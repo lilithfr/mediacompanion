@@ -4085,7 +4085,7 @@ Public Class Form1
         Dim tab As String = TabControl2.SelectedTab.Text
         If tab.ToLower = "movie preferences" Then
             e.Cancel = True
-            OpenPreferences(2)
+            OpenPreferences(1)
         End If
     End Sub
 
@@ -5216,7 +5216,7 @@ Public Class Form1
         'Dim tab As String = TabControl3.SelectedTab.Text
         If TabControl3.SelectedTab.Text = "TV Preferences" Then
             e.Cancel = True
-            OpenPreferences(3)
+            OpenPreferences(2)
         End If
     End Sub
 
@@ -10227,7 +10227,7 @@ End Sub
     End Sub
 
     Private Sub PreferencesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PreferencesToolStripMenuItem.Click
-        OpenPreferences()
+        OpenPreferences(0)
     End Sub
 
     Private Sub OpenPreferences(Optional ByVal TabRequired As Integer = 0)
@@ -11477,19 +11477,10 @@ End Sub
             MsgBox(" Deletion of .nfo, artwork and Actors " &vbCrLf & "has been Cancelled")
         End If
     End Sub
-
-    Private Sub TabLevel1_Selecting(sender As System.Object, e As CancelEventArgs) Handles TabLevel1.Selecting
-        If TabLevel1.SelectedTab.Text.ToLower = "general preferences" Then
-            e.Cancel = True
-            OpenPreferences(1)
-        End If
-    End Sub
-
+    
     Private Sub TabLevel1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
 
         Select Case TabLevel1.SelectedTab.Text.ToLower
-            'Case "general preferences"
-                'Call General_PreferencesSetup()
             Case "config.xml"
                 RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config) '   applicationPath & "\Settings\config.xml"
             Case "moviecache" 
@@ -20364,7 +20355,7 @@ End Sub
     Private Sub TabControl1_Selecting(sender As System.Object, e As CancelEventArgs) Handles TabControl1.Selecting
         If TabControl1.SelectedTab.Text.ToLower = "homemovie preferences" Then
             e.Cancel = True
-            OpenPreferences(4)
+            OpenPreferences(3)
         End If
     End Sub
 
