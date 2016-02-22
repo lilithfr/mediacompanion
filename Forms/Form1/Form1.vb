@@ -16655,6 +16655,10 @@ End Sub
         End Try
     End Sub
 
+    Private Sub btn_MovFanartScrnSht_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MovFanartScrnSht.Click
+        'Check tb_MovFanartScrnShtTime.
+    End Sub
+
     Private Sub btnMovFanartUrlorBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartUrlorBrowse.Click
         Try
             Dim t As New frmImageBrowseOrUrl
