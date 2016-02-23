@@ -4179,10 +4179,23 @@ Public Class Form1
                     End If
                 Next
             End If
+            If String.IsNullOrEmpty(tb_MovFanartScrnShtTime.Text) Then tb_MovFanartScrnShtTime.Text = "50"
             GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
             UpdateMissingFanartNav()
             If Panel2.Controls.Count = 0 Then
+                btn_MovFanartScrnSht.Visible = False
+                tb_MovFanartScrnShtTime.Visible = False
+                Label2.Visible = False
                 Call mov_FanartLoad()
+            End If
+            If Panel2.Controls.Count = 1 AndAlso Panel2.Controls().Item(0).GetType Is GetType(Label) Then
+                btn_MovFanartScrnSht.Visible = True
+                tb_MovFanartScrnShtTime.Visible = True
+                Label2.Visible = True
+            'Else
+            '    btn_MovFanartScrnSht.Visible = False
+            '    tb_MovFanartScrnShtTime.Visible = False
+            '    Label2.Visible = False
             End If
             currentTabIndex = TabControl2.SelectedIndex
             EnableFanartScrolling()
@@ -4459,7 +4472,7 @@ Public Class Form1
     Sub EnableFanartScrolling()
         Try
             Dim rb As RadioButton = Panel2.Controls("moviefanartcheckbox0")
-
+            If rb Is Nothing Then Exit Sub
             rb.Select()                       'Causes RadioButtons checked state to toggle
             rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
         Catch
@@ -16656,7 +16669,39 @@ End Sub
     End Sub
 
     Private Sub btn_MovFanartScrnSht_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_MovFanartScrnSht.Click
-        'Check tb_MovFanartScrnShtTime.
+        Dim Timepoint As Integer = Nothing
+        If Int16.TryParse(tb_MovFanartScrnShtTime.Text, Timepoint) Then
+            Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(workingMovieDetails.fileinfo.filenameandpath, workingMovieDetails.fileinfo.fanartpath, Timepoint)
+            If cachepathandfilename <> "" Then
+                File.Copy(cachepathandfilename, workingMovieDetails.fileinfo.fanartpath, True)
+                util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                mov_DisplayFanart()
+                util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
+                movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
+            End If
+        End If
+    End Sub
+
+    Private Sub tb_MovFanartScrnShtTime_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_MovFanartScrnShtTime.KeyPress
+        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
+            If tb_MovFanartScrnShtTime.Text <> "" AndAlso Convert.ToInt32(tb_MovFanartScrnShtTime.Text) > 0 Then
+                TvEpThumbScreenShot()
+            End If
+        End If
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tb_MovFanartScrnShtTime_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_MovFanartScrnShtTime.Leave
+        If tb_MovFanartScrnShtTime.Text = "" Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            tb_MovFanartScrnShtTime.Focus()
+        ElseIf Convert.ToInt32(tb_MovFanartScrnShtTime.Text) = 0 Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            tb_MovFanartScrnShtTime.Focus()
+        End If
     End Sub
 
     Private Sub btnMovFanartUrlorBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartUrlorBrowse.Click
