@@ -1942,7 +1942,9 @@ Public Class Form1
                 End If
                 'Catch exception thrown when votes is an empty string
                 If workingMovieDetails.fullmoviebody.votes <> "" Then
-                    votestxt.Text = Double.Parse(workingMovieDetails.fullmoviebody.votes.Replace(".",",")).ToString("N0")
+                    Dim votestext As String = workingMovieDetails.fullmoviebody.votes
+                    votestext = votestext.RemoveWhitespace
+                    votestxt.Text = Double.Parse(votestext.Replace(".",",")).ToString("N0")
                 Else
                     votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 End If
