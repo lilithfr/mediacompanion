@@ -263,6 +263,7 @@ Public Class Form1
     Dim walllocked As Boolean = False
     Dim maxcount As Integer = 0
     Dim moviecount_bak As Integer = 0
+    Dim tvCount_bak As Integer = 0
     Dim lastSort As String = ""
     Dim lastinvert As String = ""
     Public displayRuntimeScraper As Boolean = True
@@ -5275,12 +5276,12 @@ Public Class Form1
                     tvCurrentTabIndex = TabControl3.SelectedIndex
                     Call tv_ShowChangedRePopulate()
                 End If
-            ElseIf tab = "Search for new Episodes" Then
-                TabControl3.SelectedIndex = tvCurrentTabIndex
-                Call ep_Search()
-            ElseIf tab = "Cancel Episode Search" Then
-                TabControl3.SelectedIndex = tvCurrentTabIndex
-                bckgroundscanepisodes.CancelAsync()
+            'ElseIf tab = "Search for new Episodes" Then
+            '    TabControl3.SelectedIndex = tvCurrentTabIndex
+            '    Call ep_Search()
+            'ElseIf tab = "Cancel Episode Search" Then
+            '    TabControl3.SelectedIndex = tvCurrentTabIndex
+            '    bckgroundscanepisodes.CancelAsync()
             ElseIf tab = "Main Browser" Then
                 If TvTreeview.Nodes.Count = 0 Then TvTreeview.SelectedNode = TvTreeview.TopNode
                 TvTreeview.Focus()
@@ -5291,6 +5292,9 @@ Public Class Form1
             ElseIf tab = "Table View" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_TableView()
+            ElseIf tab = "Wall" Then
+                tvCurrentTabIndex = TabControl3.SelectedIndex
+                Call tv_wallSetup()
             ElseIf tab = "" Then        'tpTvWeb tab
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
@@ -5843,8 +5847,7 @@ Public Class Form1
             ToolStripProgressBar5.Visible = False
             ToolStripStatusLabel6.Text = "TV Show Scraper"
             ToolStripStatusLabel6.Visible = False
-            TabPage15.Text = "Search for new Episodes"
-            TabPage15.ToolTipText = "Searches folders for new episodes"
+            btnTvSearchNew.Text = "Search New"
             
             globalThreadCounter -= 1
             Call util_ThreadsRunningCheck()
@@ -7275,387 +7278,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub mov_WallReset()
-        For i = TabPage22.Controls.Count - 1 To 0 Step -1
-            'If  Is PictureBox(TabPage22.Controls(i)) Then
-            TabPage22.Controls.RemoveAt(i)
-            'End If
-        Next
-        walllocked = True
-        Dim count As Integer = 0
-        Dim locx As Integer = 0
-        Dim locy As Integer = 0
-        Dim maxcount As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
-
-        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
-            maxcount += 1
-        End While      
-
-        Try
-            'Panel17.AutoScroll = False
-            For Each pic In pictureList
-                Try
-                    If count = maxcount Then
-                        count = 0
-                        locx = 0
-                        locy += 200
-                    End If
-
-                    With pic
-                        Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
-                        .Location = New Point(locx, locy - vscrollPos)
-                        .ContextMenuStrip = MovieWallContextMenu
-                    End With
-                    locx += 150
-                    count += 1
-
-                    Me.TabPage22.Controls.Add(pic)
-                    TabPage22.Refresh()
-                    Application.DoEvents()
-
-                Catch ex As Exception
-                    MsgBox(ex.ToString)
-                End Try
-            Next
-
-        Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-        Finally
-            walllocked = False
-        End Try
-    End Sub
-
-    Private Sub mov_WallSetup()
-        Dim check As Boolean = True
-        Dim count As Integer = 0
-        Dim locx As Integer = 0
-        Dim locy As Integer = 0
-
-        If lastSort = "" Then lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
-        If lastinvert = "" Then lastinvert = Mc.clsGridViewMovie.GridSort 
-        If lastSort <> Mc.clsGridViewMovie.GridFieldToDisplay2 OrElse lastinvert <> Mc.clsGridViewMovie.GridSort Then
-            lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
-            lastinvert = Mc.clsGridViewMovie.GridSort
-            moviecount_bak = 0
-        End If
-        'If moviecount_bak <> DataGridViewMovies.RowCount Then moviecount_bak = DataGridViewMovies.RowCount : check = False
-        'If check = True Then Return
-        If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
-
-        maxcount = Math.Floor((TabPage22.Width - 50)/150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
-
-        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
-            maxcount += 1
-        End While        
-        
-
-        pictureList.Clear()
-        For i = TabPage22.Controls.Count - 1 To 0 Step -1
-            If TabPage22.Controls(i).Name = "" Then
-                TabPage22.Controls.RemoveAt(i)
-            End If
-        Next
-        TabPage22.Refresh()
-        Application.DoEvents()
-
-        'Panel17.AutoScroll = False
-
-        For Each row As DataGridViewRow In DataGridViewMovies.Rows
-            moviecount_bak += 1
-            Dim m As Data_GridViewMovie = row.DataBoundItem
-
-            bigPictureBox = New PictureBox()
-            With bigPictureBox
-                '.Location = New Point(0, 0)
-                .Width = 150
-                .Height = 200
-                .SizeMode = PictureBoxSizeMode.StretchImage
-                '.Image = sender.image
-                Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
-                Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
-                If Not File.Exists(posterCache) And File.Exists(Pref.GetPosterPath(m.fullpathandfilename)) Then
-                    Try
-                        Dim bitmap2 As New Bitmap(Pref.GetPosterPath(m.fullpathandfilename))
-                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
-                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
-                        bitmap2.Dispose()
-                    Catch
-                        'Invalid file
-                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
-                    End Try
-                End If
-                If File.Exists(posterCache) Then
-                    Try
-                        .Image = Utilities.LoadImage(posterCache)
-                    Catch
-                        'Invalid file
-                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
-                    End Try
-                Else
-                    .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
-                End If
-                
-
-
-                .Tag = m.fullpathandfilename
-                Dim toolTip1 As ToolTip = New ToolTip(Me.components)
-
-                Dim outline As String = m.outline
-                Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
-                outline = ""
-                For Each line In newoutline
-                    outline = outline & vbCrLf & line
-                Next
-                outline.TrimEnd(vbCrLf)
-                toolTip1.SetToolTip(bigPictureBox, m.fullpathandfilename & vbCrLf & vbCrLf & m.DisplayTitleAndYear & vbCrLf & outline)
-                toolTip1.Active = True
-                toolTip1.InitialDelay = 0
-
-                .Visible = True
-                .BorderStyle = BorderStyle.None
-                .WaitOnLoad = True
-                .ContextMenuStrip = MovieWallContextMenu
-                AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
-                AddHandler bigPictureBox.DoubleClick, AddressOf mov_WallClicked
-                If count = maxcount Then
-                    count = 0
-                    locx = 0
-                    locy += 200
-                End If
-                walllocked = True
-                Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
-                If mouseDelta <> 0 Then
-                    vscrollPos = vscrollPos - mouseDelta
-                    mouseDelta = 0
-                End If
-                .Location = New Point(locx, locy - vscrollPos)
-                locx += 150
-                count += 1
-
-            End With
-            Me.TabPage22.Controls.Add(bigPictureBox)
-            pictureList.Add(bigPictureBox)
-            Me.TabPage22.Refresh()
-            Application.DoEvents()
-            walllocked = False
-        Next
-
-        walllocked = False
-    End Sub
-
-    Private Sub mov_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
-        Dim item As Windows.Forms.PictureBox = sender
-        Dim tempstring As String = item.Tag
-        For f = 0 To DataGridViewMovies.RowCount - 1
-            If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").ToString = tempstring Then
-                DataGridViewMovies.ClearSelection()
-                DataGridViewMovies.Rows(f).Selected = True
-                Application.DoEvents()
-                currentTabIndex = 0
-                Me.TabControl2.SelectedIndex = 0
-                Exit For
-            End If
-        Next
-    End Sub
-
-    Private Function util_TextWrap(ByVal text As String, ByVal linelength As Integer)
-        Dim ReturnValue As New List(Of String)
-        text = Trim(text)
-
-        Dim Words As String() = text.Split(" ")
-
-        If Words.Length = 1 And Words(0).Length > linelength Then
-            Dim lines As Integer = (Int(text.Length / linelength) + 1)
-            text = text.PadRight(lines * linelength)
-            For i = 0 To lines - 1
-                Dim SliceStart As Integer = i * linelength
-                ReturnValue.Add(text.Substring(SliceStart, linelength))
-            Next
-        Else
-            Dim CurrentLine As New System.Text.StringBuilder
-            For Each Word As String In Words
-                If CurrentLine.Length + Word.Length < linelength Then
-                    CurrentLine.Append(Word & " ")
-                Else
-                    If Word.Length > linelength Then
-                        Dim Slice As String = Word.Substring(0, linelength - CurrentLine.Length)
-                        CurrentLine.Append(Slice)
-                        ReturnValue.Add(CurrentLine.ToString)
-                        CurrentLine = New System.Text.StringBuilder()
-                        Word = Word.Substring(Slice.Length, Word.Length - Slice.Length)
-                        Dim RemainingSlices As Integer = Int(Word.Length / linelength) + 1
-                        For LineNumber = 1 To RemainingSlices
-                            If LineNumber = RemainingSlices Then
-                                CurrentLine.Append(Word & " ")
-                            Else
-                                Slice = Word.Substring(0, linelength)
-                                CurrentLine.Append(Slice)
-                                ReturnValue.Add(CurrentLine.ToString)
-                                CurrentLine = New System.Text.StringBuilder()
-                                Word = Word.Substring(Slice.Length, Word.Length - Slice.Length)
-                            End If
-                        Next
-                    Else
-                        ReturnValue.Add(CurrentLine.ToString)
-                        CurrentLine = New System.Text.StringBuilder(Word & " ")
-                    End If
-                End If
-            Next
-
-            If CurrentLine.Length > 0 Then
-                ReturnValue.Add(CurrentLine.ToString)
-            End If
-        End If
-
-        Return ReturnValue
-
-    End Function
-
-    Private Shadows Sub util_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Try
-            ClickedControl = sender.tag
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub MovieWallContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieWallContextMenu.Opening
-        Dim tempstring As String = ClickedControl
-        If tempstring <> Nothing Then
-            Dim trailerpath As String = GetTrailerPath(tempstring)
-            If IO.File.Exists(trailerpath) Then
-                tsmiWallPlayTrailer.Enabled = True
-            Else
-                tsmiWallPlayTrailer.Enabled = False
-            End If
-        End If
-    End Sub
-
-    Private Sub PlayMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem.Click
-        Try
-            Dim tempstring As String = ClickedControl
-            If tempstring = Nothing Then
-                Exit Sub
-            End If
-            If tempstring = "" Then
-                Exit Sub
-            End If
-            tempstring = Utilities.GetFileName(tempstring)
-            Dim playlist As New List(Of String)
-            playlist = Utilities.GetMediaList(tempstring)
-            
-            If playlist.Count <= 0 Then
-                MsgBox("No Media File Found For This nfo")
-                Exit Sub
-            End If
-
-            LaunchPlayList(playlist)
-
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub EditMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem1.Click
-        Try
-            Dim tempstring As String = ClickedControl
-            For f = 0 To DataGridViewMovies.RowCount - 1
-                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
-                    DataGridViewMovies.ClearSelection()
-                    DataGridViewMovies.Rows(f).Selected = True
-                    DisplayMovie()
-                    Application.DoEvents()
-                    currentTabIndex = 4
-                    Me.TabControl2.SelectedIndex = 4
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub DToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DToolStripMenuItem.Click
-        Try
-            Dim tempstring As String = ClickedControl
-            If tempstring <> Nothing Then
-                Try
-                    Dim Temp2 As String = Pref.GetPosterPath(tempstring)
-                    If IO.File.Exists(Temp2) Then
-                        Me.ControlBox = False
-                        MenuStrip1.Enabled = False
-                        'ToolStrip1.Enabled = False
-                        'Dim newimage As New Bitmap(Pref.GetPosterPath(tempstring))
-                        'Dim newimage2 As New Bitmap(newimage)
-                        'newimage.Dispose()
-                        'Call util_ZoomImage(newimage2)
-                        util_ZoomImage(Temp2)
-                    Else
-                        MsgBox("Cant find file:-" & vbCrLf & Pref.GetPosterPath(tempstring))
-                    End If
-                Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-                End Try
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub OpenFolderToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem1.Click
-        Try
-            Dim tempstring As String = ClickedControl
-            If tempstring <> Nothing Then
-                Try
-                    Call util_OpenFolder(tempstring)
-                Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-                End Try
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub tsmiWallPlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiWallPlayTrailer.Click
-        Try
-            Dim tempstring As String = ClickedControl
-            If tempstring <> Nothing Then
-                Dim trailerpath As String = GetTrailerPath(tempstring)
-                If IO.File.Exists(trailerpath) Then
-                    Dim trailerstring = applicationPath & "\Settings\temp.m3u"
-                    Dim file = IO.File.CreateText(trailerstring)
-                    file.WriteLine(trailerpath)
-                    file.Close()
-                    If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
-                    If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
-                    If Pref.videomode >= 4 Then
-                        If Pref.selectedvideoplayer <> Nothing Then
-                            Call util_VideoMode4(trailerstring)
-                        Else
-                            Call util_VideoMode1(trailerstring)
-                        End If
-                    End If
-                Else
-                    MsgBox("No downloaded trailer present")
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
 #Region "Media Info Export"
     Dim exportMovieInfo As Boolean = False  'these are used to allow only a single execution of media export functions
     Dim exportTVInfo As Boolean = False     'when there may be mulitple drop-down events. (Found that out the hard way!)
@@ -7763,10 +7385,7 @@ Public Class Form1
         Dim ShowList As New List(Of TvShow)
 
         If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
-            'ToolStripButton10.Visible = True
-            TabPage15.Text = "Cancel Episode Search"
-            TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
-
+            btnTvSearchNew.Text = "Cancel  "
             For Each item In Cache.TvCache.Shows
                 If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And ((item.State = Media_Companion.ShowState.Open) Or TVSearchALL = True) Then
                     ShowList.Add(item)
@@ -7808,9 +7427,7 @@ Public Class Form1
             End If
 
             If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
-                'ToolStripButton10.Visible = True
-                TabPage15.Text = "Cancel Episode Search"
-                TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
+                btnTvSearchNew.Text = "Cancel  "
 
                 bckgroundscanepisodes.RunWorkerAsync({ShowList, OverrideLock})
             ElseIf bckgroundscanepisodes.IsBusy Then
@@ -12068,6 +11685,7 @@ End Sub
             If maxcount2 <> maxcount Then
                 maxcount = maxcount2
                 Call mov_WallReset()
+                Call tv_WallReset()
             End If
         Catch
         End Try
@@ -16516,6 +16134,375 @@ End Sub
 
 #End Region
 
+#Region "Movie Wall"
+    Private Sub mov_WallReset()
+        For i = TabPage22.Controls.Count - 1 To 0 Step -1
+            TabPage22.Controls.RemoveAt(i)
+        Next
+        walllocked = True
+        Dim count As Integer = 0
+        Dim locx As Integer = 0
+        Dim locy As Integer = 0
+        Dim maxcount As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
+
+        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
+            maxcount += 1
+        End While      
+
+        Try
+            For Each pic In pictureList
+                Try
+                    If count = maxcount Then
+                        count = 0
+                        locx = 0
+                        locy += 200
+                    End If
+
+                    With pic
+                        Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
+                        .Location = New Point(locx, locy - vscrollPos)
+                        .ContextMenuStrip = MovieWallContextMenu
+                    End With
+                    locx += 150
+                    count += 1
+
+                    Me.TabPage22.Controls.Add(pic)
+                    TabPage22.Refresh()
+                    Application.DoEvents()
+
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                End Try
+            Next
+
+        Catch ex As Exception
+#If SilentErrorScream Then
+            Throw ex
+#End If
+        Finally
+            walllocked = False
+        End Try
+    End Sub
+
+    Private Sub mov_WallSetup()
+        Dim check As Boolean = True
+        Dim count As Integer = 0
+        Dim locx As Integer = 0
+        Dim locy As Integer = 0
+
+        If lastSort = "" Then lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
+        If lastinvert = "" Then lastinvert = Mc.clsGridViewMovie.GridSort 
+        If lastSort <> Mc.clsGridViewMovie.GridFieldToDisplay2 OrElse lastinvert <> Mc.clsGridViewMovie.GridSort Then
+            lastSort = Mc.clsGridViewMovie.GridFieldToDisplay2
+            lastinvert = Mc.clsGridViewMovie.GridSort
+            moviecount_bak = 0
+        End If
+        
+        If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
+
+        maxcount = Math.Floor((TabPage22.Width - 50)/150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
+
+        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
+            maxcount += 1
+        End While        
+        
+        pictureList.Clear()
+        For i = TabPage22.Controls.Count - 1 To 0 Step -1
+            If TabPage22.Controls(i).Name = "" Then
+                TabPage22.Controls.RemoveAt(i)
+            End If
+        Next
+        TabPage22.Refresh()
+        Application.DoEvents()
+        
+        For Each row As DataGridViewRow In DataGridViewMovies.Rows
+            moviecount_bak += 1
+            Dim m As Data_GridViewMovie = row.DataBoundItem
+
+            bigPictureBox = New PictureBox()
+            With bigPictureBox
+                '.Location = New Point(0, 0)
+                .Width = 150
+                .Height = 200
+                .SizeMode = PictureBoxSizeMode.StretchImage
+                '.Image = sender.image
+                Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
+                Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
+                If Not File.Exists(posterCache) And File.Exists(Pref.GetPosterPath(m.fullpathandfilename)) Then
+                    Try
+                        Dim bitmap2 As New Bitmap(Pref.GetPosterPath(m.fullpathandfilename))
+                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                        bitmap2.Dispose()
+                    Catch
+                        'Invalid file
+                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
+                    End Try
+                End If
+                If File.Exists(posterCache) Then
+                    Try
+                        .Image = Utilities.LoadImage(posterCache)
+                    Catch
+                        'Invalid file
+                        File.Delete(Pref.GetPosterPath(m.fullpathandfilename))
+                    End Try
+                Else
+                    .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+                End If
+                
+                .Tag = m.fullpathandfilename
+                Dim toolTip1 As ToolTip = New ToolTip(Me.components)
+
+                Dim outline As String = m.outline
+                Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
+                outline = ""
+                For Each line In newoutline
+                    outline = outline & vbCrLf & line
+                Next
+                outline.TrimEnd(vbCrLf)
+                toolTip1.SetToolTip(bigPictureBox, m.fullpathandfilename & vbCrLf & vbCrLf & m.DisplayTitleAndYear & vbCrLf & outline)
+                toolTip1.Active = True
+                toolTip1.InitialDelay = 0
+
+                .Visible = True
+                .BorderStyle = BorderStyle.None
+                .WaitOnLoad = True
+                .ContextMenuStrip = MovieWallContextMenu
+                AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
+                AddHandler bigPictureBox.DoubleClick, AddressOf mov_WallClicked
+                If count = maxcount Then
+                    count = 0
+                    locx = 0
+                    locy += 200
+                End If
+                walllocked = True
+                Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
+                If mouseDelta <> 0 Then
+                    vscrollPos = vscrollPos - mouseDelta
+                    mouseDelta = 0
+                End If
+                .Location = New Point(locx, locy - vscrollPos)
+                locx += 150
+                count += 1
+            End With
+            Me.TabPage22.Controls.Add(bigPictureBox)
+            pictureList.Add(bigPictureBox)
+            Me.TabPage22.Refresh()
+            Application.DoEvents()
+            walllocked = False
+        Next
+
+        walllocked = False
+    End Sub
+
+    Private Sub mov_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
+        Dim item As Windows.Forms.PictureBox = sender
+        Dim tempstring As String = item.Tag
+        For f = 0 To DataGridViewMovies.RowCount - 1
+            If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
+                DataGridViewMovies.ClearSelection()
+                DataGridViewMovies.Rows(f).Selected = True
+                Application.DoEvents()
+                currentTabIndex = 0
+                Me.TabControl2.SelectedIndex = 0
+                Exit For
+            End If
+        Next
+    End Sub
+
+    Private Function util_TextWrap(ByVal text As String, ByVal linelength As Integer)
+        Dim ReturnValue As New List(Of String)
+        text = Trim(text)
+
+        Dim Words As String() = text.Split(" ")
+
+        If Words.Length = 1 And Words(0).Length > linelength Then
+            Dim lines As Integer = (Int(text.Length / linelength) + 1)
+            text = text.PadRight(lines * linelength)
+            For i = 0 To lines - 1
+                Dim SliceStart As Integer = i * linelength
+                ReturnValue.Add(text.Substring(SliceStart, linelength))
+            Next
+        Else
+            Dim CurrentLine As New System.Text.StringBuilder
+            For Each Word As String In Words
+                If CurrentLine.Length + Word.Length < linelength Then
+                    CurrentLine.Append(Word & " ")
+                Else
+                    If Word.Length > linelength Then
+                        Dim Slice As String = Word.Substring(0, linelength - CurrentLine.Length)
+                        CurrentLine.Append(Slice)
+                        ReturnValue.Add(CurrentLine.ToString)
+                        CurrentLine = New System.Text.StringBuilder()
+                        Word = Word.Substring(Slice.Length, Word.Length - Slice.Length)
+                        Dim RemainingSlices As Integer = Int(Word.Length / linelength) + 1
+                        For LineNumber = 1 To RemainingSlices
+                            If LineNumber = RemainingSlices Then
+                                CurrentLine.Append(Word & " ")
+                            Else
+                                Slice = Word.Substring(0, linelength)
+                                CurrentLine.Append(Slice)
+                                ReturnValue.Add(CurrentLine.ToString)
+                                CurrentLine = New System.Text.StringBuilder()
+                                Word = Word.Substring(Slice.Length, Word.Length - Slice.Length)
+                            End If
+                        Next
+                    Else
+                        ReturnValue.Add(CurrentLine.ToString)
+                        CurrentLine = New System.Text.StringBuilder(Word & " ")
+                    End If
+                End If
+            Next
+
+            If CurrentLine.Length > 0 Then
+                ReturnValue.Add(CurrentLine.ToString)
+            End If
+        End If
+
+        Return ReturnValue
+
+    End Function
+
+    Private Shadows Sub util_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Try
+            ClickedControl = sender.tag
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub MovieWallContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieWallContextMenu.Opening
+        Dim tempstring As String = ClickedControl
+        If tempstring <> Nothing Then
+            Dim trailerpath As String = GetTrailerPath(tempstring)
+            If IO.File.Exists(trailerpath) Then
+                tsmiWallPlayTrailer.Enabled = True
+            Else
+                tsmiWallPlayTrailer.Enabled = False
+            End If
+        End If
+    End Sub
+
+    Private Sub PlayMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PlayMovieToolStripMenuItem.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring = Nothing Then
+                Exit Sub
+            End If
+            If tempstring = "" Then
+                Exit Sub
+            End If
+            tempstring = Utilities.GetFileName(tempstring)
+            Dim playlist As New List(Of String)
+            playlist = Utilities.GetMediaList(tempstring)
+            
+            If playlist.Count <= 0 Then
+                MsgBox("No Media File Found For This nfo")
+                Exit Sub
+            End If
+
+            LaunchPlayList(playlist)
+
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub EditMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMovieToolStripMenuItem1.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            For f = 0 To DataGridViewMovies.RowCount - 1
+                If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
+                    Application.DoEvents()
+                    currentTabIndex = 4
+                    Me.TabControl2.SelectedIndex = 4
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub DToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DToolStripMenuItem.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring <> Nothing Then
+                Try
+                    Dim Temp2 As String = Pref.GetPosterPath(tempstring)
+                    If IO.File.Exists(Temp2) Then
+                        Me.ControlBox = False
+                        MenuStrip1.Enabled = False
+                        util_ZoomImage(Temp2)
+                    Else
+                        MsgBox("Cant find file:-" & vbCrLf & Pref.GetPosterPath(tempstring))
+                    End If
+                Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub OpenFolderToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenFolderToolStripMenuItem1.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring <> Nothing Then
+                Try
+                    Call util_OpenFolder(tempstring)
+                Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Sub tsmiWallPlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiWallPlayTrailer.Click
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring <> Nothing Then
+                Dim trailerpath As String = GetTrailerPath(tempstring)
+                If IO.File.Exists(trailerpath) Then
+                    Dim trailerstring = applicationPath & "\Settings\temp.m3u"
+                    Dim file = IO.File.CreateText(trailerstring)
+                    file.WriteLine(trailerpath)
+                    file.Close()
+                    If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
+                    If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
+                    If Pref.videomode >= 4 Then
+                        If Pref.selectedvideoplayer <> Nothing Then
+                            Call util_VideoMode4(trailerstring)
+                        Else
+                            Call util_VideoMode1(trailerstring)
+                        End If
+                    End If
+                Else
+                    MsgBox("No downloaded trailer present")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+#End Region 'Movie Wall
+
 #Region "Movie Fanart Tab"
 
     Private Sub PictureBox2_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox2.DoubleClick
@@ -18973,6 +18960,10 @@ End Sub
 
     Private Sub btnTvSearchNew_Click(sender As System.Object, e As System.EventArgs) Handles btnTvSearchNew.Click
         Try
+            If btnTvSearchNew.Text = "Cancel  " Then
+                bckgroundscanepisodes.CancelAsync()
+                Exit Sub
+            End If
             Call ep_Search()
         Catch ex As Exception
 
@@ -19589,8 +19580,171 @@ End Sub
 
 #Region "TV Fanart.TV Form"
 
-    Private Sub tvtpfanarttv_Leave(sender As Object, e As EventArgs) Handles tvtpfanarttv.Leave
+    Private Sub tvtpfanarttv_Leave(sender As Object, e As EventArgs) Handles tpTvFanartTv.Leave
         tv_ShowLoad(tv_ShowSelectedCurrently())
+    End Sub
+
+#End Region
+
+#Region "TV Wall Form"
+
+    Private Sub tv_WallReset()
+        For i = tpTvWall.Controls.Count - 1 To 0 Step -1
+            tpTvWall.Controls.RemoveAt(i)
+        Next
+        walllocked = True
+        Dim count As Integer = 0
+        Dim locx As Integer = 0
+        Dim locy As Integer = 0
+        Dim maxcount As Integer = Math.Floor((tpTvWall.Width - 50) / 150) 'Convert.ToInt32((tpTvWall.Width - 50) / 150)
+        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
+            maxcount += 1
+        End While 
+        Try
+            For Each pic In pictureList
+                Try
+                    If count = maxcount Then
+                        count = 0
+                        locx = 0
+                        locy += 200
+                    End If
+                    With pic
+                        Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
+                        .Location = New Point(locx, locy - vscrollPos)
+                        .ContextMenuStrip = MovieWallContextMenu
+                    End With
+                    locx += 150
+                    count += 1
+                    Me.tpTvWall.Controls.Add(pic)
+                    tpTvWall.Refresh()
+                    Application.DoEvents()
+                Catch ex As Exception
+                    MsgBox(ex.ToString)
+                End Try
+            Next
+        Catch ex As Exception
+        Finally
+            walllocked = False
+        End Try
+    End Sub
+
+    Private Sub tv_wallSetup()
+        Dim check As Boolean = True
+        Dim count As Integer = 0
+        Dim locx As Integer = 0
+        Dim locy As Integer = 0
+        
+        If tvCount_bak = DataGridViewMovies.RowCount Then Exit Sub
+
+        maxcount = Math.Floor((tpTvWall.Width - 50)/150) 'Convert.ToInt32((tpTvWall.Width - 50) / 150)
+        
+        While (Cache.TvCache.Count / maxcount) > 164
+            maxcount += 1
+        End While        
+        
+        pictureList.Clear()
+        For i = tpTvWall.Controls.Count - 1 To 0 Step -1
+            If tpTvWall.Controls(i).Name = "" Then
+                tpTvWall.Controls.RemoveAt(i)
+            End If
+        Next
+        tpTvWall.Refresh()
+        Application.DoEvents()
+        
+        For Each tvsh In Cache.TvCache.Shows
+
+            tvCount_bak += 1
+
+            bigPictureBox = New PictureBox()
+            With bigPictureBox
+                '.Location = New Point(0, 0)
+                .Width = 150
+                .Height = 200
+                .SizeMode = PictureBoxSizeMode.StretchImage
+                '.Image = sender.image
+                Dim filename As String = Utilities.GetCRC32(tvsh.NfoFilePath)
+                Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
+                If Not File.Exists(posterCache) And File.Exists(tvsh.ImagePoster.Path) Then
+                    Try
+                        Dim bitmap2 As New Bitmap(tvsh.ImagePoster.Path)
+                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                        bitmap2.Dispose()
+                    Catch
+                        'Invalid file
+                        File.Delete(tvsh.ImagePoster.Path)
+                    End Try
+                End If
+                If File.Exists(posterCache) Then
+                    Try
+                        .Image = Utilities.LoadImage(posterCache)
+                    Catch
+                        'Invalid file
+                        File.Delete(Pref.GetPosterPath(tvsh.nfofilepath))
+                    End Try
+                Else
+                    .Image = Utilities.LoadImage(Utilities.DefaultPosterPath)
+                End If
+                
+                .Tag = tvsh.nfofilepath
+                Dim toolTip1 As ToolTip = New ToolTip(Me.components)
+
+                Dim outline As String = tvsh.Plot.Value
+                Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
+                outline = ""
+                For Each line In newoutline
+                    outline = outline & vbCrLf & line
+                Next
+                outline.TrimEnd(vbCrLf)
+                toolTip1.SetToolTip(bigPictureBox, tvsh.FolderPath & vbCrLf & vbCrLf & tvsh.Title.Value & vbCrLf & outline)
+                toolTip1.Active = True
+                toolTip1.InitialDelay = 0
+
+                .Visible = True
+                .BorderStyle = BorderStyle.None
+                .WaitOnLoad = True
+                .ContextMenuStrip = MovieWallContextMenu
+                AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
+                AddHandler bigPictureBox.DoubleClick, AddressOf tv_WallClicked
+                If count = maxcount Then
+                    count = 0
+                    locx = 0
+                    locy += 200
+                End If
+                walllocked = True
+                Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
+                If mouseDelta <> 0 Then
+                    vscrollPos = vscrollPos - mouseDelta
+                    mouseDelta = 0
+                End If
+                .Location = New Point(locx, locy - vscrollPos)
+                locx += 150
+                count += 1
+            End With
+            Me.tpTvWall.Controls.Add(bigPictureBox)
+            pictureList.Add(bigPictureBox)
+            Me.tpTvWall.Refresh()
+            Application.DoEvents()
+            walllocked = False
+        Next
+
+        walllocked = False
+    End Sub
+
+    Private Sub tv_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
+        Dim item As Windows.Forms.PictureBox = sender
+        Dim tempstring As String = item.Tag
+        Dim something As String = Nothing
+        'For f = 0 To DataGridViewMovies.RowCount - 1
+        '    If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
+        '        DataGridViewMovies.ClearSelection()
+        '        DataGridViewMovies.Rows(f).Selected = True
+        '        Application.DoEvents()
+        '        currentTabIndex = 0
+        '        Me.TabControl2.SelectedIndex = 0
+        '        Exit For
+        '    End If
+        'Next
     End Sub
 
 #End Region

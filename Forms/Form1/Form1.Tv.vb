@@ -1196,6 +1196,10 @@ Partial Public Class Form1
             childchild.InnerText = item.Status.Value
             child.AppendChild(childchild)
 
+            childchild = document.CreateElement("plot")
+            childchild.InnerText = item.Plot.Value
+            child.AppendChild(childchild)
+
             childchild = document.CreateElement("sortorder")
             childchild.InnerText = item.SortOrder.Value
             child.AppendChild(childchild)

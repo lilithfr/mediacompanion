@@ -24,10 +24,10 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -698,7 +698,7 @@ Partial Class Form1
         Me.EdenImageTrue = New System.Windows.Forms.Label()
         Me.ArtMode = New System.Windows.Forms.Label()
         Me.Label76 = New System.Windows.Forms.Label()
-        Me.tvtpfanarttv = New System.Windows.Forms.TabPage()
+        Me.tpTvFanartTv = New System.Windows.Forms.TabPage()
         Me.UcFanartTvTv1 = New Media_Companion.ucFanartTvTv()
         Me.tpTvSelector = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel16 = New System.Windows.Forms.TableLayoutPanel()
@@ -739,7 +739,6 @@ Partial Class Form1
         Me.Label125 = New System.Windows.Forms.Label()
         Me.tb_TvShSelectSeriesPath = New System.Windows.Forms.TextBox()
         Me.Label56 = New System.Windows.Forms.Label()
-        Me.TabPage15 = New System.Windows.Forms.TabPage()
         Me.tpTvTable = New System.Windows.Forms.TabPage()
         Me.DataGridView2 = New System.Windows.Forms.DataGridView()
         Me.STitle = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -976,6 +975,7 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.tpTvWall = New System.Windows.Forms.TabPage()
         Me.TVContextMenu.SuspendLayout
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
@@ -1109,7 +1109,7 @@ Partial Class Form1
         CType(Me.PictureBox12,System.ComponentModel.ISupportInitialize).BeginInit
         Me.GroupBox23.SuspendLayout
         Me.GroupBox21.SuspendLayout
-        Me.tvtpfanarttv.SuspendLayout
+        Me.tpTvFanartTv.SuspendLayout
         Me.tpTvSelector.SuspendLayout
         Me.TableLayoutPanel16.SuspendLayout
         Me.Panel10.SuspendLayout
@@ -2730,7 +2730,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 624)
-        Me.SplitContainer5.SplitterDistance = 353
+        Me.SplitContainer5.SplitterDistance = 352
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -2764,8 +2764,8 @@ Partial Class Form1
         Me.DataGridViewMovies.AllowUserToAddRows = false
         Me.DataGridViewMovies.AllowUserToDeleteRows = false
         Me.DataGridViewMovies.AllowUserToResizeRows = false
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
-        Me.DataGridViewMovies.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
+        Me.DataGridViewMovies.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
         Me.DataGridViewMovies.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
             Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
@@ -2773,39 +2773,39 @@ Partial Class Form1
         Me.DataGridViewMovies.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.DataGridViewMovies.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.DataGridViewMovies.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewMovies.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewMovies.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridViewMovies.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewMovies.ContextMenuStrip = Me.MovieContextMenu
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DarkSeaGreen
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewMovies.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DarkSeaGreen
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridViewMovies.DefaultCellStyle = DataGridViewCellStyle7
         Me.DataGridViewMovies.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
         Me.DataGridViewMovies.Location = New System.Drawing.Point(4, 132)
         Me.DataGridViewMovies.Name = "DataGridViewMovies"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.DataGridViewMovies.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.DataGridViewMovies.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 255)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 254)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -2840,7 +2840,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 333)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 332)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -2993,7 +2993,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 960)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 1097)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3043,7 +3043,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 4843)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 4980)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4153,7 +4153,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(213, 224)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(212, 224)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4163,7 +4163,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(105, 80)
+        Me.Label128.Location = New System.Drawing.Point(104, 80)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -6351,7 +6351,7 @@ Partial Class Form1
         Me.TabPage22.Location = New System.Drawing.Point(4, 25)
         Me.TabPage22.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage22.Name = "TabPage22"
-        Me.TabPage22.Size = New System.Drawing.Size(192, 71)
+        Me.TabPage22.Size = New System.Drawing.Size(1041, 628)
         Me.TabPage22.TabIndex = 9
         Me.TabPage22.Text = "Wall"
         Me.TabPage22.UseVisualStyleBackColor = true
@@ -7448,9 +7448,9 @@ Partial Class Form1
         Me.TabControl3.Controls.Add(Me.tpTvScreenshot)
         Me.TabControl3.Controls.Add(Me.tpTvFanart)
         Me.TabControl3.Controls.Add(Me.tpTvPosters)
-        Me.TabControl3.Controls.Add(Me.tvtpfanarttv)
+        Me.TabControl3.Controls.Add(Me.tpTvFanartTv)
+        Me.TabControl3.Controls.Add(Me.tpTvWall)
         Me.TabControl3.Controls.Add(Me.tpTvSelector)
-        Me.TabControl3.Controls.Add(Me.TabPage15)
         Me.TabControl3.Controls.Add(Me.tpTvTable)
         Me.TabControl3.Controls.Add(Me.tpTvWeb)
         Me.TabControl3.Controls.Add(Me.tpTvFolders)
@@ -7742,7 +7742,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(533, 354)
+        Me.Panel8.Location = New System.Drawing.Point(532, 354)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -8185,7 +8185,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(278, 198)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(277, 198)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -9611,15 +9611,15 @@ Partial Class Form1
         Me.Label76.Text = "Double Click a Poster for a larger view of the full resolution image."
         Me.Label76.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'tvtpfanarttv
+        'tpTvFanartTv
         '
-        Me.tvtpfanarttv.Controls.Add(Me.UcFanartTvTv1)
-        Me.tvtpfanarttv.Location = New System.Drawing.Point(4, 25)
-        Me.tvtpfanarttv.Name = "tvtpfanarttv"
-        Me.tvtpfanarttv.Size = New System.Drawing.Size(1041, 628)
-        Me.tvtpfanarttv.TabIndex = 10
-        Me.tvtpfanarttv.Text = "Fanart.Tv"
-        Me.tvtpfanarttv.UseVisualStyleBackColor = true
+        Me.tpTvFanartTv.Controls.Add(Me.UcFanartTvTv1)
+        Me.tpTvFanartTv.Location = New System.Drawing.Point(4, 25)
+        Me.tpTvFanartTv.Name = "tpTvFanartTv"
+        Me.tpTvFanartTv.Size = New System.Drawing.Size(1041, 628)
+        Me.tpTvFanartTv.TabIndex = 10
+        Me.tpTvFanartTv.Text = "Fanart.Tv"
+        Me.tpTvFanartTv.UseVisualStyleBackColor = true
         '
         'UcFanartTvTv1
         '
@@ -10161,20 +10161,6 @@ Partial Class Form1
         Me.Label56.Size = New System.Drawing.Size(324, 100)
         Me.Label56.TabIndex = 11
         Me.Label56.Text = resources.GetString("Label56.Text")
-        '
-        'TabPage15
-        '
-        Me.TabPage15.AutoScroll = true
-        Me.TabPage15.AutoScrollMinSize = New System.Drawing.Size(956, 450)
-        Me.TabPage15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TabPage15.Location = New System.Drawing.Point(4, 25)
-        Me.TabPage15.Margin = New System.Windows.Forms.Padding(4)
-        Me.TabPage15.Name = "TabPage15"
-        Me.TabPage15.Size = New System.Drawing.Size(1041, 628)
-        Me.TabPage15.TabIndex = 3
-        Me.TabPage15.Text = "Search for new Episodes"
-        Me.TabPage15.ToolTipText = "Searches folders for new episodes"
-        Me.TabPage15.UseVisualStyleBackColor = true
         '
         'tpTvTable
         '
@@ -12485,6 +12471,15 @@ Partial Class Form1
         Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(404, 434)
         Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
+        'tpTvWall
+        '
+        Me.tpTvWall.Location = New System.Drawing.Point(4, 25)
+        Me.tpTvWall.Name = "tpTvWall"
+        Me.tpTvWall.Size = New System.Drawing.Size(1041, 628)
+        Me.tpTvWall.TabIndex = 11
+        Me.tpTvWall.Text = "Wall"
+        Me.tpTvWall.UseVisualStyleBackColor = true
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -12680,7 +12675,7 @@ Partial Class Form1
         Me.GroupBox23.PerformLayout
         Me.GroupBox21.ResumeLayout(false)
         Me.GroupBox21.PerformLayout
-        Me.tvtpfanarttv.ResumeLayout(false)
+        Me.tpTvFanartTv.ResumeLayout(false)
         Me.tpTvSelector.ResumeLayout(false)
         Me.TableLayoutPanel16.ResumeLayout(false)
         Me.TableLayoutPanel16.PerformLayout
@@ -12958,7 +12953,6 @@ End Sub
     Friend WithEvents ReloadShowCacheToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cbTvChgShowDLImagesLang As System.Windows.Forms.CheckBox
     Friend WithEvents cbTvChgShowOverwriteImgs As System.Windows.Forms.CheckBox
-    Friend WithEvents TabPage15 As System.Windows.Forms.TabPage
     Friend WithEvents pbEpActorImage As System.Windows.Forms.PictureBox
     Friend WithEvents Tv_TreeViewContext_OpenFolder As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
@@ -13632,7 +13626,7 @@ End Sub
     Friend WithEvents FanTvArtList As System.Windows.Forms.ListBox
     Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents ftvArtPicBox As System.Windows.Forms.PictureBox
-    Friend WithEvents tvtpfanarttv As System.Windows.Forms.TabPage
+    Friend WithEvents tpTvFanartTv As System.Windows.Forms.TabPage
     Friend WithEvents UcFanartTvTv1 As Media_Companion.ucFanartTvTv
     Friend WithEvents cbTvChgShowDLFanartTvArt As System.Windows.Forms.CheckBox
     Friend WithEvents Panel7 As System.Windows.Forms.Panel
@@ -13725,4 +13719,5 @@ End Sub
     Friend WithEvents btn_MovFanartScrnSht As Button
     Friend WithEvents tb_MovFanartScrnShtTime As TextBox
     Friend WithEvents Label2 As Label
+    Friend WithEvents tpTvWall As TabPage
 End Class

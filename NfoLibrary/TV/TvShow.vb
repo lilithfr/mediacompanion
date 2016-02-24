@@ -32,7 +32,7 @@ Public Class TvShow
     Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")                 'from XBMC created tvshow.nfo
     Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")               'from XBMC created tvshow.nfo
     Public Property Votes As New ProtoProperty(Me, "votes")                                 'from XBMC created tvshow.nfo
-    Public Property Plot As New ProtoProperty(Me, "plot")
+    Public Property Plot As New ProtoProperty(Me, "plot", CacheMode:= CacheMode.Both)
     Public Property Outline As New ProtoProperty(Me, "outline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property TagLine As New ProtoProperty(Me, "tagline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Runtime As New ProtoProperty(Me, "runtime")

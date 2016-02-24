@@ -2479,7 +2479,7 @@ Public Class Movies
         If Not _tmpMoviesetDb.Count = 0 AndAlso _tmpMoviesetDb(0).MovieSetName.ToLower = "-none-" Then _tmpMoviesetDb.RemoveAt(0)
         For each mset As MovieSetInfo In _tmpMoviesetDb
             Dim q = From item In MovSetDbTmp Where item.MovieSetName = mset.MovieSetName
-            If q.Count = 0 Then Continue For
+            If q.Count <> 1 Then Continue For
             Dim ac As New MovieSetInfo
             ac = q.Single
             mset.Collection = ac.Collection
