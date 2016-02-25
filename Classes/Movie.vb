@@ -3463,7 +3463,7 @@ Public Class Movie
                 Dim bm As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(PosterPath)) 'New Bitmap(PosterPath)
                 Dim bm2 As New Bitmap(bm)
                 bm.Dispose()
-                bm2 = Utilities.ResizeImage(bm2, 150, 200)
+                bm2 = Utilities.ResizeImage(bm2, Form1.WallPicWidth, Form1.WallPicHeight)
                 Utilities.SaveImage(bm2, PosterCachePath)
                 bm2.Dispose()
             Catch       'Invalid file

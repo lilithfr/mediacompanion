@@ -211,7 +211,8 @@ Public Class Form1
     Dim prefsload As Boolean = False
     Dim XbmcTMDbScraperChanged As Boolean = False
     Dim XbmcTvdbScraperChanged As Boolean = False
-    Dim pictureList As New List(Of PictureBox)
+    Dim MovpictureList As New List(Of PictureBox)
+    Dim tvpictureList As New List(Of PictureBox)
     Dim screenshotTab As TabPage
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
@@ -261,7 +262,10 @@ Public Class Form1
     Dim WithEvents tvreslabel As Label
     Dim tvposterpage As Integer = 1
     Dim walllocked As Boolean = False
-    Dim maxcount As Integer = 0
+    Public WallPicWidth As Integer = 165
+    Public WallPicHeight As Integer = Math.Floor((WallPicWidth/3)*4)
+    Dim MovMaxWallCount As Integer = 0
+    Dim tvMaxWallCount As Integer = 0
     Dim moviecount_bak As Integer = 0
     Dim tvCount_bak As Integer = 0
     Dim lastSort As String = ""
@@ -962,12 +966,6 @@ Public Class Form1
             If Pref.formwidth <> Me.Width Or Pref.formheight <> Me.Height Then
                 Pref.formwidth = Me.Width
                 Pref.formheight = Me.Height
-                'Dim maxcount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
-                'If maxcount2 <> maxcount Then
-                '    maxcount = maxcount2
-                '    Call mov_WallReset()
-                'End If
-
             End If
             mov_SplitContainerAutoPosition()
             tv_SplitContainerAutoPosition()
@@ -5345,7 +5343,7 @@ Public Class Form1
         End Try
     End Sub
     
-        Private Sub TabControl3_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl3.MouseClick
+    Private Sub TabControl3_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl3.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
             For index As Integer = 0 To TabControl3.TabCount - 2 Step 1
                 If TabControl3.GetTabRect(index).Contains(e.X,e.Y) AndAlso TabControl3.TabPages(index).Name.ToLower = "tptvweb" Then
@@ -5360,6 +5358,20 @@ Public Class Form1
                 End If
             Next
         End If
+    End Sub
+
+    Private Sub TabControl3_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl3.MouseWheel
+        Try
+            If Tabcontrol3.TabPages(TabControl3.SelectedIndex).Text.ToLower = "wall" Then
+                mouseDelta = e.Delta / 120
+                Try
+                    tptvwall.AutoScrollPosition = New Point(0, tptvwall.VerticalScroll.Value - (mouseDelta * 30))
+                Catch ex As Exception
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
     
     Private Sub tv_TableView()
@@ -11681,10 +11693,14 @@ End Sub
             ElseIf CurrentTab = "tv shows" Then
                 TvTreeview_AfterSelect_Do()
             End If
-            Dim maxcount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
-            If maxcount2 <> maxcount Then
-                maxcount = maxcount2
+            Dim MovMaxWallCount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
+            Dim tvMaxWallCount2 As Integer = Math.Floor((tpTvWall.Width - 50) / 150)
+            If MovMaxWallCount2 <> MovMaxWallCount Then
+                MovMaxWallCount = MovMaxWallCount2
                 Call mov_WallReset()
+            End If
+            If tvMaxWallCount2 <> tvMaxWallCount Then
+                tvMaxWallCount = tvMaxWallCount2
                 Call tv_WallReset()
             End If
         Catch
@@ -16143,19 +16159,19 @@ End Sub
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
-        Dim maxcount As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
+        Dim MovMaxWallCount As Integer = Math.Floor((TabPage22.Width - 40) / WallPicWidth)
 
-        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
-            maxcount += 1
+        While (DataGridViewMovies.SelectedRows.Count / MovMaxWallCount) > WallPicWidth
+            MovMaxWallCount += 1
         End While      
 
         Try
-            For Each pic In pictureList
+            For Each pic In MovpictureList
                 Try
-                    If count = maxcount Then
+                    If count = MovMaxWallCount Then
                         count = 0
                         locx = 0
-                        locy += 200
+                        locy += WallPicHeight
                     End If
 
                     With pic
@@ -16163,22 +16179,17 @@ End Sub
                         .Location = New Point(locx, locy - vscrollPos)
                         .ContextMenuStrip = MovieWallContextMenu
                     End With
-                    locx += 150
+                    locx += WallPicWidth
                     count += 1
 
                     Me.TabPage22.Controls.Add(pic)
                     TabPage22.Refresh()
                     Application.DoEvents()
-
                 Catch ex As Exception
                     MsgBox(ex.ToString)
                 End Try
             Next
-
         Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
         Finally
             walllocked = False
         End Try
@@ -16200,13 +16211,13 @@ End Sub
         
         If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
 
-        maxcount = Math.Floor((TabPage22.Width - 50)/150) 'Convert.ToInt32((TabPage22.Width - 50) / 150)
+        MovMaxWallCount = Math.Floor((TabPage22.Width - 40)/WallPicWidth)
 
-        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
-            maxcount += 1
+        While (DataGridViewMovies.SelectedRows.Count / MovMaxWallCount) > WallPicWidth
+            MovMaxWallCount += 1
         End While        
         
-        pictureList.Clear()
+        MovpictureList.Clear()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             If TabPage22.Controls(i).Name = "" Then
                 TabPage22.Controls.RemoveAt(i)
@@ -16221,17 +16232,15 @@ End Sub
 
             bigPictureBox = New PictureBox()
             With bigPictureBox
-                '.Location = New Point(0, 0)
-                .Width = 150
-                .Height = 200
+                .Width = WallPicWidth
+                .Height = WallPicHeight
                 .SizeMode = PictureBoxSizeMode.StretchImage
-                '.Image = sender.image
                 Dim filename As String = Utilities.GetCRC32(m.fullpathandfilename)
                 Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
                 If Not File.Exists(posterCache) And File.Exists(Pref.GetPosterPath(m.fullpathandfilename)) Then
                     Try
                         Dim bitmap2 As New Bitmap(Pref.GetPosterPath(m.fullpathandfilename))
-                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        bitmap2 = Utilities.ResizeImage(bitmap2, WallPicWidth, WallPicHeight)
                         Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
                         bitmap2.Dispose()
                     Catch
@@ -16252,7 +16261,7 @@ End Sub
                 
                 .Tag = m.fullpathandfilename
                 Dim toolTip1 As ToolTip = New ToolTip(Me.components)
-
+                toolTip1.AutoPopDelay = 12000
                 Dim outline As String = m.outline
                 Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
                 outline = ""
@@ -16270,10 +16279,10 @@ End Sub
                 .ContextMenuStrip = MovieWallContextMenu
                 AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
                 AddHandler bigPictureBox.DoubleClick, AddressOf mov_WallClicked
-                If count = maxcount Then
+                If count = MovMaxWallCount Then
                     count = 0
                     locx = 0
-                    locy += 200
+                    locy += WallPicHeight
                 End If
                 walllocked = True
                 Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
@@ -16282,11 +16291,11 @@ End Sub
                     mouseDelta = 0
                 End If
                 .Location = New Point(locx, locy - vscrollPos)
-                locx += 150
+                locx += WallPicWidth
                 count += 1
             End With
             Me.TabPage22.Controls.Add(bigPictureBox)
-            pictureList.Add(bigPictureBox)
+            MovpictureList.Add(bigPictureBox)
             Me.TabPage22.Refresh()
             Application.DoEvents()
             walllocked = False
@@ -19596,24 +19605,24 @@ End Sub
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
-        Dim maxcount As Integer = Math.Floor((tpTvWall.Width - 50) / 150) 'Convert.ToInt32((tpTvWall.Width - 50) / 150)
-        While (DataGridViewMovies.SelectedRows.Count / maxcount) > 164
-            maxcount += 1
+        Dim tvMaxWallCount As Integer = Math.Floor((tpTvWall.Width - 40) / WallPicWidth)
+        While (Cache.TvCache.Shows.Count / tvMaxWallCount) > (WallPicWidth +15)
+            tvMaxWallCount += 1
         End While 
         Try
-            For Each pic In pictureList
+            For Each pic In tvpictureList
                 Try
-                    If count = maxcount Then
+                    If count = tvMaxWallCount Then
                         count = 0
                         locx = 0
-                        locy += 200
+                        locy += WallPicHeight
                     End If
                     With pic
                         Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
                         .Location = New Point(locx, locy - vscrollPos)
                         .ContextMenuStrip = MovieWallContextMenu
                     End With
-                    locx += 150
+                    locx += WallPicWidth
                     count += 1
                     Me.tpTvWall.Controls.Add(pic)
                     tpTvWall.Refresh()
@@ -19634,15 +19643,15 @@ End Sub
         Dim locx As Integer = 0
         Dim locy As Integer = 0
         
-        If tvCount_bak = DataGridViewMovies.RowCount Then Exit Sub
+        If tvCount_bak = Cache.TvCache.Shows.count Then Exit Sub
 
-        maxcount = Math.Floor((tpTvWall.Width - 50)/150) 'Convert.ToInt32((tpTvWall.Width - 50) / 150)
+        tvMaxWallCount = Math.Floor((tpTvWall.Width - 40)/WallPicWidth)
         
-        While (Cache.TvCache.Count / maxcount) > 164
-            maxcount += 1
+        While (Cache.TvCache.Count / tvMaxWallCount) > (WallPicWidth+15)
+            tvMaxWallCount += 1
         End While        
         
-        pictureList.Clear()
+        tvpictureList.Clear()
         For i = tpTvWall.Controls.Count - 1 To 0 Step -1
             If tpTvWall.Controls(i).Name = "" Then
                 tpTvWall.Controls.RemoveAt(i)
@@ -19657,17 +19666,15 @@ End Sub
 
             bigPictureBox = New PictureBox()
             With bigPictureBox
-                '.Location = New Point(0, 0)
-                .Width = 150
-                .Height = 200
+                .Width = WallPicWidth
+                .Height = WallPicHeight
                 .SizeMode = PictureBoxSizeMode.StretchImage
-                '.Image = sender.image
                 Dim filename As String = Utilities.GetCRC32(tvsh.NfoFilePath)
                 Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
                 If Not File.Exists(posterCache) And File.Exists(tvsh.ImagePoster.Path) Then
                     Try
                         Dim bitmap2 As New Bitmap(tvsh.ImagePoster.Path)
-                        bitmap2 = Utilities.ResizeImage(bitmap2, 150, 200)
+                        bitmap2 = Utilities.ResizeImage(bitmap2, WallPicWidth, WallPicHeight)
                         Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
                         bitmap2.Dispose()
                     Catch
@@ -19688,15 +19695,20 @@ End Sub
                 
                 .Tag = tvsh.nfofilepath
                 Dim toolTip1 As ToolTip = New ToolTip(Me.components)
+                toolTip1.AutoPopDelay = 12000
 
                 Dim outline As String = tvsh.Plot.Value
-                Dim newoutline As List(Of String) = util_TextWrap(outline, 50)
+                Dim newoutline As List(Of String) = util_TextWrap(outline, 55)
                 outline = ""
                 For Each line In newoutline
                     outline = outline & vbCrLf & line
                 Next
                 outline.TrimEnd(vbCrLf)
-                toolTip1.SetToolTip(bigPictureBox, tvsh.FolderPath & vbCrLf & vbCrLf & tvsh.Title.Value & vbCrLf & outline)
+                Dim epcount As String = "Episodes: " & tvsh.Episodes.Count.ToString & vbcrlf
+                Dim Seasoncount As String = "Seasons: " & tvsh.Seasons.Count.ToString & vbCrLf
+                Dim ttiptext As String = tvsh.Title.Value & vbCrLf & tvsh.FolderPath & vbCrLf & vbCrLf
+                ttiptext = ttiptext & epcount & Seasoncount & vbCrLf & outline
+                toolTip1.SetToolTip(bigPictureBox, ttiptext)
                 toolTip1.Active = True
                 toolTip1.InitialDelay = 0
 
@@ -19706,10 +19718,10 @@ End Sub
                 .ContextMenuStrip = MovieWallContextMenu
                 AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
                 AddHandler bigPictureBox.DoubleClick, AddressOf tv_WallClicked
-                If count = maxcount Then
+                If count = tvMaxWallCount Then
                     count = 0
                     locx = 0
-                    locy += 200
+                    locy += WallPicHeight
                 End If
                 walllocked = True
                 Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
@@ -19718,33 +19730,32 @@ End Sub
                     mouseDelta = 0
                 End If
                 .Location = New Point(locx, locy - vscrollPos)
-                locx += 150
+                locx += WallPicWidth
                 count += 1
             End With
             Me.tpTvWall.Controls.Add(bigPictureBox)
-            pictureList.Add(bigPictureBox)
+            tvpictureList.Add(bigPictureBox)
             Me.tpTvWall.Refresh()
             Application.DoEvents()
             walllocked = False
         Next
-
         walllocked = False
     End Sub
 
     Private Sub tv_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
         Dim item As Windows.Forms.PictureBox = sender
         Dim tempstring As String = item.Tag
-        Dim something As String = Nothing
-        'For f = 0 To DataGridViewMovies.RowCount - 1
-        '    If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
-        '        DataGridViewMovies.ClearSelection()
-        '        DataGridViewMovies.Rows(f).Selected = True
-        '        Application.DoEvents()
-        '        currentTabIndex = 0
-        '        Me.TabControl2.SelectedIndex = 0
-        '        Exit For
-        '    End If
-        'Next
+        Dim child As TreeNode
+        For each child In TvTreeview.Nodes
+            If TypeOf child.Tag Is Media_Companion.TvShow Then
+                Dim TempShow As TvShow = child.Tag
+                If TempShow.NfoFilePath = tempstring Then
+                    TvTreeview.SelectedNode = child
+                    TabControl3.SelectedIndex = 0
+                    Exit For
+                End If
+            End If
+        Next
     End Sub
 
 #End Region
