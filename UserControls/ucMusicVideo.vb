@@ -1535,6 +1535,10 @@ Public Class ucMusicVideo
         DisplayMV()
     End Sub
 
+    Private Sub MVDgv1_KeyUp(sender As Object, e As KeyEventArgs) Handles MVDgv1.KeyUp
+        DisplayMV()
+    End Sub
+
     Private Sub MVDgv1_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles MVDgv1.ColumnHeaderMouseClick
         GridInvert = Not GridInvert
         mv_FiltersAndSortApply()
@@ -1612,10 +1616,11 @@ Public Class ucMusicVideo
         MV_DeleteNfoArtwork()
     End Sub
     
+
 #End Region
 
 #Region "garbage"
-    
+
 
 #End Region
 
