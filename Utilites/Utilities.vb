@@ -278,7 +278,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     myProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                     myProcess.StartInfo.CreateNoWindow = False
                     myProcess.StartInfo.FileName = Utilities.applicationPath & "\Assets\ffmpeg.exe"
-                    Dim proc_arguments As String = "-y -i """ & FullPathAndFilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
+                    Dim proc_arguments As String = "-ss " & seconds.ToString & " -i """ & FullPathAndFilename & """ -vframes:v 1 -an " & """" & SavePath & """"
+                    'Dim proc_arguments As String = "-y -i """ & FullPathAndFilename & """ -f mjpeg -ss " & seconds.ToString & " -vframes 1 -an " & """" & SavePath & """"
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
                     myProcess.WaitForExit()
