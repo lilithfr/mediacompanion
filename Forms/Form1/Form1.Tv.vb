@@ -2987,6 +2987,23 @@ Partial Public Class Form1
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
                 item.Visible = item.VisibleSeasonCount > 0
+                item.Hidden.Value = Not item.Visible
+            Next
+        ElseIf butt.Contains("unwatched") Then
+            Dim playcount As Integer = If(butt = "watched", 1, 0)
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If episode.PlayCount.Value = playcount.ToString Then
+                            episode.Visible = True
+                        Else
+                            episode.Visible = False
+                        End If
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = item.VisibleSeasonCount > 0
+                item.Hidden.Value = Not item.Visible
             Next
         ElseIf butt = "airedmissingeps" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -3013,7 +3030,7 @@ Partial Public Class Form1
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = item.VisibleSeasonCount > 0
+                item.Visible = item.VisibleSeasonCount > 0 
             Next
         ElseIf butt = "screenshot" Then
             Dim edenart As String = ""
@@ -3152,7 +3169,7 @@ Partial Public Class Form1
 
             Next
         End If
-        If butt = "all" OrElse butt = "ended" OrElse butt = "continuing" OrElse butt = "unknown" Then TvTreeviewRebuild()
+        If butt = "all" OrElse butt = "watched" OrElse butt = "unwatched" OrElse butt = "ended" OrElse butt = "continuing" OrElse butt = "unknown" Then TvTreeviewRebuild()
     End Sub
 
 #Region "Tv MissingEpisode Routines"
