@@ -933,11 +933,11 @@ Public Class WorkingWithNfoFiles
             stage = 10
             child = doc.CreateElement("runtime")
             If tvshowtosave.runtime.Value <> Nothing Then
-                Dim minutes As String = tvshowtosave.runtime.Value
-                minutes = minutes.Replace("minutes", "")
-                minutes = minutes.Replace("mins", "")
-                minutes = minutes.Replace("min", "")
-                minutes = minutes.Replace(" ", "")
+                Dim minutes As String = tvshowtosave.runtime.Value.ToMin
+                'minutes = minutes.Replace("minutes", "")
+                'minutes = minutes.Replace("mins", "")
+                'minutes = minutes.Replace("min", "")
+                'minutes = minutes.Replace(" ", "")
                 Try
                     Do While minutes.IndexOf("0") = 0
                         minutes = minutes.Substring(1, minutes.Length - 1)
@@ -2851,7 +2851,19 @@ Public Class WorkingWithNfoFiles
                     stage = 7
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
                         filedetailschildchild = doc.CreateElement("durationinseconds")
-                        filedetailschildchild.InnerText = If(movietosave.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "", movietosave.filedetails.filedetails_video.DurationInSeconds.Value)
+                        Dim TempValue As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
+                        If Pref.MovRuntimeAsDuration Then
+                            Dim domath As Integer
+                            Dim aok As Boolean = Int32.TryParse(movietosave.fullmoviebody.runtime.ToMin, domath)
+                            If aok AndAlso domath > 0 Then
+                                TempValue = (domath*60).ToString
+                            Else
+                                TempValue = If(TempValue = "-1", "", TempValue)
+                            End If
+                        Else
+                            TempValue = If(TempValue = "-1", "", TempValue)
+                        End If
+                        filedetailschildchild.InnerText = TempValue
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
                     stage = 8
@@ -3086,11 +3098,11 @@ Public Class WorkingWithNfoFiles
                         End If
                     End If
                     If movietosave.fullmoviebody.runtime <> Nothing Then
-                        Dim minutes As String = movietosave.fullmoviebody.runtime
-                        minutes = minutes.Replace("minutes", "")
-                        minutes = minutes.Replace("mins", "")
-                        minutes = minutes.Replace("min", "")
-                        minutes = minutes.Replace(" ", "")
+                        Dim minutes As String = movietosave.fullmoviebody.runtime.ToMin
+                        'minutes = minutes.Replace("minutes", "")
+                        'minutes = minutes.Replace("mins", "")
+                        'minutes = minutes.Replace("min", "")
+                        'minutes = minutes.Replace(" ", "")
                         Try
                             If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
                                 Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
@@ -3654,11 +3666,11 @@ Public Class WorkingWithNfoFiles
 
             child = doc.CreateElement("runtime")
             If homemovietosave.fullmoviebody.runtime <> Nothing AndAlso homemovietosave.fullmoviebody.runtime <> "0" Then
-                Dim minutes As String = homemovietosave.fullmoviebody.runtime
-                minutes = minutes.Replace("minutes", "")
-                minutes = minutes.Replace("mins", "")
-                minutes = minutes.Replace("min", "")
-                minutes = minutes.Replace(" ", "")
+                Dim minutes As String = homemovietosave.fullmoviebody.runtime.ToMin
+                'minutes = minutes.Replace("minutes", "")
+                'minutes = minutes.Replace("mins", "")
+                'minutes = minutes.Replace("min", "")
+                'minutes = minutes.Replace(" ", "")
                 'If Pref.intruntime = True And Not IsNumeric(minutes) Then
                 '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
                 '    If IsNumeric(tempstring) Then

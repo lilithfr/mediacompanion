@@ -436,6 +436,7 @@ Public Class frmPreferences
             rbRuntimeScraper.Checked = True
         End If
         cb_MovDurationAsRuntine             .Checked        = Pref.MovDurationAsRuntine
+        cb_MovRuntimeAsDuration             .Checked        = Pref.MovRuntimeAsDuration
         cbMovieRuntimeFallbackToFile        .Enabled        = (Pref.movieRuntimeDisplay = "scraper")
         cbMovieRuntimeFallbackToFile        .Checked        = Pref.movieRuntimeFallbackToFile
         cbMovieShowDateOnList               .Checked        = Pref.showsortdate
@@ -1952,6 +1953,14 @@ End Sub
     Private Sub cb_MovDurationAsRuntine_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_MovDurationAsRuntine.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovDurationAsRuntine = cb_MovDurationAsRuntine.Checked
+        If Pref.MovDurationAsRuntine AndAlso cb_MovRuntimeAsDuration.Checked Then cb_MovRuntimeAsDuration.Checked = False
+        Changes = True
+    End Sub
+
+    Private Sub cb_MovRuntimeAsDuration_CheckedChanged(sender As Object, e As EventArgs) Handles cb_MovRuntimeAsDuration.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovRuntimeAsDuration = cb_MovRuntimeAsDuration.Checked
+        If Pref.MovRuntimeAsDuration AndAlso cb_MovDurationAsRuntine.Checked Then cb_MovDurationAsRuntine.Checked = False
         Changes = True
     End Sub
 
@@ -3553,5 +3562,6 @@ End Sub
             End If
         End If
     End Sub
+
     
 End Class

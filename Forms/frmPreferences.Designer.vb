@@ -90,12 +90,49 @@ Partial Class frmPreferences
         Me.cb_MovPosterTabTMDBSelect = New System.Windows.Forms.CheckBox()
         Me.cbAllowUserTags = New System.Windows.Forms.CheckBox()
         Me.cbEnableFolderSize = New System.Windows.Forms.CheckBox()
+        Me.cbDisplayLocalActor = New System.Windows.Forms.CheckBox()
+        Me.cbCheckForNewVersion = New System.Windows.Forms.CheckBox()
+        Me.cbUseMultipleThreads = New System.Windows.Forms.CheckBox()
+        Me.btnFindBrowser = New System.Windows.Forms.Button()
+        Me.tbaltnfoeditor = New System.Windows.Forms.TextBox()
+        Me.GroupBox36 = New System.Windows.Forms.GroupBox()
+        Me.llMkvMergeGuiPath = New System.Windows.Forms.LinkLabel()
+        Me.btnMkvMergeGuiPath = New System.Windows.Forms.Button()
+        Me.tbMkvMergeGuiPath = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TPGenCom = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
+        Me.TPGeneral = New System.Windows.Forms.TabPage()
+        Me.cbMcCloseMCForDLNewVersion = New System.Windows.Forms.CheckBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.cbMultiMonitorEnable = New System.Windows.Forms.CheckBox()
+        Me.cbRenameNFOtoINFO = New System.Windows.Forms.CheckBox()
+        Me.cbShowLogOnError = New System.Windows.Forms.CheckBox()
+        Me.cbExternalbrowser = New System.Windows.Forms.CheckBox()
+        Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
+        Me.GroupBox45 = New System.Windows.Forms.GroupBox()
+        Me.lblaltnfoeditorclear = New System.Windows.Forms.Label()
+        Me.btnaltnfoeditor = New System.Windows.Forms.Button()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.GroupBox33 = New System.Windows.Forms.GroupBox()
+        Me.btnFontSelect = New System.Windows.Forms.Button()
+        Me.btnFontReset = New System.Windows.Forms.Button()
+        Me.lbl_FontSample = New System.Windows.Forms.Label()
+        Me.GroupBox31 = New System.Windows.Forms.GroupBox()
+        Me.Label116 = New System.Windows.Forms.Label()
+        Me.Label107 = New System.Windows.Forms.Label()
+        Me.txtbx_minrarsize = New System.Windows.Forms.TextBox()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lbl_MediaPlayerUser = New System.Windows.Forms.Label()
+        Me.btn_MediaPlayerBrowse = New System.Windows.Forms.Button()
+        Me.rb_MediaPlayerUser = New System.Windows.Forms.RadioButton()
+        Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
+        Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
         Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
@@ -132,6 +169,7 @@ Partial Class frmPreferences
         Me.rbXBMCv_post = New System.Windows.Forms.RadioButton()
         Me.rbXBMCv_pre = New System.Windows.Forms.RadioButton()
         Me.TPActors = New System.Windows.Forms.TabPage()
+        Me.Label21 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label98 = New System.Windows.Forms.Label()
@@ -430,51 +468,20 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.TPGeneral = New System.Windows.Forms.TabPage()
-        Me.cbMcCloseMCForDLNewVersion = New System.Windows.Forms.CheckBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.cbMultiMonitorEnable = New System.Windows.Forms.CheckBox()
-        Me.cbDisplayLocalActor = New System.Windows.Forms.CheckBox()
-        Me.cbCheckForNewVersion = New System.Windows.Forms.CheckBox()
-        Me.cbRenameNFOtoINFO = New System.Windows.Forms.CheckBox()
-        Me.cbUseMultipleThreads = New System.Windows.Forms.CheckBox()
-        Me.cbShowLogOnError = New System.Windows.Forms.CheckBox()
-        Me.btnFindBrowser = New System.Windows.Forms.Button()
-        Me.cbExternalbrowser = New System.Windows.Forms.CheckBox()
-        Me.chkbx_disablecache = New System.Windows.Forms.CheckBox()
-        Me.GroupBox45 = New System.Windows.Forms.GroupBox()
-        Me.lblaltnfoeditorclear = New System.Windows.Forms.Label()
-        Me.btnaltnfoeditor = New System.Windows.Forms.Button()
-        Me.tbaltnfoeditor = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.GroupBox36 = New System.Windows.Forms.GroupBox()
-        Me.llMkvMergeGuiPath = New System.Windows.Forms.LinkLabel()
-        Me.btnMkvMergeGuiPath = New System.Windows.Forms.Button()
-        Me.tbMkvMergeGuiPath = New System.Windows.Forms.TextBox()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.GroupBox33 = New System.Windows.Forms.GroupBox()
-        Me.btnFontSelect = New System.Windows.Forms.Button()
-        Me.btnFontReset = New System.Windows.Forms.Button()
-        Me.lbl_FontSample = New System.Windows.Forms.Label()
-        Me.GroupBox31 = New System.Windows.Forms.GroupBox()
-        Me.Label116 = New System.Windows.Forms.Label()
-        Me.Label107 = New System.Windows.Forms.Label()
-        Me.txtbx_minrarsize = New System.Windows.Forms.TextBox()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.lbl_MediaPlayerUser = New System.Windows.Forms.Label()
-        Me.btn_MediaPlayerBrowse = New System.Windows.Forms.Button()
-        Me.rb_MediaPlayerUser = New System.Windows.Forms.RadioButton()
-        Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
-        Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
-        Me.Label21 = New System.Windows.Forms.Label()
+        Me.cb_MovRuntimeAsDuration = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
+        Me.GroupBox36.SuspendLayout
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.TabControl1.SuspendLayout
         Me.TPGenCom.SuspendLayout
         Me.TabControl4.SuspendLayout
+        Me.TPGeneral.SuspendLayout
+        Me.GroupBox45.SuspendLayout
+        Me.GroupBox33.SuspendLayout
+        Me.GroupBox31.SuspendLayout
+        Me.GroupBox3.SuspendLayout
         Me.TPCommonSettings.SuspendLayout
         Me.GroupBox4.SuspendLayout
         Me.gbImageResizing.SuspendLayout
@@ -546,12 +553,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.TPGeneral.SuspendLayout
-        Me.GroupBox45.SuspendLayout
-        Me.GroupBox36.SuspendLayout
-        Me.GroupBox33.SuspendLayout
-        Me.GroupBox31.SuspendLayout
-        Me.GroupBox3.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -940,7 +941,7 @@ Partial Class frmPreferences
         '
         'tbDateFormat
         '
-        Me.tbDateFormat.Location = New System.Drawing.Point(89, 14)
+        Me.tbDateFormat.Location = New System.Drawing.Point(89, 13)
         Me.tbDateFormat.Name = "tbDateFormat"
         Me.tbDateFormat.Size = New System.Drawing.Size(138, 21)
         Me.tbDateFormat.TabIndex = 1
@@ -950,7 +951,7 @@ Partial Class frmPreferences
         'Label179
         '
         Me.Label179.AutoSize = true
-        Me.Label179.Location = New System.Drawing.Point(14, 17)
+        Me.Label179.Location = New System.Drawing.Point(14, 16)
         Me.Label179.Name = "Label179"
         Me.Label179.Size = New System.Drawing.Size(71, 15)
         Me.Label179.TabIndex = 0
@@ -1191,7 +1192,7 @@ Partial Class frmPreferences
         'cbMovRootFolderCheck
         '
         Me.cbMovRootFolderCheck.AutoSize = true
-        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 348)
+        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 367)
         Me.cbMovRootFolderCheck.Name = "cbMovRootFolderCheck"
         Me.cbMovRootFolderCheck.Size = New System.Drawing.Size(158, 19)
         Me.cbMovRootFolderCheck.TabIndex = 82
@@ -1251,7 +1252,7 @@ Partial Class frmPreferences
         'cb_MovPosterTabTMDBSelect
         '
         Me.cb_MovPosterTabTMDBSelect.AutoSize = true
-        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 424)
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 440)
         Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
         Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
         Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
@@ -1274,7 +1275,7 @@ Partial Class frmPreferences
         'cbEnableFolderSize
         '
         Me.cbEnableFolderSize.AutoSize = true
-        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 473)
+        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 486)
         Me.cbEnableFolderSize.Name = "cbEnableFolderSize"
         Me.cbEnableFolderSize.Size = New System.Drawing.Size(174, 19)
         Me.cbEnableFolderSize.TabIndex = 97
@@ -1282,6 +1283,117 @@ Partial Class frmPreferences
         Me.ToolTip1.SetToolTip(Me.cbEnableFolderSize, "This feature can slow performance of MC"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"if there are multiple movies in Sub Fold"& _ 
         "ers.")
         Me.cbEnableFolderSize.UseVisualStyleBackColor = true
+        '
+        'cbDisplayLocalActor
+        '
+        Me.cbDisplayLocalActor.AutoSize = true
+        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(355, 352)
+        Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
+        Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
+        Me.cbDisplayLocalActor.TabIndex = 113
+        Me.cbDisplayLocalActor.Text = "Display Local Actor images only"
+        Me.ToolTip1.SetToolTip(Me.cbDisplayLocalActor, "If selected, MC will not attempt to download actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"images from Internet if image"& _ 
+        " is not locally stored")
+        Me.cbDisplayLocalActor.UseVisualStyleBackColor = true
+        '
+        'cbCheckForNewVersion
+        '
+        Me.cbCheckForNewVersion.AutoSize = true
+        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(355, 297)
+        Me.cbCheckForNewVersion.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbCheckForNewVersion.Name = "cbCheckForNewVersion"
+        Me.cbCheckForNewVersion.Size = New System.Drawing.Size(198, 19)
+        Me.cbCheckForNewVersion.TabIndex = 112
+        Me.cbCheckForNewVersion.Text = "Check for new version at startup"
+        Me.ToolTip1.SetToolTip(Me.cbCheckForNewVersion, "Currently only implemented in movies 'Refresh All'. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Enable for maximum performa"& _ 
+        "nce."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Disable if you encounter a problem.")
+        Me.cbCheckForNewVersion.UseVisualStyleBackColor = true
+        '
+        'cbUseMultipleThreads
+        '
+        Me.cbUseMultipleThreads.AutoSize = true
+        Me.cbUseMultipleThreads.Location = New System.Drawing.Point(24, 376)
+        Me.cbUseMultipleThreads.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbUseMultipleThreads.Name = "cbUseMultipleThreads"
+        Me.cbUseMultipleThreads.Size = New System.Drawing.Size(278, 19)
+        Me.cbUseMultipleThreads.TabIndex = 110
+        Me.cbUseMultipleThreads.Text = "Use multiple threaded version where available"
+        Me.ToolTip1.SetToolTip(Me.cbUseMultipleThreads, "Currently only implemented in movies 'Refresh All'. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Enable for maximum performa"& _ 
+        "nce."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Disable if you encounter a problem.")
+        Me.cbUseMultipleThreads.UseVisualStyleBackColor = true
+        '
+        'btnFindBrowser
+        '
+        Me.btnFindBrowser.Enabled = false
+        Me.btnFindBrowser.Location = New System.Drawing.Point(58, 318)
+        Me.btnFindBrowser.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnFindBrowser.Name = "btnFindBrowser"
+        Me.btnFindBrowser.Size = New System.Drawing.Size(112, 26)
+        Me.btnFindBrowser.TabIndex = 108
+        Me.btnFindBrowser.Text = "Locate browser..."
+        Me.ToolTip1.SetToolTip(Me.btnFindBrowser, "Select external browser to use. ")
+        Me.btnFindBrowser.UseVisualStyleBackColor = false
+        '
+        'tbaltnfoeditor
+        '
+        Me.tbaltnfoeditor.Location = New System.Drawing.Point(46, 17)
+        Me.tbaltnfoeditor.Name = "tbaltnfoeditor"
+        Me.tbaltnfoeditor.ReadOnly = true
+        Me.tbaltnfoeditor.Size = New System.Drawing.Size(287, 21)
+        Me.tbaltnfoeditor.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.tbaltnfoeditor, "Browse to Program Files\MKVToolNix\mmg.exe")
+        '
+        'GroupBox36
+        '
+        Me.GroupBox36.Controls.Add(Me.llMkvMergeGuiPath)
+        Me.GroupBox36.Controls.Add(Me.btnMkvMergeGuiPath)
+        Me.GroupBox36.Controls.Add(Me.tbMkvMergeGuiPath)
+        Me.GroupBox36.Controls.Add(Me.Label19)
+        Me.GroupBox36.Location = New System.Drawing.Point(486, 212)
+        Me.GroupBox36.Name = "GroupBox36"
+        Me.GroupBox36.Size = New System.Drawing.Size(364, 67)
+        Me.GroupBox36.TabIndex = 104
+        Me.GroupBox36.TabStop = false
+        Me.GroupBox36.Text = "mkvmerge GUI"
+        Me.ToolTip1.SetToolTip(Me.GroupBox36, "Use this program to save disk space by removing unwanted extra audio and subtitle"& _ 
+        " tracks")
+        '
+        'llMkvMergeGuiPath
+        '
+        Me.llMkvMergeGuiPath.AutoSize = true
+        Me.llMkvMergeGuiPath.Location = New System.Drawing.Point(43, 45)
+        Me.llMkvMergeGuiPath.Name = "llMkvMergeGuiPath"
+        Me.llMkvMergeGuiPath.Size = New System.Drawing.Size(85, 15)
+        Me.llMkvMergeGuiPath.TabIndex = 3
+        Me.llMkvMergeGuiPath.TabStop = true
+        Me.llMkvMergeGuiPath.Text = "Download link"
+        '
+        'btnMkvMergeGuiPath
+        '
+        Me.btnMkvMergeGuiPath.Location = New System.Drawing.Point(332, 21)
+        Me.btnMkvMergeGuiPath.Name = "btnMkvMergeGuiPath"
+        Me.btnMkvMergeGuiPath.Size = New System.Drawing.Size(26, 23)
+        Me.btnMkvMergeGuiPath.TabIndex = 2
+        Me.btnMkvMergeGuiPath.Text = "..."
+        Me.btnMkvMergeGuiPath.UseVisualStyleBackColor = true
+        '
+        'tbMkvMergeGuiPath
+        '
+        Me.tbMkvMergeGuiPath.Location = New System.Drawing.Point(46, 21)
+        Me.tbMkvMergeGuiPath.Name = "tbMkvMergeGuiPath"
+        Me.tbMkvMergeGuiPath.ReadOnly = true
+        Me.tbMkvMergeGuiPath.Size = New System.Drawing.Size(287, 21)
+        Me.tbMkvMergeGuiPath.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.tbMkvMergeGuiPath, "Browse to Program Files\MKVToolNix\mmg.exe")
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = true
+        Me.Label19.Location = New System.Drawing.Point(10, 24)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(35, 15)
+        Me.Label19.TabIndex = 0
+        Me.Label19.Text = "Path:"
         '
         'cbXbmcTmdbActorFromImdb
         '
@@ -1341,6 +1453,309 @@ Partial Class frmPreferences
         Me.TabControl4.SelectedIndex = 0
         Me.TabControl4.Size = New System.Drawing.Size(1000, 595)
         Me.TabControl4.TabIndex = 0
+        '
+        'TPGeneral
+        '
+        Me.TPGeneral.Controls.Add(Me.cbMcCloseMCForDLNewVersion)
+        Me.TPGeneral.Controls.Add(Me.Label2)
+        Me.TPGeneral.Controls.Add(Me.cbMultiMonitorEnable)
+        Me.TPGeneral.Controls.Add(Me.cbDisplayLocalActor)
+        Me.TPGeneral.Controls.Add(Me.cbCheckForNewVersion)
+        Me.TPGeneral.Controls.Add(Me.cbRenameNFOtoINFO)
+        Me.TPGeneral.Controls.Add(Me.cbUseMultipleThreads)
+        Me.TPGeneral.Controls.Add(Me.cbShowLogOnError)
+        Me.TPGeneral.Controls.Add(Me.btnFindBrowser)
+        Me.TPGeneral.Controls.Add(Me.cbExternalbrowser)
+        Me.TPGeneral.Controls.Add(Me.chkbx_disablecache)
+        Me.TPGeneral.Controls.Add(Me.GroupBox45)
+        Me.TPGeneral.Controls.Add(Me.GroupBox36)
+        Me.TPGeneral.Controls.Add(Me.GroupBox33)
+        Me.TPGeneral.Controls.Add(Me.GroupBox31)
+        Me.TPGeneral.Controls.Add(Me.GroupBox3)
+        Me.TPGeneral.Location = New System.Drawing.Point(4, 24)
+        Me.TPGeneral.Name = "TPGeneral"
+        Me.TPGeneral.Size = New System.Drawing.Size(992, 567)
+        Me.TPGeneral.TabIndex = 2
+        Me.TPGeneral.Text = "General"
+        Me.TPGeneral.UseVisualStyleBackColor = true
+        '
+        'cbMcCloseMCForDLNewVersion
+        '
+        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(364, 313)
+        Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
+        Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
+        Me.cbMcCloseMCForDLNewVersion.TabIndex = 116
+        Me.cbMcCloseMCForDLNewVersion.Text = "If accept download of new version, close Media Companion."
+        Me.cbMcCloseMCForDLNewVersion.UseVisualStyleBackColor = true
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = true
+        Me.Label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label2.Location = New System.Drawing.Point(21, 11)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(725, 22)
+        Me.Label2.TabIndex = 115
+        Me.Label2.Text = "Options on this Tab are General Media Companion options not specific to any Video"& _ 
+    " type."
+        '
+        'cbMultiMonitorEnable
+        '
+        Me.cbMultiMonitorEnable.AutoSize = true
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(355, 401)
+        Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
+        Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
+        Me.cbMultiMonitorEnable.TabIndex = 114
+        Me.cbMultiMonitorEnable.Text = "Enable Multi-Monitor Support"
+        Me.cbMultiMonitorEnable.UseVisualStyleBackColor = true
+        '
+        'cbRenameNFOtoINFO
+        '
+        Me.cbRenameNFOtoINFO.AutoSize = true
+        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(355, 378)
+        Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
+        Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
+        Me.cbRenameNFOtoINFO.TabIndex = 111
+        Me.cbRenameNFOtoINFO.Text = "Rename Non-Compliant Scene '.nfo' to '.info'"
+        Me.cbRenameNFOtoINFO.UseVisualStyleBackColor = true
+        '
+        'cbShowLogOnError
+        '
+        Me.cbShowLogOnError.AutoSize = true
+        Me.cbShowLogOnError.Location = New System.Drawing.Point(24, 399)
+        Me.cbShowLogOnError.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbShowLogOnError.Name = "cbShowLogOnError"
+        Me.cbShowLogOnError.Size = New System.Drawing.Size(123, 19)
+        Me.cbShowLogOnError.TabIndex = 109
+        Me.cbShowLogOnError.Text = "Show log on error"
+        Me.cbShowLogOnError.UseVisualStyleBackColor = true
+        '
+        'cbExternalbrowser
+        '
+        Me.cbExternalbrowser.AutoSize = true
+        Me.cbExternalbrowser.Location = New System.Drawing.Point(24, 297)
+        Me.cbExternalbrowser.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbExternalbrowser.Name = "cbExternalbrowser"
+        Me.cbExternalbrowser.Size = New System.Drawing.Size(325, 19)
+        Me.cbExternalbrowser.TabIndex = 107
+        Me.cbExternalbrowser.Text = "Use external Browser to display IMDB/TVDB webpages"
+        Me.cbExternalbrowser.UseVisualStyleBackColor = true
+        '
+        'chkbx_disablecache
+        '
+        Me.chkbx_disablecache.AutoSize = true
+        Me.chkbx_disablecache.Location = New System.Drawing.Point(24, 352)
+        Me.chkbx_disablecache.Margin = New System.Windows.Forms.Padding(4)
+        Me.chkbx_disablecache.Name = "chkbx_disablecache"
+        Me.chkbx_disablecache.Size = New System.Drawing.Size(315, 19)
+        Me.chkbx_disablecache.TabIndex = 106
+        Me.chkbx_disablecache.Text = "Disable caching of Media DB (will slow down startup)"
+        Me.chkbx_disablecache.UseVisualStyleBackColor = true
+        '
+        'GroupBox45
+        '
+        Me.GroupBox45.Controls.Add(Me.lblaltnfoeditorclear)
+        Me.GroupBox45.Controls.Add(Me.btnaltnfoeditor)
+        Me.GroupBox45.Controls.Add(Me.tbaltnfoeditor)
+        Me.GroupBox45.Controls.Add(Me.Label20)
+        Me.GroupBox45.Location = New System.Drawing.Point(486, 140)
+        Me.GroupBox45.Name = "GroupBox45"
+        Me.GroupBox45.Size = New System.Drawing.Size(364, 66)
+        Me.GroupBox45.TabIndex = 105
+        Me.GroupBox45.TabStop = false
+        Me.GroupBox45.Text = "Alternative nfo viewer/editor"
+        '
+        'lblaltnfoeditorclear
+        '
+        Me.lblaltnfoeditorclear.AutoSize = true
+        Me.lblaltnfoeditorclear.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblaltnfoeditorclear.Location = New System.Drawing.Point(55, 41)
+        Me.lblaltnfoeditorclear.Name = "lblaltnfoeditorclear"
+        Me.lblaltnfoeditorclear.Size = New System.Drawing.Size(65, 17)
+        Me.lblaltnfoeditorclear.TabIndex = 5
+        Me.lblaltnfoeditorclear.Text = "Clear path"
+        '
+        'btnaltnfoeditor
+        '
+        Me.btnaltnfoeditor.Location = New System.Drawing.Point(332, 15)
+        Me.btnaltnfoeditor.Name = "btnaltnfoeditor"
+        Me.btnaltnfoeditor.Size = New System.Drawing.Size(26, 23)
+        Me.btnaltnfoeditor.TabIndex = 4
+        Me.btnaltnfoeditor.Text = "..."
+        Me.btnaltnfoeditor.UseVisualStyleBackColor = true
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = true
+        Me.Label20.Location = New System.Drawing.Point(10, 20)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(35, 15)
+        Me.Label20.TabIndex = 4
+        Me.Label20.Text = "Path:"
+        '
+        'GroupBox33
+        '
+        Me.GroupBox33.Controls.Add(Me.btnFontSelect)
+        Me.GroupBox33.Controls.Add(Me.btnFontReset)
+        Me.GroupBox33.Controls.Add(Me.lbl_FontSample)
+        Me.GroupBox33.Location = New System.Drawing.Point(486, 49)
+        Me.GroupBox33.Name = "GroupBox33"
+        Me.GroupBox33.Size = New System.Drawing.Size(364, 85)
+        Me.GroupBox33.TabIndex = 103
+        Me.GroupBox33.TabStop = false
+        Me.GroupBox33.Text = "Interface Font"
+        '
+        'btnFontSelect
+        '
+        Me.btnFontSelect.Location = New System.Drawing.Point(7, 21)
+        Me.btnFontSelect.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnFontSelect.Name = "btnFontSelect"
+        Me.btnFontSelect.Size = New System.Drawing.Size(90, 26)
+        Me.btnFontSelect.TabIndex = 34
+        Me.btnFontSelect.Text = "Select"
+        Me.btnFontSelect.UseVisualStyleBackColor = true
+        '
+        'btnFontReset
+        '
+        Me.btnFontReset.Location = New System.Drawing.Point(104, 21)
+        Me.btnFontReset.Name = "btnFontReset"
+        Me.btnFontReset.Size = New System.Drawing.Size(75, 26)
+        Me.btnFontReset.TabIndex = 41
+        Me.btnFontReset.Text = "Reset Font"
+        Me.btnFontReset.UseVisualStyleBackColor = true
+        '
+        'lbl_FontSample
+        '
+        Me.lbl_FontSample.AutoSize = true
+        Me.lbl_FontSample.Location = New System.Drawing.Point(10, 59)
+        Me.lbl_FontSample.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.lbl_FontSample.Name = "lbl_FontSample"
+        Me.lbl_FontSample.Size = New System.Drawing.Size(77, 15)
+        Me.lbl_FontSample.TabIndex = 36
+        Me.lbl_FontSample.Text = "Sample Font"
+        Me.lbl_FontSample.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'GroupBox31
+        '
+        Me.GroupBox31.Controls.Add(Me.Label116)
+        Me.GroupBox31.Controls.Add(Me.Label107)
+        Me.GroupBox31.Controls.Add(Me.txtbx_minrarsize)
+        Me.GroupBox31.Location = New System.Drawing.Point(14, 191)
+        Me.GroupBox31.Name = "GroupBox31"
+        Me.GroupBox31.Size = New System.Drawing.Size(456, 88)
+        Me.GroupBox31.TabIndex = 102
+        Me.GroupBox31.TabStop = false
+        Me.GroupBox31.Text = "RAR Archives"
+        '
+        'Label116
+        '
+        Me.Label116.Location = New System.Drawing.Point(7, 17)
+        Me.Label116.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label116.Name = "Label116"
+        Me.Label116.Size = New System.Drawing.Size(442, 33)
+        Me.Label116.TabIndex = 32
+        Me.Label116.Text = "Media Companion can scrape data for RAR archives, to avoid scraping non-media arc"& _ 
+    "hives (eg. subtitles)."
+        '
+        'Label107
+        '
+        Me.Label107.AutoSize = true
+        Me.Label107.Location = New System.Drawing.Point(81, 57)
+        Me.Label107.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label107.Name = "Label107"
+        Me.Label107.Size = New System.Drawing.Size(319, 15)
+        Me.Label107.TabIndex = 27
+        Me.Label107.Text = "File size in MB (archives smaller than this will be ignored)"
+        '
+        'txtbx_minrarsize
+        '
+        Me.txtbx_minrarsize.Location = New System.Drawing.Point(10, 54)
+        Me.txtbx_minrarsize.Margin = New System.Windows.Forms.Padding(4)
+        Me.txtbx_minrarsize.Name = "txtbx_minrarsize"
+        Me.txtbx_minrarsize.Size = New System.Drawing.Size(63, 21)
+        Me.txtbx_minrarsize.TabIndex = 26
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.Label1)
+        Me.GroupBox3.Controls.Add(Me.lbl_MediaPlayerUser)
+        Me.GroupBox3.Controls.Add(Me.btn_MediaPlayerBrowse)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerUser)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerWMP)
+        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerDefault)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(14, 49)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(456, 136)
+        Me.GroupBox3.TabIndex = 101
+        Me.GroupBox3.TabStop = false
+        Me.GroupBox3.Text = "Media Player"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label1.Location = New System.Drawing.Point(6, 16)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(421, 26)
+        Me.Label1.TabIndex = 9
+        Me.Label1.Text = "Media Companion can be used to playback media files.  Use the options below to se"& _ 
+    "lect"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"what program to use for playback.  Multipart media files utilises a m3u pl"& _ 
+    "aylist."
+        '
+        'lbl_MediaPlayerUser
+        '
+        Me.lbl_MediaPlayerUser.AutoSize = true
+        Me.lbl_MediaPlayerUser.Location = New System.Drawing.Point(6, 111)
+        Me.lbl_MediaPlayerUser.Name = "lbl_MediaPlayerUser"
+        Me.lbl_MediaPlayerUser.Size = New System.Drawing.Size(11, 13)
+        Me.lbl_MediaPlayerUser.TabIndex = 8
+        Me.lbl_MediaPlayerUser.Text = "."
+        '
+        'btn_MediaPlayerBrowse
+        '
+        Me.btn_MediaPlayerBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_MediaPlayerBrowse.Location = New System.Drawing.Point(168, 88)
+        Me.btn_MediaPlayerBrowse.Name = "btn_MediaPlayerBrowse"
+        Me.btn_MediaPlayerBrowse.Size = New System.Drawing.Size(185, 23)
+        Me.btn_MediaPlayerBrowse.TabIndex = 7
+        Me.btn_MediaPlayerBrowse.Text = "Browse to prefferred media player"
+        Me.btn_MediaPlayerBrowse.UseVisualStyleBackColor = true
+        '
+        'rb_MediaPlayerUser
+        '
+        Me.rb_MediaPlayerUser.AutoSize = true
+        Me.rb_MediaPlayerUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerUser.Location = New System.Drawing.Point(6, 91)
+        Me.rb_MediaPlayerUser.Name = "rb_MediaPlayerUser"
+        Me.rb_MediaPlayerUser.Size = New System.Drawing.Size(129, 17)
+        Me.rb_MediaPlayerUser.TabIndex = 6
+        Me.rb_MediaPlayerUser.Text = "Select Different player"
+        Me.rb_MediaPlayerUser.UseVisualStyleBackColor = true
+        '
+        'rb_MediaPlayerWMP
+        '
+        Me.rb_MediaPlayerWMP.AutoSize = true
+        Me.rb_MediaPlayerWMP.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerWMP.Location = New System.Drawing.Point(6, 68)
+        Me.rb_MediaPlayerWMP.Name = "rb_MediaPlayerWMP"
+        Me.rb_MediaPlayerWMP.Size = New System.Drawing.Size(367, 17)
+        Me.rb_MediaPlayerWMP.TabIndex = 1
+        Me.rb_MediaPlayerWMP.Text = "Use Windows Media Player --- Launch WMP and play the selected file(s)"
+        Me.rb_MediaPlayerWMP.UseVisualStyleBackColor = true
+        '
+        'rb_MediaPlayerDefault
+        '
+        Me.rb_MediaPlayerDefault.AutoSize = true
+        Me.rb_MediaPlayerDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rb_MediaPlayerDefault.Location = New System.Drawing.Point(6, 45)
+        Me.rb_MediaPlayerDefault.Name = "rb_MediaPlayerDefault"
+        Me.rb_MediaPlayerDefault.Size = New System.Drawing.Size(446, 17)
+        Me.rb_MediaPlayerDefault.TabIndex = 0
+        Me.rb_MediaPlayerDefault.Text = "Use Default Player  ---------------  This option will open the default player for"& _ 
+    " .m3u playlist files"
+        Me.rb_MediaPlayerDefault.UseVisualStyleBackColor = true
         '
         'TPCommonSettings
         '
@@ -1732,6 +2147,17 @@ Partial Class frmPreferences
         Me.TPActors.TabIndex = 1
         Me.TPActors.Text = "Actor(s)"
         Me.TPActors.UseVisualStyleBackColor = true
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = true
+        Me.Label21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label21.Location = New System.Drawing.Point(13, 4)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(358, 26)
+        Me.Label21.TabIndex = 103
+        Me.Label21.Text = "Common Actor Settings, Movie && TV."
         '
         'GroupBox2
         '
@@ -2793,7 +3219,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -2998,7 +3424,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColWatched
         '
         Me.cbMovieList_ShowColWatched.AutoSize = true
-        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(7, 60)
+        Me.cbMovieList_ShowColWatched.Location = New System.Drawing.Point(7, 55)
         Me.cbMovieList_ShowColWatched.Name = "cbMovieList_ShowColWatched"
         Me.cbMovieList_ShowColWatched.Size = New System.Drawing.Size(152, 19)
         Me.cbMovieList_ShowColWatched.TabIndex = 3
@@ -3008,7 +3434,7 @@ Partial Class frmPreferences
         'cbMovieList_ShowColPlot
         '
         Me.cbMovieList_ShowColPlot.AutoSize = true
-        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(7, 39)
+        Me.cbMovieList_ShowColPlot.Location = New System.Drawing.Point(7, 36)
         Me.cbMovieList_ShowColPlot.Name = "cbMovieList_ShowColPlot"
         Me.cbMovieList_ShowColPlot.Size = New System.Drawing.Size(125, 19)
         Me.cbMovieList_ShowColPlot.TabIndex = 2
@@ -3020,7 +3446,7 @@ Partial Class frmPreferences
         Me.cbMovieShowDateOnList.CheckAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbMovieShowDateOnList.Enabled = false
         Me.cbMovieShowDateOnList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(7, 85)
+        Me.cbMovieShowDateOnList.Location = New System.Drawing.Point(7, 76)
         Me.cbMovieShowDateOnList.Name = "cbMovieShowDateOnList"
         Me.cbMovieShowDateOnList.Size = New System.Drawing.Size(275, 20)
         Me.cbMovieShowDateOnList.TabIndex = 72
@@ -3250,6 +3676,7 @@ Partial Class frmPreferences
         '
         'GroupBox26
         '
+        Me.GroupBox26.Controls.Add(Me.cb_MovRuntimeAsDuration)
         Me.GroupBox26.Controls.Add(Me.cbEnableFolderSize)
         Me.GroupBox26.Controls.Add(Me.cbShowMovieGridToolTip)
         Me.GroupBox26.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
@@ -3280,7 +3707,7 @@ Partial Class frmPreferences
         'cbShowMovieGridToolTip
         '
         Me.cbShowMovieGridToolTip.AutoSize = true
-        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 450)
+        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 463)
         Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
         Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
         Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
@@ -3291,7 +3718,7 @@ Partial Class frmPreferences
         'cb_MovSetTitleIgnArticle
         '
         Me.cb_MovSetTitleIgnArticle.AutoSize = true
-        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 399)
+        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 415)
         Me.cb_MovSetTitleIgnArticle.Name = "cb_MovSetTitleIgnArticle"
         Me.cb_MovSetTitleIgnArticle.Size = New System.Drawing.Size(236, 19)
         Me.cb_MovSetTitleIgnArticle.TabIndex = 94
@@ -3301,7 +3728,7 @@ Partial Class frmPreferences
         'cb_SorttitleIgnoreArticles
         '
         Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 374)
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 390)
         Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
         Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
         Me.cb_SorttitleIgnoreArticles.TabIndex = 93
@@ -3311,7 +3738,7 @@ Partial Class frmPreferences
         'cb_MovDurationAsRuntine
         '
         Me.cb_MovDurationAsRuntine.AutoSize = true
-        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(25, 230)
+        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(17, 231)
         Me.cb_MovDurationAsRuntine.Name = "cb_MovDurationAsRuntine"
         Me.cb_MovDurationAsRuntine.Size = New System.Drawing.Size(210, 19)
         Me.cb_MovDurationAsRuntine.TabIndex = 78
@@ -3321,7 +3748,7 @@ Partial Class frmPreferences
         'cbMissingMovie
         '
         Me.cbMissingMovie.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 306)
+        Me.cbMissingMovie.Location = New System.Drawing.Point(6, 334)
         Me.cbMissingMovie.Name = "cbMissingMovie"
         Me.cbMissingMovie.Size = New System.Drawing.Size(275, 36)
         Me.cbMissingMovie.TabIndex = 81
@@ -3333,7 +3760,7 @@ Partial Class frmPreferences
         'cbMovThousSeparator
         '
         Me.cbMovThousSeparator.AutoSize = true
-        Me.cbMovThousSeparator.Location = New System.Drawing.Point(7, 182)
+        Me.cbMovThousSeparator.Location = New System.Drawing.Point(7, 178)
         Me.cbMovThousSeparator.Name = "cbMovThousSeparator"
         Me.cbMovThousSeparator.Size = New System.Drawing.Size(235, 19)
         Me.cbMovThousSeparator.TabIndex = 77
@@ -3367,7 +3794,7 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeFile)
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeScraper)
         Me.PanelDisplayRuntime.Enabled = false
-        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(7, 251)
+        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(6, 273)
         Me.PanelDisplayRuntime.Name = "PanelDisplayRuntime"
         Me.PanelDisplayRuntime.Size = New System.Drawing.Size(268, 49)
         Me.PanelDisplayRuntime.TabIndex = 68
@@ -5176,430 +5603,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'TPGeneral
-        '
-        Me.TPGeneral.Controls.Add(Me.cbMcCloseMCForDLNewVersion)
-        Me.TPGeneral.Controls.Add(Me.Label2)
-        Me.TPGeneral.Controls.Add(Me.cbMultiMonitorEnable)
-        Me.TPGeneral.Controls.Add(Me.cbDisplayLocalActor)
-        Me.TPGeneral.Controls.Add(Me.cbCheckForNewVersion)
-        Me.TPGeneral.Controls.Add(Me.cbRenameNFOtoINFO)
-        Me.TPGeneral.Controls.Add(Me.cbUseMultipleThreads)
-        Me.TPGeneral.Controls.Add(Me.cbShowLogOnError)
-        Me.TPGeneral.Controls.Add(Me.btnFindBrowser)
-        Me.TPGeneral.Controls.Add(Me.cbExternalbrowser)
-        Me.TPGeneral.Controls.Add(Me.chkbx_disablecache)
-        Me.TPGeneral.Controls.Add(Me.GroupBox45)
-        Me.TPGeneral.Controls.Add(Me.GroupBox36)
-        Me.TPGeneral.Controls.Add(Me.GroupBox33)
-        Me.TPGeneral.Controls.Add(Me.GroupBox31)
-        Me.TPGeneral.Controls.Add(Me.GroupBox3)
-        Me.TPGeneral.Location = New System.Drawing.Point(4, 24)
-        Me.TPGeneral.Name = "TPGeneral"
-        Me.TPGeneral.Size = New System.Drawing.Size(992, 567)
-        Me.TPGeneral.TabIndex = 2
-        Me.TPGeneral.Text = "General"
-        Me.TPGeneral.UseVisualStyleBackColor = true
-        '
-        'cbMcCloseMCForDLNewVersion
-        '
-        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(364, 313)
-        Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
-        Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
-        Me.cbMcCloseMCForDLNewVersion.TabIndex = 116
-        Me.cbMcCloseMCForDLNewVersion.Text = "If accept download of new version, close Media Companion."
-        Me.cbMcCloseMCForDLNewVersion.UseVisualStyleBackColor = true
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = true
-        Me.Label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label2.Location = New System.Drawing.Point(21, 11)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(725, 22)
-        Me.Label2.TabIndex = 115
-        Me.Label2.Text = "Options on this Tab are General Media Companion options not specific to any Video"& _ 
-    " type."
-        '
-        'cbMultiMonitorEnable
-        '
-        Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(355, 401)
-        Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
-        Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
-        Me.cbMultiMonitorEnable.TabIndex = 114
-        Me.cbMultiMonitorEnable.Text = "Enable Multi-Monitor Support"
-        Me.cbMultiMonitorEnable.UseVisualStyleBackColor = true
-        '
-        'cbDisplayLocalActor
-        '
-        Me.cbDisplayLocalActor.AutoSize = true
-        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(355, 352)
-        Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
-        Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
-        Me.cbDisplayLocalActor.TabIndex = 113
-        Me.cbDisplayLocalActor.Text = "Display Local Actor images only"
-        Me.ToolTip1.SetToolTip(Me.cbDisplayLocalActor, "If selected, MC will not attempt to download actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"images from Internet if image"& _ 
-        " is not locally stored")
-        Me.cbDisplayLocalActor.UseVisualStyleBackColor = true
-        '
-        'cbCheckForNewVersion
-        '
-        Me.cbCheckForNewVersion.AutoSize = true
-        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(355, 297)
-        Me.cbCheckForNewVersion.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbCheckForNewVersion.Name = "cbCheckForNewVersion"
-        Me.cbCheckForNewVersion.Size = New System.Drawing.Size(198, 19)
-        Me.cbCheckForNewVersion.TabIndex = 112
-        Me.cbCheckForNewVersion.Text = "Check for new version at startup"
-        Me.ToolTip1.SetToolTip(Me.cbCheckForNewVersion, "Currently only implemented in movies 'Refresh All'. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Enable for maximum performa"& _ 
-        "nce."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Disable if you encounter a problem.")
-        Me.cbCheckForNewVersion.UseVisualStyleBackColor = true
-        '
-        'cbRenameNFOtoINFO
-        '
-        Me.cbRenameNFOtoINFO.AutoSize = true
-        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(355, 378)
-        Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
-        Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
-        Me.cbRenameNFOtoINFO.TabIndex = 111
-        Me.cbRenameNFOtoINFO.Text = "Rename Non-Compliant Scene '.nfo' to '.info'"
-        Me.cbRenameNFOtoINFO.UseVisualStyleBackColor = true
-        '
-        'cbUseMultipleThreads
-        '
-        Me.cbUseMultipleThreads.AutoSize = true
-        Me.cbUseMultipleThreads.Location = New System.Drawing.Point(24, 376)
-        Me.cbUseMultipleThreads.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbUseMultipleThreads.Name = "cbUseMultipleThreads"
-        Me.cbUseMultipleThreads.Size = New System.Drawing.Size(278, 19)
-        Me.cbUseMultipleThreads.TabIndex = 110
-        Me.cbUseMultipleThreads.Text = "Use multiple threaded version where available"
-        Me.ToolTip1.SetToolTip(Me.cbUseMultipleThreads, "Currently only implemented in movies 'Refresh All'. "&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Enable for maximum performa"& _ 
-        "nce."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Disable if you encounter a problem.")
-        Me.cbUseMultipleThreads.UseVisualStyleBackColor = true
-        '
-        'cbShowLogOnError
-        '
-        Me.cbShowLogOnError.AutoSize = true
-        Me.cbShowLogOnError.Location = New System.Drawing.Point(24, 399)
-        Me.cbShowLogOnError.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbShowLogOnError.Name = "cbShowLogOnError"
-        Me.cbShowLogOnError.Size = New System.Drawing.Size(123, 19)
-        Me.cbShowLogOnError.TabIndex = 109
-        Me.cbShowLogOnError.Text = "Show log on error"
-        Me.cbShowLogOnError.UseVisualStyleBackColor = true
-        '
-        'btnFindBrowser
-        '
-        Me.btnFindBrowser.Enabled = false
-        Me.btnFindBrowser.Location = New System.Drawing.Point(58, 318)
-        Me.btnFindBrowser.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnFindBrowser.Name = "btnFindBrowser"
-        Me.btnFindBrowser.Size = New System.Drawing.Size(112, 26)
-        Me.btnFindBrowser.TabIndex = 108
-        Me.btnFindBrowser.Text = "Locate browser..."
-        Me.ToolTip1.SetToolTip(Me.btnFindBrowser, "Select external browser to use. ")
-        Me.btnFindBrowser.UseVisualStyleBackColor = false
-        '
-        'cbExternalbrowser
-        '
-        Me.cbExternalbrowser.AutoSize = true
-        Me.cbExternalbrowser.Location = New System.Drawing.Point(24, 297)
-        Me.cbExternalbrowser.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbExternalbrowser.Name = "cbExternalbrowser"
-        Me.cbExternalbrowser.Size = New System.Drawing.Size(325, 19)
-        Me.cbExternalbrowser.TabIndex = 107
-        Me.cbExternalbrowser.Text = "Use external Browser to display IMDB/TVDB webpages"
-        Me.cbExternalbrowser.UseVisualStyleBackColor = true
-        '
-        'chkbx_disablecache
-        '
-        Me.chkbx_disablecache.AutoSize = true
-        Me.chkbx_disablecache.Location = New System.Drawing.Point(24, 352)
-        Me.chkbx_disablecache.Margin = New System.Windows.Forms.Padding(4)
-        Me.chkbx_disablecache.Name = "chkbx_disablecache"
-        Me.chkbx_disablecache.Size = New System.Drawing.Size(315, 19)
-        Me.chkbx_disablecache.TabIndex = 106
-        Me.chkbx_disablecache.Text = "Disable caching of Media DB (will slow down startup)"
-        Me.chkbx_disablecache.UseVisualStyleBackColor = true
-        '
-        'GroupBox45
-        '
-        Me.GroupBox45.Controls.Add(Me.lblaltnfoeditorclear)
-        Me.GroupBox45.Controls.Add(Me.btnaltnfoeditor)
-        Me.GroupBox45.Controls.Add(Me.tbaltnfoeditor)
-        Me.GroupBox45.Controls.Add(Me.Label20)
-        Me.GroupBox45.Location = New System.Drawing.Point(486, 140)
-        Me.GroupBox45.Name = "GroupBox45"
-        Me.GroupBox45.Size = New System.Drawing.Size(364, 66)
-        Me.GroupBox45.TabIndex = 105
-        Me.GroupBox45.TabStop = false
-        Me.GroupBox45.Text = "Alternative nfo viewer/editor"
-        '
-        'lblaltnfoeditorclear
-        '
-        Me.lblaltnfoeditorclear.AutoSize = true
-        Me.lblaltnfoeditorclear.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblaltnfoeditorclear.Location = New System.Drawing.Point(55, 41)
-        Me.lblaltnfoeditorclear.Name = "lblaltnfoeditorclear"
-        Me.lblaltnfoeditorclear.Size = New System.Drawing.Size(65, 17)
-        Me.lblaltnfoeditorclear.TabIndex = 5
-        Me.lblaltnfoeditorclear.Text = "Clear path"
-        '
-        'btnaltnfoeditor
-        '
-        Me.btnaltnfoeditor.Location = New System.Drawing.Point(332, 15)
-        Me.btnaltnfoeditor.Name = "btnaltnfoeditor"
-        Me.btnaltnfoeditor.Size = New System.Drawing.Size(26, 23)
-        Me.btnaltnfoeditor.TabIndex = 4
-        Me.btnaltnfoeditor.Text = "..."
-        Me.btnaltnfoeditor.UseVisualStyleBackColor = true
-        '
-        'tbaltnfoeditor
-        '
-        Me.tbaltnfoeditor.Location = New System.Drawing.Point(46, 17)
-        Me.tbaltnfoeditor.Name = "tbaltnfoeditor"
-        Me.tbaltnfoeditor.ReadOnly = true
-        Me.tbaltnfoeditor.Size = New System.Drawing.Size(287, 21)
-        Me.tbaltnfoeditor.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.tbaltnfoeditor, "Browse to Program Files\MKVToolNix\mmg.exe")
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = true
-        Me.Label20.Location = New System.Drawing.Point(10, 20)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(35, 15)
-        Me.Label20.TabIndex = 4
-        Me.Label20.Text = "Path:"
-        '
-        'GroupBox36
-        '
-        Me.GroupBox36.Controls.Add(Me.llMkvMergeGuiPath)
-        Me.GroupBox36.Controls.Add(Me.btnMkvMergeGuiPath)
-        Me.GroupBox36.Controls.Add(Me.tbMkvMergeGuiPath)
-        Me.GroupBox36.Controls.Add(Me.Label19)
-        Me.GroupBox36.Location = New System.Drawing.Point(486, 212)
-        Me.GroupBox36.Name = "GroupBox36"
-        Me.GroupBox36.Size = New System.Drawing.Size(364, 67)
-        Me.GroupBox36.TabIndex = 104
-        Me.GroupBox36.TabStop = false
-        Me.GroupBox36.Text = "mkvmerge GUI"
-        Me.ToolTip1.SetToolTip(Me.GroupBox36, "Use this program to save disk space by removing unwanted extra audio and subtitle"& _ 
-        " tracks")
-        '
-        'llMkvMergeGuiPath
-        '
-        Me.llMkvMergeGuiPath.AutoSize = true
-        Me.llMkvMergeGuiPath.Location = New System.Drawing.Point(43, 45)
-        Me.llMkvMergeGuiPath.Name = "llMkvMergeGuiPath"
-        Me.llMkvMergeGuiPath.Size = New System.Drawing.Size(85, 15)
-        Me.llMkvMergeGuiPath.TabIndex = 3
-        Me.llMkvMergeGuiPath.TabStop = true
-        Me.llMkvMergeGuiPath.Text = "Download link"
-        '
-        'btnMkvMergeGuiPath
-        '
-        Me.btnMkvMergeGuiPath.Location = New System.Drawing.Point(332, 21)
-        Me.btnMkvMergeGuiPath.Name = "btnMkvMergeGuiPath"
-        Me.btnMkvMergeGuiPath.Size = New System.Drawing.Size(26, 23)
-        Me.btnMkvMergeGuiPath.TabIndex = 2
-        Me.btnMkvMergeGuiPath.Text = "..."
-        Me.btnMkvMergeGuiPath.UseVisualStyleBackColor = true
-        '
-        'tbMkvMergeGuiPath
-        '
-        Me.tbMkvMergeGuiPath.Location = New System.Drawing.Point(46, 21)
-        Me.tbMkvMergeGuiPath.Name = "tbMkvMergeGuiPath"
-        Me.tbMkvMergeGuiPath.ReadOnly = true
-        Me.tbMkvMergeGuiPath.Size = New System.Drawing.Size(287, 21)
-        Me.tbMkvMergeGuiPath.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.tbMkvMergeGuiPath, "Browse to Program Files\MKVToolNix\mmg.exe")
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = true
-        Me.Label19.Location = New System.Drawing.Point(10, 24)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(35, 15)
-        Me.Label19.TabIndex = 0
-        Me.Label19.Text = "Path:"
-        '
-        'GroupBox33
-        '
-        Me.GroupBox33.Controls.Add(Me.btnFontSelect)
-        Me.GroupBox33.Controls.Add(Me.btnFontReset)
-        Me.GroupBox33.Controls.Add(Me.lbl_FontSample)
-        Me.GroupBox33.Location = New System.Drawing.Point(486, 49)
-        Me.GroupBox33.Name = "GroupBox33"
-        Me.GroupBox33.Size = New System.Drawing.Size(364, 85)
-        Me.GroupBox33.TabIndex = 103
-        Me.GroupBox33.TabStop = false
-        Me.GroupBox33.Text = "Interface Font"
-        '
-        'btnFontSelect
-        '
-        Me.btnFontSelect.Location = New System.Drawing.Point(7, 21)
-        Me.btnFontSelect.Margin = New System.Windows.Forms.Padding(4)
-        Me.btnFontSelect.Name = "btnFontSelect"
-        Me.btnFontSelect.Size = New System.Drawing.Size(90, 26)
-        Me.btnFontSelect.TabIndex = 34
-        Me.btnFontSelect.Text = "Select"
-        Me.btnFontSelect.UseVisualStyleBackColor = true
-        '
-        'btnFontReset
-        '
-        Me.btnFontReset.Location = New System.Drawing.Point(104, 21)
-        Me.btnFontReset.Name = "btnFontReset"
-        Me.btnFontReset.Size = New System.Drawing.Size(75, 26)
-        Me.btnFontReset.TabIndex = 41
-        Me.btnFontReset.Text = "Reset Font"
-        Me.btnFontReset.UseVisualStyleBackColor = true
-        '
-        'lbl_FontSample
-        '
-        Me.lbl_FontSample.AutoSize = true
-        Me.lbl_FontSample.Location = New System.Drawing.Point(10, 59)
-        Me.lbl_FontSample.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.lbl_FontSample.Name = "lbl_FontSample"
-        Me.lbl_FontSample.Size = New System.Drawing.Size(77, 15)
-        Me.lbl_FontSample.TabIndex = 36
-        Me.lbl_FontSample.Text = "Sample Font"
-        Me.lbl_FontSample.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'GroupBox31
-        '
-        Me.GroupBox31.Controls.Add(Me.Label116)
-        Me.GroupBox31.Controls.Add(Me.Label107)
-        Me.GroupBox31.Controls.Add(Me.txtbx_minrarsize)
-        Me.GroupBox31.Location = New System.Drawing.Point(14, 191)
-        Me.GroupBox31.Name = "GroupBox31"
-        Me.GroupBox31.Size = New System.Drawing.Size(456, 88)
-        Me.GroupBox31.TabIndex = 102
-        Me.GroupBox31.TabStop = false
-        Me.GroupBox31.Text = "RAR Archives"
-        '
-        'Label116
-        '
-        Me.Label116.Location = New System.Drawing.Point(7, 17)
-        Me.Label116.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label116.Name = "Label116"
-        Me.Label116.Size = New System.Drawing.Size(442, 33)
-        Me.Label116.TabIndex = 32
-        Me.Label116.Text = "Media Companion can scrape data for RAR archives, to avoid scraping non-media arc"& _ 
-    "hives (eg. subtitles)."
-        '
-        'Label107
-        '
-        Me.Label107.AutoSize = true
-        Me.Label107.Location = New System.Drawing.Point(81, 57)
-        Me.Label107.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label107.Name = "Label107"
-        Me.Label107.Size = New System.Drawing.Size(319, 15)
-        Me.Label107.TabIndex = 27
-        Me.Label107.Text = "File size in MB (archives smaller than this will be ignored)"
-        '
-        'txtbx_minrarsize
-        '
-        Me.txtbx_minrarsize.Location = New System.Drawing.Point(10, 54)
-        Me.txtbx_minrarsize.Margin = New System.Windows.Forms.Padding(4)
-        Me.txtbx_minrarsize.Name = "txtbx_minrarsize"
-        Me.txtbx_minrarsize.Size = New System.Drawing.Size(63, 21)
-        Me.txtbx_minrarsize.TabIndex = 26
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.Label1)
-        Me.GroupBox3.Controls.Add(Me.lbl_MediaPlayerUser)
-        Me.GroupBox3.Controls.Add(Me.btn_MediaPlayerBrowse)
-        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerUser)
-        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerWMP)
-        Me.GroupBox3.Controls.Add(Me.rb_MediaPlayerDefault)
-        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox3.Location = New System.Drawing.Point(14, 49)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(456, 136)
-        Me.GroupBox3.TabIndex = 101
-        Me.GroupBox3.TabStop = false
-        Me.GroupBox3.Text = "Media Player"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = true
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label1.Location = New System.Drawing.Point(6, 16)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(421, 26)
-        Me.Label1.TabIndex = 9
-        Me.Label1.Text = "Media Companion can be used to playback media files.  Use the options below to se"& _ 
-    "lect"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"what program to use for playback.  Multipart media files utilises a m3u pl"& _ 
-    "aylist."
-        '
-        'lbl_MediaPlayerUser
-        '
-        Me.lbl_MediaPlayerUser.AutoSize = true
-        Me.lbl_MediaPlayerUser.Location = New System.Drawing.Point(6, 111)
-        Me.lbl_MediaPlayerUser.Name = "lbl_MediaPlayerUser"
-        Me.lbl_MediaPlayerUser.Size = New System.Drawing.Size(11, 13)
-        Me.lbl_MediaPlayerUser.TabIndex = 8
-        Me.lbl_MediaPlayerUser.Text = "."
-        '
-        'btn_MediaPlayerBrowse
-        '
-        Me.btn_MediaPlayerBrowse.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btn_MediaPlayerBrowse.Location = New System.Drawing.Point(168, 88)
-        Me.btn_MediaPlayerBrowse.Name = "btn_MediaPlayerBrowse"
-        Me.btn_MediaPlayerBrowse.Size = New System.Drawing.Size(185, 23)
-        Me.btn_MediaPlayerBrowse.TabIndex = 7
-        Me.btn_MediaPlayerBrowse.Text = "Browse to prefferred media player"
-        Me.btn_MediaPlayerBrowse.UseVisualStyleBackColor = true
-        '
-        'rb_MediaPlayerUser
-        '
-        Me.rb_MediaPlayerUser.AutoSize = true
-        Me.rb_MediaPlayerUser.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rb_MediaPlayerUser.Location = New System.Drawing.Point(6, 91)
-        Me.rb_MediaPlayerUser.Name = "rb_MediaPlayerUser"
-        Me.rb_MediaPlayerUser.Size = New System.Drawing.Size(129, 17)
-        Me.rb_MediaPlayerUser.TabIndex = 6
-        Me.rb_MediaPlayerUser.Text = "Select Different player"
-        Me.rb_MediaPlayerUser.UseVisualStyleBackColor = true
-        '
-        'rb_MediaPlayerWMP
-        '
-        Me.rb_MediaPlayerWMP.AutoSize = true
-        Me.rb_MediaPlayerWMP.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rb_MediaPlayerWMP.Location = New System.Drawing.Point(6, 68)
-        Me.rb_MediaPlayerWMP.Name = "rb_MediaPlayerWMP"
-        Me.rb_MediaPlayerWMP.Size = New System.Drawing.Size(367, 17)
-        Me.rb_MediaPlayerWMP.TabIndex = 1
-        Me.rb_MediaPlayerWMP.Text = "Use Windows Media Player --- Launch WMP and play the selected file(s)"
-        Me.rb_MediaPlayerWMP.UseVisualStyleBackColor = true
-        '
-        'rb_MediaPlayerDefault
-        '
-        Me.rb_MediaPlayerDefault.AutoSize = true
-        Me.rb_MediaPlayerDefault.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rb_MediaPlayerDefault.Location = New System.Drawing.Point(6, 45)
-        Me.rb_MediaPlayerDefault.Name = "rb_MediaPlayerDefault"
-        Me.rb_MediaPlayerDefault.Size = New System.Drawing.Size(446, 17)
-        Me.rb_MediaPlayerDefault.TabIndex = 0
-        Me.rb_MediaPlayerDefault.Text = "Use Default Player  ---------------  This option will open the default player for"& _ 
-    " .m3u playlist files"
-        Me.rb_MediaPlayerDefault.UseVisualStyleBackColor = true
-        '
-        'Label21
-        '
-        Me.Label21.AutoSize = true
-        Me.Label21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 14!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label21.Location = New System.Drawing.Point(13, 4)
-        Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(358, 26)
-        Me.Label21.TabIndex = 103
-        Me.Label21.Text = "Common Actor Settings, Movie && TV."
+        'cb_MovRuntimeAsDuration
+        '
+        Me.cb_MovRuntimeAsDuration.AutoSize = true
+        Me.cb_MovRuntimeAsDuration.Location = New System.Drawing.Point(17, 252)
+        Me.cb_MovRuntimeAsDuration.Name = "cb_MovRuntimeAsDuration"
+        Me.cb_MovRuntimeAsDuration.Size = New System.Drawing.Size(241, 19)
+        Me.cb_MovRuntimeAsDuration.TabIndex = 83
+        Me.cb_MovRuntimeAsDuration.Text = "or Save Runtime as DurationInSeconds"
+        Me.cb_MovRuntimeAsDuration.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -5626,10 +5638,22 @@ Partial Class frmPreferences
         Me.gbExcludeFolders.PerformLayout
         Me.GroupBox11.ResumeLayout(false)
         Me.GroupBox11.PerformLayout
+        Me.GroupBox36.ResumeLayout(false)
+        Me.GroupBox36.PerformLayout
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
         Me.TabControl1.ResumeLayout(false)
         Me.TPGenCom.ResumeLayout(false)
         Me.TabControl4.ResumeLayout(false)
+        Me.TPGeneral.ResumeLayout(false)
+        Me.TPGeneral.PerformLayout
+        Me.GroupBox45.ResumeLayout(false)
+        Me.GroupBox45.PerformLayout
+        Me.GroupBox33.ResumeLayout(false)
+        Me.GroupBox33.PerformLayout
+        Me.GroupBox31.ResumeLayout(false)
+        Me.GroupBox31.PerformLayout
+        Me.GroupBox3.ResumeLayout(false)
+        Me.GroupBox3.PerformLayout
         Me.TPCommonSettings.ResumeLayout(false)
         Me.TPCommonSettings.PerformLayout
         Me.GroupBox4.ResumeLayout(false)
@@ -5752,18 +5776,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.TPGeneral.ResumeLayout(false)
-        Me.TPGeneral.PerformLayout
-        Me.GroupBox45.ResumeLayout(false)
-        Me.GroupBox45.PerformLayout
-        Me.GroupBox36.ResumeLayout(false)
-        Me.GroupBox36.PerformLayout
-        Me.GroupBox33.ResumeLayout(false)
-        Me.GroupBox33.PerformLayout
-        Me.GroupBox31.ResumeLayout(false)
-        Me.GroupBox31.PerformLayout
-        Me.GroupBox3.ResumeLayout(false)
-        Me.GroupBox3.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6211,4 +6223,5 @@ End Sub
     Friend WithEvents rb_MediaPlayerWMP As RadioButton
     Friend WithEvents rb_MediaPlayerDefault As RadioButton
     Friend WithEvents Label21 As Label
+    Friend WithEvents cb_MovRuntimeAsDuration As CheckBox
 End Class

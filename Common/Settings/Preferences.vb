@@ -198,6 +198,7 @@ Public Class Pref
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
     Public Shared MovDurationAsRuntine As Boolean
+    Public Shared MovRuntimeAsDuration As Boolean
     Public Shared movieRuntimeDisplay As String
     Public Shared movieRuntimeFallbackToFile As Boolean = False
     Public Shared disablelogfiles As Boolean
@@ -596,7 +597,7 @@ Public Class Pref
         DisplayMediainfoOverlay = True
         DisplayMediaInfoFolderSize = False
         EnableFolderSize = False
-        ShowAllAudioTracks = True
+        ShowAllAudioTracks = False
         incmissingmovies = False
         startupCache = True
         rarsize = 8
@@ -764,6 +765,7 @@ Public Class Pref
         ignoretrailers = False
         enablehdtags = True
         MovDurationAsRuntine = False
+        MovRuntimeAsDuration = False
         savefanart = True
         MovFanartTvscrape = False
         MovFanartNaming = False
@@ -1076,6 +1078,7 @@ Public Class Pref
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
         root.AppendChild(doc, "MovDurationAsRuntine",               MovDurationAsRuntine)               'cb_MovDurationAsRuntine
+        root.AppendChild(doc, "MovRuntimeAsDuration",               MovRuntimeAsDuration)               'cb_MovRuntimeAsDuration
         root.AppendChild(doc, "movieruntimedisplay",                movieRuntimeDisplay)                'rbRuntimeScraper
         root.AppendChild(doc, "movieRuntimeFallbackToFile",         movieRuntimeFallbackToFile)         'cbMovieRuntimeFallbackToFile
         root.AppendChild(doc, "fanartnotstacked",                   fanartnotstacked)                   'set from frmOptions - obsolete
@@ -1491,6 +1494,7 @@ Public Class Pref
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml
                     Case "MovDurationAsRuntine"                 : MovDurationAsRuntine = thisresult.InnerXml 
+                    Case "MovRuntimeAsDuration"                 : MovRuntimeAsDuration = thisresult.InnerXml 
                     Case "movieruntimedisplay"                  : movieRuntimeDisplay = thisresult.InnerXml
                     Case "movieRuntimeFallbackToFile"           : movieRuntimeFallbackToFile = thisresult.InnerXml
                     Case "hdtvtags"                             : enabletvhdtags = thisresult.InnerXml
