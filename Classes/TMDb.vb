@@ -4,7 +4,7 @@ Imports System.IO
 
 Public Class TMDb
 
-    Public Const Key          = "3f026194412846e530a208cf8a39e9cb"
+    Public Const Key          = Utilities.TMDBAPI '"3f026194412846e530a208cf8a39e9cb"
     Public Const TMDB_EXC_MSG = "TMDb is unavailable!"
 
     Public Shared LanguagesFile               = Pref.applicationPath & "\classes\tmdb_languages.xml"

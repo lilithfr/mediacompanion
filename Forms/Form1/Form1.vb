@@ -9522,7 +9522,7 @@ End Sub
     Private Sub mov_FanartGet(Optional ByVal MovSet As Boolean = False)
         If IsNothing(workingMovieDetails) Then Return
         messbox = New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
-        messbox.Show() : messbox.Refresh()
+        'messbox.Show() : messbox.Refresh()
         Application.DoEvents()
 
         Dim tmdb As New TMDb
@@ -10934,6 +10934,20 @@ End Sub
 
     Private Sub plottxt_DoubleClick(sender As System.Object, e As System.EventArgs) Handles plottxt.DoubleClick
         ShowBigMovieText()
+    End Sub
+
+    Private Sub plottxt_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles plottxt.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub outlinetxt_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles outlinetxt.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
     End Sub
 
     Private Sub ShowBigMovieText()
@@ -18670,8 +18684,22 @@ End Sub
         End Try
     End Sub
 
-    Private Sub TextBox_Plot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles tb_EpPlot.DoubleClick
+    Private Sub tb_EpPlot_DoubleClick(sender As System.Object, e As System.EventArgs) Handles tb_EpPlot.DoubleClick
         ShowBigTvEpisodeText()
+    End Sub
+
+    Private Sub tb_EpPlot_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_EpPlot.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tb_ShPlot_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_ShPlot.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
     End Sub
 
     Private Sub ShowBigTvEpisodeText()
