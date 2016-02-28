@@ -5316,6 +5316,7 @@ Public Class Form1
                             WebBrowser4.ScriptErrorsSuppressed = True
                             WebBrowser4.Navigate(tempstring)
                         End Try
+                        WebBrowser4.Focus()
                     End If
                 ElseIf String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso String.IsNullOrEmpty(Show.ImdbId.Value) Then
                     TabControl3.SelectedIndex = 0
@@ -16486,8 +16487,8 @@ End Sub
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
             WebBrowser4.Navigate(url)
-
         End Try
+        WebBrowser4.Focus()
     End Sub
 
     Private Sub btn_TvIMDB_Click(sender As System.Object, e As System.EventArgs) Handles btn_TvIMDB.Click
@@ -16506,7 +16507,32 @@ End Sub
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
             WebBrowser4.Navigate(url)
+        End Try
+        WebBrowser4.Focus()
+    End Sub
 
+    Private Sub btnTvWebStop_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebStop.Click
+        WebBrowser4.Stop()
+    End Sub
+
+    Private Sub btnTvWebRefresh_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebRefresh.Click
+        Try
+            WebBrowser4.Refresh()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub btnTvWebBack_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebBack.Click
+        Try
+            WebBrowser4.GoBack()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub btnTvWebForward_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebForward.Click
+        Try
+            WebBrowser4.GoForward()
+        Catch
         End Try
     End Sub
 

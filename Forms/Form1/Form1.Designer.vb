@@ -758,6 +758,11 @@ Partial Class Form1
         Me.btn_TvIMDB = New System.Windows.Forms.Button()
         Me.Label195 = New System.Windows.Forms.Label()
         Me.btn_TvTVDb = New System.Windows.Forms.Button()
+        Me.Panel14 = New System.Windows.Forms.Panel()
+        Me.btnTvWebStop = New System.Windows.Forms.Button()
+        Me.btnTvWebBack = New System.Windows.Forms.Button()
+        Me.btnTvWebForward = New System.Windows.Forms.Button()
+        Me.btnTvWebRefresh = New System.Windows.Forms.Button()
         Me.tpTvFolders = New System.Windows.Forms.TabPage()
         Me.SplitContainer9 = New System.Windows.Forms.SplitContainer()
         Me.SplitContainer6 = New System.Windows.Forms.SplitContainer()
@@ -977,9 +982,9 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TVWallContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.TVContextMenu.SuspendLayout
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
@@ -1127,6 +1132,7 @@ Partial Class Form1
         CType(Me.DataGridView2,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tpTvWeb.SuspendLayout
         Me.TableLayoutPanel15.SuspendLayout
+        Me.Panel14.SuspendLayout
         Me.tpTvFolders.SuspendLayout
         CType(Me.SplitContainer9,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer9.Panel1.SuspendLayout
@@ -2735,7 +2741,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 624)
-        Me.SplitContainer5.SplitterDistance = 349
+        Me.SplitContainer5.SplitterDistance = 347
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -2810,7 +2816,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 251)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 249)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -2845,7 +2851,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 329)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 327)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -2998,7 +3004,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 1502)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 1767)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3048,7 +3054,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 5385)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 5650)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4158,7 +4164,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(209, 224)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(207, 224)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4168,7 +4174,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(101, 80)
+        Me.Label128.Location = New System.Drawing.Point(99, 80)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -7747,7 +7753,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(529, 354)
+        Me.Panel8.Location = New System.Drawing.Point(532, 354)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -8190,7 +8196,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(274, 198)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(272, 198)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -10295,6 +10301,7 @@ Partial Class Form1
         Me.TableLayoutPanel15.Controls.Add(Me.btn_TvIMDB, 4, 1)
         Me.TableLayoutPanel15.Controls.Add(Me.Label195, 3, 1)
         Me.TableLayoutPanel15.Controls.Add(Me.btn_TvTVDb, 2, 1)
+        Me.TableLayoutPanel15.Controls.Add(Me.Panel14, 0, 1)
         Me.TableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel15.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel15.Name = "TableLayoutPanel15"
@@ -10358,6 +10365,58 @@ Partial Class Form1
         Me.btn_TvTVDb.Size = New System.Drawing.Size(98, 45)
         Me.btn_TvTVDb.TabIndex = 1
         Me.btn_TvTVDb.UseVisualStyleBackColor = true
+        '
+        'Panel14
+        '
+        Me.Panel14.Controls.Add(Me.btnTvWebStop)
+        Me.Panel14.Controls.Add(Me.btnTvWebBack)
+        Me.Panel14.Controls.Add(Me.btnTvWebForward)
+        Me.Panel14.Controls.Add(Me.btnTvWebRefresh)
+        Me.Panel14.Location = New System.Drawing.Point(3, 576)
+        Me.Panel14.Name = "Panel14"
+        Me.Panel14.Size = New System.Drawing.Size(257, 45)
+        Me.Panel14.TabIndex = 5
+        '
+        'btnTvWebStop
+        '
+        Me.btnTvWebStop.BackgroundImage = Global.Media_Companion.My.Resources.Resources.incorrect
+        Me.btnTvWebStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnTvWebStop.Location = New System.Drawing.Point(17, 5)
+        Me.btnTvWebStop.Name = "btnTvWebStop"
+        Me.btnTvWebStop.Size = New System.Drawing.Size(36, 36)
+        Me.btnTvWebStop.TabIndex = 3
+        Me.btnTvWebStop.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnTvWebStop.UseVisualStyleBackColor = true
+        '
+        'btnTvWebBack
+        '
+        Me.btnTvWebBack.BackgroundImage = Global.Media_Companion.My.Resources.Resources.arrow_roll_Back
+        Me.btnTvWebBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnTvWebBack.Location = New System.Drawing.Point(128, 5)
+        Me.btnTvWebBack.Name = "btnTvWebBack"
+        Me.btnTvWebBack.Size = New System.Drawing.Size(36, 36)
+        Me.btnTvWebBack.TabIndex = 2
+        Me.btnTvWebBack.UseVisualStyleBackColor = true
+        '
+        'btnTvWebForward
+        '
+        Me.btnTvWebForward.BackgroundImage = Global.Media_Companion.My.Resources.Resources.arrow_roll_Forward
+        Me.btnTvWebForward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnTvWebForward.Location = New System.Drawing.Point(189, 5)
+        Me.btnTvWebForward.Name = "btnTvWebForward"
+        Me.btnTvWebForward.Size = New System.Drawing.Size(36, 36)
+        Me.btnTvWebForward.TabIndex = 1
+        Me.btnTvWebForward.UseVisualStyleBackColor = true
+        '
+        'btnTvWebRefresh
+        '
+        Me.btnTvWebRefresh.BackgroundImage = Global.Media_Companion.My.Resources.Resources.RefreshAll
+        Me.btnTvWebRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnTvWebRefresh.Location = New System.Drawing.Point(72, 5)
+        Me.btnTvWebRefresh.Name = "btnTvWebRefresh"
+        Me.btnTvWebRefresh.Size = New System.Drawing.Size(36, 36)
+        Me.btnTvWebRefresh.TabIndex = 0
+        Me.btnTvWebRefresh.UseVisualStyleBackColor = true
         '
         'tpTvFolders
         '
@@ -12494,6 +12553,12 @@ Partial Class Form1
         Me.TVWallContextMenu.Name = "ContextMenuStrip3"
         Me.TVWallContextMenu.Size = New System.Drawing.Size(161, 70)
         '
+        'tsmiTvWallPosterChange
+        '
+        Me.tsmiTvWallPosterChange.Name = "tsmiTvWallPosterChange"
+        Me.tsmiTvWallPosterChange.Size = New System.Drawing.Size(160, 22)
+        Me.tsmiTvWallPosterChange.Text = "Change TV Poster"
+        '
         'tsmiTvWallLargeView
         '
         Me.tsmiTvWallLargeView.Name = "tsmiTvWallLargeView"
@@ -12505,12 +12570,6 @@ Partial Class Form1
         Me.tsmiTvWallOpenFolder.Name = "tsmiTvWallOpenFolder"
         Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
         Me.tsmiTvWallOpenFolder.Text = "Open Folder"
-        '
-        'tsmiTvWallPosterChange
-        '
-        Me.tsmiTvWallPosterChange.Name = "tsmiTvWallPosterChange"
-        Me.tsmiTvWallPosterChange.Size = New System.Drawing.Size(160, 22)
-        Me.tsmiTvWallPosterChange.Text = "Change TV Poster"
         '
         'Form1
         '
@@ -12729,6 +12788,7 @@ Partial Class Form1
         Me.tpTvWeb.ResumeLayout(false)
         Me.TableLayoutPanel15.ResumeLayout(false)
         Me.TableLayoutPanel15.PerformLayout
+        Me.Panel14.ResumeLayout(false)
         Me.tpTvFolders.ResumeLayout(false)
         Me.SplitContainer9.Panel1.ResumeLayout(false)
         Me.SplitContainer9.Panel2.ResumeLayout(false)
@@ -13757,4 +13817,9 @@ End Sub
     Friend WithEvents tsmiTvWallLargeView As ToolStripMenuItem
     Friend WithEvents tsmiTvWallOpenFolder As ToolStripMenuItem
     Friend WithEvents tsmiTvWallPosterChange As ToolStripMenuItem
+    Friend WithEvents Panel14 As Panel
+    Friend WithEvents btnTvWebStop As Button
+    Friend WithEvents btnTvWebBack As Button
+    Friend WithEvents btnTvWebForward As Button
+    Friend WithEvents btnTvWebRefresh As Button
 End Class

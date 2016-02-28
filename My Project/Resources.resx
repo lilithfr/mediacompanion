@@ -175,4 +175,10 @@
   <data name="mc_xbmc_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\mc-xbmc-link.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="arrow_roll_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\arrow-roll back.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrow_roll_Forward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\arrow-roll forward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
