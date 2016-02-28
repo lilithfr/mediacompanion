@@ -767,7 +767,7 @@ Public Class frmCoverArt
                                 mainposter.Visible = True
                                 b1.Dispose()
 
-                                Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
+                                Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath, Form1.WallPicWidth, Form1.WallPicHeight)
                                 Form1.updateposterwall(path, fullpathandfilename)
                                 Me.Close()
                                 Exit For
@@ -843,7 +843,7 @@ Public Class frmCoverArt
                                 End With
                                 b1.Dispose()
 
-                                Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath)
+                                Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath, Form1.WallPicWidth, Form1.WallPicHeight)
                                 Form1.updateposterwall(path, fullpathandfilename)
                                 Me.Close()
                                 Exit For

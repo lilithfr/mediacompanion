@@ -976,6 +976,10 @@ Partial Class Form1
         Me.BasicmovienfoBindingSource1 = New System.Windows.Forms.BindingSource(Me.components)
         Me.BasicmovienfoBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.TVWallContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.TVContextMenu.SuspendLayout
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
@@ -1172,6 +1176,7 @@ Partial Class Form1
         CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.TVWallContextMenu.SuspendLayout
         Me.SuspendLayout
         '
         'ToolTip1
@@ -2730,7 +2735,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(327, 624)
-        Me.SplitContainer5.SplitterDistance = 351
+        Me.SplitContainer5.SplitterDistance = 349
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -2805,7 +2810,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 253)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(314, 251)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -2840,7 +2845,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 331)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(140, 329)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -2993,7 +2998,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 1233)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 1502)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3043,7 +3048,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 5116)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 5385)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4153,7 +4158,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(211, 224)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(209, 224)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4163,7 +4168,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(103, 80)
+        Me.Label128.Location = New System.Drawing.Point(101, 80)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -6351,7 +6356,7 @@ Partial Class Form1
         Me.TabPage22.Location = New System.Drawing.Point(4, 25)
         Me.TabPage22.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage22.Name = "TabPage22"
-        Me.TabPage22.Size = New System.Drawing.Size(1041, 628)
+        Me.TabPage22.Size = New System.Drawing.Size(192, 71)
         Me.TabPage22.TabIndex = 9
         Me.TabPage22.Text = "Wall"
         Me.TabPage22.UseVisualStyleBackColor = true
@@ -7742,7 +7747,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(531, 354)
+        Me.Panel8.Location = New System.Drawing.Point(529, 354)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -8185,7 +8190,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(276, 198)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(274, 198)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -12483,6 +12488,30 @@ Partial Class Form1
         Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(404, 434)
         Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
+        'TVWallContextMenu
+        '
+        Me.TVWallContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiTvWallPosterChange, Me.tsmiTvWallLargeView, Me.tsmiTvWallOpenFolder})
+        Me.TVWallContextMenu.Name = "ContextMenuStrip3"
+        Me.TVWallContextMenu.Size = New System.Drawing.Size(161, 70)
+        '
+        'tsmiTvWallLargeView
+        '
+        Me.tsmiTvWallLargeView.Name = "tsmiTvWallLargeView"
+        Me.tsmiTvWallLargeView.Size = New System.Drawing.Size(160, 22)
+        Me.tsmiTvWallLargeView.Text = "Large Image View"
+        '
+        'tsmiTvWallOpenFolder
+        '
+        Me.tsmiTvWallOpenFolder.Name = "tsmiTvWallOpenFolder"
+        Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
+        Me.tsmiTvWallOpenFolder.Text = "Open Folder"
+        '
+        'tsmiTvWallPosterChange
+        '
+        Me.tsmiTvWallPosterChange.Name = "tsmiTvWallPosterChange"
+        Me.tsmiTvWallPosterChange.Size = New System.Drawing.Size(160, 22)
+        Me.tsmiTvWallPosterChange.Text = "Change TV Poster"
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -12765,6 +12794,7 @@ Partial Class Form1
         CType(Me.BindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).EndInit
+        Me.TVWallContextMenu.ResumeLayout(false)
         Me.ResumeLayout(false)
         Me.PerformLayout
 
@@ -13723,4 +13753,8 @@ End Sub
     Friend WithEvents tb_MovFanartScrnShtTime As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents tpTvWall As TabPage
+    Friend WithEvents TVWallContextMenu As ContextMenuStrip
+    Friend WithEvents tsmiTvWallLargeView As ToolStripMenuItem
+    Friend WithEvents tsmiTvWallOpenFolder As ToolStripMenuItem
+    Friend WithEvents tsmiTvWallPosterChange As ToolStripMenuItem
 End Class

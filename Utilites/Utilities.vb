@@ -1000,15 +1000,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return "Error"
     End Function
 
-    Public Shared Function save2postercache(ByVal fullpathandfilename As String, ByVal posterpath As String) As String
+    Public Shared Function save2postercache(ByVal fullpathandfilename As String, ByVal posterpath As String, optional ByVal Width As Integer = 150, Optional ByVal Height As Integer = 200) As String
         Dim bitmap3 As New Bitmap(posterpath)
         Dim bitmap2 As New Bitmap(bitmap3)
         bitmap3.Dispose()
         Dim bm_source As New Bitmap(bitmap2)
-        Dim bm_dest As New Bitmap(150, 200)
+        Dim bm_dest As New Bitmap(Width, Height)
         Dim gr As Graphics = Graphics.FromImage(bm_dest)
         gr.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBilinear
-        gr.DrawImage(bm_source, 0, 0, 150 - 1, 200 - 1)
+        gr.DrawImage(bm_source, 0, 0, Width - 1, Height - 1)
         Dim tempbitmap As Bitmap = bm_dest
         Dim filename As String = Utilities.GetCRC32(fullpathandfilename)
         If Not Directory.Exists(Utilities.PosterCachePath) Then

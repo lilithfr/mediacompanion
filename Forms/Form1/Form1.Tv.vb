@@ -3612,6 +3612,8 @@ Partial Public Class Form1
                         If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-poster.jpg")
                         If eden AndAlso isseasonall = "poster" Then imgpaths.Add(currentshowpath & "season-all.tbn")
                         success = DownloadCache.SaveImageToCacheAndPaths(mainposter, imgpaths, False, , ,overwriteimage)
+                        Dim popath As String = Utilities.save2postercache(currentshow.NfoFilePath, currentshow.ImagePoster.Path, WallPicWidth, WallPicHeight)
+                        updateTvPosterWall(popath, currentshow.NfoFilePath)
                     End If
                 End If
 

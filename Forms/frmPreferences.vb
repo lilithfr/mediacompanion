@@ -641,7 +641,8 @@ Public Class frmPreferences
 #Region "General & Common"
 
 #Region "General Tab"
-    Private Sub rb_MediaPlayerDefault_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) 
+    
+    Private Sub rb_MediaPlayerDefault_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerDefault.CheckedChanged
         If prefsload Then Exit Sub
         If rb_MediaPlayerDefault.Checked = True Then
             Pref.videomode = 1
@@ -649,7 +650,7 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    Private Sub rb_MediaPlayerWMP_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) 
+    Private Sub rb_MediaPlayerWMP_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerWMP.CheckedChanged
         If prefsload Then Exit Sub
         If rb_MediaPlayerWMP.Checked = True Then
             Pref.videomode = 2
@@ -657,7 +658,7 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    Private Sub rb_MediaPlayerUser_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) 
+    Private Sub rb_MediaPlayerUser_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles rb_MediaPlayerUser.CheckedChanged
         If Prefsload Then
             If rb_MediaPlayerUser.Checked AndAlso Not String.IsNullOrEmpty(Pref.selectedvideoplayer) Then
                 lbl_MediaPlayerUser.Text = Pref.selectedvideoplayer
@@ -682,7 +683,7 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    Private Sub btn_MediaPlayerBrowse_Click(ByVal sender As Object, ByVal e As EventArgs) 
+    Private Sub btn_MediaPlayerBrowse_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btn_MediaPlayerBrowse.Click
         If prefsload Then Exit Sub
         Try
             Dim filebrowser As New OpenFileDialog
@@ -702,7 +703,7 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs) 
+    Private Sub txtbx_minrarsize_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs) Handles txtbx_minrarsize.KeyPress
         If prefsload Then Exit Sub
         Try
             If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
@@ -729,7 +730,7 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub txtbx_minrarsize_TextChanged(ByVal sender As Object, ByVal e As EventArgs) 
+    Private Sub txtbx_minrarsize_TextChanged(ByVal sender As Object, ByVal e As EventArgs) Handles txtbx_minrarsize.TextChanged
         If prefsload Then Exit Sub
         If IsNumeric(txtbx_minrarsize.Text) Then
             Pref.rarsize = Convert.ToInt32(txtbx_minrarsize.Text)
@@ -741,7 +742,7 @@ Public Class frmPreferences
         Changes = True
     End Sub
     
-    Private Sub btnFontSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    Private Sub btnFontSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFontSelect.Click
         Try
             Dim dlg As FontDialog = New FontDialog()
             Dim res As DialogResult = dlg.ShowDialog()
@@ -763,7 +764,7 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub btnFontReset_Click(sender As System.Object, e As System.EventArgs) 
+    Private Sub btnFontReset_Click(sender As System.Object, e As System.EventArgs) Handles btnFontReset.Click
         Try
             'Reset Font
             Pref.font = "Times New Roman, 9pt"
@@ -777,7 +778,7 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) 
+    Private Sub btnMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles btnMkvMergeGuiPath.Click
         Dim ofd As New OpenFileDialog
         ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
         ofd.Filter           = "Executable Files|*.exe"
@@ -786,17 +787,17 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) 
+    Private Sub llMkvMergeGuiPath_Click( sender As Object,  e As EventArgs) Handles llMkvMergeGuiPath.Click
         Form1.OpenUrl("http://www.downloadbestsoft.com/MKVToolNix.html")
     End Sub
 
-    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) 
+    Private Sub lblaltnfoeditorclear_Click( sender As Object,  e As EventArgs) Handles lblaltnfoeditorclear.Click
         tbaltnfoeditor.Text = ""
         Pref.altnfoeditor = ""
         Changes = True
     End Sub
 
-    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) 
+    Private Sub btnaltnfoeditor_Click( sender As Object,  e As EventArgs) Handles btnaltnfoeditor.Click
         Dim ofd As New OpenFileDialog
         ofd.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
         ofd.Filter           = "Executable Files|*.exe"
@@ -808,14 +809,14 @@ Public Class frmPreferences
         End If
     End Sub
 
-    Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
         If prefsload Then Exit Sub
         Pref.externalbrowser = cbExternalbrowser.Checked
         btnFindBrowser.Enabled = cbExternalbrowser.Checked
         Changes = True
     End Sub
 
-    Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) 
+    Private Sub btnFindBrowser_Click(sender As System.Object, e As System.EventArgs) Handles btnFindBrowser.Click
         Try
             Dim filebrowser As New OpenFileDialog
             Dim mstrProgramFilesPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
@@ -832,56 +833,57 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    Private Sub chkbx_disablecache_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkbx_disablecache.CheckedChanged
         If prefsload Then Exit Sub
         Pref.startupCache = Not chkbx_disablecache.Checked
         Changes = True
     End Sub
 
-    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) 
+    Private Sub cbUseMultipleThreads_CheckedChanged( sender As Object,  e As EventArgs) Handles cbUseMultipleThreads.CheckedChanged
         If prefsload Then Exit Sub
         Pref.UseMultipleThreads = cbUseMultipleThreads.Checked
         If prefsload Then Exit Sub
         Changes = True
     End Sub
 
-    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) 
+    Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
         If prefsload Then Exit Sub
         Pref.ShowLogOnError = cbShowLogOnError.Checked
         If prefsload Then Exit Sub
         Changes = True
     End Sub
 
-    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) 
+    Private Sub cbCheckForNewVersion_CheckedChanged( sender As Object,  e As EventArgs) Handles cbCheckForNewVersion.CheckedChanged
         If prefsload Then Exit Sub
         Pref.CheckForNewVersion = cbCheckForNewVersion.Checked
         If prefsload Then Exit Sub
         Changes = True
     End Sub
 
-    Private Sub cbMcCloseMCForDLNewVersion_CheckedChanged(sender As Object, e As EventArgs) 
+    Private Sub cbMcCloseMCForDLNewVersion_CheckedChanged(sender As Object, e As EventArgs) Handles cbMcCloseMCForDLNewVersion.CheckedChanged
         If prefsload Then Exit Sub
         Pref.CloseMCForDLNewVersion = cbMcCloseMCForDLNewVersion.Checked
         Changes = True
     End Sub
 
-    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) 
+    Private Sub cbDisplayLocalActor_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDisplayLocalActor.CheckedChanged
         If prefsload Then Exit Sub
         Pref.LocalActorImage = cbDisplayLocalActor.Checked = True
         Changes = True
     End Sub
 
-    Private Sub cbRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    Private Sub cbRenameNFOtoINFO_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRenameNFOtoINFO.CheckedChanged
         If prefsload Then Exit Sub
         Pref.renamenfofiles = cbRenameNFOtoINFO.Checked
         Changes = True
     End Sub
 
-    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
+    Private Sub cbMultiMonitorEnable_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMultiMonitorEnable.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MultiMonitoEnabled = cbMultiMonitorEnable.Checked
         Changes = True
     End Sub
+    
 #End Region  'General Tab    
 
 #Region "Common Settings Tab"

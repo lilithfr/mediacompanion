@@ -7267,6 +7267,10 @@ Public Class Form1
 
                 messbox.Close()
             End Try
+            If ComboBox2.Text.ToLower = "main image" AndAlso rbtvposter.Checked Then
+                Dim popath As String = Utilities.save2postercache(WorkingTvShow.NfoFilePath, WorkingTvShow.ImagePoster.Path, WallPicWidth, WallPicHeight)
+                updateTvPosterWall(popath, WorkingTvShow.NfoFilePath)
+            End If
             path = ""
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -9698,7 +9702,7 @@ End Sub
                         If Not aok Then Throw New Exception()
                         util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
                         util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
-                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0))
+                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, PostPaths(0), WallPicWidth, WallPicHeight)
                         updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                         success = True
                     Else
@@ -9727,16 +9731,7 @@ End Sub
         End Try
         If success then UpdateMissingPoster()
     End Sub
-
-    Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
-        For Each poster As PictureBox In Form1.TabPage22.Controls
-            If poster.Tag = movie Then
-                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
-                poster.Tag = movie
-            End If
-        Next
-    End Sub
-
+    
     Public Sub mov_OfflineDvdProcess(ByVal nfopath As String, ByVal title As String, ByVal mediapath As String)
         Dim tempint2 As Integer = 2097152
         Dim SizeOfFile As Integer = FileLen(mediapath)
@@ -16165,6 +16160,16 @@ End Sub
 #End Region
 
 #Region "Movie Wall"
+
+    Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
+        For Each poster As PictureBox In Form1.TabPage22.Controls
+            If poster.Tag = movie Then
+                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                poster.Tag = movie
+            End If
+        Next
+    End Sub
+
     Private Sub mov_WallReset()
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             TabPage22.Controls.RemoveAt(i)
@@ -17255,7 +17260,7 @@ End Sub
                     If aok Then
                         util_ImageLoad(PictureBoxAssignedMoviePoster, cachename, Utilities.DefaultPosterPath)
                         util_ImageLoad(PbMoviePoster, cachename, Utilities.DefaultPosterPath)
-                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, cachename)
+                        Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, cachename, WallPicWidth, WallPicHeight)
                         updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                     End If
                 Else
@@ -17313,7 +17318,7 @@ End Sub
                 util_ImageLoad(PbMoviePoster, posterpath, Utilities.DefaultPosterPath) '.Image = bmp4
                 btnMoviePosterResetImage.Enabled = False
                 btnMoviePosterSaveCroppedImage.Enabled = False
-                Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.posterpath)
+                Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.posterpath, WallPicWidth, WallPicHeight)
                 updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                 XbmcLink_UpdateArtwork()
             Catch ex As Exception
@@ -17447,7 +17452,7 @@ End Sub
                     Dim Paths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename, workingMovieDetails.fileinfo.videotspath)
                     Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(tempstring2, Paths, False, , ,True)
 
-                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0))
+                    Dim path As String = Utilities.save2postercache(workingMovieDetails.fileinfo.fullpathandfilename, Paths(0), WallPicWidth, WallPicHeight)
                     updateposterwall(path, workingMovieDetails.fileinfo.fullpathandfilename)
                     util_ImageLoad(PictureBoxAssignedMoviePoster, Paths(0), Utilities.DefaultPosterPath)
                     util_ImageLoad(PbMoviePoster, Paths(0), Utilities.DefaultPosterPath)
@@ -19625,6 +19630,21 @@ End Sub
 
 #Region "TV Wall Form"
 
+    Private Sub updateTvPosterWall(ByVal path As String, ByVal series As String)
+        For Each poster As PictureBox In tpTvWall.Controls
+            If poster.Tag = series Then
+                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                poster.Tag = series
+            End If
+        Next
+        For each poster As PictureBox In tvpicturelist
+            If poster.Tag = series Then
+                util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
+                poster.Tag = series
+            End If
+        Next
+    End Sub
+
     Private Sub tv_WallReset()
         For i = tpTvWall.Controls.Count - 1 To 0 Step -1
             tpTvWall.Controls.RemoveAt(i)
@@ -19701,10 +19721,11 @@ End Sub
                 Dim posterCache As String = Utilities.PosterCachePath & filename & ".jpg"
                 If Not File.Exists(posterCache) And File.Exists(tvsh.ImagePoster.Path) Then
                     Try
-                        Dim bitmap2 As New Bitmap(tvsh.ImagePoster.Path)
-                        bitmap2 = Utilities.ResizeImage(bitmap2, WallPicWidth, WallPicHeight)
-                        Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
-                        bitmap2.Dispose()
+                        Utilities.save2postercache(tvsh.NfoFilePath, tvsh.ImagePoster.Path, WallPicWidth, WallPicHeight)
+                        'Dim bitmap2 As New Bitmap(tvsh.ImagePoster.Path)
+                        'bitmap2 = Utilities.ResizeImage(bitmap2, WallPicWidth, WallPicHeight)
+                        'Utilities.SaveImage(bitmap2, IO.Path.Combine(posterCache))
+                        'bitmap2.Dispose()
                     Catch
                         'Invalid file
                         File.Delete(tvsh.ImagePoster.Path)
@@ -19743,7 +19764,7 @@ End Sub
                 .Visible = True
                 .BorderStyle = BorderStyle.None
                 .WaitOnLoad = True
-                .ContextMenuStrip = MovieWallContextMenu
+                .ContextMenuStrip = TVWallContextMenu  'MovieWallContextMenu
                 AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
                 AddHandler bigPictureBox.DoubleClick, AddressOf tv_WallClicked
                 If count = tvMaxWallCount Then
@@ -19785,6 +19806,66 @@ End Sub
             End If
         Next
     End Sub
+    
+    Private Sub tsmiTvWallPosterChange_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiTvWallPosterChange.Click
+        Dim tempstring As String = ClickedControl
+        If tempstring <> Nothing Then
+            Dim child As TreeNode
+            For each child In TvTreeview.Nodes
+                If TypeOf child.Tag Is Media_Companion.TvShow Then
+                    Dim TempShow As TvShow = child.Tag
+                    If TempShow.NfoFilePath = tempstring Then
+                        TvTreeview.SelectedNode = child
+                        TabControl3.SelectedIndex = TabControl3.TabPages.IndexOf(tpTvPosters)
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub tsmiTvWallLargeView_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiTvWallLargeView.Click 
+        Dim tempstring As String = ClickedControl
+        If tempstring <> Nothing Then
+            Try
+                Dim Temp2 As String = SeriesFromCache(tempstring).ImagePoster.path
+                If IO.File.Exists(Temp2) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    util_ZoomImage(Temp2)
+                Else
+                    MsgBox("Cant find file:-" & vbCrLf & Temp2)
+                End If
+            Catch ex As Exception
+            End Try
+        End If
+    End Sub
+
+    Private Sub tsmiTvWallOpenFolder_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles tsmiTvWallOpenFolder.Click 
+        Try
+            Dim tempstring As String = ClickedControl
+            If tempstring <> Nothing Then
+                Try
+                    Call util_OpenFolder(tempstring)
+                Catch ex As Exception
+                End Try
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+
+    Private Function SeriesFromCache(ByVal nfopath As String) As TvShow
+        Dim child As TreeNode
+        For each child In TvTreeview.Nodes
+            If TypeOf child.Tag Is Media_Companion.TvShow Then
+                Dim TempShow As TvShow = child.Tag
+                If TempShow.NfoFilePath = nfopath Then Return TempShow
+            End If
+        Next
+        Return Nothing
+    End Function
 
 #End Region
 
