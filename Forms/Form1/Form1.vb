@@ -262,8 +262,8 @@ Public Class Form1
     Dim WithEvents tvreslabel As Label
     Dim tvposterpage As Integer = 1
     Dim walllocked As Boolean = False
-    Public WallPicWidth As Integer = 165
-    Public WallPicHeight As Integer = Math.Floor((WallPicWidth/3)*4)
+    Public Shared WallPicWidth As Integer = 165
+    Public Shared WallPicHeight As Integer = Math.Floor((WallPicWidth/3)*4)
     Dim MovMaxWallCount As Integer = 0
     Dim tvMaxWallCount As Integer = 0
     Dim moviecount_bak As Integer = 0

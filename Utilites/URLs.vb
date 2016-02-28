@@ -1,7 +1,7 @@
 ﻿'Class which contains all the urls so if anything changes we change it in just one single place
 Public NotInheritable Class URLs
 
-    Private Shared ReadOnly Property TMdbAPIKey() As String
+    Public Shared ReadOnly Property TMdbAPIKey() As String
         Get
             Return "3f026194412846e530a208cf8a39e9cb"
         End Get
