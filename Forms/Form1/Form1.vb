@@ -19668,7 +19668,7 @@ End Sub
                     With pic
                         Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
                         .Location = New Point(locx, locy - vscrollPos)
-                        .ContextMenuStrip = MovieWallContextMenu
+                        .ContextMenuStrip = TVWallContextMenu
                     End With
                     locx += WallPicWidth
                     count += 1
@@ -19695,7 +19695,7 @@ End Sub
 
         tvMaxWallCount = Math.Floor((tpTvWall.Width - 40)/WallPicWidth)
         
-        While (Cache.TvCache.Count / tvMaxWallCount) > (WallPicWidth+15)
+        While (Cache.TvCache.Shows.Count / tvMaxWallCount) > (WallPicWidth+15)
             tvMaxWallCount += 1
         End While        
         
@@ -19764,7 +19764,7 @@ End Sub
                 .Visible = True
                 .BorderStyle = BorderStyle.None
                 .WaitOnLoad = True
-                .ContextMenuStrip = TVWallContextMenu  'MovieWallContextMenu
+                .ContextMenuStrip = TVWallContextMenu
                 AddHandler bigPictureBox.MouseEnter, AddressOf util_MouseEnter
                 AddHandler bigPictureBox.DoubleClick, AddressOf tv_WallClicked
                 If count = tvMaxWallCount Then
