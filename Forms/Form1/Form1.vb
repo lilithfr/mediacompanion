@@ -4124,14 +4124,14 @@ Public Class Form1
                 If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
                     Dim tpi As Integer = TabPage7.ImageIndex
                     If tpi = 1 Then
-                        weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
+                        weburl = "https://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                     Else
                         weburl = "http://www.imdb.com/title/" & IMDB & "/"
                     End If
                 ElseIf (IMDB <> "" And IMDB <> "0") AndAlso TMDB = "" Then
                     weburl = "http://www.imdb.com/title/" & IMDB & "/"
                 ElseIf IMDB = "0" AndAlso TMDB <> "" Then
-                    weburl = "http://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
+                    weburl = "https://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                 End If
 
                 If Pref.externalbrowser = True Then
@@ -4141,20 +4141,28 @@ Public Class Form1
                     OpenUrl(weburl)
                 Else
                     Try
+                        currentTabIndex = TabControl2.SelectedIndex
+                        WebBrowser2.Hide()
+                        WebBrowser2.Navigate("about:blank")
+                        Do Until WebBrowser2.ReadyState = WebBrowserReadyState.Complete
+                            Application.DoEvents()
+                            System.Threading.Thread.Sleep(100)
+                        Loop
+                        WebBrowser2.Show()
                         If IsNothing(WebBrowser2.Url) OrElse WebBrowser2.Url.AbsoluteUri.ToLower.ToString <> weburl Then
                             WebBrowser2.Stop()
                             WebBrowser2.ScriptErrorsSuppressed = True
                             WebBrowser2.Navigate(weburl)
-                            WebBrowser2.Refresh()
+                            'WebBrowser2.Refresh()
                             currentTabIndex = TabControl2.SelectedIndex
                         End If
                     Catch
                         WebBrowser2.Stop()
                         WebBrowser2.ScriptErrorsSuppressed = True
                         WebBrowser2.Navigate(weburl)
-                        WebBrowser2.Refresh()
-                        currentTabIndex = TabControl2.SelectedIndex
+                        'WebBrowser2.Refresh()
                     End Try
+                    WebBrowser2.Focus()
                 End If
             Else
                 MsgBox("No IMDB or TMDB ID is available for this movie")
@@ -14445,6 +14453,85 @@ End Sub
 
 #End Region
 
+#Region "Movie Web Tab"
+
+    Private Sub btnMovWebStop_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebStop.Click
+        WebBrowser2.Stop()
+        WebBrowser2.Focus()
+    End Sub
+
+    Private Sub btnMovWebRefresh_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebRefresh.Click
+        Try
+            WebBrowser2.Refresh()
+        Catch
+        End Try
+        WebBrowser2.Focus()
+    End Sub
+
+    Private Sub btnMovWebBack_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebBack.Click
+        Try
+            WebBrowser2.GoBack()
+        Catch
+        End Try
+        WebBrowser2.Focus()
+    End Sub
+
+    Private Sub btnMovWebForward_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebForward.Click
+        Try
+            WebBrowser2.GoForward()
+        Catch
+        End Try
+        WebBrowser2.Focus()
+    End Sub
+
+    Private Sub btnMovWebTMDb_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebTMDb.Click
+        Dim TMDB As String = workingMovieDetails.fullmoviebody.tmdbid
+        If TMDB = "" Then
+            MsgBox("Selected Movie does not contain a TMDb ID number")
+            Exit Sub
+        End If
+        Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)
+        Dim weburl = "https://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0)
+        Try
+            WebBrowser2.Hide()
+            WebBrowser2.Navigate("about:blank")
+            Do Until WebBrowser2.ReadyState = WebBrowserReadyState.Complete
+                Application.DoEvents()
+                System.Threading.Thread.Sleep(100)
+            Loop
+            WebBrowser2.Show()
+            WebBrowser2.Stop()
+            WebBrowser2.Navigate(weburl)
+        Catch
+        End Try
+        WebBrowser2.Focus()
+    End Sub
+
+    Private Sub btnMovWebIMDb_Click(sender As System.Object, e As System.EventArgs) Handles btnMovWebIMDb.Click
+        Dim IMDB As String = workingMovieDetails.fullmoviebody.imdbid
+        If Not IMDB.Contains("tt") Then
+            MsgBox("Selected Movie does not contain a IMDb ID number")
+            Exit Sub
+        End If
+        Dim weburl = "http://www.imdb.com/title/" & IMDB & "/"
+        Try
+            WebBrowser2.Hide()
+            WebBrowser2.Navigate("about:blank")
+            Do Until WebBrowser2.ReadyState = WebBrowserReadyState.Complete
+                Application.DoEvents()
+                System.Threading.Thread.Sleep(100)
+            Loop
+            WebBrowser2.Show()
+            WebBrowser2.Stop()
+            WebBrowser2.Navigate(weburl)
+        Catch
+        End Try
+        WebBrowser2.Focus()
+    End Sub
+
+
+#End Region
+
 #Region "Movie Change Movie Tab"
 
     Private Sub WebBrowser1_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles WebBrowser1.NewWindow
@@ -16513,6 +16600,7 @@ End Sub
 
     Private Sub btnTvWebStop_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebStop.Click
         WebBrowser4.Stop()
+        WebBrowser4.Focus()
     End Sub
 
     Private Sub btnTvWebRefresh_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebRefresh.Click
@@ -16520,6 +16608,7 @@ End Sub
             WebBrowser4.Refresh()
         Catch
         End Try
+        WebBrowser4.Focus()
     End Sub
 
     Private Sub btnTvWebBack_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebBack.Click
@@ -16527,6 +16616,7 @@ End Sub
             WebBrowser4.GoBack()
         Catch
         End Try
+        WebBrowser4.Focus()
     End Sub
 
     Private Sub btnTvWebForward_Click(sender As System.Object, e As System.EventArgs) Handles btnTvWebForward.Click
@@ -16534,6 +16624,7 @@ End Sub
             WebBrowser4.GoForward()
         Catch
         End Try
+        WebBrowser4.Focus()
     End Sub
 
 #End Region
