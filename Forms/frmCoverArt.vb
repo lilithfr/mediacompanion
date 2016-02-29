@@ -1,7 +1,4 @@
-﻿Imports System.Net
-Imports System.IO
-Imports System.Linq
-Imports System.Xml 
+﻿Imports System.Xml
 
 
 Public Class frmCoverArt
@@ -12,7 +9,7 @@ Public Class frmCoverArt
     Dim WithEvents reslabel As Label
     Dim resolutionlbl As Label
     Dim panel2 As New Panel
-    Dim posterurls(, ) As String
+    Dim posterurls(,) As String
     Dim posterpath As String
     Dim WithEvents mainposter As New PictureBox
     Dim WithEvents bigpicbox As PictureBox
@@ -27,7 +24,7 @@ Public Class frmCoverArt
     Dim folderjpgpath As String
     Dim imdbid As String = Form1.workingMovieDetails.fullmoviebody.imdbid
     Dim tmdbid As String = Form1.workingMovieDetails.fullmoviebody.tmdbid
-    Dim movietitle As String =  Form1.workingMovieDetails.fullmoviebody.title
+    Dim movietitle As String = Form1.workingMovieDetails.fullmoviebody.title
     Dim fullpathandfilename As String = Form1.workingMovieDetails.fileinfo.fullpathandfilename
     Dim videotspath As String = Form1.workingMovieDetails.fileinfo.videotspath
     Dim applicationPath As String = Pref.applicationPath
@@ -253,9 +250,9 @@ Public Class frmCoverArt
             tmdb.Imdb = If(imdbid.Contains("tt"), imdbid, "")
             tmdb.TmdbId = tmdbid
             For Each item In tmdb.McPosters
-                 posterurls(count, 0) = item.hdUrl   
-                 posterurls(count, 1) = item.ldUrl 
-                 count += 1
+                posterurls(count, 0) = item.hdUrl
+                posterurls(count, 1) = item.ldUrl
+                count += 1
             Next
             Call displayselection()
         Catch ex As Exception
@@ -276,7 +273,7 @@ Public Class frmCoverArt
             messbox.Refresh()
             Call initialise()
             Dim newobject As New class_mpdb_thumbs.Class1
-            newobject.MCProxy = Utilities.MyProxy 
+            newobject.MCProxy = Utilities.MyProxy
             Dim testthumbs As String = String.Empty
             Try
                 testthumbs = newobject.get_mpdb_thumbs(imdbid)
@@ -291,8 +288,8 @@ Public Class frmCoverArt
                 For Each thisresult In thumbstring("totalthumbs")
                     Select Case thisresult.Name
                         Case "thumb"
-                            posterurls(count,0) = thisresult.InnerText
-                            posterurls(count,1) = thisresult.InnerText
+                            posterurls(count, 0) = thisresult.InnerText
+                            posterurls(count, 1) = thisresult.InnerText
                             count += 1
                     End Select
                 Next
@@ -357,7 +354,7 @@ Public Class frmCoverArt
             Me.bigpanel.Controls.Add(bigpanellabel)
             bigpanellabel.BringToFront()
             Application.DoEvents()
-            
+
             If Not bigpicbox.Image Is Nothing And bigpicbox.Image.Width > 20 Then
 
                 Dim sizey As Integer = bigpicbox.Image.Height
@@ -440,7 +437,7 @@ Public Class frmCoverArt
             currentpage += 1
             btnScrollPrev.Enabled = True
 
-             btnScrollNext.Enabled = Not (currentpage = pagecount)
+            btnScrollNext.Enabled = Not (currentpage = pagecount)
             'If currentpage = pagecount Then
             '    btnScrollNext.Enabled = False
             'Else
@@ -586,7 +583,6 @@ Public Class frmCoverArt
         Dim names As New List(Of String)()
 
         If count > 0 Then
-
             If count > maxthumbs Then
                 Dim tempmaxthumbs As Integer = count
 
@@ -596,13 +592,12 @@ Public Class frmCoverArt
                 Loop
             End If
 
-
             If count > maxthumbs Then
-                For f = 1 To maxthumbs
+                For f = 0 To maxthumbs - 1
                     names.Add(posterurls(f, 1))
                 Next
             Else
-                For f = 0 To count-1
+                For f = 0 To count - 1
                     names.Add(posterurls(f, 1))
                 Next
             End If
@@ -632,8 +627,6 @@ Public Class frmCoverArt
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
             For Each item As String In names
-
-
                 picboxes() = New PictureBox()
                 With picboxes
                     .Location = New Point(location, 0)
@@ -674,7 +667,6 @@ Public Class frmCoverArt
                 .Height = 100
                 .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
                 .Text = "No Posters Were Found For This Movie"
-
             End With
             Me.panel2.Controls.Add(mainlabel2)
         End If
@@ -753,7 +745,7 @@ Public Class frmCoverArt
                         Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
                         If Not b1.Image Is Nothing Then
                             If b1.Image.Width > 20 Then
-                                Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
+                                Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename, If(videotspath <> "", videotspath, ""))
                                 For Each pth As String In Paths
                                     b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
                                     posterpath = pth
@@ -811,50 +803,22 @@ Public Class frmCoverArt
                 MsgBox("No Fanart Is Selected")
             End If
             If allok = True Then
-                For Each PictureBox2 As Control In Me.panel2.Controls
-                    If PictureBox2.Name.IndexOf("picture") <> -1 And PictureBox2.Name.IndexOf(tempint.ToString) <> -1 Then
-                        Dim b1 As PictureBox = CType(PictureBox2, PictureBox)
-                        If Not b1.Image Is Nothing Then
-                            If b1.Image.Width > 20 Then
-                                With b1
-                                    .WaitOnLoad = True
-                                    Try
-                                        .ImageLocation = (posterurls(realnumber + 1, 0))
-                                    Catch
-                                        .ImageLocation = (posterurls(realnumber + 1, 1))
-                                    End Try
-                                End With
-                                Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename,If(videotspath<>"",videotspath,""))
-                                For Each pth As String In Paths
-                                    b1.Image.Save(pth, Imaging.ImageFormat.Jpeg)
-                                    posterpath = pth
-                                Next
-                                
-                                Form1.util_ImageLoad(Form2.moviethumb, posterpath, Utilities.DefaultPosterPath)
-                                Form1.util_ImageLoad(Form1.PbMoviePoster, posterpath, Utilities.DefaultPosterPath)
-                                Form1.util_ImageLoad(Me.mainposter, posterpath, Utilities.DefaultPosterPath)
-                                Label6.Visible = True
-                                tempstring = b1.Image.Width.ToString & " x " & b1.Image.Height.ToString
-                                Label6.Text = tempstring
-                                mainposter.Visible = True
-                                With b1
-                                    .WaitOnLoad = True
-                                    .ImageLocation = (posterurls(realnumber + 1, 1))
-                                End With
-                                b1.Dispose()
-
-                                Dim path As String = Utilities.save2postercache(fullpathandfilename, posterpath, Form1.WallPicWidth, Form1.WallPicHeight)
-                                Form1.updateposterwall(path, fullpathandfilename)
-                                Me.Close()
-                                Exit For
-                            Else
-                                Label6.Visible = False
-                            End If
-                        Else
-                            Label6.Visible = False
-                        End If
-                    End If
-                Next
+                If Not String.IsNullOrEmpty(tempstring2) Then
+                    Dim paths As List(Of String) = Pref.GetPosterPaths(fullpathandfilename, If(videotspath <> "", videotspath, ""))
+                    DownloadCache.SaveImageToCacheAndPaths(tempstring2, paths, True)
+                    Form1.util_ImageLoad(Form2.moviethumb, paths(0), Utilities.DefaultPosterPath)
+                    Form1.util_ImageLoad(Form1.PbMoviePoster, paths(0), Utilities.DefaultPosterPath)
+                    Form1.util_ImageLoad(Me.mainposter, paths(0), Utilities.DefaultPosterPath)
+                    Label6.Visible = True
+                    tempstring = Me.mainposter.Image.Width.ToString & " x " & Me.mainposter.Image.Height.ToString
+                    Label6.Text = tempstring
+                    mainposter.Visible = True
+                    Dim path As String = Utilities.save2postercache(fullpathandfilename, paths(0), Form1.WallPicWidth, Form1.WallPicHeight)
+                    Form1.updateposterwall(path, fullpathandfilename)
+                    Me.Close()
+                Else
+                    Label6.Visible = False
+                End If
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -924,5 +888,5 @@ Public Class frmCoverArt
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-    
+
 End Class
