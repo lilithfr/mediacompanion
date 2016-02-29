@@ -339,6 +339,7 @@ Public Class Pref
     Public Shared CloseMCForDLNewVersion As Boolean = False
     Public Shared AllowUserTags As Boolean = True
     Public Shared GenreCustomBefore As Boolean
+    Public Shared CustomTmdbApiKey As String = ""
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -750,6 +751,7 @@ Public Class Pref
 
         'Unknown - need to be sorted/named better
         GenreCustomBefore = False
+        CustomTmdbApiKey = ""
         intruntime = False
         actorseasy = True
         startuptab = 0
@@ -1045,6 +1047,7 @@ Public Class Pref
         root.AppendChild(doc, "prxyPassword"         ,  prxyPassword         )  'ucGenPref_Proxy.prxyPassword
         root.AppendChild(doc, "ShowAllAudioTracks"   ,  ShowAllAudioTracks   )  'cbShowAllAudioTracks
         root.AppendChild(doc, "GenreCustomBefore"    ,  GenreCustomBefore    )  'cbGenreCustomBefore
+        root.AppendChild(doc, "CustomTmdbApiKey"        , CustomTmdbApiKey   )  'tbTMDbAPI
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1483,6 +1486,7 @@ Public Class Pref
                     Case "tvshowautoquick"                      : tvshowautoquick = thisresult.InnerXml
                     Case "intruntime"                           : intruntime = thisresult.InnerXml
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml
+                    Case "CustomTmdbApiKey"                     : CustomTmdbApiKey = thisresult.InnerText
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "ignoretrailers"                       : ignoretrailers = thisresult.InnerXml
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
@@ -1733,6 +1737,7 @@ Public Class Pref
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999
         Proxyreload()
         XBMC_MC_MovieFolderMappings.IniFolders
+        Utilities.TMDBAPI = Pref.CustomTmdbApiKey 
     End Sub
 
     Public Shared Sub util_RegexSetDefaultScraper()

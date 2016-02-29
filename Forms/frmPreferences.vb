@@ -135,6 +135,8 @@ Public Class frmPreferences
         Form1.util_RegexSave()
         Pref.ConfigSave()
 
+        Utilities.TMDBAPI = Pref.CustomTmdbApiKey
+
         Form1.UpdateMovieSetDisplayNames
 
         If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
@@ -315,6 +317,9 @@ Public Class frmPreferences
         'IndividualMovieFolders
         cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
         cbMovieAllInFolders                 .Checked        = Pref.allfolders
+
+        'User TMDb API Key
+        tbTMDbAPI                           .Text           = Pref.CustomTmdbApiKey
 
         ''Scraping Options
         'Preferred Language
@@ -1377,6 +1382,7 @@ Public Class frmPreferences
     End Sub
 
     Private Sub tbCustomLanguageValue_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbCustomLanguageValue.TextChanged
+        If prefsload Then Exit Sub
         Pref.TMDbCustomLanguageValue = tbCustomLanguageValue.Text
         Changes = True
     End Sub
@@ -1458,6 +1464,13 @@ Public Class frmPreferences
                 cbMovieAllInFolders.Checked = CheckState.Checked
             End If
         End If
+        Changes = True
+    End Sub
+
+'Custom TMDb API
+    Private Sub tbTMDbAPI_TextChanged(sender As System.Object, e As System.EventArgs) Handles tbTMDbAPI.TextChanged
+        If prefsload Then Exit Sub
+        Pref.CustomTmdbApiKey = tbTMDbAPI.Text
         Changes = True
     End Sub
 

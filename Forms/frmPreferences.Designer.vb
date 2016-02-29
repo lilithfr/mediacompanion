@@ -305,6 +305,7 @@ Partial Class frmPreferences
         Me.Label77 = New System.Windows.Forms.Label()
         Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
         Me.GroupBox26 = New System.Windows.Forms.GroupBox()
+        Me.cb_MovRuntimeAsDuration = New System.Windows.Forms.CheckBox()
         Me.cbShowMovieGridToolTip = New System.Windows.Forms.CheckBox()
         Me.cb_MovSetTitleIgnArticle = New System.Windows.Forms.CheckBox()
         Me.cb_SorttitleIgnoreArticles = New System.Windows.Forms.CheckBox()
@@ -468,7 +469,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_MovRuntimeAsDuration = New System.Windows.Forms.CheckBox()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
+        Me.Label22 = New System.Windows.Forms.Label()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -553,6 +556,7 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
+        Me.GroupBox6.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -2252,6 +2256,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.AutoScroll = true
         Me.tpMoviePreferences_Scraper.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Scraper.BackColor = System.Drawing.SystemColors.Control
+        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox6)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox25)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.gpbxPrefScraperImages)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox24)
@@ -2315,7 +2320,7 @@ Partial Class frmPreferences
         Me.cmbxTMDBPreferredCertCountry.FormattingEnabled = true
         Me.cmbxTMDBPreferredCertCountry.Location = New System.Drawing.Point(216, 211)
         Me.cmbxTMDBPreferredCertCountry.Name = "cmbxTMDBPreferredCertCountry"
-        Me.cmbxTMDBPreferredCertCountry.Size = New System.Drawing.Size(72, 23)
+        Me.cmbxTMDBPreferredCertCountry.Size = New System.Drawing.Size(74, 23)
         Me.cmbxTMDBPreferredCertCountry.TabIndex = 84
         '
         'Label5
@@ -2862,7 +2867,7 @@ Partial Class frmPreferences
         Me.GroupBox24.Controls.Add(Me.cbMovieUseFolderNames)
         Me.GroupBox24.Location = New System.Drawing.Point(7, 370)
         Me.GroupBox24.Name = "GroupBox24"
-        Me.GroupBox24.Size = New System.Drawing.Size(319, 80)
+        Me.GroupBox24.Size = New System.Drawing.Size(319, 70)
         Me.GroupBox24.TabIndex = 78
         Me.GroupBox24.TabStop = false
         Me.GroupBox24.Text = "Individual Movie Folder Options"
@@ -2871,7 +2876,7 @@ Partial Class frmPreferences
         '
         Me.cbMovieAllInFolders.AutoSize = true
         Me.cbMovieAllInFolders.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbMovieAllInFolders.Location = New System.Drawing.Point(7, 46)
+        Me.cbMovieAllInFolders.Location = New System.Drawing.Point(7, 44)
         Me.cbMovieAllInFolders.Name = "cbMovieAllInFolders"
         Me.cbMovieAllInFolders.Size = New System.Drawing.Size(239, 17)
         Me.cbMovieAllInFolders.TabIndex = 52
@@ -3219,7 +3224,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -3703,6 +3708,16 @@ Partial Class frmPreferences
         Me.GroupBox26.TabIndex = 73
         Me.GroupBox26.TabStop = false
         Me.GroupBox26.Text = "General Options"
+        '
+        'cb_MovRuntimeAsDuration
+        '
+        Me.cb_MovRuntimeAsDuration.AutoSize = true
+        Me.cb_MovRuntimeAsDuration.Location = New System.Drawing.Point(17, 252)
+        Me.cb_MovRuntimeAsDuration.Name = "cb_MovRuntimeAsDuration"
+        Me.cb_MovRuntimeAsDuration.Size = New System.Drawing.Size(241, 19)
+        Me.cb_MovRuntimeAsDuration.TabIndex = 83
+        Me.cb_MovRuntimeAsDuration.Text = "or Save Runtime as DurationInSeconds"
+        Me.cb_MovRuntimeAsDuration.UseVisualStyleBackColor = true
         '
         'cbShowMovieGridToolTip
         '
@@ -5603,15 +5618,33 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cb_MovRuntimeAsDuration
+        'GroupBox6
         '
-        Me.cb_MovRuntimeAsDuration.AutoSize = true
-        Me.cb_MovRuntimeAsDuration.Location = New System.Drawing.Point(17, 252)
-        Me.cb_MovRuntimeAsDuration.Name = "cb_MovRuntimeAsDuration"
-        Me.cb_MovRuntimeAsDuration.Size = New System.Drawing.Size(241, 19)
-        Me.cb_MovRuntimeAsDuration.TabIndex = 83
-        Me.cb_MovRuntimeAsDuration.Text = "or Save Runtime as DurationInSeconds"
-        Me.cb_MovRuntimeAsDuration.UseVisualStyleBackColor = true
+        Me.GroupBox6.Controls.Add(Me.Label22)
+        Me.GroupBox6.Controls.Add(Me.tbTMDbAPI)
+        Me.GroupBox6.Location = New System.Drawing.Point(7, 442)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(319, 89)
+        Me.GroupBox6.TabIndex = 79
+        Me.GroupBox6.TabStop = false
+        Me.GroupBox6.Text = "TMDb API"
+        '
+        'tbTMDbAPI
+        '
+        Me.tbTMDbAPI.Location = New System.Drawing.Point(7, 62)
+        Me.tbTMDbAPI.Name = "tbTMDbAPI"
+        Me.tbTMDbAPI.Size = New System.Drawing.Size(293, 21)
+        Me.tbTMDbAPI.TabIndex = 0
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = true
+        Me.Label22.Location = New System.Drawing.Point(23, 21)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(269, 30)
+        Me.Label22.TabIndex = 1
+        Me.Label22.Text = "Users can save their own TMDb API key here."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"NB: TMDB XBMC Scraper uses it's own "& _ 
+    "API Key."
         '
         'frmPreferences
         '
@@ -5776,6 +5809,8 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
+        Me.GroupBox6.ResumeLayout(false)
+        Me.GroupBox6.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6224,4 +6259,7 @@ End Sub
     Friend WithEvents rb_MediaPlayerDefault As RadioButton
     Friend WithEvents Label21 As Label
     Friend WithEvents cb_MovRuntimeAsDuration As CheckBox
+    Friend WithEvents GroupBox6 As GroupBox
+    Friend WithEvents Label22 As Label
+    Friend WithEvents tbTMDbAPI As TextBox
 End Class

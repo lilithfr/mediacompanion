@@ -85,8 +85,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
     Public Shared Property RARsize As Integer
-    Public Const TMDBAPI As String = "f7f51775877e0bb6703520952b3c7840" '"3f026194412846e530a208cf8a39e9cb"
-
+    'Public Const TMDBAPI As String = "f7f51775877e0bb6703520952b3c7840" '"3f026194412846e530a208cf8a39e9cb"
+    Private Shared _tmdbapi As String
     Private Shared _ApplicationPath As String
     Private Shared _LanguageLibrary As New List(Of langlib)
     Private Shared _mcproxy As New List(Of String)
@@ -103,6 +103,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If (TestKey("Software\Microsoft\NET Framework Setup\NDP\v4\Full", "Install")) Then installedFrameworks.Add("4.0 Full")
         Return installedFrameworks
     End Function
+
+    Public Shared Property TMDBAPI As String
+        Get
+            Return If(String.IsNullOrEmpty(_tmdbapi), "f7f51775877e0bb6703520952b3c7840", _tmdbapi)
+        End Get
+        Set(value As String)
+            _tmdbapi = value
+        End Set
+    End Property
 
     Public Shared Function TestKey(key As String, value As String)
         Dim regKey As Microsoft.Win32.RegistryKey = Registry.LocalMachine.OpenSubKey(key, False)

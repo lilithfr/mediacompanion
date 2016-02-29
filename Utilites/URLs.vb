@@ -3,7 +3,7 @@ Public NotInheritable Class URLs
 
     Public Shared ReadOnly Property TMdbAPIKey() As String
         Get
-            Return "3f026194412846e530a208cf8a39e9cb"
+            Return "f7f51775877e0bb6703520952b3c7840"
         End Get
     End Property
 
