@@ -462,7 +462,6 @@ Public Class Form1
                 currentprofile.RegExList = tempstring & "regex.xml"
                 currentprofile.TvCache = tempstring & "tvcache.xml"
                 currentprofile.MusicVideoCache = tempstring & "musicvideocache.xml"
-                currentprofile.Filters = tempstring & "filters.txt"
                 currentprofile.Genres = tempstring & "genres.txt"
                 currentprofile.MovieCache = tempstring & "moviecache.xml"
                 currentprofile.MovieSetCache = tempstring & "moviesetcache.xml"
@@ -491,7 +490,6 @@ Public Class Form1
                     workingProfile.MovieCache = prof.MovieCache
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.RegExList = prof.RegExList
-                    workingProfile.Filters = prof.Filters
                     workingProfile.Genres = prof.Genres 
                     workingProfile.TvCache = prof.TvCache
                     workingProfile.ProfileName = prof.ProfileName
@@ -1230,14 +1228,12 @@ Public Class Form1
 
         rescrapeList.ResetFields()
         rescrapeList.rebuildnfo = True
-        'rescrapeList.Rename_Files = True
 
         _rescrapeList.FullPathAndFilenames.Clear()
         For Each movie As ComboList In oMovies.MovieCache
             _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
         Next
         RunBackgroundMovieScrape("BatchRescrape")
-        'oMovies.BatchRescrapeSpecific(_rescrapeList.FullPathAndFilenames, rescrapeList)    'filteredList
 
     End Sub
     
@@ -1482,39 +1478,7 @@ Public Class Form1
         End Try
 
     End Sub
-
-    Private Sub util_FilterLoad()
-        'If File.Exists(workingProfile.filters) Or Pref.startupCache = False Then
-
-        '    Dim line As String = String.Empty
-        '    CheckedListBox2.Items.Clear()
-
-        '    Try
-        '        Dim userConfig As StreamReader = File.OpenText(workingProfile.filters)
-
-        '        Do
-        '            Try
-        '                line = userConfig.ReadLine
-
-        '                If line <> Nothing Then
-        '                    Dim regexMatch As Match
-        '                    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
-
-        '                    If regexMatch.Success = False Then
-        '                        CheckedListBox2.Items.Add(line)
-        '                    End If
-        '                End If
-
-        '            Catch ex As Exception
-        '                MessageBox.Show(ex.Message)
-        '            End Try
-        '        Loop Until line = Nothing
-        '    Catch ex As Exception
-        '        MessageBox.Show(ex.Message)
-        '    End Try
-        'End If
-    End Sub
-
+    
     Private Sub GenreMasterLoad()
         genrelist.Clear()
         genrelist = Utilities.loadGenre
@@ -1574,11 +1538,11 @@ Public Class Form1
                         Application.DoEvents()
                     Loop
                     If killMC AndAlso Pref.CloseMCForDLNewVersion Then
+                        frmSplash.Close()
+                        Application.Exit()
                         Me.Close()
-                        'Process.GetCurrentProcess.Kill()
                     End If
                 End If
-
                 Me.util_ConfigLoad()
             End If
         Next
@@ -1628,9 +1592,6 @@ Public Class Form1
                                         Case "regex"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.RegExList = applicationPath & s
-                                        Case "filters"
-                                            Dim s As String = result.innertext.ToString.Substring(t)
-                                            currentprofile.Filters = applicationPath & s
                                         Case "genres"
                                             Dim s As String = ""
                                             If result.innertext = "" Then 
@@ -1738,11 +1699,7 @@ Public Class Form1
             childchild = doc.CreateElement("regex")
             childchild.InnerText = prof.RegExList.Replace(applicationPath, "")
             child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("filters")
-            childchild.InnerText = prof.Filters.Replace(applicationPath, "")
-            child.AppendChild(childchild)
-
+            
             childchild = doc.CreateElement("genres")
             childchild.InnerText = prof.Genres.Replace(applicationPath, "")
             child.AppendChild(childchild)
@@ -7625,7 +7582,6 @@ Public Class Form1
     End Sub
     
     Private Sub DownSizeAll(postersOrBackdrops As String) 
-
         Dim tempint As Integer = oMovies.MovieCache.Count
 
         System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -7638,35 +7594,24 @@ Public Class Form1
         Else
             height = Movie.GetHeightResolution(Pref.PosterResolutionSI)
         End If
-
-
+        
         Using messbox As frmMessageBox = New frmMessageBox("Please wait - " & postersOrBackdrops & " are being resized", "", tempint.ToString & " remaining")
-
             messbox.Show
             Me.Refresh
             messbox.Refresh
-
-
             Dim path   = ""
-
             For Each m In oMovies.MovieCache
-
                 If postersOrBackdrops = "Backdrops" then
-
                     path = Pref.GetFanartPath(m.fullpathandfilename)
-
                     If File.Exists(path) then
                         DownloadCache.CopyAndDownSizeImage(path, path, point.x, point.y)
                     End If
                 Else
-
                     path   = Pref.GetPosterPath(m.fullpathandfilename)
-
                     If File.Exists(path) then
                         DownloadCache.CopyAndDownSizeImage(path, path, , height  )
                     End If
                 End If
-
                 tempint -= 1
                 messbox.TextBox3.Text = tempint.ToString & " remaining"
                 messbox.TextBox3.Refresh
@@ -7677,159 +7622,12 @@ Public Class Form1
     End Sub
 
     Public Sub mov_RebuildMovieCaches
-
-        'Enabled = False
-
         mov_PreferencesDisplay
-
-        'ProgressAndStatus1.Display()
-        'ProgressAndStatus1.Status("Rebuilding Movie caches...")
-        'ProgressAndStatus1.ReportProgress(0, "Processing....")
-        'Application.DoEvents()
-
-        'oMovies.RebuildCaches
         RunBackgroundMovieScrape("RebuildCaches")
-
-        'filteredList.Clear
-        'filteredList.AddRange(oMovies.MovieCache)
-        'filteredListObj.Clear
-        'filteredListObj.AddRange(oMovies.Data_GridViewMovieCache)
-
-
-        'ProgressAndStatus1.ReportProgress(0, "Apply Filters...")
-        'Mc.clsGridViewMovie.mov_FiltersAndSortApply
-
-        'ProgressAndStatus1.ReportProgress(0, "Reload Main Page...")
-        'mov_FormPopulate
-
-        'If DataGridViewMovies.Rows.Count>0 Then
-        '    DataGridViewMovies.Rows(0).Selected = True
-        '    DisplayMovie
-        'End If
-
-        'Activate
-        'Enabled = True
-        'ProgressAndStatus1.Visible = False
     End Sub
-
-    '    Public Sub updatetree(Optional ByVal addnew As Boolean = True)
-
-
-    '        Dim oldfolders As New List(Of String)
-    '        totalTvShowCount = 0
-    '        totalEpisodeCount = 0
-    '        TextBox32.Text = ""
-    '        TextBox33.Text = ""
-    '        'Me.Enabled = False
-    '        'basictvlist.Clear()
-    '        TvTreeview.Nodes.Clear()
-
-    '        For Each tvshow In TvShows
-    '            If tvshow.fullpath IsNot Nothing Then
-    '                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
-    '                If Not tvFolders.Contains(tempstring) Then
-    '                    oldfolders.Add(tempstring)
-    '                End If
-    '            End If
-    '        Next
-    '        For Each folder In oldfolders
-    '            For Each oldshow In TvShows
-    '                Dim tempstring As String = oldshow.fullpath.Replace("\tvshow.nfo", "")
-    '                If tempstring = folder Then
-    '                    TvShows.Remove(oldshow)
-    '                    For Each fol In tvFolders
-    '                        If oldshow.fullpath.IndexOf(fol) <> -1 Then
-    '                            tvFolders.Remove(fol)
-    '                            Exit For
-    '                        End If
-    '                    Next
-    '                    Exit For
-    '                End If
-    '            Next
-    '        Next
-
-    '        'get list of new
-    '        Dim folderstoadd As New List(Of String)
-    '        For Each folder In tvFolders
-    '            Dim add As Boolean = True
-    '            Dim tempstring2 As String = folder
-    '            For Each tvshow In TvShows
-    '                Dim tempstring As String = tvshow.fullpath.Replace("\tvshow.nfo", "")
-    '                If folder = tempstring Then
-    '                    add = False
-    '                    Exit For
-    '                End If
-    '            Next
-    '            If add = True Then
-    '                folderstoadd.Add(tempstring2)
-    '            End If
-    '        Next
-
-    '        If folderstoadd.Count > 0 Then
-    '            messbox = New frmMessageBox("New TV Folders Found", "Adding to DB", "Please Wait")
-    '            'remove old
-    '            messbox.Show()
-    '            messbox.Refresh()
-    '            Application.DoEvents()
-    '            messbox.Show()
-    '            Try
-    '                For Each tvfolder In folderstoadd
-    '                    Try
-    '                        Dim shownfopath As String = IO.Path.Combine(tvfolder, "tvshow.nfo")
-    '                        Dim newtvshownfo As TvShow
-    '                        newtvshownfo = nfoFunction.loadbasictvshownfo(shownfopath)
-    '                        'Try
-    '                        '    If addnew = True Then
-    '                        '        If Not IO.File.Exists(shownfopath) Then
-    '                        'Call setgoingnewtvshows(shownfopath)
-    '                        '        End If
-    '                        '    End If
-    '                        'Catch
-    '                        'End Try
-    '                        If newtvshownfo.title <> Nothing Then
-    '                            If newtvshownfo.status.IndexOf("skipthisfile") = -1 Then
-    '                                Dim skip As Boolean = False
-    '                                For Each tvshow In TvShows
-    '                                    If newtvshownfo.fullpath = tvshow.fullpath Then
-    '                                        skip = True
-    '                                        Exit For
-    '                                    End If
-    '                                Next
-    '                                If skip = False Then
-    '                                    ListtvFiles(newtvshownfo, "*.NFO")
-    '                                    TvShows.Add(newtvshownfo)
-    '                                End If
-    '                            End If
-   '                        End If
-    '                        realTvPaths.Add(tvfolder)
-    '                    Catch ex As Exception
-    '#If SilentErrorScream Then
-    '                        Throw ex
-    '#End If
-    '                    End Try
-    '                Next
-    '            Catch ex As Exception
-    '#If SilentErrorScream Then
-    '                Throw ex
-    '#End If
-    '            End Try
-    '            messbox.Close()
-    '            Me.Activate()               'bring main form back to front
-    '        End If
-    '        'For Each tv In basictvlist
-    '        '    ListtvFiles(tv, "*.NFO")
-    '        'Next
-    '        'Call populatetvtree()
-    '        'messbox.Close()
-    '        Me.Enabled = True
-
-    '        Call TV_SaveTvData("New Function")
-
-    '    End Sub
-
+    
     Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
         Try
-            'tv_FoldersSetup()
             tv_ShowFind(Pref.tvRootFolders, False)
             If newTvFolders.Count > 0 Then
                 For Each item In newTvFolders
@@ -7875,69 +7673,7 @@ Public Class Form1
             bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
         End If
     End Sub
-
-    'Private Sub cbImdbgetTMDBActor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
-    '    movieprefschanged = True
-    '    btnMoviePrefSaveChanges.Enabled = True
-    'End Sub 
-
-    'Private Sub cbImdbPrimaryPlot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        Pref.ImdbPrimaryPlot = cbImdbPrimaryPlot.Checked 
-    '        movieprefschanged = True
-    '        btnMoviePrefSaveChanges.Enabled = True
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
-    'Private Sub ListBox9_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) 
-    '    Try
-    '        Pref.imdbmirror = ListBox9.SelectedItem
-    '        movieprefschanged = True
-    '        btnMoviePrefSaveChanges.Enabled = True
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub
-
-    'Private Sub mov_ThumbNailUrlsSet()
-    '    If IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 0
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 1
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 2
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 3
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 4
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 5
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 6
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Unchecked Then
-    '        Pref.nfoposterscraper = 7
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 8
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 9
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 10
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Unchecked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 11
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 12
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Unchecked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 13
-    '    ElseIf IMPA_chk.CheckState = CheckState.Unchecked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 14
-    '    ElseIf IMPA_chk.CheckState = CheckState.Checked And tmdb_chk.CheckState = CheckState.Checked And mpdb_chk.CheckState = CheckState.Checked And imdb_chk.CheckState = CheckState.Checked Then
-    '        Pref.nfoposterscraper = 15
-    '    End If
-    'End Sub
-
+    
     Public Function util_RegexValidate(ByVal regexs As String)
         Try
             Dim test As Match
@@ -7978,10 +7714,6 @@ Public Class Form1
                 urllinecount -= 1
 
             Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-                'MsgBox(ex.ToString)
             End Try
             For f = 1 To urllinecount
                 If websource(f).IndexOf("<Language>") <> -1 Then
@@ -7996,9 +7728,6 @@ Public Class Form1
                 End If
             Next
         Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
         End Try
         Return "Error"
     End Function
@@ -8014,7 +7743,6 @@ Public Class Form1
                     workingProfile.actorcache = prof.actorcache
                     workingProfile.DirectorCache = prof.DirectorCache
                     workingProfile.config = prof.config
-                    workingProfile.filters = prof.filters
                     workingProfile.Genres = prof.Genres 
                     workingProfile.moviecache = prof.moviecache
                     workingProfile.MusicVideoCache = prof.MusicVideoCache 
@@ -8064,11 +7792,7 @@ Public Class Form1
         Else
             oMovies.LoadCaches
         End If
-
-        If IO.File.Exists(workingProfile.filters) Then
-            Call util_FilterLoad()
-        End If
-
+        
         If IO.File.Exists(workingProfile.Genres) Then
             Call util_GenreLoad()
         End If
@@ -8082,23 +7806,7 @@ Public Class Form1
         If IO.File.Exists(workingProfile.MusicVideoCache) Then
             Call UcMusicVideo1.MVCacheLoad()
         End If
-
-
-        'If Pref.maximised = True Then
-        '    Me.WindowState = FormWindowState.Maximized
-        'Else
-        '    If Pref.locx <> 0 Then
-        '        Me.Location = New Point(Pref.locx, Pref.locy)
-        '    End If
-        '    If Pref.locy <> 0 Then
-        '        Me.Location = New Point(Pref.locx, Pref.locy)
-        '    End If
-        '    If Pref.formheight <> 0 And Pref.formwidth <> 0 Then
-        '        Me.Width = Pref.formwidth
-        '        Me.Height = Pref.formheight
-        '    End If
-        'End If
-
+        
         Me.Refresh()
         Application.DoEvents()
 
@@ -9471,20 +9179,6 @@ End Sub
 
     Private Sub SearchForNewEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewEpisodesToolStripMenuItem.Click
         Try
-            'If Not bckgroundscanepisodes.IsBusy Then
-            '    'ToolStripButton10.Visible = True
-            '    TabPage15.Text = "Cancel Episode Search"
-            '    TabPage15.ToolTipText = "This cancels the episode search" & vbCrLf & "and episode scraper thread"
-            '    showstoscrapelist.Clear()
-            '    For Each item In basictvlist
-            '        If (item.fullpath.ToLower.IndexOf("tvshow.nfo") <> -1) And (item.locked = 0) Then
-            '            showstoscrapelist.Add(item.fullpath)
-            '        End If
-            '    Next
-            '    bckgroundscanepisodes.RunWorkerAsync()
-            'Else
-            '    MsgBox("This TV Scraper is already running")
-            'End If
             SearchForNewEpisodesToolStripMenuItem.Owner.Hide()
             Call ep_Search()
         Catch ex As Exception
@@ -9538,7 +9232,7 @@ End Sub
     Private Sub mov_FanartGet(Optional ByVal MovSet As Boolean = False)
         If IsNothing(workingMovieDetails) Then Return
         messbox = New frmMessageBox("      Please Wait,", "", "Attempting to download Fanart")
-        'messbox.Show() : messbox.Refresh()
+        messbox.Show() : messbox.Refresh()
         Application.DoEvents()
 
         Dim tmdb As New TMDb
@@ -9758,7 +9452,6 @@ End Sub
                 fanartpath = Utilities.DefaultOfflineArtPath
             End If
             Dim curImage As Image = Image.FromFile(fanartpath)
-            'Dim tempstring As String = "Please Insert '" & title & "' DVD"
 
             Dim tempstring As String = Pref.OfflineDVDTitle.Replace("%T", title)
 
@@ -9900,26 +9593,20 @@ End Sub
             If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
                 Pref.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
                 Pref.ConfigSave()
-                If Pref.displayMissingEpisodes = False 'OrElse MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details") = Windows.Forms.DialogResult.No Then
+                If Pref.displayMissingEpisodes = False
                     RefreshMissingEpisodesToolStripMenuItem.Enabled = False
                     rbTvListAll.Checked = True
                     rbTvMissingEpisodes.Enabled = False
                     rbTvMissingAiredEp.Enabled = False
                     RefreshMissingEpisodesToolStripMenuItem.ToolTipText = Nothing
                     tv_CacheRefresh 
-                    'tv_Filter()
                     Return
                 End If
                 RefreshMissingEpisodesToolStripMenuItem.Enabled = True
                 RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
                 rbTvMissingEpisodes.Enabled = True
                 rbTvMissingAiredEp.Enabled = True
-                'Dim answer = MsgBox("If you had previously downloaded missing episodes, do you wish to download them again?", MsgBoxStyle.YesNo, "Confirm Download Missing Episode Details")
-                'If answer = MsgBoxResult.Yes 
-                    'Preferences.DlMissingEpData = True
-                'Else
-                    Pref.DlMissingEpData = False
-                'End If
+                Pref.DlMissingEpData = False
                 tv_EpisodesMissingLoad(False)
             ElseIf Bckgrndfindmissingepisodes.IsBusy Then
                 MsgBox("Process is already running")
@@ -9934,7 +9621,7 @@ End Sub
     Private Sub RefreshMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMissingEpisodesToolStripMenuItem.Click
         Pref.DlMissingEpData = True
         Pref.lastrefreshmissingdate = DateTime.Now.ToString("yyyy-MM-dd")
-        ClearMissingFolder()   'tv_EpisodesMissingClean
+        ClearMissingFolder()
         tv_EpisodesMissingLoad(True)
         
     End Sub
@@ -9976,7 +9663,6 @@ End Sub
                 Dim ShowList As New List(Of TvShow)
                 ShowList.Add(Show)
                 Bckgrndfindmissingepisodes.RunWorkerAsync(ShowList)
-                'Call tv_EpisodesMissingFind()
                 messbox.Close()
             Else
                 MsgBox("The missing episode thread is already running")
@@ -10051,15 +9737,9 @@ End Sub
             listoffilestomove.Clear()
 
             If DataGridViewMovies.SelectedRows.Count > 0 Then
-
-                'For Each movie In MovieListComboBox.SelectedItems
                 For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
-                    'Dim tempstring As String = CType(MovieListComboBox.SelectedItem, ValueDescriptionPair).Value
                     Dim playlist As New List(Of String)
-                    'tempstring = Utilities.GetFileName(tempstring)
-
                     Dim tempstring As String = Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
-
                     playlist = Utilities.GetMediaList(tempstring)
                     If playlist.Count > 0 Then
                         For Each File In playlist
@@ -10108,27 +9788,6 @@ End Sub
                 End With
                 Dim drive As String = ""
                 Dim savepath As String = ""
-                'If FolderBrowserDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-                '    savepath = FolderBrowserDialog1.SelectedPath
-                '    drive = IO.Path.GetPathRoot(savepath)
-                '    Me.Visible = True
-                '    Me.Show()
-                '    Me.Refresh()
-
-                '    Dim listoffilestomove2 As New List(Of String)
-                '    listoffilestomove2.Clear()
-                '    For Each fil In listoffilestomove
-                '        listoffilestomove2.Add(fil)
-                '    Next
-
-                '    Dim drivespace As Long
-                '    drivespace = GetFreeSpace(drive)
-                '    Application.DoEvents()
-                '    Me.Refresh()
-                '    Dim percentages As New List(Of Integer)
-
-                '    If drivespace > totalfilesize Then
-                '        'My.Computer.FileSystem.CopyFile("C:\UserFiles\TestFiles\testFile.txt", "C:\UserFiles\TestFiles2\NewFile.txt", FileIO.UIOption.AllDialogs, FileIO.UICancelOption.DoNothing)
                 Dim frm As New frmCopyProgress
                 If Pref.MultiMonitoEnabled Then
                     frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
@@ -10154,15 +9813,9 @@ End Sub
                 Try
                     prefs.Load(tempstring2)
                 Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
                 End Try
                 Dim thisresult As XmlNode = Nothing
-
-
                 For Each thisresult In prefs("relativepaths")
-
                     Select Case thisresult.Name
                         Case "folder"
                             Dim mc As New str_RelativeFileList(SetDefaults)
@@ -10176,7 +9829,6 @@ End Sub
                                         relativeFolderList.Add(mc)
                                 End Select
                             Next
-
                     End Select
                 Next
                 For Each item In relativeFolderList
@@ -10214,9 +9866,6 @@ End Sub
         Try
             relativeFolderList.Clear()
             Dim tempstring2 As String = workingProfile.config.Replace(IO.Path.GetFileName(workingProfile.config), "pathsubstitution.xml")
-
-
-
             Dim temptext As String = ""
             temptext = "<relativepaths>" & TextBox45.Text & "</relativepaths>"
             Dim doc As New XmlDocument
@@ -10232,13 +9881,9 @@ End Sub
                             newfo.xbmc = innerresult.InnerText
                     End Select
                 Next
-                If newfo.mc <> Nothing Then
-                    If newfo.mc <> "" Then
-                        If newfo.xbmc <> Nothing Then
-                            If newfo.xbmc <> "" Then
-                                relativeFolderList.Add(newfo)
-                            End If
-                        End If
+                If Not String.IsNullOrEmpty(newfo.mc) Then
+                    If Not String.IsNullOrEmpty(newfo.xbmc) Then
+                        relativeFolderList.Add(newfo)
                     End If
                 End If
             Next
@@ -10267,8 +9912,7 @@ End Sub
                     child.AppendChild(childchild)
                     root.AppendChild(child)
                 Next
-
-
+                
                 Dim output As New XmlTextWriter(tempstring2, System.Text.Encoding.UTF8)
                 output.Formatting = Formatting.Indented
                 doc.WriteTo(output)
@@ -10281,7 +9925,6 @@ End Sub
 
     
     Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
-
         Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
     End Sub
 
@@ -10298,7 +9941,6 @@ End Sub
     Private Sub MediaCompanionCodeplexSiteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionCodeplexSiteToolStripMenuItem.Click
         Try
             Dim webAddress As String = "http://mediacompanion.codeplex.com/"
-            'Process.Start(webAddress)
             OpenUrl(webAddress)
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -10362,14 +10004,7 @@ End Sub
             frmSplash.Label3.Refresh()
             mov_CacheLoad()
         End If
-
-        If IO.File.Exists(workingProfile.filters) Then
-            loadinginfo = "Status :- Loading Filterlist"
-            frmSplash.Label3.Text = loadinginfo
-            frmSplash.Label3.Refresh()
-            Call util_FilterLoad()
-        End If
-
+        
         If IO.File.Exists(workingProfile.Genres) Then
             loadinginfo = "Status :- Loading Genre List"
             frmSplash.Label3.Text = loadinginfo
@@ -10455,8 +10090,6 @@ End Sub
                     MsgBox("Unsupported TvTreeviewlevel in Aired Date Function", MsgBoxStyle.Exclamation, "Error!")
                     Exit Sub
             End Select
-
-
 
 
             'this section steps down through the tree to get from the tvshow to each episode
@@ -10547,36 +10180,33 @@ End Sub
                     Dim episode As New TvEpisode
                     episode.Load(childNodeLevel3.Name)  'load the episode from the nfo using the path stored in the treeview
 
-                    If episode.Season.Value = -1 Or episode.Episode.Value = -1 Then ' check if we have the issue
-                        textstring += "!!! " & childNodeLevel1.Text & " - " & childNodeLevel3.Name      'add details to the log"
-                        correctionsfound += 1   'increment the found issues counter
-                        For Each regexp In Pref.tv_RegexScraper
+                    If episode.Season.Value <> -1 AndAlso episode.Episode.Value <> -1 Then Continue For ' check if we have the issue
 
-                            Dim M As Match
-                            Dim sourcetext As String = ""
-                            If RadioButton_Fix_Filename.Checked Then
-                                sourcetext = childNodeLevel3.Name       'use nfo filename to retrieve season/episode
-                            Else
-                                sourcetext = episode.Title.Value        'use 'title' node in nfo to retieve season/episode
-                            End If
-                            M = Regex.Match(episode.Title.Value, regexp)
-                            If M.Success = True Then                            'we found a valid regex match
-                                Try
-                                    episode.Season.Value = M.Groups(1).Value.ToString   'set new values
-                                    episode.Episode.Value = M.Groups(2).Value.ToString
-                                    correctionsfixed += 1
-                                    episode.Save(childNodeLevel3.Name)                  'save episode
-                                    textstring += " - Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
-                                    Exit For
+                    textstring += "!!! " & childNodeLevel1.Text & " - " & childNodeLevel3.Name      'add details to the log"
+                    correctionsfound += 1   'increment the found issues counter
+                    For Each regexp In Pref.tv_RegexScraper
 
-                                Catch
-                                    textstring += vbCrLf & "**** exception created during nfo save **** - " & childNodeLevel3.Name
-                                End Try
-                            End If
-
-                        Next
-                        textstring += vbCrLf
-                    End If
+                        Dim M As Match
+                        Dim sourcetext As String = ""
+                        If RadioButton_Fix_Filename.Checked Then
+                            sourcetext = childNodeLevel3.Name       'use nfo filename to retrieve season/episode
+                        Else
+                            sourcetext = episode.Title.Value        'use 'title' node in nfo to retieve season/episode
+                        End If
+                        M = Regex.Match(episode.Title.Value, regexp)
+                        If Not M.Success Then Continue For           'we found a valid regex match
+                        Try
+                            episode.Season.Value = M.Groups(1).Value.ToString   'set new values
+                            episode.Episode.Value = M.Groups(2).Value.ToString
+                            correctionsfixed += 1
+                            episode.Save(childNodeLevel3.Name)                  'save episode
+                            textstring += " - Corrected - S" & episode.Season.Value & "E" & episode.Episode.Value
+                            Exit For
+                        Catch
+                            textstring += vbCrLf & "**** exception created during nfo save **** - " & childNodeLevel3.Name
+                        End Try
+                    Next
+                    textstring += vbCrLf
                 Next
             Next
         Next
@@ -10789,7 +10419,6 @@ End Sub
 
     Private Sub MovieContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieContextMenu.Opening
         Try
-            'If (MovieListComboBox.SelectedItems.Count = 0) Then
             If DataGridViewMovies.SelectedRows.Count = 0 Then
                 e.Cancel = True
             End If
@@ -11037,28 +10666,7 @@ End Sub
 #End If
         End Try
     End Sub
-
-    'Private Sub applyAdvancedLists()
-    '    If cleanfilenameprefchanged Then
-    '        Dim strTemp As String = ""
-    '        For i = 0 To lbCleanFilename.Items.Count - 1
-    '            strTemp &= lbCleanFilename.Items(i) & "|"
-    '        Next
-    '        Pref.moviecleanTags = strTemp.TrimEnd("|")
-    '        cleanfilenameprefchanged = False
-    '    End If
-    '    If videosourceprefchanged Then
-    '        Dim count As Integer = lbVideoSource.Items.Count - 1
-    '        ReDim Pref.releaseformat(count)
-    '        For g = 0 To count
-    '            Pref.releaseformat(g) = lbVideoSource.Items(g)
-    '        Next
-    '        mov_VideoSourcePopulate()
-    '        ep_VideoSourcePopulate()
-    '        videosourceprefchanged = False
-    '    End If
-    'End Sub
-
+    
     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
     Public Sub OpenUrl(ByVal url As String)
         Try
@@ -11077,26 +10685,20 @@ End Sub
     End Sub
 
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
-
         If IsNothing(pictureBox.Tag) orElse  pictureBox.Tag.ToString = Utilities.DefaultActorPath Then
             Exit Sub
         End If
-
         Me.ControlBox = False
         MenuStrip1.Enabled = False
-
         Try
-            'util_ZoomImage(New Bitmap(pictureBox.Tag.ToString))
             util_ZoomImage(pictureBox.Tag.ToString)
         Catch
             Dim wc As New WebClient()
             Dim ImageInBytes() As Byte = wc.DownloadData(pictureBox.Tag)
             Dim ImageStream As New IO.MemoryStream(ImageInBytes)
             Dim cachefile As String = Utilities.Download2Cache(pictureBox.Tag.ToString)
-            'util_ZoomImage(New Bitmap(ImageStream))
             util_ZoomImage(cachefile)
         End Try
-
     End Sub
 
     Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
@@ -11105,9 +10707,7 @@ End Sub
 
     Private Sub Mov_RemoveMovie()
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-
             oMovies.RemoveMovieFromCache(row.Cells("fullpathandfilename").Value.ToString)
-
             DataGridViewMovies.Rows.RemoveAt(row.Index)
         Next
 
@@ -18625,7 +18225,7 @@ End Sub
             tmdbplot = Nothing
         End Try
         ListofPlots = _imdbScraper.GetImdbPlots(workingMovieDetails.fullmoviebody.imdbid)
-        If Not IsNothing(tmdbplot) AndAlso tmdbplot <> "" Then ListofPlots.Add(tmdbplot)
+        If Not IsNothing(tmdbplot) AndAlso tmdbplot <> "" AndAlso Not ListofPlots.Contains(tmdbplot) Then ListofPlots.Add(tmdbplot)
         messbox.Close()
         If ListofPlots.Count < 2 Then 
             MsgBox("No Extra Plots found for this movie", MsgBoxStyle.Exclamation)

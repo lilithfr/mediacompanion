@@ -2317,7 +2317,7 @@ Public Class Movie
 
     Sub DownloadExtraFanart()
         If Pref.MovieChangeMovie AndAlso Pref.MovieChangeKeepExistingArt Then Exit Sub
-        If Pref.dlxtrafanart AndAlso (Pref.allfolders Or Pref.usefoldernames) Then
+        If (Pref.dlxtrafanart AndAlso (Pref.allfolders Or Pref.usefoldernames)) OrElse Rescrape Then
             DoDownloadExtraFanart()
         Else
             ReportProgress(, "Scraping Extra Fanart-Thumbs not selected" & vbCrLf)

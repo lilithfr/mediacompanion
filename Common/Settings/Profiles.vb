@@ -17,12 +17,9 @@ Public Class Profiles
         profilepath = Path.Combine(profilepath, "profile.xml")
 
         If IO.File.Exists(profilepath) Then
-
             Dim xmlDoc As New XmlDocument
             xmlDoc.Load(profilepath)
-
             If xmlDoc.DocumentElement.Name = "profile" Then
-
                 For Each thisresult In xmlDoc("profile")
                     Select Case thisresult.Name
                         Case "default"
@@ -36,27 +33,21 @@ Public Class Profiles
                                 Select Case result.name
                                     Case "actorcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.ActorCache = applicationPath & s 'result.innertext
-
+                                        currentprofile.ActorCache = applicationPath & s
                                     Case "directorcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.DirectorCache = applicationPath & s 'result.innertext
-
+                                        currentprofile.DirectorCache = applicationPath & s
                                     Case "config"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.Config = applicationPath & s 'result.innertext
+                                        currentprofile.Config = applicationPath & s
                                     Case "moviecache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.MovieCache = applicationPath & s 'result.innertext
+                                        currentprofile.MovieCache = applicationPath & s
                                     Case "profilename"
-                                        'Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.ProfileName = result.innertext
                                     Case "regex"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.RegExList = applicationPath & s 'result.innertext
-                                    Case "filters"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.Filters = applicationPath & s 'result.innertext
+                                        currentprofile.RegExList = applicationPath & s
                                     Case "genres"
                                         Dim s As String = ""
                                         If result.innertext = "" Then 
@@ -65,10 +56,9 @@ Public Class Profiles
                                             s = result.innertext.ToString.Substring(t)
                                         End If
                                         currentprofile.Genres = applicationPath & s
-
                                     Case "tvcache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
-                                        currentprofile.TvCache = applicationPath & s 'result.innertext
+                                        currentprofile.TvCache = applicationPath & s
                                     Case "musicvideocache"
                                         Dim s As String = result.innertext.ToString.Substring(t)
                                         currentprofile.MusicVideoCache = applicationPath & s
@@ -80,7 +70,6 @@ Public Class Profiles
                             ProfileList.Add(currentprofile)
                     End Select
                 Next
-
             End If
         End If
     End Sub

@@ -19,7 +19,6 @@ Public Class ListOfProfiles
 
     Property ProfileName    As String = ""
     Property RegExList      As String = ""
-    Property Filters        As String = ""
     Property Genres         As String = ""
     Property Config         As String = ""
     Property HomeMovieCache As String = ""
@@ -32,7 +31,6 @@ Public Class ListOfProfiles
         profileTo.MovieCache        = MovieCache
         profileTo.ProfileName       = ProfileName
         profileTo.RegExList         = RegExList
-        profileTo.Filters           = Filters
         profileTo.Genres            = Genres
         profileTo.TvCache           = TvCache
         profileTo.ProfileName       = ProfileName

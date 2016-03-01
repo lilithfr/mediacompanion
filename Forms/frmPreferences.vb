@@ -1758,7 +1758,7 @@ End Sub
         If cbMovXtraThumbs.Checked Then
             Pref.movxtrathumb = True
         Else
-            If Not cbMovXtraFanart.Checked Then
+            If Not cbMovXtraFanart.Checked AndAlso cbDlXtraFanart.Checked Then
                 cbDlXtraFanart.Checked = False
                 MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
             End If
@@ -1772,7 +1772,7 @@ End Sub
         If cbMovXtraFanart.Checked Then
             Pref.movxtrafanart = True
         Else
-            If Not cbMovXtraThumbs.Checked Then
+            If Not cbMovXtraThumbs.Checked AndAlso cbDlXtraFanart.Checked Then
                 cbDlXtraFanart.Checked = False
                 MsgBox("Disabled ""Download Extra Fanart/Thumbs"" as either " & vbCrLf & "Extra Fanart or Extra Thumbs" & vbCrLf & "         must be checked")
             End If
@@ -3286,7 +3286,6 @@ End Sub
                     directorcachetocopy     = profs.DirectorCache
                     tvcachetocopy           = profs.TvCache
                     configtocopy            = profs.Config
-                    filterstocopy           = profs.Filters
                     genrestocopy            = profs.Genres 
                     regextocopy             = profs.RegExList
                     moviesetcachetocopy     = profs.MovieSetCache 
@@ -3297,7 +3296,6 @@ End Sub
             profiletoadd.ActorCache         = tempstring & "actorcache" & tempint.ToString & ".xml"
             profiletoadd.DirectorCache      = tempstring & "directorcache" & tempint.ToString & ".xml"
             profiletoadd.Config             = tempstring & "config" & tempint.ToString & ".xml"
-            profiletoadd.Filters            = tempstring & "filters" & tempint.ToString & ".txt"
             profiletoadd.Genres             = tempstring & "genres" & tempint.ToString & ".txt"
             profiletoadd.MovieCache         = tempstring & "moviecache" & tempint.ToString & ".xml"
             profiletoadd.RegExList          = tempstring & "regex" & tempint.ToString & ".xml"
@@ -3313,7 +3311,6 @@ End Sub
             If File.Exists(directorcachetocopy)     Then File.Copy(directorcachetocopy, profiletoadd.DirectorCache)
             If File.Exists(tvcachetocopy)           Then File.Copy(tvcachetocopy, profiletoadd.TvCache)
             If File.Exists(configtocopy)            Then File.Copy(configtocopy, profiletoadd.Config)
-            If File.Exists(filterstocopy)           Then File.Copy(filterstocopy, profiletoadd.Filters)
             If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
             If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
             If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
@@ -3388,10 +3385,6 @@ End Sub
                         End Try
                         Try
                             File.Delete(Form1.profileStruct.profilelist(f).Config)
-                        Catch ex As Exception
-                        End Try
-                        Try
-                            File.Delete(Form1.profileStruct.profilelist(f).Filters)
                         Catch ex As Exception
                         End Try
                         Try
