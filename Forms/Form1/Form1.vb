@@ -759,7 +759,7 @@ Public Class Form1
             Else
                 Mc.clsGridViewMovie.GridSort = "Asc"
             End If
-            genretxt.ShortcutsEnabled = False
+            'genretxt.ShortcutsEnabled = False
 
             Read_XBMC_TMDB_Scraper_Config()
             Read_XBMC_TVDB_Scraper_Config()
@@ -3652,14 +3652,7 @@ Public Class Form1
             End Try
         End If
     End Sub
-
-    Private Sub genretxt_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles genretxt.KeyPress
-        If e.KeyChar = Convert.ToChar(1) Then
-            DirectCast(sender, TextBox).SelectAll()
-            e.Handled = True
-        End If
-    End Sub
-
+    
     Public Sub DisplayMovie(Optional yielding As Boolean = False)
         Try
             DisplayMovie(DataGridViewMovies.SelectedCells, DataGridViewMovies.SelectedRows, yielding)
