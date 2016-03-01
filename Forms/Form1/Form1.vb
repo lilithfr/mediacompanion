@@ -3653,6 +3653,13 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub genretxt_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles genretxt.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
+    End Sub
+
     Public Sub DisplayMovie(Optional yielding As Boolean = False)
         Try
             DisplayMovie(DataGridViewMovies.SelectedCells, DataGridViewMovies.SelectedRows, yielding)
