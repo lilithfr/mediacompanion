@@ -1344,7 +1344,7 @@ Public Class ucMusicVideo
         If Pref.incmissingmovies Then
             For Each row As DataGridViewRow In dgv.Rows
                 If row.Cells("videomissing").Value = True Then
-                    row.DefaultCellStyle.BackColor = Color.Red                
+                    row.DefaultCellStyle.BackColor = Color.Red
                 End If
             Next
         End If

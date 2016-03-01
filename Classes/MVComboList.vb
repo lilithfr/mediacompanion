@@ -66,6 +66,7 @@ Public Class MVComboList
     Property filename               As String = ""
     Property foldername             As String = ""
     Property tmdbid                 As String = ""
+    Property VideoMissing           As Boolean = False
     
     Public Property thumb As String
         Get
@@ -237,6 +238,7 @@ Public Class MVComboList
         Resolution              = From.Resolution
         thumb                   = From.thumb
         track                   = From.track
+        VideoMissing            = From.videomissing
         FrodoPosterExists       = From.FrodoPosterExists
         PreFrodoPosterExists    = From.PreFrodoPosterExists
         AssignAudio(From.Audio)
@@ -271,6 +273,7 @@ Public Class MVComboList
         Resolution              = From.filedetails.filedetails_video.VideoResolution
         thumb                   = From.fullmoviebody.thumb
         track                   = From.fullmoviebody.track 
+        VideoMissing            = Not File.Exists(From.fileinfo.filenameandpath)
         AssignMissingData(From)
         AssignAudio(From.filedetails.filedetails_audio)
     End Sub
