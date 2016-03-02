@@ -179,6 +179,9 @@ Partial Class frmPreferences
         Me.TPMovPref = New System.Windows.Forms.TabPage()
         Me.tcMoviePreferences = New System.Windows.Forms.TabControl()
         Me.tpMoviePreferences_Scraper = New System.Windows.Forms.TabPage()
+        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
         Me.GroupBox25 = New System.Windows.Forms.GroupBox()
         Me.CheckBox_Use_XBMC_Scraper = New System.Windows.Forms.CheckBox()
         Me.GroupBox_TMDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
@@ -469,9 +472,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
-        Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
-        Me.Label22 = New System.Windows.Forms.Label()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.cbMovNfoWatchTag = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -497,6 +500,7 @@ Partial Class frmPreferences
         Me.TPMovPref.SuspendLayout
         Me.tcMoviePreferences.SuspendLayout
         Me.tpMoviePreferences_Scraper.SuspendLayout
+        Me.GroupBox6.SuspendLayout
         Me.GroupBox25.SuspendLayout
         Me.GroupBox_TMDB_Scraper_Preferences.SuspendLayout
         Me.GroupBox46.SuspendLayout
@@ -556,7 +560,7 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.GroupBox6.SuspendLayout
+        Me.GroupBox7.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -2270,6 +2274,34 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.TabIndex = 0
         Me.tpMoviePreferences_Scraper.Text = "Scraper"
         '
+        'GroupBox6
+        '
+        Me.GroupBox6.Controls.Add(Me.Label22)
+        Me.GroupBox6.Controls.Add(Me.tbTMDbAPI)
+        Me.GroupBox6.Location = New System.Drawing.Point(7, 442)
+        Me.GroupBox6.Name = "GroupBox6"
+        Me.GroupBox6.Size = New System.Drawing.Size(319, 89)
+        Me.GroupBox6.TabIndex = 79
+        Me.GroupBox6.TabStop = false
+        Me.GroupBox6.Text = "TMDb API"
+        '
+        'Label22
+        '
+        Me.Label22.AutoSize = true
+        Me.Label22.Location = New System.Drawing.Point(23, 21)
+        Me.Label22.Name = "Label22"
+        Me.Label22.Size = New System.Drawing.Size(269, 30)
+        Me.Label22.TabIndex = 1
+        Me.Label22.Text = "Users can save their own TMDb API key here."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"NB: TMDB XBMC Scraper uses it's own "& _ 
+    "API Key."
+        '
+        'tbTMDbAPI
+        '
+        Me.tbTMDbAPI.Location = New System.Drawing.Point(7, 62)
+        Me.tbTMDbAPI.Name = "tbTMDbAPI"
+        Me.tbTMDbAPI.Size = New System.Drawing.Size(293, 21)
+        Me.tbTMDbAPI.TabIndex = 0
+        '
         'GroupBox25
         '
         Me.GroupBox25.Controls.Add(Me.CheckBox_Use_XBMC_Scraper)
@@ -3956,13 +3988,14 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.GroupBox7)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.gb_MovieIdentifier)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.GroupBox16)
         Me.tpMoviePreferences_Advanced.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5618,33 +5651,35 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'GroupBox6
+        'GroupBox7
         '
-        Me.GroupBox6.Controls.Add(Me.Label22)
-        Me.GroupBox6.Controls.Add(Me.tbTMDbAPI)
-        Me.GroupBox6.Location = New System.Drawing.Point(7, 442)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(319, 89)
-        Me.GroupBox6.TabIndex = 79
-        Me.GroupBox6.TabStop = false
-        Me.GroupBox6.Text = "TMDb API"
+        Me.GroupBox7.Controls.Add(Me.cbMovNfoWatchTag)
+        Me.GroupBox7.Controls.Add(Me.Label23)
+        Me.GroupBox7.Location = New System.Drawing.Point(401, 130)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(463, 76)
+        Me.GroupBox7.TabIndex = 77
+        Me.GroupBox7.TabStop = false
+        Me.GroupBox7.Text = "GroupBox7"
         '
-        'tbTMDbAPI
+        'Label23
         '
-        Me.tbTMDbAPI.Location = New System.Drawing.Point(7, 62)
-        Me.tbTMDbAPI.Name = "tbTMDbAPI"
-        Me.tbTMDbAPI.Size = New System.Drawing.Size(293, 21)
-        Me.tbTMDbAPI.TabIndex = 0
+        Me.Label23.AutoSize = true
+        Me.Label23.Location = New System.Drawing.Point(8, 17)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(320, 15)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "Save tag <watched> in movie nfo, mirroring playcount tag."
         '
-        'Label22
+        'cbMovNfoWatchTag
         '
-        Me.Label22.AutoSize = true
-        Me.Label22.Location = New System.Drawing.Point(23, 21)
-        Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(269, 30)
-        Me.Label22.TabIndex = 1
-        Me.Label22.Text = "Users can save their own TMDb API key here."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"NB: TMDB XBMC Scraper uses it's own "& _ 
-    "API Key."
+        Me.cbMovNfoWatchTag.AutoSize = true
+        Me.cbMovNfoWatchTag.Location = New System.Drawing.Point(11, 35)
+        Me.cbMovNfoWatchTag.Name = "cbMovNfoWatchTag"
+        Me.cbMovNfoWatchTag.Size = New System.Drawing.Size(222, 19)
+        Me.cbMovNfoWatchTag.TabIndex = 1
+        Me.cbMovNfoWatchTag.Text = "Enable <watched> tag saving to nfo."
+        Me.cbMovNfoWatchTag.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -5708,6 +5743,8 @@ Partial Class frmPreferences
         Me.TPMovPref.ResumeLayout(false)
         Me.tcMoviePreferences.ResumeLayout(false)
         Me.tpMoviePreferences_Scraper.ResumeLayout(false)
+        Me.GroupBox6.ResumeLayout(false)
+        Me.GroupBox6.PerformLayout
         Me.GroupBox25.ResumeLayout(false)
         Me.GroupBox25.PerformLayout
         Me.GroupBox_TMDB_Scraper_Preferences.ResumeLayout(false)
@@ -5809,8 +5846,8 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.GroupBox6.ResumeLayout(false)
-        Me.GroupBox6.PerformLayout
+        Me.GroupBox7.ResumeLayout(false)
+        Me.GroupBox7.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6262,4 +6299,7 @@ End Sub
     Friend WithEvents GroupBox6 As GroupBox
     Friend WithEvents Label22 As Label
     Friend WithEvents tbTMDbAPI As TextBox
+    Friend WithEvents GroupBox7 As GroupBox
+    Friend WithEvents cbMovNfoWatchTag As CheckBox
+    Friend WithEvents Label23 As Label
 End Class

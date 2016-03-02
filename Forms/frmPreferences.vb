@@ -511,6 +511,8 @@ Public Class frmPreferences
         tmdb_chk.CheckState = If(Pref.nfoposterscraper And 2, CheckState.Checked, CheckState.Unchecked)
         mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
         imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
+
+        cbMovNfoWatchTag.Checked    = Pref.MovNfoWatchTag
     End Sub
 
     Private Sub TVInit()
@@ -2248,22 +2250,14 @@ End Sub
 
     Private Sub cbMovieFilters_Sets_Order_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cbMovieFilters_Sets_Order.SelectedValueChanged
         If PrefsLoad Then Exit Sub
-        Try
-            Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
+        Changes = True
     End Sub
 
     Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
         If PrefsLoad Then Exit Sub
-        Try
-            Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.DisableNotMatchingRenamePattern = cbDisableNotMatchingRenamePattern.Checked
+        Changes = True
     End Sub
 
 
@@ -2337,6 +2331,11 @@ End Sub
         End Try
     End Sub
 
+    Private Sub cbMovNfoWatchTag_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovNfoWatchTag.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovNfoWatchTag = cbMovNfoWatchTag.Checked
+        Changes = True
+    End Sub
 
 #End Region  'Movie Preferences - Advanced Tab
 
@@ -3570,6 +3569,5 @@ End Sub
             End If
         End If
     End Sub
-
     
 End Class

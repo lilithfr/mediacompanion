@@ -2439,6 +2439,7 @@ Public Class WorkingWithNfoFiles
             'newfilenfo.filedetails_audio.Add(audio)
             newmovie.filedetails = newfilenfo
             Dim thumbstring As String = String.Empty
+            Dim watched As Boolean = False
             If Not IO.File.Exists(path) Then
             Else
                 Dim movie As New XmlDocument
@@ -2605,6 +2606,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fullmoviebody.tmdbid = thisresult.InnerText 
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
+                        Case "watched"
+                            watched = thisresult.InnerXml
                         Case "lastplayed"
                             newmovie.fullmoviebody.lastplayed = thisresult.InnerText
                         Case "rating"
@@ -2743,6 +2746,7 @@ Public Class WorkingWithNfoFiles
                 If String.IsNullOrEmpty(newmovie.fullmoviebody.imdbid) Then
                     newmovie.fullmoviebody.imdbid = "0"
                 End If
+                If watched Then newmovie.fullmoviebody.playcount = "1"
                 newmovie.fileinfo.fullpathandfilename = path
                 newmovie.fileinfo.filename = IO.Path.GetFileName(path)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
@@ -3185,8 +3189,12 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
 
                 stage = 42
-                child = doc.CreateElement("playcount") : child.InnerText = movietosave.fullmoviebody.playcount
+                child = doc.CreateElement("playcount")  : child.InnerText = movietosave.fullmoviebody.playcount
                 root.AppendChild(child)
+                If Pref.MovNfoWatchTag Then
+                    child = doc.CreateElement("watched")    : child.InnerXml = If(movietosave.fullmoviebody.playcount = "0", False, True)
+                    root.AppendChild(child)
+                End If
 
                 stage = 42
                 child = doc.CreateElement("lastplayed") : child.InnerText = movietosave.fullmoviebody.lastplayed
