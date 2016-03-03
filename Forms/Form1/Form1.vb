@@ -7429,15 +7429,21 @@ Public Class Form1
         End Try
     End Sub
 
-    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByVal seasonno As String, ByVal episodeno As String, ByVal language As String)
+    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByRef seasonno As String, ByRef episodeno As String, ByVal language As String, ByVal aired As String)
         Dim episodestring As String = ""
         Dim episodeurl As String = ""
+        Dim episodeurl2 As String = ""
         Dim xmlfile As String = ""
 
         If language.ToLower.IndexOf(".xml") = -1 Then
             language = language & ".xml"
         End If
-        episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+        episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+        If IsNothing(aired) Then
+            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+        Else
+            episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, aired, language)
+        End If
         'First try seriesxml data
         'check if present, download if not
         Dim gotseriesxml As Boolean = False
@@ -7465,7 +7471,15 @@ Public Class Form1
             Dim gotEpxml As Boolean = False
             'check episode is present in seriesxml file, else, re-download it (update to latest)
             For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                If Not IsNothing(aired) Then
+                    If NewEpisode.FirstAired.Value = aired Then
+                        Dim somedata As String = "What The??"
+                        xmlfile = NewEpisode.Node.ToString 
+                        xmlfile = "<Data>" & xmlfile & "</Data>"
+                        gotEpxml = True
+                        Exit For
+                    End If
+                Else If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
                     Dim somedata As String = "What The??"
                     xmlfile = NewEpisode.Node.ToString 
                     xmlfile = "<Data>" & xmlfile & "</Data>"
@@ -7483,7 +7497,7 @@ Public Class Form1
         Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
         If xmlOK Then
             episodestring = "<episodedetails>"
-            episodestring = episodestring & "<url>" & episodeurl & "</url>"
+            episodestring = episodestring & "<url>" & If(IsNothing(aired), episodeurl, episodeurl2) & "</url>"
             Dim mirrorslist As New XmlDocument
             mirrorslist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
@@ -7528,6 +7542,10 @@ Public Class Form1
                                     episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
                                 Case "airsbefore_season"
                                     episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
+                                Case "SeasonNumber"
+                                    seasonno = mirrorselection.InnerText
+                                Case "EpisodeNumber"
+                                    episodeno = mirrorselection.InnerText
                             End Select
                         Next
                 End Select

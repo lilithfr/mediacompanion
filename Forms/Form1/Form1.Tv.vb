@@ -2147,40 +2147,50 @@ Partial Public Class Form1
                     End If
                     
                     stage = "3"
-                    S = S.Replace("x265", "")
-                    S = S.Replace("x264", "")
-                    S = S.Replace("720p", "")
-                    S = S.Replace("720i", "")
-                    S = S.Replace("1080p", "")
-                    S = S.Replace("1080i", "")
-                    S = S.Replace("X265", "")
-                    S = S.Replace("X264", "")
-                    S = S.Replace("720P", "")
-                    S = S.Replace("720I", "")
-                    S = S.Replace("1080P", "")
-                    S = S.Replace("1080I", "")
+                    S = S.Replace("x265"    , "")
+                    S = S.Replace("x264"    , "")
+                    S = S.Replace("720p"    , "")
+                    S = S.Replace("720i"    , "")
+                    S = S.Replace("1080p"   , "")
+                    S = S.Replace("1080i"   , "")
+                    S = S.Replace("X265"    , "")
+                    S = S.Replace("X264"    , "")
+                    S = S.Replace("720P"    , "")
+                    S = S.Replace("720I"    , "")
+                    S = S.Replace("1080P"   , "")
+                    S = S.Replace("1080I"   , "")
                     stage = "4"
-                    Dim M As Match
-                    M = Regex.Match(S, Regexs)
-                    If M.Success = True Then
-                        Try
-                            newepisode.Season.Value = M.Groups(1).Value.ToString
-                            newepisode.Episode.Value = M.Groups(2).Value.ToString
-
+                    Dim N As Match
+                    stage = "5"     'Do date test first.
+                    N = Regex.Match(S, tv_EpRegexDate)
+                    If N.Success Then
+                        Dim aired As String = N.Groups(0).Value.Replace(".", "-").Replace("_", "-")
+                        newepisode.Aired.Value = aired
+                        Dim somthing As String = Nothing
+                        Exit For
+                    Else
+                        Dim M As Match
+                        M = Regex.Match(S, Regexs)
+                        If M.Success = True Then
                             Try
-                                Dim matchvalue As String = M.Value
-                                newepisode.Thumbnail.FileName = S.Substring(S.LastIndexOf(matchvalue)+matchvalue.Length, S.Length - (S.LastIndexOf(matchvalue) + (matchvalue.Length)))
-                                'newepisode.Thumbnail.FileName = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
-                            Catch ex As Exception
-        #If SilentErrorScream Then
-                                    Throw ex
-        #End If
+                                newepisode.Season.Value = M.Groups(1).Value.ToString
+                                newepisode.Episode.Value = M.Groups(2).Value.ToString
+
+                                Try
+                                    Dim matchvalue As String = M.Value
+                                    newepisode.Thumbnail.FileName = S.Substring(S.LastIndexOf(matchvalue)+matchvalue.Length, S.Length - (S.LastIndexOf(matchvalue) + (matchvalue.Length)))
+                                    'newepisode.Thumbnail.FileName = S.Substring(M.Groups(2).Index + M.Groups(2).Value.Length, S.Length - (M.Groups(2).Index + M.Groups(2).Value.Length))
+                                Catch ex As Exception
+            #If SilentErrorScream Then
+                                        Throw ex
+            #End If
+                                End Try
+                                Exit For
+                            Catch
+                                newepisode.Season.Value = "-1"
+                                newepisode.Episode.Value = "-1"
                             End Try
-                            Exit For
-                        Catch
-                            newepisode.Season.Value = "-1"
-                            newepisode.Episode.Value = "-1"
-                        End Try
+                        End If
                     End If
                 Next
                 If newepisode.Season.Value = Nothing Then newepisode.Season.Value = "-1"
@@ -2193,8 +2203,12 @@ Partial Public Class Form1
                 Dim showtitle As String = eps.ShowTitle.Value
                 epscount += 1
                 Pref.tvScraperLog &= "!!! With File : " & eps.VideoFilePath & vbCrLf
-                Pref.tvScraperLog &= "!!! Detected  : Season : " & eps.Season.Value & " Episode : " & eps.Episode.Value & vbCrLf
-                If eps.Season.Value = "-1" And eps.Episode.Value = "-1" Then
+                If eps.Aired.Value <> Nothing Then
+                    Pref.tvScraperLog &= "!!! Detected  : Aired Date: " & eps.Aired.Value & vbCrLf
+                Else
+                    Pref.tvScraperLog &= "!!! Detected  : Season : " & eps.Season.Value & " Episode : " & eps.Episode.Value & vbCrLf
+                End If
+                If eps.Season.Value = "-1" And eps.Episode.Value = "-1" AndAlso eps.Aired.Value = Nothing Then
                     Pref.tvScraperLog &= "!!! WARNING: Can't extract Season and Episode details from this filename, file not added!" & vbCrLf
                     Pref.tvScraperLog &= "!!!" & vbCrLf
                     Continue For    'if we can't get season or episode then skip to next episode
@@ -2216,7 +2230,7 @@ Partial Public Class Form1
                 progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 Dim removal As String = ""
-                If eps.Season.Value = "-1" Or eps.Episode.Value = "-1" Then
+                If (eps.Season.Value = "-1" Or eps.Episode.Value = "-1") AndAlso eps.Aired.Value = Nothing Then
                     eps.Title.Value = Utilities.GetFileName(eps.VideoFilePath)
                     eps.Rating.Value = "0"
                     eps.PlayCount.Value = "0"
@@ -2238,6 +2252,7 @@ Partial Public Class Form1
                     stage = "6"
                     eps.Thumbnail.FileName = ""
                     Do
+                        If eps.Aired.Value <> Nothing Then Exit Do
                         '<tvregex>[Ss]([\d]{1,2}).?[Ee]([\d]{3})</tvregex>
                         M2 = Regex.Match(S, "(([EeXx])([\d]{1,4}))")
                         If M2.Success = True Then
@@ -2318,6 +2333,9 @@ Partial Public Class Form1
                             progresstext &= " - Scraping..."
                             bckgroundscanepisodes.ReportProgress(progress, progresstext)
                             Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
+                            If Not IsNothing(eps.Aired.Value) Then
+                                episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, singleepisode.Aired.Value, language & ".xml")
+                            End If
                             stage = "12a"
                             If Not Utilities.UrlIsValid(episodeurl) Then
                                 If sortorder.ToLower = "dvd" Then
@@ -2330,7 +2348,7 @@ Partial Public Class Form1
                             End If
                             stage = "12b"
                             If Utilities.UrlIsValid(episodeurl) Then
-                                If Pref.tvshow_useXBMC_Scraper = True Then
+                                IF IsNothing(singleepisode.Aired.Value) AndAlso Pref.tvshow_useXBMC_Scraper = True Then
                                     Dim FinalResult As String = ""
                                     stage = "12b1"
                                     episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
@@ -2348,7 +2366,7 @@ Partial Public Class Form1
                                     Exit For
                                 End If
                                 stage = "12b3"
-                                Dim tempepisode As String = ep_Get(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language)
+                                Dim tempepisode As String = ep_Get(tvdbid, tempsortorder, singleepisode.Season.Value, singleepisode.Episode.Value, language, singleepisode.Aired.Value)
                                 stage = "12b4"
                                 scrapedok = True
                                 If tempepisode = Nothing Or tempepisode = "Error" Then

@@ -36,6 +36,7 @@ Public Class Pref
     Public Const SetDefaults = True
     Public Const datePattern As String = "yyyyMMddHHmmss"
     Public Const nfoDatePattern As String = "yyyy-MM-dd"
+    Public Const tv_EpRegexDate As String = "([0-9]{4})[.\-_]([0-9]{2})[.\-_]([0-9]{2})"
     
     'Not saved items
     Public Shared fixnfoid As Boolean
