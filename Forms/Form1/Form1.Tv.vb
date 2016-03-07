@@ -214,7 +214,7 @@ Partial Public Class Form1
     Private Sub Tv_TreeViewContextMenuItemsEnable()        'enable/disable right click context menu items depending on if its show/season/episode
         '                                                  'called from tv_treeview mouseup event where we check for a right click
         If TvTreeview.SelectedNode Is Nothing Then Return
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
         Dim showtitle As String = WorkingTvShow.Title.Value       'set our show title
 
 
@@ -250,7 +250,7 @@ Partial Public Class Form1
             tsmiTvDelShowEpNfoArt.Enabled = True
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - " & tv_SeasonSelectedCurrently.SeasonLabel
+            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - " & tv_SeasonSelectedCurrently(TvTreeview).SeasonLabel
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
             Tv_TreeViewContext_Play_Episode.Enabled = False
             Tv_TreeViewContext_ViewNfo.Text = "View Season .nfo"
@@ -277,7 +277,7 @@ Partial Public Class Form1
             tsmiTvDelShowEpNfoArt.Enabled = False
 
         ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently.Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently.Episode.Value, 2) & " '" & ep_SelectedCurrently.Title.Value & "'"
+            Tv_TreeViewContext_ShowTitle.Text = "'" & showtitle & "' - S" & Utilities.PadNumber(ep_SelectedCurrently(TvTreeview).Season.Value, 2) & "E" & Utilities.PadNumber(ep_SelectedCurrently(TvTreeview).Episode.Value, 2) & " '" & ep_SelectedCurrently(TvTreeview).Title.Value & "'"
             Tv_TreeViewContext_ShowTitle.Font = New Font("Arial", 10, FontStyle.Bold)
             Tv_TreeViewContext_Play_Episode.Enabled = Not DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).Ismissing
             Tv_TreeViewContext_ViewNfo.Text = "View Episode .nfo"
@@ -504,7 +504,7 @@ Partial Public Class Form1
     Private Sub tb_ShGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles tb_ShGenre.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Try
-                Dim thisshow As TvShow = tv_ShowSelectedCurrently 
+                Dim thisshow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
                 Dim item() As String = thisshow.Genre.Value.Split("/")
                 Dim genre As String = ""
                 Dim listof As New List(Of str_genre)
@@ -563,7 +563,7 @@ Partial Public Class Form1
     End Sub
 
     Public Sub tv_ActorDisplay(Optional ByVal useDefault As Boolean = False)
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         If WorkingTvShow Is Nothing Then Exit Sub
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Pref.EdenEnabled
@@ -592,7 +592,7 @@ Partial Public Class Form1
     End Sub
 
     Public Sub tv_ActorRoleDisplay(Optional ByVal useDefault As Boolean = False)
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         If WorkingTvShow Is Nothing Then Exit Sub
         Dim imgLocation As String = Utilities.DefaultActorPath
         Dim eden As Boolean = Pref.EdenEnabled
@@ -646,7 +646,7 @@ Partial Public Class Form1
         If IsNothing(tvFanlistbox.SelectedItem) Then Exit Sub
         item = tvFanlistbox.SelectedItem.ToString.ToLower
         If Not String.IsNullOrEmpty(item) Then
-                Dim tmpsh As TvShow = tv_ShowSelectedCurrently()
+                Dim tmpsh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
                 imagepath = tmpsh.FolderPath 
                 Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
                 imagepath &= item & suffix
@@ -659,7 +659,7 @@ Partial Public Class Form1
             If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
             If tempint = Windows.Forms.DialogResult.Yes Then
                 Utilities.SafeDeleteFile(imagepath)
-                TvPanel7Update(tv_ShowSelectedCurrently.FolderPath)
+                TvPanel7Update(tv_ShowSelectedCurrently(TvTreeview).FolderPath)
             End If
         End If
     End Sub
@@ -770,7 +770,7 @@ Partial Public Class Form1
         cmbxEpActor.Items.Clear()
         tbEpRole.Text = ""
 
-        Dim Show As TvShow = tv_ShowSelectedCurrently()
+        Dim Show As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Dim season As Integer = SelectedEpisode.Season.Value
         Dim episode As Integer = SelectedEpisode.Episode.Value
         Dim SeasonObj As New Media_Companion.TvSeason
@@ -1672,7 +1672,7 @@ Partial Public Class Form1
             Dim done As Integer = 0
             'Dim SelectedShow As TvShow
             If singleshow Then
-                showslist = tv_ShowSelectedCurrently()
+                showslist = tv_ShowSelectedCurrently(TvTreeview)
                 For x = Cache.TvCache.Shows.Count - 1 To 0 Step -1
                     If Cache.TvCache.Shows(x).Title.Value = showslist.Title.Value Then
                         shcachecount = x + 1
@@ -2863,51 +2863,50 @@ Partial Public Class Form1
         Return result
     End Function
 
-    Public Function tv_ShowSelectedCurrently() As Media_Companion.TvShow
+    Public Function tv_ShowSelectedCurrently(ByRef tree As TreeView) As Media_Companion.TvShow
         'TvTreeview.Focus()
-        If TvTreeview.SelectedNode Is Nothing Then
-            If TvTreeview.Nodes.Count = 0 Then Return Nothing
-            TvTreeview.SelectedNode = TvTreeview.TopNode
+        If tree.SelectedNode Is Nothing Then
+            If tree.Nodes.Count = 0 Then Return Nothing
+            tree.SelectedNode = tree.TopNode
         End If
-        If TvTreeview.SelectedNode Is Nothing Then
-            TvTreeview.SelectedNode = TvTreeview.Nodes(0)
+        If tree.SelectedNode Is Nothing Then
+            tree.SelectedNode = tree.Nodes(0)
         End If
 
         Dim Show As Media_Companion.TvShow = Nothing
         Dim Season As Media_Companion.TvSeason = Nothing
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
-        If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = TvTreeview.SelectedNode.Tag
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = TvTreeview.SelectedNode.Tag
+        If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
+            Show = tree.SelectedNode.Tag
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
+            Season = tree.SelectedNode.Tag
             Show = Season.GetParentShow
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
 
 
-            Episode = TvTreeview.SelectedNode.Tag
+            Episode = tree.SelectedNode.Tag
             Season = Episode.SeasonObj
             Show = Episode.ShowObj
         End If
-
-
+        
         Return Show
     End Function
 
-    Public Function tv_SeasonSelectedCurrently() As Media_Companion.TvSeason
-        If TvTreeview.SelectedNode Is Nothing Then Return Nothing
+    Public Function tv_SeasonSelectedCurrently(ByRef tree As TreeView) As Media_Companion.TvSeason
+        If tree.SelectedNode Is Nothing Then Return Nothing
 
         Dim Show As Media_Companion.TvShow = Nothing
         Dim Season As Media_Companion.TvSeason = Nothing
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
-        If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = TvTreeview.SelectedNode.Tag
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = TvTreeview.SelectedNode.Tag
+        If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
+            Show = tree.SelectedNode.Tag
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
+            Season = tree.SelectedNode.Tag
             Show = Season.GetParentShow
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-            Episode = TvTreeview.SelectedNode.Tag
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+            Episode = tree.SelectedNode.Tag
             Season = Episode.SeasonObj
             Show = Episode.ShowObj
         End If
@@ -2915,20 +2914,20 @@ Partial Public Class Form1
         Return Season
     End Function
 
-    Public Function ep_SelectedCurrently() As Media_Companion.TvEpisode
-        If TvTreeview.SelectedNode Is Nothing Then Return Nothing
+    Public Function ep_SelectedCurrently(ByRef tree As TreeView) As Media_Companion.TvEpisode
+        If tree.SelectedNode Is Nothing Then Return Nothing
 
         Dim Show As Media_Companion.TvShow = Nothing
         Dim Season As Media_Companion.TvSeason = Nothing
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
-        If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = TvTreeview.SelectedNode.Tag
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = TvTreeview.SelectedNode.Tag
+        If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
+            Show = tree.SelectedNode.Tag
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
+            Season = tree.SelectedNode.Tag
             Show = Season.GetParentShow
-        ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-            Episode = TvTreeview.SelectedNode.Tag
+        ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
+            Episode = tree.SelectedNode.Tag
             Season = Episode.SeasonObj
             Show = Episode.ShowObj
         End If
@@ -4011,7 +4010,7 @@ Partial Public Class Form1
     Private Sub TvEpThumbScreenShot()
         Try
             Dim aok As Boolean = False
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
             If WorkingEpisode.IsMissing Then Exit Sub
             If TextBox35.Text = "" Then TextBox35.Text = Pref.ScrShtDelay
             If IsNumeric(TextBox35.Text) Then
@@ -4075,9 +4074,9 @@ Partial Public Class Form1
 
     Private Sub TvEpThumbRescrape()
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
             If WorkingEpisode.IsMissing Then Exit Sub
             Dim messbox As frmMessageBox = New frmMessageBox("Checking TVDB for screenshot", "", "Please Wait")
             Dim episodescraper As New TVDBScraper
@@ -4185,7 +4184,7 @@ Partial Public Class Form1
 
     Private Sub TvScrapePosterBanner(ByVal postertype As String)
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim messbox As frmMessageBox = New frmMessageBox("Searching TVDB for " & If(postertype = "poster", "Poster", "Banner"), "", "Please Wait")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
             messbox.Show()
@@ -4197,7 +4196,7 @@ Partial Public Class Form1
             Dim seasonno As String = ""
             Dim seasonpath As String = ""
             If Not mainimages Then
-                seasonno = tv_SeasonSelectedCurrently.ToString
+                seasonno = tv_SeasonSelectedCurrently(TvTreeview).ToString
                 seasonno = seasonno.ToLower.Replace("season ", "")
                 Dim tmp As Integer = seasonno.ToInt
                 seasonno = tmp.ToString
@@ -4682,9 +4681,9 @@ Partial Public Class Form1
 #Region "Tv Watched/Unwatched Routines"
     Private Sub Tv_MarkAs_Watched_UnWatched(ByVal toggle As String)
         If TvTreeview.SelectedNode Is Nothing Then Exit Sub
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
         If WorkingTvShow Is Nothing Then Exit Sub
 
         If Not IsNothing(WorkingEpisode) Then
@@ -4805,7 +4804,7 @@ Partial Public Class Form1
     End Function
 
     Private Function GetEpMediaFlags() As List(Of KeyValuePair(Of String, String))
-        Dim thisep As TvEpisode = ep_SelectedCurrently()
+        Dim thisep As TvEpisode = ep_SelectedCurrently(TvTreeview)
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then

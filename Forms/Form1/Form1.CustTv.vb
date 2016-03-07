@@ -33,8 +33,8 @@ Partial Public Class Form1
 
     Private Sub CustTvTabControl_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CustTvTabControl.SelectedIndexChanged
         Try
-            Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(CTvTreeView)
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(CTvTreeView)
             Dim tab As String = CustTvTabControl.SelectedTab.Name
             If Show Is Nothing Then
                 MsgBox("No TV Show is selected")

@@ -727,7 +727,7 @@ Public Class Form1
                 'ToolStrip1.Enabled = True
 
                 mov_SplitContainerAutoPosition()
-                tv_ShowSelectedCurrently()
+                tv_ShowSelectedCurrently(TvTreeview)
                 tv_SplitContainerAutoPosition()
             End If
 
@@ -5161,7 +5161,7 @@ Public Class Form1
 
     Private Sub ExpandSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExpandSelectedShowToolStripMenuItem.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 
             WorkingTvShow.ShowNode.ExpandAll()
         Catch ex As Exception
@@ -5171,7 +5171,7 @@ Public Class Form1
 
     Private Sub CollapseSelectedShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CollapseSelectedShowToolStripMenuItem.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 
             WorkingTvShow.ShowNode.Collapse()
         Catch ex As Exception
@@ -5188,9 +5188,9 @@ Public Class Form1
     End Sub
 
     Private Sub tv_ShowReload(Optional ByVal force As Boolean = False)
-        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
-        Dim Season As Media_Companion.TvSeason = tv_SeasonSelectedCurrently()
-        Dim Episode As Media_Companion.TvEpisode = ep_SelectedCurrently()
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim Season As Media_Companion.TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim Episode As Media_Companion.TvEpisode = ep_SelectedCurrently(TvTreeview)
     End Sub
 
     Private Sub TabControl3_Selecting(ByVal sender As Object, ByVal e As CancelEventArgs) Handles TabControl3.Selecting 
@@ -5204,9 +5204,9 @@ Public Class Form1
     Private Sub TabControl3_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControl3.SelectedIndexChanged
         
         Try
-            Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+            Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim tab As String = TabControl3.SelectedTab.Text
-            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
             If (tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences") AndAlso Show Is Nothing Then
                 MsgBox("No TV Show is selected")
                 Exit Sub
@@ -5293,7 +5293,7 @@ Public Class Form1
                 Call tv_Fanart_Load()
                 tvCurrentTabIndex = TabControl3.SelectedIndex
             ElseIf tab.ToLower = "fanart.tv" Then
-                UcFanartTvTv1.ucFanartTv_Refresh(tv_ShowSelectedCurrently())
+                UcFanartTvTv1.ucFanartTv_Refresh(tv_ShowSelectedCurrently(TvTreeview))
             ElseIf tab.ToLower = "screenshot" Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 If Pref.EdenEnabled Then
@@ -5405,7 +5405,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_ShowChangedRePopulate()
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Try
             TextBox26.Text = Utilities.GetLastFolder(WorkingTvShow.NfoFilePath)
             tb_TvShSelectSeriesPath.Enabled = True
@@ -5857,9 +5857,9 @@ Public Class Form1
         Try
             If Not TvTreeview.SelectedNode Is Nothing Then
                 Dim Path As String = Nothing 
-                Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
-                Dim WorkingTvEpisode As TvEpisode = ep_SelectedCurrently()
-                Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently()
+                Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)  'set WORKINGTVSHOW to show obj irrelavent if we have selected show/season/episode
+                Dim WorkingTvEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
+                Dim WorkingTvSeason As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
                 If Not IsNothing(WorkingTvEpisode) AndAlso Not WorkingTvEpisode.IsMissing Then
                     Path = WorkingTvEpisode.NfoFilePath
                 ElseIf Not IsNothing(WorkingTvSeason) AndAlso Not IsNothing(WorkingTvSeason.FolderPath) Then
@@ -5926,7 +5926,7 @@ Public Class Form1
     End Sub
 
     Private Sub tv_Fanart_Load()
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Me.Panel13.Controls.Clear()
         listOfTvFanarts.Clear()
         btnTvFanartResetImage.Visible = False
@@ -6083,7 +6083,7 @@ Public Class Form1
     End Sub
 
     Private Sub Tv_FanartDisplay()
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         If IsNothing(WorkingTvShow) Then Exit Sub
         If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
             If Not tv_PictureBoxLeft.Image Is Nothing Then
@@ -6125,8 +6125,8 @@ Public Class Form1
     End Sub
 
     Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
 
         If IsNothing(WorkingTvShow.TvdbId.Value) = True Then
             WorkingTvShow.TvdbId.Value = ""
@@ -6399,7 +6399,7 @@ Public Class Form1
     Private Sub Tv_TreeViewContext_RescrapeMediaTags_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeMediaTags.Click
         Try
             Dim tmp As Integer = Utilities.languagelibrary.count
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim tempint As Integer = 0
             Dim nfofilestorename As New List(Of String)
             nfofilestorename.Clear()
@@ -6503,7 +6503,7 @@ Public Class Form1
     Private Sub Tv_TreeViewContext_MissingEpThumbs_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_MissingEpThumbs.Click
         Try
             Dim tmp As Integer = Utilities.languagelibrary.count
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim tempint As Integer = 0
             Dim seasonnumber As Integer = -1
             Dim nfofilestorename As New List(Of String)
@@ -6583,8 +6583,8 @@ Public Class Form1
     End Sub
     Private Sub tv_PosterSetup(Optional ByVal IsOfType As String = "")
 
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
-        Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
         tvposterpage = 0
         imdbposterlist.Clear()
         tvdbposterlist.Clear()
@@ -6656,7 +6656,7 @@ Public Class Form1
         Try
             Me.Panel16.Hide()
             Label72.Text = ""
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             rbTVposter.Enabled = True
             rbTVbanner.Enabled = True
             btnTvPosterTVDBSpecific.Enabled = True
@@ -6813,7 +6813,7 @@ Public Class Form1
 
     Private Sub tv_TvdbThumbsGet()
 
-        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Dim showlist As New XmlDocument
         'Dim tvdbstuff As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
         Dim tvdbstuff As New TVDBScraper
@@ -7099,7 +7099,7 @@ Public Class Form1
             Dim eden As Int16=0
             Dim frodo As Int16=0
             Dim imagePaths As New List(Of String)
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim workingposterpath = WorkingTvShow.FolderPath & "folder.jpg"
             If ComboBox2.Text.ToLower = "main image" Then
                 If (Pref.EdenEnabled OrElse Pref.tvfolderjpg) And Not (Pref.FrodoEnabled AndAlso rbTVbanner.Checked) Then
@@ -9651,7 +9651,7 @@ End Sub
 
     Private Sub RefreshThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RefreshShow.Click
         Try
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            Dim Show As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim selectednode As Integer = TvTreeview.SelectedNode.Index
 
             If Show IsNot Nothing Then
@@ -9668,7 +9668,7 @@ End Sub
 
     Private Sub Tv_TreeViewContext_ShowMissEps_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_ShowMissEps.Click
         Try
-            Dim Show As TvShow = tv_ShowSelectedCurrently()
+            Dim Show As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 
             If Not Bckgrndfindmissingepisodes.IsBusy Then
                 Dim tempstring As String = ""
@@ -10096,7 +10096,7 @@ End Sub
         'It handles the following errors - no aired date, episodes on the same aired date, episodes on same date with same series & same episode i.e. a duplicate.... 
 
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim NoDateCountUp As Integer = 0
             Dim Abort As Boolean = True     'this is used to verify that we actually have episodes to process
             Dim mySortedList As New SortedList()        'this is our sorted list, we add to the list a key (aired date) & the associated data (episode name), then we sort it & then we read out the data
@@ -10271,7 +10271,7 @@ End Sub
     End Sub
     Private Sub Tv_TreeViewContext_Play_Episode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
         Try
-            Dim ep As TvEpisode = ep_SelectedCurrently()
+            Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
             If ep.IsMissing Then Exit Sub
             Dim tempstring As String = ep.VideoFilePath     'DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
             If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
@@ -10315,7 +10315,7 @@ End Sub
     Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowNfoArt.MouseDown
         Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
         TVContextMenu.Close()
-        Dim Sh As TvShow = tv_ShowSelectedCurrently()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         TvDelShowNfoArt(Sh, False, NoDelArt)
     End Sub
 
@@ -10329,9 +10329,9 @@ End Sub
         msgstring &= vbCrLf & "Are your sure you wish to continue?"
         Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
         If x = MsgBoxResult.Cancel Then Exit Sub
-        Dim Sh As TvShow = tv_ShowSelectedCurrently()
-        Dim seas As TvSeason = tv_SeasonSelectedCurrently()
-        Dim ep As TvEpisode = ep_SelectedCurrently()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
         TvDelEpNfoAst(Sh, seas, ep, True, NoDelArt)
         TvDelShowNfoArt(Sh, True, NoDelArt)
     End Sub
@@ -10339,9 +10339,9 @@ End Sub
     Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelEpNfoArt.MouseDown 
         Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
         TVContextMenu.Close()
-        Dim Sh As TvShow = tv_ShowSelectedCurrently()
-        Dim seas As TvSeason = tv_SeasonSelectedCurrently()
-        Dim ep As TvEpisode = ep_SelectedCurrently()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
         TvDelEpNfoAst(Sh, seas, ep, False, NoDelArt)
     End Sub
 
@@ -10433,7 +10433,7 @@ End Sub
 
     Private Sub Tv_TreeViewContext_FindMissArt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_FindMissArt.Click
         Try
-            tv_MissingArtDownload(tv_ShowSelectedCurrently)
+            tv_MissingArtDownload(tv_ShowSelectedCurrently(TvTreeview))
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14842,9 +14842,9 @@ End Sub
 
     Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
         If Panel9.Visible Then
-            tb_Sh_Ep_Title.Text = ep_SelectedCurrently().Title.Value
+            tb_Sh_Ep_Title.Text = ep_SelectedCurrently(TvTreeview).Title.Value
         Else
-            tb_Sh_Ep_Title.Text = tv_ShowSelectedCurrently().Title.Value
+            tb_Sh_Ep_Title.Text = tv_ShowSelectedCurrently(TvTreeview).Title.Value
         End If
     End Sub
     
@@ -14965,7 +14965,7 @@ End Sub
 
     Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim TVShowNFOContent As String = ""
             If Button47.Text = "Default" Then
                 WorkingTvShow.SortOrder.Value = "dvd"
@@ -14981,7 +14981,7 @@ End Sub
 
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 
             Dim TVShowNFOContent As String = ""
             If Button45.Text = "TVDB" Then
@@ -15003,7 +15003,7 @@ End Sub
 
     Private Sub Button46_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button46.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim TVShowNFOContent As String = ""
             If Button46.Text = "TVDB" Then
                 WorkingTvShow.EpisodeActorSource.Value = "imdb"
@@ -15137,7 +15137,7 @@ End Sub
 #Region "Tv PictureBoxes"
     Private Sub ReScrFanartToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
         Try
-            Dim Showname As TvShow = tv_ShowSelectedCurrently()
+            Dim Showname As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             TvGetArtwork(Showname, True, False, False, False, False)
             tv_ShowLoad(Showname)
         Catch ex As Exception
@@ -15291,7 +15291,7 @@ End Sub
         Dim issavefanart As Boolean = Pref.savefanart
         Pref.savefanart =true
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             lbl_movVotes.Text = "Please Wait, Trying to Download Fanart"
             Me.Refresh()
             Application.DoEvents()
@@ -15454,7 +15454,7 @@ End Sub
 
     Private Sub btnTvFanartResetImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartResetImage.Click
         Try
-            Dim workingtvshow As TvShow = tv_ShowSelectedCurrently()
+            Dim workingtvshow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             util_ImageLoad(PictureBox10, workingtvshow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
@@ -15467,7 +15467,7 @@ End Sub
 
     Private Sub btnTvFanartSaveCropped_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSaveCropped.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Try
                 Dim stream As New System.IO.MemoryStream
                 PictureBox10.Image.Save(WorkingTvShow.FolderPath & "fanart.jpg", System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -15500,7 +15500,7 @@ End Sub
             Dim PathOrUrl As String = t.tb_PathorUrl.Text
             t.Dispose()
             t = Nothing
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             Dim savepath As String = WorkingTvShow.NfoFilePath.ToLower.Replace("tvshow.nfo", "fanart.jpg")
             Dim eh As Boolean = Pref.savefanart
             Pref.savefanart = True
@@ -15651,7 +15651,7 @@ End Sub
     Private Sub btnTvPosterIMDB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterIMDB.Click
         Try
             btnTvPosterSaveBig.Visible = False
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             If WorkingTvShow.ImdbId = Nothing Then
                 MsgBox("No IMDB ID is available for this movie, cant scrape posters")
                 Exit Sub
@@ -15737,7 +15737,7 @@ End Sub
 #Region "TV Fanart.TV Form"
 
     Private Sub tvtpfanarttv_Leave(sender As Object, e As EventArgs) Handles tpTvFanartTv.Leave
-        tv_ShowLoad(tv_ShowSelectedCurrently())
+        tv_ShowLoad(tv_ShowSelectedCurrently(TvTreeview))
     End Sub
 
 #End Region
@@ -16106,7 +16106,7 @@ End Sub
 
     Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
         Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
+            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
             If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
                 MsgBox("No show is selected")
                 Exit Sub
@@ -16165,7 +16165,7 @@ End Sub
 
     Private Sub btn_TvTVDb_Click(sender As System.Object, e As System.EventArgs) Handles btn_TvTVDb.Click
         Dim url As String
-        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview)
         If Show.TvdbId.Value.Contains("tt") Then
             MsgBox("Invalid Tvdb ID" & vbCrLf & "Unable to load Show's TVDB page")
             Exit Sub
@@ -16190,7 +16190,7 @@ End Sub
 
     Private Sub btn_TvIMDB_Click(sender As System.Object, e As System.EventArgs) Handles btn_TvIMDB.Click
         Dim url As String
-        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently()
+        Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview)
         If String.IsNullOrEmpty(Show.ImdbId.Value) Then
             MsgBox("Selected Show has no IMDB ID" & vbCrLf & "Unable to load Show's IMDB page")
             Exit Sub
