@@ -28,43 +28,47 @@ Public Class Profiles
                             StartupProfile = thisresult.innertext
                         Case "profiledetails"
                             Dim currentprofile As New ListOfProfiles
+                            Dim result As xmlnode
                             For Each result In thisresult.childnodes
-                                Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
+                                Dim t As Integer = result.InnerText.ToString.ToLower.IndexOf("\s")
                                 Select Case result.name
                                     Case "actorcache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.ActorCache = applicationPath & s
                                     Case "directorcache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.DirectorCache = applicationPath & s
                                     Case "config"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.Config = applicationPath & s
                                     Case "moviecache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.MovieCache = applicationPath & s
                                     Case "profilename"
-                                        currentprofile.ProfileName = result.innertext
+                                        currentprofile.ProfileName = result.InnerText
                                     Case "regex"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.RegExList = applicationPath & s
                                     Case "genres"
                                         Dim s As String = ""
-                                        If result.innertext = "" Then 
+                                        If result.InnerText = "" Then 
                                             s = "\settings\genres.txt"  'incase missing from existing profile.xml
                                         Else
                                             s = result.innertext.ToString.Substring(t)
                                         End If
                                         currentprofile.Genres = applicationPath & s
                                     Case "tvcache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.TvCache = applicationPath & s
                                     Case "musicvideocache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.MusicVideoCache = applicationPath & s
                                     Case "moviesetcache"
-                                        Dim s As String = result.innertext.ToString.Substring(t)
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.MovieSetCache = applicationPath & s
+                                    Case "custtvcache"
+                                        Dim s As String = result.InnerText.ToString.Substring(t)
+                                        currentprofile.CustTvCache = applicationpath & s
                                 End Select
                             Next
                             ProfileList.Add(currentprofile)

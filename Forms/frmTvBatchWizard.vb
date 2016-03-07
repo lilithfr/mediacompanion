@@ -291,7 +291,7 @@
         cbepStreamDetails.Enabled = Pref.enabletvhdtags
         Dim TitleText As String = "Tv Batch Wizard - "
         If Form1.singleshow Then
-            Dim workingshow As TvShow = Form1.tv_ShowSelectedCurrently
+            Dim workingshow As TvShow = Form1.tv_ShowSelectedCurrently()
             TitleText += workingshow.Title.Value
         Else
             TitleText += "All Shows"

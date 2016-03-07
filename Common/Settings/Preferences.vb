@@ -100,6 +100,7 @@ Public Class Pref
     Public Shared tvFolders         As New List(Of String)
     Public Shared tvRootFolders     As New List(Of str_RootPaths)
     Public Shared movieFolders      As New List(Of str_RootPaths)
+    Public Shared custtvFolders     As New List(Of String)
     Public Shared offlinefolders    As New List(Of String)
     Public Shared stubfolder        As String
     Public Shared stubmessage       As String = "Insert Media to Continue"
@@ -848,11 +849,12 @@ Public Class Pref
         releaseformat(13) = "Bluray"
         releaseformat(14) = "DVD"
 
-        movieFolders.Clear()
-        tvRootFolders.Clear()
-        tvFolders.Clear()
-        MVidFolders.Clear()
-        MVConcertFolders.Clear()
+        movieFolders        .Clear()
+        tvRootFolders       .Clear()
+        tvFolders           .Clear()
+        MVidFolders         .Clear()
+        MVConcertFolders    .Clear()
+        custtvFolders       .Clear()
 
     End Sub
 
@@ -943,6 +945,10 @@ Public Class Pref
         For Each path In MVConcertFolders
             Dim t As String = path.rpath & "|" & path.selected
             root.AppendChild(doc, "MVConcertFolders", t)
+        Next
+
+        For each path In custtvFolders
+            root.AppendChild(doc, "custtvFolder", path)
         Next
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
@@ -1313,6 +1319,7 @@ Public Class Pref
         homemoviefolders.Clear() 
         MVidFolders.Clear()
         MVConcertFolders.Clear()
+        custtvFolders.Clear()
         movie_filters.Reset()
         engineupdate()
         ExcludeFolders.Clear()
@@ -1415,6 +1422,9 @@ Public Class Pref
                         u.rpath = t(0)
                         If t.Count > 1 Then u.selected = t(1)
                         MVConcertFolders.Add(u)
+                    Case "custtvFolder"
+                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
+                        custtvFolders.Add(decodestring)
                     Case "ExcludeFolders"
                         ExcludeFolders.Load(thisresult)
                     Case "moviethumbpriority"

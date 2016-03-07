@@ -132,8 +132,6 @@ Public Class Form1
     Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
     Public startup As Boolean = True
-    'Public tv_RegexScraper As New List(Of String)
-    'Public tv_RegexRename As New List(Of String)
     Public SeriesXmlPath As String
     Public dList As New List(Of String)
     Public scraperFunction2 As New ScraperFunctions
@@ -217,15 +215,12 @@ Public Class Form1
     Dim filterOverride As Boolean = False
     Dim mouseOver As Boolean = False
     Dim bigPanel As Panel
-    Dim realMoviePaths As New List(Of String)
     Dim realTvPaths As New List(Of String)
-    Dim newTvShows As New List(Of String)
     Public Shared profileStruct As New Profiles
     Dim frmSplash As New frmSplashscreen
     Dim frmSplash2 As New frmProgressScreen
     Public Shared multimonitor As Boolean = False
     Dim progressmode As Boolean
-    Dim overItem As String
     Dim scrapeAndQuit  As Boolean = False
     Dim refreshAndQuit As Boolean = False
     Dim sandq As Integer = 0
@@ -238,30 +233,19 @@ Public Class Form1
     Dim posterArray As New List(Of McImage)
     Dim pageCount As Integer = 0
     Dim currentPage As Integer = 0
-    Dim tab1 As Integer = 0
     Dim actorflag As Boolean = False
     Dim listOfTvFanarts As New List(Of str_FanartList)
     Dim lockedList As Boolean = False
-    Dim tempTVDBiD As String = String.Empty
-    Dim novaThread As Thread
-    Dim newMovieFoundTitle As String = String.Empty
-    Dim newMovieFoundFilename As String = String.Empty
     Dim tableSets As New List(Of str_TableItems)
     Dim relativeFolderList As New List(Of str_RelativeFileList)
 
     Dim templanguage As String
-
-    Dim combostart As String = ""
-
-    Dim currentposterid As String = ""
-    Dim workingposterpath As String
-
+    
     Dim WithEvents tvposterpicboxes As PictureBox
     Dim WithEvents tvpostercheckboxes As RadioButton
     Dim WithEvents tvposterlabels As Label
     Dim WithEvents tvreslabel As Label
     Dim tvposterpage As Integer = 1
-    Dim walllocked As Boolean = False
     Public Shared WallPicWidth As Integer = 165
     Public Shared WallPicHeight As Integer = Math.Floor((WallPicWidth/3)*4)
     Dim MovMaxWallCount As Integer = 0
@@ -281,20 +265,17 @@ Public Class Form1
     Dim TVSearchALL As Boolean = False
     Private ClickedControl As String
 
-
-    Private WithEvents FileToBeDownloaded As WebFileDownloader
+    
     Private tvCurrentTabIndex As Integer = 0
     Private currentTabIndex As Integer = 0
     Private homeTabIndex As Integer = 0
+    Private CustTvIndex As Integer = 0
 
     Public totalfilesize As Long = 0
     Public listoffilestomove As New List(Of String)
-    Dim showstoscrapelist As New List(Of String)
-    Dim processnow As Boolean = True
     Dim currenttitle As String
     Public singleshow As Boolean = False
     Public showslist As Object
-    Public homemovietabindex As Integer = 0
     Public DGVMoviesColName As String = ""
     Dim killMC As Boolean = False
 
@@ -465,6 +446,7 @@ Public Class Form1
                 currentprofile.Genres = tempstring & "genres.txt"
                 currentprofile.MovieCache = tempstring & "moviecache.xml"
                 currentprofile.MovieSetCache = tempstring & "moviesetcache.xml"
+                currentprofile.CustTvCache = tempstring & "custtvcache.xml"
                 currentprofile.ProfileName = "Default"
                 profileStruct.ProfileList.Add(currentprofile)
                 profileStruct.WorkingProfileName = "Default"
@@ -478,7 +460,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabProfile)
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
-            TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
+            'TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             'PreferencesToolStripMenuItem.Visible = False    'hidden
             
             Call util_ProfilesLoad()
@@ -492,6 +474,7 @@ Public Class Form1
                     workingProfile.RegExList = prof.RegExList
                     workingProfile.Genres = prof.Genres 
                     workingProfile.TvCache = prof.TvCache
+                    workingProfile.CustTvCache = prof.CustTvCache 
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.MusicVideoCache = prof.MusicVideoCache
                     workingProfile.MovieSetCache = prof.MovieSetCache 
@@ -524,6 +507,12 @@ Public Class Form1
                             workingProfile.MovieSetCache = tempstring & "moviesetcache.xml"
                         End If
                     End If
+                    If prof.CustTvCache = "" Then
+                        prof.CustTvCache = "\Settings\custtvcache.xml"
+                        If prof.ProfileName = workingProfile.ProfileName Then
+                            workingProfile.CustTvCache = tempstring & "custtvcache.xml"
+                        End If
+                    End If
                 Else
                     If prof.MusicVideoCache = "" Then
                         prof.MusicVideoCache = "\Settings\musicvideocache" & counter.ToString & ".xml"
@@ -536,6 +525,12 @@ Public Class Form1
                     End If
                     If prof.ProfileName = workingProfile.ProfileName Then
                         workingProfile.MovieSetCache = tempstring & "moviesetcache" & counter.ToString & ".xml"
+                    End If
+                    If prof.CustTvCache = "" Then
+                        prof.CustTvCache = "\Settings\custtvcache" & counter.ToString & ".xml"
+                    End If
+                    If prof.ProfileName = workingProfile.ProfileName Then
+                        workingProfile.CustTvCache = tempstring & "custtvcache" & counter.ToString & ".xml"
                     End If
                 End If
                 counter += 1
@@ -1571,6 +1566,7 @@ Public Class Form1
                                 profileStruct.StartupProfile = thisresult.innertext
                             Case "profiledetails"
                                 Dim currentprofile As New ListOfProfiles
+                                Dim result As XmlNode
                                 For Each result In thisresult.childnodes
                                     Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
                                     If t > 0 Then notportable = True
@@ -1609,6 +1605,9 @@ Public Class Form1
                                         Case "moviesetcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.MovieSetCache = applicationPath & s
+                                        Case "custtvcache"
+                                            Dim s As String = result.InnerText.ToString.Substring(t)
+                                            currentprofile.CustTvCache = applicationPath & s
                                     End Select
                                 Next
                 profileStruct.ProfileList.Add(currentprofile)
@@ -1714,6 +1713,11 @@ Public Class Form1
 
             childchild = doc.CreateElement("moviesetcache")
             childchild.InnerText = prof.MovieSetCache.Replace(applicationPath, "")
+            child.AppendChild(childchild)
+            root.AppendChild(child)
+
+            childchild = doc.CreateElement("custtvcache")
+            childchild.InnerText = prof.CustTvCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
@@ -2588,8 +2592,6 @@ Public Class Form1
             If errors <> "" Then
                 objWriter.WriteLine(errors)
             End If
-            'objWriter.WriteLine() '(Chr(13))
-            'objWriter.WriteLine()
             objWriter.Close()
         Catch ex As Exception
             MsgBox("Error, cant write to " & errpath & vbCrLf & vbCrLf & ex.ToString)
@@ -6583,9 +6585,6 @@ Public Class Form1
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
         Dim WorkingSeason As TvSeason = tv_SeasonSelectedCurrently()
-        'If workingTvShow.tvdbid = currentposterid Then
-        '    Exit Sub
-        'End If
         tvposterpage = 0
         imdbposterlist.Clear()
         tvdbposterlist.Clear()
@@ -6604,7 +6603,6 @@ Public Class Form1
         ComboBox2.Items.Add("Season All")
         For Each tvshow In Cache.TvCache.Shows
             If tvshow.TvdbId = WorkingTvShow.TvdbId Then
-                currentposterid = tvshow.TvdbId.Value
                 For Each Season As Media_Companion.TvSeason In tvshow.Seasons.Values
                     For Each ep As Media_Companion.TvEpisode In Season.Episodes
                         Dim seasonstring As String = ""
@@ -6806,7 +6804,7 @@ Public Class Form1
                 Label73.Text = "Current Poster - " & PictureBox12.Image.Width.ToString & " x " & PictureBox12.Image.Height.ToString
             End If
 
-            Return workingposterpath
+            Return 0
         Catch ex As Exception
             Return 0
             ExceptionHandler.LogError(ex)
@@ -7768,6 +7766,7 @@ Public Class Form1
                     workingProfile.regexlist = prof.regexlist
                     workingProfile.tvcache = prof.tvcache
                     workingProfile.MovieSetCache = prof.MovieSetCache 
+                    workingProfile.CustTvCache = prof.CustTvCache
                     Call util_ProfileSetup()
                 End If
             Next
@@ -7819,6 +7818,12 @@ Public Class Form1
             Call tv_CacheRefresh()
         Else
             Call tv_CacheLoad()
+        End If
+
+        If Not IO.File.Exists(workingProfile.tvcache) Or Pref.startupCache = False Then
+            Call Custtv_CacheRefresh()
+        Else
+            Call Custtv_CacheLoad()
         End If
 
         If IO.File.Exists(workingProfile.MusicVideoCache) Then
@@ -11756,7 +11761,6 @@ End Sub
     Private Sub titletxt_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles titletxt.Enter
         Try
             Try
-                processnow = False
                 If titletxt.Text.IndexOf(workingMovieDetails.fullmoviebody.year) <> -1 Then
                     Dim tempstring2 As String = " (" & workingMovieDetails.fullmoviebody.year & ")"
                     Dim tempstring As String = titletxt.Text.Replace(tempstring2, "")
@@ -11795,7 +11799,6 @@ End Sub
                     Next
                     titletxt.Text = tempstring & " (" & workingMovieDetails.fullmoviebody.year & ")"
                 End If
-                processnow = True
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -12212,7 +12215,6 @@ End Sub
         For i = TabPage22.Controls.Count - 1 To 0 Step -1
             TabPage22.Controls.RemoveAt(i)
         Next
-        walllocked = True
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
@@ -12248,7 +12250,6 @@ End Sub
             Next
         Catch ex As Exception
         Finally
-            walllocked = False
         End Try
     End Sub
 
@@ -12341,7 +12342,6 @@ End Sub
                     locx = 0
                     locy += WallPicHeight
                 End If
-                walllocked = True
                 Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
                 If mouseDelta <> 0 Then
                     vscrollPos = vscrollPos - mouseDelta
@@ -12355,10 +12355,7 @@ End Sub
             MovpictureList.Add(bigPictureBox)
             Me.TabPage22.Refresh()
             Application.DoEvents()
-            walllocked = False
         Next
-
-        walllocked = False
     End Sub
 
     Private Sub mov_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
@@ -15766,7 +15763,6 @@ End Sub
         For i = tpTvWall.Controls.Count - 1 To 0 Step -1
             tpTvWall.Controls.RemoveAt(i)
         Next
-        walllocked = True
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
@@ -15798,7 +15794,6 @@ End Sub
             Next
         Catch ex As Exception
         Finally
-            walllocked = False
         End Try
     End Sub
 
@@ -15889,7 +15884,6 @@ End Sub
                     locx = 0
                     locy += WallPicHeight
                 End If
-                walllocked = True
                 Dim vscrollPos As Integer = tpTvWall.VerticalScroll.Value
                 If mouseDelta <> 0 Then
                     vscrollPos = vscrollPos - mouseDelta
@@ -15903,9 +15897,7 @@ End Sub
             tvpictureList.Add(bigPictureBox)
             Me.tpTvWall.Refresh()
             Application.DoEvents()
-            walllocked = False
         Next
-        walllocked = False
     End Sub
 
     Private Sub tv_WallClicked(ByVal sender As Object, ByVal e As EventArgs)
@@ -16461,7 +16453,7 @@ End Sub
 
     Private Sub bnt_TvChkFolderList_Click(sender As System.Object, e As System.EventArgs) Handles bnt_TvChkFolderList.Click
         Try
-            tvfolderschanged = tv_Showremovedfromlist(, True)
+            tvfolderschanged = tv_Showremovedfromlist(ListBox6, True, , True)
         Catch ex As Exception
 
         End Try
@@ -17708,6 +17700,56 @@ End Sub
     
 #End Region   'Home Movie Routines, buttons etc.
 
+#Region "CustomTv"
+#Region "Custom Browser Tab"
+
+    Private Sub btnCSearch_Click(sender As Object, e As EventArgs) Handles btnCSearch.Click
+        CustSearch()
+    End Sub
+
+    Private Sub btnCRefresh_Click(sender As Object, e As EventArgs) Handles btnCRefresh.Click
+        CustRefresh()
+    End Sub
+
+    Private Sub pbSave_Click(sender As Object, e As EventArgs) Handles pbSave.Click
+        CustSave()
+    End Sub
+
+    Private Sub CustPB_Zoom(sender As Object, e As EventArgs) Handles pb_Cust_Fanart.DoubleClick, pb_Cust_Poster.DoubleClick, pb_Cust_Banner.DoubleClick
+        Try
+            Dim picBox As PictureBox = sender
+
+            Dim imageLocation As String = picBox.tag
+
+            If imageLocation <> Nothing Then
+                If IO.File.Exists(imageLocation) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Call util_ZoomImage(imageLocation)
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+#End Region
+
+#Region " Custom Folder Tab"
+    Private Sub btnCFolderAdd_Click(sender As Object, e As EventArgs) Handles btnCFolderAdd.Click
+
+    End Sub
+
+    Private Sub btnCFolderRemove_Click(sender As Object, e As EventArgs) Handles btnCFolderRemove.Click
+
+    End Sub
+
+    Private Sub btnCFolderSave_Click(sender As Object, e As EventArgs) Handles btnCFolderSave.Click
+
+    End Sub
+#End Region
+    
+#End Region
 
     Sub BckWrkCheckNewVersion_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkCheckNewVersion.DoWork
 
@@ -18398,5 +18440,5 @@ End Sub
             tagtxt.Font      = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         End If
     End Sub
-    
+
 End Class

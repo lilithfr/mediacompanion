@@ -1138,7 +1138,7 @@ Partial Public Class Form1
             Next
             mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
             If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-                tv_Showremovedfromlist(nofolder)
+                tv_Showremovedfromlist(listbox6, True, nofolder)
             End If
         End If
 
@@ -4622,7 +4622,7 @@ Partial Public Class Form1
 
     End Sub
 
-    Public Function tv_Showremovedfromlist(Optional ByVal nofolder As List(Of String) = Nothing, Optional ByVal lstboxscan As Boolean = False) As Boolean
+    Public Function tv_Showremovedfromlist(ByRef lstbox As Listbox, ByVal tvcache As Boolean, Optional ByVal nofolder As List(Of String) = Nothing, Optional ByVal lstboxscan As Boolean = False) As Boolean
         Dim remfolder As New List(Of String)
         Dim notvshownfo As New List(Of String)
         Dim status As Boolean = False
@@ -4632,9 +4632,7 @@ Partial Public Class Form1
                     remfolder.Add(item)
                 Else
                     Dim tvnfopath As String = item & "\tvshow.nfo"
-                    If Not File.Exists(tvnfopath) Then
-                        notvshownfo.Add(item)
-                    End If
+                    If Not File.Exists(tvnfopath) Then notvshownfo.Add(item)
                 End If
             Next
         End If
@@ -4658,22 +4656,25 @@ Partial Public Class Form1
         If IsNothing(nofolder) And Not IsNothing(remfolder) Then nofolder = remfolder
         If nofolder.Count > 0 Then
             For Each folder In nofolder
-                If lstboxscan Then
-                    For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
-                        If Item.FolderPath.Trim("\") = folder Then
-                            TvTreeview.Nodes.Remove(Item.ShowNode)
-                            Cache.TvCache.Remove(Item)
-                            Exit For
-                        End If
-                    Next
-                    ListBox6.Items.Remove(folder)
-                    status = True
+                If tvcache Then
+                    If lstboxscan Then
+                        For Each Item As Media_Companion.TvShow In Cache.TvCache.Shows
+                            If Item.FolderPath.Trim("\") = folder Then
+                                TvTreeview.Nodes.Remove(Item.ShowNode)
+                                Cache.TvCache.Remove(Item)
+                                Exit For
+                            End If
+                        Next
+                        lstbox.Items.Remove(folder)
+                        status = True
+                    Else
+                        tvFolders.Remove(folder)
+                    End If
                 Else
-                    tvFolders.Remove(folder)
+                    lstbox.Items.Remove(folder)
+                    custtvFolders.Remove(folder)
                 End If
             Next
-            'If Not lstboxscan Then tv_CacheRefresh()
-            'MsgBox((nofolder.Count).ToString + " folder/s removed")
         End If
         Return status
     End Function
