@@ -3249,7 +3249,7 @@ End Sub
                 Dim regexpath As String = tempstring2 & "regex" & f.ToString & ".xml"
                 Dim tvcachepath As String = tempstring2 & "tvcache" & f.ToString & ".xml"
                 Dim musicvideocachepath As String = tempstring2 & "musicvideocache" & f.ToString & ".xml"
-                Dim custtvcachepath As String = tempstring2 & "custtvcache" & f.ToString & ".xml"
+                Dim custtvcachepath As String = tempstring2 & "customtvcache" & f.ToString & ".xml"
                 Dim ok As Boolean = True
                 If File.Exists(configpath) Then ok = False
                 If File.Exists(actorcachepath) Then ok = False
@@ -3291,7 +3291,7 @@ End Sub
                     genrestocopy            = profs.Genres 
                     regextocopy             = profs.RegExList
                     moviesetcachetocopy     = profs.MovieSetCache 
-                    custtvcachetocopy       = profs.CustTvCache
+                    custtvcachetocopy       = profs.CustomTvCache
                 End If
             Next
 
@@ -3305,7 +3305,7 @@ End Sub
             profiletoadd.TvCache            = tempstring & "tvcache" & tempint.ToString & ".xml"
             profiletoadd.MusicVideoCache    = tempstring & "musicvideocache" & tempint.ToString & ".xml"
             profiletoadd.MovieSetCache      = tempstring & "moviesetcache" & tempint.ToString & ".xml"
-            profiletoadd.CustTvCache        = tempstring & "custtvcache" & tempint.ToString & ".xml"
+            profiletoadd.CustomTvCache      = tempstring & "customtvcache" & tempint.ToString & ".xml"
             profiletoadd.ProfileName        = tb_ProfileNew.Text
             Form1.profileStruct.ProfileList.Add(profiletoadd)
 
@@ -3318,7 +3318,7 @@ End Sub
             If File.Exists(genrestocopy)            Then File.Copy(genrestocopy, profiletoadd.Genres)
             If File.Exists(regextocopy)             Then File.Copy(regextocopy, profiletoadd.RegExList)
             If File.Exists(moviesetcachetocopy)     Then File.Copy(moviesetcachetocopy, profiletoadd.MovieSetCache)
-            If File.Exists(custtvcachetocopy)        Then File.Copy(custtvcachetocopy, profiletoadd.CustTvCache)
+            If File.Exists(custtvcachetocopy)        Then File.Copy(custtvcachetocopy, profiletoadd.CustomTvCache)
             lb_ProfileList.Items.Add(tb_ProfileNew.Text)
             Call Form1.util_ProfileSave()
             done = True
@@ -3417,7 +3417,7 @@ End Sub
                         Catch ex As Exception
                         End Try
                         Try
-                            File.Delete(Form1.profileStruct.profilelist(f).CustTvCache)
+                            File.Delete(Form1.profileStruct.profilelist(f).CustomTvCache)
                         Catch ex As Exception
                         End Try
                         Exit For

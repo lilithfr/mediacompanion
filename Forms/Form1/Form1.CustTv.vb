@@ -74,7 +74,7 @@ Partial Public Class Form1
 #Region "CustTvCache Routines"
 
     Public Sub Custtv_CacheLoad()
-        Cache.CustTvCache.TvCachePath = Pref.workingProfile.CustTvCache
+        Cache.CustTvCache.TvCachePath = Pref.workingProfile.CustomTvCache
         Cache.CustTvCache.Load()
         CTvTreeView.BeginUpdate()
         Try
@@ -92,13 +92,13 @@ Partial Public Class Form1
 
     Public Function CustTv_CacheSave() As Boolean
 
-        Cache.CustTvCache.TvCachePath = Pref.workingProfile.CustTvCache
+        Cache.CustTvCache.TvCachePath = Pref.workingProfile.CustomTvCache
         Cache.CustTvCache.Save()
         Return False
     End Function
 
     Private Sub CustTv_RefreshCacheSave(ByVal tvshowlist As List(Of TvShow), ByVal episodeelist As List(Of TvEpisode))
-        Dim custtvcachepath As String = Pref.workingProfile.CustTvCache
+        Dim custtvcachepath As String = Pref.workingProfile.CustomTvCache
         Dim document As New XmlDocument
         Dim root As XmlElement
         Dim child As XmlElement
@@ -106,7 +106,7 @@ Partial Public Class Form1
         Dim xmlproc As XmlDeclaration
         xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         document.AppendChild(xmlproc)
-        root = document.CreateElement("custtvcache")
+        root = document.CreateElement("customtvcache")
         root.SetAttribute("ver", "3.5")
         For Each item In tvshowlist
             child = document.CreateElement("tvshow")

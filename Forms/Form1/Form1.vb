@@ -446,7 +446,7 @@ Public Class Form1
                 currentprofile.Genres = tempstring & "genres.txt"
                 currentprofile.MovieCache = tempstring & "moviecache.xml"
                 currentprofile.MovieSetCache = tempstring & "moviesetcache.xml"
-                currentprofile.CustTvCache = tempstring & "custtvcache.xml"
+                currentprofile.CustomTvCache = tempstring & "customtvcache.xml"
                 currentprofile.ProfileName = "Default"
                 profileStruct.ProfileList.Add(currentprofile)
                 profileStruct.WorkingProfileName = "Default"
@@ -474,7 +474,7 @@ Public Class Form1
                     workingProfile.RegExList = prof.RegExList
                     workingProfile.Genres = prof.Genres 
                     workingProfile.TvCache = prof.TvCache
-                    workingProfile.CustTvCache = prof.CustTvCache 
+                    workingProfile.CustomTvCache = prof.CustomTvCache 
                     workingProfile.ProfileName = prof.ProfileName
                     workingProfile.MusicVideoCache = prof.MusicVideoCache
                     workingProfile.MovieSetCache = prof.MovieSetCache 
@@ -496,41 +496,41 @@ Public Class Form1
             For Each prof In profileStruct.ProfileList
                 If counter = 0 Then
                     If prof.MusicVideoCache = "" Then
-                        prof.MusicVideoCache = "\Settings\musicvideocache.xml"
+                        prof.MusicVideoCache = tempstring & "musicvideocache.xml"
                         If prof.ProfileName = workingProfile.ProfileName Then
                             workingProfile.MusicVideoCache = tempstring & "musicvideocache.xml"
                         End If
                     End If
                     If prof.MovieSetCache = "" Then
-                        prof.MovieSetCache = "\Settings\moviesetcache.xml"
+                        prof.MovieSetCache = tempstring & "moviesetcache.xml"
                         If prof.ProfileName = workingProfile.ProfileName Then
                             workingProfile.MovieSetCache = tempstring & "moviesetcache.xml"
                         End If
                     End If
-                    If prof.CustTvCache = "" Then
-                        prof.CustTvCache = "\Settings\custtvcache.xml"
+                    If prof.CustomTvCache = "" Then
+                        prof.CustomTvCache = tempstring & "customtvcache.xml"
                         If prof.ProfileName = workingProfile.ProfileName Then
-                            workingProfile.CustTvCache = tempstring & "custtvcache.xml"
+                            workingProfile.CustomTvCache = tempstring & "customtvcache.xml"
                         End If
                     End If
                 Else
                     If prof.MusicVideoCache = "" Then
-                        prof.MusicVideoCache = "\Settings\musicvideocache" & counter.ToString & ".xml"
+                        prof.MusicVideoCache = tempstring & "musicvideocache" & counter.ToString & ".xml"
                     End If
                     If prof.ProfileName = workingProfile.ProfileName Then
                         workingProfile.MusicVideoCache = tempstring & "musicvideocache" & counter.ToString & ".xml"
                     End If
                     If prof.MovieSetCache = "" Then
-                        prof.MovieSetCache = "\Settings\moviesetcache" & counter.ToString & ".xml"
+                        prof.MovieSetCache = tempstring & "moviesetcache" & counter.ToString & ".xml"
                     End If
                     If prof.ProfileName = workingProfile.ProfileName Then
                         workingProfile.MovieSetCache = tempstring & "moviesetcache" & counter.ToString & ".xml"
                     End If
-                    If prof.CustTvCache = "" Then
-                        prof.CustTvCache = "\Settings\custtvcache" & counter.ToString & ".xml"
+                    If prof.CustomTvCache = "" Then
+                        prof.CustomTvCache = tempstring & "customtvcache" & counter.ToString & ".xml"
                     End If
                     If prof.ProfileName = workingProfile.ProfileName Then
-                        workingProfile.CustTvCache = tempstring & "custtvcache" & counter.ToString & ".xml"
+                        workingProfile.CustomTvCache = tempstring & "customtvcache" & counter.ToString & ".xml"
                     End If
                 End If
                 counter += 1
@@ -1605,9 +1605,9 @@ Public Class Form1
                                         Case "moviesetcache"
                                             Dim s As String = result.innertext.ToString.Substring(t)
                                             currentprofile.MovieSetCache = applicationPath & s
-                                        Case "custtvcache"
+                                        Case "customtvcache"
                                             Dim s As String = result.InnerText.ToString.Substring(t)
-                                            currentprofile.CustTvCache = applicationPath & s
+                                            currentprofile.CustomTvCache = applicationPath & s
                                     End Select
                                 Next
                 profileStruct.ProfileList.Add(currentprofile)
@@ -1716,8 +1716,8 @@ Public Class Form1
             child.AppendChild(childchild)
             root.AppendChild(child)
 
-            childchild = doc.CreateElement("custtvcache")
-            childchild.InnerText = prof.CustTvCache.Replace(applicationPath, "")
+            childchild = doc.CreateElement("customtvcache")
+            childchild.InnerText = prof.CustomTvCache.Replace(applicationPath, "")
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
@@ -7766,7 +7766,7 @@ Public Class Form1
                     workingProfile.regexlist = prof.regexlist
                     workingProfile.tvcache = prof.tvcache
                     workingProfile.MovieSetCache = prof.MovieSetCache 
-                    workingProfile.CustTvCache = prof.CustTvCache
+                    workingProfile.CustomTvCache = prof.CustomTvCache
                     Call util_ProfileSetup()
                 End If
             Next
@@ -7820,7 +7820,7 @@ Public Class Form1
             Call tv_CacheLoad()
         End If
 
-        If Not IO.File.Exists(workingProfile.tvcache) Or Pref.startupCache = False Then
+        If Not IO.File.Exists(workingProfile.CustomTvCache) Or Pref.startupCache = False Then
             Call Custtv_CacheRefresh()
         Else
             Call Custtv_CacheLoad()

@@ -66,9 +66,9 @@ Public Class Profiles
                                     Case "moviesetcache"
                                         Dim s As String = result.InnerText.ToString.Substring(t)
                                         currentprofile.MovieSetCache = applicationPath & s
-                                    Case "custtvcache"
+                                    Case "customtvcache"
                                         Dim s As String = result.InnerText.ToString.Substring(t)
-                                        currentprofile.CustTvCache = applicationpath & s
+                                        currentprofile.CustomTvCache = applicationpath & s
                                 End Select
                             Next
                             ProfileList.Add(currentprofile)
