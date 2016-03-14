@@ -331,6 +331,9 @@ Partial Class frmPreferences
         Me.lblNameModeEg = New System.Windows.Forms.Label()
         Me.cbMoviePartsNameMode = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_Advanced = New System.Windows.Forms.TabPage()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.cbMovNfoWatchTag = New System.Windows.Forms.CheckBox()
+        Me.Label23 = New System.Windows.Forms.Label()
         Me.gb_MovieIdentifier = New System.Windows.Forms.GroupBox()
         Me.btn_MovSepReset = New System.Windows.Forms.Button()
         Me.Label198 = New System.Windows.Forms.Label()
@@ -472,9 +475,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.Label23 = New System.Windows.Forms.Label()
-        Me.cbMovNfoWatchTag = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -535,6 +535,7 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.SuspendLayout
         Me.grpNameMode.SuspendLayout
         Me.tpMoviePreferences_Advanced.SuspendLayout
+        Me.GroupBox7.SuspendLayout
         Me.gb_MovieIdentifier.SuspendLayout
         Me.GroupBox16.SuspendLayout
         Me.TPTVPref.SuspendLayout
@@ -560,7 +561,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.GroupBox7.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -3999,6 +3999,36 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
+        'GroupBox7
+        '
+        Me.GroupBox7.Controls.Add(Me.cbMovNfoWatchTag)
+        Me.GroupBox7.Controls.Add(Me.Label23)
+        Me.GroupBox7.Location = New System.Drawing.Point(401, 130)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(463, 76)
+        Me.GroupBox7.TabIndex = 77
+        Me.GroupBox7.TabStop = false
+        Me.GroupBox7.Text = "Custom playcount tag"
+        '
+        'cbMovNfoWatchTag
+        '
+        Me.cbMovNfoWatchTag.AutoSize = true
+        Me.cbMovNfoWatchTag.Location = New System.Drawing.Point(11, 35)
+        Me.cbMovNfoWatchTag.Name = "cbMovNfoWatchTag"
+        Me.cbMovNfoWatchTag.Size = New System.Drawing.Size(222, 19)
+        Me.cbMovNfoWatchTag.TabIndex = 1
+        Me.cbMovNfoWatchTag.Text = "Enable <watched> tag saving to nfo."
+        Me.cbMovNfoWatchTag.UseVisualStyleBackColor = true
+        '
+        'Label23
+        '
+        Me.Label23.AutoSize = true
+        Me.Label23.Location = New System.Drawing.Point(8, 17)
+        Me.Label23.Name = "Label23"
+        Me.Label23.Size = New System.Drawing.Size(320, 15)
+        Me.Label23.TabIndex = 0
+        Me.Label23.Text = "Save tag <watched> in movie nfo, mirroring playcount tag."
+        '
         'gb_MovieIdentifier
         '
         Me.gb_MovieIdentifier.Controls.Add(Me.btn_MovSepReset)
@@ -5651,36 +5681,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'GroupBox7
-        '
-        Me.GroupBox7.Controls.Add(Me.cbMovNfoWatchTag)
-        Me.GroupBox7.Controls.Add(Me.Label23)
-        Me.GroupBox7.Location = New System.Drawing.Point(401, 130)
-        Me.GroupBox7.Name = "GroupBox7"
-        Me.GroupBox7.Size = New System.Drawing.Size(463, 76)
-        Me.GroupBox7.TabIndex = 77
-        Me.GroupBox7.TabStop = false
-        Me.GroupBox7.Text = "GroupBox7"
-        '
-        'Label23
-        '
-        Me.Label23.AutoSize = true
-        Me.Label23.Location = New System.Drawing.Point(8, 17)
-        Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(320, 15)
-        Me.Label23.TabIndex = 0
-        Me.Label23.Text = "Save tag <watched> in movie nfo, mirroring playcount tag."
-        '
-        'cbMovNfoWatchTag
-        '
-        Me.cbMovNfoWatchTag.AutoSize = true
-        Me.cbMovNfoWatchTag.Location = New System.Drawing.Point(11, 35)
-        Me.cbMovNfoWatchTag.Name = "cbMovNfoWatchTag"
-        Me.cbMovNfoWatchTag.Size = New System.Drawing.Size(222, 19)
-        Me.cbMovNfoWatchTag.TabIndex = 1
-        Me.cbMovNfoWatchTag.Text = "Enable <watched> tag saving to nfo."
-        Me.cbMovNfoWatchTag.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5803,6 +5803,8 @@ Partial Class frmPreferences
         Me.grpNameMode.ResumeLayout(false)
         Me.grpNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
+        Me.GroupBox7.ResumeLayout(false)
+        Me.GroupBox7.PerformLayout
         Me.gb_MovieIdentifier.ResumeLayout(false)
         Me.gb_MovieIdentifier.PerformLayout
         Me.GroupBox16.ResumeLayout(false)
@@ -5846,8 +5848,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.GroupBox7.ResumeLayout(false)
-        Me.GroupBox7.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
