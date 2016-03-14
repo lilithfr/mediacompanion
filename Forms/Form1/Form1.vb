@@ -13706,6 +13706,7 @@ End Sub
         oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
         MovieSetMissingID = False
         dgvmovset.Rows.Clear()
+        Pref.moviesets.Sort()
         For Each mset In Pref.moviesets
             If mset <> "-None-" Then
                 Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
@@ -13735,6 +13736,7 @@ End Sub
                 Next
                 If ex = False Then
                     Pref.moviesets.Add(tbMovSetEntry.Text)
+                    Pref.moviesets.Sort()
                     MovSetDgvLoad()
                     pop_cbMovieDisplay_MovieSet()
                     tbMovSetEntry.Clear()
@@ -13758,6 +13760,10 @@ End Sub
     Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
         Try
             Dim SelectedMovieSet As String = dgvmovset.SelectedCells(0).Value
+            If Not RemoveFromMovieSetCache(SelectedMovieSet) Then
+                MsgBox("Setname selected is already allocated to a" & vbCrLf & "   movie in Media Companions cache" & vbCrLf & "      unable to remove is in use.")
+                Exit Sub
+            End If
             Pref.moviesets.Remove(SelectedMovieSet)
             dgvmovset.Rows.RemoveAt(dgvmovset.CurrentRow.Index)
             pop_cbMovieDisplay_MovieSet()
@@ -13849,9 +13855,9 @@ End Sub
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
+                    'oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                     Dim found As Boolean = False
-                    For Each s As MovieSetInfo In MsetCache
+                    For Each s As MovieSetInfo In oMovies.MovieSetDB 'MsetCache
                         If s.MovieSetName = MsetName Then
                             If  s.MovieSetId <> NewTMDBID Then
                                 If s.MovieSetId <> "" Then
@@ -13862,8 +13868,10 @@ End Sub
                                     End If
                                 End If
                                 s.MovieSetId = NewTMDBID
-                                oMovies.SaveMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
+                                oMovies.SaveMovieSetCache()
+                                'oMovies.SaveMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
                                 found = True
+                                Exit For
                             End If
                         End If
                     Next
@@ -13872,23 +13880,21 @@ End Sub
                             Dim newset As New MovieSetInfo
                             newset.MovieSetName = MsetName
                             newset.MovieSetId = NewTMDBID
-                            MsetCache.Add(newset)
+                            oMovies.MovieSetDB.Add(newset)
                             oMovies.SaveMovieSetCache()
-                        End If
-                        If found Then 
-                            dgvmovset.Rows(RowIndexFromMouseDown).Cells(ColIndexFromMouseDown).Value = Global.Media_Companion.My.Resources.Resources.correct
-                            Dim matchedmovies As New List(Of String)
-                            For Each Mov As Combolist In oMovies.MovieCache
-                                If Mov.MovieSet.MovieSetName = MsetName Then
-                                    Mov.MovieSet.MovieSetId = NewTMDBID
-                                    Dim filepath As String = Mov.fullpathandfilename 
-                                    Dim fmd As New FullMovieDetails
-                                    fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
-                                    fmd.fullmoviebody.MovieSet.MovieSetId = NewTMDBID
-                                    Movie.SaveNFO(filepath, fmd)
-                                End If
-                            Next
-                        End If
+                        End If 
+                        dgvmovset.Rows(RowIndexFromMouseDown).Cells(ColIndexFromMouseDown).Value = Global.Media_Companion.My.Resources.Resources.correct
+                        Dim matchedmovies As New List(Of String)
+                        For Each Mov As Combolist In oMovies.MovieCache
+                            If Mov.MovieSet.MovieSetName = MsetName Then
+                                Mov.MovieSet.MovieSetId = NewTMDBID
+                                Dim filepath As String = Mov.fullpathandfilename 
+                                Dim fmd As New FullMovieDetails
+                                fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
+                                fmd.fullmoviebody.MovieSet.MovieSetId = NewTMDBID
+                                Movie.SaveNFO(filepath, fmd)
+                            End If
+                        Next
                     End If
                 Else
                     Fail = True
@@ -18303,6 +18309,7 @@ End Sub
     End Function
     
     Private Sub tsmiMovieSetIdCheck_Click( sender As Object,  e As EventArgs) Handles tsmiMovieSetIdCheck.Click
+        Application.DoEvents()
         rescrapeList.ResetFields
         _rescrapeList.FullPathAndFilenames.Clear()
         Dim MovieSetIds As New List(Of String)
@@ -18323,15 +18330,19 @@ End Sub
 
     Private Sub RebuildMovieSetCollectionList(ByVal SetIds As List(Of String))
         Try
-            messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "")
+            messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "...Checking TMDB is accessible...")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            messbox.Refresh()
+            Application.DoEvents()
             If Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
                 MsgBox("TMDB not accessible," & vbCrLf & "Try again later")
                 Exit Sub
             End If
-            messbox.Show()
-            messbox.Refresh()
-            Application.DoEvents()
+            SetIds.Sort()
+            For x As Integer = SetIds.Count - 1 To 1 Step -1
+                If SetIds(x) = SetIds(x - 1) Then SetIds.RemoveAt(x)
+            Next x
             Dim totalsets As Integer = SetIds.Count
             Dim currentset As Integer = 0
             For each item In SetIds
@@ -18339,7 +18350,6 @@ End Sub
                 messbox.TextBox3.Text = currentset.ToString & " of " & totalsets.ToString 
                 messbox.Refresh()
                 Dim api As New TMDb
-                'api.urlcheck = False
                 api.SetId = item
                 Dim MovCollectionList As New List(Of MovieSetsList)
 
@@ -18366,6 +18376,24 @@ End Sub
             If Not IsNothing(messbox) Then messbox.Close()
         End Try
     End Sub
+
+    Private Function RemoveFromMovieSetCache(ByVal s As String) As Boolean
+        Dim aok As Boolean = True
+        For each mov In oMovies.MovieCache
+            If mov.MovieSet.MovieSetName = s Then
+                aok = False
+                Exit For
+            End If
+        Next
+        If Not aok Then Return aok
+        Dim res = oMovies.MovieSetDB.Find(function(c) c.MovieSetName = s)
+        If Not IsNothing(res) Then
+            Dim msetdb As Integer = oMovies.MovieSetDB.IndexOf(res)
+            Dim something As String = Nothing
+            oMovies.MovieSetDB.RemoveAt(msetdb)
+        End If
+        Return aok
+    End Function
 
     Private Sub TSMI_AboutMC_Click(sender As Object, e As EventArgs) Handles TSMI_AboutMC.Click
         Dim txt As String

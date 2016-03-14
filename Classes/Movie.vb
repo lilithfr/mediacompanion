@@ -419,10 +419,10 @@ Public Class Movie
     ReadOnly Property MovieSet As MovieSetInfo 
         Get
             Try
-                'If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
-                'Return New MovieSetInfo(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId, New List(Of CollectionMovie))
+                If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
+                Return New MovieSetInfo(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId, New List(Of CollectionMovie))
                 'Return _parent.MovieSetDB.Find(function(c) c.MovieSetId=_scrapedMovie.fullmoviebody.MovieSet.MovieSetId)
-                Return _parent.MovieSetDB.Find(function(c) c.MovieSetName =_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+                'Return _parent.MovieSetDB.Find(function(c) c.MovieSetName =_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
                 'Return _scrapedMovie.fullmoviebody.movieset
             Catch
                 Return Nothing
@@ -3317,10 +3317,11 @@ Public Class Movie
     Sub UpdateMovieSetCache
         RemoveMovieSetFromCache
 
-        If IsNothing(McMovieSetInfo) Then Exit Sub
-
+        'If IsNothing(McMovieSetInfo) Then Exit Sub
+        If IsNothing(MovieSet) Then Exit Sub
 '       If MovieSet.MovieSetName <> "" Or MovieSet.MovieSetName.ToLower <> "-none-" Then
-            _parent.MovieSetDB.Add(McMovieSetInfo)
+            '_parent.MovieSetDB.Add(McMovieSetInfo)
+        _parent.MovieSetDB.Add(MovieSet)
 '       End If
     End Sub
 
