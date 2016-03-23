@@ -23,3 +23,8 @@ Public Class McImage
 
     End Function
 End Class
+
+Public Class FanartPicBox
+    Public Property pbox As PictureBox = New Picturebox
+    Public Property imagepath As String = ""
+End Class

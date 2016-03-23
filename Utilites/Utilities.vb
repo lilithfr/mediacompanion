@@ -2496,9 +2496,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function ReplaceNothing(ByVal text As String, Optional ByVal replacetext As String = "") As String
-        If text Is Nothing Then
-            text = replacetext
-        End If
+        If text Is Nothing Then text = replacetext
         Return text
     End Function
 
@@ -2547,16 +2545,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function CheckForXMLIllegalChars(ByRef xmlfile As String) As Boolean
         Dim xmlOK As Boolean = False
         Dim numCharLimit As Integer = 10    'Arbitrary limit so we don't get lost in an infinite loop
-        Do
-            Dim episode As New XmlDocument
-            Try
-                episode.LoadXml(xmlfile)    'Load XML as normal - if all goes well, we're outta here!
-                xmlOK = True
-            Catch ex As XmlException
-                xmlfile = Utilities.ReplaceXMLIllegalChars(xmlfile, ex.LineNumber, ex.LinePosition) 'Let's assume an illegal character is the problem, and convert it.
-                numCharLimit -= 1
-            End Try
-        Loop Until xmlOK Or numCharLimit = 0
+        Try
+            Do
+                Dim episode As New XmlDocument
+                Try
+                    episode.LoadXml(xmlfile)    'Load XML as normal - if all goes well, we're outta here!
+                    xmlOK = True
+                Catch ex As XmlException
+                    xmlfile = Utilities.ReplaceXMLIllegalChars(xmlfile, ex.LineNumber, ex.LinePosition) 'Let's assume an illegal character is the problem, and convert it.
+                    numCharLimit -= 1
+                End Try
+            Loop Until xmlOK Or numCharLimit = 0
+        Catch
+        End Try
         Return xmlOK
     End Function
 

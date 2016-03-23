@@ -30,6 +30,9 @@ Public Class Form1
     Public Dim WithEvents  BckWrkScnMovies       As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents  Bw                    As BackgroundWorker = New BackgroundWorker
+    Property               BWs                   As New List(Of BackgroundWorker)
+    Property                NumActiveThreads     As Integer
     Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
     Shared Public          XbmcControllerBufferQ As PriorityQueue    = New PriorityQueue
     Shared Public Property MC_Only_Movies        As List(Of ComboList)
@@ -280,6 +283,7 @@ Public Class Form1
     Dim killMC As Boolean = False
 
     Dim MoviesFiltersResizeCalled As Boolean = False
+    Dim _cancelled As Boolean = False
 
     'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -2622,6 +2626,10 @@ Public Class Form1
                 busy = True
                 bckepisodethumb.CancelAsync()
             End If
+            If BWs.Count > 0 Then
+                busy = True
+                Bw.CancelAsync()
+            End If
 
             Dim exitnowok As Boolean = False
             If busy = True Then
@@ -2632,7 +2640,7 @@ Public Class Form1
                 messbox.Visible = True
             End If
             Do Until busy = False
-                If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy Then
+                If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy And Not BWs.Count > 0 Then
                     busy = False
                     Exit Do
                 End If
@@ -4331,17 +4339,19 @@ Public Class Form1
             tmdb.SetId = SetId
             fanartArray.AddRange(tmdb.McSetFanart)
         End If
-        Me.Panel2.Visible = False
-        messbox.TextBox2.Text = "Downloading Fanart preview images...."
+        'Me.Panel2.Visible = False
+        messbox.TextBox2.Text = "Setting up display...."
         messbox.Refresh()
         Try
             If fanartArray.Count > 0 Then
+                Dim MovFanartPicBox As New List(Of FanartPicBox)
                 Dim location As Integer = 0
                 Dim itemcounter As Integer = 0
                 For Each item In fanartArray
-                    messbox.TextBox1.Text = itemcounter+1 & " of " & fanartArray.Count
-                    messbox.Refresh()
-                    Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
+                    Dim thispicbox As New FanartPicBox
+                    'messbox.TextBox1.Text = itemcounter+1 & " of " & fanartArray.Count
+                    'messbox.Refresh()
+                    'Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                     fanartBoxes() = New PictureBox()
                     With fanartBoxes
                         .Location = New Point(0, location)
@@ -4359,7 +4369,10 @@ Public Class Form1
                         .Name = "moviefanart" & itemcounter.ToString
                         AddHandler fanartBoxes.DoubleClick, AddressOf util_ZoomImage2
                     End With
-                    util_ImageLoad(fanartBoxes, item2, "")
+                    thispicbox.pbox = fanartBoxes
+                    thispicbox.imagepath = item.ldurl
+                    MovFanartPicBox.Add(thispicbox)
+                    'util_ImageLoad(fanartBoxes, item2, "")
                     Application.DoEvents()
                     If fanartArray.Count > 2 Then
                         fanartCheckBoxes() = New RadioButton()
@@ -4405,12 +4418,18 @@ Public Class Form1
                     Me.Panel2.Controls.Add(fanartBoxes())
                     Me.Panel2.Controls.Add(fanartCheckBoxes())
                     Me.Panel2.Controls.Add(resLabels)
-                    Me.Panel2.Refresh()
-                    Me.Refresh()
                     Application.DoEvents()
                 Next
-
+                Me.Panel2.Refresh()
+                Me.Refresh()
+                If MovFanartPicBox.Count > 0 Then
+                    messbox.TextBox2.Text = "Downloading Fanart preview images...."
+                    messbox.Refresh()
+                    PicBoxLoadBackground(messbox, MovFanartPicBox)
+                End If
                 EnableFanartScrolling()
+                Me.Panel2.Refresh()
+                Me.Refresh
             Else
                 Dim mainlabel2 As Label
                 mainlabel2 = New Label
@@ -4426,7 +4445,7 @@ Public Class Form1
 
                 Me.Panel2.Controls.Add(mainlabel2)
             End If
-            Me.Panel2.Visible = True
+            'Me.Panel2.Visible = True
             messbox.Close()
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -4570,9 +4589,23 @@ Public Class Form1
 
     Private Sub SaveFanart(hd As Boolean, Optional clipbrd As Boolean = False)
         Try
+            If NumActiveThreads > 0 Then
+                _cancelled = True
+                Application.DoEvents()
+                Dim aok As Boolean = False
+                Do Until aok
+                    Application.DoEvents()
+                    If NumActiveThreads = 0 Then aok = True
+                Loop
+            End If
+            Try
+                messbox.Close()
+            Catch
+            End Try
             messbox = New frmMessageBox("", "Downloading Fanart...", "")
             messbox.Show()
-
+            messbox.Refresh()
+            Application.DoEvents()
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
 
             Dim tempstring As String = String.Empty
@@ -18469,4 +18502,147 @@ End Sub
         End If
     End Sub
 
+    Public ReadOnly Property Cancelled As Boolean
+        Get
+            Application.DoEvents
+            'If Not IsNothing(_bw) AndAlso _bw.WorkerSupportsCancellation AndAlso _bw.CancellationPending Then
+            '    'ReportProgress("Cancelled!",vbCrLf & "!!! Operation cancelled by user")
+            '    Return True
+            'End If
+            Return _cancelled
+        End Get
+    End Property
+
+    Sub PicBoxLoadBackground(ByRef msbx As frmMessageBox, ByVal fanartpicbox As List(Of FanartPicBox))
+        _cancelled = False
+        BWs.Clear()
+        NumActiveThreads = 0
+        For each item In fanartpicbox
+
+            Dim bw As BackgroundWorker = New BackgroundWorker
+
+            'bw.WorkerReportsProgress      = True
+            bw.WorkerSupportsCancellation = True
+
+            AddHandler bw.DoWork            , AddressOf bw_DoWork
+            'AddHandler bw.ProgressChanged   , AddressOf bw_ProgressChanged
+            AddHandler bw.RunWorkerCompleted, AddressOf bw_RunWorkerCompleted
+
+            BWs.Add(bw)
+            NumActiveThreads += 1
+
+            bw.RunWorkerAsync(item)
+        Next
+
+        Dim Cancelling As Boolean = False
+        Dim Busy       As Boolean = True
+
+        While Busy
+            Threading.Thread.Sleep(100)
+            If Cancelled And Not Cancelling Then 
+                Cancelling = True
+                For each item As BackgroundWorker in BWs
+                    Try
+                        item.CancelAsync
+                    Catch
+                    End Try
+                Next
+            End If
+            Busy = False
+            For Each item As BackgroundWorker in BWs
+                Try
+                    Busy = Busy Or item.IsBusy
+                    If Busy Then Exit For
+                Catch
+                End Try
+            Next
+            If Not Cancelled Then
+                messbox.TextBox1.Text = (fanartpicbox.Count - NumActiveThreads)  & " of " & fanartpicbox.Count
+            Else
+                messbox.TextBox1.Text = "Cancelling all download Threads..."
+            End If
+            messbox.Refresh()
+            If messbox.Cancelled Then _cancelled = True
+        End While
+        BWs.Clear()
+        If Cancelled Then Exit Sub
+    End Sub
+
+    Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
+        If Not Cancelled Then
+            Dim item As FanartPicBox = DirectCast(e.Argument, FanartPicBox)
+
+            e.Result = util_ImageLoad2(item.pbox, item.imagepath, "")
+        End If
+    End Sub
+
+    'Private Sub bw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs)
+
+    '    'Dim mp As MovieProgress = CType(e.UserState, MovieProgress)
+
+    '    'Select mp.ProgressEvent
+
+    '    '    Case MovieProgress.MsgType.GotFoldersCount : TotalNumberOfFolders += mp.Data
+    '    '                                                 ReportProgress("Total number of folders : [" & TotalNumberOfFolders & "]")
+
+    '    '    Case MovieProgress.MsgType.DoneSome        : NumberOfFoldersDone += mp.Data
+    '    '                                                 PercentDone = CalcPercentDone(NumberOfFoldersDone, TotalNumberOfFolders)
+    '    '                                                 ReportProgress("Active threads : [" & NumActiveThreads & "] - Scanning folder " & NumberOfFoldersDone & " of " & TotalNumberOfFolders)
+
+    '    'End Select
+    'End Sub
+
+    Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
+        Threading.Monitor.Enter(Me)
+        NumActiveThreads -= 1
+        If IsNothing(e.Result) Then Exit Sub 
+        Threading.Monitor.Exit(Me)
+    End Sub
+
+    ' We need to load images in this way so that they remain unlocked by the OS so we can update the fanart/poster files as needed
+    Public Function util_ImageLoad2(ByVal PicBox As PictureBox, ByVal ImagePath As String, ByVal DefaultPic As String) As Boolean
+        Dim PathToUse As String = DefaultPic
+        Dim cachename As String = ""
+        PicBox.Tag = Nothing
+        If Cancelled Then Exit Function
+        If Utilities.UrlIsValid(ImagePath) Then
+            cachename = Utilities.Download2Cache(ImagePath)
+            If cachename <> "" Then PathToUse = cachename
+        ElseIf File.Exists(ImagePath) Then
+            PathToUse = ImagePath
+        End If
+        If PathToUse = "" Then
+            PicBox.Image = Nothing
+            Exit Function 
+        End If
+        If Cancelled Then Exit Function
+        Try
+            Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+                fs.CopyTo(ms)
+                ms.Seek(0, System.IO.SeekOrigin.Begin)
+                PicBox.Image = Image.FromStream(ms)
+            End Using
+            PicBox.Tag = PathToUse
+        Catch
+            'Image is invalid e.g. not downloaded correctly -> Delete it
+            Try
+                File.Delete(PathToUse)
+            Catch
+            End Try
+            If Cancelled Then Exit Function
+            Try
+                Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+                    fs.CopyTo(ms)
+                    ms.Seek(0, System.IO.SeekOrigin.Begin)
+                    PicBox.Image = Image.FromStream(ms)
+                End Using
+                PicBox.ImageLocation = DefaultPic
+            Catch
+                Return False
+            End Try
+            Return True
+        End Try
+
+        Return True
+    End Function
 End Class

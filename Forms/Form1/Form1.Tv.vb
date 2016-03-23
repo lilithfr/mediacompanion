@@ -966,7 +966,6 @@ Partial Public Class Form1
         Dim PathToUse As String = DefaultPic
         Dim cachename As String = ""
         PicBox.Tag = Nothing
-
         If Utilities.UrlIsValid(ImagePath) Then
             cachename = Utilities.Download2Cache(ImagePath)
             If cachename <> "" Then PathToUse = cachename
