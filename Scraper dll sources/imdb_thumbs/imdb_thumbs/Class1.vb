@@ -73,8 +73,8 @@ Public Class Class1
         For f = postercount-1 To 0 Step -1
             Try
                 If posters(f, 0).ToLower.IndexOf("http") <> -1 Then
-                    finalposters(counter, 0) = posters(f, 0) & ".jpg" '"_V1._SX1000_SY1000_.jpg"
-                    finalposters(counter, 1) = posters(f, 1) & ".jpg" '"_V1._SX1000_SY1000_.jpg"
+                    finalposters(counter, 0) = posters(f, 0) & "._V1_UY720_AL_.jpg" '".jpg" '"_V1._SX1000_SY1000_.jpg"
+                    finalposters(counter, 1) = posters(f, 1) & "._V1_UY1080_AL_.jpg" '".jpg" '"_V1._SX1000_SY1000_.jpg"
                     counter += 1
                 End If
             Catch

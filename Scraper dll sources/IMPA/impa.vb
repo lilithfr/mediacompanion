@@ -205,6 +205,7 @@ Public Class getimpaposters
             If fanarturl.IndexOf("_ver") <> -1 Then
                 fanarturl = fanarturl.Substring(0, fanarturl.IndexOf("_ver"))
             End If
+            fanarturl = fanarturl.Replace("_gallery", "")
             Dim posterurls(1000, 1)
             If highest > count Then count = highest
             If version = True Then

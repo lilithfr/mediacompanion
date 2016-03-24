@@ -258,7 +258,7 @@ Public Class ucFanartTv
     Private Sub artPosterRadioChanged(ByVal sender As Object, ByVal e As EventArgs)
         Dim tempstring As String = sender.name
         Dim tempint As Integer = 0
-        Dim tempstring2 As String = tempstring
+        Dim tempstring2 As String = tempstring.ToInt
         Dim allok As Boolean = False
         tempstring = tempstring.Replace("imgcheckbox", "")
         tempint = Convert.ToDecimal(tempstring)

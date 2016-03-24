@@ -18,9 +18,10 @@ Public Class Class1
             Dim first As Integer
             Dim last As Integer
 
-            fanarturl = "http://www.movieposterdb.com/movie/"
-            Dim temp As String = imdbid
-            fanarturl = fanarturl & temp.Replace("tt", "")
+            fanarturl = "http://www.movieposterdb.com/Movie/"
+            Dim temp As String = imdbid.Replace("tt", "")
+            temp = Convert.ToInt32(temp).ToString
+            fanarturl = fanarturl & temp   '.Replace("tt", "")
 
             Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
             wrGETURL2.Proxy = MCProxy 

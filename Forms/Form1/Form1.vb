@@ -664,7 +664,7 @@ Public Class Form1
                         UpdateMovieFiltersPanel
                     End If
                 End If
-
+                btn_MPDB_posters.Enabled = False        'Disable MoviePoster button on Movie Poster Tab as now not available to us.
 
                 SplitContainer1.IsSplitterFixed = False
                 SplitContainer2.IsSplitterFixed = False
@@ -5061,7 +5061,7 @@ Public Class Form1
             Me.Refresh()
             Me.panelAvailableMoviePosters.Visible = True
             If MovPosterPicBox.Count > 0 Then
-                messbox.TextBox2.Text = "Downloading Fanart preview images...."
+                messbox.TextBox2.Text = "Downloading Poster preview images...."
                 messbox.Refresh()
                 PicBoxLoadBackground(messbox, MovPosterPicBox, 10, If(posterArray.Count >= 10, "10", posterArray.Count.ToString))
             End If
@@ -13203,8 +13203,8 @@ End Sub
                     mcPoster.hdUrl = posters(f, 1)
                     mcPoster.ldUrl = posters(f, 0)
                     posterArray.Add(mcPoster)
-                    mcPoster.ldUrl = Nothing
-                    mcPoster.hdUrl = Nothing
+                    'mcPoster.ldUrl = Nothing
+                    'mcPoster.hdUrl = Nothing
                 End If
             Next
             messbox.Close()
@@ -13452,8 +13452,8 @@ End Sub
                             newposters.hdUrl = thisresult.InnerText
                             newposters.ldUrl = thisresult.InnerText
                             posterArray.Add(newposters)
-                            newposters.ldUrl = Nothing
-                            newposters.hdUrl = Nothing
+                            'newposters.ldUrl = Nothing
+                            'newposters.hdUrl = Nothing
                     End Select
                 Next
             Catch ex As Exception
@@ -13487,8 +13487,8 @@ End Sub
                         poster.hdUrl = posters(f, 0)
                         poster.ldUrl = posters(f, 1)
                         posterArray.Add(poster)
-                        poster.ldUrl = Nothing
-                        poster.hdUrl = Nothing
+                        'poster.ldUrl = Nothing
+                        'poster.hdUrl = Nothing
                     End If
                 Next
             Catch ex As Exception
