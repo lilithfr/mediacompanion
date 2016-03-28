@@ -2519,7 +2519,7 @@ Partial Public Class Form1
                                         Pref.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                     End If
                                     stage = "12b5f"
-                                    If Pref.enablehdtags = True Then
+                                    If Pref.enabletvhdtags = True Then
                                         progresstext &= " : HD Tags..."
                                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                         stage = "12b5f1"
