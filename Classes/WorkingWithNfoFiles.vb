@@ -786,7 +786,7 @@ Public Class WorkingWithNfoFiles
         Dim newtvshow As New TvShow
         If Not IO.File.Exists(path) Then
             newtvshow.Title.Value = Utilities.GetLastFolder(path)
-            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+            'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
             newtvshow.Plot.Value = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
             newtvshow.Status.Value = "file does not exist"
             newtvshow.NfoFilePath = path
@@ -812,6 +812,9 @@ Public Class WorkingWithNfoFiles
                 newtvshow.Url.Node.SetAttributeValue("cache", newtvshow.TvdbId.Value)
             End If
             'end fix
+            If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
+                newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+            End If
         End If
         For Each season As TvSeason In newtvshow.Seasons.Values
             For Each episode In season.Episodes
@@ -826,7 +829,7 @@ Public Class WorkingWithNfoFiles
         Dim newtvshow As New TvShow
         If Not IO.File.Exists(path) Then
             newtvshow.Title.Value = Utilities.GetLastFolder(path)
-            newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+            'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
             newtvshow.NfoFilePath = path
             newtvshow.Year.Value = "0000"
             newtvshow.TvdbId.Value = ""
@@ -837,6 +840,9 @@ Public Class WorkingWithNfoFiles
         Else
             newtvshow.NfoFilePath = path
             newtvshow.Load()
+            If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
+                newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+            End If
         End If
         Return newtvshow
     End Function
@@ -1194,7 +1200,7 @@ Public Class WorkingWithNfoFiles
             If newtvshow.Mpaa.Value = Nothing Then newtvshow.Mpaa.Value = "na"
             If newtvshow.Studio.Value = Nothing Then newtvshow.Studio.Value = "-"
             If newtvshow.Runtime.Value = Nothing Then newtvshow.Runtime.Value = "0"
-            If String.IsNullOrEmpty(newtvshow.Year.Value) AndAlso Not newtvshow.Premiered.Value = Nothing Then
+            If (String.IsNullOrEmpty(newtvshow.Year.Value) OrElse newtvshow.Year.Value.ToInt = 0) AndAlso Not newtvshow.Premiered.Value.Length = 10 Then
                 Dim tmp As String = newtvshow.Premiered.Value.Substring(0,4)
                 newtvshow.Year.Value = tmp
             ElseIf String.IsNullOrEmpty(newtvshow.Year.Value) Then

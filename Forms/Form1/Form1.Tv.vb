@@ -1041,6 +1041,7 @@ Partial Public Class Form1
     End Function
 
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
+        Dim nfoclass As New WorkingWithNfoFiles
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
         frmSplash2.Label1.Visible = True
@@ -1104,7 +1105,11 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
-            newtvshownfo.Load() 
+            newtvshownfo.Load()
+            If newtvshownfo.Year.Value.ToInt = 0 AndAlso newtvshownfo.Premiered.Value.Length = 10 Then
+                newtvshownfo.Year.Value = newtvshownfo.Premiered.Value.Substring(0,4)
+                nfoclass.tvshow_NfoSave(newtvshownfo, True)
+            End If
             fulltvshowlist.Add(newtvshownfo)
             Dim episodelist As New List(Of TvEpisode)
             episodelist = loadepisodes(newtvshownfo, episodelist)
@@ -2137,9 +2142,10 @@ Partial Public Class Form1
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
                     stage = "1"
-                    If Not String.IsNullOrEmpty(newepisode.ShowTitle.Value) Then S = S.Replace(newepisode.ShowTitle.Value, "")
+                    Dim i As Integer                  'sacrificial variable to appease the TryParseosaurus Checks
+                    If Not String.IsNullOrEmpty(newepisode.ShowTitle.Value) AndAlso Integer.TryParse(newepisode.ShowTitle.Value, i) <> -1 Then S = S.Replace(newepisode.ShowTitle.Value, "")
                     stage = "2"
-                    If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) Then 
+                    If Not String.IsNullOrEmpty(newepisode.ShowYear.Value) AndAlso (newepisode.ShowYear.Value.ToInt <> 0) Then 
                         If S.Contains(newepisode.ShowYear.Value) AndAlso Not S.ToLower.Contains("s" & newepisode.ShowYear.Value) Then
                             S = S.Replace(newepisode.ShowYear.Value, "")
                         End If
