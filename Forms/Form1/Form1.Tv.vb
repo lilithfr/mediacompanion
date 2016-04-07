@@ -2342,6 +2342,7 @@ Partial Public Class Form1
                                 episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, singleepisode.Aired.Value, language & ".xml")
                             End If
                             stage = "12a"
+                            Dim tmpaok As Boolean = False
                             If Not Utilities.UrlIsValid(episodeurl) Then
                                 If sortorder.ToLower = "dvd" Then
                                     tempsortorder = "default"
@@ -2350,9 +2351,11 @@ Partial Public Class Form1
                                     episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/default/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
                                     Pref.tvScraperLog &= "Now Trying Episode URL: " & episodeurl & vbCrLf
                                 End If
+                            Else
+                                tmpaok = True
                             End If
                             stage = "12b"
-                            If Utilities.UrlIsValid(episodeurl) Then
+                            If tmpaok OrElse Utilities.UrlIsValid(episodeurl) Then
                                 IF IsNothing(singleepisode.Aired.Value) AndAlso Pref.tvshow_useXBMC_Scraper = True Then
                                     Dim FinalResult As String = ""
                                     stage = "12b1"
