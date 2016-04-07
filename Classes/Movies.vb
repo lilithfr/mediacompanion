@@ -1887,6 +1887,7 @@ Public Class Movies
             Dim evt As BaseEvent = New BaseEvent(XbmcController.E.MC_ScanForNewMovies,PriorityQueue.Priorities.low)
             Form1.XbmcControllerQ.Write(evt)
         End If
+        BWs.Clear()
     End Sub
 
     Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 

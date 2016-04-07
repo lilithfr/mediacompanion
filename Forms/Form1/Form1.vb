@@ -13122,6 +13122,15 @@ End Sub
     End Sub
 
     Private Sub btnMovFanartToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovFanartToggle.Click
+        'If Not BWs.Count = 0 Then
+        '    _cancelled = True
+        '    Do Until BWs.Count = 0
+        '        Thread.Sleep(100)
+        '        Application.DoEvents()
+        '        If BWs.Count = 0 Then _cancelled = False
+        '    Loop
+        '    _cancelled = False
+        'End If
         If MovFanartToggle Then
             btnMovFanartToggle.Text = "Show MovieSet Fanart"
             btnMovFanartToggle.BackColor = System.Drawing.Color.Lime
@@ -13651,6 +13660,14 @@ End Sub
     End Sub
 
     Private Sub btnMovPosterToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterToggle.Click
+        'If Not BWs.Count = 0 Then
+        '    _cancelled = True
+        '    Do Until Cancelled = False
+        '        Thread.Sleep(100)
+        '        Application.DoEvents()
+        '        If BWs.Count = 0 Then _cancelled = False
+        '    Loop
+        'End If
         If MovPosterToggle Then
             btnMovPosterToggle.Text = "Show MovieSet Posters"
             btnMovPosterToggle.BackColor = System.Drawing.Color.Lime
@@ -18720,27 +18737,42 @@ End Sub
         End Get
     End Property
 
-    Sub PicBoxLoadBackground(ByRef msbx As frmMessageBox, ByVal listpicbox As List(Of FanartPicBox), Optional ByVal count As Integer = 0, Optional ByVal Total As Integer = 0)
+    Private Sub PicBoxLoadBackground(ByRef msbx As frmMessageBox, ByVal listpicbox As List(Of FanartPicBox), Optional ByVal count As Integer = 0, Optional ByVal Total As Integer = 0)
         _cancelled = False
         BWs.Clear()
+        Dim totalcount As Integer = 0
         If Total = 0 Then Total = listpicbox.count
         If count = 0 Then count = listpicbox.count
         NumActiveThreads = 0
         For each item In listpicbox
 
             Dim bw As BackgroundWorker = New BackgroundWorker
-
-            'bw.WorkerReportsProgress      = True
+            
             bw.WorkerSupportsCancellation = True
 
             AddHandler bw.DoWork            , AddressOf bw_DoWork
-            'AddHandler bw.ProgressChanged   , AddressOf bw_ProgressChanged
             AddHandler bw.RunWorkerCompleted, AddressOf bw_RunWorkerCompleted
 
             BWs.Add(bw)
             NumActiveThreads += 1
 
             bw.RunWorkerAsync(item)
+            totalcount += 1
+            msbx.TextBox1.Text = totalcount  & " of " & Total
+            msbx.Refresh()
+            If NumActiveThreads > 3 Then
+                Do Until NumActiveThreads < 3
+                    'Application.DoEvents()
+                    If msbx.Cancelled Then _cancelled = True
+                    If Cancelled Then
+                        Exit For
+                    End If
+                Loop
+            End If
+            If msbx.Cancelled Then _cancelled = True
+            If Cancelled Then
+                Exit For
+            End If
         Next
 
         Dim Cancelling As Boolean = False
@@ -18748,15 +18780,15 @@ End Sub
 
         While Busy
             Threading.Thread.Sleep(100)
-            If Cancelled And Not Cancelling Then 
-                Cancelling = True
-                For each item As BackgroundWorker in BWs
-                    Try
-                        item.CancelAsync
-                    Catch
-                    End Try
-                Next
-            End If
+            'If Cancelled And Not Cancelling Then 
+            '    Cancelling = True
+            '    For each item As BackgroundWorker in BWs
+            '        Try
+            '            item.CancelAsync
+            '        Catch
+            '        End Try
+            '    Next
+            'End If
             Busy = False
             For Each item As BackgroundWorker in BWs
                 Try
@@ -18765,17 +18797,18 @@ End Sub
                 Catch
                 End Try
             Next
-            If Not Cancelled Then
-                Dim donecount As Integer = count - NumActiveThreads 
-                messbox.TextBox1.Text = donecount  & " of " & Total
-            Else
+            'If Not Cancelled Then
+            '    Dim donecount As Integer = count - NumActiveThreads 
+            '    messbox.TextBox1.Text = donecount  & " of " & Total
+            'Else
+            If Cancelled Then
                 messbox.TextBox1.Text = "Cancelling all download Threads..."
             End If
-            messbox.Refresh()
-            If messbox.Cancelled Then _cancelled = True
+            msbx.Refresh()
+            If msbx.Cancelled Then _cancelled = True
         End While
         BWs.Clear()
-        If Cancelled Then Exit Sub
+        _cancelled = False
     End Sub
 
     Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
@@ -18805,7 +18838,10 @@ End Sub
     Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
         Threading.Monitor.Enter(Me)
         NumActiveThreads -= 1
-        If IsNothing(e.Result) Then Exit Sub 
+        If Cancelled Then
+            Dim Something As String = Nothing
+        End If
+        'If IsNothing(e.Result) Then Exit Sub 
         Threading.Monitor.Exit(Me)
     End Sub
 
