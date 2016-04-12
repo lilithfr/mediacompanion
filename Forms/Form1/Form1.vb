@@ -6070,7 +6070,7 @@ Public Class Form1
             Tv_CacheSave()
             tv_CacheLoad()
             tv_Filter()
-            If Pref.disabletvlogs Then
+            If Pref.disabletvlogs Or ScraperErrorDetected Then
                 Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
                 Try
                     MyFormObject.ShowDialog()
@@ -6079,6 +6079,7 @@ Public Class Form1
                 Throw ex
 #End If
                 End Try
+                ScraperErrorDetected = False
             Else
                 BlinkTaskBar()
             End If

@@ -2308,6 +2308,7 @@ Partial Public Class Form1
                         Pref.tvScraperLog &= vbCrLf
                     End If
                     stage = "10"
+                    Dim Firstep As Boolean = True
                     For Each singleepisode In episodearray
                         If bckgroundscanepisodes.CancellationPending Then
                             Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
@@ -2379,7 +2380,8 @@ Partial Public Class Form1
                                 scrapedok = True
                                 If tempepisode = Nothing Or tempepisode = "Error" Then
                                     scrapedok = False
-                                    Pref.tvScraperLog &= "!!! WARNING: This episode could not be found on TVDB" & vbCrLf
+                                    singleepisode.Title.Value = tempepisode
+                                    Pref.tvScraperLog &= "!!! WARNING: This episode: " & singleepisode.Episode.Value & " - could not be found on TVDB" & vbCrLf
                                 ElseIf tempepisode.Contains("Could not connect") Then     'If TVDB unavailable, advise user to try again later
                                     scrapedok = False
                                     Pref.tvScraperLog &= "!!! Issue at TheTVDb, Episode could not be retrieve. Try again later" & vbCrLf
@@ -2470,6 +2472,7 @@ Partial Public Class Form1
                                             End If
                                         Next
                                     End If
+                                    Pref.tvScraperLog &= "Scrape body of episode: " & singleepisode.Episode.Value & " - OK" & vbCrLf
                                     stage = "12b5d"
                                     progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                     bckgroundscanepisodes.ReportProgress(progress, progresstext)
@@ -2568,7 +2571,18 @@ Partial Public Class Form1
                             scrapedok = False
                         End If
                         stage = "12c"
+                        Firstep = False
                     Next
+                    If Not scrapedok AndAlso Not Firstep Then
+                        For i = episodearray.Count-1 To 0 Step -1
+                            If episodearray(i).Title.Value = "Error" Then
+                                Pref.tvScraperLog &= "!!! WARNING: MultiEpisode No: " & episodearray(i).Episode.Value & " Not Found!  Please check file: " & episodearray(i).VideoFilePath & vbCrLf
+                                episodearray.RemoveAt(i)
+                                scrapedok = True
+                                ScraperErrorDetected = True
+                            End If
+                        Next
+                    End If
                     stage = "13"
                 End If
                 stage = "14"
@@ -2624,6 +2638,7 @@ Partial Public Class Form1
                     Next
                     stage = "15"
                 End If
+                If Not scrapedok Then ScraperErrorDetected = True
                 Pref.tvScraperLog &= "!!!" & vbCrLf
                 stage = "16"
             Next
