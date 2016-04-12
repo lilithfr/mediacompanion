@@ -4142,58 +4142,61 @@ Partial Public Class Form1
             Dim thumburl As String = ""
             messbox.Close()
             Dim scrapedepisode As New XmlDocument
+            scrapedepisode.LoadXml(tempepisode)
             Try
-                If tempepisode <> Nothing Then
-                    scrapedepisode.LoadXml(tempepisode)
-                    Dim thisresult As XmlNode = Nothing
-                    For Each thisresult In scrapedepisode("episodedetails")
-                        Select Case thisresult.Name
-                            Case "thumb"
-                                thumburl = thisresult.InnerText
-                                Exit For
-                                Exit Select
-                        End Select
-                    Next
-                    If thumburl <> "" And thumburl.ToLower <> "http://www.thetvdb.com/banners/" Then
-                        messbox = New frmMessageBox("Screenshot found, downloading now", "", "Please Wait")
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-                        Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
-                        Dim cachename As String = Utilities.Download2Cache(thumburl)
-                        If cachename <> "" Then
-                            If eden Then Utilities.SafeCopyFile(cachename, tempstring, True)
-                            If frodo Then
-                                tempstring = tempstring.Replace(".tbn", "-thumb.jpg")
-                                Utilities.SafeCopyFile(cachename, tempstring, True)
-                            End If
-
-                            util_ImageLoad(PictureBox14, tempstring, Utilities.DefaultTvFanartPath)
-                            util_ImageLoad(tv_PictureBoxLeft, tempstring, Utilities.DefaultTvFanartPath)
-
-                            Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
-                            If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
-                                Dim episodelist As New List(Of TvEpisode)
-                                episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-                                For Each Ep In episodelist
-                                    If Ep.Season.Value = seasonno And Ep.Episode.Value = episodeno Then
-                                        Dim video_flags = GetMultiEpMediaFlags(ep)
-                                        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                                        Exit For
-                                    End If
-                                Next
-                            Else
-                                Dim video_flags = GetEpMediaFlags()
-                                movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
-                            End If
-                            messbox.Close()
-                        Else
-                            messbox.Close()
-                            MsgBox("Unable To Download Image")
+                Dim thisresult As XmlNode = Nothing
+                For Each thisresult In scrapedepisode("episodedetails")
+                    Select Case thisresult.Name
+                        Case "thumb"
+                            thumburl = thisresult.InnerText
+                            Exit For
+                    End Select
+                Next
+            Catch
+            End Try
+            If thumburl = "" Then
+                Dim tvdbstuff As New TVDBScraper
+                Dim tmpep As Tvdb.Episode = tvdbstuff.getepisodefromxml(WorkingTvShow.TvdbId.Value, sortorder, seasonno, episodeno, language, True)
+                If tmpep.ThumbNail.Value <> Nothing Then thumburl = tmpep.ThumbNail.Value
+            End If
+            Try
+                If thumburl <> "" And thumburl.ToLower <> "http://www.thetvdb.com/banners/" Then
+                    messbox = New frmMessageBox("Screenshot found, downloading now", "", "Please Wait")
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    messbox.Show()
+                    messbox.Refresh()
+                    Application.DoEvents()
+                    Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
+                    Dim cachename As String = Utilities.Download2Cache(thumburl)
+                    If cachename <> "" Then
+                        If eden Then Utilities.SafeCopyFile(cachename, tempstring, True)
+                        If frodo Then
+                            tempstring = tempstring.Replace(".tbn", "-thumb.jpg")
+                            Utilities.SafeCopyFile(cachename, tempstring, True)
                         End If
+
+                        util_ImageLoad(PictureBox14, tempstring, Utilities.DefaultTvFanartPath)
+                        util_ImageLoad(tv_PictureBoxLeft, tempstring, Utilities.DefaultTvFanartPath)
+
+                        Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
+                        If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
+                            Dim episodelist As New List(Of TvEpisode)
+                            episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                            For Each Ep In episodelist
+                                If Ep.Season.Value = seasonno And Ep.Episode.Value = episodeno Then
+                                    Dim video_flags = GetMultiEpMediaFlags(ep)
+                                    movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                                    Exit For
+                                End If
+                            Next
+                        Else
+                            Dim video_flags = GetEpMediaFlags()
+                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                        End If
+                        messbox.Close()
                     Else
-                        MsgBox("No Episode Screenshot Found On TVDB")
+                        messbox.Close()
+                        MsgBox("Unable To Download Image")
                     End If
                 Else
                     MsgBox("No Episode Screenshot Found On TVDB")
