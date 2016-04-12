@@ -1539,6 +1539,7 @@ Public Class Form1
                     Loop
                     If killMC AndAlso Pref.CloseMCForDLNewVersion Then
                         frmSplash.Close()
+                        Process.GetCurrentProcess.Kill()
                         Application.Exit()
                         Me.Close()
                     End If
