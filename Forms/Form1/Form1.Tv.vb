@@ -2849,6 +2849,10 @@ Partial Public Class Form1
         If Pref.FrodoEnabled AndAlso (Pref.overwritethumbs Or Not File.Exists(fpath)) Then paths.Add(fpath)
         If paths.Count > 0 Then
             Dim downloadok As Boolean = False
+            If episode.Thumbnail.FileName = Nothing Then
+                'Dim tvdbstuff As New TVDBScraper
+                'Dim tempepisode As Tvdb.Episode = tvdbstuff.getepisodefromxml(episode.ShowId.Value, sortorder, episode.Season.value, episode.Episode.Value, episode.ShowLang.Value, True)
+            End If
             If episode.Thumbnail.FileName <> Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
                 Dim url As String = episode.Thumbnail.FileName
                 If Not url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then

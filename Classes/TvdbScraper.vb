@@ -407,11 +407,11 @@ Public Class TVDBScraper
             If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
                 gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
             Else
-                'Check series xml isn't older than two weeks, if so, re-download it.
+                'Check series xml isn't older than Five days.  If so, re-download it.
                 Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2) 
                 Dim datenow As DateTime = Date.Now()
                 Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
-                If dif > 13 Then
+                If dif > 5 Then
                     gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
                 Else
                     gotseriesxml = True
