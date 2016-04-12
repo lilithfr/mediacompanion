@@ -6,6 +6,7 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Runtime.InteropServices
+Imports System.Globalization
 Imports Microsoft.Win32
 Imports Media_Companion.Pref
 Imports System.Xml
@@ -4242,9 +4243,10 @@ Public Class Form1
         Else
             url = "http://www.themoviedb.org/search?query=" & Utilities.CleanFileName(tempstring)
         End If
+        Dim uri As New Uri(url)
         WebBrowser1.Stop()
         WebBrowser1.ScriptErrorsSuppressed = True
-        WebBrowser1.Navigate(url)
+        WebBrowser1.Navigate(uri.AbsoluteUri)
         WebBrowser1.Refresh()
         Panel2.Visible = True
     End Sub
@@ -6122,13 +6124,13 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub WebBrowser3_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) 
-        Try
-            e.Cancel = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
+    'Private Sub WebBrowser3_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles webb
+    '    Try
+    '        e.Cancel = True
+    '    Catch ex As Exception
+    '        ExceptionHandler.LogError(ex)
+    '    End Try
+    'End Sub
 
     Private Sub WebBrowser4_NewWindow(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles WebBrowser4.NewWindow
         Try

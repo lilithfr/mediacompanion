@@ -147,7 +147,12 @@ Public Class Renamer
                 Case "FL"
                     formatShowTitle(0) = StrConv(formatShowTitle(0), VbStrConv.ProperCase)
             End Select
-            showtitle = String.Join(rename.sepShowTitle, formatShowTitle)
+            
+            If rename.showTitleCase = "SC" Then
+                showtitle = Utilities.TitleCase(showtitle).Replace(" ", rename.sepShowTitle)
+            Else
+                showtitle = String.Join(rename.sepShowTitle, formatShowTitle)
+            End If
         Else
             showtitle = ""
         End If
@@ -167,7 +172,11 @@ Public Class Renamer
                 Case "FL"
                     formatEpisodeTitle(0) = StrConv(formatEpisodeTitle(0), VbStrConv.ProperCase)
             End Select
-            episodetitle = String.Join(rename.sepEpisodeTitle, formatEpisodeTitle)
+            If rename.episodeTitleCase = "SC" Then
+                episodetitle = Utilities.TitleCase(episodetitle).Replace(" ", rename.sepEpisodeTitle)
+            Else
+                episodetitle = String.Join(rename.sepEpisodeTitle, formatEpisodeTitle)
+            End If
         Else
             episodetitle = ""
         End If

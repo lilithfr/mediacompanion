@@ -894,8 +894,8 @@ Public Class Pref
         engineend.Clear()
         enginefront.Add("http://www.google.co.uk/search?hl=en-US&as_q=")
         engineend.Add("&as_sitesearch=www.imdb.com")
-        enginefront.Add("http://www.bing.com/search?q=")
-        engineend.Add("+movie+site%3Aimdb.com")
+        'enginefront.Add("http://www.bing.com/search?q=")
+        'engineend.Add("+movie+site%3Aimdb.com")
         enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
         engineend.Add("&qo=serpSearchTopBox")
     End Sub

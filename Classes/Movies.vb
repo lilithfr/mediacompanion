@@ -1299,7 +1299,7 @@ Public Class Movies
             Pref.MusicVidConcertScrape = False
             Pref.googlecount += 1
             Pref.engineno += 1
-            If Pref.engineno = 3 Then Pref.engineno = 0
+            If Pref.engineno = Pref.enginefront.Count Then Pref.engineno = 0
             If newMovie.TimingsLog <> "" then
                 ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If
