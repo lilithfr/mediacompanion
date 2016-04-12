@@ -475,6 +475,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -2947,7 +2948,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3088,7 +3089,7 @@ Partial Class frmPreferences
         Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityDown)
         Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityUp)
         Me.GroupBox10.Controls.Add(Me.lbPosterSourcePriorities)
-        Me.GroupBox10.Location = New System.Drawing.Point(9, 271)
+        Me.GroupBox10.Location = New System.Drawing.Point(9, 298)
         Me.GroupBox10.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox10.Name = "GroupBox10"
         Me.GroupBox10.Padding = New System.Windows.Forms.Padding(4)
@@ -3171,6 +3172,7 @@ Partial Class frmPreferences
         '
         'GroupBox37
         '
+        Me.GroupBox37.Controls.Add(Me.cbMovCustFolderjpgNoDelete)
         Me.GroupBox37.Controls.Add(Me.cbMovFanartNaming)
         Me.GroupBox37.Controls.Add(Me.btnMovFanartTvSelect)
         Me.GroupBox37.Controls.Add(Me.Label10)
@@ -3181,7 +3183,7 @@ Partial Class frmPreferences
         Me.GroupBox37.Controls.Add(Me.cbMoviePosterScrape)
         Me.GroupBox37.Location = New System.Drawing.Point(9, 13)
         Me.GroupBox37.Name = "GroupBox37"
-        Me.GroupBox37.Size = New System.Drawing.Size(327, 251)
+        Me.GroupBox37.Size = New System.Drawing.Size(327, 278)
         Me.GroupBox37.TabIndex = 60
         Me.GroupBox37.TabStop = false
         Me.GroupBox37.Text = "Autoscrape artwork"
@@ -3995,7 +3997,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5681,6 +5683,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbMovCustFolderjpgNoDelete
+        '
+        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 236)
+        Me.cbMovCustFolderjpgNoDelete.Name = "cbMovCustFolderjpgNoDelete"
+        Me.cbMovCustFolderjpgNoDelete.Size = New System.Drawing.Size(295, 36)
+        Me.cbMovCustFolderjpgNoDelete.TabIndex = 49
+        Me.cbMovCustFolderjpgNoDelete.Text = "I use custom folder.jpg images, do not delete on autoscrape."
+        Me.cbMovCustFolderjpgNoDelete.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6302,4 +6313,5 @@ End Sub
     Friend WithEvents GroupBox7 As GroupBox
     Friend WithEvents cbMovNfoWatchTag As CheckBox
     Friend WithEvents Label23 As Label
+    Friend WithEvents cbMovCustFolderjpgNoDelete As CheckBox
 End Class

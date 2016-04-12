@@ -381,6 +381,7 @@ Public Class frmPreferences
         cbMovFanartNaming                   .Checked        = Pref.MovFanartNaming
         cbDlXtraFanart                      .Checked        = Pref.dlxtrafanart
         cbMovSetArtScrape                   .Checked        = Pref.dlMovSetArtwork
+        cbMovCustFolderjpgNoDelete          .Checked        = Pref.MovCustFolderjpgNoDelete
 
         ''Movie Poster Scrape Priority
         lbPosterSourcePriorities.Items.Clear()
@@ -1684,6 +1685,12 @@ End Sub
         Else
             Pref.dlxtrafanart = False
         End If
+        Changes = True
+    End Sub
+
+    Private Sub cbMovCustFolderjpgNoDelete_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovCustFolderjpgNoDelete.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovCustFolderjpgNoDelete = cbMovCustFolderjpgNoDelete.Checked 
         Changes = True
     End Sub
 

@@ -2487,10 +2487,16 @@ Public Class Movie
     End Sub
 
     Sub DeletePoster
-        DeleteFile(PosterPath)
-        If Pref.createfolderjpg Then DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
-        DeleteFile(PosterDVDFrodo)
-        DeleteFile(ActualPosterPath)
+        If Pref.MovCustFolderjpgNoDelete Then
+            If Not PosterPath.Contains("folder.jpg")        Then DeleteFile(PosterPath)
+            If Not PosterDVDFrodo.Contains("folder.jpg")    Then DeleteFile(PosterDVDFrodo)
+            If Not ActualPosterPath.Contains("folder.jpg")  Then DeleteFile(ActualPosterPath)
+        Else
+            DeleteFile(PosterPath)
+            If Pref.createfolderjpg Then DeleteFile(PosterPath.Replace(Path.GetFileName(PosterPath),"folder.jpg"))
+            DeleteFile(PosterDVDFrodo)
+            DeleteFile(ActualPosterPath)
+        End If
     End Sub
 
     Sub DeleteFanart
