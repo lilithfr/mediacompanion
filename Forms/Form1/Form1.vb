@@ -32,6 +32,7 @@ Public Class Form1
     Public Dim WithEvents  BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  BckWrkXbmcController  As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents  Bw                    As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents  ImgBw                 As BackgroundWorker = New BackgroundWorker
     Property               BWs                   As New List(Of BackgroundWorker)
     Property                NumActiveThreads     As Integer
     Shared Public          XbmcControllerQ       As PriorityQueue    = New PriorityQueue
@@ -284,7 +285,7 @@ Public Class Form1
     Dim killMC As Boolean = False
 
     Dim MoviesFiltersResizeCalled As Boolean = False
-    Dim _cancelled As Boolean = False
+    'Dim _cancelled As Boolean = False
 
     'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -299,7 +300,8 @@ Public Class Form1
 
             BckWrkScnMovies.WorkerReportsProgress = True
             BckWrkScnMovies.WorkerSupportsCancellation = True
-
+            ImgBw.WorkerReportsProgress = True
+            ImgBw.WorkerSupportsCancellation = True
             oMovies.Bw = BckWrkScnMovies
 
             For I = 0 To 20
@@ -4208,7 +4210,7 @@ Public Class Form1
         End Try
     End Sub
 
-        Private Sub TabControl2_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl2.MouseClick
+    Private Sub TabControl2_MouseClick(ByVal sender As Object, ByVal e As MouseEventArgs) Handles TabControl2.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
             For index As Integer = 0 To TabControl2.TabCount - 1 Step 1
                 If TabControl2.GetTabRect(index).Contains(e.Location) Then
@@ -4426,9 +4428,14 @@ Public Class Form1
                 Me.Panel2.Refresh()
                 Me.Refresh()
                 If MovFanartPicBox.Count > 0 Then
-                    messbox.TextBox2.Text = "Downloading Fanart preview images...."
-                    messbox.Refresh()
-                    PicBoxLoadBackground(messbox, MovFanartPicBox)
+                    'messbox.TextBox2.Text = "Downloading Fanart preview images...."
+                    messbox.Close()
+                    If Not ImgBw.IsBusy Then
+                        ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                        ToolStripStatusLabel2.Visible = True
+                        ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel2})
+                    End If
+                    'PicBoxLoadBackground(messbox, MovFanartPicBox)
                 End If
                 EnableFanartScrolling()
                 Me.Panel2.Refresh()
@@ -4592,13 +4599,10 @@ Public Class Form1
 
     Private Sub SaveFanart(hd As Boolean, Optional clipbrd As Boolean = False)
         Try
-            If NumActiveThreads > 0 Then
-                _cancelled = True
-                Application.DoEvents()
-                Dim aok As Boolean = False
-                Do Until aok
+            If ImgBw.Isbusy Then
+                ImgBw.CancelAsync()
+                Do Until Not ImgBw.IsBusy
                     Application.DoEvents()
-                    If NumActiveThreads = 0 Then aok = True
                 Loop
             End If
             Try
@@ -5064,9 +5068,15 @@ Public Class Form1
             Me.Refresh()
             Me.panelAvailableMoviePosters.Visible = True
             If MovPosterPicBox.Count > 0 Then
-                messbox.TextBox2.Text = "Downloading Poster preview images...."
-                messbox.Refresh()
-                PicBoxLoadBackground(messbox, MovPosterPicBox, 10, If(posterArray.Count >= 10, "10", posterArray.Count.ToString))
+                'messbox.TextBox2.Text = "Downloading Poster preview images...."
+                'messbox.Refresh()
+                messbox.Close()
+                If Not ImgBw.IsBusy Then
+                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                    ToolStripStatusLabel2.Visible = True
+                    ImgBw.RunWorkerAsync({MovPosterPicBox, 0, If(posterArray.Count >= 10, 10, posterArray.Count), Me.panelAvailableMoviePosters})
+                End If
+                'PicBoxLoadBackground(messbox, MovPosterPicBox, 10, If(posterArray.Count >= 10, "10", posterArray.Count.ToString))
             End If
         Else
             Dim mainlabel2 As Label
@@ -5180,8 +5190,14 @@ Public Class Form1
             Me.Refresh()
             If MovPosterPicBox.Count > 0 Then
                 messbox.TextBox2.Text = "Downloading Poster preview images...."
-                messbox.Refresh()
-                PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint2)
+                'messbox.Refresh()
+                messbox.Close()
+                If Not ImgBw.IsBusy Then
+                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                    ToolStripStatusLabel2.Visible = True
+                    ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
+                End If
+                PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint)
             End If
             'Me.panelAvailableMoviePosters.Visible = True
             messbox.Close()
@@ -5274,9 +5290,15 @@ Public Class Form1
             Me.panelAvailableMoviePosters.Refresh()
             Me.Refresh()
             If MovPosterPicBox.Count > 0 Then
-                messbox.TextBox2.Text = "Downloading Poster preview images...."
-                messbox.Refresh()
-                PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint2)
+                'messbox.TextBox2.Text = "Downloading Poster preview images...."
+                'messbox.Refresh()
+                messbox.Close()
+                If Not ImgBw.IsBusy Then
+                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                    ToolStripStatusLabel2.Visible = True
+                    ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
+                End If
+                'PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint2)
             End If
             messbox.Close()
             Me.Refresh()
@@ -11545,6 +11567,7 @@ End Sub
     End Sub
 
     Sub bckgrndcancel
+        If ImgBw.IsBusy Then ImgBw.CancelAsync()
         Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
         If CurrentTab = "movies" Then BckWrkScnMovies_Cancel
         If CurrentTab = "tv shows" Then bckgroundscanepisodes.CancelAsync()
@@ -11554,6 +11577,10 @@ End Sub
         If BckWrkScnMovies.IsBusy Then
             tsStatusLabel.Text = "* Cancelling... *"
             BckWrkScnMovies.CancelAsync()
+        End If
+        If ImgBw.IsBusy Then
+            tsStatusLabel.Text = "* Cancelling... *"
+            ImgBw.CancelAsync()
         End If
     End Sub
 
@@ -11591,7 +11618,14 @@ End Sub
 
     Sub doRefresh
         Dim CurrentTab As String = TabLevel1.SelectedTab.Name.ToLower
-        If CurrentTab = "tabpage1" Then mov_RebuildMovieCaches()
+        If CurrentTab = "tabpage1" Then
+            Dim SubTab As String = TabControl2.SelectedTab.Name.ToLower
+            If SubTab = "tabpagelevel2movmainbrowser" Then mov_RebuildMovieCaches()
+            If SubTab = "tabpagemoviefanart" Then 
+                MovFanartClear()
+                MovFanartDisplay()
+            End If
+        End If
         If CurrentTab = "tabpage2" Then tv_CacheRefresh()
         If CurrentTab = "tabmv" Then ucMusicVideo1.btnRefresh.PerformClick()
     End Sub
@@ -13693,6 +13727,12 @@ End Sub
     End Sub
 
     Private Function MoviePosterSave(Optional clipbrd As Boolean = False) As Boolean
+        If ImgBw.Isbusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         Dim allok As Boolean = False
         Try
             Dim tempstring As String = ""
@@ -18733,16 +18773,12 @@ End Sub
     Public ReadOnly Property Cancelled As Boolean
         Get
             Application.DoEvents
-            'If Not IsNothing(_bw) AndAlso _bw.WorkerSupportsCancellation AndAlso _bw.CancellationPending Then
-            '    'ReportProgress("Cancelled!",vbCrLf & "!!! Operation cancelled by user")
-            '    Return True
-            'End If
-            Return _cancelled
+            Return ImgBw.CancellationPending
         End Get
     End Property
 
     Private Sub PicBoxLoadBackground(ByRef msbx As frmMessageBox, ByVal listpicbox As List(Of FanartPicBox), Optional ByVal count As Integer = 0, Optional ByVal Total As Integer = 0)
-        _cancelled = False
+        '_cancelled = False
         BWs.Clear()
         Dim totalcount As Integer = 0
         If Total = 0 Then Total = listpicbox.count
@@ -18767,13 +18803,13 @@ End Sub
             If NumActiveThreads > 3 Then
                 Do Until NumActiveThreads < 3
                     'Application.DoEvents()
-                    If msbx.Cancelled Then _cancelled = True
+                    'If msbx.Cancelled Then _cancelled = True
                     If Cancelled Then
                         Exit For
                     End If
                 Loop
             End If
-            If msbx.Cancelled Then _cancelled = True
+            'If msbx.Cancelled Then _cancelled = True
             If Cancelled Then
                 Exit For
             End If
@@ -18809,11 +18845,58 @@ End Sub
                 messbox.TextBox1.Text = "Cancelling all download Threads..."
             End If
             msbx.Refresh()
-            If msbx.Cancelled Then _cancelled = True
+            'If msbx.Cancelled Then _cancelled = True
         End While
         BWs.Clear()
-        _cancelled = False
+        '_cancelled = False
     End Sub
+
+    Sub imgbw_DoWork(ByVal snder As Object, ByVal e As DoWorkEventArgs) Handles ImgBw.DoWork
+        Dim listpicbox As New List(Of FanartPicBox)
+        listpicbox.AddRange(e.Argument(0))
+        Dim count As Integer = e.Argument(1)
+        Dim Total As Integer = e.Argument(2)
+        BWs.Clear()
+        Dim totalcount As Integer = count
+        If Total = 0 Then Total = listpicbox.count
+        NumActiveThreads = 0
+        For each item In listpicbox
+            Dim bw As BackgroundWorker = New BackgroundWorker
+            bw.WorkerSupportsCancellation = True
+
+            AddHandler bw.DoWork            , AddressOf bw_DoWork
+            AddHandler bw.RunWorkerCompleted, AddressOf bw_RunWorkerCompleted
+
+            BWs.Add(bw)
+            NumActiveThreads += 1
+
+            bw.RunWorkerAsync(item)
+            totalcount += 1
+            ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
+            If NumActiveThreads > 3 Then
+                Do Until NumActiveThreads < 3
+                    If Cancelled Then
+                        Exit Do
+                    End If
+                Loop
+            End If
+            If Cancelled Then
+                Exit For
+            End If
+        Next
+        Dim panelrefresh As Panel = DirectCast(e.Argument(3), Panel)
+        panelrefresh.Refresh()
+    End Sub
+
+    Sub ImgBw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBw.ProgressChanged
+        ToolStripStatusLabel2.Text = e.UserState
+    End Sub
+
+    Sub ImgBw_RunWorkerComplete(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBw.RunWorkerCompleted
+        ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
+        ToolStripStatusLabel2.Visible = False
+    End Sub
+
 
     Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
         If Not Cancelled Then
@@ -18822,30 +18905,10 @@ End Sub
             e.Result = util_ImageLoad2(item.pbox, item.imagepath, "")
         End If
     End Sub
-
-    'Private Sub bw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs)
-
-    '    'Dim mp As MovieProgress = CType(e.UserState, MovieProgress)
-
-    '    'Select mp.ProgressEvent
-
-    '    '    Case MovieProgress.MsgType.GotFoldersCount : TotalNumberOfFolders += mp.Data
-    '    '                                                 ReportProgress("Total number of folders : [" & TotalNumberOfFolders & "]")
-
-    '    '    Case MovieProgress.MsgType.DoneSome        : NumberOfFoldersDone += mp.Data
-    '    '                                                 PercentDone = CalcPercentDone(NumberOfFoldersDone, TotalNumberOfFolders)
-    '    '                                                 ReportProgress("Active threads : [" & NumActiveThreads & "] - Scanning folder " & NumberOfFoldersDone & " of " & TotalNumberOfFolders)
-
-    '    'End Select
-    'End Sub
-
+    
     Private Sub bw_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs)
         Threading.Monitor.Enter(Me)
         NumActiveThreads -= 1
-        If Cancelled Then
-            Dim Something As String = Nothing
-        End If
-        'If IsNothing(e.Result) Then Exit Sub 
         Threading.Monitor.Exit(Me)
     End Sub
 
@@ -18895,4 +18958,5 @@ End Sub
 
         Return True
     End Function
+
 End Class
