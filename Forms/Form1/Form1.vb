@@ -11628,7 +11628,7 @@ End Sub
         End If
         If CurrentTab = "tv shows" Then 
             Dim SubTab As String = TabControl3.SelectedTab.Text.ToLower
-            If SubTab = "main" Then tv_CacheRefresh()
+            If SubTab = "main browser" Then tv_CacheRefresh()
             If SubTab = "fanart" Then tv_Fanart_Load()
         End If
         If CurrentTab = "music videos" Then ucMusicVideo1.btnRefresh.PerformClick()
