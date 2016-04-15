@@ -283,6 +283,7 @@ Public Class Form1
     Public showslist As Object
     Public DGVMoviesColName As String = ""
     Dim killMC As Boolean = False
+    Public Imageloading As Boolean = False
 
     Dim MoviesFiltersResizeCalled As Boolean = False
     'Dim _cancelled As Boolean = False
@@ -2634,6 +2635,10 @@ Public Class Form1
                 busy = True
                 Bw.CancelAsync()
             End If
+            If ImgBw.IsBusy Then
+                busy = True
+                ImgBw.CancelAsync()
+            End If
 
             Dim exitnowok As Boolean = False
             If busy = True Then
@@ -2644,7 +2649,7 @@ Public Class Form1
                 messbox.Visible = True
             End If
             Do Until busy = False
-                If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy And Not BWs.Count > 0 Then
+                If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy And Not BWs.Count > 0 And Not ImgBw.IsBusy Then
                     busy = False
                     Exit Do
                 End If
@@ -4344,7 +4349,6 @@ Public Class Form1
             tmdb.SetId = SetId
             fanartArray.AddRange(tmdb.McSetFanart)
         End If
-        'Me.Panel2.Visible = False
         messbox.TextBox2.Text = "Setting up display...."
         messbox.Refresh()
         Try
@@ -4354,9 +4358,6 @@ Public Class Form1
                 Dim itemcounter As Integer = 0
                 For Each item In fanartArray
                     Dim thispicbox As New FanartPicBox
-                    'messbox.TextBox1.Text = itemcounter+1 & " of " & fanartArray.Count
-                    'messbox.Refresh()
-                    'Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                     fanartBoxes() = New PictureBox()
                     With fanartBoxes
                         .Location = New Point(0, location)
@@ -4377,7 +4378,6 @@ Public Class Form1
                     thispicbox.pbox = fanartBoxes
                     thispicbox.imagepath = item.ldurl
                     MovFanartPicBox.Add(thispicbox)
-                    'util_ImageLoad(fanartBoxes, item2, "")
                     Application.DoEvents()
                     If fanartArray.Count > 2 Then
                         fanartCheckBoxes() = New RadioButton()
@@ -4428,14 +4428,12 @@ Public Class Form1
                 Me.Panel2.Refresh()
                 Me.Refresh()
                 If MovFanartPicBox.Count > 0 Then
-                    'messbox.TextBox2.Text = "Downloading Fanart preview images...."
                     messbox.Close()
                     If Not ImgBw.IsBusy Then
                         ToolStripStatusLabel2.Text = "Starting Download of Images..."
                         ToolStripStatusLabel2.Visible = True
                         ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel2})
                     End If
-                    'PicBoxLoadBackground(messbox, MovFanartPicBox)
                 End If
                 EnableFanartScrolling()
                 Me.Panel2.Refresh()
@@ -4455,7 +4453,6 @@ Public Class Form1
 
                 Me.Panel2.Controls.Add(mainlabel2)
             End If
-            'Me.Panel2.Visible = True
             messbox.Close()
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -5005,9 +5002,6 @@ Public Class Form1
 
             For Each item In names
                 Dim thispicbox As New FanartPicBox
-                'messbox.TextBox2.Text = itemcounter+1 & " of " & If(posterArray.Count >= 10, "10", posterArray.Count.ToString)
-                'messbox.Refresh()
-                'Dim item2 As String = Utilities.Download2Cache(item.ldUrl)
                 Try
                     posterPicBoxes() = New PictureBox()
                     With posterPicBoxes
@@ -5025,7 +5019,6 @@ Public Class Form1
                     thispicbox.imagepath = item.ldUrl
                     thispicbox.pbox = posterPicBoxes
                     MovPosterPicBox.Add(thispicbox)
-                    'util_ImageLoad(posterPicBoxes, item2, "")
 
                     posterCheckBoxes() = New RadioButton()
                     With posterCheckBoxes
@@ -5062,21 +5055,17 @@ Public Class Form1
                     Throw ex
 #End If
                 End Try
-                'If messbox.Cancelled Then Exit For
             Next
             Me.panelAvailableMoviePosters.Refresh()
             Me.Refresh()
             Me.panelAvailableMoviePosters.Visible = True
             If MovPosterPicBox.Count > 0 Then
-                'messbox.TextBox2.Text = "Downloading Poster preview images...."
-                'messbox.Refresh()
                 messbox.Close()
                 If Not ImgBw.IsBusy Then
                     ToolStripStatusLabel2.Text = "Starting Download of Images..."
                     ToolStripStatusLabel2.Visible = True
                     ImgBw.RunWorkerAsync({MovPosterPicBox, 0, If(posterArray.Count >= 10, 10, posterArray.Count), Me.panelAvailableMoviePosters})
                 End If
-                'PicBoxLoadBackground(messbox, MovPosterPicBox, 10, If(posterArray.Count >= 10, "10", posterArray.Count.ToString))
             End If
         Else
             Dim mainlabel2 As Label
@@ -5143,9 +5132,6 @@ Public Class Form1
             Dim MovPosterPicBox As New List(Of FanartPicBox)
             For Each item As String In names
                 Dim thispicbox As New FanartPicBox
-                'messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
-                'messbox.Refresh()
-                'Dim item2 As String = Utilities.Download2Cache(item)
                 posterPicBoxes() = New PictureBox()
                 With posterPicBoxes
                     .WaitOnLoad = True
@@ -5162,7 +5148,6 @@ Public Class Form1
                 thispicbox.imagepath = item
                 thispicbox.pbox = posterPicBoxes
                 MovPosterPicBox.Add(thispicbox)
-                'util_ImageLoad(posterPicBoxes, item2, "")
 
                 posterCheckBoxes() = New RadioButton()
                 With posterCheckBoxes
@@ -5189,17 +5174,13 @@ Public Class Form1
             Me.panelAvailableMoviePosters.Refresh()
             Me.Refresh()
             If MovPosterPicBox.Count > 0 Then
-                messbox.TextBox2.Text = "Downloading Poster preview images...."
-                'messbox.Refresh()
                 messbox.Close()
                 If Not ImgBw.IsBusy Then
                     ToolStripStatusLabel2.Text = "Starting Download of Images..."
                     ToolStripStatusLabel2.Visible = True
                     ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
                 End If
-                PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint)
             End If
-            'Me.panelAvailableMoviePosters.Visible = True
             messbox.Close()
             Me.Refresh()
             Application.DoEvents()
@@ -5241,9 +5222,6 @@ Public Class Form1
             Dim MovPosterPicBox As New List(Of FanartPicBox)
             For Each item As String In names
                 Dim thispicbox As New FanartPicBox
-                'messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
-                'messbox.Refresh()
-                'Dim item2 As String = Utilities.Download2Cache(item)
                 Try
                     posterPicBoxes() = New PictureBox()
                     With posterPicBoxes
@@ -5261,7 +5239,6 @@ Public Class Form1
                     thispicbox.imagepath = item
                     thispicbox.pbox = posterPicBoxes
                     MovPosterPicBox.Add(thispicbox)
-                    'util_ImageLoad(posterPicBoxes, item2, "")
 
                     posterCheckBoxes() = New RadioButton()
                     With posterCheckBoxes
@@ -5290,15 +5267,12 @@ Public Class Form1
             Me.panelAvailableMoviePosters.Refresh()
             Me.Refresh()
             If MovPosterPicBox.Count > 0 Then
-                'messbox.TextBox2.Text = "Downloading Poster preview images...."
-                'messbox.Refresh()
                 messbox.Close()
                 If Not ImgBw.IsBusy Then
                     ToolStripStatusLabel2.Text = "Starting Download of Images..."
                     ToolStripStatusLabel2.Visible = True
                     ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
                 End If
-                'PicBoxLoadBackground(messbox, MovPosterPicBox, tempint2, tempint2)
             End If
             messbox.Close()
             Me.Refresh()
@@ -6204,9 +6178,6 @@ Public Class Form1
             Label58.Text = PictureBox10.Image.Height.ToString
             Label59.Text = PictureBox10.Image.Width.ToString
         Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
         End Try
         TextBox28.Text = WorkingTvShow.Title.Value
         messbox = New frmMessageBox("Please wait,", "", "Querying TVDB for fanart list")
@@ -6258,16 +6229,17 @@ Public Class Form1
                 End Select
             Next
         Catch ex As WebException
+            Dim webmsg As String = ex.Message
             MsgBox("TVDB appears to be down at the moment, please try again later")
         End Try
 
         If listOfTvFanarts.Count > 0 Then
+            Dim MovFanartPicBox As New List(Of FanartPicBox)
             Dim location As Integer = 0
             Dim itemcounter As Integer = 0
-            For f = 0 To listOfTvFanarts.Count - 1
+            For Each item In listOfTvFanarts
+                Dim thispicbox As New FanartPicBox
                 tvFanartBoxes() = New PictureBox()
-                Dim item As String = Utilities.Download2Cache(listOfTvFanarts(f).smallUrl)
-                
                 With tvFanartBoxes
                     .Location = New Point(0, location)
                     If listOfTvFanarts.Count > 2 Then
@@ -6280,10 +6252,13 @@ Public Class Form1
                     .SizeMode = PictureBoxSizeMode.Zoom
                     .Visible = True
                     .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "tvfanart" & f.ToString
+                    .Name = "tvfanart" & itemcounter.ToString
                     AddHandler tvFanartBoxes.DoubleClick, AddressOf util_ZoomImage2
                 End With
-                util_ImageLoad(tvFanartBoxes, item, "")
+                thispicbox.pbox = tvFanartBoxes
+                thispicbox.imagepath = item.smallUrl
+                MovFanartPicBox.Add(thispicbox)
+                Application.DoEvents()
 
                 tvFanartCheckBoxes() = New RadioButton()
                 With tvFanartCheckBoxes
@@ -6296,17 +6271,28 @@ Public Class Form1
                 With resolutionLabels
                     .BringToFront()
                     .Location = New Point(10, location + 225)
-                    .Name = listOfTvFanarts(f).resolution
-                    .Text = listOfTvFanarts(f).resolution
+                    .Name = item.resolution
+                    .Text = item.resolution
                 End With
                 itemcounter += 1
                 location += 250
                 Me.Panel13.Controls.Add(tvFanartBoxes())
                 Me.Panel13.Controls.Add(tvFanartCheckBoxes())
                 Me.Panel13.Controls.Add(resolutionLabels())
-                Me.Refresh()
                 Application.DoEvents()
             Next
+            Me.Panel13.Refresh()
+            Me.Refresh()
+            If MovFanartPicBox.Count > 0 Then
+                messbox.Close()
+                If Not ImgBw.IsBusy Then
+                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                    ToolStripStatusLabel2.Visible = True
+                    ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel13})
+                End If
+            End If
+            Me.Panel13.Refresh()
+            Me.Refresh()
             EnableTvFanartScrolling
         Else
             Dim mainlabel2 As Label
@@ -6841,6 +6827,7 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
     Private Sub tv_PosterSetup(Optional ByVal IsOfType As String = "")
 
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
@@ -6897,19 +6884,6 @@ Public Class Form1
             Next
 
         End If
-        '        For Each item In tvobjects
-        '            ComboBox2.Items.Add(item)
-        '            If item = combostart Then
-        '                Try
-        '                    ComboBox2.SelectedIndex = ComboBox2.Items.Count - 1
-        '                Catch ex As Exception
-        '#If SilentErrorScream Then
-        '                    Throw ex
-        '#End If
-        '                End Try
-        '            End If
-        '        Next
-
     End Sub
 
     Public Function BannerAndPosterViewer()
@@ -7173,9 +7147,7 @@ Public Class Form1
         For i = Panel16.Controls.Count - 1 To 0 Step -1
             Panel16.Controls.RemoveAt(i)
         Next
-
-
-
+        
         Dim tempint As Integer = (tvposterpage * (Pref.maximumthumbs) + 1) - Pref.maximumthumbs
         Dim tempint2 As Integer = tvposterpage * 10
 
@@ -7195,9 +7167,11 @@ Public Class Form1
         Dim itemcounter As Integer = 0
         Dim tempboolean As Boolean = True
         'If CheckBox8.Checked = True Or CheckBox8.Visible = False Then
+        Dim MovFanartPicBox As New List(Of FanartPicBox)
         If rbTVposter.Checked = True Or rbTVbanner.Enabled = False Then
             For f = tempint - 1 To tempint2 - 1
-                Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
+                Dim thispicbox As New FanartPicBox
+                'Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
                 tvposterpicboxes() = New PictureBox()
                 With tvposterpicboxes
                     .Location = New Point(locationX, locationY)
@@ -7211,7 +7185,10 @@ Public Class Form1
                     AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
                     'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
                 End With
-                util_ImageLoad(tvposterpicboxes, item, "")
+                thispicbox.pbox = tvposterpicboxes
+                thispicbox.imagepath = usedlist(f).smallUrl
+                MovFanartPicBox.Add(thispicbox)
+                'util_ImageLoad(tvposterpicboxes, item, "")
 
                 tvpostercheckboxes() = New RadioButton()
                 With tvpostercheckboxes
@@ -7237,7 +7214,6 @@ Public Class Form1
                 itemcounter += 1
                 Me.Panel16.Controls.Add(tvposterpicboxes())
                 Me.Panel16.Controls.Add(tvpostercheckboxes())
-                Me.Refresh()
                 Application.DoEvents()
                 If tempboolean = True Then
                     locationY = (192 + 19)
@@ -7247,9 +7223,12 @@ Public Class Form1
                 End If
                 tempboolean = Not tempboolean
             Next
+            'Me.Panel16.Refresh()
+            'Me.Refresh()
         Else
             For f = tempint - 1 To tempint2 - 1
-                Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
+                Dim thispicbox As New FanartPicBox
+                'Dim item As String = Utilities.Download2Cache(usedlist(f).SmallUrl)
                 tvposterpicboxes() = New PictureBox()
                 With tvposterpicboxes
                     .Location = New Point(0, locationY)
@@ -7263,7 +7242,10 @@ Public Class Form1
                     AddHandler tvposterpicboxes.DoubleClick, AddressOf tv_PosterDoubleClick
                     'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
                 End With
-                util_ImageLoad(tvposterpicboxes, item, "")
+                thispicbox.pbox = tvposterpicboxes
+                thispicbox.imagepath = usedlist(f).smallUrl
+                MovFanartPicBox.Add(thispicbox)
+                'util_ImageLoad(tvposterpicboxes, item, "")
 
                 tvpostercheckboxes() = New RadioButton()
                 With tvpostercheckboxes
@@ -7279,9 +7261,21 @@ Public Class Form1
 
                 Me.Panel16.Controls.Add(tvposterpicboxes())
                 Me.Panel16.Controls.Add(tvpostercheckboxes())
+                Application.DoEvents()
             Next
         End If
-        
+        Me.Panel16.Refresh()
+        Me.Refresh()
+        If MovFanartPicBox.Count > 0 Then
+            messbox.Close()
+            If Not ImgBw.IsBusy Then
+                ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                ToolStripStatusLabel2.Visible = True
+                ImgBw.RunWorkerAsync({MovFanartPicBox, tempint, tempint2, Me.Panel16})
+            End If
+        End If
+        Me.Panel16.Refresh()
+        Me.Refresh()
         Application.DoEvents()
         If rbTVbanner.Checked AndAlso Me.Panel16.Controls.Count > 0 Then EnableTvBannerScrolling
         Me.Refresh()
@@ -7352,6 +7346,12 @@ Public Class Form1
     End Sub
 
     Private Sub TvPosterSave(ByVal imageUrl As String)
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         Try
             Dim witherror As Boolean = False
             Dim witherror2 As Boolean = False
@@ -11617,24 +11617,28 @@ End Sub
     End Sub
 
     Sub doRefresh
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Name.ToLower
-        If CurrentTab = "tabpage1" Then
-            Dim SubTab As String = TabControl2.SelectedTab.Name.ToLower
-            If SubTab = "tabpagelevel2movmainbrowser" Then mov_RebuildMovieCaches()
-            If SubTab = "tabpagemoviefanart" Then 
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
+        If CurrentTab = "movies" Then
+            Dim SubTab As String = TabControl2.SelectedTab.Text.ToLower
+            If SubTab = "main browser" Then mov_RebuildMovieCaches()
+            If SubTab = "fanart" Then 
                 MovFanartClear()
                 MovFanartDisplay()
             End If
         End If
-        If CurrentTab = "tabpage2" Then tv_CacheRefresh()
-        If CurrentTab = "tabmv" Then ucMusicVideo1.btnRefresh.PerformClick()
+        If CurrentTab = "tv shows" Then 
+            Dim SubTab As String = TabControl3.SelectedTab.Text.ToLower
+            If SubTab = "main" Then tv_CacheRefresh()
+            If SubTab = "fanart" Then tv_Fanart_Load()
+        End If
+        If CurrentTab = "music videos" Then ucMusicVideo1.btnRefresh.PerformClick()
     End Sub
 
     Sub doSearchNew
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Name.ToLower
-        If CurrentTab = "tabpage1" Then SearchForNew()
-        If CurrentTab = "tabpage2" Then ep_Search()
-        If CurrentTab = "tabmv" Then ucMusicVideo1.btnSearchNew.PerformClick()
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
+        If CurrentTab = "movies" AndAlso TabControl2.SelectedTab.Text.ToLower = "main browser" Then SearchForNew()
+        If CurrentTab = "tv shows" Then ep_Search()
+        If CurrentTab = "music videos" Then ucMusicVideo1.btnSearchNew.PerformClick()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
@@ -12840,6 +12844,15 @@ End Sub
 
 #Region "Movie Fanart Tab"
 
+    Private Sub TabPageMovieFanart_Leave( sender As Object,  e As EventArgs) Handles TabPageMovieFanart.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
+    End Sub
+
     Private Sub PictureBox2_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox2.DoubleClick
         Try
             If Not PictureBox2.Tag Is Nothing Then
@@ -13189,6 +13202,15 @@ End Sub
 
 #Region "Movie Poster Tab"
 
+    Private Sub TabPageMoviePoster_Leave( sender As Object,  e As EventArgs) Handles TabPageMoviePoster.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
+    End Sub
+
     Private Sub PictureBoxAssignedMoviePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBoxAssignedMoviePoster.DoubleClick
         Try
             If Not PictureBoxAssignedMoviePoster.Tag Is Nothing Then
@@ -13262,7 +13284,12 @@ End Sub
     End Sub
 
     Private Sub btnMovPosterNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterNext.Click
-
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         mov_PosterSelectionDisplayNext()
 
 '        Try
@@ -13350,7 +13377,12 @@ End Sub
     End Sub
 
     Private Sub btnMovPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterPrev.Click
-
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         mov_PosterSelectionDisplayPrev()
 
         'Try
@@ -13826,6 +13858,12 @@ End Sub
 #Region "Movie Fanart.TV Tab"
 
     Private Sub tpFanartTv_Leave(sender As Object, e As EventArgs) Handles tpFanartTv.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         Mov_PictureboxLoad()
     End Sub
 
@@ -15594,7 +15632,22 @@ End Sub
 
 #Region "Tv Fanart Form"
 
+    Private Sub tpTvFanart_Leave( sender As Object,  e As EventArgs) Handles tpTvFanart.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
+    End Sub
+
     Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         Dim issavefanart As Boolean = Pref.savefanart
         Pref.savefanart =true
         Try
@@ -15838,6 +15891,15 @@ End Sub
 
 #Region "Tv Poster Form"
 
+    Private Sub tpTvPosters_Leave( sender As Object,  e As EventArgs) Handles tpTvPosters.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
+    End Sub
+
     Private Sub btnTvPosterSaveBig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterSaveBig.Click
         Call TvPosterSave(btnTvPosterSaveBig.Tag)
     End Sub
@@ -15929,6 +15991,12 @@ End Sub
 
     Private Sub btnTvPosterNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterNext.Click  'TV Poster Page Next
         Try
+            If ImgBw.IsBusy Then
+                ImgBw.CancelAsync()
+                Do Until Not ImgBw.IsBusy
+                    Application.DoEvents()
+                Loop
+            End If
             tvposterpage += 1
             btnTvPosterSaveBig.Visible = False
             If usedlist.Count < 10 * tvposterpage Then
@@ -15943,6 +16011,12 @@ End Sub
 
     Private Sub btnTvPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvPosterPrev.Click  'TV Poster Page Prev
         Try
+            If ImgBw.IsBusy Then
+                ImgBw.CancelAsync()
+                Do Until Not ImgBw.IsBusy
+                    Application.DoEvents()
+                Loop
+            End If
             tvposterpage -= 1
             btnTvPosterSaveBig.Visible = False
             If tvposterpage = 1 Then
@@ -16044,6 +16118,12 @@ End Sub
 #Region "TV Fanart.TV Form"
 
     Private Sub tvtpfanarttv_Leave(sender As Object, e As EventArgs) Handles tpTvFanartTv.Leave
+        If ImgBw.IsBusy Then
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         tv_ShowLoad(tv_ShowSelectedCurrently(TvTreeview))
     End Sub
 
@@ -18770,90 +18850,16 @@ End Sub
         End If
     End Sub
 
-    Public ReadOnly Property Cancelled As Boolean
+    Public ReadOnly Property ImgBwCancelled As Boolean
         Get
             Application.DoEvents
             Return ImgBw.CancellationPending
         End Get
     End Property
 
-    Private Sub PicBoxLoadBackground(ByRef msbx As frmMessageBox, ByVal listpicbox As List(Of FanartPicBox), Optional ByVal count As Integer = 0, Optional ByVal Total As Integer = 0)
-        '_cancelled = False
-        BWs.Clear()
-        Dim totalcount As Integer = 0
-        If Total = 0 Then Total = listpicbox.count
-        If count = 0 Then count = listpicbox.count
-        NumActiveThreads = 0
-        For each item In listpicbox
-
-            Dim bw As BackgroundWorker = New BackgroundWorker
-            
-            bw.WorkerSupportsCancellation = True
-
-            AddHandler bw.DoWork            , AddressOf bw_DoWork
-            AddHandler bw.RunWorkerCompleted, AddressOf bw_RunWorkerCompleted
-
-            BWs.Add(bw)
-            NumActiveThreads += 1
-
-            bw.RunWorkerAsync(item)
-            totalcount += 1
-            msbx.TextBox1.Text = totalcount  & " of " & Total
-            msbx.Refresh()
-            If NumActiveThreads > 3 Then
-                Do Until NumActiveThreads < 3
-                    'Application.DoEvents()
-                    'If msbx.Cancelled Then _cancelled = True
-                    If Cancelled Then
-                        Exit For
-                    End If
-                Loop
-            End If
-            'If msbx.Cancelled Then _cancelled = True
-            If Cancelled Then
-                Exit For
-            End If
-        Next
-
-        Dim Cancelling As Boolean = False
-        Dim Busy       As Boolean = True
-
-        While Busy
-            Threading.Thread.Sleep(100)
-            'If Cancelled And Not Cancelling Then 
-            '    Cancelling = True
-            '    For each item As BackgroundWorker in BWs
-            '        Try
-            '            item.CancelAsync
-            '        Catch
-            '        End Try
-            '    Next
-            'End If
-            Busy = False
-            For Each item As BackgroundWorker in BWs
-                Try
-                    Busy = Busy Or item.IsBusy
-                    If Busy Then Exit For
-                Catch
-                End Try
-            Next
-            'If Not Cancelled Then
-            '    Dim donecount As Integer = count - NumActiveThreads 
-            '    messbox.TextBox1.Text = donecount  & " of " & Total
-            'Else
-            If Cancelled Then
-                messbox.TextBox1.Text = "Cancelling all download Threads..."
-            End If
-            msbx.Refresh()
-            'If msbx.Cancelled Then _cancelled = True
-        End While
-        BWs.Clear()
-        '_cancelled = False
-    End Sub
-
     Sub imgbw_DoWork(ByVal snder As Object, ByVal e As DoWorkEventArgs) Handles ImgBw.DoWork
         Dim listpicbox As New List(Of FanartPicBox)
-        listpicbox.AddRange(e.Argument(0))
+        listpicbox.AddRange(e.Argument(0))      '{image list, Start image number, total number of images, picture panel}
         Dim count As Integer = e.Argument(1)
         Dim Total As Integer = e.Argument(2)
         BWs.Clear()
@@ -18873,19 +18879,19 @@ End Sub
             bw.RunWorkerAsync(item)
             totalcount += 1
             ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
-            If NumActiveThreads > 3 Then
-                Do Until NumActiveThreads < 3
-                    If Cancelled Then
+            If NumActiveThreads > 2 Then
+                Do Until NumActiveThreads < 2
+                    If ImgBwCancelled Then
                         Exit Do
                     End If
                 Loop
             End If
-            If Cancelled Then
+            If ImgBwCancelled Then
                 Exit For
             End If
         Next
-        Dim panelrefresh As Panel = DirectCast(e.Argument(3), Panel)
-        panelrefresh.Refresh()
+        'Dim panelrefresh As Panel = DirectCast(e.Argument(3), Panel)
+        'panelrefresh.Refresh()
     End Sub
 
     Sub ImgBw_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles ImgBw.ProgressChanged
@@ -18893,13 +18899,15 @@ End Sub
     End Sub
 
     Sub ImgBw_RunWorkerComplete(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBw.RunWorkerCompleted
+        Imageloading = True
         ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
         ToolStripStatusLabel2.Visible = False
+        Imageloading = False
     End Sub
 
 
     Sub bw_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
-        If Not Cancelled Then
+        If Not ImgBwCancelled Then
             Dim item As FanartPicBox = DirectCast(e.Argument, FanartPicBox)
 
             e.Result = util_ImageLoad2(item.pbox, item.imagepath, "")
@@ -18917,7 +18925,7 @@ End Sub
         Dim PathToUse As String = DefaultPic
         Dim cachename As String = ""
         PicBox.Tag = Nothing
-        If Cancelled Then Exit Function
+        If ImgBwCancelled Then Exit Function
         If Utilities.UrlIsValid(ImagePath) Then
             cachename = Utilities.Download2Cache(ImagePath)
             If cachename <> "" Then PathToUse = cachename
@@ -18928,7 +18936,7 @@ End Sub
             PicBox.Image = Nothing
             Exit Function 
         End If
-        If Cancelled Then Exit Function
+        If ImgBwCancelled Then Exit Function
         Try
             Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                 fs.CopyTo(ms)
@@ -18942,7 +18950,7 @@ End Sub
                 File.Delete(PathToUse)
             Catch
             End Try
-            If Cancelled Then Exit Function
+            If ImgBwCancelled Then Exit Function
             Try
                 Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                     fs.CopyTo(ms)
@@ -18959,4 +18967,7 @@ End Sub
         Return True
     End Function
 
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class

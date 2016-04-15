@@ -205,8 +205,10 @@ Public Class ucFanartTvTv
         Dim xlocation As Integer = xstart
         Dim ylocOffset = (locHeight + pbheight + 36)
         Dim itemcounter As Integer = 0
+        Dim MovFanartPicBox As New List(Of FanartPicBox)
         For each item In usedlist
-            Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
+            Dim thispicbox As New FanartPicBox
+            'Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
             artposterpicboxes() = New PictureBox()
             With artposterpicboxes
                 .Location = New Point(xlocation, locHeight)
@@ -221,7 +223,11 @@ Public Class ucFanartTvTv
                 .Name = "poster" & itemcounter.ToString
                 AddHandler artposterpicboxes.DoubleClick, AddressOf PosterDoubleClick
             End With
-            Form1.util_ImageLoad(artposterpicboxes, item2, "")
+            thispicbox.pbox = artposterpicboxes
+            thispicbox.imagepath = item.urlpreview
+            MovFanartPicBox.Add(thispicbox)
+            Application.DoEvents()
+            'Form1.util_ImageLoad(artposterpicboxes, item2, "")
             
             artcheckboxes() = New RadioButton()
             With artcheckboxes
@@ -245,6 +251,19 @@ Public Class ucFanartTvTv
                 locHeight += ylocOffset 
             End If
         Next
+        Me.Panel1.Refresh()
+        Me.Refresh()
+        If MovFanartPicBox.Count > 0 Then
+            messbox.Close()
+            If Not Form1.ImgBw.IsBusy Then
+                Form1.Imageloading = True
+                Form1.ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                Form1.ToolStripStatusLabel2.Visible = True
+                Form1.ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel1})
+            End If
+        End If
+        Me.Panel1.Refresh()
+        Me.Refresh()
         Application.DoEvents()
         Me.Refresh()
         Button1.Visible = False
@@ -334,6 +353,12 @@ Public Class ucFanartTvTv
 
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
         If nodata Then Exit Sub
+        If Form1.ImgBw.IsBusy Then
+            Form1.ImgBw.CancelAsync()
+            Do Until Not Form1.imgbw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         If Not IsNothing(selectedimageurl) Then
             Dim savepaths As New List(Of String)
             Dim savepath As String = ""
@@ -419,7 +444,7 @@ Public Class ucFanartTvTv
     End Sub
 
     Private Sub panel_resize() Handles MyBase.resize
-        If Not Form1MainFormLoadedStatus Then Exit Sub
+        If Not Form1MainFormLoadedStatus OrElse Form1.Imageloading Then Exit Sub
         PanelSelectionDisplay()
     End Sub
 

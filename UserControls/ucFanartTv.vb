@@ -10,6 +10,7 @@ Public Class ucFanartTv
     Dim WithEvents tvreslabel As Label
     Dim nodata As Boolean = False
     Public Dim Form1MainFormLoadedStatus As Boolean = False
+    'Public Shared Dim Imageloading As Boolean = False
     Dim isroot As Boolean
     Dim artheight As Integer = 37
     Dim artwidth As Integer = 200
@@ -208,8 +209,10 @@ Public Class ucFanartTv
         Dim xlocation As Integer = xstart
         Dim ylocOffset = (locHeight + pbheight + 36)
         Dim itemcounter As Integer = 0
+        Dim MovFanartPicBox As New List(Of FanartPicBox)
         For each item In usedlist
-            Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
+            Dim thispicbox As New FanartPicBox
+            'Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
             artposterpicboxes() = New PictureBox()
             With artposterpicboxes
                 .Location = New Point(xlocation, locHeight)
@@ -224,7 +227,11 @@ Public Class ucFanartTv
                 .Name = "poster" & itemcounter.ToString
                 AddHandler artposterpicboxes.DoubleClick, AddressOf PosterDoubleClick
             End With
-            Form1.util_ImageLoad(artposterpicboxes, item2, "")
+            thispicbox.pbox = artposterpicboxes
+            thispicbox.imagepath = item.urlpreview
+            MovFanartPicBox.Add(thispicbox)
+            Application.DoEvents()
+            'Form1.util_ImageLoad(artposterpicboxes, item2, "")
 
             artcheckboxes() = New RadioButton()
             With artcheckboxes
@@ -248,7 +255,19 @@ Public Class ucFanartTv
                 locHeight += ylocOffset 
             End If
         Next
+        Me.Panel1.Refresh()
+        Me.Refresh()
+        If MovFanartPicBox.Count > 0 Then
+            messbox.Close()
+            If Not Form1.ImgBw.IsBusy Then
+                Form1.Imageloading = True
+                Form1.ToolStripStatusLabel2.Text = "Starting Download of Images..."
+                Form1.ToolStripStatusLabel2.Visible = True
+                Form1.ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel1})
+            End If
+        End If
         Application.DoEvents()
+        Me.Panel1.Refresh()
         Me.Refresh()
         Button1.Visible = False
         EnableFanartScrolling()
@@ -345,6 +364,12 @@ Public Class ucFanartTv
 
     Private Sub Button1_Click( sender As Object,  e As EventArgs) Handles Button1.Click
         If nodata Then Exit Sub
+        If Form1.ImgBw.IsBusy Then
+            Form1.ImgBw.CancelAsync()
+            Do Until Not Form1.imgbw.IsBusy
+                Application.DoEvents()
+            Loop
+        End If
         If Not IsNothing(selectedimageurl) Then
             messbox = New frmMessageBox("Please wait,", "Downloading new image", "and saving")
             System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -383,7 +408,7 @@ Public Class ucFanartTv
     End Sub
 
     Private Sub panel_resize() Handles MyBase.resize
-        If Not Form1MainFormLoadedStatus Then Exit Sub
+        If Not Form1MainFormLoadedStatus OrElse Form1.Imageloading Then Exit Sub
         PanelSelectionDisplay()
     End Sub
 
