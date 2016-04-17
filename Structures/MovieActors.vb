@@ -131,7 +131,7 @@ Public Structure str_MovieActors
             actorid    = m.Groups("actorid").ToString
         Catch
         End Try
-            order       = "0"
+            order       = m.Groups("order").ToString'"0"
         Return actorname<>""
     End Function
 
