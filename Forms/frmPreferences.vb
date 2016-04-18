@@ -94,6 +94,10 @@ Public Class frmPreferences
             prefsload = False
             Changes = False
             TabControl1.SelectedIndex = SelectTab
+
+            'MoviePosterDb is no longer.  unselect if user had selected, and disable option.
+            mpdb_chk.Checked = CheckState.Unchecked
+            mpdb_chk.Enabled = False
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

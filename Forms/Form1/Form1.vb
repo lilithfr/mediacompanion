@@ -3446,6 +3446,27 @@ Public Class Form1
         
     End Sub
 
+    Private Function CleanMovieTitle(ByVal s As String) As String
+        Dim tmplist As New List(Of String)
+        Dim q = From el In MovSepLst Order By el.Length Descending
+        tmplist.AddRange(q.tolist)
+        'tmplist.Sort
+        For each item In tmplist
+            Dim t As String = " " & item
+            If s.Contains(t) Then s = s.Replace(t, "")
+            'If s.Contains(t.TrimEnd) Then s = s.Replace(t.TrimEnd, "")
+        Next
+        tmplist.Clear()
+        Dim r = From el In ThreeDKeyWords Order By el.Length Descending
+        tmplist.AddRange(r.ToList)
+        For each item In tmplist
+            Dim t As String = " " & item & " "
+            If s.Contains(t) Then s = s.Replace(t, "")
+            If s.Contains(t.TrimEnd) Then s = s.Replace(t.TrimEnd, "")
+        Next
+        Return s
+    End Function
+
     Public Sub LaunchPlayList(ByVal plist As List(Of String))
         Dim tempstring = applicationPath & "\Settings\temp.m3u"
         frmSplash2.Text = "Playing Movie..."
@@ -13558,7 +13579,8 @@ End Sub
             Dim newobject2 As New IMPA.getimpaposters
             newobject2.MCProxy = Utilities.MyProxy
             Try
-                Dim posters(,) As String = newobject2.getimpaafulllist(workingMovieDetails.fullmoviebody.title, workingMovieDetails.fullmoviebody.year)
+                Dim title As String = CleanMovieTitle(workingMovieDetails.fullmoviebody.title)
+                Dim posters(,) As String = newobject2.getimpaafulllist(title, workingMovieDetails.fullmoviebody.year)
                 For f = 0 To UBound(posters)
                     If posters(f, 0) <> Nothing Then
                         If posters(f, 1) = Nothing Then posters(f, 1) = posters(f, 0)
@@ -13566,8 +13588,6 @@ End Sub
                         poster.hdUrl = posters(f, 0)
                         poster.ldUrl = posters(f, 1)
                         posterArray.Add(poster)
-                        'poster.ldUrl = Nothing
-                        'poster.hdUrl = Nothing
                     End If
                 Next
             Catch ex As Exception

@@ -15,81 +15,14 @@ Public Class getimpaposters
         
         fanarturl = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
         'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
-        title = title.ToLower
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
-        title = title.Replace("À", "%c0")
-        title = title.Replace("Á", "%c1")
-        title = title.Replace("Â", "%c2")
-        title = title.Replace("Ã", "%c3")
-        title = title.Replace("Ä", "%c4")
-        title = title.Replace("Å", "%c5")
-        title = title.Replace("Æ", "%c6")
-        title = title.Replace("Ç", "%c7")
-        title = title.Replace("È", "%c8")
-        title = title.Replace("É", "%c9")
-        title = title.Replace("Ê", "%ca")
-        title = title.Replace("Ë", "%cb")
-        title = title.Replace("Ì", "%cc")
-        title = title.Replace("Í", "%cd")
-        title = title.Replace("Î", "%ce")
-        title = title.Replace("Ï", "%cf")
-        title = title.Replace("Ð", "%d0")
-        title = title.Replace("Ñ", "%d1")
-        title = title.Replace("Ò", "%d2")
-        title = title.Replace("Ó", "%d3")
-        title = title.Replace("Ô", "%d4")
-        title = title.Replace("Õ", "%d5")
-        title = title.Replace("Ö", "%d6")
-        title = title.Replace("Ø", "%d8")
-        title = title.Replace("Ù", "%d9")
-        title = title.Replace("Ú", "%da")
-        title = title.Replace("Û", "%db")
-        title = title.Replace("Ü", "%dc")
-        title = title.Replace("Ý", "%dd")
-        title = title.Replace("Þ", "%de")
-        title = title.Replace("ß", "%df")
-        title = title.Replace("à", "%e0")
-        title = title.Replace("á", "%e1")
-        title = title.Replace("â", "%e2")
-        title = title.Replace("ã", "%e3")
-        title = title.Replace("ä", "%e4")
-        title = title.Replace("å", "%e5")
-        title = title.Replace("æ", "%e6")
-        title = title.Replace("ç", "%e7")
-        title = title.Replace("è", "%e8")
-        title = title.Replace("é", "%e9")
-        title = title.Replace("ê", "%ea")
-        title = title.Replace("ë", "%eb")
-        title = title.Replace("ì", "%ec")
-        title = title.Replace("í", "%ed")
-        title = title.Replace("î", "%ee")
-        title = title.Replace("ï", "%ef")
-        title = title.Replace("ð", "%f0")
-        title = title.Replace("ñ", "%f1")
-        title = title.Replace("ò", "%f2")
-        title = title.Replace("ó", "%f3")
-        title = title.Replace("ô", "%f4")
-        title = title.Replace("õ", "%f5")
-        title = title.Replace("ö", "%f6")
-        title = title.Replace("÷", "%f7")
-        title = title.Replace("ø", "%f8")
-        title = title.Replace("ù", "%f9")
-        title = title.Replace("ú", "%fa")
-        title = title.Replace("û", "%fb")
-        title = title.Replace("ü", "%fc")
-        title = title.Replace("ý", "%fd")
-        title = title.Replace("þ", "%fe")
-        title = title.Replace("ÿ", "%ff")
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
+
+        title = cleantitle(title)
+
         fanarturl = fanarturl & title & "+" & movieyear
         fanarturl = fanarturl & "&sitesearch=www.impawards.com"
         ReDim apple2(10000)
         Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
         wrGETURL2.Proxy = MCProxy 
-        'Dim myProxy2 As New WebProxy("myproxy", 80)
-        'myProxy2.BypassProxyOnLocal = True
         Dim objStream2 As Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
         Dim objReader2 As New StreamReader(objStream2)
@@ -127,8 +60,6 @@ Public Class getimpaposters
             Dim wrGETURL4 As WebRequest = WebRequest.Create(fanarturl)
             wrGETURL4.Proxy = MCProxy
             
-            'Dim myProxy4 As New WebProxy("myproxy", 80)
-            'myProxy4.BypassProxyOnLocal = True
             Dim objStream4 As Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
             Dim objReader4 As New StreamReader(objStream4)
@@ -165,8 +96,6 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL As WebRequest = WebRequest.Create(fanarturl)
             wrGETURL.Proxy = MCProxy 
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy2.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -250,74 +179,9 @@ Public Class getimpaposters
         Dim posterurls As New List(Of String)
         url = "http://www.google.com/custom?hl=en&client=pub-6811780361519631&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
         'fanarturl = "http://www.impawards.com/googlesearch.html?cx=partner-pub-6811780361519631%3A48v46vdqqnk&cof=FORID%3A9&ie=ISO-8859-1&q="
-        title = title.ToLower
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
-        title = title.Replace("À", "%c0")
-        title = title.Replace("Á", "%c1")
-        title = title.Replace("Â", "%c2")
-        title = title.Replace("Ã", "%c3")
-        title = title.Replace("Ä", "%c4")
-        title = title.Replace("Å", "%c5")
-        title = title.Replace("Æ", "%c6")
-        title = title.Replace("Ç", "%c7")
-        title = title.Replace("È", "%c8")
-        title = title.Replace("É", "%c9")
-        title = title.Replace("Ê", "%ca")
-        title = title.Replace("Ë", "%cb")
-        title = title.Replace("Ì", "%cc")
-        title = title.Replace("Í", "%cd")
-        title = title.Replace("Î", "%ce")
-        title = title.Replace("Ï", "%cf")
-        title = title.Replace("Ð", "%d0")
-        title = title.Replace("Ñ", "%d1")
-        title = title.Replace("Ò", "%d2")
-        title = title.Replace("Ó", "%d3")
-        title = title.Replace("Ô", "%d4")
-        title = title.Replace("Õ", "%d5")
-        title = title.Replace("Ö", "%d6")
-        title = title.Replace("Ø", "%d8")
-        title = title.Replace("Ù", "%d9")
-        title = title.Replace("Ú", "%da")
-        title = title.Replace("Û", "%db")
-        title = title.Replace("Ü", "%dc")
-        title = title.Replace("Ý", "%dd")
-        title = title.Replace("Þ", "%de")
-        title = title.Replace("ß", "%df")
-        title = title.Replace("à", "%e0")
-        title = title.Replace("á", "%e1")
-        title = title.Replace("â", "%e2")
-        title = title.Replace("ã", "%e3")
-        title = title.Replace("ä", "%e4")
-        title = title.Replace("å", "%e5")
-        title = title.Replace("æ", "%e6")
-        title = title.Replace("ç", "%e7")
-        title = title.Replace("è", "%e8")
-        title = title.Replace("é", "%e9")
-        title = title.Replace("ê", "%ea")
-        title = title.Replace("ë", "%eb")
-        title = title.Replace("ì", "%ec")
-        title = title.Replace("í", "%ed")
-        title = title.Replace("î", "%ee")
-        title = title.Replace("ï", "%ef")
-        title = title.Replace("ð", "%f0")
-        title = title.Replace("ñ", "%f1")
-        title = title.Replace("ò", "%f2")
-        title = title.Replace("ó", "%f3")
-        title = title.Replace("ô", "%f4")
-        title = title.Replace("õ", "%f5")
-        title = title.Replace("ö", "%f6")
-        title = title.Replace("÷", "%f7")
-        title = title.Replace("ø", "%f8")
-        title = title.Replace("ù", "%f9")
-        title = title.Replace("ú", "%fa")
-        title = title.Replace("û", "%fb")
-        title = title.Replace("ü", "%fc")
-        title = title.Replace("ý", "%fd")
-        title = title.Replace("þ", "%fe")
-        title = title.Replace("ÿ", "%ff")
-        title = title.Replace(" ", "+")
-        title = title.Replace("&", "%26")
+
+        title = cleantitle(title)
+
         If movieyear <> "" Then
             url = url & title & "+" & movieyear
         Else
@@ -327,8 +191,6 @@ Public Class getimpaposters
         ReDim apple2(10000)
         Dim wrGETURL2 As WebRequest = WebRequest.Create(url)
         wrGETURL2.Proxy = MCProxy 
-        'Dim myProxy2 As New WebProxy("myproxy", 80)
-        'myProxy2.BypassProxyOnLocal = True
         Dim objStream2 As Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
         Dim objReader2 As New StreamReader(objStream2)
@@ -365,8 +227,6 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL4 As WebRequest = WebRequest.Create(url)
             wrGETURL4.Proxy = MCProxy 
-            'Dim myProxy4 As New WebProxy("myproxy", 80)
-            'myProxy4.BypassProxyOnLocal = True
             Dim objStream4 As Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
             Dim objReader4 As New StreamReader(objStream4)
@@ -403,8 +263,6 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy2.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -474,8 +332,6 @@ Public Class getimpaposters
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
@@ -511,4 +367,76 @@ Public Class getimpaposters
         End Try
     End Function
     
+    Private Function cleantitle(ByVal title) As String
+        title = title.ToLower
+        title = title.Replace(" ", "+")
+        title = title.Replace("&", "%26")
+        title = title.Replace("À", "%c0")
+        title = title.Replace("Á", "%c1")
+        title = title.Replace("Â", "%c2")
+        title = title.Replace("Ã", "%c3")
+        title = title.Replace("Ä", "%c4")
+        title = title.Replace("Å", "%c5")
+        title = title.Replace("Æ", "%c6")
+        title = title.Replace("Ç", "%c7")
+        title = title.Replace("È", "%c8")
+        title = title.Replace("É", "%c9")
+        title = title.Replace("Ê", "%ca")
+        title = title.Replace("Ë", "%cb")
+        title = title.Replace("Ì", "%cc")
+        title = title.Replace("Í", "%cd")
+        title = title.Replace("Î", "%ce")
+        title = title.Replace("Ï", "%cf")
+        title = title.Replace("Ð", "%d0")
+        title = title.Replace("Ñ", "%d1")
+        title = title.Replace("Ò", "%d2")
+        title = title.Replace("Ó", "%d3")
+        title = title.Replace("Ô", "%d4")
+        title = title.Replace("Õ", "%d5")
+        title = title.Replace("Ö", "%d6")
+        title = title.Replace("Ø", "%d8")
+        title = title.Replace("Ù", "%d9")
+        title = title.Replace("Ú", "%da")
+        title = title.Replace("Û", "%db")
+        title = title.Replace("Ü", "%dc")
+        title = title.Replace("Ý", "%dd")
+        title = title.Replace("Þ", "%de")
+        title = title.Replace("ß", "%df")
+        title = title.Replace("à", "%e0")
+        title = title.Replace("á", "%e1")
+        title = title.Replace("â", "%e2")
+        title = title.Replace("ã", "%e3")
+        title = title.Replace("ä", "%e4")
+        title = title.Replace("å", "%e5")
+        title = title.Replace("æ", "%e6")
+        title = title.Replace("ç", "%e7")
+        title = title.Replace("è", "%e8")
+        title = title.Replace("é", "%e9")
+        title = title.Replace("ê", "%ea")
+        title = title.Replace("ë", "%eb")
+        title = title.Replace("ì", "%ec")
+        title = title.Replace("í", "%ed")
+        title = title.Replace("î", "%ee")
+        title = title.Replace("ï", "%ef")
+        title = title.Replace("ð", "%f0")
+        title = title.Replace("ñ", "%f1")
+        title = title.Replace("ò", "%f2")
+        title = title.Replace("ó", "%f3")
+        title = title.Replace("ô", "%f4")
+        title = title.Replace("õ", "%f5")
+        title = title.Replace("ö", "%f6")
+        title = title.Replace("÷", "%f7")
+        title = title.Replace("ø", "%f8")
+        title = title.Replace("ù", "%f9")
+        title = title.Replace("ú", "%fa")
+        title = title.Replace("û", "%fb")
+        title = title.Replace("ü", "%fc")
+        title = title.Replace("ý", "%fd")
+        title = title.Replace("þ", "%fe")
+        title = title.Replace("ÿ", "%ff")
+        title = title.Replace(" ", "+")
+        title = title.Replace("&", "%26")
+        Return title
+    End Function
+
 End Class

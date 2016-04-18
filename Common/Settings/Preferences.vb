@@ -664,7 +664,7 @@ Public Class Pref
         maxmoviegenre = 99
         moviethumbpriority.Add("themoviedb.org")
         moviethumbpriority.Add("IMDB")
-        moviethumbpriority.Add("Movie Poster DB")
+        'moviethumbpriority.Add("Movie Poster DB")
         moviethumbpriority.Add("Internet Movie Poster Awards")
         MovSepLst.Add("3DSBS")
         MovSepLst.Add("3DTAB")
@@ -673,6 +673,7 @@ Public Class Pref
         MovSepLst.Add("Extended-Edition")
         MovSepLst.Add("Theatrical-Version")
         MovSepLst.Add("Unrated-Version")
+        ThreeDKeyWords.Clear()
         ThreeDKeyWords.Add("HSBS")
         ThreeDKeyWords.Add("SBS")
         ThreeDKeyWords.Add("TAB")
@@ -864,7 +865,7 @@ Public Class Pref
         moviethumbpriority.Clear()
         moviethumbpriority.Add("themoviedb.org")
         moviethumbpriority.Add("IMDB")
-        moviethumbpriority.Add("Movie Poster DB")
+        'moviethumbpriority.Add("Movie Poster DB")
         moviethumbpriority.Add("Internet Movie Poster Awards")
     End Sub
 
@@ -1433,6 +1434,7 @@ Public Class Pref
                     Case "moviethumbpriority"
                         Dim tmp() As String = thisresult.InnerXml.Split("|")
                         For Each t In tmp
+                            If t = "Movie Poster DB" Then Continue For  'remove movieposterdb from users config.xml.
                             moviethumbpriority.Add(t)
                         Next
                     Case "movseplst"

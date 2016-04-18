@@ -750,33 +750,35 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         LastRootPath = RootPath
 
         Dim TempReturn As New List(Of String)
-        If String.IsNullOrEmpty(RootPath) Then Return Nothing
-        Dim ChildList
         Try
-            ChildList = Directory.GetDirectories(RootPath)
-        Catch ex As UnauthorizedAccessException
-            Return TempReturn
-        End Try
-        If Level > 0 Then
-            TempReturn.Add(RootPath)
-        End If
+            If String.IsNullOrEmpty(RootPath) Then Return Nothing
+            Dim ChildList
+            Try
+                ChildList = Directory.GetDirectories(RootPath)
+            Catch ex As UnauthorizedAccessException
+                Return TempReturn
+            End Try
+            If Level > 0 Then
+                TempReturn.Add(RootPath)
+            End If
 
-        For Each Item In ChildList
-            If (Item.ToString.Contains(".actors")) Then Continue For
-            If (Item.ToString.ToLower.Contains("thumbnails")) Then Continue For
-            If (Item.ToString.ToLower.Contains("extrafanart")) Then Continue For
-            If (Item.ToString.ToLower.Contains("extrathumbs")) Then Continue For
-            If (Item.ToString.ToLower.Contains("bdmv")) Then 
-                If Not File.Exists(Item.ToString.Replace("BDMV", "BDMV\index.bdmv")) Then Continue For
-            End If
-            'Continue For
-            If (Item.ToString.ToLower.Contains("certificate")) Then Continue For
-            If Level <= MaxLevels Then
-                If ValidMovieDir(Item) Then
-                    TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))
+            For Each Item In ChildList
+                If (Item.ToString.Contains(".actors")) Then Continue For
+                If (Item.ToString.ToLower.Contains("thumbnails")) Then Continue For
+                If (Item.ToString.ToLower.Contains("extrafanart")) Then Continue For
+                If (Item.ToString.ToLower.Contains("extrathumbs")) Then Continue For
+                If (Item.ToString.ToLower.Contains("bdmv")) Then 
+                    If Not File.Exists(Item.ToString.Replace("BDMV", "BDMV\index.bdmv")) Then Continue For
                 End If
-            End If
-        Next
+                If (Item.ToString.ToLower.Contains("certificate")) Then Continue For
+                If Level <= MaxLevels Then
+                    If ValidMovieDir(Item) Then
+                        TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))
+                    End If
+                End If
+            Next
+        Catch
+        End Try
 
         Return TempReturn
     End Function
