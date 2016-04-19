@@ -800,9 +800,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\new2.png" />
-    <None Include="Assets\mcEventLog.exe">
+    <Content Include="Assets\mcEventLog.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <Content Include="Assets\scrapers\metadata.themoviedb.org\Notes for MC.txt" />
     <Content Include="Assets\scrapers\metadata.tvdb.com\Notes for MC.txt" />
     <Content Include="Classes\genre.txt">

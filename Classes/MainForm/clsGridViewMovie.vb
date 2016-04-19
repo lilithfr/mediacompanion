@@ -225,7 +225,7 @@ Public Class clsGridViewMovie
 
                 Case "Duplicates"                  : Dim sort = b.Where(Function(y) y.id<>"0").GroupBy(Function(f) f.id) : b = sort.Where(Function(x) x.Count>1).SelectMany(Function(x) x).ToList
 
-                Case "Incomplete movie set info"   : b = From f In b Where f.IncompleteMovieSet
+                'Case "Incomplete movie set info"   : b = From f In b Where f.IncompleteMovieSet
                 Case "Missing Poster"              : b = From f In b Where f.MissingPoster
                 Case "Missing Fanart"              : b = From f In b Where f.MissingFanart
                 Case "Missing Trailer"             : b = From f In b Where f.MissingTrailer

@@ -332,7 +332,7 @@ Public Class Movies
             lst.Add( ScrapeError              )
             lst.Add( Duplicates               )
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
-            lst.Add( IncompleteMovieSetInfo   )
+            'lst.Add( IncompleteMovieSetInfo   )
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )

@@ -16583,6 +16583,7 @@ End Sub
         End If
         Dim TvdbId As Integer = Show.TvdbId.Value
         url = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
+        'url = "whatsmyuseragent.com"
         Try
             WebBrowser4.Stop()
             WebBrowser4.ScriptErrorsSuppressed = True
