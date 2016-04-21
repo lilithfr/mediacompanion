@@ -791,7 +791,7 @@ Public Class Pref
         createfanartjpg = False
         basicsavemode = False               'movie.nfo, movie.tbn, fanart.jpg
         namemode = "1"
-        maximumthumbs = 10
+        maximumthumbs = 6
         preferredscreen = 0
         gettrailer = False
         DownloadTrailerDuringScrape = False

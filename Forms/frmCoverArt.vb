@@ -9,7 +9,7 @@ Public Class frmCoverArt
     Dim WithEvents reslabel As Label
     Dim resolutionlbl As Label
     Dim panel2 As New Panel
-    Dim posterurls(,) As String
+    'Dim posterurls(,) As String
     Dim posterpath As String
     Dim WithEvents mainposter As New PictureBox
     Dim WithEvents bigpicbox As PictureBox
@@ -18,6 +18,8 @@ Public Class frmCoverArt
     Dim itemnumber As Integer
     Dim rememberint As Integer
     Dim maxthumbs As Integer = Pref.maximumthumbs
+    'Dim tvposterpage As Integer = 1
+    Dim posterArray As New List(Of McImage)
     Dim pagecount As Integer = 0
     Dim currentpage As Integer = 1
     Dim movieyear As String
@@ -42,6 +44,7 @@ Public Class frmCoverArt
             If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then movieyear = Form1.workingMovieDetails.fullmoviebody.year
 
             TextBox1.Text = Pref.maximumthumbs.ToString
+            btnSourceMPDB.Enabled = False
 
             Dim exists As Boolean = System.IO.File.Exists(posterpath)
             If exists = True Then
@@ -187,12 +190,13 @@ Public Class frmCoverArt
                 .Height = bigpanel.Height
                 .SizeMode = PictureBoxSizeMode.Zoom
                 '.Image = sender.image
-                .ImageLocation = posterurls(tempint + 1, 0)
+                '.ImageLocation = posterurls(tempint + 1, 0)
                 .Visible = True
                 .BorderStyle = BorderStyle.Fixed3D
                 AddHandler bigpicbox.DoubleClick, AddressOf closeimage
                 .Dock = DockStyle.Fill
             End With
+            Form1.util_ImageLoad(bigpicbox, posterArray.Item(tempint).hdUrl, Utilities.DefaultPosterPath)
 
             Dim sizex As Integer = bigpicbox.Width
             Dim sizey As Integer = bigpicbox.Height
@@ -250,8 +254,9 @@ Public Class frmCoverArt
             tmdb.Imdb = If(imdbid.Contains("tt"), imdbid, "")
             tmdb.TmdbId = tmdbid
             For Each item In tmdb.McPosters
-                posterurls(count, 0) = item.hdUrl
-                posterurls(count, 1) = item.ldUrl
+                posterArray.Add(item)
+                'posterurls(count, 0) = item.hdUrl
+                'posterurls(count, 1) = item.ldUrl
                 count += 1
             Next
             Call displayselection()
@@ -282,14 +287,19 @@ Public Class frmCoverArt
                 'Thread.Sleep(1)
             End Try
             Dim thumbstring As New XmlDocument
+            Dim thisresult As XMLNode
             Try
                 thumbstring.LoadXml(testthumbs)
                 count = 0
                 For Each thisresult In thumbstring("totalthumbs")
                     Select Case thisresult.Name
                         Case "thumb"
-                            posterurls(count, 0) = thisresult.InnerText
-                            posterurls(count, 1) = thisresult.InnerText
+                            Dim MCImg As New McImage
+                            MCImg.hdUrl = thisresult.InnerText
+                            MCImg.ldUrl = thisresult.InnerText
+                            posterArray.Add(MCImg)
+                            'posterurls(count, 0) = thisresult.InnerText
+                            'posterurls(count, 1) = thisresult.InnerText
                             count += 1
                     End Select
                 Next
@@ -307,8 +317,16 @@ Public Class frmCoverArt
             Call initialise()
             Dim newobject2 As New imdb_thumbs.Class1
             newobject2.MCProxy = Utilities.MyProxy
+            Dim posterurls(,) As String
             posterurls = newobject2.getimdbposters(imdbid)
             count = UBound(posterurls)
+            For I = 0 To count
+                Dim MCImg As New McImage
+                MCImg.hdUrl = posterurls(I,0)
+                MCImg.ldUrl = posterurls(I,1)
+                posterArray.Add(MCImg)
+            Next
+            
             Call displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -326,8 +344,16 @@ Public Class frmCoverArt
             Dim newobject2 As New IMPA.getimpaposters
             newobject2.MCProxy = Utilities.MyProxy
             Try
-                posterurls = newobject2.getimpaafulllist(movietitle, movieyear)
+                Dim title As String = Form1.CleanMovieTitle(movietitle)
+                Dim posterurls(,) As String
+                posterurls = newobject2.getimpaafulllist(title, movieyear)
                 count = UBound(posterurls)
+                For I = 0 To count
+                    Dim MCImg As New McImage
+                    MCImg.hdUrl = posterurls(I,0)
+                    MCImg.ldUrl = posterurls(I,1)
+                    posterArray.Add(MCImg)
+                Next
             Catch ex As Exception
             End Try
             messbox.Close()
@@ -375,7 +401,7 @@ Public Class frmCoverArt
                 Application.DoEvents()
                 Dim tempstring2 As String = resolutionlbl.Text
             Else
-                bigpicbox.ImageLocation = posterurls(rememberint + 1, 1)
+                bigpicbox.ImageLocation = posterArray.Item(rememberint + 1).ldurl
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -421,18 +447,20 @@ Public Class frmCoverArt
     Private Sub btnScrollNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScrollNext.Click
         Try
             btnSaveSmall.Visible = False
-            Me.Controls.Remove(panel2)
-            panel2 = Nothing
-            picboxes = Nothing
-            checkboxes = Nothing
-            panel2 = New Panel
-            With panel2
-                .Width = 782
-                .Height = 232
-                .Location = New Point(2, 2)
-                .AutoScroll = True
-            End With
-            Me.Controls.Add(panel2)
+            panelclear()
+            'Me.Controls.Remove(panel2)
+            'panel2 = Nothing
+            'picboxes = Nothing
+            'checkboxes = Nothing
+
+            'panel2 = New Panel
+            'With panel2
+            '    .Width = 782
+            '    .Height = 232
+            '    .Location = New Point(2, 2)
+            '    .AutoScroll = True
+            'End With
+            'Me.Controls.Add(panel2)
 
             currentpage += 1
             btnScrollPrev.Enabled = True
@@ -445,52 +473,54 @@ Public Class frmCoverArt
             'End If
 
 
-            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-            Dim tempint2 As Integer = currentpage * maxthumbs
+            'Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            'Dim tempint2 As Integer = currentpage * maxthumbs
 
-            If tempint2 > count Then tempint2 = count
+            'If tempint2 > count Then tempint2 = count
 
-            Dim names As New List(Of String)()
+            'Dim names As New List(Of String)()
 
-            For f = tempint To tempint2
-                names.Add(posterurls(f, 1))
-            Next
-            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+            'For f = tempint To tempint2
+            '    names.Add(posterArray.Item(f).ldurl)
+            'Next
+            'Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
 
-            Dim location As Integer = 0
-            Dim itemcounter As Integer = 0
-            For Each item As String In names
-                picboxes() = New PictureBox()
-                With picboxes
-                    .Location = New Point(location, 0)
-                    .Width = 140
-                    .Height = 180
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "picture" & itemcounter.ToString
-                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                    AddHandler picboxes.LoadCompleted, AddressOf imageres
-                End With
+            'Dim location As Integer = 0
+            'Dim itemcounter As Integer = 0
+            'For Each item As String In names
+            '    picboxes() = New PictureBox()
+            '    With picboxes
+            '        .Location = New Point(location, 0)
+            '        .Width = 140
+            '        .Height = 180
+            '        .SizeMode = PictureBoxSizeMode.Zoom
+            '        '.ImageLocation = item
+            '        .Visible = True
+            '        .BorderStyle = BorderStyle.Fixed3D
+            '        .Name = "picture" & itemcounter.ToString
+            '        AddHandler picboxes.DoubleClick, AddressOf zoomimage
+            '        AddHandler picboxes.LoadCompleted, AddressOf imageres
+            '    End With
+            '    Form1.util_ImageLoad(picboxes, item, Utilities.DefaultPosterPath)
 
-                checkboxes() = New RadioButton()
-                With checkboxes
-                    .Location = New Point(location + 60, 195)
-                    .Name = "checkbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-                End With
+            '    checkboxes() = New RadioButton()
+            '    With checkboxes
+            '        .Location = New Point(location + 60, 195)
+            '        .Name = "checkbox" & itemcounter.ToString
+            '        .SendToBack()
+            '        .Text = " "
+            '        AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+            '    End With
 
-                itemcounter += 1
-                location += 160
+            '    itemcounter += 1
+            '    location += 160
 
-                Me.panel2.Controls.Add(picboxes())
-                Me.panel2.Controls.Add(checkboxes())
-                Me.Refresh()
-                Application.DoEvents()
-            Next
+            '    Me.panel2.Controls.Add(picboxes())
+            '    Me.panel2.Controls.Add(checkboxes())
+            '    Me.Refresh()
+            '    Application.DoEvents()
+            'Next
+            displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -500,19 +530,20 @@ Public Class frmCoverArt
     Private Sub btnScrollPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScrollPrev.Click
         Try
             btnSaveSmall.Visible = False
-            Me.Controls.Remove(panel2)
-            panel2 = Nothing
-            picboxes = Nothing
-            checkboxes = Nothing
+            panelclear()
+            'Me.Controls.Remove(panel2)
+            'panel2 = Nothing
+            'picboxes = Nothing
+            'checkboxes = Nothing
 
-            panel2 = New Panel
-            With panel2
-                .Width = 782
-                .Height = 232
-                .Location = New Point(2, 2)
-                .AutoScroll = True
-            End With
-            Me.Controls.Add(panel2)
+            'panel2 = New Panel
+            'With panel2
+            '    .Width = 782
+            '    .Height = 232
+            '    .Location = New Point(2, 2)
+            '    .AutoScroll = True
+            'End With
+            'Me.Controls.Add(panel2)
 
             currentpage -= 1
             btnScrollPrev.Enabled = True
@@ -526,53 +557,55 @@ Public Class frmCoverArt
             Else
                 btnScrollNext.Enabled = True
             End If
-            Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
-            Dim tempint2 As Integer = currentpage * maxthumbs
-            If tempint2 > count Then
-                tempint2 = count
-            End If
+            'Dim tempint As Integer = (currentpage * (maxthumbs) + 1) - maxthumbs
+            'Dim tempint2 As Integer = currentpage * maxthumbs
+            'If tempint2 > count Then
+            '    tempint2 = count
+            'End If
 
-            Dim names As New List(Of String)()
+            'Dim names As New List(Of String)()
 
-            For f = tempint To tempint2
-                names.Add(posterurls(f, 1))
-            Next
-            Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
+            'For f = tempint To tempint2
+            '    names.Add(posterArray.item(f).ldurl)
+            'Next
+            'Label7.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & count.ToString & " Images"
 
-            Dim location As Integer = 0
-            Dim itemcounter As Integer = 0
-            For Each item As String In names
-                picboxes() = New PictureBox()
-                With picboxes
-                    .Location = New Point(location, 0)
-                    .Width = 140
-                    .Height = 180
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "picture" & itemcounter.ToString
-                    AddHandler picboxes.DoubleClick, AddressOf zoomimage
-                    AddHandler picboxes.LoadCompleted, AddressOf imageres
-                End With
+            'Dim location As Integer = 0
+            'Dim itemcounter As Integer = 0
+            'For Each item As String In names
+            '    picboxes() = New PictureBox()
+            '    With picboxes
+            '        .Location = New Point(location, 0)
+            '        .Width = 140
+            '        .Height = 180
+            '        .SizeMode = PictureBoxSizeMode.Zoom
+            '        '.ImageLocation = item
+            '        .Visible = True
+            '        .BorderStyle = BorderStyle.Fixed3D
+            '        .Name = "picture" & itemcounter.ToString
+            '        AddHandler picboxes.DoubleClick, AddressOf zoomimage
+            '        AddHandler picboxes.LoadCompleted, AddressOf imageres
+            '    End With
+            '    Form1.util_ImageLoad(picboxes, item, Utilities.DefaultPosterPath)
 
-                checkboxes() = New RadioButton()
-                With checkboxes
-                    .Location = New Point(location + 60, 195)
-                    .Name = "checkbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
-                End With
+            '    checkboxes() = New RadioButton()
+            '    With checkboxes
+            '        .Location = New Point(location + 60, 195)
+            '        .Name = "checkbox" & itemcounter.ToString
+            '        .SendToBack()
+            '        .Text = " "
+            '        AddHandler checkboxes.CheckedChanged, AddressOf radiochanged
+            '    End With
 
-                itemcounter += 1
-                location += 160
+            '    itemcounter += 1
+            '    location += 160
 
-                Me.panel2.Controls.Add(picboxes())
-                Me.panel2.Controls.Add(checkboxes())
-                Me.Refresh()
-                Application.DoEvents()
-            Next
+            '    Me.panel2.Controls.Add(picboxes())
+            '    Me.panel2.Controls.Add(checkboxes())
+            '    Me.Refresh()
+            '    Application.DoEvents()
+            'Next
+            displayselection()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -593,26 +626,26 @@ Public Class frmCoverArt
             End If
 
             If count > maxthumbs Then
-                For f = 0 To maxthumbs - 1
-                    names.Add(posterurls(f, 1))
+                For f = ((currentpage-1)*maxthumbs) To (currentpage*maxthumbs) - 1
+                    names.Add(posterArray.Item(f).ldurl)
                 Next
             Else
                 For f = 0 To count - 1
-                    names.Add(posterurls(f, 1))
+                    names.Add(posterArray.Item(f).ldurl)
                 Next
             End If
 
             Label7.Visible = True
             If pagecount > 1 Then
-                btnScrollPrev.Visible = True
+                btnScrollPrev.Visible = currentpage > 1
                 btnScrollNext.Visible = True
                 If count >= maxthumbs Then
-                    Label7.Text = "Displaying 1 to " & maxthumbs.ToString & " of " & count.ToString & " Images"
+                    Label7.Text = "Displaying " & ((currentpage*maxthumbs)-(maxthumbs-1)) & " to " & (currentpage*maxthumbs).ToString & " of " & count.ToString & " Images"
                 Else
                     Label7.Text = "Displaying 1 to " & count.ToString & " of " & count.ToString & " Images"
                 End If
-                currentpage = 1
-                btnScrollPrev.Enabled = False
+                'currentpage = 1
+                btnScrollPrev.Enabled = currentpage > 1
                 btnScrollNext.Enabled = True
             Else
                 btnScrollPrev.Visible = False
@@ -633,13 +666,14 @@ Public Class frmCoverArt
                     .Width = 123
                     .Height = 180
                     .SizeMode = PictureBoxSizeMode.Zoom
-                    .ImageLocation = item
+                    '.ImageLocation = item
                     .Visible = True
                     .BorderStyle = BorderStyle.Fixed3D
                     .Name = "picture" & itemcounter.ToString
                     AddHandler picboxes.DoubleClick, AddressOf zoomimage
                     AddHandler picboxes.LoadCompleted, AddressOf imageres
                 End With
+                Form1.util_ImageLoad(picboxes, item, Utilities.DefaultPosterPath)
 
                 checkboxes() = New RadioButton()
                 With checkboxes
@@ -672,6 +706,12 @@ Public Class frmCoverArt
         End If
     End Sub
 
+    Private Sub panelclear()
+        For i = Panel2.Controls.Count - 1 To 0 Step -1
+            Panel2.Controls.RemoveAt(i)
+        Next
+    End Sub
+
     Private Sub initialise()
         If TextBox1.Text <> "" Then
             If IsNumeric(TextBox1.Text) And Convert.ToDecimal(TextBox1.Text) <> 0 Then
@@ -679,15 +719,15 @@ Public Class frmCoverArt
                 Pref.maximumthumbs = maxthumbs
             Else
                 MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
-                maxthumbs = 10
-                TextBox1.Text = "10"
-                Pref.maximumthumbs = 10
+                maxthumbs = 6
+                TextBox1.Text = "6"
+                Pref.maximumthumbs = 6
             End If
         Else
             MsgBox("Invalid Maximum Thumb Value" & vbCrLf & "Setting to default Value of 10")
-            maxthumbs = 10
-            TextBox1.Text = "10"
-            Pref.maximumthumbs = 10
+            maxthumbs = 6
+            TextBox1.Text = "6"
+            Pref.maximumthumbs = 6
         End If
 
         btnSaveSmall.Visible = False
@@ -697,6 +737,8 @@ Public Class frmCoverArt
         picboxes = Nothing
         checkboxes = Nothing
         reslabel = Nothing
+        posterArray.Clear()
+        currentpage = 1
 
         panel2 = New Panel
         With panel2
@@ -710,7 +752,7 @@ Public Class frmCoverArt
         panel2.Refresh()
         Application.DoEvents()
 
-        ReDim posterurls(1000, 1)
+        'ReDim posterurls(1000, 1)
         count = 0
         pagecount = 0
     End Sub
@@ -730,7 +772,7 @@ Public Class frmCoverArt
                         tempstring = tempstring.Replace("checkbox", "")
                         tempint = Convert.ToDecimal(tempstring)
                         realnumber = tempint + ((currentpage - 1) * maxthumbs)
-                        tempstring2 = posterurls(realnumber, 1)
+                        tempstring2 = posterarray.Item(realnumber).ldurl
                         allok = True
                         Exit For
                     End If
@@ -793,7 +835,7 @@ Public Class frmCoverArt
                         tempstring = tempstring.Replace("checkbox", "")
                         tempint = Convert.ToDecimal(tempstring)
                         realnumber = tempint + ((currentpage - 1) * maxthumbs)
-                        tempstring2 = posterurls(realnumber, 1)
+                        tempstring2 = posterArray.Item(realnumber).hdurl
                         allok = True
                         Exit For
                     End If

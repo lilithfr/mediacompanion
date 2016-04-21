@@ -3446,7 +3446,7 @@ Public Class Form1
         
     End Sub
 
-    Private Function CleanMovieTitle(ByVal s As String) As String
+    Public Function CleanMovieTitle(ByVal s As String) As String
         Dim tmplist As New List(Of String)
         Dim q = From el In MovSepLst Order By el.Length Descending
         tmplist.AddRange(q.tolist)
