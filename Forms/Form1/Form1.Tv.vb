@@ -989,7 +989,6 @@ Partial Public Class Form1
                 File.Delete(PathToUse)
             Catch
             End Try
-
             Try
                 Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                     fs.CopyTo(ms)
@@ -1002,7 +1001,6 @@ Partial Public Class Form1
             End Try
             Return True
         End Try
-
         Return True
     End Function
 

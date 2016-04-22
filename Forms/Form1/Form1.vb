@@ -4936,14 +4936,18 @@ Public Class Form1
         PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
     End Sub
 
+    Private Sub mov_PosterPanelClear()
+        For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
+            panelAvailableMoviePosters.Controls.RemoveAt(i)
+        Next
+    End Sub
+
     Private Sub mov_PosterInitialise()
         pageCount = 0
         currentPage = 1
         cbMoviePosterSaveLoRes.Enabled = False
         btnPosterTabs_SaveImage.Enabled = False
-        For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-            panelAvailableMoviePosters.Controls.RemoveAt(i)
-        Next
+        mov_PosterPanelClear()
         If Pref.maximumthumbs < 1 Then
         Else
             Pref.maximumthumbs = 10
@@ -4963,23 +4967,19 @@ Public Class Form1
     Private Sub mov_PosterSelectionDisplay()
         Dim names As New List(Of McImage)
         Me.panelAvailableMoviePosters.Visible = False
-        messbox = New frmMessageBox("", "Retrieving Posters...", "Please wait...")
-        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        messbox.Show()
-        Me.Refresh()
-        messbox.Refresh()
+        If pageCount = 0 Then
+            messbox = New frmMessageBox("", "Retrieving Posters...", "Please wait...")
+            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+            messbox.Show()
+            Me.Refresh()
+            messbox.Refresh()
+        End If
         Dim itemcounter As Integer = 0
         If posterArray.Count > 0 Then
             Dim MovPosterPicBox As New List(Of FanartPicBox)
-            If posterArray.Count > Pref.maximumthumbs Then
-                Dim tempmaxthumbs As Integer = posterArray.Count
-                Do Until tempmaxthumbs < 1
-                    pageCount += 1
-                    tempmaxthumbs -= Pref.maximumthumbs
-                Loop
-            End If
+            If pageCount = 0 Then pageCount = Math.Ceiling(posterArray.count/10)
             If posterArray.Count > 10 Then
-                For f = 0 To Pref.maximumthumbs - 1
+                For f = ((currentPage-1)*10) To ((currentPage*10)-1)
                     names.Add(posterArray(f))
                 Next
             Else
@@ -4992,24 +4992,19 @@ Public Class Form1
                 btnMovPosterNext.Visible = True
                 btnMovPosterPrev.Visible = True
                 If posterArray.Count >= 10 Then
-                    lblMovPosterPages.Text = "Displaying 1 to 10 of " & posterArray.Count.ToString & " Images"
+                    lblMovPosterPages.Text = "Displaying " & ((currentPage*10) - 9) & " to " & (currentPage*10) & " of " & posterArray.Count.ToString & " Images"
                 Else
                     lblMovPosterPages.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
                 End If
                 lblMovPosterPages.Visible = True
                 Me.Refresh()
                 Application.DoEvents()
-                currentPage = 1
-                btnMovPosterPrev.Enabled = False
-                btnMovPosterNext.Enabled = True
+                btnMovPosterPrev.Enabled = currentPage > 1
+                btnMovPosterNext.Enabled = currentPage < pagecount 
             Else
                 btnMovPosterPrev.Visible = False
                 btnMovPosterNext.Visible = False
-                If posterArray.Count >= 10 Then
-                    lblMovPosterPages.Text = "Displaying 1 to " & 10 & " of " & posterArray.Count.ToString & " Images"
-                Else
-                    lblMovPosterPages.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
-                End If
+                lblMovPosterPages.Text = "Displaying 1 to " & posterArray.Count.ToString & " of " & posterArray.Count.ToString & " Images"
                 lblMovPosterPages.Visible = True
                 Me.Refresh()
                 Application.DoEvents()
@@ -5017,7 +5012,7 @@ Public Class Form1
             Dim tempboolean As Boolean = True
             Dim locationX As Integer = 0
             Dim locationY As Integer = 0
-
+            
             messbox.TextBox2.Text = "Setting up display...."
             messbox.Refresh()
 
@@ -5122,89 +5117,13 @@ Public Class Form1
 
     Private Sub mov_PosterSelectionDisplayPrev()
         Try
-            Me.panelAvailableMoviePosters.Visible = False
-            For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-                panelAvailableMoviePosters.Controls.RemoveAt(i)
-            Next
-            messbox = New frmMessageBox("", "Setting up Display...", "Please wait...")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
+            mov_PosterPanelClear()
             currentPage -= 1
             If currentPage = 1 Then
                 btnMovPosterPrev.Enabled = False
             End If
             btnMovPosterNext.Enabled = True
-            Dim tempint As Integer = (currentPage * (10) + 1) - 10
-            Dim tempint2 As Integer = currentPage * 10
-            If tempint2 > posterArray.Count Then
-                tempint2 = posterArray.Count
-            End If
-            Dim names As New List(Of String)()
-            For f = tempint - 1 To tempint2 - 1
-                names.Add(posterArray(f).ldUrl)
-            Next
-            lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-            Dim locationX As Integer = 0
-            Dim locationY As Integer = 0
-            Dim itemcounter As Integer = 0
-            Dim tempboolean As Boolean = True
-            Dim MovPosterPicBox As New List(Of FanartPicBox)
-            For Each item As String In names
-                Dim thispicbox As New FanartPicBox
-                posterPicBoxes() = New PictureBox()
-                With posterPicBoxes
-                    .WaitOnLoad = True
-                    .Location = New Point(locationX, locationY)
-                    .Width = 123
-                    .Height = 168
-                    .SizeMode = PictureBoxSizeMode.Zoom
-                    .Visible = True
-                    .BorderStyle = BorderStyle.Fixed3D
-                    .Name = "poster" & itemcounter.ToString
-                    AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                    AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                End With
-                thispicbox.imagepath = item
-                thispicbox.pbox = posterPicBoxes
-                MovPosterPicBox.Add(thispicbox)
-
-                posterCheckBoxes() = New RadioButton()
-                With posterCheckBoxes
-                    .Location = New Point(locationX + 50, locationY + 166)
-                    .Name = "postercheckbox" & itemcounter.ToString
-                    .SendToBack()
-                    .Text = " "
-                    AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                End With
-                itemcounter += 1
-                Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                Me.Refresh()
-                Application.DoEvents()
-                If tempboolean = True Then
-                    locationY = 192
-                Else
-                    locationX += 120
-                    locationY = 0
-                End If
-                tempboolean = Not tempboolean
-            Next
-            Me.panelAvailableMoviePosters.Visible = True
-            Me.panelAvailableMoviePosters.Refresh()
-            Me.Refresh()
-            If MovPosterPicBox.Count > 0 Then
-                messbox.Close()
-                If Not ImgBw.IsBusy Then
-                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
-                    ToolStripStatusLabel2.Visible = True
-                    ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
-                End If
-            End If
-            messbox.Close()
-            Me.Refresh()
-            Application.DoEvents()
+            mov_PosterSelectionDisplay()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5212,92 +5131,13 @@ Public Class Form1
     
     Private Sub mov_PosterSelectionDisplayNext()
         Try
-            Me.panelAvailableMoviePosters.Visible = False
-            For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-                panelAvailableMoviePosters.Controls.RemoveAt(i)
-            Next
-            messbox = New frmMessageBox("", "Setting up Display...", "Please wait...")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
+            mov_PosterPanelClear()
             currentPage += 1
             If currentPage = pageCount Then
                 btnMovPosterNext.Enabled = False
             End If
             btnMovPosterPrev.Enabled = True
-            Dim tempint As Integer = (currentPage * (10) + 1) - 10
-            Dim tempint2 As Integer = currentPage * 10
-            If tempint2 > posterArray.Count Then
-                tempint2 = posterArray.Count
-            End If
-            Dim names As New List(Of String)()
-            For f = tempint - 1 To tempint2 - 1
-                names.Add(posterArray(f).ldUrl)
-            Next
-            lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-            Dim locationX As Integer = 0
-            Dim locationY As Integer = 0
-            Dim itemcounter As Integer = 0
-            Dim tempboolean As Boolean = True
-            Dim MovPosterPicBox As New List(Of FanartPicBox)
-            For Each item As String In names
-                Dim thispicbox As New FanartPicBox
-                Try
-                    posterPicBoxes() = New PictureBox()
-                    With posterPicBoxes
-                        .WaitOnLoad = True
-                        .Location = New Point(locationX, locationY)
-                        .Width = 123
-                        .Height = 168
-                        .SizeMode = PictureBoxSizeMode.Zoom
-                        .Visible = True
-                        .BorderStyle = BorderStyle.Fixed3D
-                        .Name = "poster" & itemcounter.ToString
-                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-                    End With
-                    thispicbox.imagepath = item
-                    thispicbox.pbox = posterPicBoxes
-                    MovPosterPicBox.Add(thispicbox)
-
-                    posterCheckBoxes() = New RadioButton()
-                    With posterCheckBoxes
-                        .Location = New Point(locationX + 50, locationY +166)
-                        .Name = "postercheckbox" & itemcounter.ToString
-                        .SendToBack()
-                        .Text = " "
-                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-                    End With
-                    itemcounter += 1
-                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-                    Me.Refresh()
-                    Application.DoEvents()
-                    If tempboolean = True Then
-                        locationY = 192
-                    Else
-                        locationX += 120
-                        locationY = 0
-                    End If
-                    tempboolean = Not tempboolean
-                Catch ex As Exception
-                End Try
-            Next
-            Me.panelAvailableMoviePosters.Visible = True
-            Me.panelAvailableMoviePosters.Refresh()
-            Me.Refresh()
-            If MovPosterPicBox.Count > 0 Then
-                messbox.Close()
-                If Not ImgBw.IsBusy Then
-                    ToolStripStatusLabel2.Text = "Starting Download of Images..."
-                    ToolStripStatusLabel2.Visible = True
-                    ImgBw.RunWorkerAsync({MovPosterPicBox, tempint, tempint, Me.panelAvailableMoviePosters})
-                End If
-            End If
-            messbox.Close()
-            Me.Refresh()
-            Application.DoEvents()
+            mov_PosterSelectionDisplay()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
