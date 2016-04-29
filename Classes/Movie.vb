@@ -1575,19 +1575,23 @@ Public Class Movie
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.MovieSet = _previousCache.MovieSet
         Else
-            tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
-            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
-            If Certificates.Count = 0 Then
-                _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", If(Pref.IncludeMpaaRated, "Rated ", "")) & tmdb.Certification 
-                If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
-            End If
-            If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then
-                _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
-            End If
-            If Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
-                _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id 
-            End If
+            Try
+                tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
+                tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid 
+                If Certificates.Count = 0 Then
+                    _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", If(Pref.IncludeMpaaRated, "Rated ", "")) & tmdb.Certification 
+                    If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
+                End If
+                If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then
+                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                End If
+                If Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id 
+                End If
+            Catch
+                Throw New Exception ("offline")
+            End Try
         End If
     End Sub
     
@@ -1792,8 +1796,12 @@ Public Class Movie
         _scrapedMovie.frodoPosterThumbs.Clear
 
         If Pref.XtraFrodoUrls AndAlso Pref.FrodoEnabled Then
-            _scrapedMovie.frodoPosterThumbs.AddRange(tmdb.FrodoPosterThumbs)
-            ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & " ", "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
+            Try
+                _scrapedMovie.frodoPosterThumbs.AddRange(tmdb.FrodoPosterThumbs)
+                ReportProgress("Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & " ", "Extra Frodo Poster thumbs: " & tmdb.FrodoPosterThumbs.count & vbCrLf)
+            Catch
+                ReportProgress("Extra Frodo Poster thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site.", "Extra Frodo Poster thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site." &vbcrlf)
+            End Try
         'Else
             'ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
         End If
@@ -1804,8 +1812,12 @@ Public Class Movie
         _scrapedMovie.frodoFanartThumbs.Thumbs.Clear
 
         If Pref.XtraFrodoUrls AndAlso Pref.FrodoEnabled Then
-            _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
-            ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & " ", "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
+            Try
+                _scrapedMovie.frodoFanartThumbs.Thumbs.AddRange(tmdb.FrodoFanartThumbs.Thumbs)
+                ReportProgress("Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & " ", "Extra Frodo Fanart thumbs: " & tmdb.FrodoFanartThumbs.Thumbs.count & vbCrLf)
+            Catch
+                ReportProgress("Extra Frodo Fanart thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site.", "Extra Frodo Poster thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site." &vbcrlf)
+            End Try
         End If
     End Sub
 
@@ -3071,7 +3083,10 @@ Public Class Movie
                     ReportProgress(MSG_ERROR,"!!! - ERROR! - Rescrape TMDB body with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & useID & """" & vbCrLf )
                 Else
                     ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
-                    AssignScrapedMovie(_rescrapedMovie)
+                    Try
+                        AssignScrapedMovie(_rescrapedMovie)
+                    Catch
+                    End Try
                 End If
             Else
                 _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
@@ -3080,7 +3095,10 @@ Public Class Movie
                     ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Pref.imdbmirror & """" & vbCrLf)
                 Else
                     ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
-                    AssignScrapedMovie(_rescrapedMovie)
+                    Try
+                        AssignScrapedMovie(_rescrapedMovie)
+                    Catch
+                    End Try
                 End If
             End If
             

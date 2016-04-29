@@ -335,7 +335,7 @@ Public Class Pref
     Public Shared movie_filters As MovieFilters = New MovieFilters
 
     Public Shared CheckForNewVersion As Boolean=False
-    Public Shared CloseMCForDLNewVersion As Boolean = False
+    Public Shared CloseMCForDLNewVersion As Boolean = True
     Public Shared AllowUserTags As Boolean = True
     Public Shared GenreCustomBefore As Boolean
     Public Shared CustomTmdbApiKey As String = ""

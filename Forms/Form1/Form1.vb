@@ -3018,8 +3018,14 @@ Public Class Form1
                         End If
                     End If
                 Next
-                'movie.ScrapedMovie.fullmoviebody.tag = NewTagList
-
+                If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
+                    Dim first As Boolean = True
+                    For Each t In workingMovieDetails.fullmoviebody.tag
+                        If Not first Then tagtxt.Text &= ", "
+                        tagtxt.Text &= t
+                        first = False
+                    Next
+                End If
             Else
 
                 If Pref.AllowUserTags Then
@@ -3101,7 +3107,6 @@ Public Class Form1
                                 End If
                             End If
                         Next
-                        'movie.ScrapedMovie.fullmoviebody.tag = NewTagList
                     End If
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
@@ -4365,10 +4370,16 @@ Public Class Form1
         If SetId = "" Then
             tmdb.Imdb = If(workingMovieDetails.fullmoviebody.imdbid.Contains("tt"), workingMovieDetails.fullmoviebody.imdbid, "")
             tmdb.TmdbId = workingMovieDetails.fullmoviebody.tmdbid
-            fanartArray.AddRange(tmdb.McFanart)
+            Try
+                fanartArray.AddRange(tmdb.McFanart)
+            Catch
+            End Try
         Else
             tmdb.SetId = SetId
-            fanartArray.AddRange(tmdb.McSetFanart)
+            Try
+                fanartArray.AddRange(tmdb.McSetFanart)
+            Catch
+            End Try
         End If
         messbox.TextBox2.Text = "Setting up display...."
         messbox.Refresh()
@@ -4466,7 +4477,7 @@ Public Class Form1
                     .Location = New Point(0, 100)
                     .AutoSize = False
                     .TextAlign = ContentAlignment.MiddleCenter
-                    .Width = 500
+                    .Width = 410
                     .Height = 400
                     .Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
                     .Text = "No Fanart Was Found At" & Environment.NewLine & "www.themoviedb.org For This Movie"
