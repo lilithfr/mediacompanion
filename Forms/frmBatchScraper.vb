@@ -158,6 +158,7 @@
                     Return True
                 End If
             End If
+            If Pref.MovieManualRename Then Return True
         End Get
     End Property
 
