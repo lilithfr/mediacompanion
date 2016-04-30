@@ -945,6 +945,168 @@ Partial Public Class Form1
 
     End Sub
 
+    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByRef seasonno As String, ByRef episodeno As String, ByVal language As String, ByVal aired As String)
+        Dim episodestring As String = ""
+        Dim episodeurl As String = ""
+        Dim episodeurl2 As String = ""
+        Dim xmlfile As String = ""
+
+        If language.ToLower.IndexOf(".xml") = -1 Then
+            language = language & ".xml"
+        End If
+        episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+        If IsNothing(aired) Then
+            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+        Else
+            episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, aired, language)
+        End If
+        'First try seriesxml data
+        'check if present, download if not
+        Dim gotseriesxml As Boolean = False
+        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
+        Dim xmlfile2 As String = SeriesXmlPath & tvdbid & ".xml"
+        Dim SeriesInfo As New Tvdb.ShowData
+        If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
+            gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+        Else
+            'Check series xml isn't older than Five days.  If so, re-download it.
+            Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2) 
+            Dim datenow As DateTime = Date.Now()
+            Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
+            If dif > If(Not IsNothing(aired), 1, 5) Then
+                gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
+            Else
+                gotseriesxml = True
+            End If
+        End If
+        
+        If Not gotseriesxml then
+            xmlfile = Utilities.DownloadTextFiles(episodeurl)
+            If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
+                xmlfile = Utilities.DownloadTextFiles(episodeurl2)
+            End If
+        Else
+            SeriesInfo.Load(xmlfile2)
+            Dim gotEpxml As Boolean = False
+            'check episode is present in seriesxml file, else, re-download it (update to latest)
+            If Not IsNothing(aired) Then
+                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                    If NewEpisode.FirstAired.Value = aired Then
+                        xmlfile = NewEpisode.Node.ToString 
+                        xmlfile = "<Data>" & xmlfile & "</Data>"
+                        gotEpxml = True
+                        Exit For
+                    End If
+                Next
+            End If
+            If Not gotEpxml AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
+                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                    If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                        xmlfile = NewEpisode.Node.ToString 
+                        xmlfile = "<Data>" & xmlfile & "</Data>"
+                        gotEpxml = True
+                        Exit For
+                    End If
+                Next
+            End If
+            ' Finally, if not in seriesxml file, go old-school
+            If Not gotEpxml Then
+                xmlfile = Utilities.DownloadTextFiles(episodeurl)
+                If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
+                    xmlfile = Utilities.DownloadTextFiles(episodeurl2)
+                End If
+            End If
+        End If
+        
+        If xmlfile.Contains("Could not connect") OrElse xmlfile.Contains("No Results from SP") Then Return xmlfile               ' Added check if TVDB is unavailable.
+        Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
+        If xmlOK Then
+            episodestring = "<episodedetails>"
+            episodestring = episodestring & "<url>" & If(IsNothing(aired), episodeurl, episodeurl2) & "</url>"
+            Dim mirrorslist As New XmlDocument
+            mirrorslist.LoadXml(xmlfile)
+            Dim thisresult As XmlNode = Nothing
+            For Each thisresult In mirrorslist("Data")
+                Select Case thisresult.Name
+                    Case "Episode"
+                        Dim mirrorselection As XmlNode = Nothing
+                        For Each mirrorselection In thisresult.ChildNodes
+                            Select Case mirrorselection.Name
+                                Case "EpisodeName"
+                                    episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
+                                Case "FirstAired"
+                                    episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
+                                Case "GuestStars"
+                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
+                                    For Each guest In gueststars
+                                        If Not String.IsNullOrEmpty(guest) Then
+                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
+                                        End If
+                                    Next
+                                Case "Director"
+                                    Dim tempstring As String = mirrorselection.InnerXml
+                                    tempstring = tempstring.Trim("|")
+                                    episodestring = episodestring & "<director>" & tempstring & "</director>"
+                                Case "Writer"
+                                    Dim tempstring As String = mirrorselection.InnerXml
+                                    tempstring = tempstring.Trim("|")
+                                    episodestring = episodestring & "<credits>" & tempstring & "</credits>"
+                                Case "Overview"
+                                    episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
+                                Case "Rating"
+                                    episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "IMDB_ID"
+                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
+                                Case "id"
+                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+                                Case "seriesid"
+                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
+                                Case "filename"
+                                    episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+                                Case "airsbefore_episode"
+                                    episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
+                                Case "airsbefore_season"
+                                    episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
+                                Case "SeasonNumber"
+                                    seasonno = mirrorselection.InnerText
+                                Case "EpisodeNumber"
+                                    episodeno = mirrorselection.InnerText
+                            End Select
+                        Next
+                End Select
+            Next
+            episodestring = episodestring & "</episodedetails>"
+        Else
+            If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
+            episodestring = "Error"
+        End If
+        Return episodestring
+    End Function
+
+    Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
+
+        tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
+
+        WorkingWithNfoFiles.ep_NfoSave(alleps, path)
+
+        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.autoepisodescreenshot) & vbcrlf
+
+        If Pref.autorenameepisodes = True Then
+            Dim eps As New List(Of String)
+            eps.Clear()
+            For Each ep In alleps
+                eps.Add(ep.Episode.Value)
+            Next
+            Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
+
+            If tempspath <> "false" Then
+                path = tempspath
+            End If
+        End If
+
+        Return path
+    End Function
+
     Public Sub ep_VideoSourcePopulate()
         Try
             cbTvSource.Items.Clear()
@@ -2137,6 +2299,7 @@ Partial Public Class Form1
                     End If
                 Next
                 Dim episode As New TvEpisode
+                Dim airedgot As Boolean = False
                 For Each Regexs In tv_RegexScraper
                     S = newepisode.VideoFilePath '.ToLower
                     stage = "1"
@@ -2166,12 +2329,13 @@ Partial Public Class Form1
                     Dim N As Match
                     stage = "5"     'Do date test first.
                     N = Regex.Match(S, tv_EpRegexDate)
-                    If N.Success Then
+                    If N.Success AndAlso Not airedgot Then
                         Dim aired As String = N.Groups(0).Value.Replace(".", "-").Replace("_", "-")
                         newepisode.Aired.Value = aired
-                        Dim somthing As String = Nothing
-                        Exit For
-                    Else
+                        airedgot = True
+                        'Exit For
+                    End If
+                    If Not N.Success OrElse airedgot Then
                         Dim M As Match
                         M = Regex.Match(S, Regexs)
                         If M.Success = True Then
@@ -2383,6 +2547,9 @@ Partial Public Class Form1
                                 ElseIf tempepisode.Contains("Could not connect") Then     'If TVDB unavailable, advise user to try again later
                                     scrapedok = False
                                     Pref.tvScraperLog &= "!!! Issue at TheTVDb, Episode could not be retrieve. Try again later" & vbCrLf
+                                ElseIf tempepisode.Contains("No Results from SP") Then
+                                    scrapedok = False
+                                    Pref.tvScraperLog &= "!!! Scraping using AirDate found in Filename failed.  Check Episode Filename AiredDate is correct." & vbCrLf
                                 End If
                                 stage = "12b5"
                                 If scrapedok = True Then
