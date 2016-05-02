@@ -3253,7 +3253,7 @@ Public Class Movie
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.missingmovsetart And _scrapedMovie.fullmoviebody.MovieSet.MovieSetId<>"" Then DoDownloadMovieSetArtwork()
+            If rl.missingmovsetart AndAlso Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.MovieSet.MovieSetId) Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
