@@ -4209,7 +4209,7 @@ Public Class Form1
             '    Label2.Visible = False
             End If
             currentTabIndex = TabControl2.SelectedIndex
-            EnableFanartScrolling()
+            If Panel2.Controls.Count > 1 Then EnableFanartScrolling()
         ElseIf tab.ToLower = "posters" Then
             currentTabIndex = TabControl2.SelectedIndex
             gbMoviePostersAvailable.Refresh()
@@ -4497,10 +4497,11 @@ Public Class Form1
     'Set focus on the first checkbox to enable mouse wheel scrolling 
     Sub EnableFanartScrolling()
         Try
-            Dim rb As RadioButton = Panel2.Controls("moviefanartcheckbox0")
-            If rb Is Nothing Then Exit Sub
-            rb.Select()                       'Causes RadioButtons checked state to toggle
-            rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+            Panel2.Focus()
+            'Dim rb As RadioButton = Panel2.Controls("moviefanartcheckbox0")
+            'If rb Is Nothing Then Exit Sub
+            'rb.Select()                       'Causes RadioButtons checked state to toggle
+            'rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
         Catch
         End Try
     End Sub
@@ -18689,4 +18690,5 @@ End Sub
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
     End Sub
+    
 End Class
