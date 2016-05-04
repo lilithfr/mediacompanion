@@ -1086,10 +1086,10 @@ Public Class Movies
         Return movie
     End Function
 
-    Public Function SaveAndLoadMovie(fullpathandfilename As String, fmd As FullMovieDetails)
-        Movie.SaveNFO(fullpathandfilename,fmd)
-        Return oMovies.LoadMovie(fullpathandfilename)
-    End Function
+    'Public Function SaveAndLoadMovie(fullpathandfilename As String, fmd As FullMovieDetails)
+    '    Movie.SaveNFO(fullpathandfilename,fmd)
+    '    Return oMovies.LoadMovie(fullpathandfilename)
+    'End Function
 
     Public Sub FindNewMovies(Optional scrape=True)
         NewMovies.Clear
