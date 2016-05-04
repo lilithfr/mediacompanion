@@ -3020,7 +3020,7 @@ Public Class Form1
                 Next
                 If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
                     Dim first As Boolean = True
-                    For Each t In workingMovieDetails.fullmoviebody.tag
+                    For Each t In movie.ScrapedMovie.fullmoviebody.tag
                         If Not first Then tagtxt.Text &= ", "
                         tagtxt.Text &= t
                         first = False
