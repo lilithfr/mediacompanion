@@ -2394,7 +2394,9 @@ Public Class Movie
 
     Sub DownloadMovieSetArt()
         If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetId <> "" Then
-            DoDownloadMovieSetArtwork()
+            If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) Or Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Pref.overwritethumbs Then
+                DoDownloadMovieSetArtwork()
+            End If
         End If
     End Sub
 
@@ -2404,7 +2406,7 @@ Public Class Movie
 
             _api.SetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
 
-            _scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
+            '_scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
 
             If _api.McSetFanart.Count > 0 Then
                 If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) OrElse Pref.overwritethumbs Then
@@ -3232,22 +3234,22 @@ Public Class Movie
 
             If rl.tmdb_set_name OrElse rl.tmdb_set_id Then
                 Try
-                    '_rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
                     If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                        'If rl.tmdb_set_name Then
-                        '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
-                        'Else
-                        '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName 
-                        'End If
-                        '_rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id
+                        If rl.tmdb_set_name Then
+                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                        Else
+                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
+                        End If
+                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id
 
-                        _scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
+                        '_scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
 
-                    'Else
-                    '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
-                    '    _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId 
+                    Else
+                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
+                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
                     End If
-'                   UpdateProperty(_rescrapedMovie.fullmoviebody.MovieSet, _scrapedMovie.fullmoviebody.MovieSet, , rl.EmptyMainTags)                   
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.MovieSet, _scrapedMovie.fullmoviebody.MovieSet, , rl.EmptyMainTags)
                 Catch
                 End Try
             End If
