@@ -9257,10 +9257,13 @@ End Sub
             Else
                 If Not MovSet Then
                     Dim paths As List(Of String) = Pref.GetfanartPaths(workingMovieDetails.fileinfo.fullpathandfilename,If(workingMovieDetails.fileinfo.videotspath <>"",workingMovieDetails.fileinfo.videotspath,""))
-                    Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True)
+                    Dim point = Movie.GetBackDropResolution(Pref.BackDropResolutionSI)
+                    Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(FanartUrl, paths, True, point.X, point.Y)
                     If Not aok Then Throw New Exception("TMDB is offline")
                     util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
                     util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
+                    Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
+                    movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
                 Else
                     Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
                     If MovSetFanartSavePath <> "" Then
@@ -9407,7 +9410,9 @@ End Sub
                 Try
                     If Not MovSet Then
                         Dim PostPaths As List(Of String) = Pref.GetPosterPaths(workingMovieDetails.fileinfo.fullpathandfilename,workingMovieDetails.fileinfo.videotspath)
-                        Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True)
+                        Dim height As Integer = 0
+                        height = Movie.GetHeightResolution(Pref.PosterResolutionSI)
+                        Dim aok As Boolean = DownloadCache.SaveImageToCacheAndPaths(moviethumburl, PostPaths, True, , height)
                         If Not aok Then Throw New Exception()
                         util_ImageLoad(PictureBoxAssignedMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
                         util_ImageLoad(PbMoviePoster, PostPaths(0), Utilities.DefaultPosterPath)
