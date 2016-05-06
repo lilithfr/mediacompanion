@@ -955,7 +955,7 @@ Partial Public Class Form1
             language = language & ".xml"
         End If
         episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
-        If IsNothing(aired) Then
+        If aired = Nothing Then
             episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
         Else
             episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, aired, language)
@@ -973,7 +973,7 @@ Partial Public Class Form1
             Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2) 
             Dim datenow As DateTime = Date.Now()
             Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
-            If dif > If(Not IsNothing(aired), 1, 5) Then
+            If dif > If(aired <> Nothing, 1, 5) Then
                 gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
             Else
                 gotseriesxml = True
@@ -989,7 +989,7 @@ Partial Public Class Form1
             SeriesInfo.Load(xmlfile2)
             Dim gotEpxml As Boolean = False
             'check episode is present in seriesxml file, else, re-download it (update to latest)
-            If Not IsNothing(aired) Then
+            If aired <> Nothing Then
                 For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                     If NewEpisode.FirstAired.Value = aired Then
                         xmlfile = NewEpisode.Node.ToString 
@@ -2337,10 +2337,13 @@ Partial Public Class Form1
                     Dim N As Match
                     stage = "5"     'Do date test first.
                     N = Regex.Match(S, tv_EpRegexDate)
-                    If N.Success AndAlso Not airedgot Then
-                        Dim aired As String = N.Groups(0).Value.Replace(".", "-").Replace("_", "-")
-                        newepisode.Aired.Value = aired
-                        airedgot = True
+                    If N.Success Then
+                        If Not airedgot Then
+                            Dim aired As String = N.Groups(0).Value.Replace(".", "-").Replace("_", "-")
+                            newepisode.Aired.Value = aired
+                            airedgot = True
+                        End If
+                        If airedgot Then S = S.Replace(N.Groups(0).Value, "")
                         'Exit For
                     End If
                     If Not N.Success OrElse airedgot Then
@@ -2370,6 +2373,7 @@ Partial Public Class Form1
                 Next
                 If newepisode.Season.Value = Nothing Then newepisode.Season.Value = "-1"
                 If newepisode.Episode.Value = Nothing Then newepisode.Episode.Value = "-1"
+                If newepisode.Season.Value <> "-1" AndAlso newepisode.Episode.Value <> "-1" Then newepisode.Aired.Value = "" 'Clear Aired value if got valid Ep and Season values.
             Next
             Dim savepath As String = ""
             Dim scrapedok As Boolean
@@ -2509,7 +2513,7 @@ Partial Public Class Form1
                             progresstext &= " - Scraping..."
                             bckgroundscanepisodes.ReportProgress(progress, progresstext)
                             Dim episodeurl As String = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & singleepisode.Season.Value & "/" & singleepisode.Episode.Value & "/" & language & ".xml"
-                            If Not IsNothing(eps.Aired.Value) Then
+                            If eps.Aired.Value <> Nothing Then
                                 episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, singleepisode.Aired.Value, language & ".xml")
                             End If
                             stage = "12a"
@@ -2527,7 +2531,7 @@ Partial Public Class Form1
                             End If
                             stage = "12b"
                             If tmpaok OrElse Utilities.UrlIsValid(episodeurl) Then
-                                IF IsNothing(singleepisode.Aired.Value) AndAlso Pref.tvshow_useXBMC_Scraper = True Then
+                                IF singleepisode.Aired.Value = Nothing AndAlso Pref.tvshow_useXBMC_Scraper = True Then
                                     Dim FinalResult As String = ""
                                     stage = "12b1"
                                     episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
