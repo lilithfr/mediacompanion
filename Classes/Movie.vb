@@ -3348,8 +3348,8 @@ Public Class Movie
         'If IsNothing(McMovieSetInfo) Then Exit Sub
         If IsNothing(MovieSet) Then Exit Sub
 '       If MovieSet.MovieSetName <> "" Or MovieSet.MovieSetName.ToLower <> "-none-" Then
-            '_parent.MovieSetDB.Add(McMovieSetInfo)
-        _parent.MovieSetDB.Add(MovieSet)
+            _parent.MovieSetDB.Add(McMovieSetInfo)
+        '_parent.MovieSetDB.Add(MovieSet)
 '       End If
     End Sub
 
