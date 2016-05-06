@@ -2830,12 +2830,13 @@ Public Class WorkingWithNfoFiles
                 anotherchild = doc.CreateElement("streamdetails")
                 filedetailschild = doc.CreateElement("video")
                 If Pref.enablehdtags = True Then
+                    stage = 4
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Width.Value) Then
                         filedetailschildchild = doc.CreateElement("width")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Width.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 4
+                    stage = 5
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Height.Value) Then
                         filedetailschildchild = doc.CreateElement("height")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Height.Value
@@ -2846,19 +2847,19 @@ Public Class WorkingWithNfoFiles
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Aspect.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 5
+                    stage = 6
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Codec.Value) Then
                         filedetailschildchild = doc.CreateElement("codec")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Codec.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 6
+                    stage = 7
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.FormatInfo.Value) Then
                         filedetailschildchild = doc.CreateElement("formatinfo")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.FormatInfo.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 7
+                    stage = 8
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
                         filedetailschildchild = doc.CreateElement("durationinseconds")
                         Dim TempValue As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
@@ -2876,55 +2877,55 @@ Public Class WorkingWithNfoFiles
                         filedetailschildchild.InnerText = TempValue
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 8
+                    stage = 9
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Bitrate.Value) Then
                         filedetailschildchild = doc.CreateElement("bitrate")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Bitrate.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 9
+                    stage = 10
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.BitrateMode.Value) Then
                         filedetailschildchild = doc.CreateElement("bitratemode")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.BitrateMode.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 10
+                    stage = 11
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.BitrateMax.Value) Then
                         filedetailschildchild = doc.CreateElement("bitratemax")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.BitrateMax.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 11
+                    stage = 12
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Container.Value) Then
                         filedetailschildchild = doc.CreateElement("container")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Container.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 12
+                    stage = 13
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.CodecId.Value) Then
                         filedetailschildchild = doc.CreateElement("codecid")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.CodecId.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 13
+                    stage = 14
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.CodecInfo.Value) Then
                         filedetailschildchild = doc.CreateElement("codecidinfo")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.CodecInfo.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 14
+                    stage = 15
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.ScanType.Value) Then
                         filedetailschildchild = doc.CreateElement("scantype")
                         filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.ScanType.Value
                         filedetailschild.AppendChild(filedetailschildchild)
                     End If
-                    stage = 15
+                    stage = 16
                     Try
                         anotherchild.AppendChild(filedetailschild)
                     Catch
                     End Try
 
-                    stage = 16
+                    stage = 17
                     'Try
                     For Each item In movietosave.filedetails.filedetails_audio
                         filedetailschild = doc.CreateElement("audio")
@@ -2955,7 +2956,7 @@ Public Class WorkingWithNfoFiles
                         End If
                         anotherchild.AppendChild(filedetailschild)
                     Next
-                    stage = 17
+                    stage = 18
                     For Each entry In movietosave.filedetails.filedetails_subtitles
                         If Not String.IsNullOrEmpty(entry.Language.Value) Then
                             filedetailschild = doc.CreateElement("subtitle")
@@ -2968,23 +2969,23 @@ Public Class WorkingWithNfoFiles
                             anotherchild.AppendChild(filedetailschild)
                         End If
                     Next
-                    stage = 18
-                Else
                     stage = 19
+                Else
+                    stage = 20
                     Dim container As String = movietosave.filedetails.filedetails_video.Container.Value
                     filedetailschildchild = doc.CreateElement("container")
                     filedetailschildchild.InnerText = If(String.IsNullOrEmpty(container), "", container)
                     filedetailschild.AppendChild(filedetailschildchild)
                     anotherchild.AppendChild(filedetailschild)
                 End If
-                stage = 20
+                stage = 21
                 child.AppendChild(anotherchild)
                 root.AppendChild(child)
-                stage = 21
+                stage = 22
                 child = doc.CreateElement("title")
                 child.InnerText = movietosave.fullmoviebody.title
                 root.AppendChild(child)
-                stage = 22
+                stage = 23
                 child = doc.CreateElement("originaltitle")
                 If String.IsNullOrEmpty(movietosave.fullmoviebody.originaltitle) Then
                     child.InnerText = movietosave.fullmoviebody.title
@@ -2993,7 +2994,7 @@ Public Class WorkingWithNfoFiles
                 End If
 
                 root.AppendChild(child)
-                stage = 23
+                stage = 24
                 If Not Pref.NoAltTitle AndAlso movietosave.alternativetitles.Count > 0 Then
                     For Each title In movietosave.alternativetitles
                         If title <> movietosave.fullmoviebody.title Then
@@ -3003,7 +3004,7 @@ Public Class WorkingWithNfoFiles
                         End If
                     Next
                 End If
-                stage = 24
+                stage = 25
                 If movietosave.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
                     child = doc.CreateElement("set")
                     child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetName
@@ -3012,17 +3013,17 @@ Public Class WorkingWithNfoFiles
                     child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetId
                     root.AppendChild(child)
                 End If
-                stage = 25
+                stage = 26
                 If String.IsNullOrEmpty(movietosave.fullmoviebody.sortorder) Then
                     movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title
                 End If
                 child = doc.CreateElement("sorttitle")
                 child.InnerText = movietosave.fullmoviebody.sortorder
                 root.AppendChild(child)
-                stage = 26
+                stage = 27
                 child = doc.CreateElement("year") : child.InnerText = movietosave.fullmoviebody.year
                 root.AppendChild(child)
-                stage = 27
+                stage = 28
                 child = doc.CreateElement("premiered") : child.InnerText = movietosave.fullmoviebody.premiered
                 root.AppendChild(child)
                 child = doc.CreateElement("rating")
@@ -3031,7 +3032,7 @@ Public Class WorkingWithNfoFiles
                 child = doc.CreateElement("userrating")
                 child.InnerText = If(movietosave.fullmoviebody.usrrated = "", "0", movietosave.fullmoviebody.usrrated)
                 root.AppendChild(child)
-                stage = 28
+                stage = 29
                 child = doc.CreateElement("votes")
                 Dim votes As String = movietosave.fullmoviebody.votes
                 If Not String.IsNullOrEmpty(votes) then
@@ -3050,18 +3051,18 @@ Public Class WorkingWithNfoFiles
                 End If
                 child.InnerText = votes
                 root.AppendChild(child)
-                stage = 29
+                stage = 30
                 child = doc.CreateElement("top250") : child.InnerText = movietosave.fullmoviebody.top250
                 root.AppendChild(child)
                 child = doc.CreateElement("outline") : child.InnerText = movietosave.fullmoviebody.outline
                 root.AppendChild(child)
-                stage = 30
+                stage = 31
                 child = doc.CreateElement("plot") : child.InnerText = movietosave.fullmoviebody.plot
                 root.AppendChild(child)
-                stage = 31
+                stage = 32
                 child = doc.CreateElement("tagline") : child.InnerText = movietosave.fullmoviebody.tagline
                 root.AppendChild(child)
-                stage = 32
+                stage = 33
                 Dim strArr() As String
                 strArr = movietosave.fullmoviebody.country.Split(",")
                 For count = 0 To strArr.Length - 1
@@ -3071,7 +3072,7 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Next
 
-                stage = 33
+                stage = 34
                 Try
                     If Pref.XtraFrodoUrls AndAlso Pref.FrodoEnabled Then
                         For Each item In movietosave.frodoPosterThumbs
@@ -3097,7 +3098,7 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 
-                stage = 34
+                stage = 35
                 Try
                     child = doc.CreateElement("runtime")
                     If Pref.MovDurationAsRuntine Then
@@ -3141,11 +3142,11 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Catch
                 End Try
-                stage = 35
+                stage = 36
                 child = doc.CreateElement("mpaa") : child.InnerText = movietosave.fullmoviebody.mpaa
                 root.AppendChild(child)
 
-                stage = 36
+                stage = 37
                 If movietosave.fullmoviebody.genre <> "" Then
                     Dim strArr2() As String
                     strArr2 = movietosave.fullmoviebody.genre.Split("/")
@@ -3157,7 +3158,7 @@ Public Class WorkingWithNfoFiles
                     Next
                 End If
 
-                stage = 37
+                stage = 38
                 If movietosave.fullmoviebody.tag.Count <> 0 Then
                     For Each tags In movietosave.fullmoviebody.tag
                         child = doc.CreateElement("tag")
@@ -3166,11 +3167,11 @@ Public Class WorkingWithNfoFiles
                     Next
                 End If
 
-                stage = 38
+                stage = 39
                 child = doc.CreateElement("credits") : child.InnerText = movietosave.fullmoviebody.credits
                 root.AppendChild(child)
 
-                stage = 39
+                stage = 40
                     Dim strArr3() As String
                     strArr3 = movietosave.fullmoviebody.director.Split("/")
                     For count = 0 To strArr3.Length - 1
@@ -3180,7 +3181,7 @@ Public Class WorkingWithNfoFiles
                         root.AppendChild(child)
                     Next
 
-                stage = 40
+                stage = 41
                 Dim strArr4() As String
                 strArr4 = movietosave.fullmoviebody.studio.Split(",")
                 For count = 0 To strArr4.Length - 1
@@ -3190,11 +3191,11 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 Next
 
-                stage = 41
+                stage = 42
                 child = doc.CreateElement("trailer") : child.InnerText = movietosave.fullmoviebody.trailer
                 root.AppendChild(child)
 
-                stage = 42
+                stage = 43
                 child = doc.CreateElement("playcount")  : child.InnerText = movietosave.fullmoviebody.playcount
                 root.AppendChild(child)
                 If Pref.MovNfoWatchTag Then
@@ -3202,32 +3203,32 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 End If
 
-                stage = 42
+                stage = 44
                 child = doc.CreateElement("lastplayed") : child.InnerText = movietosave.fullmoviebody.lastplayed
                 root.AppendChild(child)
 
-                stage = 43
+                stage = 45
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.imdbid) Then
                     child = doc.CreateElement("id")
                     child.InnerText = movietosave.fullmoviebody.imdbid
                     root.AppendChild(child)
                 End If
-                stage = 44
+                stage = 46
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.tmdbid) Then
                     child = doc.CreateElement("tmdbid")
                     child.InnerText = movietosave.fullmoviebody.tmdbid
                     root.AppendChild(child)
                 End If
-                stage = 45
+                stage = 47
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.source) Then
                     child = doc.CreateElement("videosource")
                     child.InnerText = movietosave.fullmoviebody.source
                     root.AppendChild(child)
                 End If
-                stage = 46
+                stage = 48
                 child = doc.CreateElement("showlink") : child.InnerText = movietosave.fullmoviebody.showlink
                 root.AppendChild(child)
-                stage = 47
+                stage = 49
                 child = doc.CreateElement("createdate")
                 If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
                     Dim myDate2 As Date = System.DateTime.Now
@@ -3240,10 +3241,10 @@ Public Class WorkingWithNfoFiles
                 End If
                 root.AppendChild(child)
 
-                stage = 48
+                stage = 50
                 child = doc.CreateElement("stars") : child.InnerText = movietosave.fullmoviebody.stars
                 root.AppendChild(child)
-                stage = 49
+                stage = 51
                 Dim actorstosave As Integer = movietosave.listactors.Count
                 If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
                 For f = 0 To actorstosave - 1
@@ -3267,7 +3268,7 @@ Public Class WorkingWithNfoFiles
                 Next
 
                 doc.AppendChild(root)
-                stage = 50
+                stage = 52
                 Try
                     'Dim settings As New XmlWriterSettings()
                     'settings.Encoding = New UTF8Encoding(False)
@@ -3278,13 +3279,13 @@ Public Class WorkingWithNfoFiles
                     'Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
                     'output.Formatting = Formatting.Indented
                     'output.Indentation = 4
-                    stage = 51
+                    stage = 53
                     SaveXMLDoc(doc, filenameandpath)
                     'doc.Save(writer)
                     'writer.Close()
                     'doc.WriteTo(output)
                     'output.Close()
-                    stage = 52
+                    stage = 54
                 Catch
                 End Try
             Else

@@ -582,6 +582,7 @@ Public Class Form1
             Call util_RegexLoad()
 
             Call util_PrefsLoad()
+            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
 
             'These lines fixed the associated panel so that they don't automove when the Form1 is resized
             SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
@@ -5904,11 +5905,10 @@ Public Class Form1
                 tvScraperLog = tvScraperLog & vbCrLf & "!!! Operation Completed" & vbCrLf
             End If
             
-            ToolStripProgressBar5.Value = 0
-            ToolStripProgressBar5.ProgressBar.Refresh()
-            ToolStripProgressBar5.Visible = False
             ToolStripStatusLabel6.Text = "TV Show Scraper"
             ToolStripStatusLabel6.Visible = False
+            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            tsStatusLabel1.Visible = True
             btnTvSearchNew.Text = "Search New"
             
             globalThreadCounter -= 1
@@ -7466,8 +7466,11 @@ Public Class Form1
         Try
             Dim List As List(Of TvShow) = e.Argument(0)
             Dim Force As Boolean = e.Argument(1)
+            StatusStrip1.Visible = True
+            tsStatusLabel1.Visible = False
 
             Call TV_EpisodeScraper(List, Force)
+            
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9591,6 +9594,9 @@ End Sub
                 t.StartPosition = FormStartPosition.Manual
             End If
             t.ShowDialog()
+            If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+                StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -9728,7 +9734,6 @@ End Sub
                     ToolStripStatusLabel8.Visible = True
                     ToolStripProgressBar7.Value = 0
                     ToolStripProgressBar7.Visible = True
-                    'ToolStripProgressBar6.Visible = True
                     tvbckrescrapewizard.RunWorkerAsync()
                 End If
             Else
@@ -10885,7 +10890,11 @@ End Sub
             tsStatusLabel.Text = ""
             tsMultiMovieProgressBar.Value = tsMultiMovieProgressBar.Minimum
             tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action)
-            ScraperStatusStrip.Visible = True
+            tsStatusLabel.Visible = True
+            tsLabelEscCancel.Visible = True
+            StatusStrip1.Visible = True
+            tsStatusLabel1.Visible = False
+            'ScraperStatusStrip.Visible = True
             ssFileDownload.Visible = False
             tsProgressBarFileDownload_Resize()
             EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
@@ -11079,7 +11088,12 @@ End Sub
             LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
             UpdateFilteredList()
         End If
-        ScraperStatusStrip.Visible = False
+        tsStatusLabel.Visible = False
+        tsMultiMovieProgressBar.Visible = False
+        tsLabelEscCancel.Visible = False
+        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        tsStatusLabel1.Visible = True
+        'ScraperStatusStrip.Visible = False
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Pref.MovieChangeMovie = False
@@ -11092,57 +11106,6 @@ End Sub
     End Sub
 
 #End Region 
-
-#Region "XBMC TMDB Scraper Calls"
-
-    'Private Sub BckWrkXbmcMovies_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkXbmcMovies.DoWork
-    '    Try
-            
-
-    '    Catch ex As Exception
-    '        ExceptionHandler.LogError(ex)
-    '    End Try
-    'End Sub 
-
-    'Private Sub BckWrkXbmcMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkXbmcMovies.ProgressChanged
-    '    Dim oProgress As Progress = CType(e.UserState, Progress)
-    '    If e.ProgressPercentage <> -1 Then
-    '        tsMultiMovieProgressBar.Value = e.ProgressPercentage
-    '    End If
-    '    If oProgress.Command = Progress.Commands.Append Then
-    '        tsStatusLabel.Text &= oProgress.Message
-    '    Else
-    '        tsStatusLabel.Text = oProgress.Message
-    '    End If
-    '    If oProgress.Message = Movie.MSG_ERROR then
-    '        ScraperErrorDetected = True
-    '    End If
-    '    If Not IsNothing(oProgress.Log) Then
-    '        scraperLog += oProgress.Log
-    '    End If
-    'End Sub
-
-    'Private Sub BckWrkXbmcMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkXbmcMovies.RunWorkerCompleted
-
-    '    If scrapeAndQuit = True Then
-    '        sandq = sandq -2
-    '        Exit Sub
-    '    End If
-
-    '    LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
-    '    UpdateFilteredList()
-
-    '    ScraperStatusStrip.Visible = False
-    '    ssFileDownload.Visible = False
-    '    EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
-
-    '    DisplayLogFile()
-
-    '    'TabPage14.Text = "Search for new movies"
-    '    'TabPage14.ToolTipText = "Scan movie folders for new media files"
-    'End Sub
-
-#End Region
 
     Private Sub UpdateFilteredList
         Dim lastSelectedRow As Integer = 0
@@ -11239,15 +11202,15 @@ End Sub
         End If
     End Sub
     
-    Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
-        If Not scrapeAndQuit Then
-            If e.ProgressPercentage <> 999999 Then
-                ToolStripStatusLabel1.Text = e.UserState
-            Else
-                Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            End If
-        End If
-    End Sub
+    'Private Sub XBMC_ProgressChanged(ByVal e As System.ComponentModel.ProgressChangedEventArgs)
+    '    If Not scrapeAndQuit Then
+    '        If e.ProgressPercentage <> 999999 Then
+    '            ToolStripStatusLabel1.Text = e.UserState
+    '        Else
+    '            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+    '        End If
+    '    End If
+    'End Sub
 
     Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
 
@@ -11287,7 +11250,7 @@ End Sub
         tsProgressBarFileDownload.Value = iTotalBytesRead
     End Sub
 
-    Private Sub tsLabelEscCancel_Click(sender As System.Object, e As System.EventArgs) Handles tsLabelEscCancel.Click
+    Private Sub tsLabelEscCancel_Click(sender As System.Object, e As System.EventArgs) 
         BckWrkScnMovies_Cancel()
     End Sub
 
@@ -13016,89 +12979,7 @@ End Sub
             Loop
         End If
         mov_PosterSelectionDisplayNext()
-
-'        Try
-'            Me.panelAvailableMoviePosters.Visible = False
-'            For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-'                panelAvailableMoviePosters.Controls.RemoveAt(i)
-'            Next
-'            messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
-'            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-'            messbox.Show()
-'            Me.Refresh()
-'            messbox.Refresh()
-'            currentPage += 1
-'            If currentPage = pageCount Then
-'                btnMovPosterNext.Enabled = False
-'            End If
-'            btnMovPosterPrev.Enabled = True
-'            Dim tempint As Integer = (currentPage * (10) + 1) - 10
-'            Dim tempint2 As Integer = currentPage * 10
-'            If tempint2 > posterArray.Count Then
-'                tempint2 = posterArray.Count
-'            End If
-'            Dim names As New List(Of String)()
-'            For f = tempint - 1 To tempint2 - 1
-'                names.Add(posterArray(f).ldUrl)
-'            Next
-'            lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-'            Dim locationX As Integer = 0
-'            Dim locationY As Integer = 0
-'            Dim itemcounter As Integer = 0
-'            Dim tempboolean As Boolean = True
-'            For Each item As String In names
-'                messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
-'                messbox.Refresh()
-'                Dim item2 As String = Utilities.Download2Cache(item)
-'                Try
-'                    posterPicBoxes() = New PictureBox()
-'                    With posterPicBoxes
-'                        .WaitOnLoad = True
-'                        .Location = New Point(locationX, locationY)
-'                        .Width = 123
-'                        .Height = 168
-'                        .SizeMode = PictureBoxSizeMode.Zoom
-'                        .Visible = True
-'                        .BorderStyle = BorderStyle.Fixed3D
-'                        .Name = "poster" & itemcounter.ToString
-'                        AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-'                        AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-'                    End With
-'                    util_ImageLoad(posterPicBoxes, item2, "")
-
-'                    posterCheckBoxes() = New RadioButton()
-'                    With posterCheckBoxes
-'                        .Location = New Point(locationX + 50, locationY +166)
-'                        .Name = "postercheckbox" & itemcounter.ToString
-'                        .SendToBack()
-'                        .Text = " "
-'                        AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-'                    End With
-'                    itemcounter += 1
-'                    Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-'                    Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-'                    Me.Refresh()
-'                    Application.DoEvents()
-'                    If tempboolean = True Then
-'                        locationY = 192
-'                    Else
-'                        locationX += 120
-'                        locationY = 0
-'                    End If
-'                    tempboolean = Not tempboolean
-'                Catch ex As Exception
-'#If SilentErrorScream Then
-'                Throw ex
-'#End If
-'                End Try
-'            Next
-'            Me.panelAvailableMoviePosters.Visible = True
-'            messbox.Close()
-'            Me.Refresh()
-'            Application.DoEvents()
-'        Catch ex As Exception
-'            ExceptionHandler.LogError(ex)
-'        End Try
+        
     End Sub
 
     Private Sub btnMovPosterPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovPosterPrev.Click
@@ -13109,83 +12990,7 @@ End Sub
             Loop
         End If
         mov_PosterSelectionDisplayPrev()
-
-        'Try
-        '    Me.panelAvailableMoviePosters.Visible = False
-        '    For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-        '        panelAvailableMoviePosters.Controls.RemoveAt(i)
-        '    Next
-        '    messbox = New frmMessageBox("Please wait,", "", "Downloading Preview Images")
-        '    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-        '    messbox.Show()
-        '    Me.Refresh()
-        '    messbox.Refresh()
-        '    currentPage -= 1
-        '    If currentPage = 1 Then
-        '        btnMovPosterPrev.Enabled = False
-        '    End If
-        '    btnMovPosterNext.Enabled = True
-        '    Dim tempint As Integer = (currentPage * (10) + 1) - 10
-        '    Dim tempint2 As Integer = currentPage * 10
-        '    If tempint2 > posterArray.Count Then
-        '        tempint2 = posterArray.Count
-        '    End If
-        '    Dim names As New List(Of String)()
-        '    For f = tempint - 1 To tempint2 - 1
-        '        names.Add(posterArray(f).ldUrl)
-        '    Next
-        '    lblMovPosterPages.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & posterArray.Count.ToString & " Images"
-        '    Dim locationX As Integer = 0
-        '    Dim locationY As Integer = 0
-        '    Dim itemcounter As Integer = 0
-        '    Dim tempboolean As Boolean = True
-        '    For Each item As String In names
-        '        messbox.TextBox2.Text = ((tempint-1)+itemcounter+1).ToString & " of " & tempint2.ToString
-        '        messbox.Refresh()
-        '        Dim item2 As String = Utilities.Download2Cache(item)
-        '        posterPicBoxes() = New PictureBox()
-        '        With posterPicBoxes
-        '            .WaitOnLoad = True
-        '            .Location = New Point(locationX, locationY)
-        '            .Width = 123
-        '            .Height = 168
-        '            .SizeMode = PictureBoxSizeMode.Zoom
-        '            .Visible = True
-        '            .BorderStyle = BorderStyle.Fixed3D
-        '            .Name = "poster" & itemcounter.ToString
-        '            AddHandler posterPicBoxes.DoubleClick, AddressOf util_ZoomImage2
-        '            AddHandler posterPicBoxes.LoadCompleted, AddressOf util_ImageRes
-        '        End With
-        '        util_ImageLoad(posterPicBoxes, item2, "")
-
-        '        posterCheckBoxes() = New RadioButton()
-        '        With posterCheckBoxes
-        '            .Location = New Point(locationX + 50, locationY + 166)
-        '            .Name = "postercheckbox" & itemcounter.ToString
-        '            .SendToBack()
-        '            .Text = " "
-        '            AddHandler posterCheckBoxes.CheckedChanged, AddressOf mov_PosterRadioChanged
-        '        End With
-        '        itemcounter += 1
-        '        Me.panelAvailableMoviePosters.Controls.Add(posterPicBoxes())
-        '        Me.panelAvailableMoviePosters.Controls.Add(posterCheckBoxes())
-        '        Me.Refresh()
-        '        Application.DoEvents()
-        '        If tempboolean = True Then
-        '            locationY = 192
-        '        Else
-        '            locationX += 120
-        '            locationY = 0
-        '        End If
-        '        tempboolean = Not tempboolean
-        '    Next
-        '    Me.panelAvailableMoviePosters.Visible = True
-        '    messbox.Close()
-        '    Me.Refresh()
-        '    Application.DoEvents()
-        'Catch ex As Exception
-        '    ExceptionHandler.LogError(ex)
-        'End Try
+        
     End Sub
 
     Private Sub btn_TMDb_posters_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TMDb_posters.Click
@@ -17478,6 +17283,8 @@ End Sub
         scraperLog = ""
         Dim dirpath As String = String.Empty
         scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
+        StatusStrip1.Visible = true
+        tsStatusLabel1.Visible = False
         ToolStripProgressBar8.Value = 0
         ToolStripProgressBar8.ProgressBar.Refresh()
         ToolStripStatusLabel9.Text = "Scanning for Home Movies"
@@ -17588,6 +17395,8 @@ End Sub
         Next
         ToolStripProgressBar8.Visible = False
         ToolStripStatusLabel9.Visible = False
+        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        tsStatusLabel1.Visible = True
     End Sub
 
     Private Sub rebuildHomeMovies()
@@ -18583,6 +18392,8 @@ End Sub
     End Property
 
     Sub imgbw_DoWork(ByVal snder As Object, ByVal e As DoWorkEventArgs) Handles ImgBw.DoWork
+        StatusStrip1.Visible = True
+        tsStatusLabel1.Visible = False
         Dim listpicbox As New List(Of FanartPicBox)
         listpicbox.AddRange(e.Argument(0))      '{image list, Start image number, total number of images, picture panel}
         Dim count As Integer = e.Argument(1)
@@ -18627,6 +18438,8 @@ End Sub
         Imageloading = True
         ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
         ToolStripStatusLabel2.Visible = False
+        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        tsStatusLabel1.Visible = True
         Imageloading = False
     End Sub
 

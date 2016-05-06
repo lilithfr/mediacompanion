@@ -154,6 +154,7 @@ Public Class Pref
     Public Shared XBMC_version As Byte
     Public Shared ShowMovieGridToolTip As Boolean = False
     Public Shared ShowLogOnError As Boolean = True
+    Public Shared AutoHideStatusBar As Boolean
     Public Shared DisplayRatingOverlay As Boolean
     Public Shared DisplayMediainfoOverlay As Boolean
     Public Shared DisplayMediaInfoFolderSize As Boolean
@@ -594,6 +595,7 @@ Public Class Pref
         formheight = "600"
         formwidth = "800"
         disablelogfiles = False
+        AutoHideStatusBar = True
         DisplayRatingOverlay = True
         DisplayMediainfoOverlay = True
         DisplayMediaInfoFolderSize = False
@@ -1123,6 +1125,7 @@ Public Class Pref
         root.AppendChild(doc, "NoAltTitle",                         NoAltTitle)                         'cbNoAltTitle
         root.AppendChild(doc, "XtraFrodoUrls",                      XtraFrodoUrls)                      'cbXtraFrodoUrls
         root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "AutoHideStatusBar",                  AutoHideStatusBar)                  'cbAutoHideStatusBar
         root.AppendChild(doc, "DisplayRatingOverlay",               DisplayRatingOverlay)               'cbDisplayRatingOverlay
         root.AppendChild(doc, "DisplayMediainfoOverlay",            DisplayMediainfoOverlay)            'cbDisplayMediainfoOverlay
         root.AppendChild(doc, "DisplayMediaInfoFolderSize",         DisplayMediaInfoFolderSize)         'cbDisplayMediaInfoFolderSize
@@ -1609,6 +1612,7 @@ Public Class Pref
                     Case "NoAltTitle"                           : NoAltTitle = thisresult.InnerXml 
                     Case "XtraFrodoUrls"                        : XtraFrodoUrls = thisresult.InnerXml
                     Case "disablelogs"                          : disablelogfiles = thisresult.InnerXml
+                    Case "AutoHideStatusBar"                    : AutoHideStatusBar = thisresult.InnerXml
                     Case "DisplayRatingOverlay"                 : DisplayRatingOverlay = thisresult.InnerXml
                     Case "DisplayMediainfoOverlay"              : DisplayMediainfoOverlay = thisresult.InnerXml
                     Case "DisplayMediaInfoFolderSize"           : DisplayMediaInfoFolderSize = thisresult.InnerXml

@@ -196,6 +196,7 @@ Public Class frmPreferences
         chkbx_disablecache          .Checked    = Not Pref.startupCache
         cbUseMultipleThreads        .Checked    = Pref.UseMultipleThreads
         cbShowLogOnError            .Checked    = Pref.ShowLogOnError
+        cbAutoHideStatusBar         .Checked    = Pref.AutoHideStatusBar
         cbCheckForNewVersion        .Checked    = Pref.CheckForNewVersion
         cbMcCloseMCForDLNewVersion  .Checked    = Pref.CloseMCForDLNewVersion
         cbDisplayLocalActor         .Checked    = Pref.LocalActorImage
@@ -861,7 +862,12 @@ Public Class frmPreferences
     Private Sub cbShowLogOnError_CheckedChanged( sender As Object,  e As EventArgs) Handles cbShowLogOnError.CheckedChanged
         If prefsload Then Exit Sub
         Pref.ShowLogOnError = cbShowLogOnError.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbAutoHideStatusBar_CheckedChanged( sender As Object,  e As EventArgs) Handles cbAutoHideStatusBar.CheckedChanged
         If prefsload Then Exit Sub
+        Pref.AutoHideStatusBar = cbAutoHideStatusBar.Checked
         Changes = True
     End Sub
 

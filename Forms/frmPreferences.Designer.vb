@@ -259,6 +259,7 @@ Partial Class frmPreferences
         Me.btnMovPosterPriorityUp = New System.Windows.Forms.Button()
         Me.lbPosterSourcePriorities = New System.Windows.Forms.ListBox()
         Me.GroupBox37 = New System.Windows.Forms.GroupBox()
+        Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovFanartNaming = New System.Windows.Forms.CheckBox()
         Me.btnMovFanartTvSelect = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -475,7 +476,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
+        Me.cbAutoHideStatusBar = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -1465,6 +1466,7 @@ Partial Class frmPreferences
         '
         'TPGeneral
         '
+        Me.TPGeneral.Controls.Add(Me.cbAutoHideStatusBar)
         Me.TPGeneral.Controls.Add(Me.cbMcCloseMCForDLNewVersion)
         Me.TPGeneral.Controls.Add(Me.Label2)
         Me.TPGeneral.Controls.Add(Me.cbMultiMonitorEnable)
@@ -2948,7 +2950,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3187,6 +3189,15 @@ Partial Class frmPreferences
         Me.GroupBox37.TabIndex = 60
         Me.GroupBox37.TabStop = false
         Me.GroupBox37.Text = "Autoscrape artwork"
+        '
+        'cbMovCustFolderjpgNoDelete
+        '
+        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 236)
+        Me.cbMovCustFolderjpgNoDelete.Name = "cbMovCustFolderjpgNoDelete"
+        Me.cbMovCustFolderjpgNoDelete.Size = New System.Drawing.Size(295, 36)
+        Me.cbMovCustFolderjpgNoDelete.TabIndex = 49
+        Me.cbMovCustFolderjpgNoDelete.Text = "I use custom folder.jpg images, do not delete on autoscrape."
+        Me.cbMovCustFolderjpgNoDelete.UseVisualStyleBackColor = true
         '
         'cbMovFanartNaming
         '
@@ -5683,14 +5694,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbMovCustFolderjpgNoDelete
+        'cbAutoHideStatusBar
         '
-        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 236)
-        Me.cbMovCustFolderjpgNoDelete.Name = "cbMovCustFolderjpgNoDelete"
-        Me.cbMovCustFolderjpgNoDelete.Size = New System.Drawing.Size(295, 36)
-        Me.cbMovCustFolderjpgNoDelete.TabIndex = 49
-        Me.cbMovCustFolderjpgNoDelete.Text = "I use custom folder.jpg images, do not delete on autoscrape."
-        Me.cbMovCustFolderjpgNoDelete.UseVisualStyleBackColor = true
+        Me.cbAutoHideStatusBar.AutoSize = true
+        Me.cbAutoHideStatusBar.Location = New System.Drawing.Point(24, 425)
+        Me.cbAutoHideStatusBar.Name = "cbAutoHideStatusBar"
+        Me.cbAutoHideStatusBar.Size = New System.Drawing.Size(222, 19)
+        Me.cbAutoHideStatusBar.TabIndex = 117
+        Me.cbAutoHideStatusBar.Text = "Auto Hide Status Bar on completion."
+        Me.cbAutoHideStatusBar.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6314,4 +6326,5 @@ End Sub
     Friend WithEvents cbMovNfoWatchTag As CheckBox
     Friend WithEvents Label23 As Label
     Friend WithEvents cbMovCustFolderjpgNoDelete As CheckBox
+    Friend WithEvents cbAutoHideStatusBar As CheckBox
 End Class
