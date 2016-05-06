@@ -879,11 +879,11 @@ Public Class Movies
 
 
     Function FindMovieSetInfoByName(MovieSetDisplayName As String) As MovieSetInfo
-        'Try
-            Return (From x In MovieSetDB Where x.MovieSetDisplayName=MovieSetDisplayName Select x).FirstOrDefault
-        'Catch
-        '    Return Nothing
-        'End Try
+        Try
+            Return (From x In MovieSetDB Where x.MovieSetDisplayName = MovieSetDisplayName Select x).FirstOrDefault
+        Catch
+            Return Nothing
+        End Try
     End Function
 
 
