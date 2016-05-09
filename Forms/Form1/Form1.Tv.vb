@@ -1266,9 +1266,11 @@ Partial Public Class Form1
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
             newtvshownfo.Load()
-            If (IsNothing(newtvshownfo.Year.Value) OrElse newtvshownfo.Year.Value.ToInt = 0) AndAlso newtvshownfo.Premiered.Value.Length = 10 Then
-                newtvshownfo.Year.Value = newtvshownfo.Premiered.Value.Substring(0,4)
-                nfoclass.tvshow_NfoSave(newtvshownfo, True)
+            If (IsNothing(newtvshownfo.Year.Value) OrElse newtvshownfo.Year.Value.ToInt = 0) Then
+                If Not String.IsNullOrEmpty(newtvshownfo.Premiered.Value) AndAlso newtvshownfo.Premiered.Value.Length = 10 Then
+                    newtvshownfo.Year.Value = newtvshownfo.Premiered.Value.Substring(0,4)
+                    nfoclass.tvshow_NfoSave(newtvshownfo, True)
+                End If
             End If
             fulltvshowlist.Add(newtvshownfo)
             Dim episodelist As New List(Of TvEpisode)
