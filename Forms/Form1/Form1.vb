@@ -201,7 +201,6 @@ Public Class Form1
     Dim currentPage As Integer = 0
     Dim actorflag As Boolean = False
     Dim listOfTvFanarts As New List(Of str_FanartList)
-    Dim lockedList As Boolean = False
     Dim tableSets As New List(Of str_TableItems)
     Dim relativeFolderList As New List(Of str_RelativeFileList)
     Dim templanguage As String
@@ -1113,7 +1112,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub util_BatchUpdate()
+    Private Sub Batch_Rewritenfo()
 
         rescrapeList.ResetFields()
         rescrapeList.rebuildnfo = True
@@ -3620,25 +3619,13 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Private Sub TextBox_GenreFilter_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
-        Try
-            If lockedList = False Then
-                lockedList = True
-            Else
-                lockedList = False
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
+    
     Private Sub TabControl2_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseWheel
         Try
             If TabControl2.SelectedIndex = 1 Then
                 mouseDelta = e.Delta / 120
                 Try
-                    TabPage22.AutoScrollPosition = New Point(0, TabPage22.VerticalScroll.Value - (mouseDelta * 30))
+                    tpMovWall.AutoScrollPosition = New Point(0, tpMovWall.VerticalScroll.Value - (mouseDelta * 30))
                 Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -3662,14 +3649,14 @@ Public Class Form1
 
         mov_PreferencesDisplay()
         Dim tempstring As String = ""
-        Dim tab As String = TabControl2.SelectedTab.Text
-
-        If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" And tab <> "Media Stubs" Then
+        Dim tab As String = TabControl2.SelectedTab.Name
+        If tab <> tpMovMain.Name And tab <> tpMovFolders.Name And tab <> tpMovStubs.Name Then
+        'If tab <> "Main Browser" And tab <> "Folders" And tab <> "Movie Preferences" And tab <> "Media Stubs" Then
             If workingMovieDetails Is Nothing And movieFolders.Count = 0 And Pref.offlinefolders.Count = 0 Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 MsgBox("There are no movies in your list to work on" & vbCrLf & "Add movie folders in the Folders Tab" & vbCrLf & "Then select the ""Search For New Movies"" Tab")
                 Exit Sub
-            ElseIf workingMovieDetails Is Nothing And movieFolders.Count > 0 And tab <> "Search for new movies" Then
+            ElseIf workingMovieDetails Is Nothing And movieFolders.Count > 0 Then 'And tab <> "Search for new movies" Then
                 Me.TabControl2.SelectedIndex = currentTabIndex
                 If oMovies.MovieCache.Count > 0 Then
                     MsgBox("No Movie is selected")
@@ -3682,15 +3669,15 @@ Public Class Form1
         Else
             currentTabIndex = Me.TabControl2.SelectedIndex
         End If
-
-        If tab = "" Then
+        If tab = tpMovWebBrowser.Name Then     'Movie WebBrowser tab.
+        'If tab = "" Then
             If workingMovieDetails.fullmoviebody.imdbid <> Nothing OrElse workingMovieDetails.fullmoviebody.tmdbid <> "" Then
                 Dim weburl As String = ""
                 Dim TMDB As String = workingMovieDetails.fullmoviebody.tmdbid 
                 Dim IMDB As String = workingMovieDetails.fullmoviebody.imdbid
                 Dim TMDBLan As List(Of String) = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)
                 If (IMDB <> "" And IMDB <> "0") AndAlso TMDB <> "" Then
-                    Dim tpi As Integer = TabPage7.ImageIndex
+                    Dim tpi As Integer = tpMovWebBrowser.ImageIndex
                     If tpi = 1 Then
                         weburl = "https://www.themoviedb.org/movie/" & TMDB & "?language=" & TMDBLan(0) 'de"
                     Else
@@ -3732,14 +3719,17 @@ Public Class Form1
             Else
                 MsgBox("No IMDB or TMDB ID is available for this movie")
             End If
-        ElseIf tab = "Main Browser" Then
+        ElseIf tab = tpMovMain.Name Then      'Movie Main Browser tab
+        'ElseIf tab = "Main Browser" Then
             'Need to update displayed movies list as user may have invalidated it by have a 'missing...' filter selected and assigning one or more missing items
             currentTabIndex = TabControl2.SelectedIndex
             UpdateFilteredList()
-        ElseIf tab.ToLower = "file details" Then
+        ElseIf tab = tpMovFileDetails.Name Then         'Movie File Details tab
+        'ElseIf tab.ToLower = "file details" Then
             currentTabIndex = TabControl2.SelectedIndex
             If TextBox8.Text = "" Then Call util_FileDetailsGet()
-        ElseIf tab.ToLower = "fanart" Then
+        ElseIf tab = tpMovFanart.Name Then       'Movie Fanart tab
+        'ElseIf tab.ToLower = "fanart" Then
             Dim isrootfolder As Boolean = False
             If Pref.movrootfoldercheck Then
                 For Each moviefolder In movieFolders
@@ -3766,22 +3756,28 @@ Public Class Form1
             End If
             currentTabIndex = TabControl2.SelectedIndex
             If Panel2.Controls.Count > 1 Then EnableFanartScrolling()
-        ElseIf tab.ToLower = "posters" Then
+        ElseIf tab = tpMovPoster.Name Then   'Poster Tab
+        'ElseIf tab.ToLower = "posters" Then
             currentTabIndex = TabControl2.SelectedIndex
             gbMoviePostersAvailable.Refresh()
             btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.MovieSet.MovieSetId <> ""
             UpdateMissingPosterNav()
             If Pref.MovPosterTabTMDBSelect Then btn_TMDb_posters.PerformClick()
-        ElseIf tab.ToLower = "change movie" Then
+        ElseIf tab = tpMovChange.Name Then         'Change Movie
+        'ElseIf tab.ToLower = "change movie" Then
             Call mov_ChangeMovieSetup(MovieSearchEngine)
             currentTabIndex = TabControl2.SelectedIndex
-        ElseIf tab.ToLower = "wall" Then
+        ElseIf tab = tpMovWall.Name Then        'Wall Tab
+        'ElseIf tab.ToLower = "wall" Then
             Call mov_WallSetup()
-        ElseIf tab.ToLower = "moviesets & tags" Then
+        ElseIf tab = tpMovSetsTags.Name Then         'Movie Sets & Tags tab
+        'ElseIf tab.ToLower = "moviesets & tags" Then
             Call MovieSetsAndTagsSetup()
-        ElseIf tab.ToLower = "fanart.tv"
+        ElseIf tab = tpMovFanartTv.Name Then       'Fanart.Tv tab
+        'ElseIf tab.ToLower = "fanart.tv"
             UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
-        ElseIf tab.ToLower = "table" Then
+        ElseIf tab = tpMovTable.Name Then    'Table tab
+        'ElseIf tab.ToLower = "table" Then
             currentTabIndex = TabControl2.SelectedIndex
             Call mov_TableSetup()
         Else
@@ -3801,13 +3797,13 @@ Public Class Form1
             For index As Integer = 0 To TabControl2.TabCount - 1 Step 1
                 If TabControl2.GetTabRect(index).Contains(e.Location) Then
                     If index = 8 Then
-                        Dim tpi As Integer = TabPage7.ImageIndex
+                        Dim tpi As Integer = tpMovWebBrowser.ImageIndex
                         If tpi = 0 Then
-                            TabPage7.ImageIndex = 1
+                            tpMovWebBrowser.ImageIndex = 1
                         Else
-                            TabPage7.ImageIndex = 0
+                            tpMovWebBrowser.ImageIndex = 0
                         End If 
-                        TabPage7.Refresh()
+                        tpMovWebBrowser.Refresh()
                     End If
                     Exit For
                 End If
@@ -4829,8 +4825,7 @@ Public Class Form1
     End Sub
 
     Private Sub TabControl3_Selecting(ByVal sender As Object, ByVal e As CancelEventArgs) Handles TabControl3.Selecting 
-        'Dim tab As String = TabControl3.SelectedTab.Text
-        If TabControl3.SelectedTab.Text = "TV Preferences" Then
+        If TabControl3.SelectedTab.Name = tpTvPrefs.Name Then
             e.Cancel = True
             OpenPreferences(2)
         End If
@@ -4840,20 +4835,20 @@ Public Class Form1
         
         Try
             Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview)
-            Dim tab As String = TabControl3.SelectedTab.Text
+            Dim tab As String = TabControl3.SelectedTab.Name
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
-            If (tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences") AndAlso Show Is Nothing Then
+            If (tab <> tpTvMainBrowser.Name And tab <> tpTvFolders.Name And tab <> tpTvPrefs.Name) AndAlso Show Is Nothing Then
                 MsgBox("No TV Show is selected")
                 Exit Sub
             End If
 
             Dim tempstring As String = ""
-            If tab <> "Main Browser" And tab <> "Folders" And tab <> "TV Preferences" Then
+            If tab <> tpTvMainBrowser.Name And tab <> tpTvFolders.Name And tab <> tpTvPrefs.Name Then
                 If Show.NfoFilePath = "" And tvFolders.Count = 0 Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                     MsgBox("There are no TV Shows in your list to work on" & vbCrLf & "Set the Preferences as you want them" & vbCrLf & "Using the Preferences Tab, then" & vbCrLf & "add your TV Folders using the Folders Tab" & vbCrLf & "Once the tvshow has been scraped then" & vbCrLf & "Use the tab, ""Search for new episodes""")
-                    If tab <> "TV Preferences" Then Exit Sub
-                ElseIf Show.NfoFilePath = "" And tvFolders.Count > 0 And tab <> "Search for new Episodes" And tab <> "TV Preferences" Then
+                    If tab <> tpTvPrefs.Name Then Exit Sub
+                ElseIf Show.NfoFilePath = "" And tvFolders.Count > 0 And tab <> tpTvPrefs.Name Then
                     Me.TabControl3.SelectedIndex = tvCurrentTabIndex
                     If Cache.TvCache.Shows.Count > 0 Then
                         MsgBox("No TV Show is selected")
@@ -4863,7 +4858,7 @@ Public Class Form1
                         Exit Sub
                     End If
                 End If
-            ElseIf tab.Tolower = "folders" Then
+            ElseIf tab = tpTvFolders.Name Then      'Folders
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 TabControl3.SelectedIndex = tvCurrentTabIndex
                 Call tv_FoldersSetup()
@@ -4871,75 +4866,46 @@ Public Class Form1
                 tvCurrentTabIndex = 0
                 Exit Sub
             End If
-            If tab = "TV Show Selector" Then
+            If tab = tpTvSelector.Name Then
                 If ListBox3.Items.Count = 0 Then
                     tvCurrentTabIndex = TabControl3.SelectedIndex
                     Call tv_ShowChangedRePopulate()
                 End If
-            'ElseIf tab = "Search for new Episodes" Then
-            '    TabControl3.SelectedIndex = tvCurrentTabIndex
-            '    Call ep_Search()
-            'ElseIf tab = "Cancel Episode Search" Then
-            '    TabControl3.SelectedIndex = tvCurrentTabIndex
-            '    bckgroundscanepisodes.CancelAsync()
-            ElseIf tab = "Main Browser" Then
+            ElseIf tab = tpTvMainBrowser.Name Then
                 If TvTreeview.Nodes.Count = 0 Then TvTreeview.SelectedNode = TvTreeview.TopNode
                 TvTreeview.Focus()
                 tvCurrentTabIndex = 0
-            ElseIf tab = "Posters" Then
+            ElseIf tab = tpTvPosters.Name Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_PosterSetup()
-            ElseIf tab = "Table View" Then
+            ElseIf tab = tpTvTable.Name Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_TableView()
-            ElseIf tab = "Wall" Then
+            ElseIf tab = tpTvWall.Name Then
                 tvCurrentTabIndex = TabControl3.SelectedIndex
                 Call tv_wallSetup()
-            ElseIf tab = "" Then        'tpTvWeb tab
+            ElseIf tab = tpTvWeb.Name Then        'tpTvWeb tab
                 Dim TvdbId As Integer = 0
                 If Not String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso Integer.TryParse(Show.TvdbId.Value, TvdbId) Then
                     Dim tpi As Integer = tpTvWeb.ImageIndex
                     If tpi = 0 Then
-                            tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
-                        Else
-                            tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
-                        End If
-                    If Pref.externalbrowser = True Then
-                        Me.TabControl3.SelectedIndex = tvCurrentTabIndex
-                        OpenUrl(tempstring)
+                        tempstring = "http://thetvdb.com/?tab=series&id=" & TvdbId & "&lid=7"
                     Else
-                        tvCurrentTabIndex = TabControl3.SelectedIndex
-                        Try
-                            WebBrowser4.Stop()
-                            WebBrowser4.ScriptErrorsSuppressed = True
-                            WebBrowser4.Navigate(tempstring)
-                        Catch
-                            WebBrowser4.Stop()
-                            WebBrowser4.ScriptErrorsSuppressed = True
-                            WebBrowser4.Navigate(tempstring)
-                        End Try
-                        WebBrowser4.Focus()
+                        tempstring = "http://www.imdb.com/title/" & Show.ImdbId.Value & "/"
                     End If
+                    Call GoTvWebBrowser(tempstring)
                 ElseIf String.IsNullOrEmpty(Show.TvdbId.Value) AndAlso String.IsNullOrEmpty(Show.ImdbId.Value) Then
                     TabControl3.SelectedIndex = 0
                     MsgBox("No TVDB or IMDB ID present for selected Show" & vbCrLf & "Use Tv Show Selector Tab, to select" & vbCrLf & "correct show")
                 End If
-            ElseIf tab.ToLower = "fanart" Then
+            ElseIf tab = tpTvFanart.Name Then
                 Call tv_Fanart_Load()
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-            ElseIf tab.ToLower = "fanart.tv" Then
+            ElseIf tab = tpTvFanartTv.Name Then
                 UcFanartTvTv1.ucFanartTv_Refresh(tv_ShowSelectedCurrently(TvTreeview))
-            ElseIf tab.ToLower = "screenshot" Then
+            ElseIf tab = tpTvScreenshot.Name Then       
                 tvCurrentTabIndex = TabControl3.SelectedIndex
-                If Pref.EdenEnabled Then
-                    util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
-                End If
-                If Pref.FrodoEnabled Then
-                    util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
-                End If
-                If TextBox35.Text = "" Then
-                    TextBox35.Text = Pref.ScrShtDelay
-                End If
+                Call GoScreenshotTab(WorkingEpisode)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -4977,6 +4943,37 @@ Public Class Form1
         End Try
     End Sub
     
+    Private Sub GoTvWebBrowser(ByVal tempstring As String)
+        If Pref.externalbrowser = True Then
+            Me.TabControl3.SelectedIndex = tvCurrentTabIndex
+            OpenUrl(tempstring)
+        Else
+            tvCurrentTabIndex = TabControl3.SelectedIndex
+            Try
+                WebBrowser4.Stop()
+                WebBrowser4.ScriptErrorsSuppressed = True
+                WebBrowser4.Navigate(tempstring)
+            Catch
+                WebBrowser4.Stop()
+                WebBrowser4.ScriptErrorsSuppressed = True
+                WebBrowser4.Navigate(tempstring)
+            End Try
+            WebBrowser4.Focus()
+        End If
+    End Sub
+
+    Private Sub GoScreenshotTab(ByRef WorkingEpisode As TvEpisode)
+        If Pref.EdenEnabled Then
+            util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
+        End If
+        If Pref.FrodoEnabled Then
+            util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
+        End If
+        If TextBox35.Text = "" Then
+            TextBox35.Text = Pref.ScrShtDelay
+        End If
+    End Sub
+
     Private Sub tv_TableView()
         Dim availableshows As New List(Of TvShow)
 
@@ -6884,7 +6881,7 @@ Public Class Form1
     
     Private Sub RefreshMovieNfoFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RefreshMovieNfoFilesToolStripMenuItem.Click
         Try
-            Call util_BatchUpdate()
+            Call Batch_Rewritenfo()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -7075,15 +7072,15 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub TabPage22_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage22.LostFocus
+    Private Sub tpMovWall_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovWall.LostFocus
         Try
-            TabPage22.Focus()
+            tpMovWall.Focus()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub TabPage22_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabPage22.MouseWheel
+    Private Sub tpMovWall_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tpMovWall.MouseWheel
         Try
 
         Catch ex As Exception
@@ -7576,12 +7573,12 @@ Public Class Form1
 #Region "Movie Table"
 
 'tabpage events
-    Private Sub tpMoviesTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Enter
+    Private Sub tpMovTable_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovTable.Enter
         'MovSetsRepopulate()
         'mov_TableSetup()
     End Sub
 
-    Private Sub tpMoviesTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMoviesTable.Leave
+    Private Sub tpMovTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovTable.Leave
         DataGridView1.EndEdit()
         Pref.tableview.Clear()
         For Each column In DataGridView1.Columns
@@ -10099,11 +10096,11 @@ End Sub
         End If
     End Function
 
-    Private Sub TabPageMovMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2MovMainBrowser.Enter
+    Private Sub tpMovMain_Enter(sender As Object, e As System.EventArgs) Handles tpMovMain.Enter
         mov_SplitContainerAutoPosition()  
     End Sub
 
-    Private Sub TabPageTVMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles TabPageLevel2TVMainBrowser.Enter
+    Private Sub tpTvMainBrowser_Enter(sender As Object, e As System.EventArgs) Handles tpTvMainBrowser.Enter
         tv_SplitContainerAutoPosition()
     End Sub
 
@@ -10787,9 +10784,9 @@ End Sub
 
     Sub bckgrndcancel
         If ImgBw.IsBusy Then ImgBw.CancelAsync()
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-        If CurrentTab = "movies" Then BckWrkScnMovies_Cancel
-        If CurrentTab = "tv shows" Then bckgroundscanepisodes.CancelAsync()
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Name
+        If CurrentTab = TabPage1.Name Then BckWrkScnMovies_Cancel
+        If CurrentTab = TabPage2.Name Then bckgroundscanepisodes.CancelAsync()
     End Sub
 
     Sub BckWrkScnMovies_Cancel
@@ -10812,16 +10809,16 @@ End Sub
     
     Sub doResizeRefresh
         Try
-            Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-            If CurrentTab = "movies" Then
+            Dim CurrentTab As String = TabLevel1.SelectedTab.Name
+            If CurrentTab = TabPage1.Name Then   'Movies
                 mov_DisplayFanart()
                 util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
                 Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
                 movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize)
-            ElseIf CurrentTab = "tv shows" Then
+            ElseIf CurrentTab = TabPage2.Name Then  'TV Shows
                 TvTreeview_AfterSelect_Do()
             End If
-            Dim MovMaxWallCount2 As Integer = Math.Floor((TabPage22.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
+            Dim MovMaxWallCount2 As Integer = Math.Floor((tpMovWall.Width - 50) / 150) 'Convert.ToInt32((TabPage22.Width - 100) / 150)
             Dim tvMaxWallCount2 As Integer = Math.Floor((tpTvWall.Width - 50) / 150)
             If MovMaxWallCount2 <> MovMaxWallCount Then
                 MovMaxWallCount = MovMaxWallCount2
@@ -10836,28 +10833,28 @@ End Sub
     End Sub
 
     Sub doRefresh
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-        If CurrentTab = "movies" Then
-            Dim SubTab As String = TabControl2.SelectedTab.Text.ToLower
-            If SubTab = "main browser" Then mov_RebuildMovieCaches()
-            If SubTab = "fanart" Then 
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Name
+        If CurrentTab = TabPage1.Name Then  'Movies
+            Dim SubTab As String = TabControl2.SelectedTab.Name
+            If SubTab = tpMovMain.Name Then mov_RebuildMovieCaches()
+            If SubTab = tpMovFanart.name Then 
                 MovFanartClear()
                 MovFanartDisplay()
             End If
         End If
-        If CurrentTab = "tv shows" Then 
-            Dim SubTab As String = TabControl3.SelectedTab.Text.ToLower
-            If SubTab = "main browser" Then tv_CacheRefresh()
-            If SubTab = "fanart" Then tv_Fanart_Load()
+        If CurrentTab = TabPage2.Name Then  'TV Shows
+            Dim SubTab As String = TabControl3.SelectedTab.Name
+            If SubTab = tpTvMainBrowser.Name Then tv_CacheRefresh()
+            If SubTab = tpTvFanart.Name Then tv_Fanart_Load()
         End If
-        If CurrentTab = "music videos" Then ucMusicVideo1.btnRefresh.PerformClick()
+        If CurrentTab = TabMV.Name Then ucMusicVideo1.btnRefresh.PerformClick()
     End Sub
 
     Sub doSearchNew
-        Dim CurrentTab As String = TabLevel1.SelectedTab.Text.ToLower
-        If CurrentTab = "movies" AndAlso TabControl2.SelectedTab.Text.ToLower = "main browser" Then SearchForNew()
-        If CurrentTab = "tv shows" Then ep_Search()
-        If CurrentTab = "music videos" Then ucMusicVideo1.btnSearchNew.PerformClick()
+        Dim CurrentTab As String = TabLevel1.SelectedTab.Name
+        If CurrentTab = TabPage1.name AndAlso TabControl2.SelectedTab.Name = tpMovMain.Name Then SearchForNew()
+        If CurrentTab = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then ep_Search()
+        If CurrentTab = TabMV.Name Then ucMusicVideo1.btnSearchNew.PerformClick()
     End Sub
 
     Private Sub ssFileDownload_Resize(sender As System.Object, e As System.EventArgs) Handles ssFileDownload.Resize
@@ -11698,7 +11695,7 @@ End Sub
 #Region "Movie Wall"
 
     Public Shared Sub updateposterwall(ByVal path As String, ByVal movie As String)
-        For Each poster As PictureBox In Form1.TabPage22.Controls
+        For Each poster As PictureBox In Form1.tpMovWall.Controls
             If poster.Tag = movie Then
                 util_ImageLoad(poster, path, Utilities.DefaultPosterPath)
                 poster.Tag = movie
@@ -11707,13 +11704,13 @@ End Sub
     End Sub
 
     Private Sub mov_WallReset()
-        For i = TabPage22.Controls.Count - 1 To 0 Step -1
-            TabPage22.Controls.RemoveAt(i)
+        For i = tpMovWall.Controls.Count - 1 To 0 Step -1
+            tpMovWall.Controls.RemoveAt(i)
         Next
         Dim count As Integer = 0
         Dim locx As Integer = 0
         Dim locy As Integer = 0
-        Dim MovMaxWallCount As Integer = Math.Floor((TabPage22.Width - 40) / WallPicWidth)
+        Dim MovMaxWallCount As Integer = Math.Floor((tpMovWall.Width - 40) / WallPicWidth)
 
         While (DataGridViewMovies.SelectedRows.Count / MovMaxWallCount) > WallPicWidth
             MovMaxWallCount += 1
@@ -11729,15 +11726,15 @@ End Sub
                     End If
 
                     With pic
-                        Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
+                        Dim vscrollPos As Integer = tpMovWall.VerticalScroll.Value
                         .Location = New Point(locx, locy - vscrollPos)
                         .ContextMenuStrip = MovieWallContextMenu
                     End With
                     locx += WallPicWidth
                     count += 1
 
-                    Me.TabPage22.Controls.Add(pic)
-                    TabPage22.Refresh()
+                    Me.tpMovWall.Controls.Add(pic)
+                    tpMovWall.Refresh()
                     Application.DoEvents()
                 Catch ex As Exception
                     MsgBox(ex.ToString)
@@ -11764,19 +11761,19 @@ End Sub
         
         If moviecount_bak = DataGridViewMovies.RowCount Then Exit Sub
 
-        MovMaxWallCount = Math.Floor((TabPage22.Width - 40)/WallPicWidth)
+        MovMaxWallCount = Math.Floor((tpMovWall.Width - 40)/WallPicWidth)
 
         While (DataGridViewMovies.SelectedRows.Count / MovMaxWallCount) > WallPicWidth
             MovMaxWallCount += 1
         End While        
         
         MovpictureList.Clear()
-        For i = TabPage22.Controls.Count - 1 To 0 Step -1
-            If TabPage22.Controls(i).Name = "" Then
-                TabPage22.Controls.RemoveAt(i)
+        For i = tpMovWall.Controls.Count - 1 To 0 Step -1
+            If tpMovWall.Controls(i).Name = "" Then
+                tpMovWall.Controls.RemoveAt(i)
             End If
         Next
-        TabPage22.Refresh()
+        tpMovWall.Refresh()
         Application.DoEvents()
         
         For Each row As DataGridViewRow In DataGridViewMovies.Rows
@@ -11837,7 +11834,7 @@ End Sub
                     locx = 0
                     locy += WallPicHeight
                 End If
-                Dim vscrollPos As Integer = TabPage22.VerticalScroll.Value
+                Dim vscrollPos As Integer = tpMovWall.VerticalScroll.Value
                 If mouseDelta <> 0 Then
                     vscrollPos = vscrollPos - mouseDelta
                     mouseDelta = 0
@@ -11846,9 +11843,9 @@ End Sub
                 locx += WallPicWidth
                 count += 1
             End With
-            Me.TabPage22.Controls.Add(bigPictureBox)
+            Me.tpMovWall.Controls.Add(bigPictureBox)
             MovpictureList.Add(bigPictureBox)
-            Me.TabPage22.Refresh()
+            Me.tpMovWall.Refresh()
             Application.DoEvents()
         Next
     End Sub
@@ -12063,7 +12060,7 @@ End Sub
 
 #Region "Movie Fanart Tab"
 
-    Private Sub TabPageMovieFanart_Leave( sender As Object,  e As EventArgs) Handles TabPageMovieFanart.Leave
+    Private Sub tpMovFanart_Leave( sender As Object,  e As EventArgs) Handles tpMovFanart.Leave
         If ImgBw.IsBusy Then
             ImgBw.CancelAsync()
             Do Until Not ImgBw.IsBusy
@@ -12421,7 +12418,7 @@ End Sub
 
 #Region "Movie Poster Tab"
 
-    Private Sub TabPageMoviePoster_Leave( sender As Object,  e As EventArgs) Handles TabPageMoviePoster.Leave
+    Private Sub tpMovPoster_Leave( sender As Object,  e As EventArgs) Handles tpMovPoster.Leave
         If ImgBw.IsBusy Then
             ImgBw.CancelAsync()
             Do Until Not ImgBw.IsBusy
@@ -12917,7 +12914,7 @@ End Sub
 
 #Region "Movie Fanart.TV Tab"
 
-    Private Sub tpFanartTv_Leave(sender As Object, e As EventArgs) Handles tpFanartTv.Leave
+    Private Sub tpMovFanartTv_Leave(sender As Object, e As EventArgs) Handles tpMovFanartTv.Leave
         If ImgBw.IsBusy Then
             ImgBw.CancelAsync()
             Do Until Not ImgBw.IsBusy
@@ -13632,7 +13629,7 @@ End Sub
 
     'Movie Folders
 
-    Private Sub TabPage25_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage25.Leave
+    Private Sub TabPage25_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovFolders.Leave
         Try
             If moviefolderschanged Then
                 Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
