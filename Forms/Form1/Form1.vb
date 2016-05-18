@@ -2621,7 +2621,7 @@ Public Class Form1
                 movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
             End If
             movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-            If TabControl2.SelectedTab.Name = "TabPage9" Then
+            If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then
                 For Each t In NewTagList
                     Dim remtag As String = t.Replace("- ","").Replace("+ ","")
                     If t.Contains("- ") Then
@@ -2702,7 +2702,7 @@ Public Class Form1
                     End If
                     If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString'text
                     movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-                    If TabControl2.SelectedTab.Name = "TabPage9" Then
+                    If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then
                         For Each t In NewTagList
                             Dim remtag As String = t.Replace("- ","").Replace("+ ","")
                             If t.Contains("- ") Then

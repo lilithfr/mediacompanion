@@ -655,15 +655,27 @@ Public Class ucMusicVideo
             workingMusicVideo.fullmoviebody.genre = txtGenre.Text
             workingMusicVideo.fullmoviebody.plot = txtPlot.Text
             WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
+            MVCacheRemove(workingMusicVideo.fileinfo.fullpathandfilename)
+            MVCacheadd(workingMusicVideo)
         Else
-            'Dim NfosToSave As List(Of String) = (From x As datagridviewrow In MVDGV1.SelectedRows Select nfo=x.Cells("nfopathandfilename").Value.ToString).ToList
-            'For Each nfo As String In NfosToSave
-            '    If Not File.Exists(nfo) Then Continue For
-            '    Dim movie As Movie = oMovies.LoadMovie(nfo)
-            '    If IsNothing(movie) Then Continue For
-            '    'If Not String.IsNullOrEmpty(txtAlbum.Text) Then 
-            'Next
+            Dim NfosToSave As List(Of String) = (From x As datagridviewrow In MVDGV1.SelectedRows Select nfo = x.Cells("nfopathandfilename").Value.ToString).ToList
+            For Each nfo As String In NfosToSave
+                If Not File.Exists(nfo) Then Continue For
+                Dim MVTemp As FullMovieDetails =  WorkingWithNfoFiles.MVloadNfo(nfo)
+                If IsNothing(MVTemp) Then Continue For
+                If Not String.IsNullOrEmpty(txtAlbum.Text)      Then MVTemp.fullmoviebody.album     = txtAlbum.Text
+                If Not String.IsNullOrEmpty(txtArtist.Text)     Then MVTemp.fullmoviebody.artist    = txtArtist.Text
+                If Not String.IsNullOrEmpty(txtYear.Text)       Then MVTemp.fullmoviebody.year      = txtYear.Text
+                If Not String.IsNullOrEmpty(txtStudio.Text)     Then MVTemp.fullmoviebody.studio    = txtStudio.Text
+                If Not String.IsNullOrEmpty(txtDirector.Text)   Then MVTemp.fullmoviebody.director  = txtDirector.Text
+                If Not String.IsNullOrEmpty(txtGenre.Text)      Then MVTemp.fullmoviebody.genre     = txtGenre.Text
+                If Not String.IsNullOrEmpty(txtPlot.Text)       Then MVTemp.fullmoviebody.plot      = txtPlot.Text
+                WorkingWithNfoFiles.MVsaveNfo(nfo, MVTemp)
+                MVCacheRemove(nfo)
+                MVCacheadd(MVTemp)
+            Next
         End If
+        mv_FiltersAndSortApply()
     End Sub
 
     Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick

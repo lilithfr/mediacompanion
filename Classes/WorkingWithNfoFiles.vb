@@ -4131,6 +4131,8 @@ Public Class WorkingWithNfoFiles
         If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.filedetails_video.Container.Value) Then
             Dim container As String = NewMusicVideo.filedetails.filedetails_video.Container.Value
             NewMusicVideo.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
+        Else
+            NewMusicVideo.fileinfo.filenameandpath = Utilities.GetFileName(filepath,True)
         End If
         Return NewMusicVideo
     End Function
