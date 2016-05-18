@@ -24,6 +24,8 @@ Public Class ucMusicVideo
     Public DataGridViewBindingSource As New BindingSource
     Public Shared Property MVCache As New List(Of MVComboList)
     Public Shared changeMVList As New List(Of String)
+    Private keypresstimer As Timers.Timer = New Timers.Timer()
+    Private MVKeyPress As String = ""
     Private changefields As Boolean = False
     Dim movieGraphicInfo As New GraphicInfo
     Public cropimage As Bitmap
@@ -58,6 +60,9 @@ Public Class ucMusicVideo
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         MVPreferencesLoad()
+
+        AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
+        Form1.Ini_Timer(keypresstimer, 1000)
     End Sub
 
     Private Sub MVPreferencesLoad()
@@ -488,16 +493,40 @@ Public Class ucMusicVideo
         'Else
         '    LastSelected = MVDgv1.SelectedCells(0).RowIndex
         'End If
-        MVForm_Init()
-        Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
-        Dim queryList As List(Of MVComboList) = query.ToList()
+        If selectedRows.Count = 1 Then
+            lblMultiMode.Visible = False
+            PcBxMusicVideoScreenShot.Visible = True
+            PcBxPoster.Visible = True
+            btnMVPlay.Enabled = True
+            MVForm_Init()
+            Dim query = From f In MVCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
+            Dim queryList As List(Of MVComboList) = query.ToList()
 
-        If queryList.Count > 0 Then
-            workingMV.nfopathandfilename = queryList(0).nfopathandfilename
-            MVForm_Populate()
+            If queryList.Count > 0 Then
+                workingMV.nfopathandfilename = queryList(0).nfopathandfilename
+                MVForm_Populate()
+            Else
+                MVForm_Populate()
+            End If
         Else
-            MVForm_Populate()
+            lblMultiMode.Visible                = True
+            PcBxMusicVideoScreenShot.Image      = Nothing
+            PcBxMusicVideoScreenShot.Visible    = False
+            PcBxPoster.Image                    = Nothing
+            PcBxPoster.Visible                  = False
+            btnMVPlay.Enabled                   = False
+            txtTitle    .Text = ""
+            txtArtist   .Text = ""
+            txtAlbum    .Text = ""
+            txtYear     .Text = ""
+            txtStudio   .Text = ""
+            txtDirector .Text = ""
+            txtGenre    .Text = ""
+            txtFullpath .Text = ""
+            txtRuntime  .Text = ""
+            txtPlot     .Text = ""
         End If
+        
     End Sub
 
     Private Sub MVForm_Populate()
@@ -615,15 +644,26 @@ Public Class ucMusicVideo
     End Sub
 
     Private Sub btnSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSave.Click
-        workingMusicVideo.fullmoviebody.title = txtTitle.Text
-        workingMusicVideo.fullmoviebody.artist = txtArtist.Text
-        workingMusicVideo.fullmoviebody.album = txtAlbum.Text
-        workingMusicVideo.fullmoviebody.year = txtYear.Text
-        workingMusicVideo.fullmoviebody.studio = txtStudio.Text
-        workingMusicVideo.fullmoviebody.director = txtDirector.Text
-        workingMusicVideo.fullmoviebody.genre = txtGenre.Text
-        workingMusicVideo.fullmoviebody.plot = txtPlot.Text
-        WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
+        If MVDgv1.SelectedRows.Count = 0 Then Return
+        If MVDgv1.SelectedRows.Count = 1 Then
+            workingMusicVideo.fullmoviebody.title = txtTitle.Text
+            workingMusicVideo.fullmoviebody.artist = txtArtist.Text
+            workingMusicVideo.fullmoviebody.album = txtAlbum.Text
+            workingMusicVideo.fullmoviebody.year = txtYear.Text
+            workingMusicVideo.fullmoviebody.studio = txtStudio.Text
+            workingMusicVideo.fullmoviebody.director = txtDirector.Text
+            workingMusicVideo.fullmoviebody.genre = txtGenre.Text
+            workingMusicVideo.fullmoviebody.plot = txtPlot.Text
+            WorkingWithNfoFiles.MVsaveNfo(workingMusicVideo.fileinfo.fullpathandfilename, workingMusicVideo)
+        Else
+            'Dim NfosToSave As List(Of String) = (From x As datagridviewrow In MVDGV1.SelectedRows Select nfo=x.Cells("nfopathandfilename").Value.ToString).ToList
+            'For Each nfo As String In NfosToSave
+            '    If Not File.Exists(nfo) Then Continue For
+            '    Dim movie As Movie = oMovies.LoadMovie(nfo)
+            '    If IsNothing(movie) Then Continue For
+            '    'If Not String.IsNullOrEmpty(txtAlbum.Text) Then 
+            'Next
+        End If
     End Sub
 
     Private Sub PcBxPoster_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles PcBxPoster.DoubleClick
@@ -1581,8 +1621,30 @@ Public Class ucMusicVideo
         End Try
     End Sub
 
+    Private Sub MVDgv1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles MVDgv1.Keypress
+	    If [Char].IsLetter(e.KeyChar) or [Char].IsDigit(e.KeyChar) Then
+            Dim ekey As String = e.KeyChar.ToString.ToLower
+            keypresstimer.Stop()
+            MVKeyPress &= ekey
+            keypresstimer.Start()
+		    For i As Integer = 0 To (MVDgv1.Rows.Count) - 1
+                Dim rtitle As String = MVDgv1.Rows(i).Cells(GridFieldToDisplay1).Value.ToString.ToLower
+			    If rtitle.StartsWith(MVKeyPress) Then
+                    Dim icell As Integer = MVDgv1.CurrentCell.ColumnIndex 
+                    MVDgv1.CurrentCell = MVDgv1.Rows(i).Cells(icell)
+                    DisplayMV()
+				    Return
+			    End If
+		    Next
+	    End If
+    End Sub
+
 #End Region             'MVDgv1 Handlers
     
+    Private Sub keypresstimer_Elapsed()
+        MVKeyPress = ""
+    End Sub
+
 #Region "MVContextMenu Items"
 
     Private Sub TSMIMVConfig()

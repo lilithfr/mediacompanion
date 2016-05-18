@@ -141,6 +141,7 @@ Partial Class ucMusicVideo
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.lblMultiMode = New System.Windows.Forms.Label()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -177,6 +178,7 @@ Partial Class ucMusicVideo
         'tPMainMV
         '
         Me.tPMainMV.BackColor = System.Drawing.Color.LightGray
+        Me.tPMainMV.Controls.Add(Me.lblMultiMode)
         Me.tPMainMV.Controls.Add(Me.TableLayoutPanel1)
         Me.tPMainMV.ForeColor = System.Drawing.Color.Black
         Me.tPMainMV.Location = New System.Drawing.Point(4, 24)
@@ -1566,6 +1568,18 @@ Partial Class ucMusicVideo
         Me.Label27.TabIndex = 20
         Me.Label27.Text = resources.GetString("Label27.Text")
         '
+        'lblMultiMode
+        '
+        Me.lblMultiMode.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.lblMultiMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
+        Me.lblMultiMode.Location = New System.Drawing.Point(345, 100)
+        Me.lblMultiMode.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
+        Me.lblMultiMode.Name = "lblMultiMode"
+        Me.lblMultiMode.Size = New System.Drawing.Size(517, 163)
+        Me.lblMultiMode.TabIndex = 165
+        Me.lblMultiMode.Text = resources.GetString("lblMultiMode.Text")
+        Me.lblMultiMode.Visible = false
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1714,4 +1728,5 @@ End Sub
     Friend WithEvents Label26 As Label
     Friend WithEvents Button1 As Button
     Friend WithEvents Label27 As Label
+    Friend WithEvents lblMultiMode As Label
 End Class

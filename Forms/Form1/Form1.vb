@@ -3260,31 +3260,31 @@ Public Class Form1
 
         Dim needtoload As Boolean = False
         Dim done As Boolean = False
-        If selectedRows.Count > 1 Then
-            mov_ToolStripPlayMovie.Visible = False
-            mov_ToolStripOpenFolder.Visible = False
-            mov_ToolStripViewNfo.Visible = False
-            ToolStripSeparator17.Visible = False
-            ToolStripSeparator24.Visible = False
-            mov_ToolStripFanartBrowserAlt.Visible = False
-            mov_ToolStripPosterBrowserAlt.Visible = False
-            mov_ToolStripEditMovieAlt.Visible = False
-            mov_ToolStripReloadFromCache.Visible = False
-        End If
+        'If selectedRows.Count > 1 Then
+            mov_ToolStripPlayMovie.Visible = (selectedRows.Count = 1)
+            mov_ToolStripOpenFolder.Visible = (selectedRows.Count = 1)
+            mov_ToolStripViewNfo.Visible = (selectedRows.Count = 1)
+            ToolStripSeparator17.Visible = (selectedRows.Count = 1)
+            ToolStripSeparator24.Visible = (selectedRows.Count = 1)
+            mov_ToolStripFanartBrowserAlt.Visible = (selectedRows.Count = 1)
+            mov_ToolStripPosterBrowserAlt.Visible = (selectedRows.Count = 1)
+            mov_ToolStripEditMovieAlt.Visible = (selectedRows.Count = 1)
+            mov_ToolStripReloadFromCache.Visible = (selectedRows.Count = 1)
+        'End If
 
         If Yield(yielding) Then Return
 
         If selectedRows.Count = 1 Then
-            mov_ToolStripPlayMovie.Visible = True
-            mov_ToolStripOpenFolder.Visible = True
-            mov_ToolStripViewNfo.Visible = True
-            ToolStripSeparator17.Visible = True
-            ToolStripSeparator24.Visible = True
-            ToolStripSeparator4.Visible = True
-            mov_ToolStripFanartBrowserAlt.Visible = True
-            mov_ToolStripPosterBrowserAlt.Visible = True
-            mov_ToolStripEditMovieAlt.Visible = True
-            mov_ToolStripReloadFromCache.Visible = True
+            'mov_ToolStripPlayMovie.Visible = True
+            'mov_ToolStripOpenFolder.Visible = True
+            'mov_ToolStripViewNfo.Visible = True
+            'ToolStripSeparator17.Visible = True
+            'ToolStripSeparator24.Visible = True
+            'ToolStripSeparator4.Visible = True
+            'mov_ToolStripFanartBrowserAlt.Visible = True
+            'mov_ToolStripPosterBrowserAlt.Visible = True
+            'mov_ToolStripEditMovieAlt.Visible = True
+            'mov_ToolStripReloadFromCache.Visible = True
             If titletxt.Visible = False Then
                 needtoload = True
             End If
