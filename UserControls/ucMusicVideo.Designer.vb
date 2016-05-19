@@ -23,11 +23,12 @@ Partial Class ucMusicVideo
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ucMusicVideo))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ucMusicVideo))
         Me.TabControlMain = New System.Windows.Forms.TabControl()
         Me.tPMainMV = New System.Windows.Forms.TabPage()
+        Me.lblMultiMode = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.rbMVFilename = New System.Windows.Forms.RadioButton()
@@ -141,7 +142,6 @@ Partial Class ucMusicVideo
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.lblMultiMode = New System.Windows.Forms.Label()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -174,6 +174,7 @@ Partial Class ucMusicVideo
         Me.TabControlMain.SelectedIndex = 0
         Me.TabControlMain.Size = New System.Drawing.Size(975, 604)
         Me.TabControlMain.TabIndex = 0
+        Me.TabControlMain.TabStop = false
         '
         'tPMainMV
         '
@@ -187,6 +188,18 @@ Partial Class ucMusicVideo
         Me.tPMainMV.Size = New System.Drawing.Size(967, 576)
         Me.tPMainMV.TabIndex = 0
         Me.tPMainMV.Text = "Main Browser"
+        '
+        'lblMultiMode
+        '
+        Me.lblMultiMode.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.lblMultiMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
+        Me.lblMultiMode.Location = New System.Drawing.Point(345, 100)
+        Me.lblMultiMode.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
+        Me.lblMultiMode.Name = "lblMultiMode"
+        Me.lblMultiMode.Size = New System.Drawing.Size(517, 163)
+        Me.lblMultiMode.TabIndex = 165
+        Me.lblMultiMode.Text = resources.GetString("lblMultiMode.Text")
+        Me.lblMultiMode.Visible = false
         '
         'TableLayoutPanel1
         '
@@ -350,6 +363,7 @@ Partial Class ucMusicVideo
         Me.btnSearchNew.Name = "btnSearchNew"
         Me.btnSearchNew.Size = New System.Drawing.Size(120, 33)
         Me.btnSearchNew.TabIndex = 25
+        Me.btnSearchNew.TabStop = false
         Me.btnSearchNew.Text = "Search  "
         Me.btnSearchNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolTip1.SetToolTip(Me.btnSearchNew, "Search Folders For New"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"     Music Videos and"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"         Scrape Data")
@@ -363,6 +377,7 @@ Partial Class ucMusicVideo
         Me.txtFilter.Name = "txtFilter"
         Me.txtFilter.Size = New System.Drawing.Size(140, 26)
         Me.txtFilter.TabIndex = 50
+        Me.txtFilter.TabStop = false
         Me.ToolTip1.SetToolTip(Me.txtFilter, "Text Filter")
         '
         'PcBxPoster
@@ -390,6 +405,7 @@ Partial Class ucMusicVideo
         Me.txtFullpath.ReadOnly = true
         Me.txtFullpath.Size = New System.Drawing.Size(203, 26)
         Me.txtFullpath.TabIndex = 45
+        Me.txtFullpath.TabStop = false
         '
         'btnRefresh
         '
@@ -401,6 +417,7 @@ Partial Class ucMusicVideo
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(123, 33)
         Me.btnRefresh.TabIndex = 49
+        Me.btnRefresh.TabStop = false
         Me.btnRefresh.Text = "Refresh  "
         Me.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolTip1.SetToolTip(Me.btnRefresh, "Reload all nfo's from"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Music Video Folders")
@@ -413,7 +430,7 @@ Partial Class ucMusicVideo
         Me.btnSave.Location = New System.Drawing.Point(914, 8)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(34, 31)
-        Me.btnSave.TabIndex = 51
+        Me.btnSave.TabIndex = 9
         Me.btnSave.Text = "Button2"
         Me.ToolTip1.SetToolTip(Me.btnSave, "Save Manual Edits")
         Me.btnSave.UseVisualStyleBackColor = true
@@ -443,7 +460,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.SetRowSpan(Me.txtPlot, 2)
         Me.txtPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtPlot.Size = New System.Drawing.Size(527, 104)
-        Me.txtPlot.TabIndex = 32
+        Me.txtPlot.TabIndex = 8
         '
         'Label3
         '
@@ -464,7 +481,7 @@ Partial Class ucMusicVideo
         Me.txtTitle.Location = New System.Drawing.Point(296, 8)
         Me.txtTitle.Name = "txtTitle"
         Me.txtTitle.Size = New System.Drawing.Size(460, 31)
-        Me.txtTitle.TabIndex = 27
+        Me.txtTitle.TabIndex = 1
         '
         'PcBxMusicVideoScreenShot
         '
@@ -513,7 +530,7 @@ Partial Class ucMusicVideo
         Me.txtArtist.Location = New System.Drawing.Point(381, 293)
         Me.txtArtist.Name = "txtArtist"
         Me.txtArtist.Size = New System.Drawing.Size(203, 26)
-        Me.txtArtist.TabIndex = 28
+        Me.txtArtist.TabIndex = 2
         '
         'txtDirector
         '
@@ -525,7 +542,7 @@ Partial Class ucMusicVideo
         Me.txtDirector.Location = New System.Drawing.Point(381, 375)
         Me.txtDirector.Name = "txtDirector"
         Me.txtDirector.Size = New System.Drawing.Size(203, 26)
-        Me.txtDirector.TabIndex = 29
+        Me.txtDirector.TabIndex = 6
         '
         'Label7
         '
@@ -549,7 +566,7 @@ Partial Class ucMusicVideo
         Me.txtYear.Location = New System.Drawing.Point(381, 334)
         Me.txtYear.Name = "txtYear"
         Me.txtYear.Size = New System.Drawing.Size(203, 26)
-        Me.txtYear.TabIndex = 33
+        Me.txtYear.TabIndex = 4
         '
         'Label1
         '
@@ -573,7 +590,7 @@ Partial Class ucMusicVideo
         Me.txtAlbum.Location = New System.Drawing.Point(670, 293)
         Me.txtAlbum.Name = "txtAlbum"
         Me.txtAlbum.Size = New System.Drawing.Size(238, 26)
-        Me.txtAlbum.TabIndex = 30
+        Me.txtAlbum.TabIndex = 3
         '
         'Label4
         '
@@ -597,7 +614,7 @@ Partial Class ucMusicVideo
         Me.txtStudio.Location = New System.Drawing.Point(670, 334)
         Me.txtStudio.Name = "txtStudio"
         Me.txtStudio.Size = New System.Drawing.Size(238, 26)
-        Me.txtStudio.TabIndex = 31
+        Me.txtStudio.TabIndex = 5
         '
         'Label11
         '
@@ -621,7 +638,7 @@ Partial Class ucMusicVideo
         Me.txtGenre.Location = New System.Drawing.Point(670, 375)
         Me.txtGenre.Name = "txtGenre"
         Me.txtGenre.Size = New System.Drawing.Size(238, 26)
-        Me.txtGenre.TabIndex = 47
+        Me.txtGenre.TabIndex = 7
         '
         'Label6
         '
@@ -647,6 +664,7 @@ Partial Class ucMusicVideo
         Me.txtRuntime.ReadOnly = true
         Me.txtRuntime.Size = New System.Drawing.Size(89, 26)
         Me.txtRuntime.TabIndex = 34
+        Me.txtRuntime.TabStop = false
         '
         'btnMVPlay
         '
@@ -657,7 +675,7 @@ Partial Class ucMusicVideo
         Me.btnMVPlay.Margin = New System.Windows.Forms.Padding(10, 3, 3, 3)
         Me.btnMVPlay.Name = "btnMVPlay"
         Me.btnMVPlay.Size = New System.Drawing.Size(95, 27)
-        Me.btnMVPlay.TabIndex = 53
+        Me.btnMVPlay.TabIndex = 10
         Me.btnMVPlay.Text = "Play"
         Me.btnMVPlay.UseVisualStyleBackColor = true
         '
@@ -695,6 +713,7 @@ Partial Class ucMusicVideo
         Me.MVDgv1.Size = New System.Drawing.Size(274, 363)
         Me.MVDgv1.StandardTab = true
         Me.MVDgv1.TabIndex = 54
+        Me.MVDgv1.TabStop = false
         '
         'CM1MVBrowser
         '
@@ -816,6 +835,7 @@ Partial Class ucMusicVideo
         Me.cmbxMVSort.Name = "cmbxMVSort"
         Me.cmbxMVSort.Size = New System.Drawing.Size(105, 23)
         Me.cmbxMVSort.TabIndex = 55
+        Me.cmbxMVSort.TabStop = false
         '
         'Label23
         '
@@ -847,6 +867,7 @@ Partial Class ucMusicVideo
         Me.btn_MVSortReset.Name = "btn_MVSortReset"
         Me.btn_MVSortReset.Size = New System.Drawing.Size(80, 22)
         Me.btn_MVSortReset.TabIndex = 58
+        Me.btn_MVSortReset.TabStop = false
         Me.btn_MVSortReset.Text = "Reset Sort"
         Me.btn_MVSortReset.UseVisualStyleBackColor = true
         '
@@ -1567,18 +1588,6 @@ Partial Class ucMusicVideo
         Me.Label27.Size = New System.Drawing.Size(366, 105)
         Me.Label27.TabIndex = 20
         Me.Label27.Text = resources.GetString("Label27.Text")
-        '
-        'lblMultiMode
-        '
-        Me.lblMultiMode.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.lblMultiMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.lblMultiMode.Location = New System.Drawing.Point(345, 100)
-        Me.lblMultiMode.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
-        Me.lblMultiMode.Name = "lblMultiMode"
-        Me.lblMultiMode.Size = New System.Drawing.Size(517, 163)
-        Me.lblMultiMode.TabIndex = 165
-        Me.lblMultiMode.Text = resources.GetString("lblMultiMode.Text")
-        Me.lblMultiMode.Visible = false
         '
         'ucMusicVideo
         '
