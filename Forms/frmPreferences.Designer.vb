@@ -107,6 +107,7 @@ Partial Class frmPreferences
         Me.TPGenCom = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPGeneral = New System.Windows.Forms.TabPage()
+        Me.cbAutoHideStatusBar = New System.Windows.Forms.CheckBox()
         Me.cbMcCloseMCForDLNewVersion = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cbMultiMonitorEnable = New System.Windows.Forms.CheckBox()
@@ -476,7 +477,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbAutoHideStatusBar = New System.Windows.Forms.CheckBox()
+        Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -1489,6 +1490,16 @@ Partial Class frmPreferences
         Me.TPGeneral.TabIndex = 2
         Me.TPGeneral.Text = "General"
         Me.TPGeneral.UseVisualStyleBackColor = true
+        '
+        'cbAutoHideStatusBar
+        '
+        Me.cbAutoHideStatusBar.AutoSize = true
+        Me.cbAutoHideStatusBar.Location = New System.Drawing.Point(24, 425)
+        Me.cbAutoHideStatusBar.Name = "cbAutoHideStatusBar"
+        Me.cbAutoHideStatusBar.Size = New System.Drawing.Size(222, 19)
+        Me.cbAutoHideStatusBar.TabIndex = 117
+        Me.cbAutoHideStatusBar.Text = "Auto Hide Status Bar on completion."
+        Me.cbAutoHideStatusBar.UseVisualStyleBackColor = true
         '
         'cbMcCloseMCForDLNewVersion
         '
@@ -2543,6 +2554,7 @@ Partial Class frmPreferences
         '
         'GroupBox_MovieIMDBMirror
         '
+        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbMovImdbAspectRatio)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbMovImdbFirstRunTime)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbImdbPrimaryPlot)
         Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.Label181)
@@ -5694,15 +5706,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbAutoHideStatusBar
+        'cbMovImdbAspectRatio
         '
-        Me.cbAutoHideStatusBar.AutoSize = true
-        Me.cbAutoHideStatusBar.Location = New System.Drawing.Point(24, 425)
-        Me.cbAutoHideStatusBar.Name = "cbAutoHideStatusBar"
-        Me.cbAutoHideStatusBar.Size = New System.Drawing.Size(222, 19)
-        Me.cbAutoHideStatusBar.TabIndex = 117
-        Me.cbAutoHideStatusBar.Text = "Auto Hide Status Bar on completion."
-        Me.cbAutoHideStatusBar.UseVisualStyleBackColor = true
+        Me.cbMovImdbAspectRatio.AutoSize = true
+        Me.cbMovImdbAspectRatio.Location = New System.Drawing.Point(10, 252)
+        Me.cbMovImdbAspectRatio.Name = "cbMovImdbAspectRatio"
+        Me.cbMovImdbAspectRatio.Size = New System.Drawing.Size(180, 19)
+        Me.cbMovImdbAspectRatio.TabIndex = 7
+        Me.cbMovImdbAspectRatio.Text = "Use Aspect Ratio from IMDb"
+        Me.cbMovImdbAspectRatio.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6327,4 +6339,5 @@ End Sub
     Friend WithEvents Label23 As Label
     Friend WithEvents cbMovCustFolderjpgNoDelete As CheckBox
     Friend WithEvents cbAutoHideStatusBar As CheckBox
+    Friend WithEvents cbMovImdbAspectRatio As CheckBox
 End Class

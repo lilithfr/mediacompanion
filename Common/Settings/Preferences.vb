@@ -251,6 +251,7 @@ Public Class Pref
     Public Shared TmdbActorsImdbScrape As Boolean
     Public Shared ImdbPrimaryPlot As Boolean
     Public Shared MovImdbFirstRunTime As Boolean
+    Public Shared MovImdbAspectRatio As Boolean
     Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared XbmcTmdbRenameMovie As Boolean
     Public Shared XbmcTmdbMissingFromImdb As Boolean
@@ -635,6 +636,7 @@ Public Class Pref
         TmdbActorsImdbScrape = False
         ImdbPrimaryPlot = False
         MovImdbFirstRunTime = False
+        MovImdbAspectRatio = False
         XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
         XbmcTmdbMissingFromImdb = False
@@ -1149,6 +1151,7 @@ Public Class Pref
         root.AppendChild(doc, "TmdbActorsImdbScrape",               TmdbActorsImdbScrape)               'cbImdbgetTMDBActor 
         root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot 
         root.AppendChild(doc, "MovImdbFirstRunTime",                MovImdbFirstRunTime)                'cbMovImdbFirstRunTime 
+        root.AppendChild(doc, "MovImdbAspectRatio",                 MovImdbAspectRatio)                 'cbMovImdbAspectRatio
         root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
         root.AppendChild(doc, "XbmcTmdbMissingFromImdb",            XbmcTmdbMissingFromImdb)            'cbXbmcTmdbMissingFromImdb
@@ -1475,6 +1478,7 @@ Public Class Pref
                     Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml
                     Case "ImdbPrimaryPlot"                      : ImdbPrimaryPlot = thisresult.InnerXml 
                     Case "MovImdbFirstRunTime"                  : MovImdbFirstRunTime = thisresult.InnerXml
+                    Case "MovImdbAspectRatio"                   : MovImdbAspectRatio = thisresult.InnerXml
                     'Case "xbmcscraper"                          : XBMC_Scraper = thisresult.InnerText    -  locked at "tmdb"
                     Case "XbmcTmdbRenameMovie"                  : XbmcTmdbRenameMovie = thisresult.InnerText 
                     Case "XbmcTmdbMissingFromImdb"              : XbmcTmdbMissingFromImdb = thisresult.InnerText
@@ -2481,8 +2485,12 @@ Public Class Pref
             workingfiledetails.filedetails_video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
             workingfiledetails.filedetails_video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
 
-            workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename) '"This is the extension of the file"
-
+            If filename.ToLower.Contains("\bdmv\stream\") Then
+                workingfiledetails.filedetails_video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"
+            Else
+                workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename) '"else this is the extension of the file"
+            End If
+            
             workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")
             'Video()
             'Format                     : MPEG-4 Visual

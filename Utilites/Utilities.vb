@@ -314,7 +314,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetStdAspectRatio(ByVal Ratio As String) As String
         If IsNothing(Ratio) Then Return ""
         If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
-
+        Return Ratio
         Dim aspectRatio As Double
         If Double.TryParse(Ratio, aspectRatio) Then
 

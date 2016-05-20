@@ -45,6 +45,7 @@ Public Class MovieRegExs
     Public Const REGEX_RUNTIMETECH          = "class=""label""> Runtime <\/td>(.*?)<\/tr>"
     Public Const REGEX_DURATIONTECH         = "\((.*?) min"
     Public Const REGEX_DURATIONTECH2        = "(\d*?) min"
+    Public Const REGEX_ASPECTRATIO          = "class=""inline"">Aspect Ratio:</h4>(.*?)</div>"
 End Class
 
 
@@ -870,6 +871,22 @@ Public Class Classimdb
         End Get
     End Property
 
+    ReadOnly Property ARImdb As String      'Aspect Ratio from IMDb
+        Get
+            Try
+                Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
+                If s.Contains("</div>") Then
+                    s = s.Substring(0, s.IndexOf("</div>"))
+                End If
+                s = s.Substring(0, s.IndexOf(":")).Trim
+                's = s.Replace("&quot;", """")
+                Return Utilities.cleanSpecChars(encodespecialchrs(s))
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+    End Property
+
     ReadOnly Property Duration As String
         Get
             Try
@@ -1223,6 +1240,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "id"        , imdbid      )
                 totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
+                totalinfo.AppendTag( "aspect"    , ARImdb      )
                 totalinfo &= getomdbTomato(imdbid)
                 
 

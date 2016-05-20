@@ -1154,6 +1154,10 @@ Public Class Movie
                 _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
             End If
         End If
+
+        If Pref.MovImdbAspectRatio AndAlso _scrapedMovie.fileinfo.aspectratioimdb <> "" Then
+            _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _scrapedMovie.fileinfo.aspectratioimdb
+        End If
         'If Not Pref.ExcludeMpaaRated Then
         '    Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
         '    If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
@@ -1503,7 +1507,9 @@ Public Class Movie
                 Case "track"
                     _scrapedMovie.fullmoviebody.track = thisresult.InnerText
                 Case "thumb"
-                    _scrapedMovie.fullmoviebody.thumb = thisresult.InnerText 
+                    _scrapedMovie.fullmoviebody.thumb = thisresult.InnerText
+                Case "aspect"
+                    _scrapedMovie.fileinfo.aspectratioimdb = thisresult.InnerText
             End Select
         Next
         If Pref.MusicVidConcertScrape Then
@@ -3283,6 +3289,10 @@ Public Class Movie
                 If rl.runtime_file Or (rl.runtime And ((Pref.movieRuntimeDisplay = "file") Or (Pref.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
                     AssignRuntime(_rescrapedMovie, rl.runtime_file)
                     UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime)
+                End If
+
+                If Pref.MovImdbAspectRatio AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
+                    _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
                 End If
             End If
         End If

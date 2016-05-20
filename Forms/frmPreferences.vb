@@ -318,6 +318,7 @@ Public Class frmPreferences
         cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
         cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
         cbMovImdbFirstRunTime               .Checked        = Pref.MovImdbFirstRunTime
+        cbMovImdbAspectRatio                .Checked        = Pref.MovImdbAspectRatio
 
         'IndividualMovieFolders
         cbMovieUseFolderNames               .Checked        = Pref.usefoldernames
@@ -1338,6 +1339,12 @@ Public Class frmPreferences
     Private Sub cbMovImdbFirstRunTime_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovImdbFirstRunTime.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovImdbFirstRunTime = cbMovImdbFirstRunTime.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbMovImdbAspectRatio_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovImdbAspectRatio.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovImdbAspectRatio = cbMovImdbAspectRatio.Checked
         Changes = True
     End Sub
 
