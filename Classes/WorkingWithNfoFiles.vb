@@ -109,7 +109,11 @@ Public Class WorkingWithNfoFiles
                 'If Not validate_nfo(path) Then
                 '    Exit Function
                 'End If
+                Try
                 newtvshow.Title.Value = IO.Path.GetFileName(path)
+                Catch
+                    newtvshow.Title.Value = path
+                End Try
                 'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
                 newtvshow.ImdbId.Value = "xml error"
                 newtvshow.NfoFilePath = path

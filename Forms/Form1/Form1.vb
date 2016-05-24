@@ -5968,33 +5968,39 @@ Public Class Form1
             End If
 
             For Each nfo In nfofilestorename
-                Dim ThisEp As New List(Of TvEpisode)
-                ThisEp.Clear()
-                ThisEp = WorkingWithNfoFiles.ep_NfoLoad(nfo)
-                For h = ThisEp.Count - 1 To 0 Step -1
-                    Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
-                    ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-                    ThisEp(h).Details.StreamDetails.Audio.Clear()
-                    For Each audioStream In fileStreamDetails.filedetails_audio
-                        ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
+                Try
+                    Dim ThisEp As New List(Of TvEpisode)
+                    ThisEp.Clear()
+                    ThisEp = WorkingWithNfoFiles.ep_NfoLoad(nfo)
+                    For h = ThisEp.Count - 1 To 0 Step -1
+                        Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
+                        ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                        ThisEp(h).Details.StreamDetails.Audio.Clear()
+                        For Each audioStream In fileStreamDetails.filedetails_audio
+                            ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
+                        Next
+                        ThisEp(h).Details.StreamDetails.Subtitles.Clear()
+                        For each langStream In fileStreamDetails.filedetails_subtitles
+                            ThisEp(h).Details.StreamDetails.Subtitles.Add(langStream)
+                        Next
+                        If ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+                            Try
+                                Dim tempstring As String
+                                tempstring = ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value
+                                If Pref.intruntime Then
+                                    ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString
+                                Else
+                                    ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                                End If
+                            Catch
+                            End Try
+                        End If
                     Next
-                    For each langStream In fileStreamDetails.filedetails_subtitles
-                        ThisEp(h).Details.StreamDetails.Subtitles.Add(langStream)
-                    Next
-                    If ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
-                        Try
-                            Dim tempstring As String
-                            tempstring = ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value
-                            If Pref.intruntime Then
-                                ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString
-                            Else
-                                ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
-                            End If
-                        Catch ex As Exception
-                        End Try
-                        WorkingWithNfoFiles.ep_NfoSave(ThisEp, ThisEp(0).NfoFilePath)
-                    End If
-                Next
+                    WorkingWithNfoFiles.ep_NfoSave(ThisEp, ThisEp(0).NfoFilePath)
+                Catch ex As Exception
+                    messbox.Close()
+                    ExceptionHandler.LogError(ex)
+                End Try
             Next
             messbox.Close()
             tv_CacheRefresh(WorkingTvShow)
