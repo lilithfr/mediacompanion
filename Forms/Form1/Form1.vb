@@ -15668,6 +15668,7 @@ Public Class Form1
             tvfolderschanged = False
             Pref.ConfigSave()
             tv_ShowScrape()
+            TabControl3.SelectedIndex = 0
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
