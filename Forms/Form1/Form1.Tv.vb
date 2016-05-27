@@ -358,7 +358,7 @@ Partial Public Class Form1
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
         Show.ListActors.Clear()
-        Show.Load()
+        Show = nfoFunction.tvshow_NfoLoad(Show.NfoFilePath) '.Load()
         
         'Fix episodeguide tag
         Dim lang As String = Show.EpisodeGuideUrl.Value
@@ -532,7 +532,7 @@ Partial Public Class Form1
                     Next
                     thisshow.Genre.Value = genre
                     tb_ShGenre.Text = genre
-                    thisshow.Save()
+                    nfoFunction.tvshow_NfoSave(thisshow, True) 'thisshow.Save()
                 End If
             Catch
             End Try
@@ -1265,7 +1265,7 @@ Partial Public Class Form1
             Dim newtvshownfo As New TvShow
             newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
 
-            newtvshownfo.Load()
+            newtvshownfo = nfoFunction.tvshow_NfoLoad(newtvshownfo.NfoFilePath) '.Load()
             If (IsNothing(newtvshownfo.Year.Value) OrElse newtvshownfo.Year.Value.ToInt = 0) Then
                 If Not String.IsNullOrEmpty(newtvshownfo.Premiered.Value) AndAlso newtvshownfo.Premiered.Value.Length = 10 Then
                     newtvshownfo.Year.Value = newtvshownfo.Premiered.Value.Substring(0,4)
@@ -1639,7 +1639,7 @@ Partial Public Class Form1
                 If Not haveTVDbID And NewShow.FileContainsReadableXml Then
                     Dim validcheck As Boolean = nfoFunction.tv_NfoLoadCheck(NewShow.NfoFilePath)
                     If validcheck Then
-                        NewShow.Load()
+                        NewShow = nfoFunction.tvshow_NfoLoad(NewShow.NfoFilePath) '.Load()
                     End If
                 Else
                     If haveTVDbID Then
@@ -2290,7 +2290,7 @@ Partial Public Class Form1
                     End If
                     If newepisode.FolderPath.Contains(Shows.FolderPath) Then
                         If Shows.ImdbId.Value Is Nothing OrElse String.IsNullOrEmpty(Shows.Premiered.Value) Then
-                            Shows.Load()
+                            Shows = nfoFunction.tvshow_NfoLoad(Shows.NfoFilePath) '.Load()
                         End If
                         newepisode.ShowLang.Value = Shows.Language.Value
                         newepisode.sortorder.Value = Shows.SortOrder.Value

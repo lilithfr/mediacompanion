@@ -183,6 +183,7 @@ Public Class ScraperQuery
       Const SettingReplacementRegex As String = "\$INFO\[([^\]]+)\]"
 
       Dim result As String = input
+        If IsNothing(result) Then Return ""
         ' I've inserted the Try routine below, for handling null result
         Try ' isto é meu
             For Each m As Match In Regex.Matches(result, BufferReplacementRegEx)
@@ -346,7 +347,7 @@ Public Class ScraperQuery
          Dim output As String = ReplaceBuffers(e.@output)
          Dim destination As String = e.@dest
             On Error Resume Next  'isto é meu ' I've inserted the On Error, for handling null result coming from ReplaceBuffer
-            Dim destinationAppend As Boolean = (e.@dest.Contains("+"))
+            Dim destinationAppend As Boolean = If(IsNothing(e.@dest), False, (e.@dest.Contains("+")))
             On Error GoTo 0 'isto é meu' I've inserted the On Error GoTo 0 for restoring error trapping again
             Dim conditional As String = e.@conditional
 

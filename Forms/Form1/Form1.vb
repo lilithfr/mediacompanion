@@ -4969,7 +4969,7 @@ Public Class Form1
         For Each sh As TvShow In Cache.TvCache.Shows
             Dim shload As New TvShow 
             shload.NfoFilePath = sh.NfoFilePath 
-            shload.Load()
+            shload = nfoFunction.tvshow_NfoLoad(sh.NfoFilePath) '.Load()
             availableshows.Add(shload)
         Next
         messbox.Close()
@@ -8983,9 +8983,10 @@ Public Class Form1
         Try
             Dim Show As Media_Companion.TvShow
             For Each Show In Cache.TvCache.Shows
-                Show.Load()
+                Show = nfoFunction.tvshow_NfoLoad(Show.NfoFilePath) '.Load()
                 Show.State = Media_Companion.ShowState.Locked
-                Show.Save()
+                nfoFunction.tvshow_NfoSave(Show, True)
+                'Show.Save()
                 Tv_CacheSave()
             Next
             tv_CacheLoad()
@@ -8998,9 +8999,10 @@ Public Class Form1
         Try
             Dim Show As Media_Companion.TvShow
             For Each Show In Cache.TvCache.Shows
-                Show.Load()
+                Show = nfoFunction.tvshow_NfoLoad(Show.NfoFilePath) '.Load()
                 Show.State = Media_Companion.ShowState.Open
-                Show.Save()
+                nfoFunction.tvshow_NfoSave(Show, True)
+                'Show.Save()
                 Tv_CacheSave()
             Next
             tv_CacheLoad()
@@ -13969,7 +13971,8 @@ Public Class Form1
                 WorkingTvShow.TvShowActorSource.Value = "tvdb"
                 Button45.Text = "TVDB"
             End If
-            WorkingTvShow.Save()
+            nfoFunction.tvshow_NfoSave(WorkingTvShow, True)
+            'WorkingTvShow.Save()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

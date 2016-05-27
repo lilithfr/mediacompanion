@@ -986,8 +986,18 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             stage = 15
-            child = doc.CreateElement("genre") : child.InnerText = tvshowtosave.genre.Value
-            root.AppendChild(child)
+            If tvshowtosave.genre.Value <> "" Then
+                Dim strArr2() As String
+                strArr2 = tvshowtosave.genre.Value.Split("/")
+                For count = 0 To strArr2.Length - 1
+                    child = doc.CreateElement("genre")
+                    strArr2(count) = strArr2(count).Trim
+                    child.InnerText = strArr2(count)
+                    root.AppendChild(child)
+                Next
+            End If
+            'child = doc.CreateElement("genre") : child.InnerText = tvshowtosave.genre.Value
+            'root.AppendChild(child)
 
             stage = 16
             child = doc.CreateElement("episodeguide")

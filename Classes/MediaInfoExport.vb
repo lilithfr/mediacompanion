@@ -36,7 +36,7 @@ Public Class MediaInfoExport
     Public workingTemplate As mediaInfoExportTemplate
     Dim templateList As New List(Of mediaInfoExportTemplate)
     Dim fullTemplateString As String = Nothing
-    'Dim mediaExportNfoFunction As New WorkingWithNfoFiles
+    Dim nfoFunction As New WorkingWithNfoFiles
     Dim templateFolder As String = Path.Combine(Application.StartupPath, "html_templates\")
     'RegexOptions.IgnoreCase to make the regex case insensitive, and RegexOptions.Singleline causes the dot to match newlines
     Dim regexBlockOption As RegexOptions = RegexOptions.IgnoreCase Or RegexOptions.Singleline
@@ -803,7 +803,7 @@ Public Class MediaInfoExport
     End Function
     Private Function getTagsTVShow(ByRef text As String, ByVal tvShow As TvShow, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
         Dim fullTVShowDetails As New TvShow
-        fullTVShowDetails.Load(tvShow.NfoFilePath)
+        fullTVShowDetails = nfoFunction.tvshow_NfoLoad(tvShow.NfoFilePath) '.Load(tvShow.NfoFilePath)
 
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")

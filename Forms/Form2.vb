@@ -16,6 +16,7 @@ Public Class Form2
     Dim datechanged As Boolean = False
     Dim PremierDateChanged As Boolean = False
     Dim textBoxList As List(Of TextBox)
+    Dim nfoFunction As New WorkingWithNfoFiles
 
     
     Private Sub setupdisplay()
@@ -662,7 +663,7 @@ Public Class Form2
                     If File.Exists(nfopath) Then
                         Dim tvshownfo As New TvShow
                         tvshownfo.NfoFilePath = nfopath
-                        tvshownfo.Load
+                        tvshownfo = nfoFunction.tvshow_NfoLoad(nfopath) '.Load
                         If tvshownfo.Title.Value <> "" Then
                             tb_SeriesLnk.Text = tvshownfo.Title.Value
                             editsmade = True
