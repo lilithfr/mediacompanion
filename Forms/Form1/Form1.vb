@@ -152,6 +152,7 @@ Public Class Form1
     Public moviefolderschanged As Boolean = False
     Public tvfolderschanged As Boolean = False
     Public hmfolderschanged As Boolean = False
+    Public customTvfolderschanged As Boolean = False
     Public scraperLog As String = ""
     Public NewTagList As New List(Of String)
     Public MovieSearchEngine As String = "imdb"
@@ -413,7 +414,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabProfile)
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
-            TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
+            'TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
@@ -13204,7 +13205,7 @@ Public Class Form1
 
     'Movie Folders
 
-    Private Sub TabPage25_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovFolders.Leave
+    Private Sub tpMovFolders_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovFolders.Leave
         Try
             If moviefolderschanged Then
                 Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
@@ -16724,58 +16725,7 @@ Public Class Form1
     End Sub
     
 #End Region   'Home Movie Routines, buttons etc.
-
-#Region "CustomTv"
-#Region "Custom Browser Tab"
-
-    Private Sub btnCSearch_Click(sender As Object, e As EventArgs) Handles btnCSearch.Click
-        CustSearch()
-    End Sub
-
-    Private Sub btnCRefresh_Click(sender As Object, e As EventArgs) Handles btnCRefresh.Click
-        CustRefresh()
-    End Sub
-
-    Private Sub pbSave_Click(sender As Object, e As EventArgs) Handles pbSave.Click
-        CustSave()
-    End Sub
-
-    Private Sub CustPB_Zoom(sender As Object, e As EventArgs) Handles pb_Cust_Fanart.DoubleClick, pb_Cust_Poster.DoubleClick, pb_Cust_Banner.DoubleClick
-        Try
-            Dim picBox As PictureBox = sender
-
-            Dim imageLocation As String = picBox.tag
-
-            If imageLocation <> Nothing Then
-                If IO.File.Exists(imageLocation) Then
-                    Me.ControlBox = False
-                    MenuStrip1.Enabled = False
-                    Call util_ZoomImage(imageLocation)
-                End If
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
     
-#End Region
-
-#Region " Custom Folder Tab"
-    Private Sub btnCFolderAdd_Click(sender As Object, e As EventArgs) Handles btnCFolderAdd.Click
-
-    End Sub
-
-    Private Sub btnCFolderRemove_Click(sender As Object, e As EventArgs) Handles btnCFolderRemove.Click
-
-    End Sub
-
-    Private Sub btnCFolderSave_Click(sender As Object, e As EventArgs) Handles btnCFolderSave.Click
-
-    End Sub
-#End Region
-    
-#End Region
-
     Sub BckWrkCheckNewVersion_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkCheckNewVersion.DoWork
 
         Dim ShowNoNewVersionMsgBox As String = DirectCast(e.Argument, Boolean)

@@ -11,15 +11,15 @@ Imports System.Linq
 Partial Public Class Form1
     Dim CTvLoaded As Boolean = False
 
-    Sub CustSearch()
+    Sub CustTvSearch()
 
     End Sub
 
-    Sub CustRefresh()
+    Sub CustTvRefresh()
         Custtv_CacheRefresh()
     End Sub
 
-    Sub CustSave()
+    Sub CustTvSave()
 
     End Sub
     
@@ -27,19 +27,193 @@ Partial Public Class Form1
 
     End Sub
 
-    Sub CustTvFoldersSetup()
+#Region "Code Sections"
 
+
+#Region "Folder Code"
+
+    Sub CustTvFoldersSetup(Optional ByVal Refresh As Boolean = False)
+        If (lbCFolders.Items.Count = 0 Or Refresh) AndAlso Pref.custtvFolders.Count > 0 Then
+            lbCFolders.Items.Clear()
+            For each fo In Pref.custtvFolders
+                lbCFolders.Items.Add(fo)
+            Next
+        End If
     End Sub
 
+#End Region
+
+#End Region
+
+#Region "CustomTv Controls"
+
+#Region "Custom Browser Tab"
+
+    Private Sub btnCSearch_Click(sender As Object, e As EventArgs) Handles btnCSearch.Click
+        CustTvSearch()
+    End Sub
+
+    Private Sub btnCRefresh_Click(sender As Object, e As EventArgs) Handles btnCRefresh.Click
+        CustTvRefresh()
+    End Sub
+
+    Private Sub pbSave_Click(sender As Object, e As EventArgs) Handles pbSave.Click
+        CustTvSave()
+    End Sub
+
+    Private Sub CustPB_Zoom(sender As Object, e As EventArgs) Handles pb_Cust_Fanart.DoubleClick, pb_Cust_Poster.DoubleClick, pb_Cust_Banner.DoubleClick
+        Try
+            Dim picBox As PictureBox = sender
+            Dim imageLocation As String = picBox.tag
+            If imageLocation <> Nothing Then
+                If IO.File.Exists(imageLocation) Then
+                    Me.ControlBox = False
+                    MenuStrip1.Enabled = False
+                    Call util_ZoomImage(imageLocation)
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+#End Region
+
+#Region "Custom Tv Artwork"
+
+
+
+#End Region
+
+#Region "Custom Folder Tab"
+    
+    Private Sub TpCustTvFolders_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TpCustTvFolders.Leave
+        Try
+            If customTvfolderschanged Then
+                Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
+                If save = DialogResult.Yes Then
+                    btnCFolderSave.PerformClick()
+                Else
+                    CustTvFoldersSetup(True)
+                End If
+                customTvfolderschanged = False
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCFolderAdd_Click(sender As Object, e As EventArgs) Handles btnCFolderAdd.Click
+        Try
+            Dim allok As Boolean = True
+            Dim thefoldernames As String
+            fb.Description = "Select Folder for Custom TV Root Folder."
+            fb.ShowNewFolderButton = True
+            fb.RootFolder = System.Environment.SpecialFolder.Desktop
+            fb.SelectedPath = Pref.lastpath
+            Tmr.Start()
+            If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
+                thefoldernames = (fb.SelectedPath)
+                Pref.lastpath = thefoldernames
+                For each fo In lbCFolders.Items
+                    If fo = thefoldernames Then
+                        allok = False
+                        Exit For
+                    End If
+                Next
+                If allok = True Then
+                    lbCFolders.Items.Add(thefoldernames)
+                    lbCFolders.Refresh()
+                    customTvfolderschanged = True
+                Else
+                    MsgBox("        Folder Already Exists")
+                End If
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCFolderRemove_Click(sender As Object, e As EventArgs) Handles btnCFolderRemove.Click
+        Try
+            While lbCFolders.SelectedItems.Count > 0
+                lbCFolders.Items.Remove(lbCFolders.SelectedItems(0))
+            End While
+            customTvfolderschanged = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub btnCFolderSave_Click(sender As Object, e As EventArgs) Handles btnCFolderSave.Click
+        Pref.custtvFolders.Clear()
+        For each fo In lbCFolders.Items
+            Pref.custtvFolders.Add(fo)
+        Next
+        Pref.ConfigSave()
+        customTvfolderschanged = False
+        CustTvSearch()       ' Also updates cache if any custom shows exist.
+        CustTvTabControl.SelectedIndex = 0
+    End Sub
+
+    Private Sub lbCFolders_KeyPress(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles lbCFolders.KeyDown
+        If e.KeyCode = Keys.Delete AndAlso lbCFolders.SelectedItem <> Nothing
+            Call btnCFolderRemove.PerformClick()
+        End If
+    End Sub
+
+    Private Sub lbCFolders_DragEnter(sender As Object, e As DragEventArgs) Handles lbCFolders.DragEnter
+        Try
+            e.Effect = DragDropEffects.Copy
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub lbCFolders_DragDrop(sender As Object, e As DragEventArgs) Handles lbCFolders.DragDrop
+        Dim folders() As String
+        droppedItems.Clear()
+        folders = e.Data.GetData(DataFormats.filedrop)
+        For f = 0 To UBound(folders)
+            Dim exists As Boolean = False
+            For Each rtpath In Pref.custtvFolders
+                If rtpath = folders(f) Then
+                    exists = True
+                    Exit For
+                End If
+            Next
+            If exists Then Continue For
+            If lbCFolders.Items.Contains(folders(f)) Then Continue For
+		    Dim skip As Boolean = False
+		    For Each item In droppedItems
+			    If item = folders(f) Then
+				    skip = True
+				    Exit For
+			    End If
+		    Next
+		    If Not skip Then droppedItems.Add(folders(f))
+        Next
+        If droppedItems.Count < 1 Then Exit Sub
+        For Each item In droppedItems
+            lbCFolders.Items.Add(item)
+            customTvfolderschanged = True
+        Next
+        lbCFolders.Refresh()
+    End Sub
+
+#End Region
+    
+#End Region
+    
     Private Sub CustTvTabControl_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles CustTvTabControl.SelectedIndexChanged
         Try
             Dim Show As Media_Companion.TvShow = tv_ShowSelectedCurrently(CTvTreeView)
             Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(CTvTreeView)
             Dim tab As String = CustTvTabControl.SelectedTab.Name
-            If Show Is Nothing Then
-                MsgBox("No TV Show is selected")
-                Exit Sub
-            End If
+            'If Show Is Nothing AndAlso tab <> TpCustTvFolders.Name Then
+            '    MsgBox("No TV Show is selected")
+            '    Exit Sub
+            'End If
             
             If tab <> TpCustTvBrowser.Name AndAlso tab <> TpCustTvArt.Name And tab <> TpCustTvFolders.Name Then
                 If Show.NfoFilePath = "" And custtvFolders.Count = 0 Then
@@ -56,7 +230,9 @@ Partial Public Class Form1
                     End If
                 End If
             ElseIf tab = TpCustTvArt.Name Then
-                Call CustTvArtSetup()
+                If Not Show Is Nothing Then
+                    Call CustTvArtSetup()
+                End If
             ElseIf tab= TpCustTvFolders.Name Then
                 CustTvIndex = CustTvTabControl.SelectedIndex
                 CustTvTabControl.SelectedIndex = CustTvIndex
