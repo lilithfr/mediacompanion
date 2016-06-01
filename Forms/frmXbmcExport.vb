@@ -607,9 +607,10 @@ Public Class frmXbmcExport
             Dim filedetailschild As XmlElement = Nothing
             Dim anotherchild As XmlElement = Nothing
             root = ThisTvEp.CreateElement("episodedetails")
-            root.AppendChild(ThisTvEp, "title"              , tvep.Title.Value              )
+            root.AppendChild(ThisTvEp, "title"              , tvep.Title.Value                  )
             root.AppendChild(ThisTvEp, "showtitle"          , sh.Title.Value                    )
             root.AppendChild(ThisTvEp, "rating"             , tvep.Rating.Value                 )
+            root.AppendChild(ThisTvEp, "votes"              , tvep.Votes.Value                  )
             root.AppendChild(ThisTvEp, "epbookmark"         , tvep.EpBookmark.Value             )
             root.AppendChild(ThisTvEp, "year"               , tvep.Year.Value                   )
             root.AppendChild(ThisTvEp, "top250"             , sh.Top250.Value                   )

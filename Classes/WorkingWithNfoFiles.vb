@@ -176,6 +176,8 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.Rating.Value = thisresult.InnerText
                                 If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
                                 If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
+                            Case "votes"
+                                newtvepisode.Votes.Value = thisresult.InnerText
                             Case "playcount"
                                 newtvepisode.PlayCount.Value = thisresult.InnerText
                             Case "aired"
@@ -328,6 +330,7 @@ Public Class WorkingWithNfoFiles
                 If newtvepisode.TvdbId = Nothing Then newtvepisode.TvdbId.Value = ""
                 'If newtvepisode.status = Nothing Then newtvepisode.status = ""
                 If newtvepisode.Rating = Nothing Then newtvepisode.Rating.Value = ""
+                If newtvepisode.Votes = Nothing Then newtvepisode.Votes.Value = ""
                 If String.IsNullOrEmpty(newtvepisode.PlayCount.Value) Then newtvepisode.PlayCount.Value = "0"
                 episodelist.Add(newtvepisode)
             ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
@@ -366,6 +369,8 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
                                             If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
                                             If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
+                                        Case "votes"
+                                            anotherepisode.Votes.Value = thisresult.ChildNodes(f).InnerText
                                         Case "playcount"
                                             anotherepisode.PlayCount.Value = thisresult.ChildNodes(f).InnerText
                                         Case "plot"
@@ -520,6 +525,7 @@ Public Class WorkingWithNfoFiles
                                 If anotherepisode.TvdbId = Nothing Then anotherepisode.TvdbId.Value = ""
                                 'If anotherepisode.status = Nothing Then anotherepisode.status = ""
                                 If anotherepisode.Rating = Nothing Then anotherepisode.Rating.Value = ""
+                                If anotherepisode.Votes = Nothing Then anotherepisode.Votes.Value = ""
                                 If String.IsNullOrEmpty(anotherepisode.PlayCount.Value) Then anotherepisode.PlayCount.Value = "0"
                                 episodelist.Add(anotherepisode)
                             Catch ex As Exception
@@ -715,6 +721,10 @@ Public Class WorkingWithNfoFiles
 
             xmlEpisodechild = document.CreateElement("rating")
             xmlEpisodechild.InnerText = ep.Rating.Value
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
+            xmlEpisodechild = document.CreateElement("votes")
+            xmlEpisodechild.InnerText = ep.Votes.Value
             xmlEpisode.AppendChild(xmlEpisodechild)
             
             xmlEpisodechild = document.CreateElement("displayseason")

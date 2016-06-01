@@ -146,6 +146,7 @@ Public Class TvEpisode
         Me.Title.Value = TvdbEpisode.EpisodeName.Value
         Me.UniqueId.Value = TvdbEpisode.Id.Value
         Me.Rating.Value = TvdbEpisode.Rating.Value
+        Me.Votes.Value = TvdbEpisode.Votes.Value
         Me.Plot.Value = TvdbEpisode.Overview.Value
         Me.Director.Value = cleanvalue(TvdbEpisode.Director.Value)
         Me.Credits.Value = cleanvalue(TvdbEpisode.Credits.Value)
@@ -164,6 +165,7 @@ Public Class TvEpisode
         Me.Title.Value = TvEp.Title.Value
         Me.UniqueId.Value = TvEp.Id.Value
         Me.Rating.Value = TvEp.Rating.Value
+        Me.Votes.Value = TvEp.Votes.Value
         Me.Plot.Value = TvEp.Plot.Value
         Me.Director.Value = cleanvalue(TvEp.Director.Value)
         Me.Credits.Value = cleanvalue(TvEp.Credits.Value)

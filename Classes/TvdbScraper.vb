@@ -556,6 +556,8 @@ Public Class TVDBScraper
                                     thisepisode.Overview.Value = thisresult2.InnerXml
                                 Case "Rating"
                                     thisepisode.Rating.Value = thisresult2.InnerXml
+                                Case "RatingCount"
+                                    thisepisode.Votes.Value = thisresult2.InnerXml
                                 Case "id"
                                     thisepisode.id.Value = thisresult2.InnerXml
                                 Case "filename"

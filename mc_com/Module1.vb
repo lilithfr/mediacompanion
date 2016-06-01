@@ -502,6 +502,7 @@ Module Module1
             newepisodetoadd.showid = ""
             newepisodetoadd.playcount = ""
             newepisodetoadd.rating = ""
+            newepisodetoadd.votes = ""
             newepisodetoadd.seasonno = ""
             newepisodetoadd.title = ""
 
@@ -571,6 +572,7 @@ Module Module1
             If eps.seasonno = "-1" Or eps.episodeno = "-1" Then
                 eps.title = getfilename(eps.episodepath)
                 eps.rating = "0"
+                eps.votes = "0"
                 eps.playcount = "0"
                 eps.uniqueid = ""
                 eps.genre = "Unknown Episode Season and/or Episode Number"
@@ -701,6 +703,8 @@ Module Module1
                                                 singleepisode.credits = newstring
                                             Case "rating"
                                                 singleepisode.rating = thisresult.InnerText
+                                            Case "ratedcount"
+                                                singleepisode.votes = thisresult.InnerText
                                             Case "uniqueid"
                                                 singleepisode.uniqueid = thisresult.InnerText 
                                             Case "imdbid"
@@ -993,6 +997,7 @@ Module Module1
                                     newep.episodeno = epis.episodeno
                                     newep.playcount = epis.playcount
                                     newep.rating = epis.rating
+                                    newep.votes = epis.votes
                                     show.allepisodes.Remove(episode)
                                     show.allepisodes.Add(newep)
                                     timetoexit = True
@@ -1208,6 +1213,10 @@ Module Module1
 
             xmlEpisodechild = doc.CreateElement("rating")
             xmlEpisodechild.InnerText = ep.rating
+            xmlEpisode.AppendChild(xmlEpisodechild)
+
+            xmlEpisodechild = doc.CreateElement("votes")
+            xmlEpisodechild.InnerText = ep.votes
             xmlEpisode.AppendChild(xmlEpisodechild)
 
             xmlEpisodechild = doc.CreateElement("uniqueid")
@@ -2213,6 +2222,7 @@ Public Class episodeinfo
     Public playcount As String
     Public thumb As String
     Public rating As String
+    Public votes As String
     Public seasonno As String
     Public episodeno As String
     Public uniqueid As String

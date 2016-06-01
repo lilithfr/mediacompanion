@@ -1101,6 +1101,7 @@ Module General
             TempXMLEpisode1.Genre.Value = String.Empty
             TempXMLEpisode1.Plot.Value = String.Empty
             TempXMLEpisode1.Rating.Value = String.Empty
+            TempXMLEpisode1.Votes.Value = String.Empty
             TempXMLEpisode1.Season.Value = String.Empty
             TempXMLEpisode1.Thumbnail.FileName = String.Empty
             TempXMLEpisode1.Thumbnail.Url = String.empty
@@ -1131,6 +1132,8 @@ Module General
                         TempXMLEpisode1.Plot.Value = NodeChild.InnerText
                     Case "rating"
                         TempXMLEpisode1.Rating.Value = NodeChild.InnerText
+                    Case "ratingcount"
+                        TempXMLEpisode1.Votes.Value = NodeChild.InnerText
                     Case "thumb"
                         TempXMLEpisode1.Thumbnail.FileName = NodeChild.InnerText
                         TempXMLEpisode1.Thumbnail.Url = NodeChild.InnerText 

@@ -35,6 +35,8 @@ Namespace Tvdb
         Public Property ProductionCode As New ProtoProperty(Me, "ProductionCode")
         '<Rating>9.0</Rating>
         Public Property Rating As New ProtoProperty(Me, "Rating")
+        '<RatingCount>75</RatingCount>
+        Public Property Votes As New ProtoProperty(Me, "RatingCount")
         '<SeasonNumber>1</SeasonNumber>
         Public Property SeasonNumber As New ProtoProperty(Me, "SeasonNumber")
         '<Writer>|Josh Schwartz|Chris Fedak|</Writer>

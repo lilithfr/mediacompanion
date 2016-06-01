@@ -865,6 +865,7 @@ Partial Public Class Form1
 
         tb_Sh_Ep_Title.Text ="'" &  Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
         tb_EpRating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
+        'tb_EpVotes.Text = Utilities.ReplaceNothing(Episode.Votes.Value)
         tb_EpPlot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
         tb_EpDirector.Text = Utilities.ReplaceNothing(Episode.Director.Value)
         tb_EpCredits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
@@ -2067,6 +2068,7 @@ Partial Public Class Form1
                                             If tvBatchList.epDirector   Then listofnewepisodes(h).Director.Value    = Utilities.Cleanbraced(Episodedata.Director.Value)
                                             If tvBatchList.epCredits    Then listofnewepisodes(h).Credits.Value     = Utilities.Cleanbraced(Episodedata.Writer.Value)
                                             If tvBatchList.epRating     Then listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
+                                            If tvBatchList.epRating     Then listofnewepisodes(h).Votes.Value       = Episodedata.Votes.Value
                                             If tvBatchList.epTitle      Then listofnewepisodes(h).Title.Value       = Episodedata.EpisodeName.Value
                                             listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
                                             listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
@@ -2414,6 +2416,7 @@ Partial Public Class Form1
                 If (eps.Season.Value = "-1" Or eps.Episode.Value = "-1") AndAlso eps.Aired.Value = Nothing Then
                     eps.Title.Value = Utilities.GetFileName(eps.VideoFilePath)
                     eps.Rating.Value = "0"
+                    eps.Votes.Value = "0"
                     eps.PlayCount.Value = "0"
                     eps.Genre.Value = "Unknown Episode Season and/or Episode Number"
                     eps.GetFileDetails()
@@ -2603,6 +2606,9 @@ Partial Public Class Form1
                                             Case "rating"
                                                 stage = "12b5a6"
                                                 singleepisode.Rating.Value = thisresult.InnerText
+                                            Case "ratingcount"
+                                                stage = "12b5a6a"
+                                                singleepisode.Votes.Value = thisresult.InnerText
                                             Case "uniqueid"
                                                 stage = "12b5a7"
                                                 singleepisode.UniqueId.Value = thisresult.InnerText
@@ -2914,6 +2920,8 @@ Partial Public Class Form1
                         newepisode.Credits.Value = newepisode.Credits.Value.Replace("|", " / ")
                     Case "rating"
                         newepisode.Rating.Value = thisresult.InnerText
+                    Case "ratingcount"
+                        newepisode.Votes.Value = thisresult.InnerText
                     Case "thumb"
                         newepisode.Thumbnail.FileName = thisresult.InnerText
                     Case "genre"

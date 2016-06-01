@@ -13923,6 +13923,7 @@ Public Class Form1
                         ep.Plot.Value = tb_EpPlot.Text
                         ep.Aired.Value = tb_EpAired.Text
                         ep.Rating.Value = tb_EpRating.Text
+                        'ep.Votes.Value = tb_EpVotes.Text       'No, don't allow users to change votes.
                         ep.Credits.Value = tb_EpCredits.Text
                         ep.Director.Value = tb_EpDirector.Text
                         If ep.Season.Value = "0" Then

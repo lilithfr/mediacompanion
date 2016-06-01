@@ -93,8 +93,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(416, 420)
-        Me.SplitContainer1.SplitterDistance = 232
+        Me.SplitContainer1.Size = New System.Drawing.Size(414, 414)
+        Me.SplitContainer1.SplitterDistance = 240
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -111,7 +111,7 @@ Partial Class tv_batch_wizard
         Me.GroupBox1.Controls.Add(Me.cbshYear)
         Me.GroupBox1.Location = New System.Drawing.Point(11, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(373, 212)
+        Me.GroupBox1.Size = New System.Drawing.Size(398, 212)
         Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = false
         Me.GroupBox1.Text = "Select Tags to Rescrape"
@@ -138,7 +138,7 @@ Partial Class tv_batch_wizard
         Me.GroupBox3.Controls.Add(Me.cbshFanart)
         Me.GroupBox3.Location = New System.Drawing.Point(7, 89)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(340, 117)
+        Me.GroupBox3.Size = New System.Drawing.Size(389, 117)
         Me.GroupBox3.TabIndex = 13
         Me.GroupBox3.TabStop = false
         Me.GroupBox3.Text = "Download Missing artwork..."
@@ -333,7 +333,7 @@ Partial Class tv_batch_wizard
         Me.GroupBox2.Controls.Add(Me.cbepPlot)
         Me.GroupBox2.Location = New System.Drawing.Point(7, 26)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(364, 137)
+        Me.GroupBox2.Size = New System.Drawing.Size(400, 137)
         Me.GroupBox2.TabIndex = 1
         Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Select Tags to Rescrape"
@@ -477,8 +477,8 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
-        Me.SplitContainer2.Size = New System.Drawing.Size(416, 493)
-        Me.SplitContainer2.SplitterDistance = 420
+        Me.SplitContainer2.Size = New System.Drawing.Size(414, 486)
+        Me.SplitContainer2.SplitterDistance = 414
         Me.SplitContainer2.TabIndex = 1
         '
         'cbShSeries
@@ -535,7 +535,7 @@ Partial Class tv_batch_wizard
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_TvBatchCancel
-        Me.ClientSize = New System.Drawing.Size(416, 493)
+        Me.ClientSize = New System.Drawing.Size(414, 486)
         Me.ControlBox = false
         Me.Controls.Add(Me.SplitContainer2)
         Me.KeyPreview = true

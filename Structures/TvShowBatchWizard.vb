@@ -24,6 +24,7 @@ Public Structure str_TvShowBatchWizard
     Dim epDirector As Boolean
     Dim epCredits As Boolean
     Dim epRating As Boolean
+    Dim epVotes As Boolean
     Dim epRuntime As Boolean
     Dim epTitle As Boolean
     Dim epActor As Boolean
@@ -66,6 +67,7 @@ Public Structure str_TvShowBatchWizard
         epDirector = False
         epCredits = False
         epRating = False
+        epVotes = False
         epRuntime = False
         epTitle = False
         epActor = False
@@ -109,6 +111,7 @@ Public Structure str_TvShowBatchWizard
         epDirector = False
         epCredits = False
         epRating = False
+        epVotes = False
         epRuntime = False
         epTitle = False
         epActor = False
