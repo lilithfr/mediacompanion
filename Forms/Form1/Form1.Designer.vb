@@ -572,29 +572,29 @@ Partial Class Form1
         Me.cmbxEpActor = New System.Windows.Forms.ComboBox()
         Me.Panel9 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel19 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label160 = New System.Windows.Forms.Label()
+        Me.lb_EpSource = New System.Windows.Forms.Label()
         Me.tb_EpPlot = New System.Windows.Forms.TextBox()
         Me.tb_EpFilename = New System.Windows.Forms.TextBox()
-        Me.Label40 = New System.Windows.Forms.Label()
-        Me.Label36 = New System.Windows.Forms.Label()
+        Me.lb_EpFilename = New System.Windows.Forms.Label()
+        Me.lb_EpPath = New System.Windows.Forms.Label()
         Me.btn_EpWatched = New System.Windows.Forms.Button()
         Me.tb_EpPath = New System.Windows.Forms.TextBox()
-        Me.Label49 = New System.Windows.Forms.Label()
+        Me.lb_EpAired = New System.Windows.Forms.Label()
         Me.tb_EpCredits = New System.Windows.Forms.TextBox()
         Me.tb_EpAired = New System.Windows.Forms.TextBox()
         Me.tb_EpDirector = New System.Windows.Forms.TextBox()
-        Me.Label45 = New System.Windows.Forms.Label()
+        Me.lb_EpRating = New System.Windows.Forms.Label()
         Me.tb_EpRating = New System.Windows.Forms.TextBox()
-        Me.Label47 = New System.Windows.Forms.Label()
-        Me.Label46 = New System.Windows.Forms.Label()
+        Me.lb_EpCredits = New System.Windows.Forms.Label()
+        Me.lb_EpPlot = New System.Windows.Forms.Label()
         Me.lb_EpDetails = New System.Windows.Forms.ListBox()
         Me.cbTvSource = New System.Windows.Forms.ComboBox()
-        Me.Label48 = New System.Windows.Forms.Label()
-        Me.lbl_airepisode = New System.Windows.Forms.Label()
-        Me.tb_airepisode = New System.Windows.Forms.TextBox()
-        Me.lbl_airbefore = New System.Windows.Forms.Label()
-        Me.lbl_airseason = New System.Windows.Forms.Label()
-        Me.tb_airseason = New System.Windows.Forms.TextBox()
+        Me.lb_EpDirector = New System.Windows.Forms.Label()
+        Me.lbl_EPAirEpisode = New System.Windows.Forms.Label()
+        Me.tb_EpAirEpisode = New System.Windows.Forms.TextBox()
+        Me.lbl_EpAirBefore = New System.Windows.Forms.Label()
+        Me.lbl_EpAirSeason = New System.Windows.Forms.Label()
+        Me.tb_EpAirSeason = New System.Windows.Forms.TextBox()
         Me.pbtvfanarttv = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel20 = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel7 = New System.Windows.Forms.Panel()
@@ -868,12 +868,12 @@ Partial Class Form1
         Me.SpltCtnr12 = New System.Windows.Forms.SplitContainer()
         Me.Panel_Show = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel33 = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_ShRunTime = New System.Windows.Forms.Label()
-        Me.lbl_ShID = New System.Windows.Forms.Label()
-        Me.lbl_ShPremiered = New System.Windows.Forms.Label()
-        Me.lbl_ShStudio = New System.Windows.Forms.Label()
-        Me.lbl_ShGenre = New System.Windows.Forms.Label()
-        Me.lbl_ShCert = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShRunTime = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShID = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShPremiered = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShStudio = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShGenre = New System.Windows.Forms.Label()
+        Me.lbl_CustTvShCert = New System.Windows.Forms.Label()
         Me.tbCShPlot = New System.Windows.Forms.TextBox()
         Me.tbCShRuntime = New System.Windows.Forms.TextBox()
         Me.tbCShId = New System.Windows.Forms.TextBox()
@@ -891,13 +891,13 @@ Partial Class Form1
         Me.tbCEpAired = New System.Windows.Forms.TextBox()
         Me.tbCEpCredits = New System.Windows.Forms.TextBox()
         Me.tbCEpDirector = New System.Windows.Forms.TextBox()
-        Me.lbl_EpDirector = New System.Windows.Forms.Label()
-        Me.lbl_EpPlot = New System.Windows.Forms.Label()
-        Me.lbl_EpCredits = New System.Windows.Forms.Label()
-        Me.lbl_EpAired = New System.Windows.Forms.Label()
-        Me.lbl_EpPath = New System.Windows.Forms.Label()
-        Me.lbl_EpFilename = New System.Windows.Forms.Label()
-        Me.lbl_EpDetails = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpDirector = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpPlot = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpCredits = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpAired = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpPath = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpFilename = New System.Windows.Forms.Label()
+        Me.lbl_CustTvEpDetails = New System.Windows.Forms.Label()
         Me.TableLayoutPanel35 = New System.Windows.Forms.TableLayoutPanel()
         Me.tbCShEpTitle = New System.Windows.Forms.TextBox()
         Me.Show_SplCont1 = New System.Windows.Forms.SplitContainer()
@@ -1045,6 +1045,8 @@ Partial Class Form1
         Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.lbl_EpVotes = New System.Windows.Forms.Label()
+        Me.tb_EpVotes = New System.Windows.Forms.TextBox()
         Me.TVContextMenu.SuspendLayout
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
@@ -2858,7 +2860,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(329, 607)
-        Me.SplitContainer5.SplitterDistance = 311
+        Me.SplitContainer5.SplitterDistance = 310
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -2933,7 +2935,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 213)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 212)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -2968,7 +2970,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 291)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 290)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -3121,7 +3123,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 4085)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 4197)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3171,7 +3173,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 7968)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 8080)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4281,7 +4283,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(302, 207)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(301, 207)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4291,7 +4293,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(83, 71)
+        Me.Label128.Location = New System.Drawing.Point(82, 71)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -7918,7 +7920,7 @@ Partial Class Form1
         '
         Me.Panel8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel8.Controls.Add(Me.TableLayoutPanel30)
-        Me.Panel8.Location = New System.Drawing.Point(532, 337)
+        Me.Panel8.Location = New System.Drawing.Point(540, 337)
         Me.Panel8.MaximumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.MinimumSize = New System.Drawing.Size(179, 267)
         Me.Panel8.Name = "Panel8"
@@ -8035,33 +8037,35 @@ Partial Class Form1
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 47!))
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46!))
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50!))
-        Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56!))
+        Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58!))
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46!))
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60!))
         Me.TableLayoutPanel19.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 43!))
-        Me.TableLayoutPanel19.Controls.Add(Me.Label160, 0, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpPlot, 1, 1)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpFilename, 1, 4)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label40, 0, 4)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label36, 0, 3)
-        Me.TableLayoutPanel19.Controls.Add(Me.btn_EpWatched, 7, 2)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpPath, 1, 3)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label49, 0, 2)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpCredits, 5, 0)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpAired, 1, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpDirector, 0, 0)
         Me.TableLayoutPanel19.Controls.Add(Me.tb_EpDirector, 1, 0)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label45, 3, 2)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpRating, 4, 2)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label47, 4, 0)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label46, 0, 1)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpCredits, 4, 0)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpCredits, 5, 0)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpPlot, 0, 1)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpPlot, 1, 1)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpAired, 0, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpAired, 1, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.lbl_EpVotes, 3, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpVotes, 4, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpRating, 5, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpRating, 6, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.btn_EpWatched, 7, 2)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpPath, 0, 3)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpPath, 1, 3)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpFilename, 0, 4)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpFilename, 1, 4)
         Me.TableLayoutPanel19.Controls.Add(Me.lb_EpDetails, 6, 3)
+        Me.TableLayoutPanel19.Controls.Add(Me.lb_EpSource, 0, 5)
         Me.TableLayoutPanel19.Controls.Add(Me.cbTvSource, 1, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.Label48, 0, 0)
-        Me.TableLayoutPanel19.Controls.Add(Me.lbl_airepisode, 7, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_airepisode, 8, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.lbl_airbefore, 4, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.lbl_airseason, 5, 5)
-        Me.TableLayoutPanel19.Controls.Add(Me.tb_airseason, 6, 5)
+        Me.TableLayoutPanel19.Controls.Add(Me.lbl_EpAirBefore, 4, 5)
+        Me.TableLayoutPanel19.Controls.Add(Me.lbl_EpAirSeason, 5, 5)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpAirSeason, 6, 5)
+        Me.TableLayoutPanel19.Controls.Add(Me.lbl_EPAirEpisode, 7, 5)
+        Me.TableLayoutPanel19.Controls.Add(Me.tb_EpAirEpisode, 8, 5)
         Me.TableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel19.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel19.Margin = New System.Windows.Forms.Padding(0)
@@ -8076,18 +8080,18 @@ Partial Class Form1
         Me.TableLayoutPanel19.Size = New System.Drawing.Size(529, 225)
         Me.TableLayoutPanel19.TabIndex = 24
         '
-        'Label160
+        'lb_EpSource
         '
-        Me.Label160.AutoSize = true
-        Me.Label160.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label160.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label160.Location = New System.Drawing.Point(28, 198)
-        Me.Label160.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label160.Name = "Label160"
-        Me.Label160.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label160.Size = New System.Drawing.Size(52, 27)
-        Me.Label160.TabIndex = 23
-        Me.Label160.Text = "Source :"
+        Me.lb_EpSource.AutoSize = true
+        Me.lb_EpSource.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpSource.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpSource.Location = New System.Drawing.Point(28, 198)
+        Me.lb_EpSource.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpSource.Name = "lb_EpSource"
+        Me.lb_EpSource.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpSource.Size = New System.Drawing.Size(52, 27)
+        Me.lb_EpSource.TabIndex = 23
+        Me.lb_EpSource.Text = "Source :"
         '
         'tb_EpPlot
         '
@@ -8117,31 +8121,31 @@ Partial Class Form1
         Me.tb_EpFilename.Size = New System.Drawing.Size(291, 21)
         Me.tb_EpFilename.TabIndex = 18
         '
-        'Label40
+        'lb_EpFilename
         '
-        Me.Label40.AutoSize = true
-        Me.Label40.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label40.Location = New System.Drawing.Point(15, 167)
-        Me.Label40.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label40.Name = "Label40"
-        Me.Label40.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label40.Size = New System.Drawing.Size(65, 31)
-        Me.Label40.TabIndex = 19
-        Me.Label40.Text = "Filename :"
+        Me.lb_EpFilename.AutoSize = true
+        Me.lb_EpFilename.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpFilename.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpFilename.Location = New System.Drawing.Point(15, 167)
+        Me.lb_EpFilename.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpFilename.Name = "lb_EpFilename"
+        Me.lb_EpFilename.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpFilename.Size = New System.Drawing.Size(65, 31)
+        Me.lb_EpFilename.TabIndex = 19
+        Me.lb_EpFilename.Text = "Filename :"
         '
-        'Label36
+        'lb_EpPath
         '
-        Me.Label36.AutoSize = true
-        Me.Label36.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label36.Location = New System.Drawing.Point(42, 137)
-        Me.Label36.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label36.Size = New System.Drawing.Size(38, 30)
-        Me.Label36.TabIndex = 16
-        Me.Label36.Text = "Path :"
+        Me.lb_EpPath.AutoSize = true
+        Me.lb_EpPath.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpPath.Location = New System.Drawing.Point(42, 137)
+        Me.lb_EpPath.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpPath.Name = "lb_EpPath"
+        Me.lb_EpPath.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpPath.Size = New System.Drawing.Size(38, 30)
+        Me.lb_EpPath.TabIndex = 16
+        Me.lb_EpPath.Text = "Path :"
         '
         'btn_EpWatched
         '
@@ -8170,18 +8174,18 @@ Partial Class Form1
         Me.tb_EpPath.Size = New System.Drawing.Size(291, 21)
         Me.tb_EpPath.TabIndex = 17
         '
-        'Label49
+        'lb_EpAired
         '
-        Me.Label49.AutoSize = true
-        Me.Label49.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label49.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label49.Location = New System.Drawing.Point(39, 110)
-        Me.Label49.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label49.Name = "Label49"
-        Me.Label49.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label49.Size = New System.Drawing.Size(41, 27)
-        Me.Label49.TabIndex = 4
-        Me.Label49.Text = "Aired :"
+        Me.lb_EpAired.AutoSize = true
+        Me.lb_EpAired.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpAired.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpAired.Location = New System.Drawing.Point(39, 110)
+        Me.lb_EpAired.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpAired.Name = "lb_EpAired"
+        Me.lb_EpAired.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpAired.Size = New System.Drawing.Size(41, 27)
+        Me.lb_EpAired.TabIndex = 4
+        Me.lb_EpAired.Text = "Aired :"
         '
         'tb_EpCredits
         '
@@ -8190,10 +8194,10 @@ Partial Class Form1
         Me.tb_EpCredits.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel19.SetColumnSpan(Me.tb_EpCredits, 4)
         Me.tb_EpCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tb_EpCredits.Location = New System.Drawing.Point(327, 4)
+        Me.tb_EpCredits.Location = New System.Drawing.Point(325, 4)
         Me.tb_EpCredits.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpCredits.Name = "tb_EpCredits"
-        Me.tb_EpCredits.Size = New System.Drawing.Size(198, 21)
+        Me.tb_EpCredits.Size = New System.Drawing.Size(200, 21)
         Me.tb_EpCredits.TabIndex = 9
         '
         'tb_EpAired
@@ -8204,71 +8208,71 @@ Partial Class Form1
         Me.tb_EpAired.Location = New System.Drawing.Point(84, 114)
         Me.tb_EpAired.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpAired.Name = "tb_EpAired"
-        Me.tb_EpAired.Size = New System.Drawing.Size(114, 21)
+        Me.tb_EpAired.Size = New System.Drawing.Size(113, 21)
         Me.tb_EpAired.TabIndex = 10
         '
         'tb_EpDirector
         '
-        Me.tb_EpDirector.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.tb_EpDirector.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.tb_EpDirector.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel19.SetColumnSpan(Me.tb_EpDirector, 3)
         Me.tb_EpDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tb_EpDirector.Location = New System.Drawing.Point(84, 4)
         Me.tb_EpDirector.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpDirector.Name = "tb_EpDirector"
-        Me.tb_EpDirector.Size = New System.Drawing.Size(150, 21)
+        Me.tb_EpDirector.Size = New System.Drawing.Size(159, 21)
         Me.tb_EpDirector.TabIndex = 8
         '
-        'Label45
+        'lb_EpRating
         '
-        Me.Label45.AutoSize = true
-        Me.Label45.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label45.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label45.Location = New System.Drawing.Point(202, 110)
-        Me.Label45.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label45.Name = "Label45"
-        Me.Label45.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label45.Size = New System.Drawing.Size(46, 27)
-        Me.Label45.TabIndex = 0
-        Me.Label45.Text = "Rating :"
+        Me.lb_EpRating.AutoSize = true
+        Me.lb_EpRating.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpRating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpRating.Location = New System.Drawing.Point(330, 110)
+        Me.lb_EpRating.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpRating.Name = "lb_EpRating"
+        Me.lb_EpRating.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpRating.Size = New System.Drawing.Size(49, 27)
+        Me.lb_EpRating.TabIndex = 0
+        Me.lb_EpRating.Text = "Rating :"
         '
         'tb_EpRating
         '
         Me.tb_EpRating.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel19.SetColumnSpan(Me.tb_EpRating, 2)
         Me.tb_EpRating.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tb_EpRating.Location = New System.Drawing.Point(252, 114)
+        Me.tb_EpRating.Location = New System.Drawing.Point(383, 114)
         Me.tb_EpRating.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_EpRating.Name = "tb_EpRating"
-        Me.tb_EpRating.Size = New System.Drawing.Size(123, 21)
+        Me.tb_EpRating.Size = New System.Drawing.Size(38, 21)
         Me.tb_EpRating.TabIndex = 6
         '
-        'Label47
+        'lb_EpCredits
         '
-        Me.Label47.AutoSize = true
-        Me.Label47.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label47.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label47.Location = New System.Drawing.Point(272, 0)
-        Me.Label47.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label47.Name = "Label47"
-        Me.Label47.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label47.Size = New System.Drawing.Size(51, 28)
-        Me.Label47.TabIndex = 2
-        Me.Label47.Text = "Credits :"
+        Me.lb_EpCredits.AutoSize = true
+        Me.lb_EpCredits.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpCredits.Location = New System.Drawing.Point(270, 0)
+        Me.lb_EpCredits.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpCredits.Name = "lb_EpCredits"
+        Me.lb_EpCredits.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpCredits.Size = New System.Drawing.Size(51, 28)
+        Me.lb_EpCredits.TabIndex = 2
+        Me.lb_EpCredits.Text = "Credits :"
         '
-        'Label46
+        'lb_EpPlot
         '
-        Me.Label46.AutoSize = true
-        Me.Label46.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label46.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label46.Location = New System.Drawing.Point(46, 28)
-        Me.Label46.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label46.Name = "Label46"
-        Me.Label46.Padding = New System.Windows.Forms.Padding(0, 15, 0, 0)
-        Me.Label46.Size = New System.Drawing.Size(34, 82)
-        Me.Label46.TabIndex = 1
-        Me.Label46.Text = "Plot :"
+        Me.lb_EpPlot.AutoSize = true
+        Me.lb_EpPlot.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpPlot.Location = New System.Drawing.Point(46, 28)
+        Me.lb_EpPlot.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpPlot.Name = "lb_EpPlot"
+        Me.lb_EpPlot.Padding = New System.Windows.Forms.Padding(0, 15, 0, 0)
+        Me.lb_EpPlot.Size = New System.Drawing.Size(34, 82)
+        Me.lb_EpPlot.TabIndex = 1
+        Me.lb_EpPlot.Text = "Plot :"
         '
         'lb_EpDetails
         '
@@ -8284,71 +8288,73 @@ Partial Class Form1
         '
         'cbTvSource
         '
+        Me.cbTvSource.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel19.SetColumnSpan(Me.cbTvSource, 2)
         Me.cbTvSource.FormattingEnabled = true
         Me.cbTvSource.Location = New System.Drawing.Point(83, 201)
         Me.cbTvSource.Name = "cbTvSource"
-        Me.cbTvSource.Size = New System.Drawing.Size(114, 23)
+        Me.cbTvSource.Size = New System.Drawing.Size(115, 23)
         Me.cbTvSource.TabIndex = 25
         '
-        'Label48
+        'lb_EpDirector
         '
-        Me.Label48.AutoSize = true
-        Me.Label48.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label48.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label48.Location = New System.Drawing.Point(24, 0)
-        Me.Label48.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label48.Name = "Label48"
-        Me.Label48.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
-        Me.Label48.Size = New System.Drawing.Size(56, 28)
-        Me.Label48.TabIndex = 3
-        Me.Label48.Text = "Director :"
+        Me.lb_EpDirector.AutoSize = true
+        Me.lb_EpDirector.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lb_EpDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lb_EpDirector.Location = New System.Drawing.Point(24, 0)
+        Me.lb_EpDirector.Margin = New System.Windows.Forms.Padding(0)
+        Me.lb_EpDirector.Name = "lb_EpDirector"
+        Me.lb_EpDirector.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lb_EpDirector.Size = New System.Drawing.Size(56, 28)
+        Me.lb_EpDirector.TabIndex = 3
+        Me.lb_EpDirector.Text = "Director :"
         '
-        'lbl_airepisode
+        'lbl_EPAirEpisode
         '
-        Me.lbl_airepisode.AutoSize = true
-        Me.lbl_airepisode.Location = New System.Drawing.Point(428, 198)
-        Me.lbl_airepisode.Name = "lbl_airepisode"
-        Me.lbl_airepisode.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.lbl_airepisode.Size = New System.Drawing.Size(52, 21)
-        Me.lbl_airepisode.TabIndex = 27
-        Me.lbl_airepisode.Text = "Episode"
+        Me.lbl_EPAirEpisode.AutoSize = true
+        Me.lbl_EPAirEpisode.Location = New System.Drawing.Point(428, 198)
+        Me.lbl_EPAirEpisode.Name = "lbl_EPAirEpisode"
+        Me.lbl_EPAirEpisode.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.lbl_EPAirEpisode.Size = New System.Drawing.Size(52, 21)
+        Me.lbl_EPAirEpisode.TabIndex = 27
+        Me.lbl_EPAirEpisode.Text = "Episode"
         '
-        'tb_airepisode
+        'tb_EpAirEpisode
         '
-        Me.tb_airepisode.Location = New System.Drawing.Point(488, 201)
-        Me.tb_airepisode.Name = "tb_airepisode"
-        Me.tb_airepisode.Size = New System.Drawing.Size(37, 21)
-        Me.tb_airepisode.TabIndex = 26
+        Me.tb_EpAirEpisode.Location = New System.Drawing.Point(488, 201)
+        Me.tb_EpAirEpisode.Name = "tb_EpAirEpisode"
+        Me.tb_EpAirEpisode.Size = New System.Drawing.Size(37, 21)
+        Me.tb_EpAirEpisode.TabIndex = 26
         '
-        'lbl_airbefore
+        'lbl_EpAirBefore
         '
-        Me.lbl_airbefore.AutoSize = true
-        Me.lbl_airbefore.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_airbefore.Location = New System.Drawing.Point(251, 198)
-        Me.lbl_airbefore.Name = "lbl_airbefore"
-        Me.lbl_airbefore.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.lbl_airbefore.Size = New System.Drawing.Size(69, 27)
-        Me.lbl_airbefore.TabIndex = 28
-        Me.lbl_airbefore.Text = "Airs Before"
+        Me.lbl_EpAirBefore.AutoSize = true
+        Me.lbl_EpAirBefore.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_EpAirBefore.Location = New System.Drawing.Point(250, 198)
+        Me.lbl_EpAirBefore.Name = "lbl_EpAirBefore"
+        Me.lbl_EpAirBefore.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.lbl_EpAirBefore.Size = New System.Drawing.Size(68, 27)
+        Me.lbl_EpAirBefore.TabIndex = 28
+        Me.lbl_EpAirBefore.Text = "Airs Before"
         '
-        'lbl_airseason
+        'lbl_EpAirSeason
         '
-        Me.lbl_airseason.AutoSize = true
-        Me.lbl_airseason.Dock = System.Windows.Forms.DockStyle.Right
-        Me.lbl_airseason.Location = New System.Drawing.Point(327, 198)
-        Me.lbl_airseason.Name = "lbl_airseason"
-        Me.lbl_airseason.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.lbl_airseason.Size = New System.Drawing.Size(49, 27)
-        Me.lbl_airseason.TabIndex = 29
-        Me.lbl_airseason.Text = "Season"
+        Me.lbl_EpAirSeason.AutoSize = true
+        Me.lbl_EpAirSeason.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lbl_EpAirSeason.Location = New System.Drawing.Point(327, 198)
+        Me.lbl_EpAirSeason.Name = "lbl_EpAirSeason"
+        Me.lbl_EpAirSeason.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.lbl_EpAirSeason.Size = New System.Drawing.Size(49, 27)
+        Me.lbl_EpAirSeason.TabIndex = 29
+        Me.lbl_EpAirSeason.Text = "Season"
         '
-        'tb_airseason
+        'tb_EpAirSeason
         '
-        Me.tb_airseason.Location = New System.Drawing.Point(382, 201)
-        Me.tb_airseason.Name = "tb_airseason"
-        Me.tb_airseason.Size = New System.Drawing.Size(40, 21)
-        Me.tb_airseason.TabIndex = 30
+        Me.tb_EpAirSeason.Location = New System.Drawing.Point(382, 201)
+        Me.tb_EpAirSeason.Name = "tb_EpAirSeason"
+        Me.tb_EpAirSeason.Size = New System.Drawing.Size(40, 21)
+        Me.tb_EpAirSeason.TabIndex = 30
         '
         'pbtvfanarttv
         '
@@ -8358,7 +8364,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(308, 212)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(307, 212)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -11850,12 +11856,12 @@ Partial Class Form1
         Me.TableLayoutPanel33.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 11!))
         Me.TableLayoutPanel33.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50!))
         Me.TableLayoutPanel33.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15!))
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShRunTime, 1, 3)
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShID, 1, 5)
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShPremiered, 1, 7)
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShStudio, 5, 3)
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShGenre, 5, 5)
-        Me.TableLayoutPanel33.Controls.Add(Me.lbl_ShCert, 5, 7)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShRunTime, 1, 3)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShID, 1, 5)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShPremiered, 1, 7)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShStudio, 5, 3)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShGenre, 5, 5)
+        Me.TableLayoutPanel33.Controls.Add(Me.lbl_CustTvShCert, 5, 7)
         Me.TableLayoutPanel33.Controls.Add(Me.tbCShPlot, 3, 1)
         Me.TableLayoutPanel33.Controls.Add(Me.tbCShRuntime, 3, 3)
         Me.TableLayoutPanel33.Controls.Add(Me.tbCShId, 3, 5)
@@ -11880,65 +11886,65 @@ Partial Class Form1
         Me.TableLayoutPanel33.Size = New System.Drawing.Size(638, 239)
         Me.TableLayoutPanel33.TabIndex = 0
         '
-        'lbl_ShRunTime
+        'lbl_CustTvShRunTime
         '
-        Me.lbl_ShRunTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShRunTime.Location = New System.Drawing.Point(23, 114)
-        Me.lbl_ShRunTime.Name = "lbl_ShRunTime"
-        Me.lbl_ShRunTime.Size = New System.Drawing.Size(78, 32)
-        Me.lbl_ShRunTime.TabIndex = 1
-        Me.lbl_ShRunTime.Text = "Runtime:"
-        Me.lbl_ShRunTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShRunTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShRunTime.Location = New System.Drawing.Point(23, 114)
+        Me.lbl_CustTvShRunTime.Name = "lbl_CustTvShRunTime"
+        Me.lbl_CustTvShRunTime.Size = New System.Drawing.Size(78, 32)
+        Me.lbl_CustTvShRunTime.TabIndex = 1
+        Me.lbl_CustTvShRunTime.Text = "Runtime:"
+        Me.lbl_CustTvShRunTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_ShID
+        'lbl_CustTvShID
         '
-        Me.lbl_ShID.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShID.Location = New System.Drawing.Point(23, 156)
-        Me.lbl_ShID.Name = "lbl_ShID"
-        Me.lbl_ShID.Size = New System.Drawing.Size(78, 32)
-        Me.lbl_ShID.TabIndex = 2
-        Me.lbl_ShID.Text = "Show ID:"
-        Me.lbl_ShID.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShID.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShID.Location = New System.Drawing.Point(23, 156)
+        Me.lbl_CustTvShID.Name = "lbl_CustTvShID"
+        Me.lbl_CustTvShID.Size = New System.Drawing.Size(78, 32)
+        Me.lbl_CustTvShID.TabIndex = 2
+        Me.lbl_CustTvShID.Text = "Show ID:"
+        Me.lbl_CustTvShID.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_ShPremiered
+        'lbl_CustTvShPremiered
         '
-        Me.lbl_ShPremiered.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShPremiered.Location = New System.Drawing.Point(23, 201)
-        Me.lbl_ShPremiered.Name = "lbl_ShPremiered"
-        Me.lbl_ShPremiered.Size = New System.Drawing.Size(78, 32)
-        Me.lbl_ShPremiered.TabIndex = 3
-        Me.lbl_ShPremiered.Text = "Premiered:"
-        Me.lbl_ShPremiered.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShPremiered.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShPremiered.Location = New System.Drawing.Point(23, 201)
+        Me.lbl_CustTvShPremiered.Name = "lbl_CustTvShPremiered"
+        Me.lbl_CustTvShPremiered.Size = New System.Drawing.Size(78, 32)
+        Me.lbl_CustTvShPremiered.TabIndex = 3
+        Me.lbl_CustTvShPremiered.Text = "Premiered:"
+        Me.lbl_CustTvShPremiered.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_ShStudio
+        'lbl_CustTvShStudio
         '
-        Me.lbl_ShStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShStudio.Location = New System.Drawing.Point(325, 114)
-        Me.lbl_ShStudio.Name = "lbl_ShStudio"
-        Me.lbl_ShStudio.Size = New System.Drawing.Size(92, 32)
-        Me.lbl_ShStudio.TabIndex = 4
-        Me.lbl_ShStudio.Text = "Studio:"
-        Me.lbl_ShStudio.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShStudio.Location = New System.Drawing.Point(325, 114)
+        Me.lbl_CustTvShStudio.Name = "lbl_CustTvShStudio"
+        Me.lbl_CustTvShStudio.Size = New System.Drawing.Size(92, 32)
+        Me.lbl_CustTvShStudio.TabIndex = 4
+        Me.lbl_CustTvShStudio.Text = "Studio:"
+        Me.lbl_CustTvShStudio.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_ShGenre
+        'lbl_CustTvShGenre
         '
-        Me.lbl_ShGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShGenre.Location = New System.Drawing.Point(325, 156)
-        Me.lbl_ShGenre.Name = "lbl_ShGenre"
-        Me.lbl_ShGenre.Size = New System.Drawing.Size(81, 32)
-        Me.lbl_ShGenre.TabIndex = 5
-        Me.lbl_ShGenre.Text = "Genre:"
-        Me.lbl_ShGenre.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShGenre.Location = New System.Drawing.Point(325, 156)
+        Me.lbl_CustTvShGenre.Name = "lbl_CustTvShGenre"
+        Me.lbl_CustTvShGenre.Size = New System.Drawing.Size(81, 32)
+        Me.lbl_CustTvShGenre.TabIndex = 5
+        Me.lbl_CustTvShGenre.Text = "Genre:"
+        Me.lbl_CustTvShGenre.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_ShCert
+        'lbl_CustTvShCert
         '
-        Me.lbl_ShCert.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_ShCert.Location = New System.Drawing.Point(325, 201)
-        Me.lbl_ShCert.Name = "lbl_ShCert"
-        Me.lbl_ShCert.Size = New System.Drawing.Size(92, 32)
-        Me.lbl_ShCert.TabIndex = 6
-        Me.lbl_ShCert.Text = "Certification:"
-        Me.lbl_ShCert.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvShCert.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvShCert.Location = New System.Drawing.Point(325, 201)
+        Me.lbl_CustTvShCert.Name = "lbl_CustTvShCert"
+        Me.lbl_CustTvShCert.Size = New System.Drawing.Size(92, 32)
+        Me.lbl_CustTvShCert.TabIndex = 6
+        Me.lbl_CustTvShCert.Text = "Certification:"
+        Me.lbl_CustTvShCert.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'tbCShPlot
         '
@@ -12044,13 +12050,13 @@ Partial Class Form1
         Me.TableLayoutPanel34.Controls.Add(Me.tbCEpAired, 3, 5)
         Me.TableLayoutPanel34.Controls.Add(Me.tbCEpCredits, 7, 1)
         Me.TableLayoutPanel34.Controls.Add(Me.tbCEpDirector, 3, 1)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpDirector, 1, 1)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpPlot, 1, 3)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpCredits, 5, 1)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpAired, 1, 5)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpPath, 1, 7)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpFilename, 1, 9)
-        Me.TableLayoutPanel34.Controls.Add(Me.lbl_EpDetails, 1, 11)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpDirector, 1, 1)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpPlot, 1, 3)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpCredits, 5, 1)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpAired, 1, 5)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpPath, 1, 7)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpFilename, 1, 9)
+        Me.TableLayoutPanel34.Controls.Add(Me.lbl_CustTvEpDetails, 1, 11)
         Me.TableLayoutPanel34.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel34.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel34.Name = "TableLayoutPanel34"
@@ -12139,75 +12145,75 @@ Partial Class Form1
         Me.tbCEpDirector.Size = New System.Drawing.Size(217, 21)
         Me.tbCEpDirector.TabIndex = 9
         '
-        'lbl_EpDirector
+        'lbl_CustTvEpDirector
         '
-        Me.lbl_EpDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpDirector.Location = New System.Drawing.Point(23, 8)
-        Me.lbl_EpDirector.Name = "lbl_EpDirector"
-        Me.lbl_EpDirector.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpDirector.TabIndex = 0
-        Me.lbl_EpDirector.Text = "Director"
-        Me.lbl_EpDirector.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpDirector.Location = New System.Drawing.Point(23, 8)
+        Me.lbl_CustTvEpDirector.Name = "lbl_CustTvEpDirector"
+        Me.lbl_CustTvEpDirector.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpDirector.TabIndex = 0
+        Me.lbl_CustTvEpDirector.Text = "Director"
+        Me.lbl_CustTvEpDirector.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpPlot
+        'lbl_CustTvEpPlot
         '
-        Me.lbl_EpPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpPlot.Location = New System.Drawing.Point(23, 39)
-        Me.lbl_EpPlot.Name = "lbl_EpPlot"
-        Me.lbl_EpPlot.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpPlot.TabIndex = 1
-        Me.lbl_EpPlot.Text = "Plot"
-        Me.lbl_EpPlot.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpPlot.Location = New System.Drawing.Point(23, 39)
+        Me.lbl_CustTvEpPlot.Name = "lbl_CustTvEpPlot"
+        Me.lbl_CustTvEpPlot.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpPlot.TabIndex = 1
+        Me.lbl_CustTvEpPlot.Text = "Plot"
+        Me.lbl_CustTvEpPlot.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpCredits
+        'lbl_CustTvEpCredits
         '
-        Me.lbl_EpCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpCredits.Location = New System.Drawing.Point(358, 8)
-        Me.lbl_EpCredits.Name = "lbl_EpCredits"
-        Me.lbl_EpCredits.Size = New System.Drawing.Size(90, 23)
-        Me.lbl_EpCredits.TabIndex = 2
-        Me.lbl_EpCredits.Text = "Credits"
-        Me.lbl_EpCredits.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpCredits.Location = New System.Drawing.Point(358, 8)
+        Me.lbl_CustTvEpCredits.Name = "lbl_CustTvEpCredits"
+        Me.lbl_CustTvEpCredits.Size = New System.Drawing.Size(90, 23)
+        Me.lbl_CustTvEpCredits.TabIndex = 2
+        Me.lbl_CustTvEpCredits.Text = "Credits"
+        Me.lbl_CustTvEpCredits.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpAired
+        'lbl_CustTvEpAired
         '
-        Me.lbl_EpAired.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpAired.Location = New System.Drawing.Point(23, 110)
-        Me.lbl_EpAired.Name = "lbl_EpAired"
-        Me.lbl_EpAired.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpAired.TabIndex = 3
-        Me.lbl_EpAired.Text = "Aired:"
-        Me.lbl_EpAired.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpAired.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpAired.Location = New System.Drawing.Point(23, 110)
+        Me.lbl_CustTvEpAired.Name = "lbl_CustTvEpAired"
+        Me.lbl_CustTvEpAired.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpAired.TabIndex = 3
+        Me.lbl_CustTvEpAired.Text = "Aired:"
+        Me.lbl_CustTvEpAired.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpPath
+        'lbl_CustTvEpPath
         '
-        Me.lbl_EpPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpPath.Location = New System.Drawing.Point(23, 142)
-        Me.lbl_EpPath.Name = "lbl_EpPath"
-        Me.lbl_EpPath.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpPath.TabIndex = 4
-        Me.lbl_EpPath.Text = "Path:"
-        Me.lbl_EpPath.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpPath.Location = New System.Drawing.Point(23, 142)
+        Me.lbl_CustTvEpPath.Name = "lbl_CustTvEpPath"
+        Me.lbl_CustTvEpPath.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpPath.TabIndex = 4
+        Me.lbl_CustTvEpPath.Text = "Path:"
+        Me.lbl_CustTvEpPath.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpFilename
+        'lbl_CustTvEpFilename
         '
-        Me.lbl_EpFilename.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpFilename.Location = New System.Drawing.Point(23, 173)
-        Me.lbl_EpFilename.Name = "lbl_EpFilename"
-        Me.lbl_EpFilename.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpFilename.TabIndex = 5
-        Me.lbl_EpFilename.Text = "Filename:"
-        Me.lbl_EpFilename.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpFilename.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpFilename.Location = New System.Drawing.Point(23, 173)
+        Me.lbl_CustTvEpFilename.Name = "lbl_CustTvEpFilename"
+        Me.lbl_CustTvEpFilename.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpFilename.TabIndex = 5
+        Me.lbl_CustTvEpFilename.Text = "Filename:"
+        Me.lbl_CustTvEpFilename.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_EpDetails
+        'lbl_CustTvEpDetails
         '
-        Me.lbl_EpDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_EpDetails.Location = New System.Drawing.Point(23, 204)
-        Me.lbl_EpDetails.Name = "lbl_EpDetails"
-        Me.lbl_EpDetails.Size = New System.Drawing.Size(79, 23)
-        Me.lbl_EpDetails.TabIndex = 6
-        Me.lbl_EpDetails.Text = "Details:"
-        Me.lbl_EpDetails.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_CustTvEpDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_CustTvEpDetails.Location = New System.Drawing.Point(23, 204)
+        Me.lbl_CustTvEpDetails.Name = "lbl_CustTvEpDetails"
+        Me.lbl_CustTvEpDetails.Size = New System.Drawing.Size(79, 23)
+        Me.lbl_CustTvEpDetails.TabIndex = 6
+        Me.lbl_CustTvEpDetails.Text = "Details:"
+        Me.lbl_CustTvEpDetails.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TableLayoutPanel35
         '
@@ -12331,7 +12337,7 @@ Partial Class Form1
         Me.TpCustTvArt.Location = New System.Drawing.Point(4, 24)
         Me.TpCustTvArt.Name = "TpCustTvArt"
         Me.TpCustTvArt.Padding = New System.Windows.Forms.Padding(3)
-        Me.TpCustTvArt.Size = New System.Drawing.Size(1049, 612)
+        Me.TpCustTvArt.Size = New System.Drawing.Size(180, 39)
         Me.TpCustTvArt.TabIndex = 1
         Me.TpCustTvArt.Text = "Artwork"
         Me.TpCustTvArt.UseVisualStyleBackColor = true
@@ -12347,7 +12353,7 @@ Partial Class Form1
         Me.TableLayoutPanel36.RowCount = 2
         Me.TableLayoutPanel36.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50!))
         Me.TableLayoutPanel36.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50!))
-        Me.TableLayoutPanel36.Size = New System.Drawing.Size(1043, 606)
+        Me.TableLayoutPanel36.Size = New System.Drawing.Size(174, 33)
         Me.TableLayoutPanel36.TabIndex = 0
         '
         'TpCustTvFolders
@@ -12361,7 +12367,7 @@ Partial Class Form1
         Me.TpCustTvFolders.Location = New System.Drawing.Point(4, 24)
         Me.TpCustTvFolders.Name = "TpCustTvFolders"
         Me.TpCustTvFolders.Padding = New System.Windows.Forms.Padding(3)
-        Me.TpCustTvFolders.Size = New System.Drawing.Size(1049, 612)
+        Me.TpCustTvFolders.Size = New System.Drawing.Size(180, 39)
         Me.TpCustTvFolders.TabIndex = 2
         Me.TpCustTvFolders.Text = "Folders"
         Me.TpCustTvFolders.UseVisualStyleBackColor = true
@@ -12380,7 +12386,7 @@ Partial Class Form1
         '
         Me.btnCFolderSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnCFolderSave.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCFolderSave.Location = New System.Drawing.Point(32, 559)
+        Me.btnCFolderSave.Location = New System.Drawing.Point(32, -14)
         Me.btnCFolderSave.Name = "btnCFolderSave"
         Me.btnCFolderSave.Size = New System.Drawing.Size(109, 32)
         Me.btnCFolderSave.TabIndex = 4
@@ -13441,6 +13447,30 @@ Partial Class Form1
         Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
         Me.tsmiTvWallOpenFolder.Text = "Open Folder"
         '
+        'lbl_EpVotes
+        '
+        Me.lbl_EpVotes.AutoSize = true
+        Me.lbl_EpVotes.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lbl_EpVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_EpVotes.Location = New System.Drawing.Point(204, 110)
+        Me.lbl_EpVotes.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_EpVotes.Name = "lbl_EpVotes"
+        Me.lbl_EpVotes.Padding = New System.Windows.Forms.Padding(0, 8, 0, 0)
+        Me.lbl_EpVotes.Size = New System.Drawing.Size(43, 27)
+        Me.lbl_EpVotes.TabIndex = 31
+        Me.lbl_EpVotes.Text = "Votes :"
+        '
+        'tb_EpVotes
+        '
+        Me.tb_EpVotes.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tb_EpVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.tb_EpVotes.Location = New System.Drawing.Point(251, 114)
+        Me.tb_EpVotes.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_EpVotes.Name = "tb_EpVotes"
+        Me.tb_EpVotes.ReadOnly = true
+        Me.tb_EpVotes.Size = New System.Drawing.Size(66, 21)
+        Me.tb_EpVotes.TabIndex = 32
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -13894,11 +13924,11 @@ End Sub
     Friend WithEvents tb_EpCredits As System.Windows.Forms.TextBox
     Friend WithEvents tb_EpDirector As System.Windows.Forms.TextBox
     Friend WithEvents tb_EpRating As System.Windows.Forms.TextBox
-    Friend WithEvents Label49 As System.Windows.Forms.Label
-    Friend WithEvents Label48 As System.Windows.Forms.Label
-    Friend WithEvents Label47 As System.Windows.Forms.Label
-    Friend WithEvents Label46 As System.Windows.Forms.Label
-    Friend WithEvents Label45 As System.Windows.Forms.Label
+    Friend WithEvents lb_EpAired As System.Windows.Forms.Label
+    Friend WithEvents lb_EpDirector As System.Windows.Forms.Label
+    Friend WithEvents lb_EpCredits As System.Windows.Forms.Label
+    Friend WithEvents lb_EpPlot As System.Windows.Forms.Label
+    Friend WithEvents lb_EpRating As System.Windows.Forms.Label
     Friend WithEvents tbEpRole As System.Windows.Forms.TextBox
     Friend WithEvents cmbxEpActor As System.Windows.Forms.ComboBox
     Friend WithEvents Label51 As System.Windows.Forms.Label
@@ -13972,8 +14002,8 @@ End Sub
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tb_EpFilename As System.Windows.Forms.TextBox
     Friend WithEvents tb_EpPath As System.Windows.Forms.TextBox
-    Friend WithEvents Label36 As System.Windows.Forms.Label
-    Friend WithEvents Label40 As System.Windows.Forms.Label
+    Friend WithEvents lb_EpPath As System.Windows.Forms.Label
+    Friend WithEvents lb_EpFilename As System.Windows.Forms.Label
     Friend WithEvents Button_Save_TvShow_Episode As System.Windows.Forms.Button
     Friend WithEvents Button44 As System.Windows.Forms.Button
     Friend WithEvents Label67 As System.Windows.Forms.Label
@@ -14246,7 +14276,7 @@ End Sub
     Friend WithEvents rbMovThumb1 As System.Windows.Forms.RadioButton
     Friend WithEvents rbMovFanart As System.Windows.Forms.RadioButton
     Friend WithEvents Tv_TreeViewContext_Play_Episode As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Label160 As System.Windows.Forms.Label
+    Friend WithEvents lb_EpSource As System.Windows.Forms.Label
     Friend WithEvents mov_ToolStripRescrapeAll As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SearchALLForNewEpisodesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mov_ToolStripMovieName As System.Windows.Forms.ToolStripMenuItem
@@ -14654,11 +14684,11 @@ End Sub
     Friend WithEvents movsetposter As System.Windows.Forms.DataGridViewImageColumn
     Friend WithEvents lblMovTagMulti1 As System.Windows.Forms.Label
     Friend WithEvents lblMovTagMulti2 As System.Windows.Forms.Label
-    Friend WithEvents lbl_airepisode As System.Windows.Forms.Label
-    Friend WithEvents tb_airepisode As System.Windows.Forms.TextBox
-    Friend WithEvents lbl_airbefore As System.Windows.Forms.Label
-    Friend WithEvents lbl_airseason As System.Windows.Forms.Label
-    Friend WithEvents tb_airseason As System.Windows.Forms.TextBox
+    Friend WithEvents lbl_EPAirEpisode As System.Windows.Forms.Label
+    Friend WithEvents tb_EpAirEpisode As System.Windows.Forms.TextBox
+    Friend WithEvents lbl_EpAirBefore As System.Windows.Forms.Label
+    Friend WithEvents lbl_EpAirSeason As System.Windows.Forms.Label
+    Friend WithEvents tb_EpAirSeason As System.Windows.Forms.TextBox
     Friend WithEvents tp_HmPoster As System.Windows.Forms.TabPage
     Friend WithEvents TableLayoutPanel32 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Label38 As System.Windows.Forms.Label
@@ -14736,12 +14766,12 @@ End Sub
     Friend WithEvents Label5 As Label
     Friend WithEvents Panel_Show As Panel
     Friend WithEvents TableLayoutPanel33 As TableLayoutPanel
-    Friend WithEvents lbl_ShRunTime As Label
-    Friend WithEvents lbl_ShID As Label
-    Friend WithEvents lbl_ShPremiered As Label
-    Friend WithEvents lbl_ShStudio As Label
-    Friend WithEvents lbl_ShGenre As Label
-    Friend WithEvents lbl_ShCert As Label
+    Friend WithEvents lbl_CustTvShRunTime As Label
+    Friend WithEvents lbl_CustTvShID As Label
+    Friend WithEvents lbl_CustTvShPremiered As Label
+    Friend WithEvents lbl_CustTvShStudio As Label
+    Friend WithEvents lbl_CustTvShGenre As Label
+    Friend WithEvents lbl_CustTvShCert As Label
     Friend WithEvents tbCShPlot As TextBox
     Friend WithEvents tbCShRuntime As TextBox
     Friend WithEvents tbCShId As TextBox
@@ -14759,13 +14789,13 @@ End Sub
     Friend WithEvents tbCEpAired As TextBox
     Friend WithEvents tbCEpCredits As TextBox
     Friend WithEvents tbCEpDirector As TextBox
-    Friend WithEvents lbl_EpDirector As Label
-    Friend WithEvents lbl_EpPlot As Label
-    Friend WithEvents lbl_EpCredits As Label
-    Friend WithEvents lbl_EpAired As Label
-    Friend WithEvents lbl_EpPath As Label
-    Friend WithEvents lbl_EpFilename As Label
-    Friend WithEvents lbl_EpDetails As Label
+    Friend WithEvents lbl_CustTvEpDirector As Label
+    Friend WithEvents lbl_CustTvEpPlot As Label
+    Friend WithEvents lbl_CustTvEpCredits As Label
+    Friend WithEvents lbl_CustTvEpAired As Label
+    Friend WithEvents lbl_CustTvEpPath As Label
+    Friend WithEvents lbl_CustTvEpFilename As Label
+    Friend WithEvents lbl_CustTvEpDetails As Label
     Friend WithEvents TableLayoutPanel35 As TableLayoutPanel
     Friend WithEvents tbCShEpTitle As TextBox
     Friend WithEvents Show_SplCont1 As SplitContainer
@@ -14790,4 +14820,6 @@ End Sub
     Friend WithEvents tsMultiMovieProgressBar As ToolStripProgressBar
     Friend WithEvents tsStatusLabel As ToolStripStatusLabel
     Friend WithEvents tsStatusLabel1 As ToolStripStatusLabel
+    Friend WithEvents lbl_EpVotes As System.Windows.Forms.Label
+    Friend WithEvents tb_EpVotes As System.Windows.Forms.TextBox
 End Class

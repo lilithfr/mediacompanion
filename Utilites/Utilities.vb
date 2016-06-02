@@ -314,31 +314,38 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetStdAspectRatio(ByVal Ratio As String) As String
         If IsNothing(Ratio) Then Return ""
         If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
-        Return Ratio
-        Dim aspectRatio As Double
-        If Double.TryParse(Ratio, aspectRatio) Then
-
-            'This taken from XBMC StreamDetails.cpp CStreamDetails::VideoAspectToAspectDescription()
-            If (aspectRatio = 0.0) Then Return ""
-
-            ' Given that we're never going to be able to handle every single possibility in
-            ' aspect ratios, particularly when cropping prior to video encoding is taken into account
-            ' the best we can do is take the "common" aspect ratios, and return the closest one available.
-            ' The cutoffs are the geometric mean of the two aspect ratios either side.
-            If (aspectRatio < 1.4859) Then      ' sqrt(1.33*1.66)
-                Return "1.33"
-            ElseIf (aspectRatio < 1.719) Then   'sqrt(1.66*1.78)
-                Return "1.66"
-            ElseIf (aspectRatio < 1.8147) Then  'sqrt(1.78*1.85)
-                Return "1.78"
-            ElseIf (aspectRatio < 2.0174) Then  'sqrt(1.85*2.20)
-                Return "1.85"
-            ElseIf (aspectRatio < 2.2738) Then  'sqrt(2.20*2.35)
-                Return "2.20"
+        If Ratio.IndexOf(",") > -1 Then
+            Ratio = Ratio.Substring(0, Ratio.IndexOf(","))
+            If Ratio.Length > 2 AndAlso Not Ratio.Contains(".") Then
+                Dim Somthing As String = Nothing
+                Ratio = Ratio.Insert(1, ".")
             End If
-            Return "2.35"
         End If
-        Return ""
+        Return Ratio
+        'Dim aspectRatio As Double
+        'If Double.TryParse(Ratio, aspectRatio) Then
+
+        '    'This taken from XBMC StreamDetails.cpp CStreamDetails::VideoAspectToAspectDescription()
+        '    If (aspectRatio = 0.0) Then Return ""
+
+        '    ' Given that we're never going to be able to handle every single possibility in
+        '    ' aspect ratios, particularly when cropping prior to video encoding is taken into account
+        '    ' the best we can do is take the "common" aspect ratios, and return the closest one available.
+        '    ' The cutoffs are the geometric mean of the two aspect ratios either side.
+        '    If (aspectRatio < 1.4859) Then      ' sqrt(1.33*1.66)
+        '        Return "1.33"
+        '    ElseIf (aspectRatio < 1.719) Then   'sqrt(1.66*1.78)
+        '        Return "1.66"
+        '    ElseIf (aspectRatio < 1.8147) Then  'sqrt(1.78*1.85)
+        '        Return "1.78"
+        '    ElseIf (aspectRatio < 2.0174) Then  'sqrt(1.85*2.20)
+        '        Return "1.85"
+        '    ElseIf (aspectRatio < 2.2738) Then  'sqrt(2.20*2.35)
+        '        Return "2.20"
+        '    End If
+        '    Return "2.35"
+        'End If
+        'Return ""
     End Function
 
     Public Shared Function GetCodecCommonName(ByVal codec As String) As String

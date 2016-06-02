@@ -826,27 +826,25 @@ Partial Public Class Form1
         Panel7.Visible = False
 
         'test if already loaded nfo into treeview, if so, then no need to reload
-        If IsNothing(Episode.Plot.Value) OrElse epupdate Then
+        'If IsNothing(Episode.Plot.Value) OrElse epupdate Then
+            Episode.ListActors.Clear()
+            Dim episodelist As New List(Of TvEpisode)
+            episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
             'test for multiepisodenfo
-            If TestForMultiepisode(Episode.NfoFilePath) Then
-                Dim episodelist As New List(Of TvEpisode)
-                episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
+            If episodelist.Count = 1 Then
+                Episode.AbsorbTvEpisode(episodelist(0))
+            Else
                 For Each Ep In episodelist
-                    If Ep.Season.Value = Episode.Season.Value And Ep.Episode.Value = Episode.Episode.Value Then
-                        Episode.ListActors.Clear()
+                    If Ep.Season.Value = Episode.Season.Value AndAlso Ep.Episode.Value = Episode.Episode.Value Then
                         Episode.AbsorbTvEpisode(Ep)   'update treenode
                         Exit For
                     End If
                 Next
-            Else
-                Episode.ListActors.Clear()
-                Episode.Load()
             End If
-        End If
+        'End If
 
         Dim tempstring As String = ""
         lb_EpDetails.Items.Clear()
-        'lb_EpDetails.Items.Add("Details")
 
         cmbxEpActor.Items.Clear()
         tb_EpFilename.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
@@ -865,7 +863,7 @@ Partial Public Class Form1
 
         tb_Sh_Ep_Title.Text ="'" &  Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
         tb_EpRating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
-        'tb_EpVotes.Text = Utilities.ReplaceNothing(Episode.Votes.Value)
+        tb_EpVotes.Text = Utilities.ReplaceNothing(Episode.Votes.Value)
         tb_EpPlot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
         tb_EpDirector.Text = Utilities.ReplaceNothing(Episode.Director.Value)
         tb_EpCredits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
@@ -877,21 +875,21 @@ Partial Public Class Form1
             End If
         Next
         If Episode.Season.Value = "0" Then
-            lbl_airbefore.Visible = True 
-            lbl_airseason.Visible = True
-            lbl_airepisode.Visible = True
-            tb_airepisode.Visible = True
-            tb_airseason.Visible = True
-            tb_airseason.Text = Episode.DisplaySeason.Value
-            tb_airepisode.Text = Episode.DisplayEpisode.Value 
+            lbl_EpAirBefore.Visible = True 
+            lbl_EpAirSeason.Visible = True
+            lbl_EPAirEpisode.Visible = True
+            tb_EpAirEpisode.Visible = True
+            tb_EpAirSeason.Visible = True
+            tb_EpAirSeason.Text = Episode.DisplaySeason.Value
+            tb_EpAirEpisode.Text = Episode.DisplayEpisode.Value 
         Else
-            lbl_airbefore.Visible = False
-            lbl_airseason.Visible = False
-            lbl_airepisode.Visible = False
-            tb_airepisode.Visible = False
-            tb_airseason.Visible = False
-            tb_airepisode.Text = ""
-            tb_airseason.Text = ""
+            lbl_EpAirBefore.Visible = False
+            lbl_EpAirSeason.Visible = False
+            lbl_EPAirEpisode.Visible = False
+            tb_EpAirEpisode.Visible = False
+            tb_EpAirSeason.Visible = False
+            tb_EpAirEpisode.Text = ""
+            tb_EpAirSeason.Text = ""
         End If
 
         util_EpisodeSetWatched(Episode.PlayCount.Value)
@@ -2110,6 +2108,7 @@ Partial Public Class Form1
                                             'MsgBox("hekp")
                                         End Try
                                         WorkingWithNfoFiles.ep_NfoSave(listofnewepisodes, listofnewepisodes(0).NfoFilePath)
+                                        listofnewepisodes(h).UpdateTreenode()
                                         Exit For
                                     End If
                                 Next

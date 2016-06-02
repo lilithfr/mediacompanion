@@ -173,9 +173,14 @@ Public Class WorkingWithNfoFiles
                             Case "tvdbid"
                                 newtvepisode.TvdbId.Value = thisresult.InnerText
                             Case "rating"
-                                newtvepisode.Rating.Value = thisresult.InnerText
-                                If newtvepisode.Rating.IndexOf("/10") <> -1 Then newtvepisode.Rating.Value.Replace("/10", "")
-                                If newtvepisode.Rating.IndexOf(" ") <> -1 Then newtvepisode.Rating.Value.Replace(" ", "")
+                                Dim rating As String = ""
+                                rating = thisresult.InnerText  'newtvepisode.Rating.Value = thisresult.InnerText
+                                If rating.IndexOf("/10") <> -1  Then rating.Replace("/10", "")
+                                If rating.IndexOf(" ") <> -1    Then rating.Replace(" ", "")
+                                If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") Then
+                                    rating = rating.Substring(0,3)
+                                End If
+                                newtvepisode.Rating.Value = rating
                             Case "votes"
                                 newtvepisode.Votes.Value = thisresult.InnerText
                             Case "playcount"
@@ -366,9 +371,16 @@ Public Class WorkingWithNfoFiles
                                         Case "tvdbid"
                                             anotherepisode.TvdbId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "rating"
-                                            anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
-                                            If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
-                                            If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
+                                            Dim rating As String = ""
+                                            rating = thisresult.ChildNodes(f).InnerText  'anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+                                            If rating.IndexOf("/10") <> -1  Then rating.Replace("/10", "")
+                                            If rating.IndexOf(" ") <> -1    Then rating.Replace(" ", "")
+                                            If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") Then
+                                                rating = rating.Substring(0,3)
+                                            End If
+                                            anotherepisode.Rating.Value = rating
+                                            'If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
+                                            'If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
                                         Case "votes"
                                             anotherepisode.Votes.Value = thisresult.ChildNodes(f).InnerText
                                         Case "playcount"
