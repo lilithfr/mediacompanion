@@ -1008,8 +1008,8 @@ Public Class Classimdb
                 Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline)
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
                 s.AppendList(lst, " / ")
-                Return s
             End If
+            If TitleAndYear.ToLower.Contains("(tv movie ") Then s.AppendValue("Tv Movie", " / ")
             Return s
         End Get
     End Property
@@ -1217,10 +1217,6 @@ Public Class Classimdb
                 Dim webPg As String = String.Join( "" , webpage.ToArray() )
                 Html = webPg
                 Html2 = String.Join(vbcrlf, webpage.ToArray())
-                Dim test As String = ""
-                For Each wp In webpage
-                    test += wp & vbcrlf
-                Next
 
                 totalinfo.AppendTag( "genre"     , Genres      )
                 totalinfo.AppendTag( "director"  , Directors   )
@@ -1697,10 +1693,7 @@ Public Class Classimdb
             Dim webPg As String = String.Join( "" , webpage.ToArray() )
             Html = webPg
             Html2 = String.Join(vbcrlf, webpage.ToArray())
-            Dim test As String = ""
-            For Each wp In webpage
-                test += wp & vbcrlf
-            Next
+
             If Pref.XbmcTmdbAkasFromImdb     Then results = results & AKAS(IMDbId)
             If Pref.XbmcTmdbStarsFromImdb    Then results.AppendTagText ( "stars"       , Stars   )
             If Pref.XbmcTmdbMissingFromImdb  Then results.AppendTagText ( "outline"     , Outline )
@@ -1928,28 +1921,25 @@ Public Class Classimdb
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
             Dim sLine As String = ""
-
             If IntoSingleString = False Then
                 Do While Not sLine Is Nothing
-
                     sLine = objReader.ReadLine
-                    If Not sLine Is Nothing Then
-                        webpage.Add(sLine)
-                    End If
+                    If Not sLine Is Nothing Then webpage.Add(sLine)
                 Loop
             Else
                 sLine = objReader.ReadToEnd
             End If
             objReader.Close()
-
-            If IntoSingleString = False Then
+            objStream.Close()
+            
+            If Not IntoSingleString Then
                 Return webpage
             Else
                 Return sLine
             End If
 
         Catch ex As WebException
-            If IntoSingleString = False Then
+            If Not IntoSingleString Then
                 If webpage.Count > 0 Then
                     Return webpage
                 Else
