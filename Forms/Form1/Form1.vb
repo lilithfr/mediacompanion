@@ -520,8 +520,9 @@ Public Class Form1
             Call util_RegexLoad()
 
             Call util_PrefsLoad()
-            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            StatusStrip1.BackColor = Color.LightGray
+            Statusstrip_Disable()
+            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            'StatusStrip1.BackColor = Color.LightGray
 
             'These lines fixed the associated panel so that they don't automove when the Form1 is resized
             SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
@@ -6816,9 +6817,10 @@ Public Class Form1
         Try
             Dim List As List(Of TvShow) = e.Argument(0)
             Dim Force As Boolean = e.Argument(1)
-            StatusStrip1.BackColor = Color.Honeydew
-            StatusStrip1.Visible = True
-            tsStatusLabel1.Visible = False
+            Statusstrip_Enable()
+            'StatusStrip1.BackColor = Color.Honeydew
+            'StatusStrip1.Visible = True
+            'tsStatusLabel1.Visible = False
 
             Call TV_EpisodeScraper(List, Force)
             
@@ -8894,8 +8896,9 @@ Public Class Form1
             End If
             t.ShowDialog()
             If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
-                StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-                StatusStrip1.BackColor = Color.LightGray
+                Statusstrip_Disable()
+                'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+                'StatusStrip1.BackColor = Color.LightGray
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -10138,9 +10141,10 @@ Public Class Form1
             tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action)
             tsStatusLabel.Visible = True
             tsLabelEscCancel.Visible = True
-            StatusStrip1.BackColor = Color.Honeydew
-            StatusStrip1.Visible = True
-            tsStatusLabel1.Visible = False
+            Statusstrip_Enable()
+            'StatusStrip1.BackColor = Color.Honeydew
+            'StatusStrip1.Visible = True
+            'tsStatusLabel1.Visible = False
             ssFileDownload.Visible = False
             tsProgressBarFileDownload_Resize()
             EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
@@ -10315,9 +10319,10 @@ Public Class Form1
         tsStatusLabel.Visible = False
         tsMultiMovieProgressBar.Visible = False
         tsLabelEscCancel.Visible = False
-        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        StatusStrip1.BackColor = Color.LightGray
-        tsStatusLabel1.Visible = True
+        Statusstrip_Disable()
+        'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        'StatusStrip1.BackColor = Color.LightGray
+        'tsStatusLabel1.Visible = True
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Pref.MovieChangeMovie = False
@@ -16395,9 +16400,10 @@ Public Class Form1
         scraperLog = ""
         Dim dirpath As String = String.Empty
         scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
-        StatusStrip1.BackColor = Color.Honeydew
-        StatusStrip1.Visible = true
-        tsStatusLabel1.Visible = False
+        Statusstrip_Enable()
+        'StatusStrip1.BackColor = Color.Honeydew
+        'StatusStrip1.Visible = true
+        'tsStatusLabel1.Visible = False
         ToolStripProgressBar8.Value = 0
         ToolStripProgressBar8.ProgressBar.Refresh()
         ToolStripStatusLabel9.Text = "Scanning for Home Movies"
@@ -16508,9 +16514,10 @@ Public Class Form1
         Next
         ToolStripProgressBar8.Visible = False
         ToolStripStatusLabel9.Visible = False
-        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        StatusStrip1.BackColor = Color.LightGray
-        tsStatusLabel1.Visible = True
+        Statusstrip_Disable()
+        'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        'StatusStrip1.BackColor = Color.LightGray
+        'tsStatusLabel1.Visible = True
     End Sub
 
     Private Sub rebuildHomeMovies()
@@ -17455,9 +17462,10 @@ Public Class Form1
     End Property
 
     Sub imgbw_DoWork(ByVal snder As Object, ByVal e As DoWorkEventArgs) Handles ImgBw.DoWork
-        StatusStrip1.BackColor = Color.Honeydew
-        StatusStrip1.Visible = True
-        tsStatusLabel1.Visible = False
+        Statusstrip_Enable()
+        'StatusStrip1.BackColor = Color.Honeydew
+        'StatusStrip1.Visible = True
+        'tsStatusLabel1.Visible = False
         Dim listpicbox As New List(Of FanartPicBox)
         listpicbox.AddRange(e.Argument(0))      '{image list, Start image number, total number of images, picture panel}
         Dim count As Integer = e.Argument(1)
@@ -17502,9 +17510,10 @@ Public Class Form1
         Imageloading = True
         ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
         ToolStripStatusLabel2.Visible = False
-        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        StatusStrip1.BackColor = Color.LightGray
-        tsStatusLabel1.Visible = True
+        Statusstrip_Disable()
+        'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        'StatusStrip1.BackColor = Color.LightGray
+        'tsStatusLabel1.Visible = True
         Imageloading = False
     End Sub
 
@@ -17572,6 +17581,18 @@ Public Class Form1
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
+    End Sub
+
+    Private Sub Statusstrip_Enable()
+        StatusStrip1.BackColor = Color.Honeydew
+        StatusStrip1.Visible = True
+        tsStatusLabel1.Visible = False
+    End Sub
+
+    Private Sub Statusstrip_Disable()
+        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+        StatusStrip1.BackColor = Color.LightGray
+        tsStatusLabel1.Visible = True
     End Sub
     
 End Class

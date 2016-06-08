@@ -1616,9 +1616,10 @@ Partial Public Class Form1
 
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
         Try
-            StatusStrip1.BackColor = Color.Honeydew
-            StatusStrip1.Visible = True
-            tsStatusLabel1.Visible = False
+            Statusstrip_Enable()
+            'StatusStrip1.BackColor = Color.Honeydew
+            'StatusStrip1.Visible = True
+            'tsStatusLabel1.Visible = False
             Dim nfoFunction As New WorkingWithNfoFiles
             Dim args As TvdbArgs = e.Argument
             Dim searchTVDbID As String = If(IsNothing(args), "", args.tvdbid)
@@ -1798,9 +1799,10 @@ Partial Public Class Form1
             'ToolStripStatusLabel5.Text = "Populating shows"
             'tv_CacheRefresh()
             ToolStripStatusLabel5.Visible = False
-            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            StatusStrip1.BackColor = Color.LightGray
-            tsStatusLabel1.Visible = True
+            Statusstrip_Disable()
+            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            'StatusStrip1.BackColor = Color.LightGray
+            'tsStatusLabel1.Visible = True
             BlinkTaskBar
             GC.Collect()
         Catch ex As Exception
@@ -1834,9 +1836,10 @@ Partial Public Class Form1
 
     Private Sub tvbckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles tvbckrescrapewizard.DoWork
         Try
-            StatusStrip1.BackColor = Color.Honeydew
-            StatusStrip1.Visible = True
-            tsStatusLabel1.Visible = False
+            Statusstrip_Enable()
+            'StatusStrip1.BackColor = Color.Honeydew
+            'StatusStrip1.Visible = True
+            'tsStatusLabel1.Visible = False
             Dim showprocesscount As Integer = 0
             Dim progresstext As String = ""
             Dim progress As Integer = 0
@@ -2173,9 +2176,10 @@ Partial Public Class Form1
         Try
             ToolStripStatusLabel8.Visible = False
             ToolStripProgressBar7.Visible = False
-            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            StatusStrip1.BackColor = Color.LightGray
-            tsStatusLabel1.Visible = True
+            Statusstrip_Disable()
+            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            'StatusStrip1.BackColor = Color.LightGray
+            'tsStatusLabel1.Visible = True
             TvTreeview_AfterSelect_Do()
             GC.Collect()
         Catch ex As Exception
@@ -3411,9 +3415,10 @@ Partial Public Class Form1
 
     Private Sub Bckgrndfindmissingepisodes_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles Bckgrndfindmissingepisodes.DoWork
         Try
-            StatusStrip1.BackColor = Color.Honeydew
-            StatusStrip1.Visible = True
-            tsStatusLabel1.Visible = False
+            Statusstrip_Enable()
+            'StatusStrip1.BackColor = Color.Honeydew
+            'StatusStrip1.Visible = True
+            'tsStatusLabel1.Visible = False
             Call tv_EpisodesMissingFind(e.Argument)
             e.Result = e.Argument
         Catch ex As Exception
@@ -3444,9 +3449,10 @@ Partial Public Class Form1
             Pref.DlMissingEpData = False
             ToolStripStatusLabel2.Visible = False
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
-            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            StatusStrip1.BackColor = Color.LightGray
-            tsStatusLabel1.Visible = True
+            Statusstrip_Disable()
+            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            'StatusStrip1.BackColor = Color.LightGray
+            'tsStatusLabel1.Visible = True
             Application.DoEvents()
             TvTreeview.Sort()
             Dim showToRefresh = Nothing
