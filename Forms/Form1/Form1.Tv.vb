@@ -1799,10 +1799,7 @@ Partial Public Class Form1
             'ToolStripStatusLabel5.Text = "Populating shows"
             'tv_CacheRefresh()
             ToolStripStatusLabel5.Visible = False
-            Statusstrip_Disable()
-            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            'StatusStrip1.BackColor = Color.LightGray
-            'tsStatusLabel1.Visible = True
+            Statusstrip_Enable(False)
             BlinkTaskBar
             GC.Collect()
         Catch ex As Exception
@@ -2176,10 +2173,7 @@ Partial Public Class Form1
         Try
             ToolStripStatusLabel8.Visible = False
             ToolStripProgressBar7.Visible = False
-            Statusstrip_Disable()
-            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            'StatusStrip1.BackColor = Color.LightGray
-            'tsStatusLabel1.Visible = True
+            Statusstrip_Enable(False)
             TvTreeview_AfterSelect_Do()
             GC.Collect()
         Catch ex As Exception
@@ -3449,10 +3443,7 @@ Partial Public Class Form1
             Pref.DlMissingEpData = False
             ToolStripStatusLabel2.Visible = False
             ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
-            Statusstrip_Disable()
-            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            'StatusStrip1.BackColor = Color.LightGray
-            'tsStatusLabel1.Visible = True
+            Statusstrip_Enable(False)
             Application.DoEvents()
             TvTreeview.Sort()
             Dim showToRefresh = Nothing

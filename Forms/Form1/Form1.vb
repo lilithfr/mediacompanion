@@ -161,6 +161,7 @@ Public Class Form1
     Dim MovFanartToggle As Boolean = False
     Dim MovPosterToggle As Boolean = False
     Private keypresstimer As Timers.Timer = New Timers.Timer()
+    Private statusstripclear As Timers.Timer = New Timers.Timer()
     Private MovieKeyPress As String = ""
     Public cropMode As String = "movieposter"
     
@@ -520,9 +521,7 @@ Public Class Form1
             Call util_RegexLoad()
 
             Call util_PrefsLoad()
-            Statusstrip_Disable()
-            'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-            'StatusStrip1.BackColor = Color.LightGray
+            Statusstrip_Enable(False)
 
             'These lines fixed the associated panel so that they don't automove when the Form1 is resized
             SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
@@ -727,6 +726,9 @@ Public Class Form1
 
             AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
             Ini_Timer(keypresstimer, 1000)
+
+            AddHandler statusstripclear.Elapsed, AddressOf statusstripclear_Elapsed
+            Ini_Timer(statusstripclear, 2000)
 
 
             AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
@@ -1054,6 +1056,12 @@ Public Class Form1
 
     Private Sub keypresstimer_Elapsed()
         MovieKeyPress = ""
+    End Sub
+
+    Private Sub statusstripclear_Elapsed()
+        ToolStripStatusLabel2.Visible = False
+        Statusstrip_Enable(False)
+        ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
     End Sub
 
     Sub XbmcLink_UpdateArtwork()
@@ -2214,43 +2222,93 @@ Public Class Form1
         mov_CacheLoad()
     End Sub
 
-    Private Sub util_VideoMode1(ByVal tempstring As String)
-        Dim action As String
-        Dim errors As String
-        Try
-            Dim myProc As Process = Process.Start(tempstring)
-        Catch ex As Exception
-            errors = ex.ToString
-            action = "Dim myProc As Process = Process.Start(" & tempstring & ")"
-            Call util_ErrorLog(action, errors)
-        End Try
+    Private Sub StartVideo(ByVal tempstring As String)
+        If Pref.videomode = 1 Then
+            Call util_VideoMode(1, tempstring)
+            Exit Sub
+        End If
+        If Pref.videomode = 2 OrElse Pref.videomode = 3 Then
+            Call util_VideoMode(2, tempstring)
+            Exit Sub
+        End If
+        If Pref.videomode >= 4 Then
+            If Pref.selectedvideoplayer <> Nothing Then
+                Call util_VideoMode(4, tempstring)
+            Else
+                Call util_VideoMode(1, tempstring)
+            End If
+        End If
     End Sub
 
-    Private Sub util_VideoMode2(ByVal tempstring As String)
-        Dim action As String
-        Dim errors As String
-        Try
-            Dim thePSI As New System.Diagnostics.ProcessStartInfo("wmplayer")
-            thePSI.Arguments = """" & tempstring & """"
-            System.Diagnostics.Process.Start(thePSI)
-        Catch ex As Exception
-            errors = ex.ToString
-            action = "Dim thePSI As New System.Diagnostics.ProcessStartInfo(""wmplayer"")" & vbCrLf & "thePSI.Arguments = "" & tempstring & """ & vbCrLf & "System.Diagnostics.Process.Start(thePSI)"
-            Call util_ErrorLog(action, errors)
-        End Try
+    Private Sub util_VideoMode(ByVal mode As Integer, ByVal tempstring As String)
+        Dim action As String = ""
+        Dim errors As String = ""
+        If mode = 1 Then
+            Try
+                Dim myProc As Process = Process.Start(tempstring)
+            Catch ex As Exception
+                errors = ex.ToString
+                action = "Dim myProc As Process = Process.Start(" & tempstring & ")"
+                Call util_ErrorLog(action, errors)
+            End Try
+        ElseIf mode = 2 Then
+            Try
+                Dim thePSI As New System.Diagnostics.ProcessStartInfo("wmplayer")
+                thePSI.Arguments = """" & tempstring & """"
+                System.Diagnostics.Process.Start(thePSI)
+            Catch ex As Exception
+                errors = ex.ToString
+                action = "Dim thePSI As New System.Diagnostics.ProcessStartInfo(""wmplayer"")" & vbCrLf & "thePSI.Arguments = "" & tempstring & """ & vbCrLf & "System.Diagnostics.Process.Start(thePSI)"
+                Call util_ErrorLog(action, errors)
+            End Try
+        ElseIf mode = 4 Then
+            Try
+                Dim myProc As Process = Process.Start("""" & Pref.selectedvideoplayer & """", """" & tempstring & """")
+            Catch ex As Exception
+                errors = ex.ToString
+                action = "Dim myProc As Process = Process.Start(""" & Pref.selectedvideoplayer & """," & """" & tempstring & """)"
+                Call util_ErrorLog(action, errors)
+            End Try
+        End If
     End Sub
 
-    Private Sub util_VideoMode4(ByVal tempstring As String)
-        Dim action As String
-        Dim errors As String
-        Try
-            Dim myProc As Process = Process.Start("""" & Pref.selectedvideoplayer & """", """" & tempstring & """")
-        Catch ex As Exception
-            errors = ex.ToString
-            action = "Dim myProc As Process = Process.Start(""" & Pref.selectedvideoplayer & """," & """" & tempstring & """)"
-            Call util_ErrorLog(action, errors)
-        End Try
-    End Sub
+    'Private Sub util_VideoMode1(ByVal tempstring As String)
+    '    Dim action As String
+    '    Dim errors As String
+    '    Try
+    '        Dim myProc As Process = Process.Start(tempstring)
+    '    Catch ex As Exception
+    '        errors = ex.ToString
+    '        action = "Dim myProc As Process = Process.Start(" & tempstring & ")"
+    '        Call util_ErrorLog(action, errors)
+    '    End Try
+    'End Sub
+
+    'Private Sub util_VideoMode2(ByVal tempstring As String)
+    '    Dim action As String
+    '    Dim errors As String
+    '    Try
+    '        Dim thePSI As New System.Diagnostics.ProcessStartInfo("wmplayer")
+    '        thePSI.Arguments = """" & tempstring & """"
+    '        System.Diagnostics.Process.Start(thePSI)
+    '    Catch ex As Exception
+    '        errors = ex.ToString
+    '        action = "Dim thePSI As New System.Diagnostics.ProcessStartInfo(""wmplayer"")" & vbCrLf & "thePSI.Arguments = "" & tempstring & """ & vbCrLf & "System.Diagnostics.Process.Start(thePSI)"
+    '        Call util_ErrorLog(action, errors)
+    '    End Try
+    'End Sub
+
+    'Private Sub util_VideoMode4(ByVal tempstring As String)
+    '    Dim action As String
+    '    Dim errors As String
+    '    Try
+    '        Dim myProc As Process = Process.Start("""" & Pref.selectedvideoplayer & """", """" & tempstring & """")
+    '    Catch ex As Exception
+    '        errors = ex.ToString
+    '        action = "Dim myProc As Process = Process.Start(""" & Pref.selectedvideoplayer & """," & """" & tempstring & """)"
+    '        Call util_ErrorLog(action, errors)
+    '    End Try
+    'End Sub
 
     Private Sub util_ErrorLog(ByVal action As String, Optional ByVal errors As String = "")
         Dim errpath As String = applicationPath & "\error.log"
@@ -3053,13 +3111,11 @@ Public Class Form1
     End Function
 
     Public Sub LaunchPlayList(ByVal plist As List(Of String))
+        Statusstrip_Enable()
+        ToolStripStatusLabel2.Text = ""
+        ToolStripStatusLabel2.Visible = True
         Dim tempstring = applicationPath & "\Settings\temp.m3u"
-        frmSplash2.Text = "Playing Movie..."
-        frmSplash2.Label1.Text = "Creating m3u file....." & vbCrLf & tempstring
-        frmSplash2.Label1.Visible = True
-        frmSplash2.Label2.Visible = False
-        frmSplash2.ProgressBar1.Visible = False
-        frmSplash2.Show()
+        ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & tempstring
         Application.DoEvents()
         Dim aok As Boolean = True
         If IO.File.Exists(tempstring) Then
@@ -3071,25 +3127,12 @@ Public Class Form1
                 If part <> Nothing Then file.WriteLine(part)
             Next
             file.Close()
-            frmSplash2.Label1.Text = "Launching Player....."
-            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Pref.videomode = 3 Then
-                Pref.videomode = 2
-                Call util_VideoMode2(tempstring)
-            End If
-            If Pref.videomode >= 4 Then
-                If Pref.selectedvideoplayer <> Nothing Then
-                    Call util_VideoMode4(tempstring)
-                Else
-                    Call util_VideoMode1(tempstring)
-                End If
-            End If
+            ToolStripStatusLabel2.Text &= "............Launching Player."
+            StartVideo(tempstring)
         Else
-            frmSplash2.Hide()
-            MsgBox("Failed to create playlist")
+            ToolStripStatusLabel2.Text = "Failed to create playlist"
         End If
-        frmSplash2.Hide()
+        statusstripclear.Start()
     End Sub
 
     Private Sub MovieFormInit()
@@ -8896,9 +8939,7 @@ Public Class Form1
             End If
             t.ShowDialog()
             If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
-                Statusstrip_Disable()
-                'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-                'StatusStrip1.BackColor = Color.LightGray
+                Statusstrip_Enable(False)
             End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -9539,19 +9580,20 @@ Public Class Form1
             Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
             If ep.IsMissing Then Exit Sub
             Dim tempstring As String = ep.VideoFilePath     'DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
-            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Pref.videomode = 3 Then
-                Pref.videomode = 2
-                Call util_VideoMode2(tempstring)
-            End If
-            If Pref.videomode >= 4 Then
-                If Pref.selectedvideoplayer <> Nothing Then
-                    Call util_VideoMode4(tempstring)
-                Else
-                    Call util_VideoMode1(tempstring)
-                End If
-            End If
+            StartVideo(tempstring)
+            'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+            'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
+            'If Pref.videomode = 3 Then
+            '    Pref.videomode = 2
+            '    Call util_VideoMode2(tempstring)
+            'End If
+            'If Pref.videomode >= 4 Then
+            '    If Pref.selectedvideoplayer <> Nothing Then
+            '        Call util_VideoMode4(tempstring)
+            '    Else
+            '        Call util_VideoMode1(tempstring)
+            '    End If
+            'End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -10319,10 +10361,7 @@ Public Class Form1
         tsStatusLabel.Visible = False
         tsMultiMovieProgressBar.Visible = False
         tsLabelEscCancel.Visible = False
-        Statusstrip_Disable()
-        'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        'StatusStrip1.BackColor = Color.LightGray
-        'tsStatusLabel1.Visible = True
+        Statusstrip_Enable(False)
         ssFileDownload.Visible = False
         EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
         Pref.MovieChangeMovie = False
@@ -11159,23 +11198,30 @@ Public Class Form1
             _rescrapeList.FullPathAndFilenames.Add(workingMovieDetails.fileinfo.fullpathandfilename)
             RunBackgroundMovieScrape("RescrapeSpecific")
         Else
+            Statusstrip_Enable()
+            ToolStripStatusLabel2.Text = ""
+            ToolStripStatusLabel2.Visible = True
             Dim tempstring = applicationPath & "\Settings\temp.m3u"
+            ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & tempstring
             Dim file = IO.File.CreateText(tempstring)
             file.WriteLine(workingMovieDetails.fileinfo.trailerpath)
             file.Close()
-            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-            If Pref.videomode = 3 Then
-                Pref.videomode = 2
-                Call util_VideoMode2(tempstring)
-            End If
-            If Pref.videomode >= 4 Then
-                If Pref.selectedvideoplayer <> Nothing Then
-                    Call util_VideoMode4(tempstring)
-                Else
-                    Call util_VideoMode1(tempstring)
-                End If
-            End If
+            ToolStripStatusLabel2.Text &= "............Launching Player."
+            StartVideo(tempstring)
+            'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+            'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
+            'If Pref.videomode = 3 Then
+            '    Pref.videomode = 2
+            '    Call util_VideoMode2(tempstring)
+            'End If
+            'If Pref.videomode >= 4 Then
+            '    If Pref.selectedvideoplayer <> Nothing Then
+            '        Call util_VideoMode4(tempstring)
+            '    Else
+            '        Call util_VideoMode1(tempstring)
+            '    End If
+            'End If
+            statusstripclear.Start()
         End If
     End Sub
 
@@ -11638,24 +11684,33 @@ Public Class Form1
             Dim tempstring As String = ClickedControl
             If tempstring <> Nothing Then
                 Dim trailerpath As String = GetTrailerPath(tempstring)
+                statusstrip_Enable()
+                ToolStripStatusLabel2.Text = ""
+                ToolStripStatusLabel2.Visible = True
                 If IO.File.Exists(trailerpath) Then
+                    statusstrip_Enable()
+                    ToolStripStatusLabel2.Visible = True
                     Dim trailerstring = applicationPath & "\Settings\temp.m3u"
+                    ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & trailerstring
                     Dim file = IO.File.CreateText(trailerstring)
                     file.WriteLine(trailerpath)
                     file.Close()
-                    If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
-                    If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
-                    If Pref.videomode >= 4 Then
-                        If Pref.selectedvideoplayer <> Nothing Then
-                            Call util_VideoMode4(trailerstring)
-                        Else
-                            Call util_VideoMode1(trailerstring)
-                        End If
-                    End If
+                    ToolStripStatusLabel2.Text &= "............Launching Player."
+                    StartVideo(trailerstring)
+                    'If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
+                    'If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
+                    'If Pref.videomode >= 4 Then
+                    '    If Pref.selectedvideoplayer <> Nothing Then
+                    '        Call util_VideoMode4(trailerstring)
+                    '    Else
+                    '        Call util_VideoMode1(trailerstring)
+                    '    End If
+                    'End If
                 Else
-                    MsgBox("No downloaded trailer present")
+                    ToolStripStatusLabel2.Text = "No downloaded trailer present"
                 End If
             End If
+            statusstripclear.Start()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -13661,6 +13716,9 @@ Public Class Form1
             If pathandfilename.IndexOf("tvshow.nfo") <> -1 Then Exit Sub
             If pathandfilename = "" Then Exit Sub
             If pathandfilename <> Nothing Then
+                statusstrip_Enable()
+                ToolStripStatusLabel2.Text = ""
+                ToolStripStatusLabel2.Visible = True
                 If pathandfilename.ToLower.Substring(pathandfilename.Length - 4, 4) = ".nfo" Then
                     pathandfilename = pathandfilename.Substring(0, pathandfilename.Length - 4)
 
@@ -13672,33 +13730,34 @@ Public Class Form1
                         If IO.File.Exists(tempstring2) Then
                             exists = True
                             tempstring = applicationPath & "\Settings\temp.m3u"
+                            ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & tempstring
                             Dim file As IO.StreamWriter = IO.File.CreateText(tempstring)
                             file.WriteLine(tempstring2)
                             file.Close()
+                            ToolStripStatusLabel2.Text &= "......Launching Player."
+                            StartVideo(tempstring)
+                            'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
+                            'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
 
+                            'If Pref.videomode = 3 Then
+                            '    Pref.videomode = 2
+                            '    Call util_VideoMode2(tempstring)
+                            'End If
 
-
-                            If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-                            If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-
-                            If Pref.videomode = 3 Then
-                                Pref.videomode = 2
-                                Call util_VideoMode2(tempstring)
-                            End If
-
-                            If Pref.videomode >= 4 Then
-                                If Pref.selectedvideoplayer <> Nothing Then
-                                    Call util_VideoMode4(tempstring)
-                                Else
-                                    Call util_VideoMode1(tempstring)
-                                End If
-                            End If
+                            'If Pref.videomode >= 4 Then
+                            '    If Pref.selectedvideoplayer <> Nothing Then
+                            '        Call util_VideoMode4(tempstring)
+                            '    Else
+                            '        Call util_VideoMode1(tempstring)
+                            '    End If
+                            'End If
                             Exit For
                         End If
                     Next
                     If exists = False Then
-                        MsgBox("Could not find file: """ & pathandfilename & """ with any supported extension")
+                        ToolStripStatusLabel2.Text = "Could not find file: """ & pathandfilename & """ with any supported extension"
                     End If
+                    statusstripclear.Start()
                 End If
             End If
         Catch ex As Exception
@@ -16514,10 +16573,7 @@ Public Class Form1
         Next
         ToolStripProgressBar8.Visible = False
         ToolStripStatusLabel9.Visible = False
-        Statusstrip_Disable()
-        'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        'StatusStrip1.BackColor = Color.LightGray
-        'tsStatusLabel1.Visible = True
+        Statusstrip_Enable(False)
     End Sub
 
     Private Sub rebuildHomeMovies()
@@ -17510,7 +17566,7 @@ Public Class Form1
         Imageloading = True
         ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
         ToolStripStatusLabel2.Visible = False
-        Statusstrip_Disable()
+        Statusstrip_Enable(False)
         'StatusStrip1.Visible = Not Pref.AutoHideStatusBar
         'StatusStrip1.BackColor = Color.LightGray
         'tsStatusLabel1.Visible = True
@@ -17583,16 +17639,16 @@ Public Class Form1
         MyBase.Finalize()
     End Sub
 
-    Private Sub Statusstrip_Enable()
-        StatusStrip1.BackColor = Color.Honeydew
-        StatusStrip1.Visible = True
-        tsStatusLabel1.Visible = False
-    End Sub
-
-    Private Sub Statusstrip_Disable()
-        StatusStrip1.Visible = Not Pref.AutoHideStatusBar
-        StatusStrip1.BackColor = Color.LightGray
-        tsStatusLabel1.Visible = True
+    Private Sub Statusstrip_Enable(Optional ByVal Enable As Boolean = True)
+        If Enable Then
+            StatusStrip1.BackColor = Color.Honeydew
+            StatusStrip1.Visible = True
+            tsStatusLabel1.Visible = False
+        Else
+            StatusStrip1.Visible = Not Pref.AutoHideStatusBar
+            StatusStrip1.BackColor = Color.LightGray
+            tsStatusLabel1.Visible = True
+        End If
     End Sub
     
 End Class
