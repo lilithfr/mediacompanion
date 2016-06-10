@@ -206,21 +206,6 @@ If these words are in the movie's title, then Media Companion will handle them a
 
 Media Companion will keep these it the Title, and in the Foldername.</value>
   </data>
-  <data name="Label138.Text" xml:space="preserve">
-    <value>If you have enabled the option to 'Save Actor
-Thumbs to the '.Actors' Folder' located in the
-general preferences then this gives you this
-additional option.
-When Scraping episodes from TVDB, the only
-actor thumbnails avaialble are those at IMDB,
-but compared to TVDB, these actor thumbs
-are low quality.
-
-This preference gives you the option to copy an
-actors thumb, if available, to the episodes actor
-folder, allowing the higher quality TVDB actor
-thumb to be used for the episode.</value>
-  </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
 an XBMC Update, or maybe just to launch an external program.

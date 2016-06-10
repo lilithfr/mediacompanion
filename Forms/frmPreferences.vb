@@ -556,6 +556,7 @@ Public Class frmPreferences
             RadioButton43.Checked = True
         End If
         CheckBox34                      .Checked    = Pref.copytvactorthumbs
+        cbtvdbIMDbRating                .Checked    = Pref.tvdbIMDbRating
 
         'TV Autoscrape Options
         cbTvDlPosterArt                 .Checked    = Pref.tvdlposter
@@ -2486,16 +2487,14 @@ End Sub
 
     Private Sub CheckBox34_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox34.CheckedChanged
         If prefsload Then Exit Sub
-        Try
-            If CheckBox34.Checked = True Then
-                Pref.copytvactorthumbs = True
-            Else
-                Pref.copytvactorthumbs = False
-            End If
-            Changes = True
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Pref.copytvactorthumbs = CheckBox34.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbtvdbIMDbRating_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbtvdbIMDbRating.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.tvdbIMDbRating = cbtvdbIMDbRating.Checked
+        Changes = True
     End Sub
 
     Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
@@ -3553,13 +3552,13 @@ End Sub
 
     Private Sub XBMCTVDBConfigSave()
         If Not String.IsNullOrEmpty(Pref.XBMCTVDbLanguage) Then
-            Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder)
-            Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber)
-            Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart)
-            Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster)
+            Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder.ToString.ToLower)
+            Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber.ToString.ToLower)
+            Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart.ToString.ToLower)
+            Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster.ToString.ToLower)
             Save_XBMC_TVDB_Scraper_Config("language", Pref.XBMCTVDbLanguage)  'ComboBox_TVDB_Language.Text)
             Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
-            Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback)
+            Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback.ToString.ToLower)
         End If
     End Sub
 

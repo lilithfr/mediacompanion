@@ -1054,6 +1054,8 @@ Partial Public Class Form1
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "RatingCount"
+                                    episodestring = episodestring & "<ratingcount>" & mirrorselection.InnerXml & "</ratingcount>"
                                 Case "IMDB_ID"
                                     episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
                                 Case "id"
@@ -1104,6 +1106,20 @@ Partial Public Class Form1
         End If
 
         Return path
+    End Function
+
+    Private Function ep_getIMDbRating(ByVal epid As String, ByRef rating As String, ByRef votes As String) As Boolean
+        Dim aok As Boolean = True
+        If String.IsNullOrEmpty(epid) Then Return False
+        Dim url As String = String.Format("http://akas.imdb.com/title/{0}/", epid)
+        Dim IMDbpage As String = Utilities.DownloadTextFiles(url, True)
+        Dim m As Match
+        m = Regex.Match(IMDbpage, "<span itemprop=""ratingValue"">(.*?)</span>")
+        If m.Success Then rating = m.Groups(1).Value
+        Dim n As Match
+        n = Regex.Match(IMDbpage, "itemprop=""ratingCount"">(.*?)</span")
+        If n.Success Then votes = n.Groups(1).Value
+        Return rating <> ""
     End Function
 
     Public Sub ep_VideoSourcePopulate()
@@ -2644,6 +2660,16 @@ Partial Public Class Form1
                                                 Next
                                         End Select
                                     Next
+                                    If Pref.tvdbIMDbRating Then
+                                        Dim rating As String = ""
+                                        Dim votes As String = ""
+                                        If ep_getIMDbRating(singleepisode.ImdbId.Value, rating, votes) Then
+                                            If rating <> "" Then
+                                                singleepisode.Rating.Value = rating
+                                                singleepisode.Votes.Value = votes
+                                            End If
+                                        End If
+                                    End If
                                     stage = "12b5b"
                                     singleepisode.PlayCount.Value = "0"
                                     singleepisode.ShowId.Value = tvdbid

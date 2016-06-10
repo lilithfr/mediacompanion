@@ -376,6 +376,7 @@ Public Class Pref
     'Saved TV Prefs
     Public Shared tvshowautoquick As Boolean
     Public Shared copytvactorthumbs As Boolean = False
+    Public Shared tvdbIMDbRating As Boolean = False
     Public Shared displayMissingEpisodes As Boolean = False
     Public Shared ignoreMissingSpecials As Boolean = False
     Public Shared TvMissingEpOffset As Boolean = False
@@ -713,6 +714,7 @@ Public Class Pref
         tvscrnshtTVDBResize = False
         tvshowautoquick = False
         copytvactorthumbs = True
+        tvdbIMDbRating = False
         enabletvhdtags = True
         tvshowrefreshlog = False
         seasonall = "none"
@@ -1230,6 +1232,7 @@ Public Class Pref
         'TV Prefs ------------------------------------------------------------
         root.AppendChild(doc, "tvshowautoquick",                    tvshowautoquick)            'cbTvQuickAddShow
         root.AppendChild(doc, "copytvactorthumbs",                  copytvactorthumbs)          'CheckBox34
+        root.AppendChild(doc, "tvdbIMDbRating",                     tvdbIMDbRating)             'cbtvdbIMDbRating
         root.AppendChild(doc, "tvdbmode",                           sortorder)                  'RadioButton42
         root.AppendChild(doc, "tvdbactorscrape",                    TvdbActorScrape)            'ComboBox8
         root.AppendChild(doc, "tvfolderjpg",                        tvfolderjpg)                'cb_TvFolderJpg
@@ -1536,6 +1539,7 @@ Public Class Pref
                     Case "actorsave"                            : actorsave = thisresult.InnerXml
                     Case "actorseasy"                           : actorseasy = thisresult.InnerXml
                     Case "copytvactorthumbs"                    : copytvactorthumbs = thisresult.InnerXml
+                    Case "tvdbIMDbRating"                       : tvdbIMDbRating = thisresult.InnerXml
                     Case "displayMissingEpisodes"               : displayMissingEpisodes = thisresult.InnerXml
                     Case "ignoreMissingSpecials"                : ignoreMissingSpecials = thisresult.InnerXml 
                     Case "TvMissingEpOffset"                    : TvMissingEpOffset = thisresult.InnerXml

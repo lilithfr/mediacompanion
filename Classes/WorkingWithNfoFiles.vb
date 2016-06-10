@@ -177,7 +177,7 @@ Public Class WorkingWithNfoFiles
                                 rating = thisresult.InnerText  'newtvepisode.Rating.Value = thisresult.InnerText
                                 If rating.IndexOf("/10") <> -1  Then rating.Replace("/10", "")
                                 If rating.IndexOf(" ") <> -1    Then rating.Replace(" ", "")
-                                If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") Then
+                                If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") <> -1Then
                                     rating = rating.Substring(0,3)
                                 End If
                                 newtvepisode.Rating.Value = rating
@@ -375,7 +375,7 @@ Public Class WorkingWithNfoFiles
                                             rating = thisresult.ChildNodes(f).InnerText  'anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
                                             If rating.IndexOf("/10") <> -1  Then rating.Replace("/10", "")
                                             If rating.IndexOf(" ") <> -1    Then rating.Replace(" ", "")
-                                            If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") Then
+                                            If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") <> -1 Then
                                                 rating = rating.Substring(0,3)
                                             End If
                                             anotherepisode.Rating.Value = rating

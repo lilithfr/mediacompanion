@@ -204,6 +204,7 @@ Partial Class frmPreferences
         Me.cmbxXbmcTmdbHDTrailer = New System.Windows.Forms.ComboBox()
         Me.Label153 = New System.Windows.Forms.Label()
         Me.GroupBox_MovieIMDBMirror = New System.Windows.Forms.GroupBox()
+        Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.cbImdbPrimaryPlot = New System.Windows.Forms.CheckBox()
         Me.Label181 = New System.Windows.Forms.Label()
@@ -477,7 +478,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
+        Me.cbtvdbIMDbRating = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -2571,6 +2572,16 @@ Partial Class frmPreferences
         Me.GroupBox_MovieIMDBMirror.TabStop = false
         Me.GroupBox_MovieIMDBMirror.Text = "MC's IMDB Scraper"
         '
+        'cbMovImdbAspectRatio
+        '
+        Me.cbMovImdbAspectRatio.AutoSize = true
+        Me.cbMovImdbAspectRatio.Location = New System.Drawing.Point(10, 252)
+        Me.cbMovImdbAspectRatio.Name = "cbMovImdbAspectRatio"
+        Me.cbMovImdbAspectRatio.Size = New System.Drawing.Size(180, 19)
+        Me.cbMovImdbAspectRatio.TabIndex = 7
+        Me.cbMovImdbAspectRatio.Text = "Use Aspect Ratio from IMDb"
+        Me.cbMovImdbAspectRatio.UseVisualStyleBackColor = true
+        '
         'cbMovImdbFirstRunTime
         '
         Me.cbMovImdbFirstRunTime.AutoSize = true
@@ -4244,9 +4255,9 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
+        Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
         Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
         Me.GroupBox17.Controls.Add(Me.GroupBox43)
-        Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
         Me.GroupBox17.Controls.Add(Me.Label111)
         Me.GroupBox17.Controls.Add(Me.cbTv_fixNFOid)
         Me.GroupBox17.Controls.Add(Me.GroupBox22)
@@ -4448,6 +4459,7 @@ Partial Class frmPreferences
         '
         'GroupBox22
         '
+        Me.GroupBox22.Controls.Add(Me.cbtvdbIMDbRating)
         Me.GroupBox22.Controls.Add(Me.Button91)
         Me.GroupBox22.Controls.Add(Me.RadioButton43)
         Me.GroupBox22.Controls.Add(Me.RadioButton42)
@@ -4520,17 +4532,19 @@ Partial Class frmPreferences
         'Label138
         '
         Me.Label138.AutoSize = true
-        Me.Label138.Location = New System.Drawing.Point(6, 148)
+        Me.Label138.Location = New System.Drawing.Point(5, 231)
         Me.Label138.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label138.Name = "Label138"
-        Me.Label138.Size = New System.Drawing.Size(261, 195)
+        Me.Label138.Size = New System.Drawing.Size(261, 60)
         Me.Label138.TabIndex = 32
-        Me.Label138.Text = resources.GetString("Label138.Text")
+        Me.Label138.Text = "This preference gives you the option to copy an"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"actors thumb, if available, to t"& _ 
+    "he episodes actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"folder, allowing the higher quality TVDB actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"thumb to be u"& _ 
+    "sed for the episode."
         '
         'CheckBox34
         '
         Me.CheckBox34.AutoSize = true
-        Me.CheckBox34.Location = New System.Drawing.Point(9, 354)
+        Me.CheckBox34.Location = New System.Drawing.Point(8, 317)
         Me.CheckBox34.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox34.Name = "CheckBox34"
         Me.CheckBox34.Size = New System.Drawing.Size(224, 34)
@@ -5706,15 +5720,14 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbMovImdbAspectRatio
+        'cbtvdbIMDbRating
         '
-        Me.cbMovImdbAspectRatio.AutoSize = true
-        Me.cbMovImdbAspectRatio.Location = New System.Drawing.Point(10, 252)
-        Me.cbMovImdbAspectRatio.Name = "cbMovImdbAspectRatio"
-        Me.cbMovImdbAspectRatio.Size = New System.Drawing.Size(180, 19)
-        Me.cbMovImdbAspectRatio.TabIndex = 7
-        Me.cbMovImdbAspectRatio.Text = "Use Aspect Ratio from IMDb"
-        Me.cbMovImdbAspectRatio.UseVisualStyleBackColor = true
+        Me.cbtvdbIMDbRating.Location = New System.Drawing.Point(14, 159)
+        Me.cbtvdbIMDbRating.Name = "cbtvdbIMDbRating"
+        Me.cbtvdbIMDbRating.Size = New System.Drawing.Size(228, 39)
+        Me.cbtvdbIMDbRating.TabIndex = 34
+        Me.cbtvdbIMDbRating.Text = "Episode Rating and votes from IMDb (fallback to TVDb)"
+        Me.cbtvdbIMDbRating.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6340,4 +6353,5 @@ End Sub
     Friend WithEvents cbMovCustFolderjpgNoDelete As CheckBox
     Friend WithEvents cbAutoHideStatusBar As CheckBox
     Friend WithEvents cbMovImdbAspectRatio As CheckBox
+    Friend WithEvents cbtvdbIMDbRating As CheckBox
 End Class

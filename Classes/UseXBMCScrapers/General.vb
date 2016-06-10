@@ -47,6 +47,7 @@ Module General
         End Try
         Return responseFromServer
     End Function
+
     Private Function ChooseScraper(ByVal ScraperIdentification As String) As Scraper
 
         If IsNothing(mScraperManager) then
@@ -62,6 +63,7 @@ Module General
         Next
         Return TempScraper
     End Function
+
     Public Function DoScrape(ByVal ScraperName As String, ByVal WhatFunction As String, ByVal InputParameters() As String, ByVal GetURL As Boolean, Optional ByVal convertAmps As Boolean = True, Optional ByVal InputBuffer As Integer = 1)
         Dim ChoosedScraper As Scraper
         InputBuffer -= 1
@@ -1022,7 +1024,7 @@ Module General
         Catch
             Dim Something As String = Nothing
         End Try
-        'Dim WorkingFileDetails As FullFileDetails = Pref.Get_HdTags(Filename)
+        
         Dim FileInfoString As String = ""
         Dim TempString As String = ""
 
@@ -1034,9 +1036,7 @@ Module General
             If WorkingFileDetails.filedetails_video.Aspect <> Nothing Then FileInfoString &= "<aspect>" & WorkingFileDetails.filedetails_video.Aspect.Value & "</aspect>" & vbLf
             If WorkingFileDetails.filedetails_video.Codec <> Nothing Then FileInfoString &= "<codec>" & WorkingFileDetails.filedetails_video.Codec.Value & "</codec>" & vbLf
             If WorkingFileDetails.filedetails_video.FormatInfo <> Nothing Then FileInfoString &= "<format>" & WorkingFileDetails.filedetails_video.FormatInfo.Value & "</format>" & vbLf
-            'If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<durationinseconds>" & Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value) & "</durationinseconds>" & vbLf
             If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then FileInfoString &= "<durationinseconds>" & WorkingFileDetails.filedetails_video.DurationInSeconds.Value & "</durationinseconds>" & vbLf
-            'If WorkingFileDetails.filedetails_video.DurationInSeconds.Value <> Nothing Then TempEpisode.Runtime.Value = Utilities.cleanruntime(WorkingFileDetails.filedetails_video.DurationInSeconds.Value).ToString
             If WorkingFileDetails.filedetails_video.Bitrate <> Nothing Then FileInfoString &= "<bitrate>" & WorkingFileDetails.filedetails_video.Bitrate.Value & "</bitrate>" & vbLf
             If WorkingFileDetails.filedetails_video.BitrateMode <> Nothing Then FileInfoString &= "<bitratemode>" & WorkingFileDetails.filedetails_video.BitrateMode.Value & "</bitratemode>" & vbLf
             If WorkingFileDetails.filedetails_video.BitrateMax <> Nothing Then FileInfoString &= "<bitratemax>" & WorkingFileDetails.filedetails_video.BitrateMax.Value & "</bitratemax>" & vbLf
@@ -1068,6 +1068,7 @@ Module General
             TempString = Entrada(n).Substring(0, Entrada(n).IndexOf("</details>"))
             TempString = TempString.Replace("<details>", "")
             TempString = FileInfoString & TempString & "</episodedetails>"
+            If TempString.Contains("<votes>") Then TempString = TempString.Replace("votes>", "ratingcount>")
             If Entrada.Length > 1 Then TempString &= vbLf
             FileInfoString = TempString
         Next
@@ -1132,8 +1133,10 @@ Module General
                         TempXMLEpisode1.Plot.Value = NodeChild.InnerText
                     Case "rating"
                         TempXMLEpisode1.Rating.Value = NodeChild.InnerText
-                    Case "ratingcount"
+                    Case "ratingcount"  'from TVDb
                         TempXMLEpisode1.Votes.Value = NodeChild.InnerText
+                    'Case "votes"        'from IMDb
+                        'TempXMLEpisode1.Votes.Value = NodeChild.InnerText
                     Case "thumb"
                         TempXMLEpisode1.Thumbnail.FileName = NodeChild.InnerText
                         TempXMLEpisode1.Thumbnail.Url = NodeChild.InnerText 
@@ -1419,6 +1422,7 @@ Module General
                             End If
                         End If
                     Next
+                    
                     EpisodeInfoContent(n) = DoScrape("metadata.tvdb.com", "GetEpisodeDetails", ParametersForScraper, False)
                     
                     'Code below is to counter no Absolute order information from TVDB, where
@@ -1434,7 +1438,6 @@ Module General
                     episodeInformation.Clear()
                     Return episodeInformation
                     Exit Function
-                    'não achou o episodio
                 End Try
             Next
         Catch
