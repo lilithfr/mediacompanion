@@ -1633,9 +1633,6 @@ Partial Public Class Form1
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
         Try
             Statusstrip_Enable()
-            'StatusStrip1.BackColor = Color.Honeydew
-            'StatusStrip1.Visible = True
-            'tsStatusLabel1.Visible = False
             Dim nfoFunction As New WorkingWithNfoFiles
             Dim args As TvdbArgs = e.Argument
             Dim searchTVDbID As String = If(IsNothing(args), "", args.tvdbid)
@@ -1849,10 +1846,10 @@ Partial Public Class Form1
 
     Private Sub tvbckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles tvbckrescrapewizard.DoWork
         Try
-            Statusstrip_Enable()
-            'StatusStrip1.BackColor = Color.Honeydew
-            'StatusStrip1.Visible = True
-            'tsStatusLabel1.Visible = False
+            'Statusstrip_Enable()
+            'ToolStripStatusLabel8.Visible = True
+            'ToolStripProgressBar7.Visible = True
+            'Application.DoEvents()
             Dim showprocesscount As Integer = 0
             Dim progresstext As String = ""
             Dim progress As Integer = 0
@@ -2080,12 +2077,31 @@ Partial Public Class Form1
                                         'its an episode
                                         Dim episodescreenurl As String = ""
                                         Try
+                                            listofnewepisodes(h).ImdbId.Value = Episodedata.ImdbId.Value
                                             If tvBatchList.epAired      Then listofnewepisodes(h).Aired.Value       = Episodedata.FirstAired.Value
                                             If tvBatchList.epPlot       Then listofnewepisodes(h).Plot.Value        = Episodedata.Overview.Value
                                             If tvBatchList.epDirector   Then listofnewepisodes(h).Director.Value    = Utilities.Cleanbraced(Episodedata.Director.Value)
                                             If tvBatchList.epCredits    Then listofnewepisodes(h).Credits.Value     = Utilities.Cleanbraced(Episodedata.Writer.Value)
-                                            If tvBatchList.epRating     Then listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
-                                            If tvBatchList.epRating     Then listofnewepisodes(h).Votes.Value       = Episodedata.Votes.Value
+                                            Dim ratingdone As Boolean = False
+                                            If tvBatchList.epRating Then
+                                                If Pref.tvdbIMDbRating Then
+                                                    Dim rating As String = ""
+                                                    Dim votes As String = ""
+                                                    If ep_getIMDbRating(listofnewepisodes(h).ImdbId.Value, rating, votes) Then
+                                                        If rating <> "" Then
+                                                            ratingdone = True
+                                                            listofnewepisodes(h).Rating.Value = rating
+                                                            listofnewepisodes(h).Votes.Value = votes
+                                                        End If
+                                                    End If
+                                                End If
+                                                If Not ratingdone Then
+                                                    listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
+                                                    listofnewepisodes(h).Votes.Value       = Episodedata.Votes.Value
+                                                End If
+                                            End If
+                                            'If tvBatchList.epRating     Then listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
+                                            'If tvBatchList.epRating     Then listofnewepisodes(h).Votes.Value       = Episodedata.Votes.Value
                                             If tvBatchList.epTitle      Then listofnewepisodes(h).Title.Value       = Episodedata.EpisodeName.Value
                                             listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
                                             listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
@@ -2973,6 +2989,16 @@ Partial Public Class Form1
                         Next
                 End Select
             Next
+            If Pref.tvdbIMDbRating Then
+                Dim rating As String = ""
+                Dim votes As String = ""
+                If ep_getIMDbRating(newepisode.ImdbId.Value, rating, votes) Then
+                    If rating <> "" Then
+                        newepisode.Rating.Value = rating
+                        newepisode.Votes.Value = votes
+                    End If
+                End If
+            End If
             newepisode.PlayCount.Value = "0"
         Catch ex As Exception
         End Try

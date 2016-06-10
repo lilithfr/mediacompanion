@@ -9073,6 +9073,7 @@ Public Class Form1
                 displaywizard.ShowDialog()
 
                 If tvBatchList.activate = True Then
+                    Statusstrip_Enable()
                     ToolStripStatusLabel8.Text = "Starting TV Batch Scrape"
                     ToolStripStatusLabel8.Visible = True
                     ToolStripProgressBar7.Value = 0

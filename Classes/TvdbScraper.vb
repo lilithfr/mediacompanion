@@ -495,6 +495,8 @@ Public Class TVDBScraper
                                     episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
                                 Case "Rating"
                                     episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+                                Case "RatingCount"
+                                    episodestring = episodestring & "<ratingcount>" & mirrorselection.InnerXml & "</ratingcount>"
                                 Case "id"
                                     episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
                                 Case "IMDB_ID"
