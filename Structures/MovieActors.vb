@@ -40,18 +40,20 @@ Public Structure str_MovieActors
         Return IO.Path.Combine(ActorPath, actorname.Replace(" ", "_") & ".jpg")
     End Function
 
-    Public Sub SaveActor(ActorPath As String)
-
+    Public Function SaveActor(ActorPath As String) As Boolean
+        Dim aok As Boolean = True
         If Not String.IsNullOrEmpty(actorthumb) Then
-
             Dim filename As String = GetActorFileName(ActorPath)
 
-            If Pref.actorseasy Then  'Allow to save to .actors folder
+            'Allow to save to .actors folder
+            If Pref.actorseasy Then
                 Dim hg As New IO.DirectoryInfo(ActorPath)
-                If Not hg.Exists Then
-                    IO.Directory.CreateDirectory(ActorPath)
+                If Not hg.Exists Then IO.Directory.CreateDirectory(ActorPath)
+                If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then
+                    ActorSave(filename)
+                Else
+                    aok = False
                 End If
-                If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then ActorSave(filename)
             End If
 
             'Allow also to save to local path/network path
@@ -68,11 +70,12 @@ Public Structure str_MovieActors
                         workingpath = tempstring & actorid & ".jpg"
                     End If
                     Utilities.EnsureFolderExists(tempstring)
-                    
-                    DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Pref.overwritethumbs, , Movie.GetHeightResolution(Pref.ActorResolutionSI))
-                    ActorSave(workingpath)
-
-                    If Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
+                    If DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Pref.overwritethumbs, , Movie.GetHeightResolution(Pref.ActorResolutionSI)) Then
+                        ActorSave(workingpath)
+                    Else
+                        aok = False
+                    End If
+                    If aok AndAlso Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
                         If Pref.actornetworkpath.IndexOf("/") <> -1 Then
                             actorthumb = workingpath.Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("\", "/") 'Pref.actornetworkpath & "/" & actorid.Substring(actorid.Length - 2, 2) & "/" & actorid & ".jpg"
                         Else
@@ -82,7 +85,8 @@ Public Structure str_MovieActors
                 End If
             End If
         End If
-    End Sub
+        Return aok
+    End Function
 
     Sub ActorSave(ByRef workingpath As String)
         If Pref.EdenEnabled And Not Pref.FrodoEnabled Then

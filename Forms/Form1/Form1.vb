@@ -9925,22 +9925,22 @@ Public Class Form1
                         )
     End Sub
 
-    Private Function GetActorThumb(ByRef currentUri As String)
-        Dim actorthumb As String = currentUri
-        If Pref.actorsave Then
-            Dim uri As Uri
-            uri = New Uri(actorthumb)
-            If Len(Pref.actornetworkpath) > 0 AndAlso Len(Pref.actorsavepath) > 0 Then
-                Dim actorThumbFileName As String
-                Dim localActorThumbFileName As String
-                actorThumbFileName = System.IO.Path.Combine(Pref.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
-                localActorThumbFileName = System.IO.Path.Combine(Pref.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
-                Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName)
-                actorthumb = actorThumbFileName
-            End If
-        End If
-        Return actorthumb
-    End Function
+    'Private Function GetActorThumb(ByRef currentUri As String)
+    '    Dim actorthumb As String = currentUri
+    '    If Pref.actorsave Then
+    '        Dim uri As Uri
+    '        uri = New Uri(actorthumb)
+    '        If Len(Pref.actornetworkpath) > 0 AndAlso Len(Pref.actorsavepath) > 0 Then
+    '            Dim actorThumbFileName As String
+    '            Dim localActorThumbFileName As String
+    '            actorThumbFileName = System.IO.Path.Combine(Pref.actornetworkpath, uri.Segments(uri.Segments.GetLength(0) - 1))
+    '            localActorThumbFileName = System.IO.Path.Combine(Pref.actorsavepath, uri.Segments(uri.Segments.GetLength(0) - 1))
+    '            Movie.SaveActorImageToCacheAndPath(uri.OriginalString, localActorThumbFileName)
+    '            actorthumb = actorThumbFileName
+    '        End If
+    '    End If
+    '    Return actorthumb
+    'End Function
 
     Private Sub mov_ToolStripRescrapeAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
         mov_RescrapeAllSelected()

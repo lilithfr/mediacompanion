@@ -208,7 +208,7 @@ Public Class DownloadCache
                 End Try
             End If
         Catch ex As Exception
-            MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
+            'MsgBox(ex.Message.ToString & vbCrLf & "URL string =" & URL & vbCrLf & "cachefolder = " & CacheFolder & vbCrLf & "path = " & Path)
             returnCode = False
         End Try
         Return returnCode

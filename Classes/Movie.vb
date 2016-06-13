@@ -226,14 +226,7 @@ Public Class Movie
     Shared Sub LoadHeightResolutionOptions(ByRef cb As ComboBox, Optional selectedIndex As Integer=0)
         cb.Items.Clear
         cb.Items.Add(MSG_DONT_RESIZE)
-
-        'Dim qry = From x In Resolutions.Descendants("Resolution")
-        '            Select 
-        '                height = Convert.ToInt16(x.Attribute("height").Value)
-        '            Order By
-        '                height
-        '            Distinct
-
+        
         For Each item In AvailableHeightResolutions
             cb.Items.Add(item)
         Next
@@ -274,28 +267,22 @@ Public Class Movie
         Get
             Dim pos As Integer=0
             Try
-                
                 Dim BaseName = mediapathandfilename.Substring(0, mediapathandfilename.LastIndexOf(Extension))              'Replace(Extension,"")
 
                 pos = 1
-
                 'Long name
                 If File.Exists(BaseName & ".nfo") Then Return BaseName
-
                 Dim movieStackName = mediapathandfilename
                 Dim firstPart As Boolean
 
                 pos = 2
-
                 Utilities.isMultiPartMedia(movieStackName, False, firstPart)
 
                 pos = 3
-
                 'Short name
                 If File.Exists(NfoPath & movieStackName & ".nfo") Then Return NfoPath & movieStackName
 
                 pos = 4
-
                 Return "unknown"
             Catch ex As Exception
                 Dim paramInfo As String = "mediapathandfilename: [" & mediapathandfilename & "] Pos: [" & pos & "] Extension : [" & Extension & "]"
@@ -308,7 +295,6 @@ Public Class Movie
     ReadOnly Property ActualNfoPathAndFilename As String
         Get
             If Not IsNothing(_actualNfoPathAndFilename) Then Return _actualNfoPathAndFilename
-
             Return ActualBaseName & ".nfo"
         End Get
     End Property
@@ -330,18 +316,6 @@ Public Class Movie
     Public ReadOnly Property ActualPosterPaths As List(Of String)
         Get
             Return Pref.GetAllPosters(ScrapedMovie.fileinfo.fullpathandfilename)
-
-            'Dim PostPaths As List(Of String) = New List(Of String)
-
-            'Try
-            '    For Each item In Pref.GetPosterPaths(ScrapedMovie.fileinfo.fullpathandfilename,ScrapedMovie.fileinfo.videotspath)
-            '        If File.Exists(item) Then PostPaths.Add(item)
-            '    Next
-            'Catch ex As Exception
-            '    Dim x = ex
-            'End Try
-
-            'Return PostPaths
         End Get 
     End Property
 
@@ -354,9 +328,6 @@ Public Class Movie
                 s= NfoPathPrefName.Replace("movie.nfo","fanart.jpg")
                 Return s
             End If
-            'If Pref.fanartjpg Then
-            '    s=IO.Path.GetDirectoryName(NfoPathPrefName) & "\fanart.jpg
-            'End If
 
             Return ActualBaseName & "-fanart.jpg"
         End Get 
@@ -367,7 +338,6 @@ Public Class Movie
             Dim result As String = NfoPath_NoDirectorySeparatorChar
             Dim dirsepchar As String = IO.Path.DirectorySeparatorChar
             If result.LastIndexOf(dirsepchar) <> result.Length-1 Then result = result & dirsepchar
-            'Return NfoPath_NoDirectorySeparatorChar & IO.Path.DirectorySeparatorChar
             Return result
         End Get
     End Property
@@ -449,19 +419,12 @@ Public Class Movie
             Return tmdb.MovieSet
         End Get
     End Property
-
-
-
-
-
+    
     ReadOnly Property MissingLocalActors As Boolean
         Get
             For Each Actor In _scrapedMovie.listactors
-
                 If Actor.actorthumb="" Then Continue For
-
                 Dim ActorPath = GetActorPath(_movieCache.fullpathandfilename, actor.actorname, Actor.actorid)
-
                 If Not File.Exists(ActorPath) Then Return True
             Next
 
@@ -477,9 +440,7 @@ Public Class Movie
 
                 _titleFull = mediapathandfilename
                 If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
-                    If Pref.namemode <> "1" Then
-                        _titleFull = NfoPath & movieStackName & Extension
-                    End If
+                    If Pref.namemode <> "1" Then _titleFull = NfoPath & movieStackName & Extension
                 End If
             End If
 
@@ -506,13 +467,10 @@ Public Class Movie
                 If Extension.ToLower = ".disc" Then
                     tmpTitle = tmpTitle.Replace(".disc","")
                     Dim p = tmpTitle.LastIndexOf(".")
-                    If p >1 Then
-                        tmpTitle = tmpTitle.Substring(0, p)
-                    End If
+                    If p >1 Then tmpTitle = tmpTitle.Substring(0, p)
                 End If
                 Return Path.GetFileNameWithoutExtension(tmpTitle)
                 
-                'Return _title 'Path.GetFileNameWithoutExtension(TitleFull) 
             End If
         End Get
     End Property
@@ -783,17 +741,14 @@ Public Class Movie
         End If
 
         'ignore whatever this is meant to be!
-        If fileInfo.FullName.ToLower.IndexOf("sample") <> -1 And fileInfo.FullName.ToLower.IndexOf("people") = -1 Then 
-            Return False
-        End If
+        If fileInfo.FullName.ToLower.IndexOf("sample") <> -1 And fileInfo.FullName.ToLower.IndexOf("people") = -1 Then Return False
 
         If fileInfo.FullName.ToLower.Contains(".bdmv") Then
             If fileInfo.Name.ToString.ToLower <> "index.bdmv" Then Return False
         End If
 
-        If fileInfo.Extension = ".ttt" Then
-            Return False
-        End If
+        If fileInfo.Extension = ".ttt" Then Return False
+
         If fileInfo.Extension = ".rar" Then
             Dim SizeOfFile As Integer = FileLen(fileInfo.FullName)
             Dim tempint2 = Convert.ToInt32(Pref.rarsize) * 1048576
@@ -803,12 +758,10 @@ Public Class Movie
         Dim firstPart      As Boolean
 
         If Utilities.isMultiPartMedia(movieStackName, False, firstPart) Then
-            If Not firstPart Then 
-             Return False
-            End If
+            If Not firstPart Then Return False
         End If
 
-        Return true
+        Return True
     End Function
     #End Region 'Shared functions
 
@@ -846,9 +799,7 @@ Public Class Movie
 
     Public Shared Function ChangeCharacter(s As String, replaceWith As Char, idx As Integer) As String
         Dim sb As New StringBuilder(s)
-
-        sb(idx) = replaceWith
-
+            sb(idx) = replaceWith
         Return sb.ToString
     End Function
 
@@ -946,9 +897,7 @@ Public Class Movie
 
     Sub RunScrapeActions
         While Actions.Items.Count>0
-
             Dim action = Actions.Items(0)
-
             Try
                 action.Run
 
@@ -959,7 +908,6 @@ Public Class Movie
                 Actions.Items.RemoveAt(0)
 
                 If Cancelled then Exit Sub
-
             Catch ex As Exception
                 If ex.Message.ToString.ToLower.Contains("offline") Then
                     ReportProgress(,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)
@@ -969,7 +917,6 @@ Public Class Movie
                 Actions.Items.Clear
                 End If
             End Try
-
         End While
     End Sub
 
@@ -977,9 +924,7 @@ Public Class Movie
 
         Application.DoEvents
 
-        If Not IsNothing(_parent.Bw) AndAlso _parent.Bw.CancellationPending Then
-            Return True
-        End If
+        If Not IsNothing(_parent.Bw) AndAlso _parent.Bw.CancellationPending Then Return True
 
         Return False
     End Function
@@ -998,9 +943,7 @@ Public Class Movie
 
     Sub getspecialMovie
         SeparateMovie = Utilities.checktitle(TitleFull, Pref.MovSepLst)
-        If SeparateMovie = "3D" Then
-            ThreeDKeep = Utilities.checktitle(TitleFull, Pref.ThreeDKeyWords)
-        End If
+        If SeparateMovie = "3D" Then ThreeDKeep = Utilities.checktitle(TitleFull, Pref.ThreeDKeyWords)
     End Sub
 
     Sub ImdbScraper_GetBody
@@ -1013,13 +956,9 @@ Public Class Movie
     
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
-        If Not IsNothing(Title) then
-            ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
-        End If
+        If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
 
-        If PossibleImdb <> "" then
-            ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
-        End If
+        If PossibleImdb <> "" Then ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
 
         ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
 
@@ -1062,7 +1001,6 @@ Public Class Movie
         ElseIf Pref.MVScraper = "audiodb" Then
             _imdbBody = _imdbScraper.getMVbodyADB(mediapathandfilename, MVSearchName)
         End If
-        'AppendMVScrapeSuccessActions
     End Sub
     
     Sub CheckMusicVidBodyScrape()
@@ -1090,13 +1028,9 @@ Public Class Movie
     End Sub
 
     Function TmdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
-        If Not IsNothing(Title) then
-            ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
-        End If
+        If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
 
-        If PossibleImdb <> "" then
-            ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
-        End If
+        If PossibleImdb <> "" Then ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
 
         ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
 
@@ -1150,20 +1084,13 @@ Public Class Movie
                 _scrapedMovie.fullmoviebody.mpaa = mpaa
             End If
         ElseIf Pref.IncludeMpaaRated Then
-            If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then
-                _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
-            End If
+            If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
         End If
 
         If Pref.MovImdbAspectRatio AndAlso _scrapedMovie.fileinfo.aspectratioimdb <> "" Then
             _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _scrapedMovie.fileinfo.aspectratioimdb
         End If
-        'If Not Pref.ExcludeMpaaRated Then
-        '    Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
-        '    If mpaa <> "" AndAlso Not mpaa.ToLower.Contains("rated") Then
-        '        _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
-        '    End If
-        'End If
+
         Try     'Set TMDB Id in _scrapedMovie if not already set.
             If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId
         Catch
@@ -1228,9 +1155,7 @@ Public Class Movie
 
         If Pref.XbmcLinkReady Then
 
-            If IsNothing(media) Then
-                media = Utilities.GetFileName(Nfo,True)
-            End If
+            If IsNothing(media) Then media = Utilities.GetFileName(Nfo,True)
 
             Dim evt As New BaseEvent
 
@@ -1243,9 +1168,7 @@ Public Class Movie
 
         End If
     End Sub
-
-
-
+    
     Sub AssignUnknownMovieToCache
         AssignMovieToCache
         _movieCache.runtime = "0"
@@ -1371,8 +1294,7 @@ Public Class Movie
         _mvcache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         ucMusicVideo.MVCache.Add(_mvcache)
     End Sub
-
-
+    
     Sub AssignScrapedMovie
         AssignScrapedMovie(_scrapedMovie)
     End Sub
@@ -1474,7 +1396,6 @@ Public Class Movie
                     End If
                 Case "set"
                     If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
-                    '_scrapedMovie.fullmoviebody.movieset.MovieSetDisplayName = thisresult.InnerText
                 Case "setid"
                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText
                 Case "cert"
@@ -1512,9 +1433,8 @@ Public Class Movie
                     _scrapedMovie.fileinfo.aspectratioimdb = thisresult.InnerText
             End Select
         Next
-        If Pref.MusicVidConcertScrape Then
-            tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
-        End If
+        If Pref.MusicVidConcertScrape Then tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
+
         If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Exit Sub     'If Music Video Scraping, finished at this point so exit
 
         If Pref.sorttitleignorearticle Then                              'add ignored articles to end of
@@ -1523,9 +1443,8 @@ Public Class Movie
         Else
             _scrapedMovie.fullmoviebody.sortorder = _scrapedMovie.fullmoviebody.title               'Sort order defaults to title
         End If
-        If Pref.MovTitleCase Then
-            _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
-        End If
+        If Pref.MovTitleCase Then _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
+
         If _scrapedMovie.fullmoviebody.plot = "" Then _scrapedMovie.fullmoviebody.plot = _scrapedMovie.fullmoviebody.outline ' If plot is empty, use outline
         If _scrapedMovie.fullmoviebody.playcount = Nothing Then _scrapedMovie.fullmoviebody.playcount = "0"
         If _scrapedMovie.fullmoviebody.lastplayed = Nothing Then _scrapedMovie.fullmoviebody.lastplayed = ""
@@ -1588,9 +1507,9 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.mpaa = If(Pref.ExcludeMpaaRated, "", If(Pref.IncludeMpaaRated, "Rated ", "")) & tmdb.Certification 
                     If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
                 End If
-                If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then
-                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
-                End If
+
+                If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+
                 If Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                     _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
                     _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id 
@@ -1629,7 +1548,9 @@ Public Class Movie
         Dim actors2 As New List(Of str_MovieActors)
         For Each actor In actors
             Try
-                actor.SaveActor(ActorPath)
+                If Not actor.SaveActor(ActorPath) Then
+                    ReportProgress(MSG_ERROR,"!!! An error was encountered while trying to DL Actor image for: " & actor.actorname & vbCrLf & vbCrLf)
+                End If
                 actors2.Add(actor)
                 If Cancelled Then Exit For
             Catch ex As Exception
@@ -1644,31 +1565,31 @@ Public Class Movie
     End Function
 
     Function GetTmdbActors
-        ReportProgress("TMDB Actors")
-        'Get actors from tmdb
-        Dim maxactors As Integer = Pref.maxactors
+        ReportProgress("TMDb Actors")
+        'Get actors from TMDb
         Dim actors As List(Of str_MovieActors) = tmdb.cast 
         Dim actors2 As New List(Of str_MovieActors)
-        If maxactors <> 0 Then
+        If Pref.maxactors <> 0 Then
             Dim count As Integer = 0
             For Each actor In actors
                 Try
-                    actor.SaveActor(ActorPath)
+                    If Not actor.SaveActor(ActorPath) Then
+                        ReportProgress(MSG_ERROR,"!!! An error was encountered while trying to DL Actor image for: " & actor.actorname & vbCrLf & vbCrLf)
+                    End If
                     actors2.Add(actor)
                     count += 1
                     If Cancelled Then Exit For
                 Catch ex As Exception
                     ReportProgress(MSG_ERROR,"!!! Error with " & nfopathandfilename & vbCrLf & "!!! An error was encountered while trying to add a scraped Actor" & vbCrLf & ex.Message & vbCrLf & vbCrLf)
                 End Try
-                If count = maxactors Then Exit For
+                If count = Pref.maxactors Then Exit For
             Next
         End If
         ReportProgress(If(actors.Count = 0, "-None ",MSG_OK),"TMDb Actors scraped:- " & actors.Count.ToString & vbCrLf)
         If Not Pref.actorseasy AndAlso Not Pref.actorsave Then ReportProgress(MSG_OK,"Actor images not set to download" & vbCrLf)
         Return actors2
     End Function
-
-
+    
     Sub AssignTrailerUrl
         If Not Pref.gettrailer Then
             Exit Sub
@@ -1808,8 +1729,6 @@ Public Class Movie
             Catch
                 ReportProgress("Extra Frodo Poster thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site.", "Extra Frodo Poster thumbs: -Failed. TMDB may be unavailable, or Movie is not on TMDB site." &vbcrlf)
             End Try
-        'Else
-            'ReportProgress(,"Frodo extra URL scraping not selected" & vbCrLf)
         End If
     End Sub
 
@@ -1826,16 +1745,13 @@ Public Class Movie
             End Try
         End If
     End Sub
-
     
-
     Sub AssignPosterUrls
         If Pref.EdenEnabled Then
             If Pref.nfoposterscraper = 0 Then
                 ReportProgress(,"Extra poster URLs scraping not selected" & vbCrLf)
                 Exit Sub
             End If
-
             GetPosterUrls
         Else
             ReportProgress(,"Pre-Frodo poster URLs scraping not enabled" & vbCrLf)
@@ -1872,12 +1788,12 @@ Public Class Movie
         End If
 
         If Pref.nfoposterscraper And 4 then
-            Try
-                Dim mpdbThumbs As New class_mpdb_thumbs.Class1
-                mpdbThumbs.MCProxy = Utilities.MyProxy 
-                If AddThumbs(mpdbThumbs.get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
-            Catch
-            End Try
+            'Try
+            '    Dim mpdbThumbs As New class_mpdb_thumbs.Class1
+            '    mpdbThumbs.MCProxy = Utilities.MyProxy 
+            '    If AddThumbs(mpdbThumbs.get_mpdb_thumbs(_scrapedMovie.fullmoviebody.imdbid) ) then Exit Sub
+            'Catch
+            'End Try
         End If
 
         If Pref.nfoposterscraper And 8 then
@@ -1919,9 +1835,7 @@ Public Class Movie
                         _scrapedMovie.listthumbs.Add(thisresult.InnerText)
                 End Select
 
-                If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Pref.maximumthumbs then
-                    Return True
-                End If
+                If _scrapedMovie.listthumbs.Count+_scrapedMovie.frodoPosterThumbs.count >= Pref.maximumthumbs Then Return True
             Next
         Catch ex As Exception
 #If SilentErrorScream Then
@@ -1938,7 +1852,6 @@ Public Class Movie
 
     Function GetHdTags(sm As FullMovieDetails) As Boolean
         If File.Exists(TempOfflinePathAndFileName) Then Return False
-
         Try
             ReportProgress("HD Tags")
             sm.FileDetails = Pref.Get_HdTags(mediapathandfilename)
@@ -1950,15 +1863,13 @@ Public Class Movie
             Return False
         End Try
     End Function
-
-
+    
     Sub AssignRuntime(sm As FullMovieDetails, Optional runtime_file As Boolean=False)
         If sm.FileDetails.filedetails_video.DurationInSeconds.Value <> Nothing And (runtime_file or (Pref.movieRuntimeFallbackToFile and sm.fullmoviebody.runtime = "")) Then
             sm.fullmoviebody.runtime = Math.Round(sm.FileDetails.filedetails_video.DurationInSeconds.Value/60).ToString & " min"
         End If
     End Sub
-
-
+    
     Sub DownloadTrailer
         DownloadTrailer(TrailerUrl)
     End Sub
@@ -1967,13 +1878,9 @@ Public Class Movie
         'Check for and delete zero length trailer - created when Url is invalid
         DeleteZeroLengthFile(ActualTrailerPath)
         Dim TempTrailerUrl As String = TrailerUrl
-        If Not Pref.DownloadTrailerDuringScrape And Not forceTrailerDl Then
-            Exit Sub
-        End If
+        If Not Pref.DownloadTrailerDuringScrape And Not forceTrailerDl Then Exit Sub
         
-        If TrailerUrl = "" then
-            Exit Sub
-        End if
+        If TrailerUrl = "" Then Exit Sub
 
         'Don't re-download if trailer exists and not Forced
         If File.Exists(ActualTrailerPath) And Not forceTrailerDl then
@@ -1990,10 +1897,7 @@ Public Class Movie
             Dim yts as YouTubeUrlGrabber = YouTubeUrlGrabber.Create(YOU_TUBE_URL_PREFIX+Id)
             If yts.AvailableVideoFormat.Length>0 Then
                 _youTubeTrailer = yts.selectTrailer(Pref.moviePreferredTrailerResolution)
-                If Not IsNothing(_youTubeTrailer) Then
-                    TrailerUrl = _youTubeTrailer.VideoUrl
-                    'Exit For
-                End If
+                If Not IsNothing(_youTubeTrailer) Then TrailerUrl = _youTubeTrailer.VideoUrl
             End If
             If Not Utilities.UrlIsValid(TrailerUrl) Then
                 Dim Ids As List(Of String) = GetYouTubeIds()
@@ -2042,9 +1946,7 @@ Public Class Movie
     Property TrailerDownloaded As Boolean = False
 
     Private Sub DownloadPoster
-        If (Not Pref.MusicVidScrape Or Pref.MusicVidConcertScrape) AndAlso Not Pref.scrapemovieposters then
-            Exit Sub
-        End If
+        If (Not Pref.MusicVidScrape Or Pref.MusicVidConcertScrape) AndAlso Not Pref.scrapemovieposters Then Exit Sub
         If Pref.MovieChangeMovie AndAlso Pref.MovieChangeKeepExistingArt Then Exit Sub
         DoDownloadPoster
     End Sub
@@ -2087,7 +1989,7 @@ Public Class Movie
                             Case "IMDB"
                                 PosterUrl = _scraperFunctions.imdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                             Case "Movie Poster DB"
-                                PosterUrl = _scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
+                                PosterUrl = "na" '_scraperFunctions.mpdbthumb(_scrapedMovie.fullmoviebody.imdbid)
                             Case "themoviedb.org"
                                 PosterUrl = tmdb.FirstOriginalPosterUrl
                         End Select
@@ -2360,7 +2262,6 @@ Public Class Movie
                 fanartarray.AddRange(tmdb.McFanart)
                 fcount = fanartarray.Count
                 If fcount > 1 Then
-                    'Dim x As Integer = If(fcount > 4, 4, fcount)
                     Dim i As Integer = 1
                     Do
                         xtraart.Clear()
@@ -2368,18 +2269,12 @@ Public Class Movie
                         If Utilities.UrlIsValid(tmpUrl) Then
                             If xf Then
                                 Dim fanartfilename As String = tmpUrl.Substring(tmpUrl.LastIndexOf("/")+1, (tmpUrl.Length - tmpUrl.LastIndexOf("/")-1))
-                                If Not (IO.File.Exists(xfanart & fanartfilename) AndAlso Not owrite) Then
-                                    xtraart.Add(xfanart & fanartfilename)
-                                End If
+                                If Not (IO.File.Exists(xfanart & fanartfilename) AndAlso Not owrite) Then xtraart.Add(xfanart & fanartfilename)
                             End If
                             If xt AndAlso i < 6 Then
-                                If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then
-                                    xtraart.Add((xthumb & i.ToString & ".jpg"))
-                                End If
+                                If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then xtraart.Add((xthumb & i.ToString & ".jpg"))
                             End If
-                            If xtraart.Count > 0 Then
-                                SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
-                            End If
+                            If xtraart.Count > 0 Then SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
                         End If
                         i += 1
                     Loop Until i = (Pref.movxtrafanartqty+1) or i > fcount-1
@@ -2627,13 +2522,10 @@ Public Class Movie
         Dim tempint2   As Integer = 2097152
         Dim SizeOfFile As Integer = FileLen(mediapath)
 
-        If SizeOfFile > tempint2 Then
-            Exit Sub
-        End If
+        If SizeOfFile > tempint2 Then Exit Sub
 
         Try
             Dim fanartpath As String = ""
-
             If File.Exists(Pref.GetFanartPath(nfopath)) Then
                 fanartpath = Pref.GetFanartPath(nfopath)
             Else
@@ -2641,11 +2533,9 @@ Public Class Movie
             End If
 
             Dim curImage As Image = Image.FromFile(fanartpath)
-
             Dim tempstring As String = Pref.OfflineDVDTitle.Replace("%T", title)
 
             Dim g As System.Drawing.Graphics
-
             g = Graphics.FromImage(curImage)
             Dim semiTransBrush As New SolidBrush(Color.FromArgb(80, 0, 0, 0))
 
