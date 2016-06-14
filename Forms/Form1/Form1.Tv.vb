@@ -1791,6 +1791,8 @@ Partial Public Class Form1
                         NewShow.AddEpisode(ep)
                     Next
                     TvCheckfolderjpgart(NewShow)
+                Else                            'If failed, save nfo so users can change Series.
+                    'nfoFunction.tvshow_NfoSave(NewShow, True)
                 End If
                 If newTvFolders.Count > 0 AndAlso Not Pref.tvFolders.Contains(newTvFolders(0)) Then
                     Pref.tvFolders.Add(newTvFolders(0))

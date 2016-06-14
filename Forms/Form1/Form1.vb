@@ -415,7 +415,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabProfile)
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
-            'TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
+            TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
             
             Call util_ProfilesLoad()
             For Each prof In profileStruct.ProfileList
