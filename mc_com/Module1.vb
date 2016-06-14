@@ -308,11 +308,13 @@ Module Module1
 				                    key = String.Format("{0}{1}{2}{3}", movie.runtime, movie.title, movie.id, appendIncr)
 			                    Case 4
 				                    key = String.Format("{0}{1}{2}{3}", movie.rating, movie.title, movie.id, appendIncr)
-			                    Case 5
-				                    key = String.Format("{0}{1}{2}{3}", movie.sortorder, movie.year, movie.id, appendIncr)
+                                Case 4
+				                    key = String.Format("{0}{1}{2}{3}", movie.usrrated, movie.title, movie.id, appendIncr)
 			                    Case 6
-				                    key = String.Format("{0}{1}{2}{3}", movie.createdate, movie.title, movie.id, appendIncr)
+				                    key = String.Format("{0}{1}{2}{3}", movie.sortorder, movie.year, movie.id, appendIncr)
 			                    Case 7
+				                    key = String.Format("{0}{1}{2}{3}", movie.createdate, movie.title, movie.id, appendIncr)
+			                    Case 8
 				                    key = String.Format("{0}{1}{2}{3}", movie.Votes, movie.title, movie.id, appendIncr)
 	                        End Select
                             If Not setMovies.ContainsKey(key) Then
