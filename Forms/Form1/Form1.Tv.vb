@@ -358,7 +358,11 @@ Partial Public Class Form1
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
         Show.ListActors.Clear()
+        'Dim ShowTemp As TvShow = nfoFunction.tvshow_NfoLoad(Show.NfoFilePath)
+        Show.Load()
         Show = nfoFunction.tvshow_NfoLoad(Show.NfoFilePath) '.Load()
+        'Show.UpdateTreenode()
+        
         
         'Fix episodeguide tag
         Dim lang As String = Show.EpisodeGuideUrl.Value
@@ -495,7 +499,7 @@ Partial Public Class Form1
             TvPanel7Update(Show.FolderPath)
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
-            Show.UpdateTreenode()
+            'Show.UpdateTreenode()
         End If
         Panel9.Visible = False
         Panel8.Visible = False

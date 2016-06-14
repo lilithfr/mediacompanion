@@ -1009,7 +1009,7 @@ Public Class Classimdb
                 Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
                 s.AppendList(lst, " / ")
             End If
-            If TitleAndYear.ToLower.Contains("(tv movie ") Then s.AppendValue("Tv Movie", " / ")
+            If TitleAndYear.ToLower.Contains("(tv movie ") Then s.AppendValue("TV Movie", " / ")
             Return s
         End Get
     End Property
