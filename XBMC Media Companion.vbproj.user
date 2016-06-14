@@ -11,7 +11,7 @@
     <EnableSQLServerDebugging>false</EnableSQLServerDebugging>
   </PropertyGroup>
   <PropertyGroup>
-    <PublishUrlHistory>C:\_test publish\|publish\</PublishUrlHistory>
+    <PublishUrlHistory>C:\_test publish\|3\|publish\</PublishUrlHistory>
     <InstallUrlHistory>
     </InstallUrlHistory>
     <SupportUrlHistory>
