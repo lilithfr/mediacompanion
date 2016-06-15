@@ -218,6 +218,25 @@ Public Class TVDBScraper
                 showlist.LoadXml(xmlfile)
             End If
         End If
+        If Not showlist.FailedLoad Then
+            Dim strsplt As New List(Of String)
+            Try
+                strsplt.AddRange(showlist.Series(0).Genre.Value.Trim("|"c).Split("|"))
+            Catch
+            End Try
+            If strsplt.count > 0 Then
+                Dim NewGenre As String = ""
+                For i = 0 To strsplt.count -1
+                    If i = Pref.TvMaxGenres Then Exit For
+                    If NewGenre = "" Then
+                        NewGenre = strsplt.Item(i)
+                    Else
+                        NewGenre &= "|" & strsplt.Item(i)
+                    End If
+                Next
+                showlist.Series(0).Genre.Value = NewGenre
+            End If
+        End If
         Return showlist
     End Function
 

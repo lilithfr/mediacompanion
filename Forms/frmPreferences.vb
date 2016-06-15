@@ -584,6 +584,14 @@ Public Class frmPreferences
         'odd Art
         cb_TvFolderJpg                  .Checked    = Pref.tvfolderjpg
         cbSeasonFolderjpg               .Checked    = Pref.seasonfolderjpg
+        Select Case Pref.TvMaxGenres
+            Case 99
+                cmbxTvMaxGenres.SelectedItem = "All Available"
+            Case 0
+                cmbxTvMaxGenres.SelectedItem = "None"
+            Case Else
+                cmbxTvMaxGenres.SelectedItem = Pref.TvMaxGenres.ToString
+        End Select
 
         'TV Ep Renaming
         ComboBox_tv_EpisodeRename.Items.Clear()
@@ -2610,6 +2618,21 @@ End Sub
         If prefsload Then Exit Sub
         Pref.seasonfolderjpg = cbSeasonFolderjpg.checked
         Changes = True
+    End Sub
+
+    Private Sub cmbxTvMaxGenres_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbxTvMaxGenres.SelectedIndexChanged
+        Try
+            If IsNumeric(cmbxTvMaxGenres.SelectedItem) Then
+                Pref.TvMaxGenres = Convert.ToInt32(cmbxTvMaxGenres.SelectedItem)
+            ElseIf cmbxTvMaxGenres.SelectedItem.ToString.ToLower = "none" Then
+                Pref.TvMaxGenres = 0
+            Else
+                Pref.TvMaxGenres = 99
+            End If
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
     End Sub
 
 'End Of - TvShow Auto Scrape Options

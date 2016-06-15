@@ -409,6 +409,7 @@ Public Class Pref
     Public Shared TvdbLanguageCode As String = "en"
     Public Shared lastrefreshmissingdate As String
     Public Shared excludefromshowfoldername As String
+    Public Shared TvMaxGenres As Integer
     'XBMC TVDB Scraper Options
     Public Shared XBMCTVDbDvdOrder As Boolean
     Public Shared XBMCTVDbAbsoluteNumber As Boolean
@@ -743,6 +744,7 @@ Public Class Pref
         TvMissingEpOffset = False
         ScrShtDelay = 10
         excludefromshowfoldername = "[ended]"
+        TvMaxGenres = 99
 
         'Home Movie
         HmFanartScrnShot = True
@@ -1092,7 +1094,7 @@ Public Class Pref
         root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
         root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "MovTagBlacklist",                    MovTagBlacklist)                    'tb_MovTagBlacklist
-        root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'ComboBox6
+        root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'cmbxMovScraper_MaxGenres
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
         root.AppendChild(doc, "MovDurationAsRuntine",               MovDurationAsRuntine)               'cb_MovDurationAsRuntine
         root.AppendChild(doc, "MovRuntimeAsDuration",               MovRuntimeAsDuration)               'cb_MovRuntimeAsDuration
@@ -1260,6 +1262,7 @@ Public Class Pref
         root.AppendChild(doc, "ScrShtDelay",                        ScrShtDelay)                'AutoScrShtDelay
         root.AppendChild(doc, "lastrefreshmissingdate",             lastrefreshmissingdate)
         root.AppendChild(doc, "excludefromshowfoldername",          excludefromshowfoldername)
+        root.AppendChild(doc, "TvMaxGenres",                        TvMaxGenres)                 'cmbxTvMaxGenres
         root.AppendChild(doc, "XBMCTVDbDvdOrder",                   XBMCTVDbDvdOrder)            'rbXBMCTvdbDVDOrder
         root.AppendChild(doc, "XBMCTVDbAbsoluteNumber",             XBMCTVDbAbsoluteNumber)      'rbXBMCTvdbAbsoluteNumber
         root.AppendChild(doc, "XBMCTVDbFanart",                     XBMCTVDbFanart)              'cbXBMCTvdbFanart
@@ -1597,6 +1600,7 @@ Public Class Pref
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
                     Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText
+                    Case "TvMaxGenres"                          : TvMaxGenres = Convert.ToInt32(thisresult.InnerXml)
                     Case "XBMCTVDbDvdOrder"                     : XBMCTVDbDvdOrder = thisresult.InnerXml
                     Case "XBMCTVDbAbsoluteNumber"               : XBMCTVDbAbsoluteNumber = thisresult.InnerXml
                     Case "XBMCTVDbFanart"                       : XBMCTVDbFanart = thisresult.InnerXml

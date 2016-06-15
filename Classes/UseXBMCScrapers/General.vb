@@ -862,6 +862,7 @@ Module General
         Dim m_node As XmlNode
         Dim TvDBId As String = ""
         Dim Year As String = ""
+        Dim count As Integer = 0
         Dim ExtraFields As Boolean = False
         Dim FinalString As String = "<tvshow>"
 
@@ -894,11 +895,12 @@ Module General
                                         If Form1.RadioButton15.Checked Then sortorder = "default"
                                         FinalString &= "<top250>0</top250><season>-1</season><episode>-1</episode><displayseason>-1</displayseason><displayepisode>-1</displayepisode>" _
                                             & "<votes></votes><outline></outline><tagline></tagline><episodeactorsource>tvdb</episodeactorsource><tvshowactorsource>tvdb</tvshowactorsource>"
-                                        FinalString &= "<runtime>60</runtime><sortorder>" & sortorder & "</sortorder><playcount>0</playcount><lastplayed></lastplayed><status></status>" _
+                                        FinalString &= "<sortorder>" & sortorder & "</sortorder><playcount>0</playcount><lastplayed></lastplayed><status></status>" _
                                             & "<code></code><language>" & Language & "</language><locked>0</locked><trailer></trailer>"
                                         ExtraFields = True
                                     End If
-
+                                    count += 1
+                                    If count > Pref.TvMaxGenres Then Continue For
                             End Select
                             FinalString &= node1.OuterXml.ToString
                         End If
@@ -1124,10 +1126,14 @@ Module General
                     Case "director"
                         TempXMLEpisode1.Director.Value = NodeChild.InnerText
                     Case "genre"
-                        If TempXMLEpisode1.Genre.Value Is String.Empty Then
-                            TempXMLEpisode1.Genre.Value = NodeChild.InnerText
-                        Else
-                            TempXMLEpisode1.Genre.Value &= " / " & NodeChild.InnerText
+                        If Not Counter = Pref.TvMaxGenres Then
+                            If TempXMLEpisode1.Genre.Value Is String.Empty Then
+                                TempXMLEpisode1.Genre.Value = NodeChild.InnerText
+                                Counter += 1
+                            Else
+                                TempXMLEpisode1.Genre.Value &= " / " & NodeChild.InnerText
+                                Counter += 1
+                            End If
                         End If
                     Case "plot"
                         TempXMLEpisode1.Plot.Value = NodeChild.InnerText

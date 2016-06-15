@@ -1729,27 +1729,18 @@ Partial Public Class Form1
                             If Pref.tvdlfanart Or Pref.tvdlposter or Pref.tvdlseasonthumbs Then
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            'End If
                             success = TvGetArtwork(NewShow, True, True, True, Pref.dlTVxtrafanart, langu:=searchLanguage)
-                            'If Pref.tvdlfanart Or Pref.tvdlposter or Pref.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
                                 Else
                                     tvprogresstxt &= ": error!!"
                                 End If
                             End If
-                            'If Pref.TvDlFanartTvArt OrElse Pref.TvChgShowDlFanartTvArt Then 
-                            '    tvprogresstxt &= " - Getting FanartTv Artwork"
-                            '    bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            '    TvFanartTvArt(NewShow, False)
-                            'End If
                         Else
                             If Pref.tvdlfanart Or Pref.tvdlposter or Pref.tvdlseasonthumbs Then
                                 tvprogresstxt &= " - Getting TVDB artwork"
                                 bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
-                            'End If
                                 success = TvGetArtwork(NewShow, True, True, True, Pref.dlTVxtrafanart, langu:=searchLanguage)
-                            'If Pref.tvdlfanart Or Pref.tvdlposter or Pref.tvdlseasonthumbs Then
                                 If success Then 
                                     tvprogresstxt &= ": OK!"
                                 Else
@@ -1762,9 +1753,6 @@ Partial Public Class Form1
                                 TvFanartTvArt(NewShow, Pref.TvChgShowDlFanartTvArt)
                             End If
                         End If
-                        'If Pref.tvfolderjpg OrElse Pref.seasonfolderjpg Then
-                        '    TvCheckfolderjpgart(NewShow)
-                        'End If
 
                         tvprogresstxt &= " - Completed. Saving Show."
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
@@ -1968,7 +1956,18 @@ Partial Public Class Form1
                                     newstring = tvseriesdata.Series(0).Genre.Value 
                                     newstring = newstring.TrimEnd("|")
                                     newstring = newstring.TrimStart("|")
-                                    newstring = newstring.Replace("|", " / ")
+                                    Dim strsplt() As String = newstring.Split("|")
+                                    Dim counter As Integer = 0
+                                    newstring = ""
+                                    For i = 0 To strsplt.Count-1
+                                        If i = Pref.TvMaxGenres Then Exit For
+                                        If newstring = "" Then
+                                            newstring = strsplt(i)
+                                        Else
+                                            newstring &= " / " & strsplt(i)
+                                        End If
+                                    Next
+                                    'newstring = newstring.Replace("|", " / ")
                                     editshow.Genre.Value = newstring
                                 End If
                                 If tvBatchList.shStudio     Then editshow.Studio.Value = tvseriesdata.Series(0).Network.Value

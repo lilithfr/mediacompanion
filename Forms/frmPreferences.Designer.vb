@@ -355,10 +355,6 @@ Partial Class frmPreferences
         Me.TabControl6 = New System.Windows.Forms.TabControl()
         Me.TabPage30 = New System.Windows.Forms.TabPage()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
-        Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
-        Me.GroupBox43 = New System.Windows.Forms.GroupBox()
-        Me.cb_TvMissingEpOffset = New System.Windows.Forms.CheckBox()
-        Me.cbTvMissingSpecials = New System.Windows.Forms.CheckBox()
         Me.GroupBox_TVDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
         Me.cbXBMCTvdbRatingFallback = New System.Windows.Forms.CheckBox()
         Me.cbXBMCTvdbRatingImdb = New System.Windows.Forms.CheckBox()
@@ -368,9 +364,14 @@ Partial Class frmPreferences
         Me.cbXBMCTvdbFanart = New System.Windows.Forms.CheckBox()
         Me.rbXBMCTvdbAbsoluteNumber = New System.Windows.Forms.RadioButton()
         Me.rbXBMCTvdbDVDOrder = New System.Windows.Forms.RadioButton()
+        Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
+        Me.GroupBox43 = New System.Windows.Forms.GroupBox()
+        Me.cb_TvMissingEpOffset = New System.Windows.Forms.CheckBox()
+        Me.cbTvMissingSpecials = New System.Windows.Forms.CheckBox()
         Me.Label111 = New System.Windows.Forms.Label()
         Me.cbTv_fixNFOid = New System.Windows.Forms.CheckBox()
         Me.GroupBox22 = New System.Windows.Forms.GroupBox()
+        Me.cbtvdbIMDbRating = New System.Windows.Forms.CheckBox()
         Me.Button91 = New System.Windows.Forms.Button()
         Me.RadioButton43 = New System.Windows.Forms.RadioButton()
         Me.RadioButton42 = New System.Windows.Forms.RadioButton()
@@ -478,7 +479,8 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbtvdbIMDbRating = New System.Windows.Forms.CheckBox()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -546,8 +548,8 @@ Partial Class frmPreferences
         Me.TabControl6.SuspendLayout
         Me.TabPage30.SuspendLayout
         Me.GroupBox17.SuspendLayout
-        Me.GroupBox43.SuspendLayout
         Me.GroupBox_TVDB_Scraper_Preferences.SuspendLayout
+        Me.GroupBox43.SuspendLayout
         Me.GroupBox22.SuspendLayout
         Me.GroupBox20.SuspendLayout
         Me.GroupBox18.SuspendLayout
@@ -4282,50 +4284,6 @@ Partial Class frmPreferences
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
         '
-        'cbTvScrShtTVDBResize
-        '
-        Me.cbTvScrShtTVDBResize.AutoSize = true
-        Me.cbTvScrShtTVDBResize.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 478)
-        Me.cbTvScrShtTVDBResize.Name = "cbTvScrShtTVDBResize"
-        Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 49)
-        Me.cbTvScrShtTVDBResize.TabIndex = 73
-        Me.cbTvScrShtTVDBResize.Text = "Save Screenshot in TVDB friendly size."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3"& _ 
-    " means saving at 400x300"
-        Me.cbTvScrShtTVDBResize.TextAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.UseVisualStyleBackColor = true
-        '
-        'GroupBox43
-        '
-        Me.GroupBox43.Controls.Add(Me.cb_TvMissingEpOffset)
-        Me.GroupBox43.Controls.Add(Me.cbTvMissingSpecials)
-        Me.GroupBox43.Location = New System.Drawing.Point(712, 391)
-        Me.GroupBox43.Name = "GroupBox43"
-        Me.GroupBox43.Size = New System.Drawing.Size(264, 72)
-        Me.GroupBox43.TabIndex = 72
-        Me.GroupBox43.TabStop = false
-        Me.GroupBox43.Text = "Missing Episode Options"
-        '
-        'cb_TvMissingEpOffset
-        '
-        Me.cb_TvMissingEpOffset.AutoSize = true
-        Me.cb_TvMissingEpOffset.Location = New System.Drawing.Point(14, 45)
-        Me.cb_TvMissingEpOffset.Name = "cb_TvMissingEpOffset"
-        Me.cb_TvMissingEpOffset.Size = New System.Drawing.Size(181, 19)
-        Me.cb_TvMissingEpOffset.TabIndex = 1
-        Me.cb_TvMissingEpOffset.Text = "Delay missing aired by 1 day"
-        Me.cb_TvMissingEpOffset.UseVisualStyleBackColor = true
-        '
-        'cbTvMissingSpecials
-        '
-        Me.cbTvMissingSpecials.AutoSize = true
-        Me.cbTvMissingSpecials.Location = New System.Drawing.Point(14, 20)
-        Me.cbTvMissingSpecials.Name = "cbTvMissingSpecials"
-        Me.cbTvMissingSpecials.Size = New System.Drawing.Size(172, 19)
-        Me.cbTvMissingSpecials.TabIndex = 0
-        Me.cbTvMissingSpecials.Text = "Ignore specials (Season 0)"
-        Me.cbTvMissingSpecials.UseVisualStyleBackColor = true
-        '
         'GroupBox_TVDB_Scraper_Preferences
         '
         Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingFallback)
@@ -4439,6 +4397,50 @@ Partial Class frmPreferences
         Me.rbXBMCTvdbDVDOrder.Text = "Use DVD Order (default)"
         Me.rbXBMCTvdbDVDOrder.UseVisualStyleBackColor = true
         '
+        'cbTvScrShtTVDBResize
+        '
+        Me.cbTvScrShtTVDBResize.AutoSize = true
+        Me.cbTvScrShtTVDBResize.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 478)
+        Me.cbTvScrShtTVDBResize.Name = "cbTvScrShtTVDBResize"
+        Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 49)
+        Me.cbTvScrShtTVDBResize.TabIndex = 73
+        Me.cbTvScrShtTVDBResize.Text = "Save Screenshot in TVDB friendly size."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3"& _ 
+    " means saving at 400x300"
+        Me.cbTvScrShtTVDBResize.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.cbTvScrShtTVDBResize.UseVisualStyleBackColor = true
+        '
+        'GroupBox43
+        '
+        Me.GroupBox43.Controls.Add(Me.cb_TvMissingEpOffset)
+        Me.GroupBox43.Controls.Add(Me.cbTvMissingSpecials)
+        Me.GroupBox43.Location = New System.Drawing.Point(712, 391)
+        Me.GroupBox43.Name = "GroupBox43"
+        Me.GroupBox43.Size = New System.Drawing.Size(264, 72)
+        Me.GroupBox43.TabIndex = 72
+        Me.GroupBox43.TabStop = false
+        Me.GroupBox43.Text = "Missing Episode Options"
+        '
+        'cb_TvMissingEpOffset
+        '
+        Me.cb_TvMissingEpOffset.AutoSize = true
+        Me.cb_TvMissingEpOffset.Location = New System.Drawing.Point(14, 45)
+        Me.cb_TvMissingEpOffset.Name = "cb_TvMissingEpOffset"
+        Me.cb_TvMissingEpOffset.Size = New System.Drawing.Size(181, 19)
+        Me.cb_TvMissingEpOffset.TabIndex = 1
+        Me.cb_TvMissingEpOffset.Text = "Delay missing aired by 1 day"
+        Me.cb_TvMissingEpOffset.UseVisualStyleBackColor = true
+        '
+        'cbTvMissingSpecials
+        '
+        Me.cbTvMissingSpecials.AutoSize = true
+        Me.cbTvMissingSpecials.Location = New System.Drawing.Point(14, 20)
+        Me.cbTvMissingSpecials.Name = "cbTvMissingSpecials"
+        Me.cbTvMissingSpecials.Size = New System.Drawing.Size(172, 19)
+        Me.cbTvMissingSpecials.TabIndex = 0
+        Me.cbTvMissingSpecials.Text = "Ignore specials (Season 0)"
+        Me.cbTvMissingSpecials.UseVisualStyleBackColor = true
+        '
         'Label111
         '
         Me.Label111.Location = New System.Drawing.Point(717, 482)
@@ -4474,6 +4476,15 @@ Partial Class frmPreferences
         Me.GroupBox22.Size = New System.Drawing.Size(270, 400)
         Me.GroupBox22.TabIndex = 66
         Me.GroupBox22.TabStop = false
+        '
+        'cbtvdbIMDbRating
+        '
+        Me.cbtvdbIMDbRating.Location = New System.Drawing.Point(14, 159)
+        Me.cbtvdbIMDbRating.Name = "cbtvdbIMDbRating"
+        Me.cbtvdbIMDbRating.Size = New System.Drawing.Size(228, 39)
+        Me.cbtvdbIMDbRating.TabIndex = 34
+        Me.cbtvdbIMDbRating.Text = "Episode Rating and votes from IMDb (fallback to TVDb)"
+        Me.cbtvdbIMDbRating.UseVisualStyleBackColor = true
         '
         'Button91
         '
@@ -4580,7 +4591,7 @@ Partial Class frmPreferences
         '
         Me.Label139.AutoSize = true
         Me.Label139.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label139.Location = New System.Drawing.Point(417, 368)
+        Me.Label139.Location = New System.Drawing.Point(417, 398)
         Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label139.Name = "Label139"
         Me.Label139.Size = New System.Drawing.Size(245, 52)
@@ -4591,6 +4602,8 @@ Partial Class frmPreferences
         '
         'GroupBox20
         '
+        Me.GroupBox20.Controls.Add(Me.Label24)
+        Me.GroupBox20.Controls.Add(Me.cmbxTvMaxGenres)
         Me.GroupBox20.Controls.Add(Me.Label7)
         Me.GroupBox20.Controls.Add(Me.cmbxTvXtraFanartQty)
         Me.GroupBox20.Controls.Add(Me.cbTvFanartTvFirst)
@@ -4608,7 +4621,7 @@ Partial Class frmPreferences
         Me.GroupBox20.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox20.Name = "GroupBox20"
         Me.GroupBox20.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox20.Size = New System.Drawing.Size(306, 320)
+        Me.GroupBox20.Size = New System.Drawing.Size(306, 351)
         Me.GroupBox20.TabIndex = 35
         Me.GroupBox20.TabStop = false
         Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
@@ -4815,7 +4828,7 @@ Partial Class frmPreferences
         '
         Me.cbTvQuickAddShow.AutoSize = true
         Me.cbTvQuickAddShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 348)
+        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 375)
         Me.cbTvQuickAddShow.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvQuickAddShow.Name = "cbTvQuickAddShow"
         Me.cbTvQuickAddShow.Size = New System.Drawing.Size(181, 19)
@@ -5720,14 +5733,29 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbtvdbIMDbRating
+        'Label24
         '
-        Me.cbtvdbIMDbRating.Location = New System.Drawing.Point(14, 159)
-        Me.cbtvdbIMDbRating.Name = "cbtvdbIMDbRating"
-        Me.cbtvdbIMDbRating.Size = New System.Drawing.Size(228, 39)
-        Me.cbtvdbIMDbRating.TabIndex = 34
-        Me.cbtvdbIMDbRating.Text = "Episode Rating and votes from IMDb (fallback to TVDb)"
-        Me.cbtvdbIMDbRating.UseVisualStyleBackColor = true
+        Me.Label24.AutoSize = true
+        Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label24.Location = New System.Drawing.Point(16, 318)
+        Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(134, 15)
+        Me.Label24.TabIndex = 77
+        Me.Label24.Text = "Max number of genres:"
+        '
+        'cmbxTvMaxGenres
+        '
+        Me.cmbxTvMaxGenres.FormattingEnabled = true
+        Me.cmbxTvMaxGenres.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(158, 315)
+        Me.cmbxTvMaxGenres.Margin = New System.Windows.Forms.Padding(4)
+        Me.cmbxTvMaxGenres.MaxDropDownItems = 30
+        Me.cmbxTvMaxGenres.Name = "cmbxTvMaxGenres"
+        Me.cmbxTvMaxGenres.Size = New System.Drawing.Size(140, 23)
+        Me.cmbxTvMaxGenres.TabIndex = 76
+        Me.ToolTip1.SetToolTip(Me.cmbxTvMaxGenres, "Media Companion will not scrape more than"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tne number of genres set with this con"& _ 
+        "trol")
         '
         'frmPreferences
         '
@@ -5862,10 +5890,10 @@ Partial Class frmPreferences
         Me.TabPage30.ResumeLayout(false)
         Me.GroupBox17.ResumeLayout(false)
         Me.GroupBox17.PerformLayout
-        Me.GroupBox43.ResumeLayout(false)
-        Me.GroupBox43.PerformLayout
         Me.GroupBox_TVDB_Scraper_Preferences.ResumeLayout(false)
         Me.GroupBox_TVDB_Scraper_Preferences.PerformLayout
+        Me.GroupBox43.ResumeLayout(false)
+        Me.GroupBox43.PerformLayout
         Me.GroupBox22.ResumeLayout(false)
         Me.GroupBox22.PerformLayout
         Me.GroupBox20.ResumeLayout(false)
@@ -6354,4 +6382,6 @@ End Sub
     Friend WithEvents cbAutoHideStatusBar As CheckBox
     Friend WithEvents cbMovImdbAspectRatio As CheckBox
     Friend WithEvents cbtvdbIMDbRating As CheckBox
+    Friend WithEvents Label24 As Label
+    Friend WithEvents cmbxTvMaxGenres As ComboBox
 End Class
