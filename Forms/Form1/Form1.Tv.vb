@@ -1003,14 +1003,25 @@ Partial Public Class Form1
                 Next
             End If
             If Not gotEpxml AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
-                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                    If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
-                        xmlfile = NewEpisode.Node.ToString 
-                        xmlfile = "<Data>" & xmlfile & "</Data>"
-                        gotEpxml = True
-                        Exit For
-                    End If
-                Next
+                If sortorder = "default" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                            xmlfile = NewEpisode.Node.ToString 
+                            xmlfile = "<Data>" & xmlfile & "</Data>"
+                            gotEpxml = True
+                            Exit For
+                        End If
+                    Next
+                ElseIf sortorder = "dvd" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.DvdEpisodeNumber.value = (episodeno & ".0") AndAlso NewEpisode.DvdSeason.Value = seasonno Then
+                            xmlfile = NewEpisode.Node.ToString 
+                            xmlfile = "<Data>" & xmlfile & "</Data>"
+                            gotEpxml = True
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
             ' Finally, if not in seriesxml file, go old-school
             If Not gotEpxml Then
@@ -1073,9 +1084,13 @@ Partial Public Class Form1
                                 Case "airsbefore_season"
                                     episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
                                 Case "SeasonNumber"
-                                    seasonno = mirrorselection.InnerText
+                                    If sortorder = "default" Then seasonno = mirrorselection.InnerText
                                 Case "EpisodeNumber"
-                                    episodeno = mirrorselection.InnerText
+                                    If sortorder = "default" Then episodeno = mirrorselection.InnerText
+                                Case "DVD_season"
+                                    If sortorder = "dvd" Then seasonno = mirrorselection.InnerText
+                                Case "DVD_episodenumber"
+                                    If sortorder = "dvd" Then episodeno = mirrorselection.InnerText.Substring(0, mirrorselection.InnerText.IndexOf("."))
                             End Select
                         Next
                 End Select

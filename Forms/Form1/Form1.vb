@@ -13985,10 +13985,10 @@ Public Class Form1
                 episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
                 For Each ep In episodelist
                     If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
-                        If tb_Sh_Ep_Title.Text.ToLower <> ep.Title.Value Then
+                        If tb_Sh_Ep_Title.Text.Replace("'", "").ToLower <> ep.Title.Value.ToLower Then
                             Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
                             If TryTitle = MsgBoxResult.Yes Then
-                                ep.Title.Value = tb_Sh_Ep_Title.Text
+                                ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
                             End If
                         End If
                         ep.Plot.Value = tb_EpPlot.Text
@@ -14013,19 +14013,18 @@ Public Class Form1
     End Sub          'save button
 
     Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
-        Try
-            Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-            Dim TVShowNFOContent As String = ""
-            If Button47.Text = "Default" Then
-                WorkingTvShow.SortOrder.Value = "dvd"
-                Button47.Text = "DVD"
-            Else
-                WorkingTvShow.SortOrder.Value = "Default"
-                Button47.Text = "Default"
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim TVShowNFOContent As String = ""
+        If Button47.Text = "Default" Then
+            WorkingTvShow.SortOrder.Value = "dvd"
+            Button47.Text = "DVD"
+        Else
+            WorkingTvShow.SortOrder.Value = "Default"
+            Button47.Text = "Default"
+        End If
+        'Button_Save_TvShow_Episode.PerformClick()
+        nfoFunction.tvshow_NfoSave(WorkingTvShow, True)
+        tv_ShowLoad(WorkingTvShow)
     End Sub
 
     Private Sub Button45_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button45.Click

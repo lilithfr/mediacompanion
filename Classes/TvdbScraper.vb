@@ -444,15 +444,25 @@ Public Class TVDBScraper
                 SeriesInfo.Load(xmlfile2)
                 Dim gotEpxml As Boolean = False
                 'check episode is present in seriesxml file, else, re-download it (update to latest)
-                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                    If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
-                        Dim somedata As String = "What The??"
-                        xmlfile = NewEpisode.Node.ToString 
-                        xmlfile = "<Data>" & xmlfile & "</Data>"
-                        gotEpxml = True
-                        Exit For
-                    End If
-                Next
+                If sortorder = "default" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                            xmlfile = NewEpisode.Node.ToString 
+                            xmlfile = "<Data>" & xmlfile & "</Data>"
+                            gotEpxml = True
+                            Exit For
+                        End If
+                    Next
+                ElseIf sortorder = "dvd" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.DvdEpisodeNumber.value = (episodeno & ".0") AndAlso NewEpisode.DvdSeason.Value = seasonno Then
+                            xmlfile = NewEpisode.Node.ToString 
+                            xmlfile = "<Data>" & xmlfile & "</Data>"
+                            gotEpxml = True
+                            Exit For
+                        End If
+                    Next
+                End If
                 ' Finally, if not in seriesxml file, go old-school
                 If Not gotEpxml Then
                     episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
