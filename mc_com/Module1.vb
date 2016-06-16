@@ -324,7 +324,7 @@ Module Module1
 		                    appendIncr = strIncr
 	                    Next
                     Next
-                    Dim mediaCollection As Object = If(Pref.movieinvertorder, setMovies.Values.Reverse.ToList, setMovies.Values.ToList)
+                    Dim mediaCollection As Object = If(Pref.movieinvertorder, If(Pref.moviesortorder = 7, setMovies.Values.ToList, setMovies.Values.Reverse.ToList), If(Pref.moviesortorder = 7, setMovies.Values.Reverse.ToList, setMovies.Values.ToList))
                     Call mediaInfoExp.addTemplates()
                     Dim templateType As MediaInfoExport.mediaType
                     If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
