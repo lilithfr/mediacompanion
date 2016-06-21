@@ -876,7 +876,7 @@ Module General
                         If node1.Name.ToLower = "actor" Then
                             For Each node2 As XmlNode In node1
                                 Select Case node2.Name.ToLower
-                                    Case "thumb"
+                                    Case "name"
                                         If node2.InnerText <> "" Then FinalString &= node1.OuterXml.ToString
                                         Exit For
                                 End Select
@@ -1496,7 +1496,7 @@ Module General
                 Parameters(n) = DoScrape(Scraper, "GetDetails", ParametersForScraper, True, True, 5)
             Next
             Parameters(0) = Parameters(0).Substring(0, Parameters(0).LastIndexOf("<fanart url="))
-            'Parameters(1) = Parameters(1).Substring(Parameters(1).IndexOf("<thumb "), (Parameters(1).LastIndexOf("</details>") - Parameters(1).IndexOf("<thumb ")))
+            Parameters(1) = Parameters(1).Substring(Parameters(1).IndexOf("<fanart url="), (Parameters(1).LastIndexOf("</details>") - Parameters(1).IndexOf("<fanart url=")))
             Parameters(2) = Parameters(2).Substring(Parameters(2).IndexOf("<actor>"), (Parameters(2).LastIndexOf("<fanart url=") - Parameters(2).IndexOf("<actor>"))) & "</details>"
             Dim Temp As String = Parameters(0) & Parameters(1) & Parameters(2)
             Temp = Clean_AddTVShowExtraFields(Temp, Language, IMDB_ID)

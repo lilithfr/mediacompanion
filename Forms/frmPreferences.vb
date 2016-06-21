@@ -484,7 +484,7 @@ Public Class frmPreferences
 
         'Name Mode
         cbMoviePartsNameMode                .Checked        = Pref.namemode
-        lblNameMode                         .Text           = Form1.createNameModeText()
+        lblNameMode                         .Text           = createNameModeText()
         cbMoviePartsIgnorePart              .Checked        = Pref.movieignorepart
 
         'Movie Filters
@@ -2126,9 +2126,8 @@ End Sub
         Else
             Pref.namemode = "0"
         End If
-        lblNameMode.Text = Form1.createNameModeText()
+        lblNameMode.Text = createNameModeText()
         Changes = True
-        
     End Sub
 
 'Rename Movie Settings
@@ -3626,4 +3625,15 @@ End Sub
         End If
     End Sub
     
+    Public Function createNameModeText() As String
+        Dim txtMovieTitle As String = "Movie (0000)"
+        Dim lstNameModeFiles As New List(Of String)(New String() {txtMovieTitle & " CD1.avi", txtMovieTitle & " CD2.avi"})
+        If Pref.namemode = "1" Then txtMovieTitle &= " CD1"
+        lstNameModeFiles.Add(txtMovieTitle & ".nfo")
+        lstNameModeFiles.Add(txtMovieTitle & ".tbn")
+        lstNameModeFiles.Add(txtMovieTitle & "-fanart.jpg")
+        lstNameModeFiles.Sort()
+        Return String.Join(vbCrLf, lstNameModeFiles)
+    End Function
+
 End Class

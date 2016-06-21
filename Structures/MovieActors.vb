@@ -35,7 +35,7 @@ Public Structure str_MovieActors
         Temp.SortOrder.Value = Input.order
         Return Temp
     End Operator
-
+    
     Function GetActorFileName(ActorPath As String) As String
         Return IO.Path.Combine(ActorPath, actorname.Replace(" ", "_") & ".jpg")
     End Function

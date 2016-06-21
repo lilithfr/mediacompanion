@@ -9825,17 +9825,6 @@ Public Class Form1
         Me.TasksOnlyIncompleteTasks = TasksDontShowCompleted.Checked
     End Sub
 
-    Public Function createNameModeText() As String
-        Dim txtMovieTitle As String = "Movie (0000)"
-        Dim lstNameModeFiles As New List(Of String)(New String() {txtMovieTitle & " CD1.avi", txtMovieTitle & " CD2.avi"})
-        If Pref.namemode = "1" Then txtMovieTitle &= " CD1"
-        lstNameModeFiles.Add(txtMovieTitle & ".nfo")
-        lstNameModeFiles.Add(txtMovieTitle & ".tbn")
-        lstNameModeFiles.Add(txtMovieTitle & "-fanart.jpg")
-        lstNameModeFiles.Sort()
-        Return String.Join(vbCrLf, lstNameModeFiles)
-    End Function
-
     Private Sub Button2_Click(sender As System.Object, e As System.EventArgs) Handles Button2.Click
         util_FixSeasonEpisode()
     End Sub
@@ -15223,6 +15212,14 @@ Public Class Form1
 
                 Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(ListBox3.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
                 If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
+                Dim newshow As TvShow = nfoFunction.tvshow_NfoLoad(WorkingTvShow.NfoFilePath)
+                newshow.ListActors.Clear()
+                If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
+                    TvGetActorTvdb(NewShow)
+                ElseIf (Pref.TvdbActorScrape = 1 Or Pref.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
+                    TvGetActorImdb(NewShow)
+                End If
+                nfoFunction.tvshow_NfoSave(newshow, True)
                 Call tv_ShowLoad(WorkingTvShow)
                 TvTreeview.Refresh()
                 messbox.Close()
