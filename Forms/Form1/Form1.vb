@@ -17364,6 +17364,7 @@ Public Class Form1
             RunBackgroundMovieScrape("BatchRescrape")
         End If
         If MovieSetIds.Count > 0 Then RebuildMovieSetCollectionList(MovieSetIds)
+        UpdateFilteredList()
     End Sub
 
     Private Sub RebuildMovieSetCollectionList(ByVal SetIds As List(Of String))
