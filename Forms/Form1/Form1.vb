@@ -2818,7 +2818,7 @@ Public Class Form1
 
     Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPosterBrowserAlt.Click
         Try
-            Dim t As New frmCoverArt
+            Dim t As New frmMovieAltPosterArt
             If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
@@ -2835,7 +2835,7 @@ Public Class Form1
 
     Private Sub mov_ToolStripFanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
         Try
-            Dim t As New frmMovieFanart
+            Dim t As New frmMovieAltFanart
             If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height

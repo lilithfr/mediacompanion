@@ -356,10 +356,10 @@
     <Compile Include="Forms\frmCopyProgress.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmCoverArt.Designer.vb">
-      <DependentUpon>frmCoverArt.vb</DependentUpon>
+    <Compile Include="Forms\frmMovieAltPosterArt.Designer.vb">
+      <DependentUpon>frmMovieAltPosterArt.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmCoverArt.vb">
+    <Compile Include="Forms\frmMovieAltPosterArt.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmDialog1.Designer.vb">
@@ -375,10 +375,10 @@
     <Compile Include="Forms\frmMessageBox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frmMovieFanart.Designer.vb">
-      <DependentUpon>frmMovieFanart.vb</DependentUpon>
+    <Compile Include="Forms\frmMovieAltFanart.Designer.vb">
+      <DependentUpon>frmMovieAltFanart.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmMovieFanart.vb">
+    <Compile Include="Forms\frmMovieAltFanart.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classes\Scraper.vb" />
@@ -559,8 +559,8 @@
       <DependentUpon>frmCopyProgress.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmCoverArt.resx">
-      <DependentUpon>frmCoverArt.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmMovieAltPosterArt.resx">
+      <DependentUpon>frmMovieAltPosterArt.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCreateDateFix.resx">
@@ -604,8 +604,8 @@
       <DependentUpon>frmMessageBox.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmMovieFanart.resx">
-      <DependentUpon>frmMovieFanart.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\frmMovieAltFanart.resx">
+      <DependentUpon>frmMovieAltFanart.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmProgressScreen.resx">

@@ -249,7 +249,7 @@ Public Class Form2
 
     Private Sub btnAltPosterBrowser_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAltPosterBrowser.Click
         Try
-            Dim t As New frmCoverArt()
+            Dim t As New frmMovieAltPosterArt()
             If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
@@ -557,7 +557,7 @@ Public Class Form2
 
     Private Sub btnfanart_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnfanart.Click
         Try
-            Dim t As New frmMovieFanart
+            Dim t As New frmMovieAltFanart
             If Pref.MultiMonitoEnabled Then
                 Dim w As Integer = t.Width
                 Dim h As Integer = t.Height
