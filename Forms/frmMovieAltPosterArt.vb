@@ -452,6 +452,7 @@ Public Class frmMovieAltPosterArt
 
         If aok AndAlso count > 0 Then
             If count > maxthumbs Then
+                pagecount = 0
                 Dim tempmaxthumbs As Integer = count
 
                 Do Until tempmaxthumbs < 1
@@ -461,7 +462,9 @@ Public Class frmMovieAltPosterArt
             End If
 
             If count > maxthumbs Then
-                For f = ((currentpage-1)*maxthumbs) To (currentpage*maxthumbs) - 1
+                Dim thispagecount As Integer = ((currentpage*maxthumbs) - 1)
+                If thispagecount >= count Then thispagecount = (count -1)
+                For f = ((currentpage-1)*maxthumbs) To thispagecount '(currentpage*maxthumbs) - 1
                     names.Add(posterArray.Item(f).ldurl)
                 Next
             Else
@@ -480,7 +483,7 @@ Public Class frmMovieAltPosterArt
                     Label7.Text = "Displaying 1 to " & count.ToString & " of " & count.ToString & " Images"
                 End If
                 btnScrollPrev.Enabled = currentpage > 1
-                btnScrollNext.Enabled = True
+                btnScrollNext.Enabled = currentpage < pagecount 'True
             Else
                 btnScrollPrev.Visible = False
                 btnScrollNext.Visible = False

@@ -4548,7 +4548,9 @@ Public Class Form1
             Dim MovPosterPicBox As New List(Of FanartPicBox)
             If pageCount = 0 Then pageCount = Math.Ceiling(posterArray.count/10)
             If posterArray.Count > 10 Then
-                For f = ((currentPage-1)*10) To ((currentPage*10)-1)
+                Dim totalthispagecount As Integer = ((currentPage*10)-1)
+                If totalthispagecount >= posterArray.Count Then totalthispagecount = posterArray.Count -1
+                For f = ((currentPage-1)*10) To totalthispagecount '((currentPage*10)-1)
                     names.Add(posterArray(f))
                 Next
             Else
