@@ -100,6 +100,7 @@ Partial Class frmPreferences
         Me.btnMkvMergeGuiPath = New System.Windows.Forms.Button()
         Me.tbMkvMergeGuiPath = New System.Windows.Forms.TextBox()
         Me.Label19 = New System.Windows.Forms.Label()
+        Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
@@ -383,6 +384,7 @@ Partial Class frmPreferences
         Me.CheckBox_Use_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
         Me.Label139 = New System.Windows.Forms.Label()
         Me.GroupBox20 = New System.Windows.Forms.GroupBox()
+        Me.Label24 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cmbxTvXtraFanartQty = New System.Windows.Forms.ComboBox()
         Me.cbTvFanartTvFirst = New System.Windows.Forms.CheckBox()
@@ -479,8 +481,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.Label24 = New System.Windows.Forms.Label()
-        Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
+        Me.cbTagRes = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -783,7 +784,7 @@ Partial Class frmPreferences
         '
         Me.cb_keywordlimit.FormattingEnabled = true
         Me.cb_keywordlimit.Items.AddRange(New Object() {"All Available", "None", "5", "10", "15", "20", "25", "30", "40", "50", "70", "90", "100", "125", "150", "175", "200", "250", "300", "400", "500"})
-        Me.cb_keywordlimit.Location = New System.Drawing.Point(192, 60)
+        Me.cb_keywordlimit.Location = New System.Drawing.Point(213, 47)
         Me.cb_keywordlimit.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_keywordlimit.MaxDropDownItems = 30
         Me.cb_keywordlimit.Name = "cb_keywordlimit"
@@ -1141,17 +1142,17 @@ Partial Class frmPreferences
         'Label178
         '
         Me.Label178.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label178.Location = New System.Drawing.Point(8, 50)
+        Me.Label178.Location = New System.Drawing.Point(8, 47)
         Me.Label178.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label178.Name = "Label178"
-        Me.Label178.Size = New System.Drawing.Size(282, 19)
+        Me.Label178.Size = New System.Drawing.Size(282, 16)
         Me.Label178.TabIndex = 7
         Me.Label178.Text = "The first available certificate in the order you select below"
         '
         'Label95
         '
         Me.Label95.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label95.Location = New System.Drawing.Point(9, 19)
+        Me.Label95.Location = New System.Drawing.Point(9, 16)
         Me.Label95.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label95.Name = "Label95"
         Me.Label95.Size = New System.Drawing.Size(282, 31)
@@ -1278,7 +1279,7 @@ Partial Class frmPreferences
         'cbAllowUserTags
         '
         Me.cbAllowUserTags.AutoSize = true
-        Me.cbAllowUserTags.Location = New System.Drawing.Point(12, 20)
+        Me.cbAllowUserTags.Location = New System.Drawing.Point(11, 16)
         Me.cbAllowUserTags.Name = "cbAllowUserTags"
         Me.cbAllowUserTags.Size = New System.Drawing.Size(108, 19)
         Me.cbAllowUserTags.TabIndex = 70
@@ -1408,6 +1409,19 @@ Partial Class frmPreferences
         Me.Label19.Size = New System.Drawing.Size(35, 15)
         Me.Label19.TabIndex = 0
         Me.Label19.Text = "Path:"
+        '
+        'cmbxTvMaxGenres
+        '
+        Me.cmbxTvMaxGenres.FormattingEnabled = true
+        Me.cmbxTvMaxGenres.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
+        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(158, 315)
+        Me.cmbxTvMaxGenres.Margin = New System.Windows.Forms.Padding(4)
+        Me.cmbxTvMaxGenres.MaxDropDownItems = 30
+        Me.cmbxTvMaxGenres.Name = "cmbxTvMaxGenres"
+        Me.cmbxTvMaxGenres.Size = New System.Drawing.Size(140, 23)
+        Me.cmbxTvMaxGenres.TabIndex = 76
+        Me.ToolTip1.SetToolTip(Me.cmbxTvMaxGenres, "Media Companion will not scrape more than"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tne number of genres set with this con"& _ 
+        "trol")
         '
         'cbXbmcTmdbActorFromImdb
         '
@@ -2675,6 +2689,7 @@ Partial Class frmPreferences
         '
         'GroupBox44
         '
+        Me.GroupBox44.Controls.Add(Me.cbTagRes)
         Me.GroupBox44.Controls.Add(Me.cbAllowUserTags)
         Me.GroupBox44.Controls.Add(Me.Label9)
         Me.GroupBox44.Controls.Add(Me.tb_MovTagBlacklist)
@@ -2693,7 +2708,7 @@ Partial Class frmPreferences
         '
         Me.Label9.AutoSize = true
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label9.Location = New System.Drawing.Point(260, 88)
+        Me.Label9.Location = New System.Drawing.Point(262, 97)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(31, 18)
         Me.Label9.TabIndex = 69
@@ -2701,16 +2716,16 @@ Partial Class frmPreferences
         '
         'tb_MovTagBlacklist
         '
-        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 121)
+        Me.tb_MovTagBlacklist.Location = New System.Drawing.Point(12, 133)
         Me.tb_MovTagBlacklist.Multiline = true
         Me.tb_MovTagBlacklist.Name = "tb_MovTagBlacklist"
-        Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 79)
+        Me.tb_MovTagBlacklist.Size = New System.Drawing.Size(277, 67)
         Me.tb_MovTagBlacklist.TabIndex = 68
         '
         'Label8
         '
         Me.Label8.AutoSize = true
-        Me.Label8.Location = New System.Drawing.Point(6, 88)
+        Me.Label8.Location = New System.Drawing.Point(8, 97)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(251, 30)
         Me.Label8.TabIndex = 67
@@ -2719,7 +2734,7 @@ Partial Class frmPreferences
         'Label69
         '
         Me.Label69.AutoSize = true
-        Me.Label69.Location = New System.Drawing.Point(9, 63)
+        Me.Label69.Location = New System.Drawing.Point(30, 54)
         Me.Label69.Name = "Label69"
         Me.Label69.Size = New System.Drawing.Size(176, 15)
         Me.Label69.TabIndex = 66
@@ -2728,7 +2743,7 @@ Partial Class frmPreferences
         'cb_keywordasTag
         '
         Me.cb_keywordasTag.AutoSize = true
-        Me.cb_keywordasTag.Location = New System.Drawing.Point(12, 41)
+        Me.cb_keywordasTag.Location = New System.Drawing.Point(11, 34)
         Me.cb_keywordasTag.Name = "cb_keywordasTag"
         Me.cb_keywordasTag.Size = New System.Drawing.Size(202, 19)
         Me.cb_keywordasTag.TabIndex = 0
@@ -4626,6 +4641,17 @@ Partial Class frmPreferences
         Me.GroupBox20.TabStop = false
         Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
         '
+        'Label24
+        '
+        Me.Label24.AutoSize = true
+        Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label24.Location = New System.Drawing.Point(16, 318)
+        Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(134, 15)
+        Me.Label24.TabIndex = 77
+        Me.Label24.Text = "Max number of genres:"
+        '
         'Label7
         '
         Me.Label7.AutoSize = true
@@ -5733,29 +5759,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'Label24
+        'cbTagRes
         '
-        Me.Label24.AutoSize = true
-        Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label24.Location = New System.Drawing.Point(16, 318)
-        Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(134, 15)
-        Me.Label24.TabIndex = 77
-        Me.Label24.Text = "Max number of genres:"
-        '
-        'cmbxTvMaxGenres
-        '
-        Me.cmbxTvMaxGenres.FormattingEnabled = true
-        Me.cmbxTvMaxGenres.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(158, 315)
-        Me.cmbxTvMaxGenres.Margin = New System.Windows.Forms.Padding(4)
-        Me.cmbxTvMaxGenres.MaxDropDownItems = 30
-        Me.cmbxTvMaxGenres.Name = "cmbxTvMaxGenres"
-        Me.cmbxTvMaxGenres.Size = New System.Drawing.Size(140, 23)
-        Me.cmbxTvMaxGenres.TabIndex = 76
-        Me.ToolTip1.SetToolTip(Me.cmbxTvMaxGenres, "Media Companion will not scrape more than"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tne number of genres set with this con"& _ 
-        "trol")
+        Me.cbTagRes.AutoSize = true
+        Me.cbTagRes.Location = New System.Drawing.Point(11, 72)
+        Me.cbTagRes.Name = "cbTagRes"
+        Me.cbTagRes.Size = New System.Drawing.Size(172, 19)
+        Me.cbTagRes.TabIndex = 71
+        Me.cbTagRes.Text = "Store Resolution as 1st tag"
+        Me.cbTagRes.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6384,4 +6396,5 @@ End Sub
     Friend WithEvents cbtvdbIMDbRating As CheckBox
     Friend WithEvents Label24 As Label
     Friend WithEvents cmbxTvMaxGenres As ComboBox
+    Friend WithEvents cbTagRes As CheckBox
 End Class

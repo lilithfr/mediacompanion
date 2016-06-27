@@ -195,8 +195,6 @@ Public Class Pref
     Public Shared nfoposterscraper As Integer
     Public Shared ignoreactorthumbs As Boolean
     Public Shared maxactors As Integer
-    Public Shared keywordasTag As Boolean
-    Public Shared keywordlimit As Integer
     Public Shared MovTagBlacklist As String
     Public Shared maxmoviegenre As Integer
     Public Shared enablehdtags As Boolean
@@ -338,7 +336,10 @@ Public Class Pref
 
     Public Shared CheckForNewVersion As Boolean=False
     Public Shared CloseMCForDLNewVersion As Boolean = True
-    Public Shared AllowUserTags As Boolean = True
+    Public Shared AllowUserTags As Boolean
+    Public Shared keywordasTag As Boolean
+    Public Shared keywordlimit As Integer
+    Public Shared TagRes As Boolean
     Public Shared GenreCustomBefore As Boolean
     Public Shared CustomTmdbApiKey As String = ""
     Public Shared MovNfoWatchTag As Boolean
@@ -792,8 +793,10 @@ Public Class Pref
         overwritethumbs = False
         LocalActorImage = True
         maxactors = 9999
+        AllowUserTags = True
         keywordasTag = False
         keywordlimit = 5
+        TagRes = False
         MovTagBlacklist = ""
         createfolderjpg = False
         createfanartjpg = False
@@ -1091,8 +1094,6 @@ Public Class Pref
         root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreactorthumbs",                  ignoreactorthumbs)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "maxactors",                          maxactors)                          'ComboBox7
-        root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
-        root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "MovTagBlacklist",                    MovTagBlacklist)                    'tb_MovTagBlacklist
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'cmbxMovScraper_MaxGenres
         root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
@@ -1224,7 +1225,10 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbScraperLanguage",            XbmcTmdbScraperLanguage)            'cmbxXbmcTmdbTitleLanguage
         root.AppendChild(doc, "XbmcTmdbScraperRatings",             XbmcTmdbScraperRatings)             'cbXbmcTmdbIMDBRatings
         root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         '
-        root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)                      '
+        root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)                      'cbAllowUserTags
+        root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
+        root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
+        root.AppendChild(doc, "TagRes",                             TagRes)                             'cbTagRes
         
         
 
@@ -1519,8 +1523,6 @@ Public Class Pref
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)
-                    Case "keywordasTag"                         : keywordasTag = thisresult.InnerXml
-                    Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
                     Case "MovTagBlacklist"                      : MovTagBlacklist = thisresult.InnerText
                     Case "maxmoviegenre"                        : maxmoviegenre = Convert.ToInt32(thisresult.InnerXml)
                     Case "enablehdtags"                         : enablehdtags = thisresult.InnerXml
@@ -1710,6 +1712,9 @@ Public Class Pref
                     Case "XbmcTmdbScraperRatings"               : XbmcTmdbScraperRatings = thisresult.InnerText
                     Case "XbmcTmdbScraperCertCountry"           : XbmcTmdbScraperCertCountry = thisresult.InnerText
                     Case "AllowUserTags"                        : AllowUserTags = thisresult.InnerText
+                    Case "keywordasTag"                         : keywordasTag = thisresult.InnerXml
+                    Case "keywordlimit"                         : keywordlimit = Convert.ToInt32(thisresult.InnerXml)
+                    Case "TagRes"                               : TagRes = thisresult.InnerXml
 
                     Case "ActorsFilterMinFilms"                 : ActorsFilterMinFilms      = thisresult.InnerXml
                     Case "MaxActorsInFilter"                    : MaxActorsInFilter         = thisresult.InnerXml

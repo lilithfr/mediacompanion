@@ -365,6 +365,7 @@ Public Class frmPreferences
             Case Else
                 cb_keywordlimit.SelectedItem = Pref.keywordlimit.ToString
         End Select
+        cbTagRes                            .Checked    = Pref.TagRes
         tb_MovTagBlacklist                  .Text       = Pref.MovTagBlacklist
 
         'IMDB Cert Priority
@@ -1570,6 +1571,12 @@ Public Class frmPreferences
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cbTagRes_CheckedChanged( sender As Object,  e As EventArgs) Handles cbTagRes.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TagRes = cbTagRes.Checked
+        Changes = True
     End Sub
 
     Private Sub tb_MovTagBlacklist_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tb_MovTagBlacklist.KeyDown

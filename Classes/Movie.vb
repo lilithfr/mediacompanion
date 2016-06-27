@@ -3064,6 +3064,24 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.title = Utilities.TitleCase(_scrapedMovie.fullmoviebody.title)
             _scrapedMovie.fullmoviebody.sortorder = Utilities.TitleCase(_scrapedMovie.fullmoviebody.sortorder)
         End If
+        If Cancelled() Then Exit Sub
+
+        If rl.runtime_file Or rl.mediatags Or (rl.runtime And ((Pref.movieRuntimeDisplay = "file") Or (Pref.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
+            If GetHdTags(_rescrapedMovie) Then
+                UpdateProperty(_rescrapedMovie.filedetails, _scrapedMovie.filedetails)
+
+                If rl.runtime_file Or (rl.runtime And ((Pref.movieRuntimeDisplay = "file") Or (Pref.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
+                    AssignRuntime(_rescrapedMovie, rl.runtime_file)
+                    UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime)
+                End If
+
+                If Pref.MovImdbAspectRatio AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
+                    _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
+                End If
+            End If
+        End If
+        If Cancelled() Then Exit Sub
+        If Not rl.TagsFromKeywords AndAlso Pref.TagRes Then GetKeyWords()
 
         If rl.TagsFromKeywords AndAlso (Not Pref.movies_useXBMC_Scraper Or rl.FromTMDB) Then GetKeyWords(True)
         If Cancelled() Then Exit Sub
@@ -3182,22 +3200,7 @@ Public Class Movie
             If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId 
         End If
         If Cancelled() Then Exit Sub
-
-        If rl.runtime_file Or rl.mediatags Or (rl.runtime And ((Pref.movieRuntimeDisplay = "file") Or (Pref.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
-            If GetHdTags(_rescrapedMovie) Then
-                UpdateProperty(_rescrapedMovie.filedetails, _scrapedMovie.filedetails)
-
-                If rl.runtime_file Or (rl.runtime And ((Pref.movieRuntimeDisplay = "file") Or (Pref.movieRuntimeFallbackToFile And _rescrapedMovie.fullmoviebody.runtime = ""))) Then
-                    AssignRuntime(_rescrapedMovie, rl.runtime_file)
-                    UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime)
-                End If
-
-                If Pref.MovImdbAspectRatio AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
-                    _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
-                End If
-            End If
-        End If
-
+        
         If rl.Convert_To_Frodo Then ConvertToFrodo()
 
         If rl.SetWatched       Then _scrapedMovie.fullmoviebody.SetWatched  ()
@@ -4163,6 +4166,14 @@ Public Class Movie
                 Next
             ElseIf keywords.Count > 0
                 _scrapedMovie.fullmoviebody.tag = keywords
+            End If
+        End If
+        If Pref.TagRes Then
+            Dim res As String = ""
+            res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+            If res <> "" Then _scrapedMovie.fullmoviebody.tag.Insert(0, res)
+            If _scrapedMovie.fullmoviebody.tag.Count > Pref.keywordlimit Then
+                _scrapedMovie.fullmoviebody.tag.RemoveAt(Pref.keywordlimit)
             End If
         End If
     End Sub
