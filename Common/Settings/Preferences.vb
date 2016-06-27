@@ -1854,10 +1854,16 @@ Public Class Pref
     Public Shared Function ActualTrailerPath(NfoPathPrefName As String) As String
         Dim s = NfoPathPrefName
         Dim FileName As String = ""
-        For Each item In "mp4,flv,webm,mov,m4v".Split(",")
-            FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
-            If IO.File.Exists(FileName) Then Return FileName
+        For each tra In Utilities.acceptedtrailernaming
+            For each extn In Utilities.TrailerExtensions
+                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & extn)
+                If IO.File.Exists(FileName) Then Return FileName
+            Next
         Next
+        'For Each item In "mp4,flv,webm,mov,m4v".Split(",")
+        '    FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+        '    If IO.File.Exists(FileName) Then Return FileName
+        'Next
         Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
     End Function
     

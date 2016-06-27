@@ -252,13 +252,12 @@ Public Class Movie
         Get
             Dim s = NfoPathPrefName
             Dim FileName As String = ""
-        
-            For Each item In Utilities.TrailerExtensions '"mp4,flv,webm,mov,m4v".Split(",")
-                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer" & item)
-
-                If File.Exists(FileName) Then Return FileName
+            For each tra In Utilities.acceptedtrailernaming
+                For Each item In Utilities.TrailerExtensions '"mp4,flv,webm,mov,m4v".Split(",")
+                    FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & item)
+                    If File.Exists(FileName) Then Return FileName
+                Next
             Next
-
             Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
         End Get
     End Property
@@ -733,12 +732,15 @@ Public Class Movie
         End If
 
         'ignore trailers
-        Dim M As Match
-        M = Regex.Match(fileInfo.FullName, "[-_.]trailer")
-        If M.Success Then
-            log &= " - ignore trailer"
-            Return False
-        End If
+        For each tra In Utilities.acceptedtrailernaming
+            Dim M As Match
+            M = Regex.Match(fileInfo.FullName, "[-_.]" & tra.Substring(1, tra.Length-1))
+            If M.Success Then
+                log &= " - ignore trailer"
+                Return False
+            End If
+        Next
+            
 
         'ignore whatever this is meant to be!
         If fileInfo.FullName.ToLower.IndexOf("sample") <> -1 And fileInfo.FullName.ToLower.IndexOf("people") = -1 Then Return False
@@ -2778,26 +2780,35 @@ Public Class Movie
                     log &= "Renamed Movie File to " & logRename & vbCrLf
                 logRename = ""
                     
-                    'rename subtitle files if any
-                'Dim oldname = 
-                    For i = 0 To subStackList.Count - 1
-                        Dim oldname = subStackList(i)
-                        Dim newsubextn As String = IO.Path.GetExtension(oldname)
-                        'Utilities.isMultiPartMedia(oldname, True) ', isFirstPart, stackdesignator, nextStackPart)
-                        Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newsubextn)
-                        'Dim changename As String = subStackList(i).Replace(oldname,newfilename)
-                        File.Move(subStackList(i), newpath & changename)
-                        logRename &= If(i, " and ", "") & changename
-                    Next
-                    log &= "Renamed Subtitle File to " & logRename & vbCrLf
-                'Next
+                'rename subtitle files if any
+                For i = 0 To subStackList.Count - 1
+                    Dim oldname = subStackList(i)
+                    Dim newsubextn As String = IO.Path.GetExtension(oldname)
+                    'Utilities.isMultiPartMedia(oldname, True) ', isFirstPart, stackdesignator, nextStackPart)
+                    Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newsubextn)
+                    'Dim changename As String = subStackList(i).Replace(oldname,newfilename)
+                    File.Move(subStackList(i), newpath & changename)
+                    logRename &= If(i, " and ", "") & changename
+                Next
+                log &= "Renamed Subtitle File to " & logRename & vbCrLf
 
-                    For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 'rename any anciliary files with the same name as the movie
-                        If File.Exists(subName1 & anciliaryFile) Then
-                            File.Move(subName1 & anciliaryFile, targetMovieFile & anciliaryFile)
-                            log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
+                'rename any anciliary files with the same name as the movie
+                For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts 
+                    If File.Exists(subName1 & anciliaryFile) Then
+                        File.Move(subName1 & anciliaryFile, targetMovieFile & anciliaryFile)
+                        log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
+                    End If
+                Next
+
+                'and trailers
+                For each anciliarytrailer As String In Utilities.acceptedtrailernaming
+                    For each extn As String In Utilities.VideoExtensions
+                        If File.Exists(subName1 & anciliarytrailer & extn) Then
+                            File.Move(subName1 & anciliarytrailer & extn, targetMovieFile & anciliarytrailer & extn)
+                            log &= "Renamed '" & anciliarytrailer & "' File" & vbCrLf
                         End If
                     Next
+                Next
 
                 'update the new movie structure with the new data
                 movieFileInfo.mediapathandfilename = targetMovieFile & newextension 'this is the new full path & filname to the rename media file
@@ -3523,8 +3534,6 @@ Public Class Movie
                     Dim oldname1 = subStackList(i)
                     If Utilities.isMultiPartMedia(oldname1, False) Then
                         Utilities.isMultiPartMedia(oldname1, True)
-                    'Else
-
                     End If
                     Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), subextn(i))
                     'Dim changename As String = subStackList(i).Replace(oldname1, newfilename)
@@ -3535,18 +3544,14 @@ Public Class Movie
                     log &= "!!! Subtitle Renamed as:- " & newfilename & vbCrLf 
 
                 '
-                'PART 3 - Rename anciliary file(s) (nfo,poster,fanart & trailer):
+                'PART 3 - Rename anciliary file(s) (nfo,poster,fanart):
                 '
                 For Each anciliaryFile As String In Utilities.acceptedAnciliaryExts
-
                     newName = targetNfoFile & anciliaryFile
-
                     oldName = GetActualName(anciliaryFile)
-
                     If oldName<>"unknown" AndAlso anciliaryFile=".nfo" AndAlso oldName <> newName Then
                         RemoveMovieFromCache
                     End If
-
                     If RenameFile(oldName, newName, log) And anciliaryFile=".nfo" Then
                         _movieCache.fullpathandfilename = newName
                         _movieCache.filename            = Path.GetFileName(newName)
@@ -3555,8 +3560,21 @@ Public Class Movie
                     End If
                  Next
 
-                mediapathandfilename = targetMovieFile & newextension
+                '
+                'PART 4 - And then rename trailer
+                '
+                For Each anciliarytrailer As String In Utilities.acceptedtrailernaming
+                    newName = targetNfoFile & anciliarytrailer
+                    Dim foundextn As String = ".avi"
+                    For each extn As String In Utilities.VideoExtensions
+                        oldName = GetActualName(anciliarytrailer & extn)
+                        foundextn = extn
+                        If oldName <> "unknown" Then Exit For
+                    Next
+                    If oldName <> "unknown" Then RenameFile(oldName, newName & foundextn, log)
+                 Next
 
+                mediapathandfilename = targetMovieFile & newextension
                 RenamedBaseName = targetNfoFile
             Else
                 log & = "!!! " & _scrapedMovie.fullmoviebody.originaltitle & vbCrLf 

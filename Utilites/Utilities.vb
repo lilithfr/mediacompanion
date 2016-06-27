@@ -22,17 +22,19 @@ Public Class Utilities
     'file ext for trailers
     Public Shared TrailerExtensions As String() = {".avi", ".mkv", ".xvid", ".divx", ".mpg", ".mpeg", ".mov",
                                                  ".rm", ".3gp", ".m4v", ".wmv", ".asf", ".mp4", ".rmvb", ".ogm",
-                                                 ".ts", ".m2ts", ".flv", ".webm" }
+                                                 ".ts", ".m2ts", ".flv", ".webm", ".vob" }
 
     'movie Fanart.Tv file list
     Public Shared ReadOnly fanarttvfiles As String() = {"clearart.png", "logo.png", "disc.png", "banner.jpg",
                                                         "landscape.jpg", "fanart.jpg", "poster.jpg"}
 
-    'files that support main movie file, ie. art, subtitles, and trailers
+    'files that support main movie file, ie. art, nfo.
     Public Shared ReadOnly acceptedAnciliaryExts() As String = {".nfo", ".tbn", "-fanart.jpg", "-poster.jpg", "-banner.jpg",
-                                                                "-trailer.flv", "-trailer.mov", "-trailer.mp4", "-trailer.m4v", "-trailer.webm",
                                                                 "-clearart.png", "-logo.png", "-banner.jpg", "-landscape.jpg", "-disc.png",
                                                                 "-folder.jpg"}
+
+    'filename entries depicting trailers
+    Public Shared ReadOnly acceptedtrailernaming() As String = {"-trailer", "-theme"}
 
     'subtitle extensions for check of multi-part subtitle files
     Public Shared ReadOnly acceptedsubextn() As String = {".sub", ".srt", ".smi", ".idx", ".ass", ".ssa"}

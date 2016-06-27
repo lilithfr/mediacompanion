@@ -1763,7 +1763,7 @@ Public Class Form1
                 workingMovieDetails.fileinfo.filename = IO.Path.GetFileName(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.path = IO.Path.GetFullPath(workingMovie.fullpathandfilename)
                 workingMovieDetails.fileinfo.foldername = workingMovie.foldername
-                workingMovieDetails.fileinfo.trailerpath = GetTrailerPath(workingMovieDetails.fileinfo.path)
+                workingMovieDetails.fileinfo.trailerpath = pref.ActualTrailerPath(workingMovieDetails.fileinfo.path)
                 If Yield(yieldIng) Then Return
                 HandleTrailerBtn(workingMovieDetails)
                 If Yield(yieldIng) Then Return
@@ -2067,6 +2067,9 @@ Public Class Form1
         If filename2.IndexOf("-trailer") <> -1 Then validfile = False
         If filename2.IndexOf(".trailer") <> -1 Then validfile = False
         If filename2.IndexOf("_trailer") <> -1 Then validfile = False
+        If filename2.IndexOf("-theme") <> -1 Then validfile = False
+        If filename2.IndexOf(".theme") <> -1 Then validfile = False
+        If filename2.IndexOf("_theme") <> -1 Then validfile = False
         If filename2.IndexOf("sample") <> -1 And filename2.IndexOf("people") = -1 Then validfile = False
 
 
@@ -3051,17 +3054,17 @@ Public Class Form1
         Return True
     End Function
     
-    Public Function GetTrailerPath(ByVal s As String)
-        Dim FileName As String = ""
+    'Public Function GetTrailerPath(ByVal s As String)
+    '    Dim FileName As String = ""
 
-        For Each extension In Utilities.TrailerExtensions
-            FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer" & extension)
-            If File.Exists(FileName) Then Return FileName
-        Next
+    '    For Each extension In Utilities.TrailerExtensions
+    '        FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer" & extension)
+    '        If File.Exists(FileName) Then Return FileName
+    '    Next
 
-        'set default trailer path and filename
-        Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
-    End Function
+    '    'set default trailer path and filename
+    '    Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), System.IO.Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+    'End Function
 
     Private Sub mov_Play(ByVal type As String)
         If DataGridViewMovies.SelectedRows.Count < 1 Then Return
@@ -9115,7 +9118,7 @@ Public Class Form1
                                 listoffilestomove.Add(fiNext.FullName)
                             End If
                         Next
-                        Dim trailerpath As String = fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-trailer.flv")
+                        Dim trailerpath As String = Pref.ActualTrailerPath(fullpathandfilename) 'fullpathandfilename.Replace(IO.Path.GetExtension(fullpathandfilename), "-trailer.flv")
                         Dim filenama2 As String = IO.Path.GetFileNameWithoutExtension(trailerpath)
                         Dim fils2 As IO.FileInfo() = di.GetFiles(filenama2 & ".*")
                         For Each fiNext In fils2
@@ -11580,7 +11583,7 @@ Public Class Form1
     Private Sub MovieWallContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovieWallContextMenu.Opening
         Dim tempstring As String = ClickedControl
         If tempstring <> Nothing Then
-            Dim trailerpath As String = GetTrailerPath(tempstring)
+            Dim trailerpath As String = Pref.ActualTrailerPath(tempstring) 'GetTrailerPath(tempstring)
             If IO.File.Exists(trailerpath) Then
                 tsmiWallPlayTrailer.Enabled = True
             Else
@@ -11675,7 +11678,7 @@ Public Class Form1
         Try
             Dim tempstring As String = ClickedControl
             If tempstring <> Nothing Then
-                Dim trailerpath As String = GetTrailerPath(tempstring)
+                Dim trailerpath As String = Pref.ActualTrailerPath(tempstring) 'GetTrailerPath(tempstring)
                 statusstrip_Enable()
                 ToolStripStatusLabel2.Text = ""
                 ToolStripStatusLabel2.Visible = True
