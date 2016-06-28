@@ -700,6 +700,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 passed = False
             ElseIf s.Contains("$recycle.bin") Then
                 passed = False
+            ElseIf s.Contains(".recycle.bin") Then
+                passed = False
             ElseIf Strings.Right(s, 10) = "lost+found" Then
                 passed = False
             ElseIf s.Contains("system volume information") Then
@@ -772,14 +774,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             End If
 
             For Each Item In ChildList
-                If (Item.ToString.Contains(".actors")) Then Continue For
-                If (Item.ToString.ToLower.Contains("thumbnails")) Then Continue For
-                If (Item.ToString.ToLower.Contains("extrafanart")) Then Continue For
-                If (Item.ToString.ToLower.Contains("extrathumbs")) Then Continue For
-                If (Item.ToString.ToLower.Contains("bdmv")) Then 
+                If (Item.ToString.Contains(".actors"))              Then Continue For
+                If (Item.ToString.ToLower.Contains("thumbnails"))   Then Continue For
+                If (Item.ToString.ToLower.Contains("extrafanart"))  Then Continue For
+                If (Item.ToString.ToLower.Contains("extrathumbs"))  Then Continue For
+                If (Item.ToString.ToLower.Contains(".recycle.bin")) Then Continue For
+                If (Item.ToString.ToLower.Contains("bdmv"))         Then 
                     If Not File.Exists(Item.ToString.Replace("BDMV", "BDMV\index.bdmv")) Then Continue For
                 End If
-                If (Item.ToString.ToLower.Contains("certificate")) Then Continue For
+                If (Item.ToString.ToLower.Contains("certificate"))  Then Continue For
                 If Level <= MaxLevels Then
                     If ValidMovieDir(Item) Then
                         TempReturn.AddRange(EnumerateFolders(Item, MaxLevels, Level + 1))
