@@ -4321,7 +4321,7 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds)
                     If cachepathandfilename <> "" Then
                         aok = True
                         Dim imagearr() As Integer = GetAspect(WorkingEpisode)

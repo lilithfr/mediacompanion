@@ -736,8 +736,8 @@ Public Class Form1
 
             BckWrkXbmcController.RunWorkerAsync(Me)
 
-            For each pb As PictureBox In TableLayoutPanel6.controls
-                If pb.Name.Contains("pbepscrsht") Then
+            For each pb As Control In Me.TableLayoutPanel6.Controls
+                If pb.Name.Contains("pbEpScrSht") Then
                     AddHandler pb.Click, AddressOf pbepscrsht_click
                 End If
             Next
@@ -14297,7 +14297,7 @@ Public Class Form1
     Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
         If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
             If TextBox35.Text <> "" AndAlso Convert.ToInt32(TextBox35.Text) > 0 Then
-                TvEpThumbScreenShot()
+                tv_EpThumbScreenShot.PerformClick()
             End If
         End If
         If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
@@ -14306,12 +14306,22 @@ Public Class Form1
     End Sub
 
     Private Sub tv_EpThumbScreenShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbScreenShot.Click
-        Try
-            TvEpThumbScreenShot()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
+        Dim Cachename As String = epGetThumbScreenShot()
+        If Cachename = "" Then
+            MsgBox("Unable to get screenshots from episode file")
+            Exit Sub
+        End If
+        Dim matches() As Control
+        For i = 0 To 4
+            matches = Me.Controls.Find("pbEpScrSht" & i, True)
+            If matches.Length > 0 Then
+                Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
+                pb.SizeMode = PictureBoxSizeMode.StretchImage
+                Dim image2load As String = Cachename.Substring(0, Cachename.Length-5) & i.ToString & ".jpg"
+                util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
+            End If
+        Next
+        If Not IsNothing(pbEpScrSht0.Image) Then util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
     End Sub
 
     Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox35.Leave
@@ -14334,7 +14344,40 @@ Public Class Form1
 
     Private Sub tv_EpThumbScreenShotSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbScreenShotSave.Click
         Try
-            'TvEpThumbRescrape()
+            Dim aok As Boolean = False
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
+            Dim paths As New List(Of String)
+            If Pref.EdenEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", ".tbn"))
+            If Pref.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
+            Dim cachepathandfilename As String = pbTvEpScrnShot.Tag.ToString
+            aok = True
+            Dim imagearr() As Integer = GetAspect(WorkingEpisode)
+            If Pref.tvscrnshtTVDBResize AndAlso Not imagearr(0) = 0 Then 
+                DownloadCache.CopyAndDownSizeImage(cachepathandfilename, paths(0), imagearr(0), imagearr(1))
+            Else
+                File.Copy(cachepathandfilename, paths(0), True)
+            End If
+
+            If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
+
+            If File.Exists(paths(0)) Then
+                util_ImageLoad(pbTvEpScrnShot, paths(0), Utilities.DefaultTvFanartPath)
+                util_ImageLoad(tv_PictureBoxLeft, paths(0), Utilities.DefaultTvFanartPath)
+                Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
+                If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
+                    Dim episodelist As New List(Of TvEpisode)
+                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
+                    For Each Ep In episodelist
+                        If Ep.Season.Value = WorkingEpisode.Season.Value And Ep.Episode.Value = WorkingEpisode.Episode.value Then
+                            Dim video_flags = GetMultiEpMediaFlags(ep)
+                            movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                        End If
+                    Next
+                Else
+                    Dim video_flags = GetEpMediaFlags()
+                    movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, Rating, video_flags)
+                End If
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -14347,6 +14390,37 @@ Public Class Form1
         util_ImageLoad(pbTvEpScrnShot, pb.Tag, Utilities.DefaultTvFanartPath)
     End Sub
 
+    Private Function epGetThumbScreenShot() As String
+        Try
+            Dim aok As Boolean = False
+            Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
+            If WorkingEpisode.IsMissing Then Return ""
+            If TextBox35.Text = "" Then TextBox35.Text = Pref.ScrShtDelay
+            If IsNumeric(TextBox35.Text) Then
+                Dim paths As New List(Of String)
+                If Pref.EdenEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", ".tbn"))
+                If Pref.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
+                'Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+                Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
+                If IO.File.Exists(tempstring2) Then
+                    Dim seconds As Integer = Pref.ScrShtDelay
+                    If Convert.ToInt32(TextBox35.Text) > 0 Then
+                        seconds = Convert.ToInt32(TextBox35.Text)
+                    End If
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    'messbox.Show()
+                    'messbox.Refresh()
+                    Application.DoEvents()
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
+                    If cachepathandfilename <> "" Then
+                        Return cachepathandfilename
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
 #End Region
 
 #Region "Tv Fanart Form"
