@@ -4321,7 +4321,7 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds)
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
                     If cachepathandfilename <> "" Then
                         aok = True
                         Dim imagearr() As Integer = GetAspect(WorkingEpisode)
@@ -4334,7 +4334,7 @@ Partial Public Class Form1
                         If paths.Count > 1 Then File.Copy(paths(0), paths(1), True)
 
                         If File.Exists(paths(0)) Then
-                            util_ImageLoad(PictureBox14, paths(0), Utilities.DefaultTvFanartPath)
+                            util_ImageLoad(pbTvEpScrnShot, paths(0), Utilities.DefaultTvFanartPath)
                             util_ImageLoad(tv_PictureBoxLeft, paths(0), Utilities.DefaultTvFanartPath)
                             Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value
                             If TestForMultiepisode(WorkingEpisode.NfoFilePath) Then
@@ -4440,7 +4440,7 @@ Partial Public Class Form1
                             Utilities.SafeCopyFile(cachename, tempstring, True)
                         End If
 
-                        util_ImageLoad(PictureBox14, tempstring, Utilities.DefaultTvFanartPath)
+                        util_ImageLoad(pbTvEpScrnShot, tempstring, Utilities.DefaultTvFanartPath)
                         util_ImageLoad(tv_PictureBoxLeft, tempstring, Utilities.DefaultTvFanartPath)
 
                         Dim Rating As String = tb_EpRating.Text  'WorkingEpisode.Rating.Value

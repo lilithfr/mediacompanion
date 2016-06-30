@@ -735,6 +735,12 @@ Public Class Form1
             AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
 
             BckWrkXbmcController.RunWorkerAsync(Me)
+
+            For each pb As PictureBox In TableLayoutPanel6.controls
+                If pb.Name.Contains("pbepscrsht") Then
+                    AddHandler pb.Click, AddressOf pbepscrsht_click
+                End If
+            Next
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5001,10 +5007,10 @@ Public Class Form1
 
     Private Sub GoScreenshotTab(ByRef WorkingEpisode As TvEpisode)
         If Pref.EdenEnabled Then
-            util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
+            util_ImageLoad(pbTvEpScrnShot, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn"), Utilities.DefaultScreenShotPath)
         End If
         If Pref.FrodoEnabled Then
-            util_ImageLoad(PictureBox14, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
+            util_ImageLoad(pbTvEpScrnShot, WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), "-thumb.jpg"), Utilities.DefaultScreenShotPath)
         End If
         If TextBox35.Text = "" Then
             TextBox35.Text = Pref.ScrShtDelay
@@ -14324,6 +14330,21 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub tv_EpThumbScreenShotSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tv_EpThumbScreenShotSave.Click
+        Try
+            'TvEpThumbRescrape()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    'pbEpScrSht0 - pbEpScrSht4
+
+    Private Sub pbepscrsht_click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pb As PictureBox = sender
+        If IsNothing(pb.Image) Then Exit Sub
+        util_ImageLoad(pbTvEpScrnShot, pb.Tag, Utilities.DefaultTvFanartPath)
     End Sub
 
 #End Region

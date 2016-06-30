@@ -265,13 +265,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Loop
         Return input
     End Function
-    Public Shared Function CreateScrnShotToCache(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer) As String
-        Dim cachename As String = GetCRC32(SavePath) & ".jpg"
-        Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename)
-        If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
-            Return CachePath 
-        End If
-        Return ""
+
+    Public Shared Function CreateScrnShotToCache(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal count As Integer = 1, Optional ByVal gap As Integer = 2) As String
+        Dim cachename As String = GetCRC32(SavePath)' & ".jpg"
+        Dim Returnpath As String = ""
+        For i = 0 To count-1
+            Dim cachename2 As String = cachename & "-" & i.tostring & ".jpg"
+            sec = sec + (i * gap)
+            Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename2)
+            If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
+                If i = 0 Then Returnpath = cachepath
+            End If
+        Next
+        'Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename)
+        'If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
+        '    Return CachePath 
+        'End If
+        Return Returnpath  '""
     End Function
 
     Public Shared Function CreateScreenShot(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As Boolean
