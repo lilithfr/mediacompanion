@@ -63,6 +63,11 @@ Public Class ucMusicVideo
 
         AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
         Form1.Ini_Timer(keypresstimer, 1000)
+        For each pb As Control In tPScreenshotMV.Controls
+            If pb.Name.Contains("pbMvScrSht") Then
+                AddHandler pb.Click, AddressOf pbMvScrSht_click
+            End If
+        Next
     End Sub
 
     Private Sub MVPreferencesLoad()
@@ -631,6 +636,87 @@ Public Class ucMusicVideo
     End Function
 
 #End Region             'Common Routines
+
+#Region "MusicVideo Screenshot Tab"
+
+    Private Sub MvScreenshot_Save()
+        Try
+            PcBxMusicVideoScreenShot.Image = Nothing
+            pcBxScreenshot.Image = Nothing
+            Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
+            If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+            Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
+                    
+            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
+            Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
+        Catch
+        End Try
+    End Sub
+
+    'Private Sub MVScreenshot_Load()
+    '    Try
+    '        Dim matches() As Control
+    '        For i = 0 To 4
+    '            matches = Me.Controls.Find("pbMvScrSht" & i, True)
+    '            If matches.Length > 0 Then
+    '                Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
+    '                pb.SizeMode = PictureBoxSizeMode.StretchImage
+    '                Dim image2load As String = Cachename.Substring(0, Cachename.Length-5) & i.ToString & ".jpg"
+    '                Form1.util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
+    '            End If
+    '        Next
+    '        If Not IsNothing(pbMvScrSht0.Image) Then Form1.util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
+    '        PcBxMusicVideoScreenShot.Image = Nothing
+    '        pcBxScreenshot.Image = Nothing
+    '        Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
+    '        If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+    '        Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
+                    
+    '        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
+    '        Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
+    '    Catch
+    '    End Try
+    'End Sub
+
+    'Private Function MvGetScreenShot() As String
+    '    Try
+    '        Dim aok As Boolean = False
+    '        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
+    '        If WorkingEpisode.IsMissing Then Return ""
+    '        If TextBox35.Text = "" Then TextBox35.Text = Pref.ScrShtDelay
+    '        If IsNumeric(TextBox35.Text) Then
+    '            Dim paths As New List(Of String)
+    '            If Pref.EdenEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", ".tbn"))
+    '            If Pref.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
+    '            'Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
+    '            Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
+    '            If IO.File.Exists(tempstring2) Then
+    '                Dim seconds As Integer = Pref.ScrShtDelay
+    '                If Convert.ToInt32(TextBox35.Text) > 0 Then
+    '                    seconds = Convert.ToInt32(TextBox35.Text)
+    '                End If
+    '                System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+    '                'messbox.Show()
+    '                'messbox.Refresh()
+    '                Application.DoEvents()
+    '                Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
+    '                If cachepathandfilename <> "" Then
+    '                    Return cachepathandfilename
+    '                End If
+    '            End If
+    '        End If
+    '    Catch
+    '    End Try
+    '    Return ""
+    'End Function
+
+    Private Sub pbMvScrSht_click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pb As PictureBox = sender
+        If IsNothing(pb.Image) Then Exit Sub
+        Form1.util_ImageLoad(pcBxScreenshot, pb.Tag, Utilities.DefaultTvFanartPath)
+    End Sub
+
+#End Region
 
 #Region "Buttons"  
     
@@ -1689,7 +1775,15 @@ Public Class ucMusicVideo
     Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
         MV_DeleteNfoArtwork()
     End Sub
-    
+
+    Private Sub pbMvScrSht2_Click(sender As Object, e As EventArgs) Handles pbMvScrSht2.Click
+
+    End Sub
+
+    Private Sub txtScreenshotTime_MaskInputRejected(sender As Object, e As MaskInputRejectedEventArgs) Handles txtScreenshotTime.MaskInputRejected
+
+    End Sub
+
 
 #End Region
 

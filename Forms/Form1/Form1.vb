@@ -736,7 +736,7 @@ Public Class Form1
 
             BckWrkXbmcController.RunWorkerAsync(Me)
 
-            For each pb As Control In Me.TableLayoutPanel6.Controls
+            For each pb As Control In TableLayoutPanel6.Controls
                 If pb.Name.Contains("pbEpScrSht") Then
                     AddHandler pb.Click, AddressOf pbepscrsht_click
                 End If

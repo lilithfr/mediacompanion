@@ -84,6 +84,11 @@ Partial Class ucMusicVideo
         Me.Label24 = New System.Windows.Forms.Label()
         Me.btn_MVSortReset = New System.Windows.Forms.Button()
         Me.tPScreenshotMV = New System.Windows.Forms.TabPage()
+        Me.pbMvScrSht4 = New System.Windows.Forms.PictureBox()
+        Me.pbMvScrSht3 = New System.Windows.Forms.PictureBox()
+        Me.pbMvScrSht2 = New System.Windows.Forms.PictureBox()
+        Me.pbMvScrSht1 = New System.Windows.Forms.PictureBox()
+        Me.pbMvScrSht0 = New System.Windows.Forms.PictureBox()
         Me.btnGoogleSearch = New System.Windows.Forms.Button()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
@@ -142,6 +147,7 @@ Partial Class ucMusicVideo
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.TabControlMain.SuspendLayout
         Me.tPMainMV.SuspendLayout
         Me.TableLayoutPanel1.SuspendLayout
@@ -151,6 +157,11 @@ Partial Class ucMusicVideo
         CType(Me.MVDgv1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.CM1MVBrowser.SuspendLayout
         Me.tPScreenshotMV.SuspendLayout
+        CType(Me.pbMvScrSht4,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbMvScrSht3,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbMvScrSht2,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbMvScrSht1,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.pbMvScrSht0,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tPPosterScrape.SuspendLayout
         CType(Me.pcBxSinglePoster,System.ComponentModel.ISupportInitialize).BeginInit
@@ -158,6 +169,7 @@ Partial Class ucMusicVideo
         Me.tPPref.SuspendLayout
         Me.TableLayoutPanel2.SuspendLayout
         Me.GroupBox1.SuspendLayout
+        Me.TableLayoutPanel3.SuspendLayout
         Me.SuspendLayout
         '
         'TabControlMain
@@ -172,7 +184,7 @@ Partial Class ucMusicVideo
         Me.TabControlMain.Location = New System.Drawing.Point(0, 0)
         Me.TabControlMain.Name = "TabControlMain"
         Me.TabControlMain.SelectedIndex = 0
-        Me.TabControlMain.Size = New System.Drawing.Size(975, 604)
+        Me.TabControlMain.Size = New System.Drawing.Size(1030, 600)
         Me.TabControlMain.TabIndex = 0
         Me.TabControlMain.TabStop = false
         '
@@ -185,7 +197,7 @@ Partial Class ucMusicVideo
         Me.tPMainMV.Location = New System.Drawing.Point(4, 24)
         Me.tPMainMV.Name = "tPMainMV"
         Me.tPMainMV.Padding = New System.Windows.Forms.Padding(3)
-        Me.tPMainMV.Size = New System.Drawing.Size(967, 576)
+        Me.tPMainMV.Size = New System.Drawing.Size(1022, 572)
         Me.tPMainMV.TabIndex = 0
         Me.tPMainMV.Text = "Main Browser"
         '
@@ -193,7 +205,7 @@ Partial Class ucMusicVideo
         '
         Me.lblMultiMode.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.lblMultiMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.lblMultiMode.Location = New System.Drawing.Point(345, 100)
+        Me.lblMultiMode.Location = New System.Drawing.Point(340, 75)
         Me.lblMultiMode.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.lblMultiMode.Name = "lblMultiMode"
         Me.lblMultiMode.Size = New System.Drawing.Size(517, 163)
@@ -280,7 +292,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(961, 570)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1016, 566)
         Me.TableLayoutPanel1.TabIndex = 53
         '
         'Panel1
@@ -385,10 +397,10 @@ Partial Class ucMusicVideo
         Me.PcBxPoster.BackColor = System.Drawing.Color.White
         Me.TableLayoutPanel1.SetColumnSpan(Me.PcBxPoster, 2)
         Me.PcBxPoster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PcBxPoster.Location = New System.Drawing.Point(690, 51)
+        Me.PcBxPoster.Location = New System.Drawing.Point(717, 51)
         Me.PcBxPoster.Name = "PcBxPoster"
         Me.TableLayoutPanel1.SetRowSpan(Me.PcBxPoster, 5)
-        Me.PcBxPoster.Size = New System.Drawing.Size(218, 231)
+        Me.PcBxPoster.Size = New System.Drawing.Size(245, 227)
         Me.PcBxPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxPoster.TabIndex = 52
         Me.PcBxPoster.TabStop = false
@@ -400,10 +412,10 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtFullpath, 2)
         Me.txtFullpath.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtFullpath.Location = New System.Drawing.Point(381, 416)
+        Me.txtFullpath.Location = New System.Drawing.Point(381, 412)
         Me.txtFullpath.Name = "txtFullpath"
         Me.txtFullpath.ReadOnly = true
-        Me.txtFullpath.Size = New System.Drawing.Size(203, 26)
+        Me.txtFullpath.Size = New System.Drawing.Size(230, 26)
         Me.txtFullpath.TabIndex = 45
         Me.txtFullpath.TabStop = false
         '
@@ -427,7 +439,7 @@ Partial Class ucMusicVideo
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.btnSave.Image = Global.Media_Companion.My.Resources.Resources.Save
-        Me.btnSave.Location = New System.Drawing.Point(914, 8)
+        Me.btnSave.Location = New System.Drawing.Point(968, 8)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(34, 31)
         Me.btnSave.TabIndex = 9
@@ -440,7 +452,7 @@ Partial Class ucMusicVideo
         Me.Label5.AutoSize = true
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label5.Location = New System.Drawing.Point(306, 378)
+        Me.Label5.Location = New System.Drawing.Point(306, 374)
         Me.Label5.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(69, 27)
@@ -454,12 +466,12 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtPlot, 6)
         Me.txtPlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtPlot.Location = New System.Drawing.Point(381, 457)
+        Me.txtPlot.Location = New System.Drawing.Point(381, 453)
         Me.txtPlot.Multiline = true
         Me.txtPlot.Name = "txtPlot"
         Me.TableLayoutPanel1.SetRowSpan(Me.txtPlot, 2)
         Me.txtPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtPlot.Size = New System.Drawing.Size(527, 104)
+        Me.txtPlot.Size = New System.Drawing.Size(581, 104)
         Me.txtPlot.TabIndex = 8
         '
         'Label3
@@ -467,7 +479,7 @@ Partial Class ucMusicVideo
         Me.Label3.AutoSize = true
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label3.Location = New System.Drawing.Point(335, 460)
+        Me.Label3.Location = New System.Drawing.Point(335, 456)
         Me.Label3.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(40, 49)
@@ -491,7 +503,7 @@ Partial Class ucMusicVideo
         Me.PcBxMusicVideoScreenShot.Location = New System.Drawing.Point(296, 51)
         Me.PcBxMusicVideoScreenShot.Name = "PcBxMusicVideoScreenShot"
         Me.TableLayoutPanel1.SetRowSpan(Me.PcBxMusicVideoScreenShot, 5)
-        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(388, 231)
+        Me.PcBxMusicVideoScreenShot.Size = New System.Drawing.Size(415, 227)
         Me.PcBxMusicVideoScreenShot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PcBxMusicVideoScreenShot.TabIndex = 26
         Me.PcBxMusicVideoScreenShot.TabStop = false
@@ -501,7 +513,7 @@ Partial Class ucMusicVideo
         Me.Label2.AutoSize = true
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label2.Location = New System.Drawing.Point(325, 296)
+        Me.Label2.Location = New System.Drawing.Point(325, 292)
         Me.Label2.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(50, 27)
@@ -513,7 +525,7 @@ Partial Class ucMusicVideo
         Me.Label10.AutoSize = true
         Me.Label10.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label10.Location = New System.Drawing.Point(297, 419)
+        Me.Label10.Location = New System.Drawing.Point(297, 415)
         Me.Label10.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(78, 27)
@@ -527,9 +539,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtArtist, 2)
         Me.txtArtist.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtArtist.Location = New System.Drawing.Point(381, 293)
+        Me.txtArtist.Location = New System.Drawing.Point(381, 289)
         Me.txtArtist.Name = "txtArtist"
-        Me.txtArtist.Size = New System.Drawing.Size(203, 26)
+        Me.txtArtist.Size = New System.Drawing.Size(230, 26)
         Me.txtArtist.TabIndex = 2
         '
         'txtDirector
@@ -539,9 +551,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtDirector, 2)
         Me.txtDirector.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtDirector.Location = New System.Drawing.Point(381, 375)
+        Me.txtDirector.Location = New System.Drawing.Point(381, 371)
         Me.txtDirector.Name = "txtDirector"
-        Me.txtDirector.Size = New System.Drawing.Size(203, 26)
+        Me.txtDirector.Size = New System.Drawing.Size(230, 26)
         Me.txtDirector.TabIndex = 6
         '
         'Label7
@@ -549,7 +561,7 @@ Partial Class ucMusicVideo
         Me.Label7.AutoSize = true
         Me.Label7.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label7.Location = New System.Drawing.Point(328, 337)
+        Me.Label7.Location = New System.Drawing.Point(328, 333)
         Me.Label7.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(47, 27)
@@ -563,9 +575,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtYear, 2)
         Me.txtYear.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtYear.Location = New System.Drawing.Point(381, 334)
+        Me.txtYear.Location = New System.Drawing.Point(381, 330)
         Me.txtYear.Name = "txtYear"
-        Me.txtYear.Size = New System.Drawing.Size(203, 26)
+        Me.txtYear.Size = New System.Drawing.Size(230, 26)
         Me.txtYear.TabIndex = 4
         '
         'Label1
@@ -573,7 +585,7 @@ Partial Class ucMusicVideo
         Me.Label1.AutoSize = true
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label1.Location = New System.Drawing.Point(606, 296)
+        Me.Label1.Location = New System.Drawing.Point(633, 292)
         Me.Label1.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(58, 27)
@@ -587,9 +599,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtAlbum, 3)
         Me.txtAlbum.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtAlbum.Location = New System.Drawing.Point(670, 293)
+        Me.txtAlbum.Location = New System.Drawing.Point(697, 289)
         Me.txtAlbum.Name = "txtAlbum"
-        Me.txtAlbum.Size = New System.Drawing.Size(238, 26)
+        Me.txtAlbum.Size = New System.Drawing.Size(265, 26)
         Me.txtAlbum.TabIndex = 3
         '
         'Label4
@@ -597,7 +609,7 @@ Partial Class ucMusicVideo
         Me.Label4.AutoSize = true
         Me.Label4.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label4.Location = New System.Drawing.Point(605, 337)
+        Me.Label4.Location = New System.Drawing.Point(632, 333)
         Me.Label4.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(59, 27)
@@ -611,9 +623,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtStudio, 3)
         Me.txtStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtStudio.Location = New System.Drawing.Point(670, 334)
+        Me.txtStudio.Location = New System.Drawing.Point(697, 330)
         Me.txtStudio.Name = "txtStudio"
-        Me.txtStudio.Size = New System.Drawing.Size(238, 26)
+        Me.txtStudio.Size = New System.Drawing.Size(265, 26)
         Me.txtStudio.TabIndex = 5
         '
         'Label11
@@ -621,7 +633,7 @@ Partial Class ucMusicVideo
         Me.Label11.AutoSize = true
         Me.Label11.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label11.Location = New System.Drawing.Point(606, 378)
+        Me.Label11.Location = New System.Drawing.Point(633, 374)
         Me.Label11.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(58, 27)
@@ -635,9 +647,9 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtGenre, 3)
         Me.txtGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtGenre.Location = New System.Drawing.Point(670, 375)
+        Me.txtGenre.Location = New System.Drawing.Point(697, 371)
         Me.txtGenre.Name = "txtGenre"
-        Me.txtGenre.Size = New System.Drawing.Size(238, 26)
+        Me.txtGenre.Size = New System.Drawing.Size(265, 26)
         Me.txtGenre.TabIndex = 7
         '
         'Label6
@@ -645,7 +657,7 @@ Partial Class ucMusicVideo
         Me.Label6.AutoSize = true
         Me.Label6.Dock = System.Windows.Forms.DockStyle.Right
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label6.Location = New System.Drawing.Point(591, 419)
+        Me.Label6.Location = New System.Drawing.Point(618, 415)
         Me.Label6.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(73, 27)
@@ -659,7 +671,7 @@ Partial Class ucMusicVideo
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.SetColumnSpan(Me.txtRuntime, 2)
         Me.txtRuntime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.txtRuntime.Location = New System.Drawing.Point(670, 416)
+        Me.txtRuntime.Location = New System.Drawing.Point(697, 412)
         Me.txtRuntime.Name = "txtRuntime"
         Me.txtRuntime.ReadOnly = true
         Me.txtRuntime.Size = New System.Drawing.Size(89, 26)
@@ -671,7 +683,7 @@ Partial Class ucMusicVideo
         Me.btnMVPlay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btnMVPlay.Image = Global.Media_Companion.My.Resources.Resources.Movie
         Me.btnMVPlay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnMVPlay.Location = New System.Drawing.Point(772, 416)
+        Me.btnMVPlay.Location = New System.Drawing.Point(799, 412)
         Me.btnMVPlay.Margin = New System.Windows.Forms.Padding(10, 3, 3, 3)
         Me.btnMVPlay.Name = "btnMVPlay"
         Me.btnMVPlay.Size = New System.Drawing.Size(95, 27)
@@ -710,7 +722,7 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel1.SetRowSpan(Me.MVDgv1, 12)
         Me.MVDgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.MVDgv1.ShowCellErrors = false
-        Me.MVDgv1.Size = New System.Drawing.Size(274, 363)
+        Me.MVDgv1.Size = New System.Drawing.Size(274, 359)
         Me.MVDgv1.StandardTab = true
         Me.MVDgv1.TabIndex = 54
         Me.MVDgv1.TabStop = false
@@ -874,33 +886,78 @@ Partial Class ucMusicVideo
         'tPScreenshotMV
         '
         Me.tPScreenshotMV.BackColor = System.Drawing.Color.LightGray
-        Me.tPScreenshotMV.Controls.Add(Me.btnGoogleSearch)
-        Me.tPScreenshotMV.Controls.Add(Me.Label17)
-        Me.tPScreenshotMV.Controls.Add(Me.Label16)
-        Me.tPScreenshotMV.Controls.Add(Me.Label15)
-        Me.tPScreenshotMV.Controls.Add(Me.Label14)
-        Me.tPScreenshotMV.Controls.Add(Me.btnPasteFromClipboard)
-        Me.tPScreenshotMV.Controls.Add(Me.btnSaveCrop)
-        Me.tPScreenshotMV.Controls.Add(Me.btnCropReset)
-        Me.tPScreenshotMV.Controls.Add(Me.btnCrop)
-        Me.tPScreenshotMV.Controls.Add(Me.txtScreenshotTime)
-        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotMinus)
-        Me.tPScreenshotMV.Controls.Add(Me.btnScreenshotPlus)
-        Me.tPScreenshotMV.Controls.Add(Me.Label12)
-        Me.tPScreenshotMV.Controls.Add(Me.btnCreateScreenshot)
-        Me.tPScreenshotMV.Controls.Add(Me.pcBxScreenshot)
+        Me.tPScreenshotMV.Controls.Add(Me.TableLayoutPanel3)
         Me.tPScreenshotMV.Location = New System.Drawing.Point(4, 24)
         Me.tPScreenshotMV.Name = "tPScreenshotMV"
         Me.tPScreenshotMV.Padding = New System.Windows.Forms.Padding(3)
-        Me.tPScreenshotMV.Size = New System.Drawing.Size(967, 576)
+        Me.tPScreenshotMV.Size = New System.Drawing.Size(1022, 572)
         Me.tPScreenshotMV.TabIndex = 2
         Me.tPScreenshotMV.Text = "Screenshot"
         '
+        'pbMvScrSht4
+        '
+        Me.pbMvScrSht4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pbMvScrSht4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel3.SetColumnSpan(Me.pbMvScrSht4, 2)
+        Me.pbMvScrSht4.Location = New System.Drawing.Point(609, 404)
+        Me.pbMvScrSht4.Name = "pbMvScrSht4"
+        Me.pbMvScrSht4.Size = New System.Drawing.Size(134, 90)
+        Me.pbMvScrSht4.TabIndex = 21
+        Me.pbMvScrSht4.TabStop = false
+        '
+        'pbMvScrSht3
+        '
+        Me.pbMvScrSht3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pbMvScrSht3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.pbMvScrSht3.Location = New System.Drawing.Point(460, 404)
+        Me.pbMvScrSht3.Name = "pbMvScrSht3"
+        Me.pbMvScrSht3.Size = New System.Drawing.Size(134, 90)
+        Me.pbMvScrSht3.TabIndex = 20
+        Me.pbMvScrSht3.TabStop = false
+        '
+        'pbMvScrSht2
+        '
+        Me.pbMvScrSht2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pbMvScrSht2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel3.SetColumnSpan(Me.pbMvScrSht2, 3)
+        Me.pbMvScrSht2.Location = New System.Drawing.Point(303, 404)
+        Me.pbMvScrSht2.Name = "pbMvScrSht2"
+        Me.pbMvScrSht2.Size = New System.Drawing.Size(134, 90)
+        Me.pbMvScrSht2.TabIndex = 19
+        Me.pbMvScrSht2.TabStop = false
+        '
+        'pbMvScrSht1
+        '
+        Me.pbMvScrSht1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pbMvScrSht1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel3.SetColumnSpan(Me.pbMvScrSht1, 4)
+        Me.pbMvScrSht1.Location = New System.Drawing.Point(155, 404)
+        Me.pbMvScrSht1.Name = "pbMvScrSht1"
+        Me.pbMvScrSht1.Size = New System.Drawing.Size(134, 90)
+        Me.pbMvScrSht1.TabIndex = 18
+        Me.pbMvScrSht1.TabStop = false
+        '
+        'pbMvScrSht0
+        '
+        Me.pbMvScrSht0.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pbMvScrSht0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel3.SetColumnSpan(Me.pbMvScrSht0, 2)
+        Me.pbMvScrSht0.Location = New System.Drawing.Point(6, 404)
+        Me.pbMvScrSht0.Name = "pbMvScrSht0"
+        Me.pbMvScrSht0.Size = New System.Drawing.Size(134, 90)
+        Me.pbMvScrSht0.TabIndex = 17
+        Me.pbMvScrSht0.TabStop = false
+        '
         'btnGoogleSearch
         '
-        Me.btnGoogleSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnGoogleSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnGoogleSearch.Location = New System.Drawing.Point(218, 405)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnGoogleSearch, 3)
+        Me.btnGoogleSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnGoogleSearch.Location = New System.Drawing.Point(758, 90)
         Me.btnGoogleSearch.Name = "btnGoogleSearch"
         Me.btnGoogleSearch.Size = New System.Drawing.Size(126, 32)
         Me.btnGoogleSearch.TabIndex = 16
@@ -909,10 +966,11 @@ Partial Class ucMusicVideo
         '
         'Label17
         '
-        Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label17.AutoSize = true
+        Me.TableLayoutPanel3.SetColumnSpan(Me.Label17, 2)
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label17.Location = New System.Drawing.Point(62, 441)
+        Me.Label17.Location = New System.Drawing.Point(833, 51)
+        Me.Label17.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(66, 20)
         Me.Label17.TabIndex = 15
@@ -920,10 +978,11 @@ Partial Class ucMusicVideo
         '
         'Label16
         '
-        Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label16.AutoSize = true
+        Me.TableLayoutPanel3.SetColumnSpan(Me.Label16, 2)
         Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label16.Location = New System.Drawing.Point(62, 408)
+        Me.Label16.Location = New System.Drawing.Point(833, 9)
+        Me.Label16.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(66, 20)
         Me.Label16.TabIndex = 14
@@ -931,10 +990,10 @@ Partial Class ucMusicVideo
         '
         'Label15
         '
-        Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label15.AutoSize = true
         Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label15.Location = New System.Drawing.Point(2, 441)
+        Me.Label15.Location = New System.Drawing.Point(758, 51)
+        Me.Label15.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(60, 20)
         Me.Label15.TabIndex = 13
@@ -942,10 +1001,10 @@ Partial Class ucMusicVideo
         '
         'Label14
         '
-        Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label14.AutoSize = true
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label14.Location = New System.Drawing.Point(2, 408)
+        Me.Label14.Location = New System.Drawing.Point(758, 9)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(54, 20)
         Me.Label14.TabIndex = 12
@@ -953,33 +1012,35 @@ Partial Class ucMusicVideo
         '
         'btnPasteFromClipboard
         '
-        Me.btnPasteFromClipboard.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnPasteFromClipboard.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnPasteFromClipboard.Location = New System.Drawing.Point(350, 405)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnPasteFromClipboard, 3)
+        Me.btnPasteFromClipboard.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnPasteFromClipboard.Location = New System.Drawing.Point(758, 129)
         Me.btnPasteFromClipboard.Name = "btnPasteFromClipboard"
-        Me.btnPasteFromClipboard.Size = New System.Drawing.Size(165, 32)
+        Me.btnPasteFromClipboard.Size = New System.Drawing.Size(143, 49)
         Me.btnPasteFromClipboard.TabIndex = 11
         Me.btnPasteFromClipboard.Text = "Paste from Clipboard"
         Me.btnPasteFromClipboard.UseVisualStyleBackColor = true
         '
         'btnSaveCrop
         '
-        Me.btnSaveCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnSaveCrop.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnSaveCrop, 2)
         Me.btnSaveCrop.Enabled = false
         Me.btnSaveCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnSaveCrop.Location = New System.Drawing.Point(521, 481)
+        Me.btnSaveCrop.Location = New System.Drawing.Point(609, 511)
         Me.btnSaveCrop.Name = "btnSaveCrop"
-        Me.btnSaveCrop.Size = New System.Drawing.Size(131, 32)
+        Me.btnSaveCrop.Size = New System.Drawing.Size(131, 49)
         Me.btnSaveCrop.TabIndex = 10
         Me.btnSaveCrop.Text = "Save Changes"
         Me.btnSaveCrop.UseVisualStyleBackColor = true
         '
         'btnCropReset
         '
-        Me.btnCropReset.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnCropReset, 3)
         Me.btnCropReset.Enabled = false
-        Me.btnCropReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCropReset.Location = New System.Drawing.Point(521, 443)
+        Me.btnCropReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnCropReset.Location = New System.Drawing.Point(758, 232)
         Me.btnCropReset.Name = "btnCropReset"
         Me.btnCropReset.Size = New System.Drawing.Size(131, 32)
         Me.btnCropReset.TabIndex = 9
@@ -988,9 +1049,9 @@ Partial Class ucMusicVideo
         '
         'btnCrop
         '
-        Me.btnCrop.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCrop.Location = New System.Drawing.Point(521, 405)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnCrop, 3)
+        Me.btnCrop.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnCrop.Location = New System.Drawing.Point(758, 192)
         Me.btnCrop.Name = "btnCrop"
         Me.btnCrop.Size = New System.Drawing.Size(131, 32)
         Me.btnCrop.TabIndex = 7
@@ -999,70 +1060,84 @@ Partial Class ucMusicVideo
         '
         'txtScreenshotTime
         '
-        Me.txtScreenshotTime.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.txtScreenshotTime.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.txtScreenshotTime.CausesValidation = false
+        Me.TableLayoutPanel3.SetColumnSpan(Me.txtScreenshotTime, 2)
         Me.txtScreenshotTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.txtScreenshotTime.HidePromptOnLeave = true
-        Me.txtScreenshotTime.Location = New System.Drawing.Point(218, 530)
+        Me.txtScreenshotTime.Location = New System.Drawing.Point(219, 520)
+        Me.txtScreenshotTime.Margin = New System.Windows.Forms.Padding(3, 12, 3, 3)
         Me.txtScreenshotTime.Mask = "00000"
         Me.txtScreenshotTime.Name = "txtScreenshotTime"
-        Me.txtScreenshotTime.Size = New System.Drawing.Size(60, 26)
+        Me.txtScreenshotTime.Size = New System.Drawing.Size(68, 26)
         Me.txtScreenshotTime.TabIndex = 6
+        Me.txtScreenshotTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.txtScreenshotTime.ValidatingType = GetType(Integer)
         '
         'btnScreenshotMinus
         '
-        Me.btnScreenshotMinus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotMinus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.btnScreenshotMinus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnScreenshotMinus.Location = New System.Drawing.Point(177, 523)
+        Me.btnScreenshotMinus.Location = New System.Drawing.Point(178, 511)
         Me.btnScreenshotMinus.Name = "btnScreenshotMinus"
-        Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 36)
+        Me.btnScreenshotMinus.Size = New System.Drawing.Size(35, 49)
         Me.btnScreenshotMinus.TabIndex = 5
         Me.btnScreenshotMinus.Text = "-"
         Me.btnScreenshotMinus.UseVisualStyleBackColor = true
         '
         'btnScreenshotPlus
         '
-        Me.btnScreenshotPlus.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnScreenshotPlus.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnScreenshotPlus, 2)
         Me.btnScreenshotPlus.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnScreenshotPlus.Location = New System.Drawing.Point(284, 523)
+        Me.btnScreenshotPlus.Location = New System.Drawing.Point(295, 511)
         Me.btnScreenshotPlus.Name = "btnScreenshotPlus"
-        Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 36)
+        Me.btnScreenshotPlus.Size = New System.Drawing.Size(35, 49)
         Me.btnScreenshotPlus.TabIndex = 4
         Me.btnScreenshotPlus.Text = "+"
         Me.btnScreenshotPlus.UseVisualStyleBackColor = true
         '
         'Label12
         '
-        Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoSize = true
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label12.Location = New System.Drawing.Point(2, 519)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.Label12, 4)
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 11!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label12.Location = New System.Drawing.Point(6, 514)
+        Me.Label12.Margin = New System.Windows.Forms.Padding(3, 6, 3, 0)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(169, 40)
+        Me.Label12.Size = New System.Drawing.Size(158, 49)
         Me.Label12.TabIndex = 3
         Me.Label12.Text = "Enter Time in Seconds"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for Capture:"
         '
         'btnCreateScreenshot
         '
-        Me.btnCreateScreenshot.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.btnCreateScreenshot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel3.SetColumnSpan(Me.btnCreateScreenshot, 3)
         Me.btnCreateScreenshot.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.btnCreateScreenshot.Location = New System.Drawing.Point(325, 527)
+        Me.btnCreateScreenshot.Location = New System.Drawing.Point(354, 511)
         Me.btnCreateScreenshot.Name = "btnCreateScreenshot"
-        Me.btnCreateScreenshot.Size = New System.Drawing.Size(188, 32)
+        Me.btnCreateScreenshot.Size = New System.Drawing.Size(188, 49)
         Me.btnCreateScreenshot.TabIndex = 2
-        Me.btnCreateScreenshot.Text = "Create New Screenshot"
+        Me.btnCreateScreenshot.Text = "Populate screenshot previews"
         Me.btnCreateScreenshot.UseVisualStyleBackColor = true
         '
         'pcBxScreenshot
         '
-        Me.pcBxScreenshot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.pcBxScreenshot.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.pcBxScreenshot.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel3.SetColumnSpan(Me.pcBxScreenshot, 16)
         Me.pcBxScreenshot.Location = New System.Drawing.Point(6, 6)
         Me.pcBxScreenshot.Name = "pcBxScreenshot"
-        Me.pcBxScreenshot.Size = New System.Drawing.Size(646, 393)
-        Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.TableLayoutPanel3.SetRowSpan(Me.pcBxScreenshot, 11)
+        Me.pcBxScreenshot.Size = New System.Drawing.Size(737, 384)
+        Me.pcBxScreenshot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pcBxScreenshot.TabIndex = 0
         Me.pcBxScreenshot.TabStop = false
         '
@@ -1080,7 +1155,7 @@ Partial Class ucMusicVideo
         Me.tPPosterScrape.Controls.Add(Me.pcBxSinglePoster)
         Me.tPPosterScrape.Location = New System.Drawing.Point(4, 24)
         Me.tPPosterScrape.Name = "tPPosterScrape"
-        Me.tPPosterScrape.Size = New System.Drawing.Size(967, 576)
+        Me.tPPosterScrape.Size = New System.Drawing.Size(1032, 622)
         Me.tPPosterScrape.TabIndex = 4
         Me.tPPosterScrape.Text = "Poster"
         Me.tPPosterScrape.UseVisualStyleBackColor = true
@@ -1206,7 +1281,7 @@ Partial Class ucMusicVideo
         Me.tPMVChange.Controls.Add(Me.WebBrowser1)
         Me.tPMVChange.Location = New System.Drawing.Point(4, 24)
         Me.tPMVChange.Name = "tPMVChange"
-        Me.tPMVChange.Size = New System.Drawing.Size(967, 576)
+        Me.tPMVChange.Size = New System.Drawing.Size(1032, 622)
         Me.tPMVChange.TabIndex = 3
         Me.tPMVChange.Text = "Change MusicVideo/Concert"
         Me.tPMVChange.UseVisualStyleBackColor = true
@@ -1264,7 +1339,7 @@ Partial Class ucMusicVideo
         Me.tPPref.Location = New System.Drawing.Point(4, 24)
         Me.tPPref.Name = "tPPref"
         Me.tPPref.Padding = New System.Windows.Forms.Padding(3)
-        Me.tPPref.Size = New System.Drawing.Size(967, 576)
+        Me.tPPref.Size = New System.Drawing.Size(1032, 622)
         Me.tPPref.TabIndex = 1
         Me.tPPref.Text = "Preferences"
         '
@@ -1319,14 +1394,14 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(961, 570)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(1026, 616)
         Me.TableLayoutPanel2.TabIndex = 8
         '
         'btnRemoveConcertFolder
         '
         Me.btnRemoveConcertFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel2.SetColumnSpan(Me.btnRemoveConcertFolder, 2)
-        Me.btnRemoveConcertFolder.Location = New System.Drawing.Point(639, 462)
+        Me.btnRemoveConcertFolder.Location = New System.Drawing.Point(639, 508)
         Me.btnRemoveConcertFolder.Name = "btnRemoveConcertFolder"
         Me.btnRemoveConcertFolder.Size = New System.Drawing.Size(122, 48)
         Me.btnRemoveConcertFolder.TabIndex = 18
@@ -1336,7 +1411,7 @@ Partial Class ucMusicVideo
         'btnBrowseConcertFolders
         '
         Me.btnBrowseConcertFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnBrowseConcertFolders.Location = New System.Drawing.Point(497, 462)
+        Me.btnBrowseConcertFolders.Location = New System.Drawing.Point(497, 508)
         Me.btnBrowseConcertFolders.Name = "btnBrowseConcertFolders"
         Me.btnBrowseConcertFolders.Size = New System.Drawing.Size(122, 48)
         Me.btnBrowseConcertFolders.TabIndex = 17
@@ -1347,7 +1422,7 @@ Partial Class ucMusicVideo
         '
         Me.TableLayoutPanel2.SetColumnSpan(Me.TextBox1, 2)
         Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox1.Location = New System.Drawing.Point(497, 415)
+        Me.TextBox1.Location = New System.Drawing.Point(497, 461)
         Me.TextBox1.Margin = New System.Windows.Forms.Padding(3, 11, 3, 3)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(316, 21)
@@ -1355,7 +1430,7 @@ Partial Class ucMusicVideo
         '
         'btnAddConcertPath
         '
-        Me.btnAddConcertPath.Location = New System.Drawing.Point(428, 407)
+        Me.btnAddConcertPath.Location = New System.Drawing.Point(428, 453)
         Me.btnAddConcertPath.Name = "btnAddConcertPath"
         Me.btnAddConcertPath.Size = New System.Drawing.Size(56, 35)
         Me.btnAddConcertPath.TabIndex = 15
@@ -1371,7 +1446,7 @@ Partial Class ucMusicVideo
         Me.clbxMVConcertFolder.Location = New System.Drawing.Point(428, 174)
         Me.clbxMVConcertFolder.Name = "clbxMVConcertFolder"
         Me.TableLayoutPanel2.SetRowSpan(Me.clbxMVConcertFolder, 3)
-        Me.clbxMVConcertFolder.Size = New System.Drawing.Size(385, 207)
+        Me.clbxMVConcertFolder.Size = New System.Drawing.Size(385, 253)
         Me.clbxMVConcertFolder.Sorted = true
         Me.clbxMVConcertFolder.TabIndex = 14
         '
@@ -1398,7 +1473,7 @@ Partial Class ucMusicVideo
         Me.clbxMvFolders.Location = New System.Drawing.Point(12, 174)
         Me.clbxMvFolders.Name = "clbxMvFolders"
         Me.TableLayoutPanel2.SetRowSpan(Me.clbxMvFolders, 3)
-        Me.clbxMvFolders.Size = New System.Drawing.Size(393, 207)
+        Me.clbxMvFolders.Size = New System.Drawing.Size(393, 253)
         Me.clbxMvFolders.Sorted = true
         Me.clbxMvFolders.TabIndex = 7
         '
@@ -1406,7 +1481,7 @@ Partial Class ucMusicVideo
         '
         Me.TableLayoutPanel2.SetColumnSpan(Me.tbFolderPath, 3)
         Me.tbFolderPath.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbFolderPath.Location = New System.Drawing.Point(77, 415)
+        Me.tbFolderPath.Location = New System.Drawing.Point(77, 461)
         Me.tbFolderPath.Margin = New System.Windows.Forms.Padding(3, 11, 3, 3)
         Me.tbFolderPath.Name = "tbFolderPath"
         Me.tbFolderPath.Size = New System.Drawing.Size(328, 21)
@@ -1474,7 +1549,7 @@ Partial Class ucMusicVideo
         'btnMVApply
         '
         Me.TableLayoutPanel2.SetColumnSpan(Me.btnMVApply, 2)
-        Me.btnMVApply.Location = New System.Drawing.Point(12, 519)
+        Me.btnMVApply.Location = New System.Drawing.Point(12, 565)
         Me.btnMVApply.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.btnMVApply.Name = "btnMVApply"
         Me.btnMVApply.Size = New System.Drawing.Size(114, 40)
@@ -1530,7 +1605,7 @@ Partial Class ucMusicVideo
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = true
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label8, 3)
-        Me.Label8.Location = New System.Drawing.Point(12, 389)
+        Me.Label8.Location = New System.Drawing.Point(12, 435)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(226, 15)
         Me.Label8.TabIndex = 6
@@ -1538,7 +1613,7 @@ Partial Class ucMusicVideo
         '
         'btnAddFolderPath
         '
-        Me.btnAddFolderPath.Location = New System.Drawing.Point(12, 407)
+        Me.btnAddFolderPath.Location = New System.Drawing.Point(12, 453)
         Me.btnAddFolderPath.Name = "btnAddFolderPath"
         Me.btnAddFolderPath.Size = New System.Drawing.Size(56, 35)
         Me.btnAddFolderPath.TabIndex = 4
@@ -1548,7 +1623,7 @@ Partial Class ucMusicVideo
         'btnBrowseFolders
         '
         Me.btnBrowseFolders.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.btnBrowseFolders.Location = New System.Drawing.Point(77, 462)
+        Me.btnBrowseFolders.Location = New System.Drawing.Point(77, 508)
         Me.btnBrowseFolders.Name = "btnBrowseFolders"
         Me.btnBrowseFolders.Size = New System.Drawing.Size(122, 48)
         Me.btnBrowseFolders.TabIndex = 2
@@ -1559,7 +1634,7 @@ Partial Class ucMusicVideo
         '
         Me.btnRemoveFolder.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel2.SetColumnSpan(Me.btnRemoveFolder, 2)
-        Me.btnRemoveFolder.Location = New System.Drawing.Point(226, 462)
+        Me.btnRemoveFolder.Location = New System.Drawing.Point(226, 508)
         Me.btnRemoveFolder.Name = "btnRemoveFolder"
         Me.btnRemoveFolder.Size = New System.Drawing.Size(122, 48)
         Me.btnRemoveFolder.TabIndex = 5
@@ -1574,7 +1649,7 @@ Partial Class ucMusicVideo
         Me.Button1.Margin = New System.Windows.Forms.Padding(0)
         Me.Button1.Name = "Button1"
         Me.TableLayoutPanel2.SetRowSpan(Me.Button1, 13)
-        Me.Button1.Size = New System.Drawing.Size(17, 570)
+        Me.Button1.Size = New System.Drawing.Size(17, 616)
         Me.Button1.TabIndex = 19
         Me.Button1.UseVisualStyleBackColor = true
         '
@@ -1589,13 +1664,86 @@ Partial Class ucMusicVideo
         Me.Label27.TabIndex = 20
         Me.Label27.Text = resources.GetString("Label27.Text")
         '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TableLayoutPanel3.ColumnCount = 24
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 28!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 98!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 141!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 119!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 22!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 67!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 73!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3!))
+        Me.TableLayoutPanel3.Controls.Add(Me.pcBxScreenshot, 1, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnSaveCrop, 15, 15)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnScreenshotMinus, 5, 15)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label12, 1, 15)
+        Me.TableLayoutPanel3.Controls.Add(Me.pbMvScrSht4, 15, 13)
+        Me.TableLayoutPanel3.Controls.Add(Me.pbMvScrSht0, 1, 13)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label16, 20, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.pbMvScrSht3, 13, 13)
+        Me.TableLayoutPanel3.Controls.Add(Me.pbMvScrSht1, 4, 13)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label14, 18, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.pbMvScrSht2, 9, 13)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label15, 18, 3)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label17, 20, 3)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnGoogleSearch, 18, 5)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnPasteFromClipboard, 18, 6)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnCrop, 18, 8)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnCropReset, 18, 9)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnScreenshotPlus, 8, 15)
+        Me.TableLayoutPanel3.Controls.Add(Me.txtScreenshotTime, 6, 15)
+        Me.TableLayoutPanel3.Controls.Add(Me.btnCreateScreenshot, 11, 15)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(3, 3)
+        Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 17
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 110!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 96!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(1016, 566)
+        Me.TableLayoutPanel3.TabIndex = 22
+        '
         'ucMusicVideo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.TabControlMain)
         Me.Name = "ucMusicVideo"
-        Me.Size = New System.Drawing.Size(975, 604)
+        Me.Size = New System.Drawing.Size(1030, 600)
         Me.TabControlMain.ResumeLayout(false)
         Me.tPMainMV.ResumeLayout(false)
         Me.TableLayoutPanel1.ResumeLayout(false)
@@ -1607,7 +1755,11 @@ Partial Class ucMusicVideo
         CType(Me.MVDgv1,System.ComponentModel.ISupportInitialize).EndInit
         Me.CM1MVBrowser.ResumeLayout(false)
         Me.tPScreenshotMV.ResumeLayout(false)
-        Me.tPScreenshotMV.PerformLayout
+        CType(Me.pbMvScrSht4,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbMvScrSht3,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbMvScrSht2,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbMvScrSht1,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.pbMvScrSht0,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.pcBxScreenshot,System.ComponentModel.ISupportInitialize).EndInit
         Me.tPPosterScrape.ResumeLayout(false)
         Me.tPPosterScrape.PerformLayout
@@ -1619,6 +1771,8 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.PerformLayout
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox1.PerformLayout
+        Me.TableLayoutPanel3.ResumeLayout(false)
+        Me.TableLayoutPanel3.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -1738,4 +1892,10 @@ End Sub
     Friend WithEvents Button1 As Button
     Friend WithEvents Label27 As Label
     Friend WithEvents lblMultiMode As Label
+    Friend WithEvents pbMvScrSht4 As PictureBox
+    Friend WithEvents pbMvScrSht3 As PictureBox
+    Friend WithEvents pbMvScrSht2 As PictureBox
+    Friend WithEvents pbMvScrSht1 As PictureBox
+    Friend WithEvents pbMvScrSht0 As PictureBox
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
 End Class
