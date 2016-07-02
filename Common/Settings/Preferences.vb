@@ -908,10 +908,12 @@ Public Class Pref
         engineend.Clear()
         enginefront.Add("http://www.google.co.uk/search?hl=en-US&as_q=")
         engineend.Add("&as_sitesearch=www.imdb.com")
+        enginefront.Add("https://duckduckgo.com/lite/?q=")
+        engineend.Add("+site%3Aimdb.com&kp=-1&kaf=1&k1=-1&kac=-1&ia=web")
         'enginefront.Add("http://www.bing.com/search?q=")
         'engineend.Add("+movie+site%3Aimdb.com")
-        enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
-        engineend.Add("&qo=serpSearchTopBox")
+        'enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
+        'engineend.Add("&qo=serpSearchTopBox")
     End Sub
     Public Shared Sub ConfigSave()
         
