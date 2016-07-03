@@ -63,7 +63,7 @@ Public Class ucMusicVideo
 
         AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
         Form1.Ini_Timer(keypresstimer, 1000)
-        For each pb As Control In tPScreenshotMV.Controls
+        For each pb As Control In TableLayoutPanel3.Controls
             If pb.Name.Contains("pbMvScrSht") Then
                 AddHandler pb.Click, AddressOf pbMvScrSht_click
             End If
@@ -642,73 +642,57 @@ Public Class ucMusicVideo
     Private Sub MvScreenshot_Save()
         Try
             PcBxMusicVideoScreenShot.Image = Nothing
-            pcBxScreenshot.Image = Nothing
             Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
             If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-            Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
-                    
-            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
-            Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
+            Dim cachepathandfilename As String = pcBxScreenshot.Tag.ToString
+            File.Copy(cachepathandfilename, screenshotpath, True)
+            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, cachepathandfilename, Utilities.DefaultTvFanartPath)
         Catch
         End Try
     End Sub
 
-    'Private Sub MVScreenshot_Load()
-    '    Try
-    '        Dim matches() As Control
-    '        For i = 0 To 4
-    '            matches = Me.Controls.Find("pbMvScrSht" & i, True)
-    '            If matches.Length > 0 Then
-    '                Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
-    '                pb.SizeMode = PictureBoxSizeMode.StretchImage
-    '                Dim image2load As String = Cachename.Substring(0, Cachename.Length-5) & i.ToString & ".jpg"
-    '                Form1.util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
-    '            End If
-    '        Next
-    '        If Not IsNothing(pbMvScrSht0.Image) Then Form1.util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
-    '        PcBxMusicVideoScreenShot.Image = Nothing
-    '        pcBxScreenshot.Image = Nothing
-    '        Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
-    '        If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-    '        Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
-                    
-    '        Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
-    '        Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
-    '    Catch
-    '    End Try
-    'End Sub
+    Private Sub MVScreenshot_Load()
+        Dim Cachename As String = MvGetScreenShot()
+        If Cachename = "" Then
+            MsgBox("Unable to get screenshots from MusicVideo file")
+            Exit Sub
+        End If
+        Try
+            Dim matches() As Control
+            For i = 0 To 4
+                matches = Me.Controls.Find("pbMvScrSht" & i, True)
+                If matches.Length > 0 Then
+                    Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
+                    pb.SizeMode = PictureBoxSizeMode.StretchImage
+                    Dim image2load As String = Cachename.Substring(0, Cachename.Length - 5) & i.ToString & ".jpg"
+                    Form1.util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
+                End If
+            Next
+            If Not IsNothing(pbMvScrSht0.Image) Then Form1.util_ImageLoad(pcBxScreenshot, pbMvScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
+        Catch
+        End Try
+    End Sub
 
-    'Private Function MvGetScreenShot() As String
-    '    Try
-    '        Dim aok As Boolean = False
-    '        Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
-    '        If WorkingEpisode.IsMissing Then Return ""
-    '        If TextBox35.Text = "" Then TextBox35.Text = Pref.ScrShtDelay
-    '        If IsNumeric(TextBox35.Text) Then
-    '            Dim paths As New List(Of String)
-    '            If Pref.EdenEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", ".tbn"))
-    '            If Pref.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
-    '            'Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-    '            Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
-    '            If IO.File.Exists(tempstring2) Then
-    '                Dim seconds As Integer = Pref.ScrShtDelay
-    '                If Convert.ToInt32(TextBox35.Text) > 0 Then
-    '                    seconds = Convert.ToInt32(TextBox35.Text)
-    '                End If
-    '                System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-    '                'messbox.Show()
-    '                'messbox.Refresh()
-    '                Application.DoEvents()
-    '                Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
-    '                If cachepathandfilename <> "" Then
-    '                    Return cachepathandfilename
-    '                End If
-    '            End If
-    '        End If
-    '    Catch
-    '    End Try
-    '    Return ""
-    'End Function
+    Private Function MvGetScreenShot() As String
+        Try
+            If txtScreenshotTime.Text = "" OrElse Convert.ToInt32(txtScreenshotTime.Text) < 1 Then txtScreenshotTime.Text = Pref.MVPrefScrnSht.ToString
+            If IsNumeric(txtScreenshotTime.Text) Then
+                Dim path As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim tempstring2 As String = workingMusicVideo.fileinfo.filenameandpath
+                If IO.File.Exists(tempstring2) Then
+                    Dim seconds = Convert.ToInt32(txtScreenshotTime.Text)
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    Application.DoEvents()
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, path, seconds, 5, 10)
+                    If cachepathandfilename <> "" Then
+                        Return cachepathandfilename
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
 
     Private Sub pbMvScrSht_click(ByVal sender As Object, ByVal e As EventArgs)
         Dim pb As PictureBox = sender
@@ -843,17 +827,7 @@ Public Class ucMusicVideo
 #Region "ScreenShot Tab"
 
     Private Sub btnCreateScreenshot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCreateScreenshot.Click
-        Try
-            PcBxMusicVideoScreenShot.Image = Nothing
-            pcBxScreenshot.Image = Nothing
-            Dim screenshotpath As String = workingMusicVideo.fileinfo.fanartpath
-            If screenshotpath = "" Then screenshotpath = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
-            Utilities.CreateScreenShot(workingMusicVideo.fileinfo.filenameandpath, screenshotpath, txtScreenshotTime.Text.ToInt, True)
-                    
-            Form1.util_ImageLoad(PcBxMusicVideoScreenShot, screenshotpath, Utilities.DefaultTvFanartPath)
-            Form1.util_ImageLoad(pcBxScreenshot, screenshotpath, Utilities.DefaultTvFanartPath)
-        Catch
-        End Try
+        MVScreenshot_Load()
     End Sub
     
     Private Sub btnScreenshotMinus_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScreenshotMinus.Click
@@ -931,6 +905,31 @@ Public Class ucMusicVideo
 
     Private Sub btnGoogleSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnGoogleSearch.Click, btnGoogleSearchPoster.Click
         Call googleSearch()
+    End Sub
+
+    Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtScreenshotTime.KeyPress
+        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
+            If txtScreenshotTime.Text <> "" AndAlso Convert.ToInt32(txtScreenshotTime.Text) > 0 Then
+                MVScreenshot_Load()
+            End If
+        End If
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtScreenshotTime.Leave
+        If txtScreenshotTime.Text = "" Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            txtScreenshotTime.Focus()
+        ElseIf Convert.ToInt32(txtScreenshotTime.Text) = 0 Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            txtScreenshotTime.Focus()
+        End If
+    End Sub
+
+    Private Sub btnMvSaveScreenShot_Click(sender As Object, e As EventArgs) Handles btnMvSaveScreenShot.Click
+        MvScreenshot_Save()
     End Sub
     
 #End Region         'ScreenShot Tab
@@ -1775,16 +1774,7 @@ Public Class ucMusicVideo
     Private Sub tsmiMVDelNfoArt_Click(sender As Object, e As EventArgs) Handles tsmiMVDelNfoArt.Click
         MV_DeleteNfoArtwork()
     End Sub
-
-    Private Sub pbMvScrSht2_Click(sender As Object, e As EventArgs) Handles pbMvScrSht2.Click
-
-    End Sub
-
-    Private Sub txtScreenshotTime_MaskInputRejected(sender As Object, e As MaskInputRejectedEventArgs) Handles txtScreenshotTime.MaskInputRejected
-
-    End Sub
-
-
+    
 #End Region
 
 #Region "garbage"
