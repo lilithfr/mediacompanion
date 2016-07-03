@@ -180,7 +180,7 @@ Public Class ucGenPref_XbmcLink
         tbDialogue.Clear
 
 
-        Dim ParentForm                                 As Form1   = Me.Parent.Parent.Parent.Parent.Parent 
+        Dim ParentForm                                 As Form1   = Media_Companion.Form1
         Dim PreFrodoPosterOnlyCount                    As Integer = ParentForm.oMovies.PreFrodoPosterOnlyCount
         Dim MovieFoldersConfigured                     As Boolean = (Pref.XBMC_MC_MovieFolderMappings.Items.Count>0)
 
