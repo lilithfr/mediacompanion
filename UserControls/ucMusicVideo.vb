@@ -907,7 +907,7 @@ Public Class ucMusicVideo
         Call googleSearch()
     End Sub
 
-    Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtScreenshotTime.KeyPress
+    Private Sub txtScreenshotTime_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtScreenshotTime.KeyPress
         If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
             If txtScreenshotTime.Text <> "" AndAlso Convert.ToInt32(txtScreenshotTime.Text) > 0 Then
                 MVScreenshot_Load()
@@ -918,7 +918,7 @@ Public Class ucMusicVideo
         End If
     End Sub
 
-    Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtScreenshotTime.Leave
+    Private Sub txtScreenshotTime_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtScreenshotTime.Leave
         If txtScreenshotTime.Text = "" Then
             MsgBox("Please enter a numerical value >0 into the textbox")
             txtScreenshotTime.Focus()

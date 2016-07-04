@@ -741,6 +741,12 @@ Public Class Form1
                     AddHandler pb.Click, AddressOf pbepscrsht_click
                 End If
             Next
+
+            For each pb As Control In TableLayoutPanel27.Controls
+                If pb.Name.Contains("pbHmScrSht") Then
+                    AddHandler pb.Click, AddressOf pbHmScrSht_click
+                End If
+            Next 
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -16192,55 +16198,95 @@ Public Class Form1
 #Region "Home fanart"
 
     Private Sub btn_HmFanartShot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HmFanartShot.Click
-        Try
-            If IsNumeric(tb_HmFanartTime.Text) Then
-                Dim thumbpathandfilename As String = WorkingHomeMovie.fileinfo.fanartpath
-                Dim pathandfilename As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "")
-                messbox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
-                Dim aok As Boolean = False
-                For Each ext In Utilities.VideoExtensions
-                    Dim tempstring2 As String = pathandfilename & ext
-                    If IO.File.Exists(tempstring2) Then
-                        pathandfilename = tempstring2
-                        aok = True
-                        Exit For
-                    End If
-                Next
-                If aok Then
-                    Dim seconds As Integer = 10
-                    If Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
-                        seconds = Convert.ToInt32(tb_HmFanartTime.Text)
-                    End If
-                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                    messbox.Show()
-                    messbox.Refresh()
-                    Application.DoEvents()
-                    aok = Utilities.CreateScreenShot(pathandfilename, thumbpathandfilename, seconds, True)
-                    messbox.Close()
-                    If aok AndAlso File.Exists(thumbpathandfilename) Then
-                        Try
-                            util_ImageLoad(pbx_HmFanartSht, thumbpathandfilename, Utilities.DefaultFanartPath)
-                            util_ImageLoad(pbx_HmFanart, thumbpathandfilename, Utilities.DefaultFanartPath)
-                        Catch
-                        End Try
-                    Else
-                        MsgBox("Failed to get ScreenShot")
-                    End If
-                Else
-                    If Not IsNothing(messbox) Then messbox.Close()
-                    MsgBox("Failed to find Video file.")
-                End If
-            Else
-                MsgBox("Please enter a numerical value into the textbox")
-                tb_HmFanartTime.Focus()
-                Exit Sub
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        Finally
-            If Not IsNothing(messbox) Then messbox.Close()
-        End Try
+        HmScreenshot_Save()
+    End Sub
 
+    Private Sub tb_HmFanartTime_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_HmFanartTime.KeyPress
+        If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
+            If tb_HmFanartTime.Text <> "" AndAlso Convert.ToInt32(tb_HmFanartTime.Text) > 0 Then
+                HmScreenshot_Load()
+            End If
+        End If
+        If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tb_HmFanartTime_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_HmFanartTime.Leave
+        If tb_HmFanartTime.Text = "" Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            tb_HmFanartTime.Focus()
+        ElseIf Convert.ToInt32(tb_HmFanartTime.Text) = 0 Then
+            MsgBox("Please enter a numerical value >0 into the textbox")
+            tb_HmFanartTime.Focus()
+        End If
+    End Sub
+
+    Private Sub btn_HmFanartGet_Click(sender As Object, e As EventArgs) Handles btn_HmFanartGet.Click
+        HmScreenshot_Load()
+    End Sub
+
+    Private Sub HmScreenshot_Save()
+        Try
+            pbx_HmFanart.Image = Nothing
+            Dim screenshotpath As String = WorkingHomeMovie.fileinfo.fanartpath
+            If screenshotpath = "" Then screenshotpath = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+            Dim cachepathandfilename As String = pbx_HmFanartSht.Tag.ToString
+            File.Copy(cachepathandfilename, screenshotpath, True)
+            util_ImageLoad(pbx_HmFanart, cachepathandfilename, Utilities.DefaultTvFanartPath)
+            Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
+            movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
+        Catch
+        End Try
+    End Sub
+
+    Private Sub HmScreenshot_Load()
+        Dim Cachename As String = HmGetScreenShot()
+        If Cachename = "" Then
+            MsgBox("Unable to get screenshots from HomeVideo file")
+            Exit Sub
+        End If
+        Try
+            Dim matches() As Control
+            For i = 0 To 4
+                matches = Me.Controls.Find("pbHmScrSht" & i, True)
+                If matches.Length > 0 Then
+                    Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
+                    pb.SizeMode = PictureBoxSizeMode.StretchImage
+                    Dim image2load As String = Cachename.Substring(0, Cachename.Length - 5) & i.ToString & ".jpg"
+                    Form1.util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
+                End If
+            Next
+            If Not IsNothing(pbHmScrSht0.Image) Then Form1.util_ImageLoad(pbx_HmFanartSht, pbHmScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
+        Catch
+        End Try
+    End Sub
+
+    Private Function HmGetScreenShot() As String
+        Try
+            If tb_HmFanartTime.Text = "" OrElse Convert.ToInt32(tb_HmFanartTime.Text) < 1 Then tb_HmFanartTime.Text = Pref.HmFanartTime.ToString
+            If IsNumeric(tb_HmFanartTime.Text) Then
+                Dim path As String = WorkingHomeMovie.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
+                Dim tempstring2 As String = WorkingHomeMovie.fileinfo.filenameandpath
+                If IO.File.Exists(tempstring2) Then
+                    Dim seconds = Convert.ToInt32(tb_HmFanartTime.Text)
+                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                    Application.DoEvents()
+                    Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, path, seconds, 5, 10)
+                    If cachepathandfilename <> "" Then
+                        Return cachepathandfilename
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
+
+    Private Sub pbHmScrSht_click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pb As PictureBox = sender
+        If IsNothing(pb.Image) Then Exit Sub
+        Form1.util_ImageLoad(pbx_HmFanartSht, pb.Tag, Utilities.DefaultTvFanartPath)
     End Sub
 
 #End Region   
