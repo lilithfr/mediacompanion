@@ -1993,9 +1993,8 @@ Public Class Pref
         Dim lst = New List(Of String)
         Dim path As String = FullPath
         Dim isroot As Boolean = Pref.GetRootFolderCheck(FullPath)
-        Dim posterjpg As Boolean = Pref.posterjpg
 
-        If (posterjpg Or Pref.basicsavemode) AndAlso Not isroot Then
+        If (Pref.posterjpg Or Pref.basicsavemode) AndAlso Not isroot Then
             If videots <> "" Then
                 If Pref.EdenEnabled Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
@@ -2006,19 +2005,16 @@ Public Class Pref
                     lst.Add(path)
                 End If
             Else
-                If posterjpg And Pref.FrodoEnabled Then
+                If (Pref.posterjpg Or Pref.basicsavemode) AndAlso Pref.FrodoEnabled Then
                     path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
                     lst.Add(path)
-                End If
-                If Pref.basicsavemode Then
-                    'path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                    'lst.Add(path)
                 End If
                 If Pref.createfolderjpg Then
                     path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
                     lst.Add(path)
                 End If
-                If Pref.EdenEnabled Or Pref.basicsavemode Then
+                If (Pref.EdenEnabled AndAlso Not Pref.basicsavemode) OrElse (Pref.basicsavemode AndAlso Not Pref.FrodoEnabled) Then
+                'If Pref.EdenEnabled Or (Pref.basicsavemode AndAlso Not Pref.FrodoEnabled) Then
                     path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
                     lst.Add(path)
                 End If

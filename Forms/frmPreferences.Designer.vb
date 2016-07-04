@@ -215,6 +215,7 @@ Partial Class frmPreferences
         Me.lb_IMDBMirrors = New System.Windows.Forms.ListBox()
         Me.gpbxPrefScraperImages = New System.Windows.Forms.GroupBox()
         Me.GroupBox44 = New System.Windows.Forms.GroupBox()
+        Me.cbTagRes = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.tb_MovTagBlacklist = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -481,7 +482,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbTagRes = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -800,9 +800,10 @@ Partial Class frmPreferences
         Me.cbMovieBasicSave.Location = New System.Drawing.Point(7, 80)
         Me.cbMovieBasicSave.Margin = New System.Windows.Forms.Padding(4)
         Me.cbMovieBasicSave.Name = "cbMovieBasicSave"
-        Me.cbMovieBasicSave.Size = New System.Drawing.Size(301, 19)
+        Me.cbMovieBasicSave.Size = New System.Drawing.Size(304, 34)
         Me.cbMovieBasicSave.TabIndex = 46
-        Me.cbMovieBasicSave.Text = "Save files as ""movie.nfo"", ""movie.tbn"", && ""fanart.jpg"""
+        Me.cbMovieBasicSave.Text = "Save files as ""movie.nfo"", ""fanart.jpg"", &&"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"""movie.tbn"" if Eden, or ""poster.jpg"""& _ 
+    " if Frodo onwards"
         Me.ToolTip1.SetToolTip(Me.cbMovieBasicSave, resources.GetString("cbMovieBasicSave.ToolTip"))
         Me.cbMovieBasicSave.UseVisualStyleBackColor = true
         '
@@ -2704,6 +2705,16 @@ Partial Class frmPreferences
         Me.GroupBox44.TabStop = false
         Me.GroupBox44.Text = "Keywords As Tags"
         '
+        'cbTagRes
+        '
+        Me.cbTagRes.AutoSize = true
+        Me.cbTagRes.Location = New System.Drawing.Point(11, 72)
+        Me.cbTagRes.Name = "cbTagRes"
+        Me.cbTagRes.Size = New System.Drawing.Size(172, 19)
+        Me.cbTagRes.TabIndex = 71
+        Me.cbTagRes.Text = "Store Resolution as 1st tag"
+        Me.cbTagRes.UseVisualStyleBackColor = true
+        '
         'Label9
         '
         Me.Label9.AutoSize = true
@@ -2757,7 +2768,7 @@ Partial Class frmPreferences
         Me.gbMovieBasicSave.Controls.Add(Me.Label109)
         Me.gbMovieBasicSave.Location = New System.Drawing.Point(6, 356)
         Me.gbMovieBasicSave.Name = "gbMovieBasicSave"
-        Me.gbMovieBasicSave.Size = New System.Drawing.Size(331, 106)
+        Me.gbMovieBasicSave.Size = New System.Drawing.Size(331, 131)
         Me.gbMovieBasicSave.TabIndex = 83
         Me.gbMovieBasicSave.TabStop = false
         Me.gbMovieBasicSave.Text = "Basic Save Mode"
@@ -5758,16 +5769,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbTagRes
-        '
-        Me.cbTagRes.AutoSize = true
-        Me.cbTagRes.Location = New System.Drawing.Point(11, 72)
-        Me.cbTagRes.Name = "cbTagRes"
-        Me.cbTagRes.Size = New System.Drawing.Size(172, 19)
-        Me.cbTagRes.TabIndex = 71
-        Me.cbTagRes.Text = "Store Resolution as 1st tag"
-        Me.cbTagRes.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
