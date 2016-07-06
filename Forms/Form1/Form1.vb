@@ -239,7 +239,7 @@ Public Class Form1
     Public singleshow As Boolean = False
     Public showslist As Object
     Public DGVMoviesColName As String = ""
-    Dim killMC As Boolean = False
+    Dim CloseMC As Boolean = False
     Public Imageloading As Boolean = False
     Dim MoviesFiltersResizeCalled As Boolean = False
 
@@ -768,7 +768,6 @@ Public Class Form1
 #End If
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles MyBase.FormClosed
-        If killMC Then Exit Sub
         Try
             Me.Dispose()
             Me.Finalize()
@@ -788,9 +787,7 @@ Public Class Form1
         While BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
-
-        If killMC Then Exit Sub
-
+        
         Try
             oMovies.SaveCaches()
 
@@ -1433,11 +1430,13 @@ Public Class Form1
                     Do Until Not BckWrkCheckNewVersion.IsBusy
                         Application.DoEvents()
                     Loop
-                    If killMC AndAlso Pref.CloseMCForDLNewVersion Then
+                    If CloseMC AndAlso Pref.CloseMCForDLNewVersion Then
                         frmSplash.Close()
                         Process.GetCurrentProcess.Kill()
                         Application.Exit()
                         Me.Close()
+                    Else
+                        CloseMC = False
                     End If
                 End If
                 Me.util_ConfigLoad()
@@ -9991,11 +9990,15 @@ Public Class Form1
     
     'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
     Public Sub OpenUrl(ByVal url As String)
+        'Dim testprocess As New Process
+        'testprocess.Start("notepad.exe")
         Try
             If Pref.selectedBrowser <> "" Then
+                'testprocess.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
                 Process.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
             Else
                 Try
+                    'testprocess.Start(url)
                     Process.Start(url)
                 Catch ex As Exception
                     MessageBox.Show("An error occurred while trying to launch the default browser - Under 'General Preferences' check 'Use external Browser...' and then locate your browser to fix this error", "", MessageBoxButtons.OK)
@@ -10004,6 +10007,8 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+        'testprocess.Close()
+        'testprocess.Dispose()
     End Sub
 
     Private Sub ZoomActorPictureBox(pictureBox As PictureBox)
@@ -16965,7 +16970,7 @@ Public Class Form1
         Dim answer = MsgBox("Would you like to download the new version?", MsgBoxStyle.YesNo, "New version " & Results.NewVersion & " available")
 
         If answer = MsgBoxResult.Yes Then
-            killMC = True
+            CloseMC = True
             OpenUrl(HOME_PAGE)
         End If
     End Sub
