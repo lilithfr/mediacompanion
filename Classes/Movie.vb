@@ -1857,11 +1857,12 @@ Public Class Movie
         Try
             ReportProgress("HD Tags")
             sm.FileDetails = Pref.Get_HdTags(mediapathandfilename)
-            ReportProgress(MSG_OK,"HD Tags Added OK" & vbCrLf)
             AssignRuntime(sm)
+            ReportProgress(MSG_OK,"HD Tags Added OK" & vbCrLf)
             Return True
         Catch ex As Exception
             ReportProgress(MSG_ERROR,"!!! Error getting HD Tags:- " & ex.Message.ToString & vbCrLf)
+            sm.filedetails = New FullFileDetails
             Return False
         End Try
     End Function
