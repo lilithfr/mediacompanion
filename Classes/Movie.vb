@@ -1962,6 +1962,13 @@ Public Class Movie
 
         If Not Rescrape Then DeletePoster()
 
+        If Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(ActualNfoPathAndFilename.Replace(".nfo", ".jpg")) Then
+            Dim oldnameandpath As String = NfoPathAndFilename.Replace(".nfo", ".jpg")
+            Dim newname As String = NfoPathAndFilename.Replace(NfoPath, "").Replace(".nfo", "-poster.jpg")
+            My.Computer.FileSystem.RenameFile(oldnameandpath, newname)
+        End If
+
+
         If Not Pref.overwritethumbs Then
             Dim lst As New List(Of String)
             For Each filepath In paths
@@ -2799,6 +2806,11 @@ Public Class Movie
                         log &= "Renamed '" & anciliaryFile & "' File" & vbCrLf
                     End If
                 Next
+
+                'Special check if user has <moviename>.jpg as custom poster
+                If Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(subName1 & ".jpg") Then
+                    File.Move(subName1 & ".jpg", targetMovieFile & ".jpg")  'keep as jpg so it doesn't get deleted on DeletePosters call.
+                End If
 
                 'and trailers
                 For each anciliarytrailer As String In Utilities.acceptedtrailernaming

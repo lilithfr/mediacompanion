@@ -482,6 +482,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbMovCustPosterjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -3001,7 +3002,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3142,7 +3143,7 @@ Partial Class frmPreferences
         Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityDown)
         Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityUp)
         Me.GroupBox10.Controls.Add(Me.lbPosterSourcePriorities)
-        Me.GroupBox10.Location = New System.Drawing.Point(9, 298)
+        Me.GroupBox10.Location = New System.Drawing.Point(9, 333)
         Me.GroupBox10.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox10.Name = "GroupBox10"
         Me.GroupBox10.Padding = New System.Windows.Forms.Padding(4)
@@ -3225,6 +3226,7 @@ Partial Class frmPreferences
         '
         'GroupBox37
         '
+        Me.GroupBox37.Controls.Add(Me.cbMovCustPosterjpgNoDelete)
         Me.GroupBox37.Controls.Add(Me.cbMovCustFolderjpgNoDelete)
         Me.GroupBox37.Controls.Add(Me.cbMovFanartNaming)
         Me.GroupBox37.Controls.Add(Me.btnMovFanartTvSelect)
@@ -3236,14 +3238,14 @@ Partial Class frmPreferences
         Me.GroupBox37.Controls.Add(Me.cbMoviePosterScrape)
         Me.GroupBox37.Location = New System.Drawing.Point(9, 13)
         Me.GroupBox37.Name = "GroupBox37"
-        Me.GroupBox37.Size = New System.Drawing.Size(327, 278)
+        Me.GroupBox37.Size = New System.Drawing.Size(327, 313)
         Me.GroupBox37.TabIndex = 60
         Me.GroupBox37.TabStop = false
         Me.GroupBox37.Text = "Autoscrape artwork"
         '
         'cbMovCustFolderjpgNoDelete
         '
-        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 236)
+        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 228)
         Me.cbMovCustFolderjpgNoDelete.Name = "cbMovCustFolderjpgNoDelete"
         Me.cbMovCustFolderjpgNoDelete.Size = New System.Drawing.Size(295, 36)
         Me.cbMovCustFolderjpgNoDelete.TabIndex = 49
@@ -5770,6 +5772,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbMovCustPosterjpgNoDelete
+        '
+        Me.cbMovCustPosterjpgNoDelete.Location = New System.Drawing.Point(5, 270)
+        Me.cbMovCustPosterjpgNoDelete.Name = "cbMovCustPosterjpgNoDelete"
+        Me.cbMovCustPosterjpgNoDelete.Size = New System.Drawing.Size(300, 35)
+        Me.cbMovCustPosterjpgNoDelete.TabIndex = 50
+        Me.cbMovCustPosterjpgNoDelete.Text = "I use <moviename>.jpg as Poster, use and rename as Kodi poster."
+        Me.cbMovCustPosterjpgNoDelete.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6398,4 +6409,5 @@ End Sub
     Friend WithEvents Label24 As Label
     Friend WithEvents cmbxTvMaxGenres As ComboBox
     Friend WithEvents cbTagRes As CheckBox
+    Friend WithEvents cbMovCustPosterjpgNoDelete As CheckBox
 End Class

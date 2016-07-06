@@ -218,6 +218,7 @@ Public Class Pref
     Public Shared dlxtrafanart As Boolean
     Public Shared dlMovSetArtwork As Boolean
     Public Shared MovCustFolderjpgNoDelete As Boolean
+    Public Shared MovCustPosterjpgNoDelete As Boolean
     Public Shared MovSetArtSetFolder As Boolean
     Public Shared MovSetArtCentralFolder As String
     Public Shared allfolders As Boolean
@@ -664,6 +665,7 @@ Public Class Pref
         dlxtrafanart = False
         dlMovSetArtwork = False
         MovCustFolderjpgNoDelete = False
+        MovCustPosterjpgNoDelete = False
         MovSetArtSetFolder = False
         MovSetArtCentralFolder = ""
         allfolders = False
@@ -1117,6 +1119,7 @@ Public Class Pref
         root.AppendChild(doc, "dlxtrafanart",                       dlxtrafanart)                       'cbDlXtraFanart
         root.AppendChild(doc, "dlMovSetArtwork",                    dlMovSetArtwork)                    'cbMovSetArtScrape
         root.AppendChild(doc, "MovCustFolderjpgNoDelete",           MovCustFolderjpgNoDelete)           'cbMovCustFolderjpgNoDelete
+        root.AppendChild(doc, "MovCustPosterjpgNoDelete",           MovCustPosterjpgNoDelete)           'cbMovCustPosterjpgNoDelete
         root.AppendChild(doc, "MovSetArtSetFolder",                 MovSetArtSetFolder)                 'rbMovSetFolder
         root.AppendChild(doc, "MovSetArtCentralFolder",             MovSetArtCentralFolder)             'tbMovSetArtCentralFolder
         root.AppendChild(doc, "allfolders",                         allfolders)                         'chkbx_MovieAllFolders
@@ -1570,6 +1573,7 @@ Public Class Pref
                     Case "dlxtrafanart"                         : dlxtrafanart = thisresult.InnerXml
                     Case "dlMovSetArtwork"                      : dlMovSetArtwork = thisresult.InnerXml
                     Case "MovCustFolderjpgNoDelete"             : MovCustFolderjpgNoDelete = thisresult.InnerXml
+                    Case "MovCustPosterjpgNoDelete"             : MovCustPosterjpgNoDelete = thisresult.InnerXml
                     Case "MovSetArtSetFolder"                   : MovSetArtSetFolder = thisresult.InnerXml 
                     Case "MovSetArtCentralFolder"               : MovSetArtCentralFolder = thisresult.InnerText  
                     Case "dlTVxtrafanart"                       : dlTVxtrafanart = thisresult.InnerXml
