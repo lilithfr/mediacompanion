@@ -162,6 +162,8 @@ Public Class Pref
     Public Shared font As String
     Public Shared MultiMonitoEnabled As Boolean
     Public Shared ShowAllAudioTracks As Boolean
+    Public Shared DisplayDefaultSubtitleLang As Boolean
+    Public Shared DisplayAllSubtitleLang As Boolean
     'Private Shared _MkvMergeGuiPath As String
     Public Shared MkvMergeGuiPath As String
 
@@ -606,6 +608,8 @@ Public Class Pref
         DisplayMediaInfoFolderSize = False
         EnableFolderSize = False
         ShowAllAudioTracks = False
+        DisplayDefaultSubtitleLang = True
+        DisplayAllSubtitleLang = False
         incmissingmovies = False
         startupCache = True
         rarsize = 8
@@ -1038,39 +1042,41 @@ Public Class Pref
         root.AppendChild(child)
         
         'General Prefs ------------------------------------------------------------
-        root.AppendChild(doc, "startupcache"            , startupCache          ) 'chkbx_disablecache
-        root.AppendChild(doc, "renamenfofiles"          , renamenfofiles        ) 'CheckBoxRenameNFOtoINFO
-        root.AppendChild(doc, "actorseasy"              , actorseasy            ) 'CheckBox33
-        root.AppendChild(doc, "rarsize"                 , rarsize               ) 'txtbx_minrarsize
-        root.AppendChild(doc, "overwritethumbs"         , overwritethumbs       )'cbOverwriteArtwork - does not appear to be used?
-        root.AppendChild(doc, "LocalActorImage"         , LocalActorImage       ) 'cbDisplayLocalActor
-        root.AppendChild(doc, "videomode"               , videomode             ) 'RadioButton36-38
-        root.AppendChild(doc, "selectedvideoplayer"     , selectedvideoplayer   )'btn_custommediaplayer
-        root.AppendChild(doc, "externalbrowser"         , externalbrowser       ) 'CheckBox12
-        root.AppendChild(doc, "selectedBrowser"         , selectedBrowser       ) 'btnFindBrowser
-        root.AppendChild(doc, "altnfoeditor"            , altnfoeditor          ) 'btnaltnfoeditor
-        root.AppendChild(doc, "ignorearticle"           , ignorearticle         ) 'cb_IgnoreThe
-        root.AppendChild(doc, "ignoreAarticle"          , ignoreAarticle        ) 'cb_IgnoreA
-        root.AppendChild(doc, "ignoreAn"                , ignoreAn              ) 'cb_IgnoreAn
-        root.AppendChild(doc, "sorttitleignorearticle"  , sorttitleignorearticle) 'cb_SorttitleIgnoreArticles
-        root.AppendChild(doc, "MovSetTitleIgnArticle"   , MovSetTitleIgnArticle ) 'cb_MovSetTitleIgnArticle
-        root.AppendChild(doc, "MovPosterTabTMDBSelect"  , MovPosterTabTMDBSelect) 'cb_MovPosterTabTMDBSelect
-        root.AppendChild(doc, "intruntime"              , intruntime            ) 'CheckBox38
-        root.AppendChild(doc, "xbmcartwork"             , XBMC_version          ) 'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
-        root.AppendChild(doc, "ShowMovieGridToolTip"    , ShowMovieGridToolTip  ) 'cbShowMovieGridToolTip
-        root.AppendChild(doc, "ShowLogOnError"          , ShowLogOnError        ) 'cbShowLogOnError
-        root.AppendChild(doc, "CheckForNewVersion"      , CheckForNewVersion    )
-        root.AppendChild(doc, "CloseMCForDLNewVersion"  , CloseMCForDLNewVersion) 'cbMcCloseMCForDLNewVersion
-        root.AppendChild(doc, "MkvMergeGuiPath"         , MkvMergeGuiPath       ) 'tbMkvMergeGuiPath
-        root.AppendChild(doc, "prxyEnabled"             , prxyEnabled           ) 'ucGenPref_Proxy.cb_prxyEnable
-        root.AppendChild(doc, "prxyIp"                  , prxyIp                ) 'ucGenPref_Proxy.tb_prxyIp
-        root.AppendChild(doc, "prxyPort"                , prxyPort              ) 'ucGenPref_Proxy.prxyPort
-        root.AppendChild(doc, "prxyUsername"            , prxyUsername          ) 'ucGenPref_Proxy.prxyUsername
-        root.AppendChild(doc, "prxyPassword"            , prxyPassword          ) 'ucGenPref_Proxy.prxyPassword
-        root.AppendChild(doc, "ShowAllAudioTracks"      , ShowAllAudioTracks    ) 'cbShowAllAudioTracks
-        root.AppendChild(doc, "GenreCustomBefore"       , GenreCustomBefore     ) 'cbGenreCustomBefore
-        root.AppendChild(doc, "CustomTmdbApiKey"        , CustomTmdbApiKey      ) 'tbTMDbAPI
-        root.AppendChild(doc, "MovNfoWatchTag"          , MovNfoWatchTag        ) 'cbMovNfoWatchTag
+        root.AppendChild(doc, "startupcache"                , startupCache              ) 'chkbx_disablecache
+        root.AppendChild(doc, "renamenfofiles"              , renamenfofiles            ) 'CheckBoxRenameNFOtoINFO
+        root.AppendChild(doc, "actorseasy"                  , actorseasy                ) 'CheckBox33
+        root.AppendChild(doc, "rarsize"                     , rarsize                   ) 'txtbx_minrarsize
+        root.AppendChild(doc, "overwritethumbs"             , overwritethumbs           )'cbOverwriteArtwork - does not appear to be used?
+        root.AppendChild(doc, "LocalActorImage"             , LocalActorImage           ) 'cbDisplayLocalActor
+        root.AppendChild(doc, "videomode"                   , videomode                 ) 'RadioButton36-38
+        root.AppendChild(doc, "selectedvideoplayer"         , selectedvideoplayer       )'btn_custommediaplayer
+        root.AppendChild(doc, "externalbrowser"             , externalbrowser           ) 'CheckBox12
+        root.AppendChild(doc, "selectedBrowser"             , selectedBrowser           ) 'btnFindBrowser
+        root.AppendChild(doc, "altnfoeditor"                , altnfoeditor              ) 'btnaltnfoeditor
+        root.AppendChild(doc, "ignorearticle"               , ignorearticle             ) 'cb_IgnoreThe
+        root.AppendChild(doc, "ignoreAarticle"              , ignoreAarticle            ) 'cb_IgnoreA
+        root.AppendChild(doc, "ignoreAn"                    , ignoreAn                  ) 'cb_IgnoreAn
+        root.AppendChild(doc, "sorttitleignorearticle"      , sorttitleignorearticle    ) 'cb_SorttitleIgnoreArticles
+        root.AppendChild(doc, "MovSetTitleIgnArticle"       , MovSetTitleIgnArticle     ) 'cb_MovSetTitleIgnArticle
+        root.AppendChild(doc, "MovPosterTabTMDBSelect"      , MovPosterTabTMDBSelect    ) 'cb_MovPosterTabTMDBSelect
+        root.AppendChild(doc, "intruntime"                  , intruntime                ) 'CheckBox38
+        root.AppendChild(doc, "xbmcartwork"                 , XBMC_version              ) 'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
+        root.AppendChild(doc, "ShowMovieGridToolTip"        , ShowMovieGridToolTip      ) 'cbShowMovieGridToolTip
+        root.AppendChild(doc, "ShowLogOnError"              , ShowLogOnError            ) 'cbShowLogOnError
+        root.AppendChild(doc, "CheckForNewVersion"          , CheckForNewVersion        )
+        root.AppendChild(doc, "CloseMCForDLNewVersion"      , CloseMCForDLNewVersion    ) 'cbMcCloseMCForDLNewVersion
+        root.AppendChild(doc, "MkvMergeGuiPath"             , MkvMergeGuiPath           ) 'tbMkvMergeGuiPath
+        root.AppendChild(doc, "prxyEnabled"                 , prxyEnabled               ) 'ucGenPref_Proxy.cb_prxyEnable
+        root.AppendChild(doc, "prxyIp"                      , prxyIp                    ) 'ucGenPref_Proxy.tb_prxyIp
+        root.AppendChild(doc, "prxyPort"                    , prxyPort                  ) 'ucGenPref_Proxy.prxyPort
+        root.AppendChild(doc, "prxyUsername"                , prxyUsername              ) 'ucGenPref_Proxy.prxyUsername
+        root.AppendChild(doc, "prxyPassword"                , prxyPassword              ) 'ucGenPref_Proxy.prxyPassword
+        root.AppendChild(doc, "ShowAllAudioTracks"          , ShowAllAudioTracks        ) 'cbShowAllAudioTracks
+        root.AppendChild(doc, "DisplayDefaultSubtitleLang"  , DisplayDefaultSubtitleLang) 'cbDisplayDefaultSubtitleLang
+        root.AppendChild(doc, "DisplayAllSubtitleLang"      , DisplayAllSubtitleLang    ) 'cbDisplayAllSubtitleLang
+        root.AppendChild(doc, "GenreCustomBefore"           , GenreCustomBefore         ) 'cbGenreCustomBefore
+        root.AppendChild(doc, "CustomTmdbApiKey"            , CustomTmdbApiKey          ) 'tbTMDbAPI
+        root.AppendChild(doc, "MovNfoWatchTag"              , MovNfoWatchTag            ) 'cbMovNfoWatchTag
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1761,9 +1767,11 @@ Public Class Pref
                     Case "XBMC_MC_MovieFolderMappings"          : XBMC_MC_MovieFolderMappings.Load(thisresult)
                     Case "XBMC_MC_CompareFields"                : XBMC_MC_CompareFields      .Load(thisresult)
 
-                    Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters = thisresult.InnerXml 
-                    Case "ShowAllAudioTracks"                   : ShowAllAudioTracks    = thisresult.InnerXml
-                    Case "ExportXBMCPath"                       : ExportXBMCPath        = thisresult.InnerText
+                    Case "ShowExtraMovieFilters"                : ShowExtraMovieFilters         = thisresult.InnerXml 
+                    Case "ShowAllAudioTracks"                   : ShowAllAudioTracks            = thisresult.InnerXml
+                    Case "DisplayDefaultSubtitleLang"           : DisplayDefaultSubtitleLang    = thisresult.InnerXml
+                    Case "DisplayAllSubtitleLang"               : DisplayAllSubtitleLang        = thisresult.InnerXml
+                    Case "ExportXBMCPath"                       : ExportXBMCPath                = thisresult.InnerText
 
                     Case Else : Dim x = thisresult
                 End Select

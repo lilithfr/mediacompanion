@@ -263,6 +263,7 @@ Partial Class frmPreferences
         Me.btnMovPosterPriorityUp = New System.Windows.Forms.Button()
         Me.lbPosterSourcePriorities = New System.Windows.Forms.ListBox()
         Me.GroupBox37 = New System.Windows.Forms.GroupBox()
+        Me.cbMovCustPosterjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovFanartNaming = New System.Windows.Forms.CheckBox()
         Me.btnMovFanartTvSelect = New System.Windows.Forms.Button()
@@ -482,7 +483,8 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovCustPosterjpgNoDelete = New System.Windows.Forms.CheckBox()
+        Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
+        Me.cbDisplayAllSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -763,7 +765,7 @@ Partial Class frmPreferences
         'gbExcludeFolders
         '
         Me.gbExcludeFolders.Controls.Add(Me.tbExcludeFolders)
-        Me.gbExcludeFolders.Location = New System.Drawing.Point(296, 291)
+        Me.gbExcludeFolders.Location = New System.Drawing.Point(296, 353)
         Me.gbExcludeFolders.Name = "gbExcludeFolders"
         Me.gbExcludeFolders.Size = New System.Drawing.Size(277, 95)
         Me.gbExcludeFolders.TabIndex = 94
@@ -1800,6 +1802,8 @@ Partial Class frmPreferences
         '
         'TPCommonSettings
         '
+        Me.TPCommonSettings.Controls.Add(Me.cbDisplayAllSubtitleLang)
+        Me.TPCommonSettings.Controls.Add(Me.cbDisplayDefaultSubtitleLang)
         Me.TPCommonSettings.Controls.Add(Me.cbGenreCustomBefore)
         Me.TPCommonSettings.Controls.Add(Me.btnEditCustomGenreFile)
         Me.TPCommonSettings.Controls.Add(Me.GroupBox4)
@@ -1829,7 +1833,7 @@ Partial Class frmPreferences
         'cbGenreCustomBefore
         '
         Me.cbGenreCustomBefore.AutoSize = true
-        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 431)
+        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 409)
         Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
         Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
         Me.cbGenreCustomBefore.TabIndex = 107
@@ -1838,7 +1842,7 @@ Partial Class frmPreferences
         '
         'btnEditCustomGenreFile
         '
-        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(9, 456)
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(21, 434)
         Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
         Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
         Me.btnEditCustomGenreFile.TabIndex = 106
@@ -1849,9 +1853,9 @@ Partial Class frmPreferences
         '
         Me.GroupBox4.Controls.Add(Me.Label185)
         Me.GroupBox4.Controls.Add(Me.AutoScrnShtDelay)
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 353)
+        Me.GroupBox4.Location = New System.Drawing.Point(296, 273)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(278, 64)
+        Me.GroupBox4.Size = New System.Drawing.Size(277, 64)
         Me.GroupBox4.TabIndex = 105
         Me.GroupBox4.TabStop = false
         Me.GroupBox4.Text = "Screenshot Delay."
@@ -3002,7 +3006,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3242,6 +3246,15 @@ Partial Class frmPreferences
         Me.GroupBox37.TabIndex = 60
         Me.GroupBox37.TabStop = false
         Me.GroupBox37.Text = "Autoscrape artwork"
+        '
+        'cbMovCustPosterjpgNoDelete
+        '
+        Me.cbMovCustPosterjpgNoDelete.Location = New System.Drawing.Point(5, 270)
+        Me.cbMovCustPosterjpgNoDelete.Name = "cbMovCustPosterjpgNoDelete"
+        Me.cbMovCustPosterjpgNoDelete.Size = New System.Drawing.Size(300, 35)
+        Me.cbMovCustPosterjpgNoDelete.TabIndex = 50
+        Me.cbMovCustPosterjpgNoDelete.Text = "I use <moviename>.jpg as Poster, use and rename as Kodi poster."
+        Me.cbMovCustPosterjpgNoDelete.UseVisualStyleBackColor = true
         '
         'cbMovCustFolderjpgNoDelete
         '
@@ -5772,14 +5785,27 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbMovCustPosterjpgNoDelete
+        'cbDisplayDefaultSubtitleLang
         '
-        Me.cbMovCustPosterjpgNoDelete.Location = New System.Drawing.Point(5, 270)
-        Me.cbMovCustPosterjpgNoDelete.Name = "cbMovCustPosterjpgNoDelete"
-        Me.cbMovCustPosterjpgNoDelete.Size = New System.Drawing.Size(300, 35)
-        Me.cbMovCustPosterjpgNoDelete.TabIndex = 50
-        Me.cbMovCustPosterjpgNoDelete.Text = "I use <moviename>.jpg as Poster, use and rename as Kodi poster."
-        Me.cbMovCustPosterjpgNoDelete.UseVisualStyleBackColor = true
+        Me.cbDisplayDefaultSubtitleLang.AutoSize = true
+        Me.cbDisplayDefaultSubtitleLang.Location = New System.Drawing.Point(12, 343)
+        Me.cbDisplayDefaultSubtitleLang.Name = "cbDisplayDefaultSubtitleLang"
+        Me.cbDisplayDefaultSubtitleLang.Size = New System.Drawing.Size(273, 19)
+        Me.cbDisplayDefaultSubtitleLang.TabIndex = 108
+        Me.cbDisplayDefaultSubtitleLang.Text = "Display Default Subtitle lang in Media Overlay"
+        Me.ToolTip1.SetToolTip(Me.cbDisplayDefaultSubtitleLang, "If any track is set as Default Subtitle, display Subtitle language"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"else display "& _ 
+        "First subtitle language."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"If unselected, First subtitle language is shown.")
+        Me.cbDisplayDefaultSubtitleLang.UseVisualStyleBackColor = true
+        '
+        'cbDisplayAllSubtitleLang
+        '
+        Me.cbDisplayAllSubtitleLang.AutoSize = true
+        Me.cbDisplayAllSubtitleLang.Location = New System.Drawing.Point(12, 368)
+        Me.cbDisplayAllSubtitleLang.Name = "cbDisplayAllSubtitleLang"
+        Me.cbDisplayAllSubtitleLang.Size = New System.Drawing.Size(238, 19)
+        Me.cbDisplayAllSubtitleLang.TabIndex = 109
+        Me.cbDisplayAllSubtitleLang.Text = "Show all Subtitle lang in Media Overlay"
+        Me.cbDisplayAllSubtitleLang.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6410,4 +6436,6 @@ End Sub
     Friend WithEvents cmbxTvMaxGenres As ComboBox
     Friend WithEvents cbTagRes As CheckBox
     Friend WithEvents cbMovCustPosterjpgNoDelete As CheckBox
+    Friend WithEvents cbDisplayAllSubtitleLang As CheckBox
+    Friend WithEvents cbDisplayDefaultSubtitleLang As CheckBox
 End Class

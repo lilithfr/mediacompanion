@@ -223,6 +223,8 @@ Public Class frmPreferences
         cbDisplayMediaInfoOverlay   .Checked    = Pref.DisplayMediainfoOverlay 
         cbDisplayMediaInfoFolderSize.Checked    = Pref.DisplayMediaInfoFolderSize
         cbShowAllAudioTracks        .Checked    = Pref.ShowAllAudioTracks
+        cbDisplayDefaultSubtitleLang.Checked    = Pref.DisplayDefaultSubtitleLang
+        cbDisplayAllSubtitleLang    .Checked    = Pref.DisplayAllSubtitleLang
         AutoScrnShtDelay            .Text       = Pref.ScrShtDelay
         cbGenreCustomBefore         .Checked    = Pref.GenreCustomBefore
         Pref.ExcludeFolders.PopTextBox(tbExcludeFolders)
@@ -993,6 +995,18 @@ Public Class frmPreferences
     Private Sub cbShowAllAudioTracks_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbShowAllAudioTracks.CheckedChanged
         If prefsload Then Exit Sub
         Pref.ShowAllAudioTracks = cbShowAllAudioTracks.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbDisplayDefaultSubtitleLang_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayDefaultSubtitleLang.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.DisplayDefaultSubtitleLang = cbDisplayDefaultSubtitleLang.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbDisplayAllSubtitleLang_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayAllSubtitleLang.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.DisplayAllSubtitleLang = cbDisplayAllSubtitleLang.Checked
         Changes = True
     End Sub
 

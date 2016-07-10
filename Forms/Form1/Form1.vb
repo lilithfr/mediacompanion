@@ -17355,6 +17355,12 @@ Public Class Form1
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(Vidfiledetails.filedetails_video))))  '.Codec.Value.RemoveWhitespace)))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString)))
             flags.Add(New KeyValuePair(Of String, string)("special", If(Is3d, "3d", "")))
+
+            Dim subtitles = If(Pref.DisplayAllSubtitleLang, Vidfiledetails.filedetails_subtitles, From x In Vidfiledetails.filedetails_subtitles Where x = Vidfiledetails.DefaultSubTrack)
+
+            For each subtitle In subtitles
+                flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
+            Next
         Catch
         End Try
         Return flags

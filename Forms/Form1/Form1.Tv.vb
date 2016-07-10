@@ -5105,26 +5105,34 @@ Partial Public Class Form1
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then
 
-                Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+                'Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
 
-                If IsNothing(defaultAudioTrack) Then
-                    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
-                End If
+                'If IsNothing(defaultAudioTrack) Then
+                '    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
+                'End If
 
-                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=defaultAudioTrack)
+                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=thisep.Details.StreamDetails.defaultAudioTrack)
 
                 For Each track In tracks
-                    flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value) ))
-                    flags.Add(New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value))
+                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
+                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
+                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
                 Next
             Else
-                flags.Add(New KeyValuePair(Of String, string)("channels", ""))
-                flags.Add(New KeyValuePair(Of String, string)("audio", ""))
+                flags.Add(New KeyValuePair(Of String, string)("channels",   ""))
+                flags.Add(New KeyValuePair(Of String, string)("audio",      ""))
+                flags.Add(New KeyValuePair(Of String, string)("lang" ,      ""))
             End If
 
-            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))   '.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("aspect",     Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec",      Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
+
+            Dim subtitles = If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack)
+
+            For each subtitle In subtitles
+                flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
+            Next
         Catch
         End Try
         Return flags
@@ -5136,30 +5144,27 @@ Partial Public Class Form1
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
             If thisep.Details.StreamDetails.Audio.Count > 0 Then
-                
-                Dim AudCh As String 
-                Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
-
-                If IsNothing(defaultAudioTrack) Then
-                    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
-                End If
-
-                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=defaultAudioTrack)
+                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=thisep.Details.StreamDetails.defaultAudioTrack)
 
                 For Each track In tracks
-                    AudCh = track.Channels.Value
-
-                    flags.Add(New KeyValuePair(Of String, string)("channels"+GetNotDefaultStr(track=defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
-                    flags.Add(New KeyValuePair(Of String, string)("audio"+GetNotDefaultStr(track=defaultAudioTrack), track.Codec.Value))
+                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
+                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
+                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
                 Next
- 
             Else
-                flags.Add(New KeyValuePair(Of String, string)("channels", ""))
-                flags.Add(New KeyValuePair(Of String, string)("audio", ""))
+                flags.Add(New KeyValuePair(Of String, string)("channels",   ""))
+                flags.Add(New KeyValuePair(Of String, string)("audio",      ""))
+                flags.Add(New KeyValuePair(Of String, string)("lang" ,      ""))
             End If
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))  'thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
+
+            Dim subtitles = If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack)
+
+            For each subtitle In subtitles
+                flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
+            Next
         Catch
         End Try
         Return flags

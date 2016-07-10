@@ -46,7 +46,7 @@ Public Class GraphicInfo
                         If item.Key.IndexOf("aspect") > -1 Then
                             TrueAspect = If(item.Value= "1.78" OrElse item.Value = "1.33", True, False)
                         End If
-                        If item.Key.IndexOf("lang") > -1 OrElse Not TrueAspect Then
+                        If item.Key = "lang" OrElse item.Key = "lang_notdefault" OrElse item.Key = "sublang" OrElse Not TrueAspect Then
                             flagPath = IO.Path.Combine(Pref.applicationPath, "Resources\video_flags\" + item.Key + ".png")
                         Else
                             flagName = String.Format("media_{0}_{1}.png", item.Key, item.Value )
@@ -56,7 +56,7 @@ Public Class GraphicInfo
                         Dim bmFlag       As New Bitmap(bmflagStream)
                         Dim rectFlag     As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
                         Dim recFanart    As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
-                        If item.Key.IndexOf("lang") > -1 OrElse Not TrueAspect Then
+                        If item.Key = "lang" OrElse item.Key = "lang_notdefault" OrElse Not TrueAspect Then
                             Dim sDisplayText As String = item.Value
                             If sDisplayText.ToLower = "error" Then Continue For
                             Dim FontSize = 19
@@ -64,6 +64,21 @@ Public Class GraphicInfo
                             'use the bitmap to draw
                             Dim graphic = Graphics.FromImage(bmFlag)
                             Dim gradient = 224
+                            Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
+                            Dim sf As new StringFormat()        'draw the string including the value
+                            sf.LineAlignment = StringAlignment.Center
+                            sf.Alignment = StringAlignment.Center
+                            graphic.DrawString(sDisplayText, font, brush, rectFlag, sf)
+                        End If
+                        If item.Key = "sublang" Then 'OrElse Not TrueAspect Then
+                            Dim sDisplayText As String = "sublang:" & vbCrLf & item.Value
+                            If sDisplayText.ToLower.Contains("error") Then Continue For
+                            'sDisplayText = "sublan:" & vbCrLf & sDisplayText
+                            Dim FontSize = 14
+                            Dim font as new Font("Tahoma", FontSize)    'create a font to write the values in the bitmap
+                            'use the bitmap to draw
+                            Dim graphic = Graphics.FromImage(bmFlag)
+                            Dim gradient = 245
                             Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
                             Dim sf As new StringFormat()        'draw the string including the value
                             sf.LineAlignment = StringAlignment.Center
