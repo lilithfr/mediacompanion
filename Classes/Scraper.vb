@@ -1236,7 +1236,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "id"        , imdbid      )
                 totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
-                totalinfo.AppendTag( "aspect"    , ARImdb      )
+                If Pref.MovImdbAspectRatio Then totalinfo.AppendTag( "aspect"    , ARImdb      )
                 totalinfo &= getomdbTomato(imdbid)
                 
 

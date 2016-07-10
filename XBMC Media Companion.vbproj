@@ -800,9 +800,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\new2.png" />
-    <Content Include="Assets\mcEventLog.exe">
+    <None Include="Assets\mcEventLog.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Assets\scrapers\metadata.themoviedb.org\Notes for MC.txt" />
     <Content Include="Assets\scrapers\metadata.tvdb.com\Notes for MC.txt" />
     <Content Include="Classes\genre.txt">
@@ -1238,9 +1238,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\RefreshAll.png" />
-    <Content Include="Assets\ffmpeg.exe">
+    <None Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="Resources\Untitled-1.gif" />
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />

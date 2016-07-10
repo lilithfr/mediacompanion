@@ -3,22 +3,17 @@ Imports System.IO
 Imports System.Threading
 Imports System.Xml
 Public Class ScraperFunctions
-
-
-
+    
     Dim tvdburl As String
     Dim tvfblinecount As Integer
     Dim tvdbwebsource(4000) As String
 
     Public Function getimdbactors(ByVal imdbid As String, ByVal mirror As String)
-
         Dim tactors(1000, 2)
         Dim tactorcount As Integer = 0
-
         tvdburl = mirror & "title/" & imdbid & "/fullcredits#cast"
         loadwebpage(tvdburl)
         Try
-
             If tvdbwebsource(1) <> "404" Then
                 For f = 1 To tvfblinecount
                     If tvdbwebsource(f).IndexOf("Episode  Cast</a>") <> -1 Then
@@ -87,29 +82,18 @@ Public Class ScraperFunctions
         Catch ex As Exception
             tactors(0, 0) = "404"
         End Try
-
-
-
-
-
-
-
+        
         Return tactors
     End Function
 
     Public Function loadwebpage(ByVal tvdburl As String)
-
         Monitor.Enter(Me)
         Try
             Try
                 ReDim tvdbwebsource(10000)
                 tvfblinecount = 0
-
-
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(tvdburl)
-                'Dim myProxy As New WebProxy("myproxy", 80)
-                'myProxy.BypassProxyOnLocal = True
                 wrGETURL.Proxy = Utilities.MyProxy
                 Dim objStream As Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
@@ -139,45 +123,7 @@ Public Class ScraperFunctions
         End Try
         Return "Error"
     End Function
-
-    'Public Function tmdbthumb(ByVal posterimdbid As String)
-    '    Monitor.Enter(Me)
-    '    Try
-    '        Dim newobject2 As New tmdb_posters.Class1
-    '        Dim thumburl As String = String.Empty
-    '        Dim xmllist As String
-    '        Dim ok As Boolean = False
-    '        Try
-    '            xmllist = newobject2.gettmdbposters_newapi(posterimdbid)
-    '            Dim bannerslist As New XmlDocument
-    '            bannerslist.LoadXml(xmllist)
-    '            For Each item In bannerslist("tmdb_posterlist")
-    '                Select Case item.name
-    '                    Case "poster"
-    '                        For Each img In item
-    '                            If img.childnodes(0).innertext = "original" Then
-    '                                thumburl = img.childnodes(1).innertext
-    '                                ok = True
-    '                                Exit For
-    '                            End If
-    '                        Next
-    '                        If ok = True Then Exit For
-    '                End Select
-    '            Next
-    '            Return thumburl
-    '        Catch ex As Exception
-    '            Thread.Sleep(1)
-    '        End Try
-
-
-    '    Catch ex As Exception
-    '    Finally
-    '        Monitor.Exit(Me)
-    '    End Try
-    '    Return "Error"
-    'End Function
-
-
+    
     Public Function mpdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Try
@@ -189,17 +135,11 @@ Public Class ScraperFunctions
             Dim temp As String = posterimdbid
             temp = temp.Replace("tt", "")
             Dim fanarturl As String = "http://www.movieposterdb.com/movie/" & temp & "/"
-
-
             Dim apple2(4000) As String
             Dim fanartlinecount As Integer = 0
-            'Try
             Dim wrGETURL As WebRequest
-
             wrGETURL = WebRequest.Create(fanarturl)
             wrGETURL.Proxy = Utilities.MyProxy
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
@@ -211,10 +151,8 @@ Public Class ScraperFunctions
                 sLine = objReader.ReadLine
                 apple2(fanartlinecount) = sLine
             Loop
-
             fanartlinecount -= 1
-
-
+            
             For f = 2 To fanartlinecount
                 If apple2(f).IndexOf("<title>") <> -1 Then
                     If apple2(f).IndexOf("<title>MoviePosterDB.com - Internet Movie Poster DataBase</title>") <> -1 Then
@@ -226,8 +164,7 @@ Public Class ScraperFunctions
                     End If
                 End If
             Next
-
-
+            
             If allok = True Then
                 allok = False
                 For f = 2 To fanartlinecount
@@ -252,11 +189,6 @@ Public Class ScraperFunctions
             Else
                 thumburl = "na"
             End If
-
-
-
-            'Catch
-            'End Try
             Return thumburl
         Catch
         Finally
@@ -264,6 +196,7 @@ Public Class ScraperFunctions
         End Try
         Return "Error"
     End Function
+
     Public Function impathumb(ByVal title As String, ByVal year As String)
         Monitor.Enter(Me)
         Try
@@ -280,83 +213,13 @@ Public Class ScraperFunctions
 
             temp = temp.ToLower
             temp = Utilities.searchurltitle(temp)
-            'temp = temp.Replace(" ", "+")
-            'temp = temp.Replace("&", "%26")
-            'temp = temp.Replace("À", "%c0")
-            'temp = temp.Replace("Á", "%c1")
-            'temp = temp.Replace("Â", "%c2")
-            'temp = temp.Replace("Ã", "%c3")
-            'temp = temp.Replace("Ä", "%c4")
-            'temp = temp.Replace("Å", "%c5")
-            'temp = temp.Replace("Æ", "%c6")
-            'temp = temp.Replace("Ç", "%c7")
-            'temp = temp.Replace("È", "%c8")
-            'temp = temp.Replace("É", "%c9")
-            'temp = temp.Replace("Ê", "%ca")
-            'temp = temp.Replace("Ë", "%cb")
-            'temp = temp.Replace("Ì", "%cc")
-            'temp = temp.Replace("Í", "%cd")
-            'temp = temp.Replace("Î", "%ce")
-            'temp = temp.Replace("Ï", "%cf")
-            'temp = temp.Replace("Ð", "%d0")
-            'temp = temp.Replace("Ñ", "%d1")
-            'temp = temp.Replace("Ò", "%d2")
-            'temp = temp.Replace("Ó", "%d3")
-            'temp = temp.Replace("Ô", "%d4")
-            'temp = temp.Replace("Õ", "%d5")
-            'temp = temp.Replace("Ö", "%d6")
-            'temp = temp.Replace("Ø", "%d8")
-            'temp = temp.Replace("Ù", "%d9")
-            'temp = temp.Replace("Ú", "%da")
-            'temp = temp.Replace("Û", "%db")
-            'temp = temp.Replace("Ü", "%dc")
-            'temp = temp.Replace("Ý", "%dd")
-            'temp = temp.Replace("Þ", "%de")
-            'temp = temp.Replace("ß", "%df")
-            'temp = temp.Replace("à", "%e0")
-            'temp = temp.Replace("á", "%e1")
-            'temp = temp.Replace("â", "%e2")
-            'temp = temp.Replace("ã", "%e3")
-            'temp = temp.Replace("ä", "%e4")
-            'temp = temp.Replace("å", "%e5")
-            'temp = temp.Replace("æ", "%e6")
-            'temp = temp.Replace("ç", "%e7")
-            'temp = temp.Replace("è", "%e8")
-            'temp = temp.Replace("é", "%e9")
-            'temp = temp.Replace("ê", "%ea")
-            'temp = temp.Replace("ë", "%eb")
-            'temp = temp.Replace("ì", "%ec")
-            'temp = temp.Replace("í", "%ed")
-            'temp = temp.Replace("î", "%ee")
-            'temp = temp.Replace("ï", "%ef")
-            'temp = temp.Replace("ð", "%f0")
-            'temp = temp.Replace("ñ", "%f1")
-            'temp = temp.Replace("ò", "%f2")
-            'temp = temp.Replace("ó", "%f3")
-            'temp = temp.Replace("ô", "%f4")
-            'temp = temp.Replace("õ", "%f5")
-            'temp = temp.Replace("ö", "%f6")
-            'temp = temp.Replace("÷", "%f7")
-            'temp = temp.Replace("ø", "%f8")
-            'temp = temp.Replace("ù", "%f9")
-            'temp = temp.Replace("ú", "%fa")
-            'temp = temp.Replace("û", "%fb")
-            'temp = temp.Replace("ü", "%fc")
-            'temp = temp.Replace("ý", "%fd")
-            'temp = temp.Replace("þ", "%fe")
-            'temp = temp.Replace("ÿ", "%ff")
-            'temp = temp.Replace(" ", "+")
-            'temp = temp.Replace("&", "%26")
             fanarturl = fanarturl & temp & "+" & year
             fanarturl = fanarturl & "&sitesearch=www.impawards.com"
-            'Try
             
             Dim apple2(4000) As String
             Dim fanartlinecount As Integer = 0
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
-            'Dim myProxy2 As New WebProxy("myproxy", 80)
-            'myProxy2.BypassProxyOnLocal = True
             wrGETURL2.Proxy = Utilities.MyProxy
             Dim objStream2 As Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
@@ -383,7 +246,6 @@ Public Class ScraperFunctions
                     If tempint - 5 = tempstring.IndexOf("/") Then
                         allok = True
                     Else
-
                         fanarturl = "http://www.google.com/custom?hl=en&cof=FORID%3A1%3BGL%3A1%3BLBGC%3A000000%3BBGC%3A%23000000%3BT%3A%23cccccc%3BLC%3A%2333cc33%3BVLC%3A%2333ff33%3BGALT%3A%2333CC33%3BGFNT%3A%23ffffff%3BGIMP%3A%23ffffff%3B&domains=www.impawards.com&ie=ISO-8859-1&oe=ISO-8859-1&q="
                         fanarturl = fanarturl & temp
                         fanarturl = fanarturl & "&sitesearch=www.impawards.com"
@@ -392,8 +254,6 @@ Public Class ScraperFunctions
                         Dim wrGETURL4 As WebRequest
                         wrGETURL4 = WebRequest.Create(fanarturl)
                         wrGETURL4.Proxy = Utilities.MyProxy
-                        'Dim myProxy4 As New WebProxy("myproxy", 80)
-                        'myProxy4.BypassProxyOnLocal = True
                         Dim objStream4 As Stream
                         objStream4 = wrGETURL4.GetResponse.GetResponseStream()
                         Dim objReader4 As New StreamReader(objStream4)
@@ -435,8 +295,6 @@ Public Class ScraperFunctions
 
             wrGETURL3 = WebRequest.Create(fanarturl)
             wrGETURL3.Proxy = Utilities.MyProxy
-            'Dim myProxy3 As New WebProxy("myproxy", 80)
-            'myProxy3.BypassProxyOnLocal = True
             Dim objStream3 As Stream
             objStream3 = wrGETURL3.GetResponse.GetResponseStream()
             Dim objReader3 As New StreamReader(objStream3)
@@ -454,8 +312,7 @@ Public Class ScraperFunctions
                     Exit For
                 End If
             Next
-
-
+            
             If allok = True Then
                 Dim tempstring3 As String
                 Dim tempstring4 As String
@@ -471,12 +328,6 @@ Public Class ScraperFunctions
                 thumburl = "na"
             End If
             If thumburl.IndexOf("art_machine.jpg") <> -1 Then thumburl = "na"
-
-
-            'Catch
-            '    thumburl = "na"
-            'End Try
-
             Return thumburl
         Catch
         Finally
@@ -484,117 +335,85 @@ Public Class ScraperFunctions
         End Try
         Return Nothing
     End Function
-    Public Function imdbthumb(ByVal posterimdbid As String)
 
+    Public Function imdbthumb(ByVal posterimdbid As String)
         Monitor.Enter(Me)
         Dim thumburl As String = "na"
         Try
-            'Dim allok As Boolean = False
+            Dim pass = 2
+            Do Until pass = 0 OrElse thumburl <> "na"
+                pass = pass -1
+                Dim posters(10000, 1) As String
+                Dim postercount As Integer = 0
+                Dim fanarturl As String
+                Dim fanartlinecount As Integer = 0
+                Dim allok As Boolean = True
+                Dim apple2(10000)
 
+                fanarturl = "http://www.imdb.com/title/" & posterimdbid & "/mediaindex?refine=poster&ref_=ttmi_ref_pos"
+                If pass = 0 Then
+                    fanarturl = "http://www.imdb.com/title/" & posterimdbid & "/mediaindex?ref_=ttmi_ref_mi"
+                End If
+                Dim wrGETURL2 As WebRequest
+                wrGETURL2 = WebRequest.Create(fanarturl)
+                wrGETURL2.Proxy = Utilities.MyProxy
+                Dim objStream2 As Stream
+                objStream2 = wrGETURL2.GetResponse.GetResponseStream()
+                Dim objReader2 As New StreamReader(objStream2)
+                Dim sLine2 As String = ""
+                fanartlinecount = 0
 
-            'Dim temp As String = posterimdbid
-            'Dim fanarturl As String = "http://www.imdb.com/title/" & temp
+                Do While Not sLine2 Is Nothing
+                    fanartlinecount += 1
+                    sLine2 = objReader2.ReadLine
+                    apple2(fanartlinecount) = sLine2
+                Loop
+                fanartlinecount -= 1
 
-            'Dim apple2(4000) As String
-            'Dim fanartlinecount As Integer = 0
-
-            'Dim wrGETURL As WebRequest
-
-            'wrGETURL = WebRequest.Create(fanarturl)
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
-            'Dim objStream As Stream
-            'objStream = wrGETURL.GetResponse.GetResponseStream()
-            'Dim objReader As New StreamReader(objStream)
-            'Dim sLine As String = ""
-            'fanartlinecount = 0
-
-            'Do While Not sLine Is Nothing
-            '    fanartlinecount += 1
-            '    sLine = objReader.ReadLine
-            '    apple2(fanartlinecount) = sLine
-            'Loop
-
-            'fanartlinecount -= 1
-            'For f = 1 To fanartlinecount
-            '    If apple2(f).IndexOf("article title-overview") <> -1 Then
-            '        thumburl = apple2(f + 11)
-            '        thumburl = thumburl.Substring(thumburl.IndexOf("http"), thumburl.IndexOf("._V1") - thumburl.IndexOf("http"))
-            '        thumburl = thumburl & "._V1._SX1500_SY1000_.jpg"
-            '        Exit For
-            '    End If
-            'Next
-            Dim posters(10000, 1) As String
-            Dim postercount As Integer = 0
-            Dim fanarturl As String
-            Dim fanartlinecount As Integer = 0
-            Dim allok As Boolean = True
-            Dim apple2(10000)
-
-            fanarturl = "http://www.imdb.com/title/" & posterimdbid & "/mediaindex?refine=poster&ref_=ttmi_ref_pos"
-
-            Dim wrGETURL2 As WebRequest
-            wrGETURL2 = WebRequest.Create(fanarturl)
-            wrGETURL2.Proxy = Utilities.MyProxy
-            'Dim myProxy2 As New WebProxy("myproxy", 80)
-            'myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            Dim sLine2 As String = ""
-            fanartlinecount = 0
-
-            Do While Not sLine2 Is Nothing
-                fanartlinecount += 1
-                sLine2 = objReader2.ReadLine
-                apple2(fanartlinecount) = sLine2
-            Loop
-            fanartlinecount -= 1
-
-            Dim totalpages As Integer
-            Dim tempint As Integer
-            Dim reached As Boolean = False
-            Try
-                For f = 1 To fanartlinecount
-                    If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
-                        apple2(f) = apple2(f).Replace("<a href=""?page=", "")
-                        apple2(f) = apple2(f).Substring(0, 1)
-                        tempint = Convert.ToString(apple2(f))
-                        If tempint > totalpages Then totalpages = tempint
-                    End If
+                Dim totalpages As Integer
+                Dim tempint As Integer
+                Dim reached As Boolean = False
+                Try
+                    For f = 1 To fanartlinecount
+                        If apple2(f) = "" Then Continue For
+                        If apple2(f).IndexOf("<a href=""?page=") <> -1 Then
+                            apple2(f) = apple2(f).Replace("<a href=""?page=", "")
+                            apple2(f) = apple2(f).Substring(0, 1)
+                            tempint = Convert.ToString(apple2(f))
+                            If tempint > totalpages Then totalpages = tempint
+                        End If
                         If apple2(f).IndexOf("<div class=""media_index_thumb_list""") <> -1 Then
                             reached = True
                         End If
-                    If reached = True Then
-                        If apple2(f).IndexOf("</div>") <> -1 Then
-                            reached = False
-                            Exit For
+                        If reached = True Then
+                            If apple2(f).IndexOf("</div>") <> -1 Then
+                                reached = False
+                                Exit For
+                            End If
+                            If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1_") <> -1 Then
+                                apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
+                                apple2(f).TrimStart()
+                                apple2(f) = apple2(f).Replace("src=""", "")
+                                posters(postercount, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
+                                posters(postercount, 1) = posters(postercount, 0)
+                                postercount += 1
+                            End If
                         End If
-                        If apple2(f).IndexOf("src=""http://") <> -1 And apple2(f).IndexOf("._V1_") <> -1 Then
-                            apple2(f) = apple2(f).Substring(apple2(f).IndexOf("src="""), apple2(f).Length - apple2(f).IndexOf("src="""))
-                            apple2(f).TrimStart()
-                            apple2(f) = apple2(f).Replace("src=""", "")
-                            posters(postercount, 0) = apple2(f).Substring(0, apple2(f).IndexOf("._V1_"))
-                            posters(postercount, 1) = posters(postercount, 0)
-                            postercount += 1
-                        End If
+                    Next
+                    If postercount <> 0 Then
+                        thumburl = (posters(postercount -1, 0) & ".jpg")
                     End If
-                Next
-                If postercount <> 0 Then
-                    thumburl = (posters(postercount -1, 0) & ".jpg")
-                End If
-            Catch ex As Exception 
-            End Try
-
-            If thumburl.IndexOf("http") = -1 Or thumburl.IndexOf(".jpg") = -1 Then thumburl = "na"
-
+                Catch ex As Exception 
+                End Try
+                If thumburl.IndexOf("http") = -1 Or thumburl.IndexOf(".jpg") = -1 Then thumburl = "na"
+            Loop
             Return thumburl
         Catch
             thumburl = "na"
         Finally
-
             Monitor.Exit(Me)
         End Try
         Return "Error"
     End Function
+
 End Class
