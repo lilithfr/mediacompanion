@@ -632,6 +632,27 @@ Public Class Classimdb
         Return GOT_IMDBID 
     End Function
 
+    Public Function getimdbID_fromOmdbapi(BYVal title As String, ByVal year As String) As String
+        Dim GOT_IMDBID As String = ""
+        Try
+            title = title.Replace(" ", "+")
+            Dim url As String = String.Format("http://www.omdbapi.com/?t={0}&y={1}&plot=full&r=xml", title, year)
+            Dim result As String = loadwebpage(Pref.proxysettings, url, True)
+            Dim adoc As New XmlDocument
+            adoc.LoadXml(result)
+            For each thisresult In adoc("root")
+                If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
+                    Dim TmpValue As String = thisresult.Attributes("imdbID").Value
+                    If TmpValue <> "" AndAlso TmpValue <> "N/A" Then GOT_IMDBID = TmpValue
+                    If GOT_IMDBID <> "" Then Exit For
+                End If
+            Next
+        Catch
+            Return "Error"
+        End Try
+        Return GOT_IMDBID
+    End Function
+
     Public Function CharCount(ByVal OrigString As String, ByVal Chars As String, Optional ByVal CaseSensitive As Boolean = False) As Long
 
         Dim lLen As Long
@@ -1197,7 +1218,8 @@ Public Class Classimdb
             totalinfo = "<movie>" & vbCrLf
             If allok = False Then
                 If imdbcounter < 450 Then
-                    imdbid = getimdbID(title, year)
+                    imdbid = getimdbID_fromOmdbapi(title, year)
+                    'imdbid = getimdbID(title, year)
                 Else
                     imdbid = getimdbID_fromimdb(title, Pref.imdbmirror, year)
                 End If
