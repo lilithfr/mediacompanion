@@ -635,11 +635,12 @@ Public Class Classimdb
     Public Function getimdbID_fromOmdbapi(BYVal title As String, ByVal year As String) As String
         Dim GOT_IMDBID As String = ""
         Try
-            title = title.Replace(" ", "+")
-            Dim url As String = String.Format("http://www.omdbapi.com/?t={0}&y={1}&plot=full&r=xml", title, year)
+            title = title.Replace("  ", "+").Replace(" ", "+").Replace("&", "%26")
+            Dim url As String = String.Format("http://www.omdbapi.com/?s={0}&y={1}&plot=full&r=xml", title, year)
             Dim result As String = loadwebpage(Pref.proxysettings, url, True)
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
+            If adoc("root").Attributes("response").Value = "False" Then Return "Error"
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
                     Dim TmpValue As String = thisresult.Attributes("imdbID").Value
