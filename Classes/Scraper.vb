@@ -223,7 +223,7 @@ End Module
 
 Public Class Classimdb
     
-    Public Function getimdbID(ByVal title As String, Optional ByVal year As String = "", Optional ByVal imdbmirror As String = "")
+    Public Function getimdbID(ByVal title As String, ByRef year As String, Optional ByVal imdbmirror As String = "")
         If imdbmirror = "" Then
             imdbmirror = "http://www.imdb.com/"
         End If
@@ -271,12 +271,13 @@ Public Class Classimdb
         End Try
     End Function
     
-    Public Function getimdbID_fromOmdbapi(BYVal title As String, ByVal year As String) As String
+    Public Function getimdbID_fromOmdbapi(BYVal title As String, ByRef year As String) As String
         Dim GOT_IMDBID As String = ""
         Try
             title = title.Replace("  ", "+").Replace(" ", "+").Replace("&", "%26")
             Dim url As String = String.Format("http://www.omdbapi.com/?s={0}&y={1}&plot=full&r=xml", title, year)
             Dim result As String = loadwebpage(Pref.proxysettings, url, True)
+            If result = "error" Then Return ""
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
             If adoc("root").Attributes("response").Value = "False" Then Return "Error"
@@ -284,11 +285,15 @@ Public Class Classimdb
                 If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
                     Dim TmpValue As String = thisresult.Attributes("imdbID").Value
                     If TmpValue <> "" AndAlso TmpValue <> "N/A" Then GOT_IMDBID = TmpValue
-                    If GOT_IMDBID <> "" Then Exit For
                 End If
+                If year = "" AndAlso Not IsNothing(thisresult.Attributes.ItemOf("year")) Then
+                    Dim TmpValue As String = thisresult.Attributes("year").Value
+                    If TmpValue <> "" AndAlso TmpValue <> "N/A" Then year = TmpValue
+                End If
+                If GOT_IMDBID <> "" Then Exit For
             Next
         Catch
-            Return "Error"
+            Return ""
         End Try
         Return GOT_IMDBID
     End Function
@@ -1073,6 +1078,25 @@ Public Class Classimdb
         End Get
     End Property
 
+    Public Function metacritic(ByVal imdbid As String) As String
+        Try
+            Dim url As String = String.Format("http://www.omdbapi.com/?i={0}&plot=short&r=xml", imdbid)
+            Dim getresult As String = loadwebpage(Pref.proxysettings, url, True)
+            If getresult = "error" Then Return ""
+            Dim adoc As New XmlDocument
+            adoc.LoadXml(getresult)
+            If adoc("root").Attributes("response").Value = "False" Then Return ""
+            For each thisresult In adoc("root")
+                If Not IsNothing(thisresult.Attributes.ItemOf("metascore")) Then
+                    Dim TmpValue As String = thisresult.Attributes("metascore").Value
+                    If TmpValue <> "" AndAlso TmpValue <> "N/A" Then Return TmpValue
+                End If
+            Next
+        Catch
+        End Try
+        Return ""
+    End Function
+
     Function AKAS(ByVal imdbid As String) As String
         Dim totalinfo As String = ""
         Try
@@ -1231,7 +1255,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "premiered" , ReleaseDate )
                 totalinfo.AppendTag( "stars"     , Stars       )
                 totalinfo.AppendTag( "title"     , Me.Title    )
-                totalinfo.AppendTag( "year"      , Me.Year     )
+                totalinfo.AppendTag( "year"      , If(year = "", Me.Year, year))
                 totalinfo.AppendTag( "studio"    , Studio      )
                 totalinfo.AppendTag( "outline"   , Outline     )
                 totalinfo.AppendTag( "top250"    , Top250      )
@@ -1243,6 +1267,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "id"        , imdbid      )
                 totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
+                totalinfo.AppendTag( "metacritic", metacritic(imdbid))
                 If Pref.MovImdbAspectRatio Then totalinfo.AppendTag( "aspect"    , ARImdb      )
                 totalinfo &= getomdbTomato(imdbid)
                 
