@@ -4184,7 +4184,19 @@ Public Class Movie
         If Pref.TagRes Then
             Dim res As String = ""
             res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
-            If res <> "" Then _scrapedMovie.fullmoviebody.tag.Insert(0, res)
+            If res <> "" Then
+                If _scrapedMovie.fullmoviebody.tag.Count > 0 AndAlso Isnumeric(_scrapedMovie.fullmoviebody.tag.Item(0)) Then
+                    Dim foundres As String = ""
+                    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
+                        If _scrapedMovie.fullmoviebody.tag.Item(0) = resin Then
+                            foundres = resin
+                            Exit For
+                        End If
+                    Next
+                    If foundres <> "" Then _scrapedMovie.fullmoviebody.tag.RemoveAt(0)
+                End If
+                _scrapedMovie.fullmoviebody.tag.Insert(0, res)
+            End If
             If _scrapedMovie.fullmoviebody.tag.Count > Pref.keywordlimit Then
                 _scrapedMovie.fullmoviebody.tag.RemoveAt(Pref.keywordlimit)
             End If

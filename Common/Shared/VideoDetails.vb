@@ -40,7 +40,8 @@ Public Class VideoDetails
         End Get
     End Property
 
-
+    Public ReadOnly Property possibleResolutions As String() = {"480", "540", "576", "720", "1080"}
+    
     Public Sub New()
         MyBase.New(Nothing, Nothing)
     End Sub
