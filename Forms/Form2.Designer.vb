@@ -1128,7 +1128,7 @@ Partial Class Form2
         Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "Form2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "XBMC Media Companion - Movie Nfo Editor"
+        Me.Text = "Media Companion for XBMC\Kodi - Movie Nfo Editor"
         CType(Me.moviethumb,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.PictureBox2,System.ComponentModel.ISupportInitialize).EndInit
