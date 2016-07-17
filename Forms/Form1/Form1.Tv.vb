@@ -1515,7 +1515,7 @@ Partial Public Class Form1
             messbox.Show()
             Me.Refresh()
             messbox.Refresh()
-
+            Try
             Dim tvdbstuff As New TVDBScraper
             Dim mirror As List(Of String) = tvdbstuff.getmirrors()
             Dim showslist As String = tvdbstuff.findshows(TextBox26.Text, mirror(0))
@@ -1551,9 +1551,7 @@ Partial Public Class Form1
                                     Exit For
                                 End If
                             Next
-                            If exists = False Then
-                                listOfShows.Add(lan)
-                            End If
+                            If exists = False Then listOfShows.Add(lan)
                     End Select
                 Next
             Else
@@ -1584,6 +1582,10 @@ Partial Public Class Form1
 
             Call util_LanguageCheck()
             messbox.Close()
+            Catch
+                If Not IsNothing(messbox) Then messbox.Close()
+                Throw New Exception()
+            End Try
         Else
             MsgBox("Please Enter a Search Term")
         End If
