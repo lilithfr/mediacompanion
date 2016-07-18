@@ -23,7 +23,7 @@ Public Class TvShow
 
     Public Property Title As New ProtoProperty(Me, "title", CacheMode:=CacheMode.Both)
     Public Property SortTitle As New ProtoProperty(Me, "sorttitle")                         'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
-    Public Property Rating As New ProtoProperty(Me, "rating")
+    Public Property Rating As New ProtoProperty(Me, "rating", "")
     Public Property Year As New ProtoProperty(Me, "year")
     Public Property Top250 As New ProtoProperty(Me, "top250")                               'from XBMC created tvshow.nfo
 
@@ -31,7 +31,7 @@ Public Class TvShow
     Public Property EpisodeCount As New ProtoProperty(Me, "episode")                        'from XBMC created tvshow.nfo
     Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")                 'from XBMC created tvshow.nfo
     Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")               'from XBMC created tvshow.nfo
-    Public Property Votes As New ProtoProperty(Me, "votes")                                 'from XBMC created tvshow.nfo
+    Public Property Votes As New ProtoProperty(Me, "votes", "")                             'from XBMC created tvshow.nfo
     Public Property Plot As New ProtoProperty(Me, "plot", CacheMode:= CacheMode.Both)
     Public Property Outline As New ProtoProperty(Me, "outline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property TagLine As New ProtoProperty(Me, "tagline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
@@ -39,7 +39,7 @@ Public Class TvShow
     Public Property Mpaa As New ProtoProperty(Me, "mpaa")
     Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")                       'obsolete
     Public Property Playcount As New ProtoProperty(Me, "playcount", "1", CacheMode:= CacheMode.Both)
-    Public Property Genre As New ProtoProperty(Me, "genre")
+    Public Property Genre As New ProtoProperty(Me, "genre", "")
     Public Property Credits As New ProtoProperty(Me, "credits")
     Public Property [Set] As New ProtoProperty(Me, "set")                                       'XBMC uses same nfo structure for movie as for tvshow nfo file
     Public Property Director As New ProtoProperty(Me, "director")
@@ -241,6 +241,7 @@ Public Class TvShow
         Me.Title.Value = If(Not String.IsNullOrEmpty(Series.SeriesName.Value), Series.SeriesName.Value, Me.Title.Value) 'not set up in ScrapeShowTask.vb
         Me.Runtime.Value = Series.RunTime.Value
         Me.Rating.Value = Series.Rating.Value
+        Me.Votes.Value  = Series.RatingCount.value
         Me.Premiered.Value = Series.FirstAired.Value
         Me.Year.Value = If(Not String.IsNullOrEmpty(Series.FirstAired.Value), Series.FirstAired.Value.Substring(0,4), "")
         Me.Studio.Value = Series.Network.Value

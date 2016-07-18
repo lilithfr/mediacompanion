@@ -101,6 +101,7 @@ Partial Class frmPreferences
         Me.tbMkvMergeGuiPath = New System.Windows.Forms.TextBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
+        Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
@@ -136,6 +137,7 @@ Partial Class frmPreferences
         Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
         Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.cbDisplayAllSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -483,8 +485,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
-        Me.cbDisplayAllSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -1427,6 +1427,18 @@ Partial Class frmPreferences
         Me.ToolTip1.SetToolTip(Me.cmbxTvMaxGenres, "Media Companion will not scrape more than"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"tne number of genres set with this con"& _ 
         "trol")
         '
+        'cbDisplayDefaultSubtitleLang
+        '
+        Me.cbDisplayDefaultSubtitleLang.AutoSize = true
+        Me.cbDisplayDefaultSubtitleLang.Location = New System.Drawing.Point(12, 343)
+        Me.cbDisplayDefaultSubtitleLang.Name = "cbDisplayDefaultSubtitleLang"
+        Me.cbDisplayDefaultSubtitleLang.Size = New System.Drawing.Size(273, 19)
+        Me.cbDisplayDefaultSubtitleLang.TabIndex = 108
+        Me.cbDisplayDefaultSubtitleLang.Text = "Display Default Subtitle lang in Media Overlay"
+        Me.ToolTip1.SetToolTip(Me.cbDisplayDefaultSubtitleLang, "If any track is set as Default Subtitle, display Subtitle language"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"else display "& _ 
+        "First subtitle language."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"If unselected, First subtitle language is shown.")
+        Me.cbDisplayDefaultSubtitleLang.UseVisualStyleBackColor = true
+        '
         'cbXbmcTmdbActorFromImdb
         '
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
@@ -1829,6 +1841,16 @@ Partial Class frmPreferences
         Me.TPCommonSettings.TabIndex = 0
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
+        '
+        'cbDisplayAllSubtitleLang
+        '
+        Me.cbDisplayAllSubtitleLang.AutoSize = true
+        Me.cbDisplayAllSubtitleLang.Location = New System.Drawing.Point(12, 368)
+        Me.cbDisplayAllSubtitleLang.Name = "cbDisplayAllSubtitleLang"
+        Me.cbDisplayAllSubtitleLang.Size = New System.Drawing.Size(238, 19)
+        Me.cbDisplayAllSubtitleLang.TabIndex = 109
+        Me.cbDisplayAllSubtitleLang.Text = "Show all Subtitle lang in Media Overlay"
+        Me.cbDisplayAllSubtitleLang.UseVisualStyleBackColor = true
         '
         'cbGenreCustomBefore
         '
@@ -4298,7 +4320,6 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
-        Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
         Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
         Me.GroupBox17.Controls.Add(Me.GroupBox43)
         Me.GroupBox17.Controls.Add(Me.Label111)
@@ -4315,6 +4336,7 @@ Partial Class frmPreferences
         Me.GroupBox17.Controls.Add(Me.ListBox12)
         Me.GroupBox17.Controls.Add(Me.Label122)
         Me.GroupBox17.Controls.Add(Me.ComboBox8)
+        Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
         Me.GroupBox17.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox17.Location = New System.Drawing.Point(4, 4)
         Me.GroupBox17.Margin = New System.Windows.Forms.Padding(4)
@@ -5784,28 +5806,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbDisplayDefaultSubtitleLang
-        '
-        Me.cbDisplayDefaultSubtitleLang.AutoSize = true
-        Me.cbDisplayDefaultSubtitleLang.Location = New System.Drawing.Point(12, 343)
-        Me.cbDisplayDefaultSubtitleLang.Name = "cbDisplayDefaultSubtitleLang"
-        Me.cbDisplayDefaultSubtitleLang.Size = New System.Drawing.Size(273, 19)
-        Me.cbDisplayDefaultSubtitleLang.TabIndex = 108
-        Me.cbDisplayDefaultSubtitleLang.Text = "Display Default Subtitle lang in Media Overlay"
-        Me.ToolTip1.SetToolTip(Me.cbDisplayDefaultSubtitleLang, "If any track is set as Default Subtitle, display Subtitle language"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"else display "& _ 
-        "First subtitle language."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"If unselected, First subtitle language is shown.")
-        Me.cbDisplayDefaultSubtitleLang.UseVisualStyleBackColor = true
-        '
-        'cbDisplayAllSubtitleLang
-        '
-        Me.cbDisplayAllSubtitleLang.AutoSize = true
-        Me.cbDisplayAllSubtitleLang.Location = New System.Drawing.Point(12, 368)
-        Me.cbDisplayAllSubtitleLang.Name = "cbDisplayAllSubtitleLang"
-        Me.cbDisplayAllSubtitleLang.Size = New System.Drawing.Size(238, 19)
-        Me.cbDisplayAllSubtitleLang.TabIndex = 109
-        Me.cbDisplayAllSubtitleLang.Text = "Show all Subtitle lang in Media Overlay"
-        Me.cbDisplayAllSubtitleLang.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '

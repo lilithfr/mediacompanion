@@ -334,6 +334,22 @@ Partial Public Class Form1
         If Pref.tvshow_useXBMC_Scraper = True Then
             Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.TvdbId.Value, selectedLang, WorkingTvShow.NfoFilePath)
             If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
+            Dim newshow As TvShow = nfoFunction.tvshow_NfoLoad(WorkingTvShow.NfoFilePath)
+            newshow.ListActors.Clear()
+            If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
+                TvGetActorTvdb(NewShow)
+            ElseIf (Pref.TvdbActorScrape = 1 Or Pref.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
+                TvGetActorImdb(NewShow)
+            End If
+            If Pref.tvdbIMDbRating Then
+                Dim rating As String = ""
+                Dim votes As String = ""
+                If ep_getIMDbRating(newshow.ImdbId.Value, rating, votes) Then
+                    newshow.Rating.Value    = rating
+                    newshow.Votes.Value     = votes
+                End If
+            End If
+            nfoFunction.tvshow_NfoSave(newshow, True)
             Call tv_ShowLoad(WorkingTvShow)
         Else
             For Each episode In WorkingTvShow.Episodes
@@ -1721,7 +1737,24 @@ Partial Public Class Form1
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                         NewShow.AbsorbTvdbSeries(SeriesInfo.Series(0))
                         NewShow.Language.Value = searchLanguage
-
+                        
+                        If Pref.tvdbIMDbRating Then
+                            Dim ratingdone As Boolean = False
+                            Dim rating As String = ""
+                            Dim votes As String = ""
+                            If ep_getIMDbRating(NewShow.ImdbId.Value, rating, votes) Then
+                                If rating <> "" Then
+                                    ratingdone = True
+                                    NewShow.Rating.Value = rating
+                                    NewShow.Votes.Value = votes
+                                End If
+                            End If
+                            If Not ratingdone Then
+                                NewShow.Rating.Value      = SeriesInfo.Series(0).Rating.Value
+                                NewShow.Votes.Value       = SeriesInfo.Series(0).RatingCount.Value
+                            End If
+                        End If
+                        
                         tvprogresstxt &= " - Getting Actors"
                         bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
                         If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
@@ -1989,7 +2022,7 @@ Partial Public Class Form1
                                 End If
                                 If tvBatchList.shStudio     Then editshow.Studio.Value = tvseriesdata.Series(0).Network.Value
                                 If tvBatchList.shPlot       Then editshow.Plot.Value = tvseriesdata.Series(0).Overview.Value
-                                If tvBatchList.shRating     Then editshow.Rating.Value = tvseriesdata.Series(0).Rating.Value 
+                                'If tvBatchList.shRating     Then editshow.Rating.Value = tvseriesdata.Series(0).Rating.Value 
                                 If tvBatchList.shRuntime    Then editshow.Runtime.Value =  tvseriesdata.Series(0).RunTime.Value
                                 If tvBatchList.shStatus     Then editshow.Status.Value = tvseriesdata.Series(0).Status.Value
                                 Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & editshow.TvdbId.Value & "/all/" & language & ".zip"
@@ -1997,7 +2030,24 @@ Partial Public Class Form1
                                     editshow.Url.Value = episodeguideurl
                                     editshow.Url.Node.SetAttributeValue("cache", editshow.TvdbId.Value)
                                     editshow.Url.AttachToParentNode(editshow.EpisodeGuideUrl.Node)
-
+                                If tvBatchList.shRating Then
+                                    Dim ratingdone As Boolean = False
+                                    If Pref.tvdbIMDbRating Then
+                                        Dim rating As String = ""
+                                        Dim votes As String = ""
+                                        If ep_getIMDbRating(editshow.ImdbId.Value, rating, votes) Then
+                                            If rating <> "" Then
+                                                ratingdone = True
+                                                editshow.Rating.Value = rating
+                                                editshow.Votes.Value = votes
+                                            End If
+                                        End If
+                                    End If
+                                    If Not ratingdone Then
+                                        editshow.Rating.Value      = tvseriesdata.Series(0).Rating.Value
+                                        editshow.Votes.Value       = tvseriesdata.Series(0).RatingCount.Value
+                                    End If
+                                End If
                                 If tvBatchList.doShowActors = True Then
                                     If editshow.TvShowActorSource.Value = Nothing Then 
                                         If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Then

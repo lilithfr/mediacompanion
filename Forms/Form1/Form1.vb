@@ -15330,6 +15330,14 @@ Public Class Form1
                 ElseIf (Pref.TvdbActorScrape = 1 Or Pref.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
                     TvGetActorImdb(NewShow)
                 End If
+                If Pref.tvdbIMDbRating Then
+                    Dim rating As String = ""
+                    Dim votes As String = ""
+                    If ep_getIMDbRating(newshow.ImdbId.Value, rating, votes) Then
+                        newshow.Rating.Value    = rating
+                        newshow.Votes.Value     = votes
+                    End If
+                End If
                 nfoFunction.tvshow_NfoSave(newshow, True)
                 Call tv_ShowLoad(WorkingTvShow)
                 TvTreeview.Refresh()

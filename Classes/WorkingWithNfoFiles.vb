@@ -994,6 +994,8 @@ Public Class WorkingWithNfoFiles
             stage = 11
             child = doc.CreateElement("rating") : child.InnerText = tvshowtosave.rating.Value
             root.AppendChild(child)
+            child = doc.CreateElement("votes") : child.InnerText = tvshowtosave.Votes.Value
+            root.AppendChild(child)
 
             stage = 12
             child = doc.CreateElement("year") : child.InnerText = tvshowtosave.year.Value
@@ -1178,6 +1180,8 @@ Public Class WorkingWithNfoFiles
                             If tmpstr.IndexOf("/10") <> -1 Then tmpstr.Replace("/10", "")
                             If tmpstr.IndexOf(" ") <> -1 Then tmpstr.Replace(" ", "")
                             newtvshow.Rating.Value = tmpstr
+                        Case "votes"
+                            newtvshow.Votes.Value = thisresult.InnerText
                         Case "year"
                             newtvshow.Year.Value = thisresult.InnerText
                         Case "premiered"
@@ -1231,8 +1235,8 @@ Public Class WorkingWithNfoFiles
 
             If newtvshow.tvdbid = Nothing Then newtvshow.TvdbId.Value = ""
             If newtvshow.ImdbId.Value = Nothing Then newtvshow.ImdbId.Value = "0"
-            If newtvshow.genre = Nothing Then newtvshow.Genre.Value = ""
-            If newtvshow.rating = Nothing Then newtvshow.Rating.Value = ""
+            'If newtvshow.genre = Nothing Then newtvshow.Genre.Value = ""
+            'If newtvshow.rating = Nothing Then newtvshow.Rating.Value = ""
             If newtvshow.Mpaa.Value = Nothing Then newtvshow.Mpaa.Value = "na"
             If newtvshow.Studio.Value = Nothing Then newtvshow.Studio.Value = "-"
             If newtvshow.Runtime.Value = Nothing Then newtvshow.Runtime.Value = "0"
