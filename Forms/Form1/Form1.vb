@@ -242,6 +242,7 @@ Public Class Form1
     Dim CloseMC As Boolean = False
     Public Imageloading As Boolean = False
     Dim MoviesFiltersResizeCalled As Boolean = False
+    Private tb_tagtxt_changed As Boolean = False
 
     'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -1745,6 +1746,7 @@ Public Class Form1
                 cbUsrRated.Text = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
                 SetTagTxtField
                 tagtxt.Text     = ""
+                tb_tagtxt_changed = False
                 If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
                     Dim first As Boolean = True
                     For Each t In workingMovieDetails.fullmoviebody.tag
@@ -1903,7 +1905,7 @@ Public Class Form1
             lblCurrentLoadedPoster.Text = ""
             TextBox34.Text = ""
             titletxt.Text = ""
-            tagtxt.Text = ""
+            tagtxt.Text = ""  :  tb_tagtxt_changed = False
             roletxt.Text = ""
             PictureBoxActor.Image = Nothing
             Panel6.Visible = False
@@ -2716,9 +2718,11 @@ Public Class Form1
                         tagtxt.Text &= t
                         first = False
                     Next
+                    tb_tagtxt_changed = False
                 End If
             Else
-                If Pref.AllowUserTags Then
+                If Pref.AllowUserTags AndAlso tb_tagtxt_changed Then
+                    tb_tagtxt_changed = False
                     movie.ScrapedMovie.fullmoviebody.tag.Clear()
                     For Each wd In tagtxt.Text.Split(",")
                         wd = wd.Trim
@@ -2746,7 +2750,7 @@ Public Class Form1
             Dim Startfullpathandfilename As String = ""
             If Not ISNothing(DataGridViewMovies.CurrentRow) Then
                 Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-                Startfullpathandfilename = DataGridViewMovies.Item(0, i).Value.ToString
+                Startfullpathandfilename = DataGridViewMovies.Item(5, i).Value.ToString
                 messbox.Cancelled = False
                 Dim pos As Integer = 0
                 Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
@@ -2790,6 +2794,19 @@ Public Class Form1
                                 End If
                             End If
                         Next
+                    Else
+                        If tb_tagtxt_changed Then
+                            tb_tagtxt_changed = False
+                            movie.ScrapedMovie.fullmoviebody.tag.Clear()
+                            If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
+                                Dim tags() As String = tagtxt.Text.Split(",")
+                                For each strtag In tags
+                                    If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(strtag.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(strtag.Trim())
+                                Next
+                            ElseIf tagtxt.Text <> "" Then
+                                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(tagtxt.Text.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(tagtxt.Text.Trim())
+                            End If
+                        End If
                     End If
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
@@ -17813,5 +17830,8 @@ Public Class Form1
             tsStatusLabel1.Visible = True
         End If
     End Sub
-    
+
+    Private Sub tagtxt_TextChanged(sender As Object, e As EventArgs) Handles tagtxt.TextChanged
+        tb_tagtxt_changed = True
+    End Sub
 End Class
