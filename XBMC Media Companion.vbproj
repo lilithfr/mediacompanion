@@ -221,6 +221,12 @@
     <Compile Include="Forms\frmFanartTvArtSelect.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\frmMovSetAdd.Designer.vb">
+      <DependentUpon>frmMovSetAdd.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMovSetAdd.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\frmMovSets.Designer.vb">
       <DependentUpon>frmMovSets.vb</DependentUpon>
     </Compile>
@@ -521,6 +527,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmFanartTvArtSelect.resx">
       <DependentUpon>frmFanartTvArtSelect.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMovSetAdd.resx">
+      <DependentUpon>frmMovSetAdd.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMovSets.resx">
       <DependentUpon>frmMovSets.vb</DependentUpon>
@@ -826,6 +835,7 @@
     <Content Include="Resources\chimes.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\correct_manual24.png" />
     <Content Include="Resources\default_tvbanner.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -835,10 +845,15 @@
     <Content Include="Resources\default_tvposter.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\error24.png" />
     <Content Include="Resources\lockwatched.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\mc-xbmc-link.JPG" />
+    <None Include="Resources\remove64.png" />
+    <Content Include="Resources\refreshMovSet64.png" />
+    <Content Include="Resources\moviesetadd64.png" />
+    <Content Include="Resources\missing24.png" />
     <Content Include="Resources\video_flags\sublang.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -890,7 +890,7 @@ Public Class Movies
 
     Public ReadOnly Property TmDbMovieSetIds As List(Of Integer)
         Get
-            Dim q = (From m In MovieCache Where IsNumeric(m.MovieSet.MovieSetId) Select Convert.ToInt32(m.MovieSet.MovieSetId) ).Distinct()
+            Dim q = (From m In MovieCache Where IsNumeric(m.MovieSet.MovieSetId) Select Convert.ToInt32(m.MovieSet.MovieSetId)).Distinct()
 
             Return q.AsEnumerable.ToList
         End Get
@@ -2213,7 +2213,7 @@ Public Class Movies
         Next
     End Sub
 
-    Sub LoadMovieSetCache(setDb As List(Of MovieSetInfo),typeName As String,  fileName As String)
+    Sub LoadMovieSetCache(setDb As List(Of MovieSetInfo), typeName As String, fileName As String)
         setDb.Clear()
         If Not File.Exists(fileName) Then Exit Sub
         Dim moviesetcache As New XmlDocument
@@ -2227,16 +2227,16 @@ Public Class Movies
                     Dim detail As XmlNode = Nothing
                     Dim movac As New List(Of CollectionMovie)
                     For Each detail In thisresult.ChildNodes
-                        
+
                         Select Case detail.Name
                             Case "moviesetname"
                                 movieset = detail.InnerText
                             Case "id"
-                                moviesetId = detail.InnerText
+                                moviesetId = setMovieSetID(detail.InnerText, setDb)
                             Case "collection"
                                 Dim ac As New CollectionMovie
                                 Dim detail2 As XmlNode = Nothing
-                                For each detail2 In detail.ChildNodes
+                                For Each detail2 In detail.ChildNodes
                                     Select Case detail2.Name
                                         Case "movietitle"
                                             ac.MovieTitle = detail2.InnerText
@@ -2265,6 +2265,33 @@ Public Class Movies
             End Select
         Next
     End Sub
+
+
+    ''' <summary>
+    ''' Make sure no Movie Set has an empty ID. If we can't find an ID on tmdb, we still need to distinguish the set
+    ''' from other sets. Comparing movie names isn't the proper way, as users in Media Companion can choose to rename
+    ''' their movies manually not corresponding to online names so we rather check for an ID (online or local)
+    ''' 
+    ''' </summary>
+    ''' <param name="moviesetID"></param>
+    ''' <returns></returns>
+    Function setMovieSetID(moviesetID As String, setDb As List(Of MovieSetInfo)) As String
+        If moviesetID = String.Empty Then   ' if no TmdbID is found set it to a local ID to avoid empty ID's
+            Dim moviesetTemp As MovieSetInfo
+            Dim moviesetTempHighestID = 0
+            For Each moviesetTemp In setDb
+                If moviesetTemp.MovieSetId.Chars(0) = "L" Then
+                    Dim moviesetTempID = moviesetTemp.MovieSetId.Substring(1).ToInt()
+                    If moviesetTempID + 1 > moviesetTempHighestID Then
+                        moviesetTempHighestID = moviesetTempID + 1
+                    End If
+                End If
+            Next
+            moviesetID = "L" + moviesetTempHighestID.ToString().PadLeft(5 - moviesetTempHighestID.ToString().Length, "0")
+        End If
+        Return moviesetID
+    End Function
+
 
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Pref.workingProfile.actorcache)

@@ -1,8 +1,8 @@
 
-Public Class MovieSetsList
+Public Class MovieSetItem
 
-    Public tmdbid  As String
-    Public title   As String
+    Public tmdbid As String
+    Public title As String
     Public present As Boolean
 
     'Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
@@ -11,7 +11,7 @@ Public Class MovieSetsList
     '    present = False
     'End Sub
 
-    Sub New
+    Sub New()
 
     End Sub
 End Class

@@ -4,7 +4,8 @@ Public Class MovieSetInfo
     Private  _movieSetName        As String = ""
     Private  _movieSetDisplayName As String = ""
 
-    Property MovieSetId     As String = ""
+
+    Property MovieSetId As String = ""   ' Defaults to Themoviedb.org ID if found
     Property Collection     As New List(Of CollectionMovie)
 
 

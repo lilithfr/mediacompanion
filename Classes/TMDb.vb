@@ -117,7 +117,7 @@ Public Class TMDb
     Private _mcSetFanart            As New List(Of McImage)
 
 
-    Private _mc_collection          As New List(Of MovieSetsList)
+    Private _mc_collection          As New List(Of MovieSetItem)
     Private _thumbs                 As New List(Of String)
     Private _keywords               As New List(Of String)
     Private _alternateTitles        As WatTmdb.V3.TmdbMovieAlternateTitles
@@ -223,11 +223,11 @@ Public Class TMDb
         End Get 
     End Property
 
-    Public ReadOnly Property Collection As List(Of MovieSetsList) 
+    Public ReadOnly Property Collection As List(Of MovieSetItem)
         Get
-            FetchSet
+            FetchSet()
             Return _mc_collection
-        End Get 
+        End Get
     End Property
 
 
@@ -835,7 +835,7 @@ Public Class TMDb
     Private Sub AssignMcCollections
         If IsNothing(_collection.parts) Then Exit Sub
         For each item In _collection.parts
-            Dim tmpitem As New MovieSetsList
+            Dim tmpitem As New MovieSetItem
             tmpitem.title = item.title
             tmpitem.tmdbid = item.id
             _mc_collection.Add(tmpitem)
