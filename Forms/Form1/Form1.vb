@@ -5810,7 +5810,7 @@ Public Class Form1
             WorkingTvShow.TvdbId.Value = ""
         End If
         If WorkingTvShow.TvdbId.Value.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
-        If Panel9.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
+        If Panel_EpisodeInfo.Visible = False Then 'i.e. rescrape selected TVSHOW else rescrape selected EPISODE
             'its a tv show
             Dim selectednode As Integer = TvTreeview.SelectedNode.Index 
             tv_Rescrape_Show(WorkingTvShow)
@@ -12898,9 +12898,14 @@ Public Class Form1
     ''' <param name="MovieSetName"></param>
     ''' <returns></returns>
     Private Function GetMovSet(MovieSetName As String) As MovieSetInfo
+        Dim q As New MovieSetInfo
         For Each p In oMovies.MovieSetDB
-            If p.MovieSetName = MovieSetName Then Return p
+            If p.MovieSetName = MovieSetName Then
+                q = p
+                Exit For
+            End If
         Next
+        Return q
         '' need something here for later as we shouldn't get here anyway
     End Function
 
@@ -14239,7 +14244,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button44_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button44.Click
+    Private Sub btn_TvRescrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvRescrape.Click
         Try
             tv_Rescrape()
         Catch ex As Exception
@@ -14285,14 +14290,14 @@ Public Class Form1
     End Sub
 
     Private Sub tb_Sh_Ep_Title_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_Sh_Ep_Title.Enter
-        If Panel9.Visible Then
+        If Panel_EpisodeInfo.Visible Then
             tb_Sh_Ep_Title.Text = ep_SelectedCurrently(TvTreeview).Title.Value
         Else
             tb_Sh_Ep_Title.Text = tv_ShowSelectedCurrently(TvTreeview).Title.Value
         End If
     End Sub
     
-    Private Sub Button_Save_TvShow_Episode_From_Form(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_Save_TvShow_Episode.Click
+    Private Sub btn_SaveTvShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_SaveTvShowOrEpisode.Click
         Try
             Dim Show As Media_Companion.TvShow = Nothing
             Dim Season As Media_Companion.TvSeason = Nothing
@@ -14408,15 +14413,15 @@ Public Class Form1
         End Try
     End Sub          'save button
 
-    Private Sub Button47_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button47.Click
+    Private Sub btn_TvShSortOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvShSortOrder.Click
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Dim TVShowNFOContent As String = ""
-        If Button47.Text = "Default" Then
+        If btn_TvShSortOrder.Text = "Default" Then
             WorkingTvShow.SortOrder.Value = "dvd"
-            Button47.Text = "DVD"
+            btn_TvShSortOrder.Text = "DVD"
         Else
             WorkingTvShow.SortOrder.Value = "Default"
-            Button47.Text = "Default"
+            btn_TvShSortOrder.Text = "Default"
         End If
         'Button_Save_TvShow_Episode.PerformClick()
         nfoFunction.tvshow_NfoSave(WorkingTvShow, True)
@@ -14511,7 +14516,7 @@ Public Class Form1
         ZoomActorPictureBox(PictureBox6)
     End Sub
 
-    Private Sub Button_TV_State_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button_TV_State.Click
+    Private Sub btn_TvShState_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvShState.Click
         Try
             Dim Btn As Button = sender
             If TypeOf Btn.Tag Is Media_Companion.TvShow Then
@@ -14527,17 +14532,17 @@ Public Class Form1
                         tb_Sh_Ep_Title.BackColor = Color.White
                 End Select
                 If TempShow.State = Media_Companion.ShowState.Locked Then
-                    Button_TV_State.Text = "Locked"
-                    Button_TV_State.BackColor = Color.Red
+                    btn_TvShState.Text = "Locked"
+                    btn_TvShState.BackColor = Color.Red
                 ElseIf TempShow.State = Media_Companion.ShowState.Open Then
-                    Button_TV_State.Text = "Open"
-                    Button_TV_State.BackColor = Color.LawnGreen
+                    btn_TvShState.Text = "Open"
+                    btn_TvShState.BackColor = Color.LawnGreen
                 ElseIf TempShow.State = Media_Companion.ShowState.Unverified Then
-                    Button_TV_State.Text = "Un-Verified"
-                    Button_TV_State.BackColor = Color.Yellow
+                    btn_TvShState.Text = "Un-Verified"
+                    btn_TvShState.BackColor = Color.Yellow
                 Else
-                    Button_TV_State.Text = "Error"
-                    Button_TV_State.BackColor = Color.Gray
+                    btn_TvShState.Text = "Error"
+                    btn_TvShState.BackColor = Color.Gray
                 End If
                 TempShow.UpdateTreenode()   'update the treenode so we can see the state change
                 nfoFunction.tvshow_NfoSave(TempShow, True)  'save the nfo immediately (you don't have to press save button)

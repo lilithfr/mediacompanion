@@ -72,7 +72,7 @@ Public Class Movie
     Private _videotsrootpath          As String =""
     Private _rescrape                 As Boolean = False
     Private _previousCache            As ComboList = Nothing
-    Private _triedUrls               As New List(Of String)
+    Private _triedUrls                As New List(Of String)
     Private _trailerUrl               As String =""
     Public _mvsearchname              As String = ""
      

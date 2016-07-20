@@ -22,7 +22,7 @@ Partial Public Class Form1
 
 #Region "Tv Treeview Routines"
     Public Sub tv_ViewReset()
-        Button_Save_TvShow_Episode.Enabled = True
+        btn_SaveTvShowOrEpisode.Enabled = True
         Tv_TreeViewContext_RefreshShow.Enabled = False
         Tv_TreeViewContext_RefreshShow.Visible = False
         Tv_TreeViewContext_ShowMissEps.Enabled = False
@@ -410,19 +410,19 @@ Partial Public Class Form1
             Dim todo As Boolean = False
 
             If Show.State = Media_Companion.ShowState.Locked Then
-                Button_TV_State.Text = "Locked"
-                Button_TV_State.BackColor = Color.Red
+                btn_TvShState.Text = "Locked"
+                btn_TvShState.BackColor = Color.Red
             ElseIf Show.State = Media_Companion.ShowState.Open Then
-                Button_TV_State.Text = "Open"
-                Button_TV_State.BackColor = Color.LawnGreen
+                btn_TvShState.Text = "Open"
+                btn_TvShState.BackColor = Color.LawnGreen
             ElseIf Show.State = Media_Companion.ShowState.Unverified Then
-                Button_TV_State.Text = "Un-Verified"
-                Button_TV_State.BackColor = Color.Yellow
+                btn_TvShState.Text = "Un-Verified"
+                btn_TvShState.BackColor = Color.Yellow
             Else
-                Button_TV_State.Text = "Error"
-                Button_TV_State.BackColor = Color.Gray
+                btn_TvShState.Text = "Error"
+                btn_TvShState.BackColor = Color.Gray
             End If
-            Button_TV_State.Tag = Show
+            btn_TvShState.Tag = Show
 
             If Show.Status.Value = "Ended" Then
                 bnt_TvSeriesStatus.Text = "Ended"
@@ -458,8 +458,8 @@ Partial Public Class Form1
             util_ImageLoad(tv_PictureBoxBottom, tvpbbottom, Utilities.DefaultTvBannerPath)
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultTvFanartPath)
 
-            Panel9.Visible = False
-            Panel8.Visible = False
+            Panel_EpisodeInfo.Visible = False
+            Panel_EpisodeActors.Visible = False
             lbl_sorttitle.Visible = True
             TextBox_Sorttitle.Visible = True
 
@@ -486,9 +486,9 @@ Partial Public Class Form1
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Pref.sortorder
             If Show.SortOrder.Value = "dvd" Then
-                Button47.Text = "DVD"
+                btn_TvShSortOrder.Text = "DVD"
             ElseIf Show.SortOrder.Value = "default" Then
-                Button47.Text = "Default"
+                btn_TvShSortOrder.Text = "Default"
             End If
             '0	-	all from tvdb
             '1	-	all from imdb
@@ -517,8 +517,8 @@ Partial Public Class Form1
             Call tv_ActorsLoad(Show.ListActors)
             'Show.UpdateTreenode()
         End If
-        Panel9.Visible = False
-        Panel8.Visible = False
+        Panel_EpisodeInfo.Visible = False
+        Panel_EpisodeActors.Visible = False
     End Sub
 
     Private Sub tb_ShGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles tb_ShGenre.MouseDown
@@ -653,7 +653,7 @@ Partial Public Class Form1
 
     Public Sub TvPanel7Update(ByVal TvShPath As String)
         tvFanlistbox.Items.Clear()
-        Panel7.Visible = TvCheckforExtraArt(TvShPath)
+        Panel_TvShowExtraArtwork.Visible = TvCheckforExtraArt(TvShPath)
     End Sub
 
     Private Sub tvFanlistbox_Mouse(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvFanlistbox.MouseDown
@@ -693,7 +693,7 @@ Partial Public Class Form1
     Public Sub tv_SeasonSelected(ByRef SelectedSeason As Media_Companion.TvSeason)
         SelectedSeason.ShowObj.ListActors.Clear()
         SelectedSeason.ShowObj.Load()
-        Panel7.Visible = False
+        Panel_TvShowExtraArtwork.Visible = False
         Dim Show As Media_Companion.TvShow
         If SelectedSeason.SeasonNode.Parent.Tag IsNot Nothing Then
             Show = SelectedSeason.SeasonNode.Parent.Tag
@@ -726,8 +726,8 @@ Partial Public Class Form1
         tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
         tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
         tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
-        Panel9.Visible = False
-        Panel8.Visible = False
+        Panel_EpisodeInfo.Visible = False
+        Panel_EpisodeActors.Visible = False
         lbl_sorttitle.Visible = True
         TextBox_Sorttitle.Visible = True
         ExpandSelectedShowToolStripMenuItem.Enabled = True
@@ -785,8 +785,8 @@ Partial Public Class Form1
                 TabControl3.Refresh()
             End If
         End If
-        Panel9.Visible = True
-        Panel8.Visible = True   'set ep actor panel visible, we'll hide later if no actor's in episode.
+        Panel_EpisodeInfo.Visible = True
+        Panel_EpisodeActors.Visible = True   'set ep actor panel visible, we'll hide later if no actor's in episode.
         cmbxEpActor.Items.Clear()
         tbEpRole.Text = ""
 
@@ -843,7 +843,7 @@ Partial Public Class Form1
     End Function
 
     Private Sub ep_Load(ByRef Season As Media_Companion.TvSeason, ByRef Episode As Media_Companion.TvEpisode, Optional ByVal epupdate As Boolean = False)
-        Panel7.Visible = False
+        Panel_TvShowExtraArtwork.Visible = False
 
         'test if already loaded nfo into treeview, if so, then no need to reload
         'If IsNothing(Episode.Plot.Value) OrElse epupdate Then
@@ -871,8 +871,8 @@ Partial Public Class Form1
         tb_EpPath.Text = Utilities.ReplaceNothing(Episode.FolderPath)
         If Not IO.File.Exists(Episode.NfoFilePath) Then
             tb_Sh_Ep_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
-            Panel9.Visible = True
-            Panel8.Visible = True
+            Panel_EpisodeInfo.Visible = True
+            Panel_EpisodeActors.Visible = True
             cmbxEpActor.Items.Clear()
             tbEpRole.Text = ""
             Episode.EpisodeNode.BackColor = Color.Red
@@ -943,7 +943,7 @@ Partial Public Class Form1
             cmbxEpActor.Items.Clear()
             cmbxEpActor.Items.Add("")
             cmbxEpActor.SelectedIndex = 0
-            Panel8.Visible = False 
+            Panel_EpisodeActors.Visible = False 
         End If
 
         If (Episode IsNot Nothing AndAlso Episode.Thumbnail IsNot Nothing) Then
@@ -960,7 +960,7 @@ Partial Public Class Form1
 
         Dim video_flags = GetEpMediaFlags()
         movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, tb_EpRating.Text, video_flags)
-        Panel9.Visible = True
+        Panel_EpisodeInfo.Visible = True
 
     End Sub
 
