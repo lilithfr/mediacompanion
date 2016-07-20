@@ -49,22 +49,23 @@ Public Class Movies
     Public Event FileDownloadComplete    ()
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
-    Private _certificateMappings   As CertificateMappings
-    Private _actorDb               As New List(Of ActorDatabase)
-    Public _tmpActorDb             As New List(Of ActorDatabase)
-    Private _directorDb            As New List(Of DirectorDatabase)
-    Public _tmpDirectorDb          As New List(Of DirectorDatabase)
-    Private _moviesetDb            As New List(Of MovieSetInfo)
-    Public _tmpMoviesetDb          As New List(Of MovieSetInfo)
-    Public Shared movRebuildCaches As Boolean = False
+    Private _certificateMappings    As CertificateMappings
+    Private _actorDb                As New List(Of ActorDatabase)
+    Public _tmpActorDb              As New List(Of ActorDatabase)
+    Private _directorDb             As New List(Of DirectorDatabase)
+    Public _tmpDirectorDb           As New List(Of DirectorDatabase)
+    Private _moviesetDb             As New List(Of MovieSetInfo)
+    Private _tagDb                  As New List(Of String)
+    Public _tmpMoviesetDb           As New List(Of MovieSetInfo)
+    Public Shared movRebuildCaches  As Boolean = False
 
-    Public Property Bw            As BackgroundWorker = Nothing
-    Public Property MovieCache    As New List(Of ComboList)
-    Public Property TmpMovieCache As New List(Of ComboList)
-    Public Property tmpMVCache    As New List(Of MVComboList)
+    Public Property Bw              As BackgroundWorker = Nothing
+    Public Property MovieCache      As New List(Of ComboList)
+    Public Property TmpMovieCache   As New List(Of ComboList)
+    Public Property tmpMVCache      As New List(Of MVComboList)
     
-    Public Property NewMovies     As New List(Of Movie)
-    Public Property PercentDone   As Integer = 0
+    Public Property NewMovies       As New List(Of Movie)
+    Public Property PercentDone     As Integer = 0
 
     Private _data_GridViewMovieCache As New List(Of Data_GridViewMovie)
 
@@ -990,6 +991,12 @@ Public Class Movies
         End Get
     End Property
 
+    Public ReadOnly Property TagDB As List(Of String)
+        Get
+            Return _tagDb
+        End Get
+    End Property
+
     Public Function GetMovieSetIdFromName(mSetName As String) As String
         For Each mset In MovieSetDB
             If mset.MovieSetName = mSetName Then
@@ -1477,6 +1484,7 @@ Public Class Movies
         LoadMovieCache
         LoadPeopleCaches
         LoadMovieSetCache()
+        LoadTagCache()
     End Sub
 
     Public Sub SaveCaches
@@ -2244,6 +2252,20 @@ Public Class Movies
         Next
     End Sub
 
+    Sub LoadTagCache()
+        _tagdb.Clear()
+        If Not File.Exists(Utilities.applicationPath & "\settings\tagcache.xml") Then Exit Sub
+        Dim peopleList As New XmlDocument
+        peopleList.Load(Utilities.applicationPath & "\settings\tagcache.xml")
+        Dim thisresult As XmlNode = Nothing
+        For Each thisresult In peopleList("tag_cache")
+            Select Case thisresult.Name
+                Case "tag"
+                    _tagDb.Add(thisresult.InnerText)
+            End Select
+        Next
+    End Sub
+
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Pref.workingProfile.actorcache)
     End Sub
@@ -2379,6 +2401,33 @@ Public Class Movies
         output.Close()
     End Sub
 
+    Sub SaveTagCache()
+        Dim doc As New XmlDocument
+
+        Dim thispref As XmlNode = Nothing
+        Dim xmlproc  As XmlDeclaration
+
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+
+        Dim root  As XmlElement
+        Dim child As XmlElement
+
+        root = doc.CreateElement("tag_cache")
+        
+        For Each tagtosave In TagDb
+            child = doc.CreateElement("tag")
+            child.InnerText = tagtosave.trim
+            root.AppendChild(child)
+        Next
+
+        doc.AppendChild(root)
+
+        Dim output As New XmlTextWriter(Utilities.applicationPath & "\settings\tagcache.xml", System.Text.Encoding.UTF8)
+        output.Formatting = Formatting.Indented
+        doc.WriteTo(output)
+        output.Close()
+    End Sub
     Public Sub RebuildCaches
         'If Pref.UseMultipleThreads Then
         '    movRebuildCaches = False
@@ -2413,13 +2462,14 @@ Public Class Movies
     Public Sub RebuildMoviePeopleCaches()
         
         Dim MovSetDbTmp As New List(Of MovieSetInfo)
-        MovSetDbTmp.AddRange(_moviesetDb)
-        _actorDB      .Clear()
-        _directorDb   .Clear()
-        _moviesetDb   .Clear()
-        _tmpActorDb   .Clear()
-        _tmpDirectorDb.Clear()
-        '_tmpMoviesetDb.Clear()
+        MovSetDbTmp     .AddRange(_moviesetDb)
+        _actorDB        .Clear()
+        _directorDb     .Clear()
+        _moviesetDb     .Clear()
+        _tagDb          .Clear()
+        _tmpActorDb     .Clear()
+        _tmpDirectorDb  .Clear()
+        '_tmpMoviesetDb .Clear()
         Dim i = 0
 
         For Each movie In MovieCache
@@ -2458,6 +2508,10 @@ Public Class Movies
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))
             Next
 
+            For each t In movie.movietag
+                _tagDb.Add(t)
+            Next
+
             If Cancelled Then Exit Sub
         Next
 
@@ -2491,6 +2545,7 @@ Public Class Movies
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()
+        SaveTagCache()
     End Sub
 
     Sub RemoveMovieFromCache(fullpathandfilename)

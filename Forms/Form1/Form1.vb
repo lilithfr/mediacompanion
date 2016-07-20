@@ -2796,7 +2796,7 @@ Public Class Form1
                         Next
                     Else
                         If tb_tagtxt_changed Then
-                            tb_tagtxt_changed = False
+                            'tb_tagtxt_changed = False
                             movie.ScrapedMovie.fullmoviebody.tag.Clear()
                             If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
                                 Dim tags() As String = tagtxt.Text.Split(",")
@@ -2814,6 +2814,8 @@ Public Class Form1
                     Application.DoEvents()
                     If messbox.Cancelled Then Exit For
                 Next
+                If tb_tagtxt_changed Then tb_tagtxt_changed = False
+                UpdateFilteredList()
                 ProgState = ProgramState.Other
             Else
                 messbox.Close()
