@@ -7489,6 +7489,7 @@ Public Class Form1
                     tb_ShStudio.Font = newFont
                     tb_ShPremiered.Font = newFont
                     tb_ShRating.Font = newFont
+                    tb_ShVotes.Font     = newFont
                     tb_ShTvdbId.Font = newFont
                     tb_ShGenre.Font = newFont
                     tb_ShImdbId.Font = newFont
@@ -14282,6 +14283,7 @@ Public Class Form1
                         tb_EpDirector.Text,
                         tb_EpAired.Text,
                         tb_EpRating.Text,
+                        tb_EpVotes.Text,
                         tb_ShRunTime.Text,
                         tb_ShGenre.Text,
                         tb_ShCert.Text,

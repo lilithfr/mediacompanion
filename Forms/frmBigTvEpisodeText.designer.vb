@@ -42,12 +42,16 @@ Partial Class frmBigTvEpisodeText
         Me.tbCloseMsg = New System.Windows.Forms.TextBox()
         Me.tbPlot = New System.Windows.Forms.TextBox()
         Me.tbDetails = New System.Windows.Forms.TextBox()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
+        Me.tbVotes = New System.Windows.Forms.TextBox()
         Me.Panel1.SuspendLayout
         Me.SuspendLayout
         '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
+        Me.Panel1.Controls.Add(Me.tbVotes)
+        Me.Panel1.Controls.Add(Me.TextBox7)
         Me.Panel1.Controls.Add(Me.TextBox3)
         Me.Panel1.Controls.Add(Me.tbCert)
         Me.Panel1.Controls.Add(Me.TextBox6)
@@ -222,7 +226,7 @@ Partial Class frmBigTvEpisodeText
         Me.tbRating.Location = New System.Drawing.Point(134, 140)
         Me.tbRating.Name = "tbRating"
         Me.tbRating.ReadOnly = true
-        Me.tbRating.Size = New System.Drawing.Size(252, 31)
+        Me.tbRating.Size = New System.Drawing.Size(78, 31)
         Me.tbRating.TabIndex = 22
         Me.tbRating.Text = "10.0"
         '
@@ -322,6 +326,33 @@ Partial Class frmBigTvEpisodeText
         Me.tbDetails.TabIndex = 22
         Me.tbDetails.Text = "10.0"
         '
+        'TextBox7
+        '
+        Me.TextBox7.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
+        Me.TextBox7.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox7.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TextBox7.ForeColor = System.Drawing.Color.White
+        Me.TextBox7.Location = New System.Drawing.Point(218, 140)
+        Me.TextBox7.Name = "TextBox7"
+        Me.TextBox7.ReadOnly = true
+        Me.TextBox7.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TextBox7.Size = New System.Drawing.Size(114, 31)
+        Me.TextBox7.TabIndex = 34
+        Me.TextBox7.Text = "Votes"
+        '
+        'tbVotes
+        '
+        Me.tbVotes.BackColor = System.Drawing.Color.FromArgb(CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer), CType(CType(64,Byte),Integer))
+        Me.tbVotes.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.tbVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.tbVotes.ForeColor = System.Drawing.Color.White
+        Me.tbVotes.Location = New System.Drawing.Point(312, 140)
+        Me.tbVotes.Name = "tbVotes"
+        Me.tbVotes.ReadOnly = true
+        Me.tbVotes.Size = New System.Drawing.Size(116, 31)
+        Me.tbVotes.TabIndex = 35
+        Me.tbVotes.Text = "10"
+        '
         'frmBigTvEpisodeText
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -356,5 +387,6 @@ End Sub
     Friend WithEvents tbCert As System.Windows.Forms.TextBox
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents tbDetails As System.Windows.Forms.TextBox
-
+    Friend WithEvents tbVotes As TextBox
+    Friend WithEvents TextBox7 As TextBox
 End Class

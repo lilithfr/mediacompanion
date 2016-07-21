@@ -360,15 +360,6 @@ Partial Class frmPreferences
         Me.TabControl6 = New System.Windows.Forms.TabControl()
         Me.TabPage30 = New System.Windows.Forms.TabPage()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox_TVDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
-        Me.cbXBMCTvdbRatingFallback = New System.Windows.Forms.CheckBox()
-        Me.cbXBMCTvdbRatingImdb = New System.Windows.Forms.CheckBox()
-        Me.ComboBox_TVDB_Language = New System.Windows.Forms.ComboBox()
-        Me.Label154 = New System.Windows.Forms.Label()
-        Me.cbXBMCTvdbPosters = New System.Windows.Forms.CheckBox()
-        Me.cbXBMCTvdbFanart = New System.Windows.Forms.CheckBox()
-        Me.rbXBMCTvdbAbsoluteNumber = New System.Windows.Forms.RadioButton()
-        Me.rbXBMCTvdbDVDOrder = New System.Windows.Forms.RadioButton()
         Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
         Me.GroupBox43 = New System.Windows.Forms.GroupBox()
         Me.cb_TvMissingEpOffset = New System.Windows.Forms.CheckBox()
@@ -420,6 +411,15 @@ Partial Class frmPreferences
         Me.ListBox12 = New System.Windows.Forms.ListBox()
         Me.Label122 = New System.Windows.Forms.Label()
         Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+        Me.GroupBox_TVDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
+        Me.cbXBMCTvdbRatingFallback = New System.Windows.Forms.CheckBox()
+        Me.cbXBMCTvdbRatingImdb = New System.Windows.Forms.CheckBox()
+        Me.ComboBox_TVDB_Language = New System.Windows.Forms.ComboBox()
+        Me.Label154 = New System.Windows.Forms.Label()
+        Me.cbXBMCTvdbPosters = New System.Windows.Forms.CheckBox()
+        Me.cbXBMCTvdbFanart = New System.Windows.Forms.CheckBox()
+        Me.rbXBMCTvdbAbsoluteNumber = New System.Windows.Forms.RadioButton()
+        Me.rbXBMCTvdbDVDOrder = New System.Windows.Forms.RadioButton()
         Me.TabPage31 = New System.Windows.Forms.TabPage()
         Me.GroupBox_tv_RegexRename = New System.Windows.Forms.GroupBox()
         Me.btn_tv_RegexRename_Restore = New System.Windows.Forms.Button()
@@ -552,13 +552,13 @@ Partial Class frmPreferences
         Me.TabControl6.SuspendLayout
         Me.TabPage30.SuspendLayout
         Me.GroupBox17.SuspendLayout
-        Me.GroupBox_TVDB_Scraper_Preferences.SuspendLayout
         Me.GroupBox43.SuspendLayout
         Me.GroupBox22.SuspendLayout
         Me.GroupBox20.SuspendLayout
         Me.GroupBox18.SuspendLayout
         Me.GroupBox19.SuspendLayout
         Me.GroupBox1.SuspendLayout
+        Me.GroupBox_TVDB_Scraper_Preferences.SuspendLayout
         Me.TabPage31.SuspendLayout
         Me.GroupBox_tv_RegexRename.SuspendLayout
         Me.GroupBox_tv_RegexScrape.SuspendLayout
@@ -4347,119 +4347,6 @@ Partial Class frmPreferences
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
         '
-        'GroupBox_TVDB_Scraper_Preferences
-        '
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingFallback)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingImdb)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.ComboBox_TVDB_Language)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.Label154)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbPosters)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbFanart)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbAbsoluteNumber)
-        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbDVDOrder)
-        Me.GroupBox_TVDB_Scraper_Preferences.Location = New System.Drawing.Point(124, 20)
-        Me.GroupBox_TVDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TVDB_Scraper_Preferences.Name = "GroupBox_TVDB_Scraper_Preferences"
-        Me.GroupBox_TVDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TVDB_Scraper_Preferences.Size = New System.Drawing.Size(270, 275)
-        Me.GroupBox_TVDB_Scraper_Preferences.TabIndex = 67
-        Me.GroupBox_TVDB_Scraper_Preferences.TabStop = false
-        Me.GroupBox_TVDB_Scraper_Preferences.Text = "XBMC Scraper TheTVDB Preferences"
-        Me.GroupBox_TVDB_Scraper_Preferences.Visible = false
-        '
-        'cbXBMCTvdbRatingFallback
-        '
-        Me.cbXBMCTvdbRatingFallback.AutoSize = true
-        Me.cbXBMCTvdbRatingFallback.Location = New System.Drawing.Point(12, 209)
-        Me.cbXBMCTvdbRatingFallback.Name = "cbXBMCTvdbRatingFallback"
-        Me.cbXBMCTvdbRatingFallback.Size = New System.Drawing.Size(243, 19)
-        Me.cbXBMCTvdbRatingFallback.TabIndex = 7
-        Me.cbXBMCTvdbRatingFallback.Text = "Ratings fall back to TVDB if not on IMDB"
-        Me.cbXBMCTvdbRatingFallback.UseVisualStyleBackColor = true
-        '
-        'cbXBMCTvdbRatingImdb
-        '
-        Me.cbXBMCTvdbRatingImdb.AutoSize = true
-        Me.cbXBMCTvdbRatingImdb.Location = New System.Drawing.Point(12, 184)
-        Me.cbXBMCTvdbRatingImdb.Name = "cbXBMCTvdbRatingImdb"
-        Me.cbXBMCTvdbRatingImdb.Size = New System.Drawing.Size(200, 19)
-        Me.cbXBMCTvdbRatingImdb.TabIndex = 6
-        Me.cbXBMCTvdbRatingImdb.Text = "Get Episode Ratings from IMDB"
-        Me.cbXBMCTvdbRatingImdb.UseVisualStyleBackColor = true
-        '
-        'ComboBox_TVDB_Language
-        '
-        Me.ComboBox_TVDB_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBox_TVDB_Language.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ComboBox_TVDB_Language.FormattingEnabled = true
-        Me.ComboBox_TVDB_Language.Location = New System.Drawing.Point(85, 144)
-        Me.ComboBox_TVDB_Language.Margin = New System.Windows.Forms.Padding(4)
-        Me.ComboBox_TVDB_Language.Name = "ComboBox_TVDB_Language"
-        Me.ComboBox_TVDB_Language.Size = New System.Drawing.Size(150, 23)
-        Me.ComboBox_TVDB_Language.Sorted = true
-        Me.ComboBox_TVDB_Language.TabIndex = 5
-        '
-        'Label154
-        '
-        Me.Label154.AutoSize = true
-        Me.Label154.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label154.Location = New System.Drawing.Point(9, 148)
-        Me.Label154.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
-        Me.Label154.Name = "Label154"
-        Me.Label154.Size = New System.Drawing.Size(63, 15)
-        Me.Label154.TabIndex = 4
-        Me.Label154.Text = "Language"
-        '
-        'cbXBMCTvdbPosters
-        '
-        Me.cbXBMCTvdbPosters.AutoSize = true
-        Me.cbXBMCTvdbPosters.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbXBMCTvdbPosters.Location = New System.Drawing.Point(12, 114)
-        Me.cbXBMCTvdbPosters.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbXBMCTvdbPosters.Name = "cbXBMCTvdbPosters"
-        Me.cbXBMCTvdbPosters.Size = New System.Drawing.Size(103, 19)
-        Me.cbXBMCTvdbPosters.TabIndex = 3
-        Me.cbXBMCTvdbPosters.Text = "Prefer Posters"
-        Me.cbXBMCTvdbPosters.UseVisualStyleBackColor = true
-        '
-        'cbXBMCTvdbFanart
-        '
-        Me.cbXBMCTvdbFanart.AutoSize = true
-        Me.cbXBMCTvdbFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbXBMCTvdbFanart.Location = New System.Drawing.Point(12, 84)
-        Me.cbXBMCTvdbFanart.Margin = New System.Windows.Forms.Padding(4)
-        Me.cbXBMCTvdbFanart.Name = "cbXBMCTvdbFanart"
-        Me.cbXBMCTvdbFanart.Size = New System.Drawing.Size(103, 19)
-        Me.cbXBMCTvdbFanart.TabIndex = 2
-        Me.cbXBMCTvdbFanart.Text = "Enable Fanart"
-        Me.cbXBMCTvdbFanart.UseVisualStyleBackColor = true
-        '
-        'rbXBMCTvdbAbsoluteNumber
-        '
-        Me.rbXBMCTvdbAbsoluteNumber.AutoSize = true
-        Me.rbXBMCTvdbAbsoluteNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbXBMCTvdbAbsoluteNumber.Location = New System.Drawing.Point(12, 58)
-        Me.rbXBMCTvdbAbsoluteNumber.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbXBMCTvdbAbsoluteNumber.Name = "rbXBMCTvdbAbsoluteNumber"
-        Me.rbXBMCTvdbAbsoluteNumber.Size = New System.Drawing.Size(148, 19)
-        Me.rbXBMCTvdbAbsoluteNumber.TabIndex = 1
-        Me.rbXBMCTvdbAbsoluteNumber.TabStop = true
-        Me.rbXBMCTvdbAbsoluteNumber.Text = "Use Absolute Ordering"
-        Me.rbXBMCTvdbAbsoluteNumber.UseVisualStyleBackColor = true
-        '
-        'rbXBMCTvdbDVDOrder
-        '
-        Me.rbXBMCTvdbDVDOrder.AutoSize = true
-        Me.rbXBMCTvdbDVDOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbXBMCTvdbDVDOrder.Location = New System.Drawing.Point(12, 29)
-        Me.rbXBMCTvdbDVDOrder.Margin = New System.Windows.Forms.Padding(4)
-        Me.rbXBMCTvdbDVDOrder.Name = "rbXBMCTvdbDVDOrder"
-        Me.rbXBMCTvdbDVDOrder.Size = New System.Drawing.Size(157, 19)
-        Me.rbXBMCTvdbDVDOrder.TabIndex = 0
-        Me.rbXBMCTvdbDVDOrder.TabStop = true
-        Me.rbXBMCTvdbDVDOrder.Text = "Use DVD Order (default)"
-        Me.rbXBMCTvdbDVDOrder.UseVisualStyleBackColor = true
-        '
         'cbTvScrShtTVDBResize
         '
         Me.cbTvScrShtTVDBResize.AutoSize = true
@@ -4546,7 +4433,7 @@ Partial Class frmPreferences
         Me.cbtvdbIMDbRating.Name = "cbtvdbIMDbRating"
         Me.cbtvdbIMDbRating.Size = New System.Drawing.Size(228, 39)
         Me.cbtvdbIMDbRating.TabIndex = 34
-        Me.cbtvdbIMDbRating.Text = "Episode Rating and votes from IMDb (fallback to TVDb)"
+        Me.cbtvdbIMDbRating.Text = "Series and Episode Rating and votes from IMDb (fallback to TVDb)"
         Me.cbtvdbIMDbRating.UseVisualStyleBackColor = true
         '
         'Button91
@@ -5066,6 +4953,119 @@ Partial Class frmPreferences
         Me.ComboBox8.Name = "ComboBox8"
         Me.ComboBox8.Size = New System.Drawing.Size(264, 23)
         Me.ComboBox8.TabIndex = 0
+        '
+        'GroupBox_TVDB_Scraper_Preferences
+        '
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingFallback)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbRatingImdb)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.ComboBox_TVDB_Language)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.Label154)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbPosters)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.cbXBMCTvdbFanart)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbAbsoluteNumber)
+        Me.GroupBox_TVDB_Scraper_Preferences.Controls.Add(Me.rbXBMCTvdbDVDOrder)
+        Me.GroupBox_TVDB_Scraper_Preferences.Location = New System.Drawing.Point(124, 20)
+        Me.GroupBox_TVDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
+        Me.GroupBox_TVDB_Scraper_Preferences.Name = "GroupBox_TVDB_Scraper_Preferences"
+        Me.GroupBox_TVDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
+        Me.GroupBox_TVDB_Scraper_Preferences.Size = New System.Drawing.Size(270, 275)
+        Me.GroupBox_TVDB_Scraper_Preferences.TabIndex = 67
+        Me.GroupBox_TVDB_Scraper_Preferences.TabStop = false
+        Me.GroupBox_TVDB_Scraper_Preferences.Text = "XBMC Scraper TheTVDB Preferences"
+        Me.GroupBox_TVDB_Scraper_Preferences.Visible = false
+        '
+        'cbXBMCTvdbRatingFallback
+        '
+        Me.cbXBMCTvdbRatingFallback.AutoSize = true
+        Me.cbXBMCTvdbRatingFallback.Location = New System.Drawing.Point(12, 209)
+        Me.cbXBMCTvdbRatingFallback.Name = "cbXBMCTvdbRatingFallback"
+        Me.cbXBMCTvdbRatingFallback.Size = New System.Drawing.Size(243, 19)
+        Me.cbXBMCTvdbRatingFallback.TabIndex = 7
+        Me.cbXBMCTvdbRatingFallback.Text = "Ratings fall back to TVDB if not on IMDB"
+        Me.cbXBMCTvdbRatingFallback.UseVisualStyleBackColor = true
+        '
+        'cbXBMCTvdbRatingImdb
+        '
+        Me.cbXBMCTvdbRatingImdb.AutoSize = true
+        Me.cbXBMCTvdbRatingImdb.Location = New System.Drawing.Point(12, 184)
+        Me.cbXBMCTvdbRatingImdb.Name = "cbXBMCTvdbRatingImdb"
+        Me.cbXBMCTvdbRatingImdb.Size = New System.Drawing.Size(200, 19)
+        Me.cbXBMCTvdbRatingImdb.TabIndex = 6
+        Me.cbXBMCTvdbRatingImdb.Text = "Get Episode Ratings from IMDB"
+        Me.cbXBMCTvdbRatingImdb.UseVisualStyleBackColor = true
+        '
+        'ComboBox_TVDB_Language
+        '
+        Me.ComboBox_TVDB_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBox_TVDB_Language.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.ComboBox_TVDB_Language.FormattingEnabled = true
+        Me.ComboBox_TVDB_Language.Location = New System.Drawing.Point(85, 144)
+        Me.ComboBox_TVDB_Language.Margin = New System.Windows.Forms.Padding(4)
+        Me.ComboBox_TVDB_Language.Name = "ComboBox_TVDB_Language"
+        Me.ComboBox_TVDB_Language.Size = New System.Drawing.Size(150, 23)
+        Me.ComboBox_TVDB_Language.Sorted = true
+        Me.ComboBox_TVDB_Language.TabIndex = 5
+        '
+        'Label154
+        '
+        Me.Label154.AutoSize = true
+        Me.Label154.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label154.Location = New System.Drawing.Point(9, 148)
+        Me.Label154.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
+        Me.Label154.Name = "Label154"
+        Me.Label154.Size = New System.Drawing.Size(63, 15)
+        Me.Label154.TabIndex = 4
+        Me.Label154.Text = "Language"
+        '
+        'cbXBMCTvdbPosters
+        '
+        Me.cbXBMCTvdbPosters.AutoSize = true
+        Me.cbXBMCTvdbPosters.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXBMCTvdbPosters.Location = New System.Drawing.Point(12, 114)
+        Me.cbXBMCTvdbPosters.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbXBMCTvdbPosters.Name = "cbXBMCTvdbPosters"
+        Me.cbXBMCTvdbPosters.Size = New System.Drawing.Size(103, 19)
+        Me.cbXBMCTvdbPosters.TabIndex = 3
+        Me.cbXBMCTvdbPosters.Text = "Prefer Posters"
+        Me.cbXBMCTvdbPosters.UseVisualStyleBackColor = true
+        '
+        'cbXBMCTvdbFanart
+        '
+        Me.cbXBMCTvdbFanart.AutoSize = true
+        Me.cbXBMCTvdbFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXBMCTvdbFanart.Location = New System.Drawing.Point(12, 84)
+        Me.cbXBMCTvdbFanart.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbXBMCTvdbFanart.Name = "cbXBMCTvdbFanart"
+        Me.cbXBMCTvdbFanart.Size = New System.Drawing.Size(103, 19)
+        Me.cbXBMCTvdbFanart.TabIndex = 2
+        Me.cbXBMCTvdbFanart.Text = "Enable Fanart"
+        Me.cbXBMCTvdbFanart.UseVisualStyleBackColor = true
+        '
+        'rbXBMCTvdbAbsoluteNumber
+        '
+        Me.rbXBMCTvdbAbsoluteNumber.AutoSize = true
+        Me.rbXBMCTvdbAbsoluteNumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rbXBMCTvdbAbsoluteNumber.Location = New System.Drawing.Point(12, 58)
+        Me.rbXBMCTvdbAbsoluteNumber.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbXBMCTvdbAbsoluteNumber.Name = "rbXBMCTvdbAbsoluteNumber"
+        Me.rbXBMCTvdbAbsoluteNumber.Size = New System.Drawing.Size(148, 19)
+        Me.rbXBMCTvdbAbsoluteNumber.TabIndex = 1
+        Me.rbXBMCTvdbAbsoluteNumber.TabStop = true
+        Me.rbXBMCTvdbAbsoluteNumber.Text = "Use Absolute Ordering"
+        Me.rbXBMCTvdbAbsoluteNumber.UseVisualStyleBackColor = true
+        '
+        'rbXBMCTvdbDVDOrder
+        '
+        Me.rbXBMCTvdbDVDOrder.AutoSize = true
+        Me.rbXBMCTvdbDVDOrder.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.rbXBMCTvdbDVDOrder.Location = New System.Drawing.Point(12, 29)
+        Me.rbXBMCTvdbDVDOrder.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbXBMCTvdbDVDOrder.Name = "rbXBMCTvdbDVDOrder"
+        Me.rbXBMCTvdbDVDOrder.Size = New System.Drawing.Size(157, 19)
+        Me.rbXBMCTvdbDVDOrder.TabIndex = 0
+        Me.rbXBMCTvdbDVDOrder.TabStop = true
+        Me.rbXBMCTvdbDVDOrder.Text = "Use DVD Order (default)"
+        Me.rbXBMCTvdbDVDOrder.UseVisualStyleBackColor = true
         '
         'TabPage31
         '
@@ -5940,8 +5940,6 @@ Partial Class frmPreferences
         Me.TabPage30.ResumeLayout(false)
         Me.GroupBox17.ResumeLayout(false)
         Me.GroupBox17.PerformLayout
-        Me.GroupBox_TVDB_Scraper_Preferences.ResumeLayout(false)
-        Me.GroupBox_TVDB_Scraper_Preferences.PerformLayout
         Me.GroupBox43.ResumeLayout(false)
         Me.GroupBox43.PerformLayout
         Me.GroupBox22.ResumeLayout(false)
@@ -5954,6 +5952,8 @@ Partial Class frmPreferences
         Me.GroupBox19.PerformLayout
         Me.GroupBox1.ResumeLayout(false)
         Me.GroupBox1.PerformLayout
+        Me.GroupBox_TVDB_Scraper_Preferences.ResumeLayout(false)
+        Me.GroupBox_TVDB_Scraper_Preferences.PerformLayout
         Me.TabPage31.ResumeLayout(false)
         Me.GroupBox_tv_RegexRename.ResumeLayout(false)
         Me.GroupBox_tv_RegexRename.PerformLayout

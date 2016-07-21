@@ -47,6 +47,7 @@ Partial Public Class Form1
         tb_ShTvdbId.Text = ""
         tb_ShImdbId.Text = ""
         tb_ShRating.Text = ""
+        tb_ShVotes.Text = ""
         tb_ShCert.Text = ""
         tb_ShRunTime.Text = ""
         tb_ShStudio.Text = ""
@@ -67,6 +68,7 @@ Partial Public Class Form1
         tb_ShTvdbId.Text = ""
         tb_ShImdbId.Text = ""
         tb_ShRating.Text = ""
+        tb_ShVotes.Text = ""
         tb_ShCert.Text = ""
         tb_ShRunTime.Text = ""
         tb_ShStudio.Text = ""
@@ -82,6 +84,7 @@ Partial Public Class Form1
         tb_ShTvdbId.Text = ""
         tb_ShImdbId.Text = ""
         tb_ShRating.Text = ""
+        tb_ShVotes.Text = ""
         tb_ShCert.Text = ""
         tb_ShRunTime.Text = ""
         tb_ShStudio.Text = ""
@@ -478,6 +481,7 @@ Partial Public Class Form1
             tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
             tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
             tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
+            tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
             tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
             tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
             tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
@@ -722,6 +726,7 @@ Partial Public Class Form1
         tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
         tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
         tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
+        tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
         tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
         tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
         tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)

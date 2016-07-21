@@ -1,20 +1,21 @@
 ﻿Public Class frmBigTvEpisodeText
 
     Public Overloads Function ShowDialog(
-                                        Title    As String,   Director As String,   Aired As String,   Rating As String,   
+                                        Title    As String,   Director As String,   Aired As String,   Rating As String, Votes As String,  
                                         Duration As String,   Genre    As String,   Cert  As String,   Plot   As String
                                         ) As Windows.Forms.DialogResult
         
         With Me
             Text            = ""
-            lblTitle  .Text = Title
-            tbDirector.Text = Director 
-            tbAired   .Text = Aired
-            tbRating  .Text = Rating
-            tbDuration.Text = Duration
-            tbGenre   .Text = Genre
-            tbCert    .Text = Cert
-            tbPlot    .Text = Plot
+            lblTitle    .Text = Title
+            tbDirector  .Text = Director 
+            tbAired     .Text = Aired
+            tbRating    .Text = Rating
+            tbVotes     .Text = Votes
+            tbDuration  .Text = Duration
+            tbGenre     .Text = Genre
+            tbCert      .Text = Cert
+            tbPlot      .Text = Plot
 
             tbPlot.SelectionStart  = 0
             tbPlot.SelectionLength = 0
