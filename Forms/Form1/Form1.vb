@@ -14726,7 +14726,7 @@ Public Class Form1
                 util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
             End If
         Next
-        If Not IsNothing(pbEpScrSht0.Image) Then util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
+        If Not IsNothing(pbEpScrSht0.Tag) Then util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
     End Sub
 
     Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox35.Leave
@@ -14791,7 +14791,7 @@ Public Class Form1
 
     Private Sub pbepscrsht_click(ByVal sender As Object, ByVal e As EventArgs)
         Dim pb As PictureBox = sender
-        If IsNothing(pb.Image) Then Exit Sub
+        If IsNothing(pb.Image) OrElse IsNothing(pb.Tag) Then Exit Sub
         util_ImageLoad(pbTvEpScrnShot, pb.Tag, Utilities.DefaultTvFanartPath)
     End Sub
 

@@ -1197,6 +1197,7 @@ Partial Public Class Form1
             Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                 fs.CopyTo(ms)
                 ms.Seek(0, System.IO.SeekOrigin.Begin)
+                If ms.Length = 0 Then Throw New Exception()
                 PicBox.Image = Image.FromStream(ms)
             End Using
             PicBox.Tag = PathToUse
