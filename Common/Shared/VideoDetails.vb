@@ -40,7 +40,18 @@ Public Class VideoDetails
         End Get
     End Property
 
-    Public ReadOnly Property possibleResolutions As String() = {"480", "540", "576", "720", "1080"}
+    'Threw "Expanded Properties cannot be initialized" error
+    'Public ReadOnly Property possibleResolutions As String() = {"480", "540", "576", "720", "1080"}
+   
+    Private _possibleResolutions As String() = {"480", "540", "576", "720", "1080"}
+
+    Public ReadOnly Property possibleResolutions As String()
+        Get
+            Return _possibleResolutions 
+        End Get
+
+    End Property
+ 
     
     Public Sub New()
         MyBase.New(Nothing, Nothing)
