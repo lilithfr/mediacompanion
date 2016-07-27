@@ -1358,11 +1358,11 @@ Partial Public Class Form1
                 mymsg = mymsg + item + vbCrLf
             Next
             mymsg = mymsg + vbCrLf + "Do you wish to remove these folders" + vbCrLf + "from your list of TV Folders?" + vbCrLf
+            If frmSplash.Visible Then frmSplash.SendToBack()
             If MsgBox(mymsg, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
                 tv_Showremovedfromlist(listbox6, True, nofolder)
             End If
         End If
-
         frmSplash2.Label2.Visible = False
 
         frmSplash2.Label1.Text = "Saving Cache..."
@@ -1381,7 +1381,6 @@ Partial Public Class Form1
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
             tv_IMDbID_warned = True
         End If
-
         tv_Filter()
         BlinkTaskBar()
     End Sub
