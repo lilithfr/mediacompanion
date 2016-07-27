@@ -735,6 +735,7 @@ Partial Public Class Form1
         Panel_EpisodeActors.Visible = False
         lbl_sorttitle.Visible = True
         TextBox_Sorttitle.Visible = True
+        TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
         ExpandSelectedShowToolStripMenuItem.Enabled = True
         ExpandAllToolStripMenuItem.Enabled = True
         CollapseAllToolStripMenuItem.Enabled = True
