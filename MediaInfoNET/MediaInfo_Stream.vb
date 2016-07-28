@@ -135,12 +135,17 @@ Public Class MediaInfo_Stream
             If Properties.TryGetValue("Duration", value) Then
                 If value IsNot Nothing Then
 
-                    If value.Contains(":") Then
-                        'Example: 02:15:30.004
-                        Return getMillisFromString(value)
-                    Else
-                        'Example: 2h 15mn 30s 4ms
-                        Dim x As Long = 0
+					If value.Contains(":") Then
+						'Example: 02:15:30.004
+						Return getMillisFromString(value)
+					Else
+
+						value = value.Replace(" h", "h")
+						value = value.Replace(" min", "mn")
+
+
+						'Example: 2h 15mn 30s 4ms
+						Dim x As Long = 0
                         Dim p() As String = Split(value)
                         For Each s As String In p
                             If s.Contains("ms") Then

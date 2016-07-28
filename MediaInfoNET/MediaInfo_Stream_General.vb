@@ -31,33 +31,40 @@ Public Class MediaInfo_Stream_General
         End Get
     End Property
 
-    Public Overrides ReadOnly Property Bitrate() As Integer
-        Get
-            Dim value As String = Nothing
-            If Properties.TryGetValue("Overall bit rate", value) Then
-                If value IsNot Nothing Then
+	Public Overrides ReadOnly Property Bitrate() As Integer
+		Get
+			Dim value As String = Nothing
+			If Properties.TryGetValue("Overall bit rate", value) Then
+				If value IsNot Nothing Then
 
-                    Dim i As Integer = 0
+					Dim i As Integer = 0
+					Dim j As Double = 0
 
-                    exp = New Regex("([ 0-9.,]+)[Kbps]*")
-                    exp_matches = exp.Matches(value)
+					If value.IndexOf("Mb/s") > 0 Then
+						Double.TryParse(value.Split.First(), j)
+						Return j * 1024
+					End If
 
-                    If exp_matches.Count > 0 Then
-                        value = exp_matches.Item(0).Value
-                        value = exp.Replace(value, "$1").Replace(" ", "").Replace(",", "").Trim
-                        If Integer.TryParse(value, i) Then
-                            Return i
-                        End If
-                    End If
 
-                End If
-            End If
+					exp = New Regex("([ 0-9.,]+)[Kbps]*")
+					exp_matches = exp.Matches(value)
 
-            Return 0
-        End Get
-    End Property
+					If exp_matches.Count > 0 Then
+						value = exp_matches.Item(0).Value
+						value = exp.Replace(value, "$1").Replace(" ", "").Replace(",", "").Trim
+						If Integer.TryParse(value, i) Then
+							Return i
+						End If
+					End If
 
-    Public ReadOnly Property Extension() As String
+				End If
+			End If
+
+			Return 0
+		End Get
+	End Property
+
+	Public ReadOnly Property Extension() As String
         Get
             If GetProperty("Complete name") <> "" Then
                 Return Path.GetExtension(GetProperty("Complete name")).Replace(".", "").Trim.ToUpper

@@ -2568,14 +2568,14 @@ Public Class Pref
                     If audio.Codec.Value.ToLower.IndexOf("truehd")>-1 Then audio.Codec.Value = "truehd"
                     tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
                     If audio.Codec.Value = "DTS" Then
-                        If tmpaud.ToLower.indexof("dts x")>-1 Then  ' should really be dts_x but that would require extra icons to be created. Sorry no time for that ;-(
-                            audio.Codec.Value = "dtshd_ma"                       
-                        ElseIf tmpaud.ToLower.indexof("dts ma")>-1 Then ' tmpaud.ToLower = "dts ma / core" Then
-                            audio.Codec.Value = "dtshd_ma"
-                        ElseIf tmpaud.ToLower = "dts hra / core" Then
-                            audio.Codec.Value = "dtshd_hra"
-                        ElseIf tmpaud.ToLower = "dts es" Then
-                            audio.Codec.Value = "dts"
+						If tmpaud.ToLower.IndexOf("dts x") > -1 Then
+							audio.Codec.Value = "dts_x"
+						ElseIf tmpaud.ToLower.IndexOf("dts ma") > -1 Then ' tmpaud.ToLower = "dts ma / core" Then
+							audio.Codec.Value = "dtshd_ma"
+						ElseIf tmpaud.ToLower = "dts hra / core" Then
+							audio.Codec.Value = "dtshd_hra"
+						ElseIf tmpaud.ToLower = "dts es" Then
+							audio.Codec.Value = "dts"
                         End If
                         audio.Codec.Value = audio.Codec.Value.ToLower
                     End If
