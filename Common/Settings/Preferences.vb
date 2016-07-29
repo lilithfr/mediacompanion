@@ -2564,27 +2564,36 @@ Public Class Pref
             Dim curAS As Integer = 0
             Dim addAS As Boolean = False
             tmpaud = ""
-            
 
-            'get audio data
-            If numOfAudioStreams > 0 Then
-                While curAS < numOfAudioStreams
-                    Dim audio As New AudioDetails
-                    audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
-                    If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
-                        audio.Codec.Value = "MP3"
-                    Else
-                        Try
-                            tempmediainfo = aviFile.Audio(curAS).Format
-                        Catch
-                            tempmediainfo = ""
-                        End Try
-                        audio.Codec.Value = tempmediainfo
-                    End If
-                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "ac3"
-                    If audio.Codec.Value.ToLower.IndexOf("truehd")>-1 Then audio.Codec.Value = "truehd"
-                    tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
-                    If audio.Codec.Value = "DTS" Then
+
+			'get audio data
+			If numOfAudioStreams > 0 Then
+				While curAS < numOfAudioStreams
+					Dim audio As New AudioDetails
+					audio.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Audio, curAS, "Language/String"))
+					If MI.Get_(StreamKind.Audio, curAS, "Format") = "MPEG Audio" Then
+						audio.Codec.Value = "MP3"
+					Else
+						Try
+							tempmediainfo = aviFile.Audio(curAS).Format
+						Catch
+							tempmediainfo = ""
+						End Try
+						audio.Codec.Value = tempmediainfo
+					End If
+					If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "ac3"
+
+					If audio.Codec.Value.ToLower.IndexOf("truehd") > -1 Then
+						If audio.Codec.Value.ToLower.IndexOf("atmos") > -1 Then
+							audio.Codec.Value = "atmos"
+						Else
+							audio.Codec.Value = "truehd"
+						End If
+					End If
+
+
+					tmpaud = aviFile.Audio(curAS).FormatID.ToLower()
+					If audio.Codec.Value = "DTS" Then
 						If tmpaud.ToLower.IndexOf("dts x") > -1 Then
 							audio.Codec.Value = "dts_x"
 						ElseIf tmpaud.ToLower.IndexOf("dts ma") > -1 Then ' tmpaud.ToLower = "dts ma / core" Then
