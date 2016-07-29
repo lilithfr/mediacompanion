@@ -100,7 +100,7 @@ Public Class WorkingWithNfoFiles
         Dim fixmulti As Boolean = False
         Dim newtvshow As New TvEpisode
         If Not IO.File.Exists(path) Then
-            Return "Error"
+            Return episodelist '"Error"
         Else
             Dim tvshow As New XmlDocument
             Try

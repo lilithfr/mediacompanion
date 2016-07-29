@@ -269,7 +269,7 @@ Public Class frmPreferences
         MovGenInit
         MovAdvInit()
         'the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
-        GroupBox_TMDB_Scraper_Preferences.Location = GroupBox_MovieIMDBMirror.Location
+        GpBx_TMDB_Scraper_Preferences.Location = GpBx_McIMDbScraperSettings.Location
     End Sub
     
     Private Sub MovScraperInit()
@@ -279,9 +279,9 @@ Public Class frmPreferences
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
         Else
             CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
-            GroupBox_MovieIMDBMirror.Enabled = True
-            GroupBox_MovieIMDBMirror.Visible = True
-            GroupBox_MovieIMDBMirror.BringToFront()
+            GpBx_McIMDbScraperSettings.Enabled = True
+            GpBx_McIMDbScraperSettings.Visible = True
+            GpBx_McIMDbScraperSettings.BringToFront()
         End If
         ''XBMC
         cbXbmcTmdbFanart                    .Checked        = Convert.ToBoolean(Pref.XbmcTmdbScraperFanart)
@@ -289,6 +289,7 @@ Public Class frmPreferences
         cbXbmcTmdbTop250FromImdb            .Checked        = Pref.XbmcTmdbTop250FromImdb
         cbXbmcTmdbIMDBRatings               .Checked        = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
         cbXbmcTmdbAkasFromImdb              .Checked        = Pref.XbmcTmdbAkasFromImdb
+        cbXbmcTmdbAspectFromImdb            .Checked        = Pref.XbmcTmdbAspectFromImdb
         cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb
         cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
         cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb
@@ -1202,16 +1203,16 @@ Public Class frmPreferences
         Try
             If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
                 Pref.movies_useXBMC_Scraper = True
-                GroupBox_MovieIMDBMirror.Enabled = False
-                GroupBox_MovieIMDBMirror.Visible = False
-                GroupBox_TMDB_Scraper_Preferences.Enabled = True
-                GroupBox_TMDB_Scraper_Preferences.Visible = True
-                GroupBox_TMDB_Scraper_Preferences.BringToFront()
+                GpBx_McIMDbScraperSettings.Enabled = False
+                GpBx_McIMDbScraperSettings.Visible = False
+                GpBx_TMDB_Scraper_Preferences.Enabled = True
+                GpBx_TMDB_Scraper_Preferences.Visible = True
+                GpBx_TMDB_Scraper_Preferences.BringToFront()
             Else
                 Pref.movies_useXBMC_Scraper = False
-                GroupBox_MovieIMDBMirror.Enabled = True
-                GroupBox_MovieIMDBMirror.Visible = True
-                GroupBox_MovieIMDBMirror.BringToFront()
+                GpBx_McIMDbScraperSettings.Enabled = True
+                GpBx_McIMDbScraperSettings.Visible = True
+                GpBx_McIMDbScraperSettings.BringToFront()
             End If
             Changes = True
         Catch ex As Exception
@@ -1269,6 +1270,12 @@ Public Class frmPreferences
     Private Sub cbXbmcTmdbAkasFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAkasFromImdb.CheckedChanged
         If prefsload Then Exit Sub
         Pref.XbmcTmdbAkasFromImdb = cbXbmcTmdbAkasFromImdb.Checked
+        Changes = True
+    End Sub
+    
+    Private Sub cbXbmcTmdbAspectFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAspectFromImdb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.XbmcTmdbAspectFromImdb = cbXbmcTmdbAspectFromImdb.Checked
         Changes = True
     End Sub
 

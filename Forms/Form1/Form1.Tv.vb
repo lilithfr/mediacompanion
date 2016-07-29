@@ -1265,6 +1265,11 @@ Partial Public Class Form1
         frmSplash2.Label2.Visible = True
         frmSplash2.ProgressBar1.Visible = True
         frmSplash2.ProgressBar1.Maximum = Pref.tvFolders.Count ' - 1
+        If Pref.MultiMonitoEnabled Then
+            frmSplash2.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
+            frmSplash2.StartPosition = FormStartPosition.Manual
+        End If
+        If frmSplash.Visible Then frmSplash2.BringToFront
         frmSplash2.Show()
         Application.DoEvents()
 

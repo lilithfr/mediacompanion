@@ -186,12 +186,12 @@ Partial Class frmPreferences
         Me.GroupBox6 = New System.Windows.Forms.GroupBox()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
-        Me.GroupBox25 = New System.Windows.Forms.GroupBox()
-        Me.CheckBox_Use_XBMC_Scraper = New System.Windows.Forms.CheckBox()
-        Me.GroupBox_TMDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
+        Me.GpBx_ScraperSettings = New System.Windows.Forms.GroupBox()
+        Me.GpBx_TMDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
         Me.cmbxTMDBPreferredCertCountry = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox46 = New System.Windows.Forms.GroupBox()
+        Me.cbXbmcTmdbAspectFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbGenreFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbAkasFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbCertFromImdb = New System.Windows.Forms.CheckBox()
@@ -206,7 +206,8 @@ Partial Class frmPreferences
         Me.cbXbmcTmdbFanart = New System.Windows.Forms.CheckBox()
         Me.cmbxXbmcTmdbHDTrailer = New System.Windows.Forms.ComboBox()
         Me.Label153 = New System.Windows.Forms.Label()
-        Me.GroupBox_MovieIMDBMirror = New System.Windows.Forms.GroupBox()
+        Me.CheckBox_Use_XBMC_Scraper = New System.Windows.Forms.CheckBox()
+        Me.GpBx_McIMDbScraperSettings = New System.Windows.Forms.GroupBox()
         Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.cbImdbPrimaryPlot = New System.Windows.Forms.CheckBox()
@@ -511,10 +512,10 @@ Partial Class frmPreferences
         Me.tcMoviePreferences.SuspendLayout
         Me.tpMoviePreferences_Scraper.SuspendLayout
         Me.GroupBox6.SuspendLayout
-        Me.GroupBox25.SuspendLayout
-        Me.GroupBox_TMDB_Scraper_Preferences.SuspendLayout
+        Me.GpBx_ScraperSettings.SuspendLayout
+        Me.GpBx_TMDB_Scraper_Preferences.SuspendLayout
         Me.GroupBox46.SuspendLayout
-        Me.GroupBox_MovieIMDBMirror.SuspendLayout
+        Me.GpBx_McIMDbScraperSettings.SuspendLayout
         Me.gpbxPrefScraperImages.SuspendLayout
         Me.GroupBox44.SuspendLayout
         Me.gbMovieBasicSave.SuspendLayout
@@ -1442,7 +1443,7 @@ Partial Class frmPreferences
         'cbXbmcTmdbActorFromImdb
         '
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
-        Me.cbXbmcTmdbActorFromImdb.Location = New System.Drawing.Point(10, 263)
+        Me.cbXbmcTmdbActorFromImdb.Location = New System.Drawing.Point(10, 270)
         Me.cbXbmcTmdbActorFromImdb.Name = "cbXbmcTmdbActorFromImdb"
         Me.cbXbmcTmdbActorFromImdb.Size = New System.Drawing.Size(183, 34)
         Me.cbXbmcTmdbActorFromImdb.TabIndex = 75
@@ -2320,7 +2321,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Scraper.BackColor = System.Drawing.SystemColors.Control
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox6)
-        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox25)
+        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GpBx_ScraperSettings)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.gpbxPrefScraperImages)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox24)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.Button82)
@@ -2361,55 +2362,43 @@ Partial Class frmPreferences
         Me.tbTMDbAPI.Size = New System.Drawing.Size(293, 21)
         Me.tbTMDbAPI.TabIndex = 0
         '
-        'GroupBox25
+        'GpBx_ScraperSettings
         '
-        Me.GroupBox25.Controls.Add(Me.CheckBox_Use_XBMC_Scraper)
-        Me.GroupBox25.Controls.Add(Me.GroupBox_TMDB_Scraper_Preferences)
-        Me.GroupBox25.Controls.Add(Me.GroupBox_MovieIMDBMirror)
-        Me.GroupBox25.Location = New System.Drawing.Point(7, 6)
-        Me.GroupBox25.Name = "GroupBox25"
-        Me.GroupBox25.Size = New System.Drawing.Size(319, 358)
-        Me.GroupBox25.TabIndex = 72
-        Me.GroupBox25.TabStop = false
-        Me.GroupBox25.Text = "Choose Default Scraper"
+        Me.GpBx_ScraperSettings.Controls.Add(Me.GpBx_TMDB_Scraper_Preferences)
+        Me.GpBx_ScraperSettings.Controls.Add(Me.CheckBox_Use_XBMC_Scraper)
+        Me.GpBx_ScraperSettings.Controls.Add(Me.GpBx_McIMDbScraperSettings)
+        Me.GpBx_ScraperSettings.Location = New System.Drawing.Point(7, 6)
+        Me.GpBx_ScraperSettings.Name = "GpBx_ScraperSettings"
+        Me.GpBx_ScraperSettings.Size = New System.Drawing.Size(319, 358)
+        Me.GpBx_ScraperSettings.TabIndex = 72
+        Me.GpBx_ScraperSettings.TabStop = false
+        Me.GpBx_ScraperSettings.Text = "Choose Default Scraper"
         '
-        'CheckBox_Use_XBMC_Scraper
+        'GpBx_TMDB_Scraper_Preferences
         '
-        Me.CheckBox_Use_XBMC_Scraper.AutoSize = true
-        Me.CheckBox_Use_XBMC_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_Use_XBMC_Scraper.Location = New System.Drawing.Point(7, 21)
-        Me.CheckBox_Use_XBMC_Scraper.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_Use_XBMC_Scraper.Name = "CheckBox_Use_XBMC_Scraper"
-        Me.CheckBox_Use_XBMC_Scraper.Size = New System.Drawing.Size(170, 19)
-        Me.CheckBox_Use_XBMC_Scraper.TabIndex = 65
-        Me.CheckBox_Use_XBMC_Scraper.Text = "Use TMDB XBMC Scraper"
-        Me.CheckBox_Use_XBMC_Scraper.UseVisualStyleBackColor = true
-        '
-        'GroupBox_TMDB_Scraper_Preferences
-        '
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxTMDBPreferredCertCountry)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.Label5)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.GroupBox46)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbActorFromImdb)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbRename)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.Label155)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbTitleLanguage)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbFanart)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbHDTrailer)
-        Me.GroupBox_TMDB_Scraper_Preferences.Controls.Add(Me.Label153)
-        Me.GroupBox_TMDB_Scraper_Preferences.Location = New System.Drawing.Point(10, 48)
-        Me.GroupBox_TMDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TMDB_Scraper_Preferences.Name = "GroupBox_TMDB_Scraper_Preferences"
-        Me.GroupBox_TMDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_TMDB_Scraper_Preferences.Size = New System.Drawing.Size(300, 303)
-        Me.GroupBox_TMDB_Scraper_Preferences.TabIndex = 68
-        Me.GroupBox_TMDB_Scraper_Preferences.TabStop = false
-        Me.GroupBox_TMDB_Scraper_Preferences.Text = "XBMC Scraper Preferences - TMDB"
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxTMDBPreferredCertCountry)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label5)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.GroupBox46)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbActorFromImdb)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbRename)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label155)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbTitleLanguage)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbFanart)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbHDTrailer)
+        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label153)
+        Me.GpBx_TMDB_Scraper_Preferences.Location = New System.Drawing.Point(10, 40)
+        Me.GpBx_TMDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
+        Me.GpBx_TMDB_Scraper_Preferences.Name = "GpBx_TMDB_Scraper_Preferences"
+        Me.GpBx_TMDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
+        Me.GpBx_TMDB_Scraper_Preferences.Size = New System.Drawing.Size(300, 310)
+        Me.GpBx_TMDB_Scraper_Preferences.TabIndex = 68
+        Me.GpBx_TMDB_Scraper_Preferences.TabStop = false
+        Me.GpBx_TMDB_Scraper_Preferences.Text = "XBMC Scraper Preferences - TMDB"
         '
         'cmbxTMDBPreferredCertCountry
         '
         Me.cmbxTMDBPreferredCertCountry.FormattingEnabled = true
-        Me.cmbxTMDBPreferredCertCountry.Location = New System.Drawing.Point(216, 211)
+        Me.cmbxTMDBPreferredCertCountry.Location = New System.Drawing.Point(216, 221)
         Me.cmbxTMDBPreferredCertCountry.Name = "cmbxTMDBPreferredCertCountry"
         Me.cmbxTMDBPreferredCertCountry.Size = New System.Drawing.Size(74, 23)
         Me.cmbxTMDBPreferredCertCountry.TabIndex = 84
@@ -2417,7 +2406,7 @@ Partial Class frmPreferences
         'Label5
         '
         Me.Label5.AutoSize = true
-        Me.Label5.Location = New System.Drawing.Point(9, 215)
+        Me.Label5.Location = New System.Drawing.Point(9, 225)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(159, 15)
         Me.Label5.TabIndex = 83
@@ -2425,6 +2414,7 @@ Partial Class frmPreferences
         '
         'GroupBox46
         '
+        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAspectFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbGenreFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAkasFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbCertFromImdb)
@@ -2434,12 +2424,23 @@ Partial Class frmPreferences
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbStarsFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbOutlineFromImdb)
         Me.GroupBox46.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox46.Location = New System.Drawing.Point(11, 41)
+        Me.GroupBox46.Location = New System.Drawing.Point(11, 36)
         Me.GroupBox46.Name = "GroupBox46"
-        Me.GroupBox46.Size = New System.Drawing.Size(244, 109)
+        Me.GroupBox46.Size = New System.Drawing.Size(244, 126)
         Me.GroupBox46.TabIndex = 82
         Me.GroupBox46.TabStop = false
         Me.GroupBox46.Text = "Scrape the following from IMDB"
+        '
+        'cbXbmcTmdbAspectFromImdb
+        '
+        Me.cbXbmcTmdbAspectFromImdb.AutoSize = true
+        Me.cbXbmcTmdbAspectFromImdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXbmcTmdbAspectFromImdb.Location = New System.Drawing.Point(22, 102)
+        Me.cbXbmcTmdbAspectFromImdb.Name = "cbXbmcTmdbAspectFromImdb"
+        Me.cbXbmcTmdbAspectFromImdb.Size = New System.Drawing.Size(91, 19)
+        Me.cbXbmcTmdbAspectFromImdb.TabIndex = 86
+        Me.cbXbmcTmdbAspectFromImdb.Text = "AspectRatio"
+        Me.cbXbmcTmdbAspectFromImdb.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbGenreFromImdb
         '
@@ -2537,7 +2538,7 @@ Partial Class frmPreferences
         'cbXbmcTmdbRename
         '
         Me.cbXbmcTmdbRename.AutoSize = true
-        Me.cbXbmcTmdbRename.Location = New System.Drawing.Point(10, 240)
+        Me.cbXbmcTmdbRename.Location = New System.Drawing.Point(10, 250)
         Me.cbXbmcTmdbRename.Name = "cbXbmcTmdbRename"
         Me.cbXbmcTmdbRename.Size = New System.Drawing.Size(251, 19)
         Me.cbXbmcTmdbRename.TabIndex = 73
@@ -2547,7 +2548,7 @@ Partial Class frmPreferences
         'Label155
         '
         Me.Label155.AutoSize = true
-        Me.Label155.Location = New System.Drawing.Point(8, 163)
+        Me.Label155.Location = New System.Drawing.Point(8, 173)
         Me.Label155.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label155.Name = "Label155"
         Me.Label155.Size = New System.Drawing.Size(200, 15)
@@ -2558,7 +2559,7 @@ Partial Class frmPreferences
         '
         Me.cmbxXbmcTmdbTitleLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbxXbmcTmdbTitleLanguage.FormattingEnabled = true
-        Me.cmbxXbmcTmdbTitleLanguage.Location = New System.Drawing.Point(165, 185)
+        Me.cmbxXbmcTmdbTitleLanguage.Location = New System.Drawing.Point(165, 195)
         Me.cmbxXbmcTmdbTitleLanguage.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbxXbmcTmdbTitleLanguage.Name = "cmbxXbmcTmdbTitleLanguage"
         Me.cmbxXbmcTmdbTitleLanguage.Size = New System.Drawing.Size(125, 23)
@@ -2568,7 +2569,7 @@ Partial Class frmPreferences
         'cbXbmcTmdbFanart
         '
         Me.cbXbmcTmdbFanart.AutoSize = true
-        Me.cbXbmcTmdbFanart.Location = New System.Drawing.Point(11, 20)
+        Me.cbXbmcTmdbFanart.Location = New System.Drawing.Point(11, 17)
         Me.cbXbmcTmdbFanart.Margin = New System.Windows.Forms.Padding(4)
         Me.cbXbmcTmdbFanart.Name = "cbXbmcTmdbFanart"
         Me.cbXbmcTmdbFanart.Size = New System.Drawing.Size(99, 19)
@@ -2580,7 +2581,7 @@ Partial Class frmPreferences
         '
         Me.cmbxXbmcTmdbHDTrailer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbxXbmcTmdbHDTrailer.FormattingEnabled = true
-        Me.cmbxXbmcTmdbHDTrailer.Location = New System.Drawing.Point(216, 160)
+        Me.cmbxXbmcTmdbHDTrailer.Location = New System.Drawing.Point(216, 170)
         Me.cmbxXbmcTmdbHDTrailer.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbxXbmcTmdbHDTrailer.Name = "cmbxXbmcTmdbHDTrailer"
         Me.cmbxXbmcTmdbHDTrailer.Size = New System.Drawing.Size(74, 23)
@@ -2590,31 +2591,43 @@ Partial Class frmPreferences
         'Label153
         '
         Me.Label153.AutoSize = true
-        Me.Label153.Location = New System.Drawing.Point(9, 186)
+        Me.Label153.Location = New System.Drawing.Point(9, 196)
         Me.Label153.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label153.Name = "Label153"
         Me.Label153.Size = New System.Drawing.Size(113, 15)
         Me.Label153.TabIndex = 69
         Me.Label153.Text = "Preferred language"
         '
-        'GroupBox_MovieIMDBMirror
+        'CheckBox_Use_XBMC_Scraper
         '
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbMovImdbAspectRatio)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbMovImdbFirstRunTime)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbImdbPrimaryPlot)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.Label181)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.cbImdbgetTMDBActor)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.Label90)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.Label91)
-        Me.GroupBox_MovieIMDBMirror.Controls.Add(Me.lb_IMDBMirrors)
-        Me.GroupBox_MovieIMDBMirror.Location = New System.Drawing.Point(10, 48)
-        Me.GroupBox_MovieIMDBMirror.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_MovieIMDBMirror.Name = "GroupBox_MovieIMDBMirror"
-        Me.GroupBox_MovieIMDBMirror.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_MovieIMDBMirror.Size = New System.Drawing.Size(300, 303)
-        Me.GroupBox_MovieIMDBMirror.TabIndex = 40
-        Me.GroupBox_MovieIMDBMirror.TabStop = false
-        Me.GroupBox_MovieIMDBMirror.Text = "MC's IMDB Scraper"
+        Me.CheckBox_Use_XBMC_Scraper.AutoSize = true
+        Me.CheckBox_Use_XBMC_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.CheckBox_Use_XBMC_Scraper.Location = New System.Drawing.Point(5, 18)
+        Me.CheckBox_Use_XBMC_Scraper.Margin = New System.Windows.Forms.Padding(4)
+        Me.CheckBox_Use_XBMC_Scraper.Name = "CheckBox_Use_XBMC_Scraper"
+        Me.CheckBox_Use_XBMC_Scraper.Size = New System.Drawing.Size(170, 19)
+        Me.CheckBox_Use_XBMC_Scraper.TabIndex = 65
+        Me.CheckBox_Use_XBMC_Scraper.Text = "Use TMDB XBMC Scraper"
+        Me.CheckBox_Use_XBMC_Scraper.UseVisualStyleBackColor = true
+        '
+        'GpBx_McIMDbScraperSettings
+        '
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbMovImdbAspectRatio)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbMovImdbFirstRunTime)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbImdbPrimaryPlot)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label181)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbImdbgetTMDBActor)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label90)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label91)
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.lb_IMDBMirrors)
+        Me.GpBx_McIMDbScraperSettings.Location = New System.Drawing.Point(10, 40)
+        Me.GpBx_McIMDbScraperSettings.Margin = New System.Windows.Forms.Padding(4)
+        Me.GpBx_McIMDbScraperSettings.Name = "GpBx_McIMDbScraperSettings"
+        Me.GpBx_McIMDbScraperSettings.Padding = New System.Windows.Forms.Padding(4)
+        Me.GpBx_McIMDbScraperSettings.Size = New System.Drawing.Size(300, 310)
+        Me.GpBx_McIMDbScraperSettings.TabIndex = 40
+        Me.GpBx_McIMDbScraperSettings.TabStop = false
+        Me.GpBx_McIMDbScraperSettings.Text = "MC's IMDB Scraper"
         '
         'cbMovImdbAspectRatio
         '
@@ -5871,14 +5884,14 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.ResumeLayout(false)
         Me.GroupBox6.ResumeLayout(false)
         Me.GroupBox6.PerformLayout
-        Me.GroupBox25.ResumeLayout(false)
-        Me.GroupBox25.PerformLayout
-        Me.GroupBox_TMDB_Scraper_Preferences.ResumeLayout(false)
-        Me.GroupBox_TMDB_Scraper_Preferences.PerformLayout
+        Me.GpBx_ScraperSettings.ResumeLayout(false)
+        Me.GpBx_ScraperSettings.PerformLayout
+        Me.GpBx_TMDB_Scraper_Preferences.ResumeLayout(false)
+        Me.GpBx_TMDB_Scraper_Preferences.PerformLayout
         Me.GroupBox46.ResumeLayout(false)
         Me.GroupBox46.PerformLayout
-        Me.GroupBox_MovieIMDBMirror.ResumeLayout(false)
-        Me.GroupBox_MovieIMDBMirror.PerformLayout
+        Me.GpBx_McIMDbScraperSettings.ResumeLayout(false)
+        Me.GpBx_McIMDbScraperSettings.PerformLayout
         Me.gpbxPrefScraperImages.ResumeLayout(false)
         Me.GroupBox44.ResumeLayout(false)
         Me.GroupBox44.PerformLayout
@@ -6077,9 +6090,9 @@ End Sub
     Friend WithEvents btn_SettingsClose2 As Button
     Friend WithEvents tcMoviePreferences As TabControl
     Friend WithEvents tpMoviePreferences_Scraper As TabPage
-    Friend WithEvents GroupBox25 As GroupBox
+    Friend WithEvents GpBx_ScraperSettings As GroupBox
     Friend WithEvents CheckBox_Use_XBMC_Scraper As CheckBox
-    Friend WithEvents GroupBox_TMDB_Scraper_Preferences As GroupBox
+    Friend WithEvents GpBx_TMDB_Scraper_Preferences As GroupBox
     Friend WithEvents cmbxTMDBPreferredCertCountry As ComboBox
     Friend WithEvents Label5 As Label
     Friend WithEvents GroupBox46 As GroupBox
@@ -6097,7 +6110,7 @@ End Sub
     Friend WithEvents cbXbmcTmdbFanart As CheckBox
     Friend WithEvents cmbxXbmcTmdbHDTrailer As ComboBox
     Friend WithEvents Label153 As Label
-    Friend WithEvents GroupBox_MovieIMDBMirror As GroupBox
+    Friend WithEvents GpBx_McIMDbScraperSettings As GroupBox
     Friend WithEvents cbImdbPrimaryPlot As CheckBox
     Friend WithEvents Label181 As Label
     Friend WithEvents cbImdbgetTMDBActor As CheckBox
@@ -6438,4 +6451,5 @@ End Sub
     Friend WithEvents cbMovCustPosterjpgNoDelete As CheckBox
     Friend WithEvents cbDisplayAllSubtitleLang As CheckBox
     Friend WithEvents cbDisplayDefaultSubtitleLang As CheckBox
+    Friend WithEvents cbXbmcTmdbAspectFromImdb As CheckBox
 End Class

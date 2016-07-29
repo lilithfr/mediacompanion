@@ -261,6 +261,7 @@ Public Class Pref
     Public Shared XbmcTmdbCertFromImdb As Boolean
     Public Shared XbmcTmdbStarsFromImdb As Boolean
     Public Shared XbmcTmdbAkasFromImdb As Boolean
+    Public Shared XbmcTmdbAspectFromImdb As Boolean
     Public Shared XbmcTmdbActorDL As Boolean
     Public Shared XbmcTmdbActorFromImdb As Boolean
     Public Shared XbmcTmdbGenreFromImdb As Boolean
@@ -653,6 +654,7 @@ Public Class Pref
         XbmcTmdbCertFromImdb = False
         XbmcTmdbStarsFromImdb = False
         XbmcTmdbAkasFromImdb = False
+        XbmcTmdbAspectFromImdb = False
         XbmcTmdbActorDL = False
         XbmcTmdbActorFromImdb = False
         XbmcTmdbGenreFromImdb = False
@@ -1176,6 +1178,7 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbCertFromImdb",               XbmcTmdbCertFromImdb)               'cbXbmcTmdbCertFromImdb
         root.AppendChild(doc, "XbmcTmdbStarsFromImdb",              XbmcTmdbStarsFromImdb)              'cbXbmcTmdbStarsFromImdb
         root.AppendChild(doc, "XbmcTmdbAkasFromImdb",               XbmcTmdbAkasFromImdb)               'cbXbmcTmdbAkasFromImdb
+        root.AppendChild(doc, "XbmcTmdbAspectFromImdb",             XbmcTmdbAspectFromImdb)             'cbXbmcTmdbAspectFromImdb
         root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL - To Delete after 01-03-2016
         root.AppendChild(doc, "XbmcTmdbActorFromImdb",              XbmcTmdbActorFromImdb)              'cbXbmcTmdbActorFromImdb
         root.AppendChild(doc, "XbmcTmdbGenreFromImdb",              XbmcTmdbGenreFromImdb)              'cbXbmcTmdbGenreFromImdb
@@ -1508,6 +1511,7 @@ Public Class Pref
                     Case "XbmcTmdbCertFromImdb"                 : XbmcTmdbCertFromImdb = thisresult.InnerText 
                     Case "XbmcTmdbStarsFromImdb"                : XbmcTmdbStarsFromImdb = thisresult.InnerText
                     Case "XbmcTmdbAkasFromImdb"                 : XbmcTmdbAkasFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbAspectFromImdb"               : XbmcTmdbAspectFromImdb = thisresult.InnerXml
                     Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
                     Case "XbmcTmdbActorFromImdb"                : XbmcTmdbActorFromImdb = thisresult.InnerText
                     Case "XbmcTmdbGenreFromImdb"                : XbmcTmdbGenreFromImdb = thisresult.InnerXml

@@ -285,7 +285,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function CreateScreenShot(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As Boolean
-
         If Not File.Exists(SavePath) Or Overwrite Then
             Try
                 IO.File.Delete(SavePath)
@@ -304,9 +303,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     myProcess.StartInfo.Arguments = proc_arguments
                     myProcess.Start()
                     myProcess.WaitForExit()
-                    If File.Exists(SavePath) Then
-                        Return True
-                    End If
+                    If File.Exists(SavePath) Then Return True
                 Catch ex As Exception
                     Throw ex
                 Finally

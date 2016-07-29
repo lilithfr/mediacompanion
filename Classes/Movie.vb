@@ -1089,7 +1089,7 @@ Public Class Movie
             If Not _scrapedMovie.fullmoviebody.mpaa.ToLower.StartsWith("rated") Then _scrapedMovie.fullmoviebody.mpaa = "Rated " & _scrapedMovie.fullmoviebody.mpaa
         End If
 
-        If Pref.MovImdbAspectRatio AndAlso _scrapedMovie.fileinfo.aspectratioimdb <> "" Then
+        If (Pref.MovImdbAspectRatio OrElse Pref.XbmcTmdbAspectFromImdb) AndAlso _scrapedMovie.fileinfo.aspectratioimdb <> "" Then
             _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _scrapedMovie.fileinfo.aspectratioimdb
         End If
 
@@ -2982,7 +2982,7 @@ Public Class Movie
     Function RescrapeBody(rl As RescrapeList)
         Return rl.credits or rl.director or rl.stars   or rl.genre   or rl.mpaa   or rl.plot  or rl.premiered or rl.rating or 
                rl.runtime or rl.studio   or rl.tagline or rl.outline or rl.top250 or rl.votes or rl.country   or rl.year   or
-               rl.title
+               rl.title Or (rl.mediatags AndAlso ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper)))
     End Function
   
     Public Sub RescrapeSpecific(rl As RescrapeList)
@@ -3088,7 +3088,7 @@ Public Class Movie
                     UpdateProperty(_rescrapedMovie.fullmoviebody.runtime, _scrapedMovie.fullmoviebody.runtime)
                 End If
 
-                If Pref.MovImdbAspectRatio AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
+                If ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper)) AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
                     _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
                 End If
             End If
