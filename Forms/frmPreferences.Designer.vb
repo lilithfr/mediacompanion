@@ -276,6 +276,10 @@ Partial Class frmPreferences
         Me.cbMovSetArtScrape = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_General = New System.Windows.Forms.TabPage()
         Me.gbMovieFilters = New System.Windows.Forms.GroupBox()
+        Me.cmbxMovFiltersTagsOrder = New System.Windows.Forms.ComboBox()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.nudMaxTagsInFilter = New System.Windows.Forms.NumericUpDown()
+        Me.nudMinTagsInFilter = New System.Windows.Forms.NumericUpDown()
         Me.cbMovieFilters_Sets_Order = New System.Windows.Forms.ComboBox()
         Me.Label54 = New System.Windows.Forms.Label()
         Me.cbMovieFilters_Directors_Order = New System.Windows.Forms.ComboBox()
@@ -370,14 +374,14 @@ Partial Class frmPreferences
         Me.GroupBox22 = New System.Windows.Forms.GroupBox()
         Me.cbtvdbIMDbRating = New System.Windows.Forms.CheckBox()
         Me.Button91 = New System.Windows.Forms.Button()
-        Me.RadioButton43 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton42 = New System.Windows.Forms.RadioButton()
+        Me.rbTvEpSortDefault = New System.Windows.Forms.RadioButton()
+        Me.rbTvEpSortDVD = New System.Windows.Forms.RadioButton()
         Me.Label124 = New System.Windows.Forms.Label()
         Me.Label123 = New System.Windows.Forms.Label()
         Me.Label138 = New System.Windows.Forms.Label()
-        Me.CheckBox34 = New System.Windows.Forms.CheckBox()
+        Me.cbTvSeriesActorstoEpisodeActors = New System.Windows.Forms.CheckBox()
         Me.cbTvAutoScreenShot = New System.Windows.Forms.CheckBox()
-        Me.CheckBox_Use_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
+        Me.cbTvUse_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
         Me.Label139 = New System.Windows.Forms.Label()
         Me.GroupBox20 = New System.Windows.Forms.GroupBox()
         Me.Label24 = New System.Windows.Forms.Label()
@@ -533,6 +537,8 @@ Partial Class frmPreferences
         Me.GroupBox41.SuspendLayout
         Me.tpMoviePreferences_General.SuspendLayout
         Me.gbMovieFilters.SuspendLayout
+        CType(Me.nudMaxTagsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.nudMinTagsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudMaxDirectorsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudMaxSetsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudDirectorsFilterMinFilms,System.ComponentModel.ISupportInitialize).BeginInit
@@ -3376,6 +3382,10 @@ Partial Class frmPreferences
         '
         'gbMovieFilters
         '
+        Me.gbMovieFilters.Controls.Add(Me.cmbxMovFiltersTagsOrder)
+        Me.gbMovieFilters.Controls.Add(Me.Label25)
+        Me.gbMovieFilters.Controls.Add(Me.nudMaxTagsInFilter)
+        Me.gbMovieFilters.Controls.Add(Me.nudMinTagsInFilter)
         Me.gbMovieFilters.Controls.Add(Me.cbMovieFilters_Sets_Order)
         Me.gbMovieFilters.Controls.Add(Me.Label54)
         Me.gbMovieFilters.Controls.Add(Me.cbMovieFilters_Directors_Order)
@@ -3395,10 +3405,50 @@ Partial Class frmPreferences
         Me.gbMovieFilters.Location = New System.Drawing.Point(657, 172)
         Me.gbMovieFilters.Margin = New System.Windows.Forms.Padding(0)
         Me.gbMovieFilters.Name = "gbMovieFilters"
-        Me.gbMovieFilters.Size = New System.Drawing.Size(329, 211)
+        Me.gbMovieFilters.Size = New System.Drawing.Size(329, 227)
         Me.gbMovieFilters.TabIndex = 82
         Me.gbMovieFilters.TabStop = false
         Me.gbMovieFilters.Text = " Movie Filters "
+        '
+        'cmbxMovFiltersTagsOrder
+        '
+        Me.cmbxMovFiltersTagsOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbxMovFiltersTagsOrder.FormattingEnabled = true
+        Me.cmbxMovFiltersTagsOrder.Items.AddRange(New Object() {"Num Movies desc", "A-Z asc"})
+        Me.cmbxMovFiltersTagsOrder.Location = New System.Drawing.Point(198, 147)
+        Me.cmbxMovFiltersTagsOrder.Name = "cmbxMovFiltersTagsOrder"
+        Me.cmbxMovFiltersTagsOrder.Size = New System.Drawing.Size(125, 23)
+        Me.cmbxMovFiltersTagsOrder.TabIndex = 15
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = true
+        Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label25.Location = New System.Drawing.Point(2, 148)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(38, 15)
+        Me.Label25.TabIndex = 16
+        Me.Label25.Text = "Tags"
+        '
+        'nudMaxTagsInFilter
+        '
+        Me.nudMaxTagsInFilter.Location = New System.Drawing.Point(130, 147)
+        Me.nudMaxTagsInFilter.Maximum = New Decimal(New Integer() {5000, 0, 0, 0})
+        Me.nudMaxTagsInFilter.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nudMaxTagsInFilter.Name = "nudMaxTagsInFilter"
+        Me.nudMaxTagsInFilter.Size = New System.Drawing.Size(62, 21)
+        Me.nudMaxTagsInFilter.TabIndex = 14
+        Me.nudMaxTagsInFilter.Value = New Decimal(New Integer() {5000, 0, 0, 0})
+        '
+        'nudMinTagsInFilter
+        '
+        Me.nudMinTagsInFilter.Location = New System.Drawing.Point(68, 146)
+        Me.nudMinTagsInFilter.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
+        Me.nudMinTagsInFilter.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nudMinTagsInFilter.Name = "nudMinTagsInFilter"
+        Me.nudMinTagsInFilter.Size = New System.Drawing.Size(49, 21)
+        Me.nudMinTagsInFilter.TabIndex = 13
+        Me.nudMinTagsInFilter.Value = New Decimal(New Integer() {99, 0, 0, 0})
         '
         'cbMovieFilters_Sets_Order
         '
@@ -3502,7 +3552,7 @@ Partial Class frmPreferences
         '
         'cbDisableNotMatchingRenamePattern
         '
-        Me.cbDisableNotMatchingRenamePattern.Location = New System.Drawing.Point(10, 152)
+        Me.cbDisableNotMatchingRenamePattern.Location = New System.Drawing.Point(7, 182)
         Me.cbDisableNotMatchingRenamePattern.Name = "cbDisableNotMatchingRenamePattern"
         Me.cbDisableNotMatchingRenamePattern.Size = New System.Drawing.Size(297, 38)
         Me.cbDisableNotMatchingRenamePattern.TabIndex = 6
@@ -3800,7 +3850,7 @@ Partial Class frmPreferences
         '
         Me.GroupBox9.Controls.Add(Me.Label77)
         Me.GroupBox9.Controls.Add(Me.TextBox_OfflineDVDTitle)
-        Me.GroupBox9.Location = New System.Drawing.Point(657, 395)
+        Me.GroupBox9.Location = New System.Drawing.Point(657, 427)
         Me.GroupBox9.Name = "GroupBox9"
         Me.GroupBox9.Size = New System.Drawing.Size(329, 61)
         Me.GroupBox9.TabIndex = 70
@@ -4339,7 +4389,7 @@ Partial Class frmPreferences
         Me.GroupBox17.Controls.Add(Me.cbTv_fixNFOid)
         Me.GroupBox17.Controls.Add(Me.GroupBox22)
         Me.GroupBox17.Controls.Add(Me.cbTvAutoScreenShot)
-        Me.GroupBox17.Controls.Add(Me.CheckBox_Use_XBMC_TVDB_Scraper)
+        Me.GroupBox17.Controls.Add(Me.cbTvUse_XBMC_TVDB_Scraper)
         Me.GroupBox17.Controls.Add(Me.Label139)
         Me.GroupBox17.Controls.Add(Me.GroupBox20)
         Me.GroupBox17.Controls.Add(Me.cbTvQuickAddShow)
@@ -4426,12 +4476,12 @@ Partial Class frmPreferences
         '
         Me.GroupBox22.Controls.Add(Me.cbtvdbIMDbRating)
         Me.GroupBox22.Controls.Add(Me.Button91)
-        Me.GroupBox22.Controls.Add(Me.RadioButton43)
-        Me.GroupBox22.Controls.Add(Me.RadioButton42)
+        Me.GroupBox22.Controls.Add(Me.rbTvEpSortDefault)
+        Me.GroupBox22.Controls.Add(Me.rbTvEpSortDVD)
         Me.GroupBox22.Controls.Add(Me.Label124)
         Me.GroupBox22.Controls.Add(Me.Label123)
         Me.GroupBox22.Controls.Add(Me.Label138)
-        Me.GroupBox22.Controls.Add(Me.CheckBox34)
+        Me.GroupBox22.Controls.Add(Me.cbTvSeriesActorstoEpisodeActors)
         Me.GroupBox22.Location = New System.Drawing.Point(124, 20)
         Me.GroupBox22.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox22.Name = "GroupBox22"
@@ -4459,29 +4509,29 @@ Partial Class frmPreferences
         Me.Button91.Text = "Get Languages From TVDB"
         Me.Button91.UseVisualStyleBackColor = true
         '
-        'RadioButton43
+        'rbTvEpSortDefault
         '
-        Me.RadioButton43.AutoSize = true
-        Me.RadioButton43.Checked = true
-        Me.RadioButton43.Location = New System.Drawing.Point(24, 99)
-        Me.RadioButton43.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton43.Name = "RadioButton43"
-        Me.RadioButton43.Size = New System.Drawing.Size(89, 19)
-        Me.RadioButton43.TabIndex = 2
-        Me.RadioButton43.TabStop = true
-        Me.RadioButton43.Text = "Use Default"
-        Me.RadioButton43.UseVisualStyleBackColor = true
+        Me.rbTvEpSortDefault.AutoSize = true
+        Me.rbTvEpSortDefault.Checked = true
+        Me.rbTvEpSortDefault.Location = New System.Drawing.Point(24, 99)
+        Me.rbTvEpSortDefault.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbTvEpSortDefault.Name = "rbTvEpSortDefault"
+        Me.rbTvEpSortDefault.Size = New System.Drawing.Size(89, 19)
+        Me.rbTvEpSortDefault.TabIndex = 2
+        Me.rbTvEpSortDefault.TabStop = true
+        Me.rbTvEpSortDefault.Text = "Use Default"
+        Me.rbTvEpSortDefault.UseVisualStyleBackColor = true
         '
-        'RadioButton42
+        'rbTvEpSortDVD
         '
-        Me.RadioButton42.AutoSize = true
-        Me.RadioButton42.Location = New System.Drawing.Point(24, 119)
-        Me.RadioButton42.Margin = New System.Windows.Forms.Padding(4)
-        Me.RadioButton42.Name = "RadioButton42"
-        Me.RadioButton42.Size = New System.Drawing.Size(92, 19)
-        Me.RadioButton42.TabIndex = 3
-        Me.RadioButton42.Text = "DVD Sorting"
-        Me.RadioButton42.UseVisualStyleBackColor = true
+        Me.rbTvEpSortDVD.AutoSize = true
+        Me.rbTvEpSortDVD.Location = New System.Drawing.Point(24, 119)
+        Me.rbTvEpSortDVD.Margin = New System.Windows.Forms.Padding(4)
+        Me.rbTvEpSortDVD.Name = "rbTvEpSortDVD"
+        Me.rbTvEpSortDVD.Size = New System.Drawing.Size(92, 19)
+        Me.rbTvEpSortDVD.TabIndex = 3
+        Me.rbTvEpSortDVD.Text = "DVD Sorting"
+        Me.rbTvEpSortDVD.UseVisualStyleBackColor = true
         '
         'Label124
         '
@@ -4515,16 +4565,16 @@ Partial Class frmPreferences
     "he episodes actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"folder, allowing the higher quality TVDB actor"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"thumb to be u"& _ 
     "sed for the episode."
         '
-        'CheckBox34
+        'cbTvSeriesActorstoEpisodeActors
         '
-        Me.CheckBox34.AutoSize = true
-        Me.CheckBox34.Location = New System.Drawing.Point(8, 317)
-        Me.CheckBox34.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox34.Name = "CheckBox34"
-        Me.CheckBox34.Size = New System.Drawing.Size(224, 34)
-        Me.CheckBox34.TabIndex = 33
-        Me.CheckBox34.Text = "Enable TV Show Actor Thumbs to be"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied for Episode Actor Thumbs "
-        Me.CheckBox34.UseVisualStyleBackColor = true
+        Me.cbTvSeriesActorstoEpisodeActors.AutoSize = true
+        Me.cbTvSeriesActorstoEpisodeActors.Location = New System.Drawing.Point(8, 317)
+        Me.cbTvSeriesActorstoEpisodeActors.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbTvSeriesActorstoEpisodeActors.Name = "cbTvSeriesActorstoEpisodeActors"
+        Me.cbTvSeriesActorstoEpisodeActors.Size = New System.Drawing.Size(224, 34)
+        Me.cbTvSeriesActorstoEpisodeActors.TabIndex = 33
+        Me.cbTvSeriesActorstoEpisodeActors.Text = "Enable TV Show Actor Thumbs to be"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"copied for Episode Actor Thumbs "
+        Me.cbTvSeriesActorstoEpisodeActors.UseVisualStyleBackColor = true
         '
         'cbTvAutoScreenShot
         '
@@ -4538,17 +4588,17 @@ Partial Class frmPreferences
         Me.cbTvAutoScreenShot.Text = "Auto create screenshot if TVDB does not have one"
         Me.cbTvAutoScreenShot.UseVisualStyleBackColor = true
         '
-        'CheckBox_Use_XBMC_TVDB_Scraper
+        'cbTvUse_XBMC_TVDB_Scraper
         '
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.AutoSize = true
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 431)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Name = "CheckBox_Use_XBMC_TVDB_Scraper"
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(195, 19)
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.TabIndex = 65
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.Text = "Use XBMC ""TheTVDB"" Scraper"
-        Me.CheckBox_Use_XBMC_TVDB_Scraper.UseVisualStyleBackColor = true
+        Me.cbTvUse_XBMC_TVDB_Scraper.AutoSize = true
+        Me.cbTvUse_XBMC_TVDB_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbTvUse_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 431)
+        Me.cbTvUse_XBMC_TVDB_Scraper.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbTvUse_XBMC_TVDB_Scraper.Name = "cbTvUse_XBMC_TVDB_Scraper"
+        Me.cbTvUse_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(195, 19)
+        Me.cbTvUse_XBMC_TVDB_Scraper.TabIndex = 65
+        Me.cbTvUse_XBMC_TVDB_Scraper.Text = "Use XBMC ""TheTVDB"" Scraper"
+        Me.cbTvUse_XBMC_TVDB_Scraper.UseVisualStyleBackColor = true
         '
         'Label139
         '
@@ -5923,6 +5973,8 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.ResumeLayout(false)
         Me.gbMovieFilters.ResumeLayout(false)
         Me.gbMovieFilters.PerformLayout
+        CType(Me.nudMaxTagsInFilter,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.nudMinTagsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudMaxDirectorsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudMaxSetsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudDirectorsFilterMinFilms,System.ComponentModel.ISupportInitialize).EndInit
@@ -6298,14 +6350,14 @@ End Sub
     Friend WithEvents cbTv_fixNFOid As CheckBox
     Friend WithEvents GroupBox22 As GroupBox
     Friend WithEvents Button91 As Button
-    Friend WithEvents RadioButton43 As RadioButton
-    Friend WithEvents RadioButton42 As RadioButton
+    Friend WithEvents rbTvEpSortDefault As RadioButton
+    Friend WithEvents rbTvEpSortDVD As RadioButton
     Friend WithEvents Label124 As Label
     Friend WithEvents Label123 As Label
     Friend WithEvents Label138 As Label
-    Friend WithEvents CheckBox34 As CheckBox
+    Friend WithEvents cbTvSeriesActorstoEpisodeActors As CheckBox
     Friend WithEvents cbTvAutoScreenShot As CheckBox
-    Friend WithEvents CheckBox_Use_XBMC_TVDB_Scraper As CheckBox
+    Friend WithEvents cbTvUse_XBMC_TVDB_Scraper As CheckBox
     Friend WithEvents Label139 As Label
     Friend WithEvents GroupBox20 As GroupBox
     Friend WithEvents Label7 As Label
@@ -6452,4 +6504,8 @@ End Sub
     Friend WithEvents cbDisplayAllSubtitleLang As CheckBox
     Friend WithEvents cbDisplayDefaultSubtitleLang As CheckBox
     Friend WithEvents cbXbmcTmdbAspectFromImdb As CheckBox
+    Friend WithEvents cmbxMovFiltersTagsOrder As ComboBox
+    Friend WithEvents Label25 As Label
+    Friend WithEvents nudMaxTagsInFilter As NumericUpDown
+    Friend WithEvents nudMinTagsInFilter As NumericUpDown
 End Class

@@ -845,6 +845,24 @@ Public Class Movies
         End If
     End Sub
 
+    'Public ReadOnly Property TagsFilter_Preferences As IEnumerable(Of String)
+    '    Get
+    '        Dim q = From x In MovieCache 
+    '            Group By 
+    '                x.movietag Into NumFilms=Count
+    '            Where 
+    '                NumFilms>=Pref.MinTagsInFilter 
+
+    '        If Pref.MovFiltersTagsOrder = 0 Then 
+    '            q = From x In q Order by x.NumFilms Descending, x.movietag Ascending
+    '        Else
+    '            q = From x In q Order by x.movietag Ascending , x.NumFilms Descending
+    '        End If
+
+    '        Return From x In q Select x.movietag & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxTagsInFilter 
+    '    End Get
+    'End Property
+
     Public ReadOnly Property SetsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In MovieCache 

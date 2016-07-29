@@ -502,6 +502,9 @@ Public Class frmPreferences
         nudSetsFilterMinFilms               .Text           = Pref.SetsFilterMinFilms
         nudMaxSetsInFilter                  .Text           = Pref.MaxSetsInFilter
         cbMovieFilters_Sets_Order           .SelectedIndex  = Pref.MovieFilters_Sets_Order
+        nudMinTagsInFilter                  .Text           = Pref.MinTagsInFilter
+        nudMaxTagsInFilter                  .Text           = Pref.MaxTagsInFilter
+        cmbxMovFiltersTagsOrder             .SelectedIndex  = Pref.MovFiltersTagsOrder
         cbDisableNotMatchingRenamePattern   .Checked        = Pref.DisableNotMatchingRenamePattern
 
         'Offline DVD Text
@@ -556,11 +559,11 @@ Public Class frmPreferences
 
         'MC TVDB Scraper Options
         If Pref.sortorder = "dvd" Then
-            RadioButton42.Checked = True
+            rbTvEpSortDVD.Checked = True
         Else
-            RadioButton43.Checked = True
+            rbTvEpSortDefault.Checked = True
         End If
-        CheckBox34                      .Checked    = Pref.copytvactorthumbs
+        cbTvSeriesActorstoEpisodeActors                      .Checked    = Pref.copytvactorthumbs
         cbtvdbIMDbRating                .Checked    = Pref.tvdbIMDbRating
 
         'TV Autoscrape Options
@@ -620,7 +623,7 @@ Public Class frmPreferences
 
         'Options
         ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
-        CheckBox_Use_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
+        cbTvUse_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
         CheckBox20                      .Checked    = Pref.enabletvhdtags
         CheckBox17                      .Checked    = Pref.disabletvlogs
         cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
@@ -2320,6 +2323,32 @@ End Sub
         Pref.MovieFilters_Sets_Order = cbMovieFilters_Sets_Order.SelectedIndex
         Changes = True
     End Sub
+    
+    Private Sub nudMinTagsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMinTagsInFilter.ValueChanged
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MinTagsInFilter = nudMinTagsInFilter.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub nudMaxTagsInFilter_ValueChanged( sender As System.Object,  e As System.EventArgs) Handles nudMaxTagsInFilter.ValueChanged
+        If PrefsLoad Then Exit Sub
+        Try
+            Pref.MaxTagsInFilter = nudMaxTagsInFilter.Value
+            Changes = True
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub cmbxMovFiltersTagsOrder_SelectedValueChanged( sender As Object,  e As EventArgs) Handles cmbxMovFiltersTagsOrder.SelectedValueChanged
+        If PrefsLoad Then Exit Sub
+        Pref.MovFiltersTagsOrder = cmbxMovFiltersTagsOrder.SelectedIndex
+        Changes = True
+    End Sub
 
     Private Sub cbDisableNotMatchingRenamePattern_CheckedChanged( sender As Object,  e As EventArgs) Handles cbDisableNotMatchingRenamePattern.CheckedChanged
         If PrefsLoad Then Exit Sub
@@ -2499,10 +2528,10 @@ End Sub
         End Try
     End Sub
 
-    Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton42.CheckedChanged
+    Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvEpSortDVD.CheckedChanged
         If prefsload Then Exit Sub
         Try
-            If RadioButton42.Checked = True Then
+            If rbTvEpSortDVD.Checked = True Then
                 Pref.sortorder = "dvd"
             Else
                 Pref.sortorder = "default"
@@ -2527,9 +2556,9 @@ End Sub
     '    End Try
     'End Sub
 
-    Private Sub CheckBox34_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox34.CheckedChanged
+    Private Sub cbTvSeriesActorstoEpisodeActors_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvSeriesActorstoEpisodeActors.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.copytvactorthumbs = CheckBox34.Checked
+        Pref.copytvactorthumbs = cbTvSeriesActorstoEpisodeActors.Checked
         Changes = True
     End Sub
 
@@ -2539,9 +2568,9 @@ End Sub
         Changes = True
     End Sub
 
-    Private Sub CheckBox_Use_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_TVDB_Scraper.CheckedChanged
+    Private Sub cbTvUse_XBMC_TVDB_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvUse_XBMC_TVDB_Scraper.CheckedChanged
         Try
-            If CheckBox_Use_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
+            If cbTvUse_XBMC_TVDB_Scraper.CheckState = CheckState.Checked Then
                 Pref.tvshow_useXBMC_Scraper = True
                 'GroupBox2.Enabled = False
                 'GroupBox3.Enabled = False

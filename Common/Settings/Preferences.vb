@@ -292,17 +292,21 @@ Public Class Pref
     Public Shared PosterResolutionSI As Integer = 9     ' Height  1080  
     Public Shared BackDropResolutionSI As Integer = 15     ' Full HD 1920x1080
 
-    Public Shared ActorsFilterMinFilms         As Integer =   1
-    Public Shared MaxActorsInFilter            As Integer = 500
-    Public Shared MovieFilters_Actors_Order    As Integer =   0        ' 0=Number of films desc 1=A-Z
+    Public Shared ActorsFilterMinFilms          As Integer =   1
+    Public Shared MaxActorsInFilter             As Integer = 500
+    Public Shared MovieFilters_Actors_Order     As Integer =   0        ' 0=Number of films desc 1=A-Z
 
-    Public Shared DirectorsFilterMinFilms      As Integer =   1
-    Public Shared MaxDirectorsInFilter         As Integer = 500
-    Public Shared MovieFilters_Directors_Order As Integer =   0        ' 0=Number of films desc 1=A-Z
+    Public Shared DirectorsFilterMinFilms       As Integer =   1
+    Public Shared MaxDirectorsInFilter          As Integer = 500
+    Public Shared MovieFilters_Directors_Order  As Integer =   0        ' 0=Number of films desc 1=A-Z
 
-    Public Shared SetsFilterMinFilms           As Integer =   1             
-    Public Shared MaxSetsInFilter              As Integer = 500
-    Public Shared MovieFilters_Sets_Order      As Integer =   0        ' 0=Number of films desc 1=A-Z
+    Public Shared SetsFilterMinFilms            As Integer =   1             
+    Public Shared MaxSetsInFilter               As Integer = 500
+    Public Shared MovieFilters_Sets_Order       As Integer =   0        ' 0=Number of films desc 1=A-Z
+
+    Public Shared MinTagsInFilter               As Integer =   1             
+    Public Shared MaxTagsInFilter               As Integer = 500
+    Public Shared MovFiltersTagsOrder           As Integer =   0        ' 0=Number of films desc 1=A-Z
 
 
     Public Shared DateFormat As String = "YYYY-MM-DD"   'Valid tokens: YYYY MM DD HH MIN SS Used in Movie list
@@ -1225,6 +1229,11 @@ Public Class Pref
         root.AppendChild(doc, "SetsFilterMinFilms",                 SetsFilterMinFilms)                 'nudSetsFilterMinFilms
         root.AppendChild(doc, "MaxSetsInFilter",                    MaxSetsInFilter)                    'nudMaxSetsInFilter
         root.AppendChild(doc, "MovieFilters_Sets_Order",            MovieFilters_Sets_Order)            'cbMovieFilters_Sets_Order
+
+        root.AppendChild(doc, "MinTagsInFilter",                    MinTagsInFilter)                    'nudMinTagsInFilter
+        root.AppendChild(doc, "MaxTagsInFilter",                    MaxTagsInFilter)                    'nudMaxTagsInFilter
+        root.AppendChild(doc, "MovFiltersTagsOrder",                MovFiltersTagsOrder)                'cmbxMovFiltersTagsOrder
+
         root.AppendChild(doc, "Original_Title",                     Original_Title         )            'chkbOriginal_Title
         root.AppendChild(doc, "UseMultipleThreads",                 UseMultipleThreads     )            'cbUseMultipleThreads
 
@@ -1743,6 +1752,10 @@ Public Class Pref
                     Case "SetsFilterMinFilms"                   : SetsFilterMinFilms        = thisresult.InnerXml
                     Case "MaxSetsInFilter"                      : MaxSetsInFilter           = thisresult.InnerXml
                     Case "MovieFilters_Sets_Order"              : MovieFilters_Sets_Order   = thisresult.InnerXml
+
+                    Case "MinTagsInFilter"                      : MinTagsInFilter           = thisresult.InnerXml
+                    Case "MaxTagsInFilter"                      : MaxTagsInFilter           = thisresult.InnerXml
+                    Case "MovFiltersTagsOrder"                  : MovFiltersTagsOrder       = thisresult.InnerXml
 
                     Case "Original_Title"                       : Original_Title            = thisresult.InnerXml
                     Case "UseMultipleThreads"                   : UseMultipleThreads        = thisresult.InnerXml
