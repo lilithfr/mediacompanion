@@ -153,16 +153,7 @@ Public Class Movies
             Return q.AsEnumerable.ToList
         End Get
     End Property    
-
-    Public ReadOnly Property TagFilter As List(Of String)
-        Get
-            Dim q2 = From x In Pref.movietags
-           
-            Return q2.AsEnumerable.ToList
-        End Get
-    End Property
-
-
+    
     Public ReadOnly Property CountriesFilter As List(Of String)
         Get
             'Dim q = From x In MovieCache Select ms=x.countriesList
@@ -632,39 +623,14 @@ Public Class Movies
             Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxActorsInFilter
         End Get
     End Property    
-
-    Public ReadOnly Property DirectorsFilter_Preferences As IEnumerable(Of String)
-        Get
-            Dim q = From x In DirectorDb 
-                Group By 
-                    x.ActorName Into NumFilms=Count 
-                Where 
-                    NumFilms>= Pref.DirectorsFilterMinFilms
-                                
-            If Pref.MovieFilters_Directors_Order=0 Then 
-                q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
-            Else
-                q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
-            End If
-
-            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxDirectorsInFilter
-        End Get
-    End Property    
-
+    
     Public ReadOnly Property ActorsFilter As List(Of String)
         Get
             Dim r = (From x In ActorsFilter_Preferences).Union(From x In ActorsFilter_Extras) 
             Return r.ToList
         End Get
     End Property    
-
-    Public ReadOnly Property DirectorsFilter As List(Of String)
-        Get
-            Dim r = (From x In DirectorsFilter_Preferences).Union(From x In DirectorsFilter_Extras) 
-            Return r.ToList
-        End Get
-    End Property    
-
+    
     Public ReadOnly Property ActorsFilter_Extras As IEnumerable(Of String)
         Get
             Dim q = From x In ActorDb 
@@ -685,6 +651,31 @@ Public Class Movies
         End If
     End Sub
 
+    Public ReadOnly Property DirectorsFilter_Preferences As IEnumerable(Of String)
+        Get
+            Dim q = From x In DirectorDb 
+                Group By 
+                    x.ActorName Into NumFilms=Count 
+                Where 
+                    NumFilms>= Pref.DirectorsFilterMinFilms
+                                
+            If Pref.MovieFilters_Directors_Order=0 Then 
+                q = From x In q Order by x.NumFilms  Descending, x.ActorName Ascending
+            Else
+                q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
+            End If
+
+            Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxDirectorsInFilter
+        End Get
+    End Property    
+
+    Public ReadOnly Property DirectorsFilter As List(Of String)
+        Get
+            Dim r = (From x In DirectorsFilter_Preferences).Union(From x In DirectorsFilter_Extras) 
+            Return r.ToList
+        End Get
+    End Property    
+    
     Public ReadOnly Property DirectorsFilter_Extras As IEnumerable(Of String)
         Get
             Dim q = From x In DirectorDb 
@@ -704,6 +695,15 @@ Public Class Movies
             DirectorsFilter_AlsoInclude.Add(value)
         End If
     End Sub
+    
+    Public ReadOnly Property TagFilter As List(Of String)
+        Get
+            Dim q2 = From x In Pref.movietags
+           
+            Return q2.AsEnumerable.ToList
+        End Get
+    End Property
+
 
     Public ReadOnly Property ResolutionFilter As List(Of String)
         Get
@@ -2554,7 +2554,7 @@ Public Class Movies
             Next
 
             For each t In movie.movietag
-                _tagDb.Add(t)
+                If Not _tagdb.Contains(t) Then _tagDb.Add(t)
             Next
 
             If Cancelled Then Exit Sub
