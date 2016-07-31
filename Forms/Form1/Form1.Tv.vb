@@ -2416,6 +2416,7 @@ Partial Public Class Form1
                         newepisode.Showimdbid.Value = Shows.ImdbId.Value
                         newepisode.ShowTitle.Value = Shows.Title.Value
                         newepisode.ShowYear.Value = Shows.Year.Value
+                        newepisode.ShowObj = Shows
                         If String.IsNullOrEmpty(newepisode.ShowYear.Value) Then
                             If Not String.IsNullOrEmpty(Shows.Premiered.Value) Then
                                 Dim yr As String = Shows.Premiered.Value.Substring(0,4)
@@ -2566,6 +2567,7 @@ Partial Public Class Form1
                                 multieps.Episode.Value = M2.Groups(3).Value
                                 multieps.VideoFilePath = eps.VideoFilePath
                                 multieps.MediaExtension = eps.MediaExtension
+                                multieps.ShowObj = eps.ShowObj 
                                 episodearray.Add(multieps)
                                 allepisodes(epcount) = Convert.ToDecimal(M2.Groups(3).Value)
                             End If
@@ -2841,6 +2843,11 @@ Partial Public Class Form1
                                     If imdbid = "" Then
                                         Pref.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                     End If
+                                    If Pref.copytvactorthumbs AndAlso singleepisode.ListActors.Count = 0 AndAlso Not IsNothing(singleepisode.ShowObj) Then
+                                        For each act In singleepisode.ShowObj.ListActors
+                                            singleepisode.ListActors.Add(act)
+                                        Next
+                                    End If
                                     stage = "12b5f"
                                     If Pref.enabletvhdtags = True Then
                                         progresstext &= " : HD Tags..."
@@ -2915,30 +2922,30 @@ Partial Public Class Form1
                         Exit Sub
                     End If
                     stage = "14d"
-                    For Each Shows In Cache.TvCache.Shows
+                    'For Each Shows In Cache.TvCache.Shows
                         stage = "14d1"
-                        If episodearray(0).NfoFilePath.IndexOf(Shows.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
+                        If episodearray(0).NfoFilePath.IndexOf(episodearray(0).ShowObj.NfoFilePath.Replace("\tvshow.nfo", "")) <> -1 Then
                             stage = "14d1a"
                             Dim epseason As String = episodearray(0).Season.Value
-                            Dim Seasonxx As String = Shows.FolderPath + "season" + (If(epseason.ToInt < 10, "0" + epseason, epseason)) + (If(Pref.FrodoEnabled, "-poster.jpg", ".tbn"))
+                            Dim Seasonxx As String = episodearray(0).ShowObj.FolderPath + "season" + (If(epseason.ToInt < 10, "0" + epseason, epseason)) + (If(Pref.FrodoEnabled, "-poster.jpg", ".tbn"))
                             stage = "14d1b"
-                            If epseason = "0" Then Seasonxx = Shows.FolderPath & "season-specials" & (If(Pref.FrodoEnabled, "-poster.jpg", ".tbn"))
+                            If epseason = "0" Then Seasonxx = episodearray(0).ShowObj.FolderPath & "season-specials" & (If(Pref.FrodoEnabled, "-poster.jpg", ".tbn"))
                             stage = "14d1c"
                             If Not IO.File.Exists(Seasonxx) Then
-                                TvGetArtwork(Shows, False, False, True, False)
+                                TvGetArtwork(episodearray(0).ShowObj, False, False, True, False)
                             End If
                             stage = "14d1d"
-                            If Pref.seasonfolderjpg AndAlso Shows.FolderPath <> episodearray(0).FolderPath AndAlso (Not File.Exists(episodearray(0).FolderPath & "folder.jpg")) Then
+                            If Pref.seasonfolderjpg AndAlso episodearray(0).ShowObj.FolderPath <> episodearray(0).FolderPath AndAlso (Not File.Exists(episodearray(0).FolderPath & "folder.jpg")) Then
                                 If File.Exists(Seasonxx) Then Utilities.SafeCopyFile(Seasonxx, (episodearray(0).FolderPath & "folder.jpg"))
                             End If
                             stage = "14d1e"
                             For Each ep In episodearray
-                                Dim newwp As New TvEpisode
-                                newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
-                                newwp.NfoFilePath = newnamepath 'left these as they were....
-                                newwp.PlayCount.Value = "0"         '
-                                newwp.ShowObj = Shows               '
-                                bckgroundscanepisodes.ReportProgress(1, newwp)
+                                'Dim newwp As New TvEpisode
+                                'newwp = ep                      'added this kline becuase plot + others were not being dispolay after a new ep was found
+                                'newwp.NfoFilePath = newnamepath 'left these as they were....
+                                'newwp.PlayCount.Value = "0"         '
+                                'newwp.ShowObj = Shows
+                                bckgroundscanepisodes.ReportProgress(1, ep)
                             Next
                             stage = "14d1f"
                             tv_EpisodesMissingUpdate(episodearray)
@@ -2946,7 +2953,7 @@ Partial Public Class Form1
                             Exit For
                         End If
                         stage = "14d2"
-                    Next
+                    'Next
                     stage = "15"
                 End If
                 If Not scrapedok Then ScraperErrorDetected = True

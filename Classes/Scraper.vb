@@ -198,7 +198,7 @@ Module ModGlobals
 
     <Extension()> _
     Function CleanActorRole(ByRef s As String) As String
-        Dim a As Integer = s.IndexOf("  ")-2
+        Dim a As Integer = s.IndexOf("  ")-1
         Dim Words As String() = s.Split(Chr(32)& Chr(32))
         If a >0 Then
             s = s.Substring(0, a)
