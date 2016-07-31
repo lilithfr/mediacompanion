@@ -2087,6 +2087,7 @@ Partial Class frmPreferences
         Me.lbVideoSource.Location = New System.Drawing.Point(6, 17)
         Me.lbVideoSource.Margin = New System.Windows.Forms.Padding(0)
         Me.lbVideoSource.Name = "lbVideoSource"
+        Me.lbVideoSource.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
         Me.lbVideoSource.Size = New System.Drawing.Size(185, 394)
         Me.lbVideoSource.TabIndex = 0
         '

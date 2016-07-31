@@ -1100,10 +1100,15 @@ Public Class frmPreferences
     End Sub
 
     Private Sub btnVideoSourceRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnVideoSourceRemove.Click
-        Dim strSelected = lbVideoSource.SelectedItem
-        Dim idxSelected = lbVideoSource.SelectedIndex
+        'Dim strSelected = lbVideoSource.SelectedItem
+        'Dim idxSelected = lbVideoSource.SelectedIndex
         Try
-            lbVideoSource.Items.RemoveAt(idxSelected)
+            While lbVideoSource.SelectedItems.Count > 0
+                Changes = True
+                videosourceprefchanged = True
+                lbVideoSource.Items.Remove(lbVideoSource.SelectedItems(0))
+            End While
+            'lbVideoSource.Items.RemoveAt(idxSelected)
             Changes = True
             videosourceprefchanged = True
         Catch ex As Exception

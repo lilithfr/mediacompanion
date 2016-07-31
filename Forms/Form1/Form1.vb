@@ -15843,11 +15843,11 @@ Public Class Form1
 
 #Region "Tv Folders Form"
 
-    'Private Sub TabPage23_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabPage23.Enter
+    'Private Sub tpTvFolders_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpTvFolders.Enter
     '    tvfolderschanged = False
     'End Sub
 
-    Private Sub TabPage23_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpTvFolders.Leave
+    Private Sub tpTvFolders_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpTvFolders.Leave
         Try
             If tvfolderschanged Then
                 Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
@@ -16021,7 +16021,7 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub checkedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbx_TvRootFolders.ItemCheck
+    Private Sub clbx_TvRootFolders_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles clbx_TvRootFolders.ItemCheck
         If Not AuthorizeCheck Then
 	        e.NewValue = e.CurrentValue
         End If
