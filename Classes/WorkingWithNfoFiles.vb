@@ -2327,6 +2327,8 @@ Public Class WorkingWithNfoFiles
                                 newmovie.rating = thisresult.InnerText.ToRating
                             Case "userrating"
                                 newmovie.usrrated = thisresult.InnerText.ToInt 
+                            Case " metascore"
+                                newmovie.metascore = thisresult.InnerText
                             Case "top250"
                                 newmovie.top250 = thisresult.InnerText
                             Case "sortorder"
@@ -2663,6 +2665,8 @@ Public Class WorkingWithNfoFiles
                             'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
                         Case "userrating"
                             newmovie.fullmoviebody.usrrated = thisresult.InnerText
+                        Case "metascore"
+                            newmovie.fullmoviebody.metascore = thisresult.InnerText
                         Case "top250"
                             newmovie.fullmoviebody.top250 = thisresult.InnerText
                         Case "createdate"
@@ -3071,6 +3075,9 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
                 child = doc.CreateElement("userrating")
                 child.InnerText = If(movietosave.fullmoviebody.usrrated = "", "0", movietosave.fullmoviebody.usrrated)
+                root.AppendChild(child)
+                child = doc.CreateElement("metascore")
+                child.InnerText = If(movietosave.fullmoviebody.metascore = "", "0", movietosave.fullmoviebody.metascore)
                 root.AppendChild(child)
                 stage = 29
                 child = doc.CreateElement("votes")

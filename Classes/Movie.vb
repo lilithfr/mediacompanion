@@ -1267,6 +1267,7 @@ Public Class Movie
         _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
         _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
         _movieCache.usrrated    = If(_scrapedMovie.fullmoviebody.usrrated = "", 0, _scrapedMovie.fullmoviebody.usrrated.ToInt)
+        _movieCache.metascore   = If(_scrapedMovie.fullmoviebody.metascore = "", 0, _scrapedMovie.fullmoviebody.metascore.ToInt)
         _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value
         _movieCache.Actorlist   = _scrapedMovie.listactors 
         If Pref.incmissingmovies Then
@@ -1449,6 +1450,8 @@ Public Class Movie
                     _scrapedMovie.fullmoviebody.thumb = thisresult.InnerText
                 Case "aspect"
                     _scrapedMovie.fileinfo.aspectratioimdb = thisresult.InnerText
+                Case "metacritic"
+                    _scrapedMovie.fullmoviebody.metascore = thisresult.InnerText
             End Select
         Next
         If Pref.MusicVidConcertScrape Then tmdb.TmdbId = _scrapedMovie.fullmoviebody.tmdbid

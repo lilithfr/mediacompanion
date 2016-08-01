@@ -35,6 +35,7 @@ Public Structure str_BasicMovieNFO
     Dim track           As String
     Dim showlink        As String
     Dim usrrated        As String
+    Dim metascore       As String
     Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
         title           = ""
         originaltitle   = ""
@@ -71,6 +72,7 @@ Public Structure str_BasicMovieNFO
         track           = ""
         showlink        = ""
         usrrated        = ""
+        metascore       = ""
     End Sub
 
     Sub ClearWatched()

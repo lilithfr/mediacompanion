@@ -37,6 +37,7 @@ Public Class Data_GridViewMovie
     Dim _videomissing As Boolean
     Dim _rootfolder             As String
     Dim _usrrated               As Integer
+    Dim _metascore              As Integer
 
 
     
@@ -99,6 +100,7 @@ Public Class Data_GridViewMovie
         DefaultAudioTrack = movie.DefaultAudioTrack
         rootfolder          = movie.rootfolder
         usrrated            = movie.usrrated
+        metascore           = movie.metascore
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -147,6 +149,7 @@ Public Class Data_GridViewMovie
         convertedMovie.DefaultAudioTrack    = Me.DefaultAudioTrack
         convertedMovie.rootfolder           = Me.rootfolder
         convertedMovie.usrrated             = Me.usrrated
+        convertedMovie.metascore            = Me.metascore
 
         Return convertedMovie
     End Function
@@ -838,6 +841,15 @@ Public Class Data_GridViewMovie
         End Get
         Set(value As Integer)
             _usrrated = value 
+        End Set
+    End Property
+
+    Public Property metascore As Integer
+        Get
+            Return _metascore
+        End Get
+        Set(value As Integer)
+            _metascore = value 
         End Set
     End Property
 

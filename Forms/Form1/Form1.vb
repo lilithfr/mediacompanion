@@ -1766,7 +1766,12 @@ Public Class Form1
                     votestxt.Text = workingMovieDetails.fullmoviebody.votes
                 End If
                 certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
-                top250txt.Text = workingMovieDetails.fullmoviebody.top250
+                If lbl_movTop250.Text = "Top 250" Then
+                    top250txt.Text = workingMovieDetails.fullmoviebody.top250
+                Else
+                    top250txt.Text = workingMovieDetails.fullmoviebody.metascore
+                End If
+                'top250txt.Text = workingMovieDetails.fullmoviebody.top250
                 If Pref.movieRuntimeDisplay = "file" Then
                     displayRuntimeScraper = False
                 Else
@@ -2686,7 +2691,12 @@ Public Class Form1
             movie.ScrapedMovie.fullmoviebody.genre = genretxt.Text
             movie.ScrapedMovie.fullmoviebody.premiered = premiertxt.Text
             movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
-            movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
+            If lbl_movTop250.Text = "Top 250" Then
+                movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
+            Else
+                movie.ScrapedMovie.fullmoviebody.metascore = top250txt.Text
+            End If
+            'movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
             movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
             movie.ScrapedMovie.fullmoviebody.usrrated = If(cbUsrRated.Text = "None", "0", cbUsrRated.Text)
             movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
@@ -2813,7 +2823,14 @@ Public Class Form1
                     If txtStars.Text <> "" Then movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
                     If ratingtxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
                     If votestxt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.votes = votestxt.Text
-                    If top250txt.Text <> "" Then movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
+                    If top250txt.Text <> "" Then
+                        If lbl_movTop250.Text = "Top 250" Then
+                            movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
+                        Else
+                            movie.ScrapedMovie.fullmoviebody.metascore = top250txt.Text
+                        End If
+                        'movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
+                    End If
                     If Not cbMovieDisplay_MovieSet.SelectedIndex < 1 Then
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                         movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
@@ -7439,6 +7456,24 @@ Public Class Form1
         End If
     End Sub
 
+    Public Sub mov_Switchtop250()
+        If workingMovieDetails Is Nothing Then Exit Sub
+        If lbl_movTop250.Text = "Top 250" Then
+            lbl_movTop250.Text = "Metascore"
+            top250txt.Text = workingMovieDetails.fullmoviebody.metascore
+        Else
+            lbl_movTop250.Text = "Top 250"
+            top250txt.Text = workingMovieDetails.fullmoviebody.top250
+        End If
+        'If Pref.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
+        '    runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
+        '    runtimetxt.Enabled = False
+        'Else
+        '    runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
+        '    runtimetxt.Enabled = True
+        'End If
+    End Sub
+
     Private Sub SearchForNewMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewMoviesToolStripMenuItem.Click
         SearchForNew
     End Sub
@@ -11279,6 +11314,12 @@ Public Class Form1
         If e.Button = Windows.Forms.MouseButtons.Left Then
             displayRuntimeScraper = Not (runtimetxt.Enabled = True)
             Call mov_SwitchRuntime()
+        End If
+    End Sub
+
+    Private Sub lbl_movTop250_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbl_movTop250.MouseDown 
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            Call mov_Switchtop250
         End If
     End Sub
 

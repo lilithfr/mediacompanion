@@ -1605,6 +1605,7 @@ Public Class Movies
                                 Case "playcount"            : newmovie.playcount = detail.InnerText
                                 Case "rating"               : newmovie.rating = detail.InnerText.ToString.ToRating
                                 Case "usrrated"             : newmovie.usrrated = detail.InnerText.toInt
+                                Case "metascore"            : newmovie.metascore = detail.InnerText.toInt
                                 Case "title"                : newmovie.title = detail.InnerText
                                 Case "originaltitle"        : newmovie.originaltitle = detail.InnerText
                                 Case "top250"               : newmovie.top250 = detail.InnerText
@@ -1765,6 +1766,7 @@ Public Class Movies
             child.AppendChild(doc, "year",          movie.year)
             child.AppendChild(doc, "votes",         movie.Votes)
             child.AppendChild(doc, "usrrated",      movie.usrrated)
+            child.AppendChild(doc, "metascore",     movie.metascore)
             child.AppendChild(doc, "Resolution",    movie.Resolution)
             child.AppendChild(doc, "VideoCodec",    movie.VideoCodec)
             child.AppendChild(doc, "Container",     movie.Container)

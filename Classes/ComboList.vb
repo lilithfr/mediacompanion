@@ -77,6 +77,7 @@ Public Class ComboList
     Property FolderSize           As Long = -1
     Property _rootfolder          As String = ""
     Property _usrrated            As Integer = 0
+    Property _metascore           As Integer = 0
 
 
     Public ReadOnly Property DisplayFolderSize As Double
@@ -420,6 +421,15 @@ Public Class ComboList
             _usrrated = Value
         End Set
     End Property
+    
+    Public Property metascore As Integer
+        Get
+            Return _metascore
+        End Get
+        Set(value As Integer)
+            _metascore = Value
+        End Set
+    End Property
 
     Public Sub Assign(From As ComboList)
 
@@ -470,6 +480,7 @@ Public Class ComboList
         Me.FolderSize           = From.FolderSize
         Me.rootfolder           = From.rootfolder
         Me.usrrated             = From.usrrated
+        Me.metascore            = From.metascore
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
