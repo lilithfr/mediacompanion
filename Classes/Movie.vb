@@ -4211,7 +4211,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.tag.Clear()
             Dim res As String = ""
             If Pref.TagRes Then res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
-            _scrapedMovie.fullmoviebody.tag.Add(res)
+            If res <> "" Then _scrapedMovie.fullmoviebody.tag.Add(res)
 
             If keywords.Count > 0 Then
                 Dim i As Integer = 0
