@@ -290,6 +290,7 @@ Public Class frmPreferences
         cbXbmcTmdbIMDBRatings               .Checked        = If(Pref.XbmcTmdbScraperRatings.ToLower = "imdb", True, False)
         cbXbmcTmdbAkasFromImdb              .Checked        = Pref.XbmcTmdbAkasFromImdb
         cbXbmcTmdbAspectFromImdb            .Checked        = Pref.XbmcTmdbAspectFromImdb
+        cbXbmcTmdbMetascoreFromImdb         .Checked        = Pref.XbmcTmdbMetascoreFromImdb
         cbXbmcTmdbStarsFromImdb             .Checked        = Pref.XbmcTmdbStarsFromImdb
         cbXbmcTmdbCertFromImdb              .Checked        = Pref.XbmcTmdbCertFromImdb
         cbXbmcTmdbVotesFromImdb             .Checked        = Pref.XbmcTmdbVotesFromImdb
@@ -1284,6 +1285,12 @@ Public Class frmPreferences
     Private Sub cbXbmcTmdbAspectFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbAspectFromImdb.CheckedChanged
         If prefsload Then Exit Sub
         Pref.XbmcTmdbAspectFromImdb = cbXbmcTmdbAspectFromImdb.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbXbmcTmdbMetascoreFromImdb_CheckedChanged(sender As Object, e As EventArgs) Handles cbXbmcTmdbMetascoreFromImdb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.XbmcTmdbMetascoreFromImdb = cbXbmcTmdbMetascoreFromImdb.Checked
         Changes = True
     End Sub
 
@@ -3705,5 +3712,5 @@ End Sub
         lstNameModeFiles.Sort()
         Return String.Join(vbCrLf, lstNameModeFiles)
     End Function
-
+    
 End Class

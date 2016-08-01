@@ -1074,7 +1074,8 @@ Public Class Classimdb
     ReadOnly Property GetFromImdb As Boolean
         Get
             Return Pref.XbmcTmdbCertFromImdb OrElse Pref.XbmcTmdbStarsFromImdb OrElse Pref.XbmcTmdbTop250FromImdb OrElse 
-                Pref.XbmcTmdbVotesFromImdb OrElse Pref.XbmcTmdbMissingFromImdb OrElse Pref.XbmcTmdbAkasFromImdb OrElse Pref.XbmcTmdbAspectFromImdb
+                Pref.XbmcTmdbVotesFromImdb OrElse Pref.XbmcTmdbMissingFromImdb OrElse Pref.XbmcTmdbAkasFromImdb OrElse
+                Pref.XbmcTmdbAspectFromImdb OrElse Pref.XbmcTmdbMetascoreFromImdb
         End Get
     End Property
 
@@ -1549,6 +1550,7 @@ Public Class Classimdb
             If Pref.XbmcTmdbVotesFromImdb       Then results.AppendTag      ( "votes"       , Votes     )
             If Pref.XbmcTmdbGenreFromImdb       Then results.AppendTag      ( "imdbgenre"   , Genres    )
             If Pref.XbmcTmdbAspectFromImdb      Then results.AppendTag      ( "aspect"      , ARImdb    )
+            If Pref.XbmcTmdbMetascoreFromImdb   Then results.AppendTag      ( "metacritic"  , metacritic(IMDbId))
             If Pref.XbmcTmdbCertFromImdb Then
                 For f = 0 To 33
                     If mpaaresults(f, 1) <> Nothing Then

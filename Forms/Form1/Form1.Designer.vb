@@ -134,72 +134,73 @@ Partial Class Form1
         Me.CTvTreeView = New System.Windows.Forms.TreeView()
         Me.tagtxt = New System.Windows.Forms.TextBox()
         Me.MovieContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.mov_ToolStripMovieName = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripPlayMovie = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripPlayTrailer = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator17 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripViewNfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripDeleteNfoArtwork = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Mov_ToolStripRemoveMovie = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Mov_ToolStripRenameMovie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_MovieName = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_PlayMovie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_PlayTrailer = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_DeleteNfoArtwork = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_ReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_RemoveMovie = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_RenameMovie = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_RenMovieAndFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_RenMovieOnly = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmi_RenMovFolderOnly = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripRescrapeAll = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripRescrapeSpecific = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem15 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem8 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_RescrapeAll = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_RescrapeSpecific = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeActors = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeCert = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeCountry = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem7 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem6 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem9 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem10 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem4 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeCredits = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeDirector = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeGenre = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeOutline = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeplot = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapePremiered = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem19 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem11 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem12 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem13 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem21 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem14 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem5 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTMDbSetName = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeRating = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeRuntime = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeRuntimeImdb = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeRuntimeFile = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeStars = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeStudio = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeTagline = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeTitle = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeTMDbSetName = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeTop250 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem20 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.YearToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeMetascore = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeTrailer = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeVotes = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeYear = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiRescrapePosterUrls = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeFrodo_Poster_Thumbs = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeFrodo_Fanart_Thumbs = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiRescrapeKeyWords = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem16 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem17 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeFanart = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapePoster = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeFanartTv = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeMovieSetArt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem18 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeMediaTags = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiDlTrailer = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
-        Me.RenameFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
-        Me.tsmiSetWatched = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiClearWatched = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripFanartBrowserAlt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripPosterBrowserAlt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.mov_ToolStripEditMovieAlt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
-        Me.mov_ToolStripExportMovies = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiOpenInMkvmergeGUI = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiSyncToXBMC = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiConvertToFrodo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRescrapeRenameFiles = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_SetWatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_ClearWatched = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_FanartBrowserAlt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_PosterBrowserAlt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_EditMovieAlt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_Separator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.tsmiMov_ExportMovies = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_OpenInMkvmergeGUI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_SyncToXBMC = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_ConvertToFrodo = New System.Windows.Forms.ToolStripMenuItem()
         Me.tpMovMain = New System.Windows.Forms.TabPage()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
@@ -520,8 +521,8 @@ Partial Class Form1
         Me.TableLayoutPanel28 = New System.Windows.Forms.TableLayoutPanel()
         Me.Label147 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.SpltCtnr7 = New System.Windows.Forms.SplitContainer()
-        Me.TableLayoutPanel9 = New System.Windows.Forms.TableLayoutPanel()
+        Me.SpltCntr_MovFolders = New System.Windows.Forms.SplitContainer()
+        Me.tbllayoutMovieFolders = New System.Windows.Forms.TableLayoutPanel()
         Me.Label134 = New System.Windows.Forms.Label()
         Me.Label184 = New System.Windows.Forms.Label()
         Me.btnMovieManualPathAdd = New System.Windows.Forms.Button()
@@ -529,15 +530,15 @@ Partial Class Form1
         Me.btn_addmoviefolderdialogue = New System.Windows.Forms.Button()
         Me.btn_removemoviefolder = New System.Windows.Forms.Button()
         Me.clbx_MovieRoots = New System.Windows.Forms.CheckedListBox()
-        Me.TableLayoutPanel8 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Button102 = New System.Windows.Forms.Button()
-        Me.Button101 = New System.Windows.Forms.Button()
+        Me.tbllayoutpanelOffLineMovie = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_OfflineMovFolderAdd = New System.Windows.Forms.Button()
+        Me.btn_OfflineMovFolderRemove = New System.Windows.Forms.Button()
         Me.Label133 = New System.Windows.Forms.Label()
-        Me.ListBox15 = New System.Windows.Forms.ListBox()
-        Me.Button108 = New System.Windows.Forms.Button()
+        Me.lbx_MovOfflineFolders = New System.Windows.Forms.ListBox()
+        Me.btn_OfflineMovLoadList = New System.Windows.Forms.Button()
         Me.Label146 = New System.Windows.Forms.Label()
-        Me.TextBox44 = New System.Windows.Forms.TextBox()
-        Me.Button107 = New System.Windows.Forms.Button()
+        Me.tb_OfflineMovName = New System.Windows.Forms.TextBox()
+        Me.btn_OfflineMovAdd = New System.Windows.Forms.Button()
         Me.Label144 = New System.Windows.Forms.Label()
         Me.Label145 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -619,6 +620,8 @@ Partial Class Form1
         Me.tb_EpAirEpisode = New System.Windows.Forms.TextBox()
         Me.pbtvfanarttv = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel20 = New System.Windows.Forms.TableLayoutPanel()
+        Me.tb_ShVotes = New System.Windows.Forms.TextBox()
+        Me.lbl_TvShVotes = New System.Windows.Forms.Label()
         Me.Panel_TvShowExtraArtwork = New System.Windows.Forms.Panel()
         Me.tvFanlistbox = New System.Windows.Forms.ListBox()
         Me.lbl_TvShExtraArtwork = New System.Windows.Forms.Label()
@@ -1079,8 +1082,6 @@ Partial Class Form1
         Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.lbl_TvShVotes = New System.Windows.Forms.Label()
-        Me.tb_ShVotes = New System.Windows.Forms.TextBox()
         Me.TVContextMenu.SuspendLayout
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
@@ -1160,12 +1161,12 @@ Partial Class Form1
         Me.Panel4.SuspendLayout
         Me.TableLayoutPanel28.SuspendLayout
         Me.Panel5.SuspendLayout
-        CType(Me.SpltCtnr7,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SpltCtnr7.Panel1.SuspendLayout
-        Me.SpltCtnr7.Panel2.SuspendLayout
-        Me.SpltCtnr7.SuspendLayout
-        Me.TableLayoutPanel9.SuspendLayout
-        Me.TableLayoutPanel8.SuspendLayout
+        CType(Me.SpltCntr_MovFolders,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_MovFolders.Panel1.SuspendLayout
+        Me.SpltCntr_MovFolders.Panel2.SuspendLayout
+        Me.SpltCntr_MovFolders.SuspendLayout
+        Me.tbllayoutMovieFolders.SuspendLayout
+        Me.tbllayoutpanelOffLineMovie.SuspendLayout
         Me.Panel3.SuspendLayout
         Me.tpMovSets.SuspendLayout
         CType(Me.scMovieSets,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1512,10 +1513,10 @@ Partial Class Form1
         Me.ButtonSaveAndQuickRefresh.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.ButtonSaveAndQuickRefresh.AutoSize = true
         Me.ButtonSaveAndQuickRefresh.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonSaveAndQuickRefresh.Location = New System.Drawing.Point(4, 51)
+        Me.ButtonSaveAndQuickRefresh.Location = New System.Drawing.Point(613, 573)
         Me.ButtonSaveAndQuickRefresh.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonSaveAndQuickRefresh.Name = "ButtonSaveAndQuickRefresh"
-        Me.ButtonSaveAndQuickRefresh.Size = New System.Drawing.Size(1, 1)
+        Me.ButtonSaveAndQuickRefresh.Size = New System.Drawing.Size(101, 25)
         Me.ButtonSaveAndQuickRefresh.TabIndex = 19
         Me.ButtonSaveAndQuickRefresh.Text = "Save && Refresh"
         Me.ToolTip1.SetToolTip(Me.ButtonSaveAndQuickRefresh, "Use this button to update the movie list"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"when folders have been added or removed"& _ 
@@ -2384,82 +2385,82 @@ Partial Class Form1
         '
         'MovieContextMenu
         '
-        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mov_ToolStripMovieName, Me.mov_ToolStripPlayMovie, Me.mov_ToolStripPlayTrailer, Me.ToolStripSeparator17, Me.mov_ToolStripOpenFolder, Me.mov_ToolStripViewNfo, Me.ToolStripSeparator27, Me.mov_ToolStripDeleteNfoArtwork, Me.ToolStripSeparator4, Me.mov_ToolStripReloadFromCache, Me.Mov_ToolStripRemoveMovie, Me.Mov_ToolStripRenameMovie, Me.ToolStripSeparator5, Me.mov_ToolStripRescrapeAll, Me.mov_ToolStripRescrapeSpecific, Me.ToolStripSeparator28, Me.tsmiSetWatched, Me.tsmiClearWatched, Me.ToolStripSeparator23, Me.mov_ToolStripFanartBrowserAlt, Me.mov_ToolStripPosterBrowserAlt, Me.mov_ToolStripEditMovieAlt, Me.ToolStripSeparator24, Me.mov_ToolStripExportMovies, Me.tsmiOpenInMkvmergeGUI, Me.tsmiSyncToXBMC, Me.tsmiConvertToFrodo})
+        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
         Me.MovieContextMenu.Name = "ContextMenuStrip1"
         Me.MovieContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-        Me.MovieContextMenu.Size = New System.Drawing.Size(242, 486)
+        Me.MovieContextMenu.Size = New System.Drawing.Size(242, 508)
         Me.MovieContextMenu.Text = "whatever"
         '
-        'mov_ToolStripMovieName
+        'tsmiMov_MovieName
         '
-        Me.mov_ToolStripMovieName.Name = "mov_ToolStripMovieName"
-        Me.mov_ToolStripMovieName.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripMovieName.Text = "Placeholder for Movie Name"
+        Me.tsmiMov_MovieName.Name = "tsmiMov_MovieName"
+        Me.tsmiMov_MovieName.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_MovieName.Text = "Placeholder for Movie Name"
         '
-        'mov_ToolStripPlayMovie
+        'tsmiMov_PlayMovie
         '
-        Me.mov_ToolStripPlayMovie.Name = "mov_ToolStripPlayMovie"
-        Me.mov_ToolStripPlayMovie.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripPlayMovie.Text = "Play Movie"
+        Me.tsmiMov_PlayMovie.Name = "tsmiMov_PlayMovie"
+        Me.tsmiMov_PlayMovie.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_PlayMovie.Text = "Play Movie"
         '
-        'mov_ToolStripPlayTrailer
+        'tsmiMov_PlayTrailer
         '
-        Me.mov_ToolStripPlayTrailer.Name = "mov_ToolStripPlayTrailer"
-        Me.mov_ToolStripPlayTrailer.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripPlayTrailer.Text = "Play Trailer"
+        Me.tsmiMov_PlayTrailer.Name = "tsmiMov_PlayTrailer"
+        Me.tsmiMov_PlayTrailer.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_PlayTrailer.Text = "Play Trailer"
         '
-        'ToolStripSeparator17
+        'tsmiMov_Separator1
         '
-        Me.ToolStripSeparator17.Name = "ToolStripSeparator17"
-        Me.ToolStripSeparator17.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator1.Name = "tsmiMov_Separator1"
+        Me.tsmiMov_Separator1.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripOpenFolder
+        'tsmiMov_OpenFolder
         '
-        Me.mov_ToolStripOpenFolder.Name = "mov_ToolStripOpenFolder"
-        Me.mov_ToolStripOpenFolder.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripOpenFolder.Text = "Open Folder"
+        Me.tsmiMov_OpenFolder.Name = "tsmiMov_OpenFolder"
+        Me.tsmiMov_OpenFolder.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_OpenFolder.Text = "Open Folder"
         '
-        'mov_ToolStripViewNfo
+        'tsmiMov_ViewNfo
         '
-        Me.mov_ToolStripViewNfo.Name = "mov_ToolStripViewNfo"
-        Me.mov_ToolStripViewNfo.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripViewNfo.Text = "View .nfo File"
+        Me.tsmiMov_ViewNfo.Name = "tsmiMov_ViewNfo"
+        Me.tsmiMov_ViewNfo.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ViewNfo.Text = "View .nfo File"
         '
-        'ToolStripSeparator27
+        'tsmiMov_Separator2
         '
-        Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
-        Me.ToolStripSeparator27.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator2.Name = "tsmiMov_Separator2"
+        Me.tsmiMov_Separator2.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripDeleteNfoArtwork
+        'tsmiMov_DeleteNfoArtwork
         '
-        Me.mov_ToolStripDeleteNfoArtwork.Name = "mov_ToolStripDeleteNfoArtwork"
-        Me.mov_ToolStripDeleteNfoArtwork.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripDeleteNfoArtwork.Text = "Delete movie(s) Nfo and Artwork"
+        Me.tsmiMov_DeleteNfoArtwork.Name = "tsmiMov_DeleteNfoArtwork"
+        Me.tsmiMov_DeleteNfoArtwork.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_DeleteNfoArtwork.Text = "Delete movie(s) Nfo and Artwork"
         '
-        'ToolStripSeparator4
+        'tsmiMov_Separator3
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator3.Name = "tsmiMov_Separator3"
+        Me.tsmiMov_Separator3.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripReloadFromCache
+        'tsmiMov_ReloadFromCache
         '
-        Me.mov_ToolStripReloadFromCache.Name = "mov_ToolStripReloadFromCache"
-        Me.mov_ToolStripReloadFromCache.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripReloadFromCache.Text = "Reload From Cache"
+        Me.tsmiMov_ReloadFromCache.Name = "tsmiMov_ReloadFromCache"
+        Me.tsmiMov_ReloadFromCache.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ReloadFromCache.Text = "Reload From Cache"
         '
-        'Mov_ToolStripRemoveMovie
+        'tsmiMov_RemoveMovie
         '
-        Me.Mov_ToolStripRemoveMovie.Name = "Mov_ToolStripRemoveMovie"
-        Me.Mov_ToolStripRemoveMovie.Size = New System.Drawing.Size(241, 22)
-        Me.Mov_ToolStripRemoveMovie.Text = "Remove selected movie(s) from list"
+        Me.tsmiMov_RemoveMovie.Name = "tsmiMov_RemoveMovie"
+        Me.tsmiMov_RemoveMovie.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_RemoveMovie.Text = "Remove selected movie(s) from list"
         '
-        'Mov_ToolStripRenameMovie
+        'tsmiMov_RenameMovie
         '
-        Me.Mov_ToolStripRenameMovie.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_RenMovieAndFolder, Me.tsmi_RenMovieOnly, Me.tsmi_RenMovFolderOnly})
-        Me.Mov_ToolStripRenameMovie.Name = "Mov_ToolStripRenameMovie"
-        Me.Mov_ToolStripRenameMovie.Size = New System.Drawing.Size(241, 22)
-        Me.Mov_ToolStripRenameMovie.Text = "Rename selected movie(s) in list"
-        Me.Mov_ToolStripRenameMovie.ToolTipText = resources.GetString("Mov_ToolStripRenameMovie.ToolTipText")
+        Me.tsmiMov_RenameMovie.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmi_RenMovieAndFolder, Me.tsmi_RenMovieOnly, Me.tsmi_RenMovFolderOnly})
+        Me.tsmiMov_RenameMovie.Name = "tsmiMov_RenameMovie"
+        Me.tsmiMov_RenameMovie.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_RenameMovie.Text = "Rename selected movie(s) in list"
+        Me.tsmiMov_RenameMovie.ToolTipText = resources.GetString("tsmiMov_RenameMovie.ToolTipText")
         '
         'tsmi_RenMovieAndFolder
         '
@@ -2479,35 +2480,35 @@ Partial Class Form1
         Me.tsmi_RenMovFolderOnly.Size = New System.Drawing.Size(156, 22)
         Me.tsmi_RenMovFolderOnly.Text = "Folder Only"
         '
-        'ToolStripSeparator5
+        'tsmiMov_Separator4
         '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator4.Name = "tsmiMov_Separator4"
+        Me.tsmiMov_Separator4.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripRescrapeAll
+        'tsmiMov_RescrapeAll
         '
-        Me.mov_ToolStripRescrapeAll.Name = "mov_ToolStripRescrapeAll"
-        Me.mov_ToolStripRescrapeAll.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripRescrapeAll.Text = "Rescrape All"
+        Me.tsmiMov_RescrapeAll.Name = "tsmiMov_RescrapeAll"
+        Me.tsmiMov_RescrapeAll.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_RescrapeAll.Text = "Rescrape All"
         '
-        'mov_ToolStripRescrapeSpecific
+        'tsmiMov_RescrapeSpecific
         '
-        Me.mov_ToolStripRescrapeSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem15, Me.ToolStripMenuItem8, Me.tsmiRescrapeCountry, Me.ToolStripMenuItem7, Me.ToolStripMenuItem6, Me.ToolStripMenuItem9, Me.ToolStripMenuItem10, Me.ToolStripMenuItem4, Me.tsmiRescrapePremiered, Me.ToolStripMenuItem19, Me.ToolStripMenuItem11, Me.ToolStripMenuItem21, Me.ToolStripMenuItem14, Me.ToolStripMenuItem5, Me.ToolStripMenuItem3, Me.tsmiTMDbSetName, Me.tsmiRescrapeTop250, Me.ToolStripMenuItem1, Me.ToolStripMenuItem20, Me.YearToolStripMenuItem, Me.ToolStripSeparator11, Me.tsmiRescrapePosterUrls, Me.tsmiRescrapeFrodo_Poster_Thumbs, Me.tsmiRescrapeFrodo_Fanart_Thumbs, Me.ToolStripSeparator6, Me.tsmiRescrapeKeyWords, Me.ToolStripMenuItem16, Me.ToolStripMenuItem17, Me.tsmiRescrapeFanartTv, Me.tsmiRescrapeMovieSetArt, Me.ToolStripMenuItem18, Me.tsmiDlTrailer, Me.ToolStripSeparator7, Me.RenameFilesToolStripMenuItem})
-        Me.mov_ToolStripRescrapeSpecific.Name = "mov_ToolStripRescrapeSpecific"
-        Me.mov_ToolStripRescrapeSpecific.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripRescrapeSpecific.Text = "Rescrape Specific"
+        Me.tsmiMov_RescrapeSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiRescrapeActors, Me.tsmiRescrapeCert, Me.tsmiRescrapeCountry, Me.tsmiRescrapeCredits, Me.tsmiRescrapeDirector, Me.tsmiRescrapeGenre, Me.tsmiRescrapeMetascore, Me.tsmiRescrapeOutline, Me.tsmiRescrapeplot, Me.tsmiRescrapePremiered, Me.tsmiRescrapeRating, Me.tsmiRescrapeRuntime, Me.tsmiRescrapeStars, Me.tsmiRescrapeStudio, Me.tsmiRescrapeTagline, Me.tsmiRescrapeTitle, Me.tsmiRescrapeTMDbSetName, Me.tsmiRescrapeTop250, Me.tsmiRescrapeTrailer, Me.tsmiRescrapeVotes, Me.tsmiRescrapeYear, Me.ToolStripSeparator11, Me.tsmiRescrapePosterUrls, Me.tsmiRescrapeFrodo_Poster_Thumbs, Me.tsmiRescrapeFrodo_Fanart_Thumbs, Me.ToolStripSeparator6, Me.tsmiRescrapeKeyWords, Me.tsmiRescrapeFanart, Me.tsmiRescrapePoster, Me.tsmiRescrapeFanartTv, Me.tsmiRescrapeMovieSetArt, Me.tsmiRescrapeMediaTags, Me.tsmiDlTrailer, Me.ToolStripSeparator7, Me.tsmiRescrapeRenameFiles})
+        Me.tsmiMov_RescrapeSpecific.Name = "tsmiMov_RescrapeSpecific"
+        Me.tsmiMov_RescrapeSpecific.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_RescrapeSpecific.Text = "Rescrape Specific"
         '
-        'ToolStripMenuItem15
+        'tsmiRescrapeActors
         '
-        Me.ToolStripMenuItem15.Name = "ToolStripMenuItem15"
-        Me.ToolStripMenuItem15.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem15.Text = "Actors"
+        Me.tsmiRescrapeActors.Name = "tsmiRescrapeActors"
+        Me.tsmiRescrapeActors.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeActors.Text = "Actors"
         '
-        'ToolStripMenuItem8
+        'tsmiRescrapeCert
         '
-        Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem8.Text = "Cert"
+        Me.tsmiRescrapeCert.Name = "tsmiRescrapeCert"
+        Me.tsmiRescrapeCert.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeCert.Text = "Cert"
         '
         'tsmiRescrapeCountry
         '
@@ -2515,35 +2516,35 @@ Partial Class Form1
         Me.tsmiRescrapeCountry.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapeCountry.Text = "Country"
         '
-        'ToolStripMenuItem7
+        'tsmiRescrapeCredits
         '
-        Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem7.Text = "Credits"
+        Me.tsmiRescrapeCredits.Name = "tsmiRescrapeCredits"
+        Me.tsmiRescrapeCredits.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeCredits.Text = "Credits"
         '
-        'ToolStripMenuItem6
+        'tsmiRescrapeDirector
         '
-        Me.ToolStripMenuItem6.Name = "ToolStripMenuItem6"
-        Me.ToolStripMenuItem6.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem6.Text = "Director"
+        Me.tsmiRescrapeDirector.Name = "tsmiRescrapeDirector"
+        Me.tsmiRescrapeDirector.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeDirector.Text = "Director"
         '
-        'ToolStripMenuItem9
+        'tsmiRescrapeGenre
         '
-        Me.ToolStripMenuItem9.Name = "ToolStripMenuItem9"
-        Me.ToolStripMenuItem9.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem9.Text = "Genre"
+        Me.tsmiRescrapeGenre.Name = "tsmiRescrapeGenre"
+        Me.tsmiRescrapeGenre.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeGenre.Text = "Genre"
         '
-        'ToolStripMenuItem10
+        'tsmiRescrapeOutline
         '
-        Me.ToolStripMenuItem10.Name = "ToolStripMenuItem10"
-        Me.ToolStripMenuItem10.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem10.Text = "Outline"
+        Me.tsmiRescrapeOutline.Name = "tsmiRescrapeOutline"
+        Me.tsmiRescrapeOutline.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeOutline.Text = "Outline"
         '
-        'ToolStripMenuItem4
+        'tsmiRescrapeplot
         '
-        Me.ToolStripMenuItem4.Name = "ToolStripMenuItem4"
-        Me.ToolStripMenuItem4.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem4.Text = "Plot"
+        Me.tsmiRescrapeplot.Name = "tsmiRescrapeplot"
+        Me.tsmiRescrapeplot.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeplot.Text = "Plot"
         '
         'tsmiRescrapePremiered
         '
@@ -2551,60 +2552,60 @@ Partial Class Form1
         Me.tsmiRescrapePremiered.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapePremiered.Text = "Premiered"
         '
-        'ToolStripMenuItem19
+        'tsmiRescrapeRating
         '
-        Me.ToolStripMenuItem19.Name = "ToolStripMenuItem19"
-        Me.ToolStripMenuItem19.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem19.Text = "Rating"
+        Me.tsmiRescrapeRating.Name = "tsmiRescrapeRating"
+        Me.tsmiRescrapeRating.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeRating.Text = "Rating"
         '
-        'ToolStripMenuItem11
+        'tsmiRescrapeRuntime
         '
-        Me.ToolStripMenuItem11.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem12, Me.ToolStripMenuItem13})
-        Me.ToolStripMenuItem11.Name = "ToolStripMenuItem11"
-        Me.ToolStripMenuItem11.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem11.Text = "Runtime"
+        Me.tsmiRescrapeRuntime.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiRescrapeRuntimeImdb, Me.tsmiRescrapeRuntimeFile})
+        Me.tsmiRescrapeRuntime.Name = "tsmiRescrapeRuntime"
+        Me.tsmiRescrapeRuntime.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeRuntime.Text = "Runtime"
         '
-        'ToolStripMenuItem12
+        'tsmiRescrapeRuntimeImdb
         '
-        Me.ToolStripMenuItem12.Name = "ToolStripMenuItem12"
-        Me.ToolStripMenuItem12.Size = New System.Drawing.Size(126, 22)
-        Me.ToolStripMenuItem12.Text = "From IMDB"
+        Me.tsmiRescrapeRuntimeImdb.Name = "tsmiRescrapeRuntimeImdb"
+        Me.tsmiRescrapeRuntimeImdb.Size = New System.Drawing.Size(126, 22)
+        Me.tsmiRescrapeRuntimeImdb.Text = "From IMDB"
         '
-        'ToolStripMenuItem13
+        'tsmiRescrapeRuntimeFile
         '
-        Me.ToolStripMenuItem13.Name = "ToolStripMenuItem13"
-        Me.ToolStripMenuItem13.Size = New System.Drawing.Size(126, 22)
-        Me.ToolStripMenuItem13.Text = "From File"
+        Me.tsmiRescrapeRuntimeFile.Name = "tsmiRescrapeRuntimeFile"
+        Me.tsmiRescrapeRuntimeFile.Size = New System.Drawing.Size(126, 22)
+        Me.tsmiRescrapeRuntimeFile.Text = "From File"
         '
-        'ToolStripMenuItem21
+        'tsmiRescrapeStars
         '
-        Me.ToolStripMenuItem21.Name = "ToolStripMenuItem21"
-        Me.ToolStripMenuItem21.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem21.Text = "Stars"
+        Me.tsmiRescrapeStars.Name = "tsmiRescrapeStars"
+        Me.tsmiRescrapeStars.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeStars.Text = "Stars"
         '
-        'ToolStripMenuItem14
+        'tsmiRescrapeStudio
         '
-        Me.ToolStripMenuItem14.Name = "ToolStripMenuItem14"
-        Me.ToolStripMenuItem14.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem14.Text = "Studio"
+        Me.tsmiRescrapeStudio.Name = "tsmiRescrapeStudio"
+        Me.tsmiRescrapeStudio.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeStudio.Text = "Studio"
         '
-        'ToolStripMenuItem5
+        'tsmiRescrapeTagline
         '
-        Me.ToolStripMenuItem5.Name = "ToolStripMenuItem5"
-        Me.ToolStripMenuItem5.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem5.Text = "Tagline"
+        Me.tsmiRescrapeTagline.Name = "tsmiRescrapeTagline"
+        Me.tsmiRescrapeTagline.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeTagline.Text = "Tagline"
         '
-        'ToolStripMenuItem3
+        'tsmiRescrapeTitle
         '
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem3.Text = "Title"
+        Me.tsmiRescrapeTitle.Name = "tsmiRescrapeTitle"
+        Me.tsmiRescrapeTitle.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeTitle.Text = "Title"
         '
-        'tsmiTMDbSetName
+        'tsmiRescrapeTMDbSetName
         '
-        Me.tsmiTMDbSetName.Name = "tsmiTMDbSetName"
-        Me.tsmiTMDbSetName.Size = New System.Drawing.Size(188, 22)
-        Me.tsmiTMDbSetName.Text = "TMDb Set Name"
+        Me.tsmiRescrapeTMDbSetName.Name = "tsmiRescrapeTMDbSetName"
+        Me.tsmiRescrapeTMDbSetName.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeTMDbSetName.Text = "TMDb Set Name"
         '
         'tsmiRescrapeTop250
         '
@@ -2612,23 +2613,29 @@ Partial Class Form1
         Me.tsmiRescrapeTop250.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapeTop250.Text = "Top250"
         '
-        'ToolStripMenuItem1
+        'tsmiRescrapeMetascore
         '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem1.Text = "Trailer"
+        Me.tsmiRescrapeMetascore.Name = "tsmiRescrapeMetascore"
+        Me.tsmiRescrapeMetascore.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeMetascore.Text = "Metascore"
         '
-        'ToolStripMenuItem20
+        'tsmiRescrapeTrailer
         '
-        Me.ToolStripMenuItem20.Name = "ToolStripMenuItem20"
-        Me.ToolStripMenuItem20.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem20.Text = "Votes"
+        Me.tsmiRescrapeTrailer.Name = "tsmiRescrapeTrailer"
+        Me.tsmiRescrapeTrailer.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeTrailer.Text = "Trailer"
         '
-        'YearToolStripMenuItem
+        'tsmiRescrapeVotes
         '
-        Me.YearToolStripMenuItem.Name = "YearToolStripMenuItem"
-        Me.YearToolStripMenuItem.Size = New System.Drawing.Size(188, 22)
-        Me.YearToolStripMenuItem.Text = "Year"
+        Me.tsmiRescrapeVotes.Name = "tsmiRescrapeVotes"
+        Me.tsmiRescrapeVotes.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeVotes.Text = "Votes"
+        '
+        'tsmiRescrapeYear
+        '
+        Me.tsmiRescrapeYear.Name = "tsmiRescrapeYear"
+        Me.tsmiRescrapeYear.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeYear.Text = "Year"
         '
         'ToolStripSeparator11
         '
@@ -2666,19 +2673,19 @@ Partial Class Form1
         Me.tsmiRescrapeKeyWords.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapeKeyWords.Text = "Keywords"
         '
-        'ToolStripMenuItem16
+        'tsmiRescrapeFanart
         '
-        Me.ToolStripMenuItem16.Name = "ToolStripMenuItem16"
-        Me.ToolStripMenuItem16.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem16.Text = "Backdrop"
-        Me.ToolStripMenuItem16.Visible = false
+        Me.tsmiRescrapeFanart.Name = "tsmiRescrapeFanart"
+        Me.tsmiRescrapeFanart.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeFanart.Text = "Backdrop"
+        Me.tsmiRescrapeFanart.Visible = false
         '
-        'ToolStripMenuItem17
+        'tsmiRescrapePoster
         '
-        Me.ToolStripMenuItem17.Name = "ToolStripMenuItem17"
-        Me.ToolStripMenuItem17.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem17.Text = "Poster"
-        Me.ToolStripMenuItem17.Visible = false
+        Me.tsmiRescrapePoster.Name = "tsmiRescrapePoster"
+        Me.tsmiRescrapePoster.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapePoster.Text = "Poster"
+        Me.tsmiRescrapePoster.Visible = false
         '
         'tsmiRescrapeFanartTv
         '
@@ -2692,11 +2699,11 @@ Partial Class Form1
         Me.tsmiRescrapeMovieSetArt.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapeMovieSetArt.Text = "MovieSet Artwork"
         '
-        'ToolStripMenuItem18
+        'tsmiRescrapeMediaTags
         '
-        Me.ToolStripMenuItem18.Name = "ToolStripMenuItem18"
-        Me.ToolStripMenuItem18.Size = New System.Drawing.Size(188, 22)
-        Me.ToolStripMenuItem18.Text = "Media Tags"
+        Me.tsmiRescrapeMediaTags.Name = "tsmiRescrapeMediaTags"
+        Me.tsmiRescrapeMediaTags.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeMediaTags.Text = "Media Tags"
         '
         'tsmiDlTrailer
         '
@@ -2711,84 +2718,84 @@ Partial Class Form1
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(185, 6)
         '
-        'RenameFilesToolStripMenuItem
+        'tsmiRescrapeRenameFiles
         '
-        Me.RenameFilesToolStripMenuItem.Name = "RenameFilesToolStripMenuItem"
-        Me.RenameFilesToolStripMenuItem.Size = New System.Drawing.Size(188, 22)
-        Me.RenameFilesToolStripMenuItem.Text = "Rename files"
-        Me.RenameFilesToolStripMenuItem.ToolTipText = resources.GetString("RenameFilesToolStripMenuItem.ToolTipText")
+        Me.tsmiRescrapeRenameFiles.Name = "tsmiRescrapeRenameFiles"
+        Me.tsmiRescrapeRenameFiles.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiRescrapeRenameFiles.Text = "Rename files"
+        Me.tsmiRescrapeRenameFiles.ToolTipText = resources.GetString("tsmiRescrapeRenameFiles.ToolTipText")
         '
-        'ToolStripSeparator28
+        'tsmiMov_Separator5
         '
-        Me.ToolStripSeparator28.Name = "ToolStripSeparator28"
-        Me.ToolStripSeparator28.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator5.Name = "tsmiMov_Separator5"
+        Me.tsmiMov_Separator5.Size = New System.Drawing.Size(238, 6)
         '
-        'tsmiSetWatched
+        'tsmiMov_SetWatched
         '
-        Me.tsmiSetWatched.Name = "tsmiSetWatched"
-        Me.tsmiSetWatched.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiSetWatched.Text = "Set Watched"
+        Me.tsmiMov_SetWatched.Name = "tsmiMov_SetWatched"
+        Me.tsmiMov_SetWatched.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_SetWatched.Text = "Set Watched"
         '
-        'tsmiClearWatched
+        'tsmiMov_ClearWatched
         '
-        Me.tsmiClearWatched.Name = "tsmiClearWatched"
-        Me.tsmiClearWatched.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiClearWatched.Text = "Clear Watched"
+        Me.tsmiMov_ClearWatched.Name = "tsmiMov_ClearWatched"
+        Me.tsmiMov_ClearWatched.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ClearWatched.Text = "Clear Watched"
         '
-        'ToolStripSeparator23
+        'tsmiMov_Separator6
         '
-        Me.ToolStripSeparator23.Name = "ToolStripSeparator23"
-        Me.ToolStripSeparator23.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator6.Name = "tsmiMov_Separator6"
+        Me.tsmiMov_Separator6.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripFanartBrowserAlt
+        'tsmiMov_FanartBrowserAlt
         '
-        Me.mov_ToolStripFanartBrowserAlt.Name = "mov_ToolStripFanartBrowserAlt"
-        Me.mov_ToolStripFanartBrowserAlt.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripFanartBrowserAlt.Text = "Fanart Browser (Alternative)"
+        Me.tsmiMov_FanartBrowserAlt.Name = "tsmiMov_FanartBrowserAlt"
+        Me.tsmiMov_FanartBrowserAlt.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_FanartBrowserAlt.Text = "Fanart Browser (Alternative)"
         '
-        'mov_ToolStripPosterBrowserAlt
+        'tsmiMov_PosterBrowserAlt
         '
-        Me.mov_ToolStripPosterBrowserAlt.Name = "mov_ToolStripPosterBrowserAlt"
-        Me.mov_ToolStripPosterBrowserAlt.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripPosterBrowserAlt.Text = "Poster Browser (Alternative)"
+        Me.tsmiMov_PosterBrowserAlt.Name = "tsmiMov_PosterBrowserAlt"
+        Me.tsmiMov_PosterBrowserAlt.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_PosterBrowserAlt.Text = "Poster Browser (Alternative)"
         '
-        'mov_ToolStripEditMovieAlt
+        'tsmiMov_EditMovieAlt
         '
-        Me.mov_ToolStripEditMovieAlt.Name = "mov_ToolStripEditMovieAlt"
-        Me.mov_ToolStripEditMovieAlt.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripEditMovieAlt.Text = "Edit Movie (Alternative)"
+        Me.tsmiMov_EditMovieAlt.Name = "tsmiMov_EditMovieAlt"
+        Me.tsmiMov_EditMovieAlt.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_EditMovieAlt.Text = "Edit Movie (Alternative)"
         '
-        'ToolStripSeparator24
+        'tsmiMov_Separator7
         '
-        Me.ToolStripSeparator24.Name = "ToolStripSeparator24"
-        Me.ToolStripSeparator24.Size = New System.Drawing.Size(238, 6)
+        Me.tsmiMov_Separator7.Name = "tsmiMov_Separator7"
+        Me.tsmiMov_Separator7.Size = New System.Drawing.Size(238, 6)
         '
-        'mov_ToolStripExportMovies
+        'tsmiMov_ExportMovies
         '
-        Me.mov_ToolStripExportMovies.Name = "mov_ToolStripExportMovies"
-        Me.mov_ToolStripExportMovies.Size = New System.Drawing.Size(241, 22)
-        Me.mov_ToolStripExportMovies.Text = "Export Selected Movies"
+        Me.tsmiMov_ExportMovies.Name = "tsmiMov_ExportMovies"
+        Me.tsmiMov_ExportMovies.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ExportMovies.Text = "Export Selected Movies"
         '
-        'tsmiOpenInMkvmergeGUI
+        'tsmiMov_OpenInMkvmergeGUI
         '
-        Me.tsmiOpenInMkvmergeGUI.Enabled = false
-        Me.tsmiOpenInMkvmergeGUI.Name = "tsmiOpenInMkvmergeGUI"
-        Me.tsmiOpenInMkvmergeGUI.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiOpenInMkvmergeGUI.Text = "Open in mkvmerge GUI"
+        Me.tsmiMov_OpenInMkvmergeGUI.Enabled = false
+        Me.tsmiMov_OpenInMkvmergeGUI.Name = "tsmiMov_OpenInMkvmergeGUI"
+        Me.tsmiMov_OpenInMkvmergeGUI.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_OpenInMkvmergeGUI.Text = "Open in mkvmerge GUI"
         '
-        'tsmiSyncToXBMC
+        'tsmiMov_SyncToXBMC
         '
-        Me.tsmiSyncToXBMC.BackgroundImage = CType(resources.GetObject("tsmiSyncToXBMC.BackgroundImage"),System.Drawing.Image)
-        Me.tsmiSyncToXBMC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
-        Me.tsmiSyncToXBMC.Name = "tsmiSyncToXBMC"
-        Me.tsmiSyncToXBMC.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiSyncToXBMC.Text = "Sync to XBMC"
+        Me.tsmiMov_SyncToXBMC.BackgroundImage = CType(resources.GetObject("tsmiMov_SyncToXBMC.BackgroundImage"),System.Drawing.Image)
+        Me.tsmiMov_SyncToXBMC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.tsmiMov_SyncToXBMC.Name = "tsmiMov_SyncToXBMC"
+        Me.tsmiMov_SyncToXBMC.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_SyncToXBMC.Text = "Sync to XBMC"
         '
-        'tsmiConvertToFrodo
+        'tsmiMov_ConvertToFrodo
         '
-        Me.tsmiConvertToFrodo.Name = "tsmiConvertToFrodo"
-        Me.tsmiConvertToFrodo.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiConvertToFrodo.Text = "Convert to Frodo only"
+        Me.tsmiMov_ConvertToFrodo.Name = "tsmiMov_ConvertToFrodo"
+        Me.tsmiMov_ConvertToFrodo.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ConvertToFrodo.Text = "Convert to Frodo only"
         '
         'tpMovMain
         '
@@ -2950,7 +2957,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(329, 607)
-        Me.SplitContainer5.SplitterDistance = 296
+        Me.SplitContainer5.SplitterDistance = 294
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -3025,7 +3032,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 198)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 196)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -3060,7 +3067,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 276)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 274)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -3213,7 +3220,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 5660)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 5853)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3263,7 +3270,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 9543)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 9736)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4373,7 +4380,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(287, 207)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(285, 207)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4383,7 +4390,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(99, 71)
+        Me.Label128.Location = New System.Drawing.Point(97, 71)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -7277,7 +7284,7 @@ Partial Class Form1
         Me.tpMovFolders.Location = New System.Drawing.Point(4, 25)
         Me.tpMovFolders.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMovFolders.Name = "tpMovFolders"
-        Me.tpMovFolders.Size = New System.Drawing.Size(192, 71)
+        Me.tpMovFolders.Size = New System.Drawing.Size(1049, 611)
         Me.tpMovFolders.TabIndex = 11
         Me.tpMovFolders.Text = "Folders"
         Me.tpMovFolders.UseVisualStyleBackColor = true
@@ -7288,7 +7295,7 @@ Partial Class Form1
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel4.Location = New System.Drawing.Point(327, 0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(0, 51)
+        Me.Panel4.Size = New System.Drawing.Size(718, 607)
         Me.Panel4.TabIndex = 15
         '
         'TableLayoutPanel28
@@ -7305,17 +7312,17 @@ Partial Class Form1
         Me.TableLayoutPanel28.RowCount = 2
         Me.TableLayoutPanel28.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.22916!))
         Me.TableLayoutPanel28.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.770833!))
-        Me.TableLayoutPanel28.Size = New System.Drawing.Size(0, 51)
+        Me.TableLayoutPanel28.Size = New System.Drawing.Size(718, 607)
         Me.TableLayoutPanel28.TabIndex = 0
         '
         'Label147
         '
         Me.Label147.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label147.AutoSize = true
-        Me.Label147.Location = New System.Drawing.Point(4, 47)
+        Me.Label147.Location = New System.Drawing.Point(16, 571)
         Me.Label147.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label147.Name = "Label147"
-        Me.Label147.Size = New System.Drawing.Size(1, 4)
+        Me.Label147.Size = New System.Drawing.Size(317, 30)
         Me.Label147.TabIndex = 18
         Me.Label147.Text = "These only create the folders, you will still need to use the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"'Search for new Mo"& _ 
     "vies' option to add the movie data."
@@ -7323,65 +7330,65 @@ Partial Class Form1
         'Panel5
         '
         Me.TableLayoutPanel28.SetColumnSpan(Me.Panel5, 2)
-        Me.Panel5.Controls.Add(Me.SpltCtnr7)
+        Me.Panel5.Controls.Add(Me.SpltCntr_MovFolders)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel5.Location = New System.Drawing.Point(3, 3)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(1, 41)
+        Me.Panel5.Size = New System.Drawing.Size(712, 559)
         Me.Panel5.TabIndex = 20
         '
-        'SpltCtnr7
+        'SpltCntr_MovFolders
         '
-        Me.SpltCtnr7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.SpltCtnr7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SpltCtnr7.IsSplitterFixed = true
-        Me.SpltCtnr7.Location = New System.Drawing.Point(0, 0)
-        Me.SpltCtnr7.Margin = New System.Windows.Forms.Padding(4)
-        Me.SpltCtnr7.Name = "SpltCtnr7"
+        Me.SpltCntr_MovFolders.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SpltCntr_MovFolders.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_MovFolders.IsSplitterFixed = true
+        Me.SpltCntr_MovFolders.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_MovFolders.Margin = New System.Windows.Forms.Padding(4)
+        Me.SpltCntr_MovFolders.Name = "SpltCntr_MovFolders"
         '
-        'SpltCtnr7.Panel1
+        'SpltCntr_MovFolders.Panel1
         '
-        Me.SpltCtnr7.Panel1.Controls.Add(Me.TableLayoutPanel9)
+        Me.SpltCntr_MovFolders.Panel1.Controls.Add(Me.tbllayoutMovieFolders)
         '
-        'SpltCtnr7.Panel2
+        'SpltCntr_MovFolders.Panel2
         '
-        Me.SpltCtnr7.Panel2.Controls.Add(Me.TableLayoutPanel8)
-        Me.SpltCtnr7.Panel2.Controls.Add(Me.Label145)
-        Me.SpltCtnr7.Size = New System.Drawing.Size(1, 41)
-        Me.SpltCtnr7.SplitterDistance = 360
-        Me.SpltCtnr7.TabIndex = 15
+        Me.SpltCntr_MovFolders.Panel2.Controls.Add(Me.tbllayoutpanelOffLineMovie)
+        Me.SpltCntr_MovFolders.Panel2.Controls.Add(Me.Label145)
+        Me.SpltCntr_MovFolders.Size = New System.Drawing.Size(712, 559)
+        Me.SpltCntr_MovFolders.SplitterDistance = 360
+        Me.SpltCntr_MovFolders.TabIndex = 15
         '
-        'TableLayoutPanel9
+        'tbllayoutMovieFolders
         '
-        Me.TableLayoutPanel9.ColumnCount = 4
-        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 167!))
-        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101!))
-        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62!))
-        Me.TableLayoutPanel9.Controls.Add(Me.Label134, 0, 0)
-        Me.TableLayoutPanel9.Controls.Add(Me.Label184, 0, 3)
-        Me.TableLayoutPanel9.Controls.Add(Me.btnMovieManualPathAdd, 3, 4)
-        Me.TableLayoutPanel9.Controls.Add(Me.tbMovieManualPath, 0, 4)
-        Me.TableLayoutPanel9.Controls.Add(Me.btn_addmoviefolderdialogue, 0, 5)
-        Me.TableLayoutPanel9.Controls.Add(Me.btn_removemoviefolder, 2, 5)
-        Me.TableLayoutPanel9.Controls.Add(Me.clbx_MovieRoots, 0, 1)
-        Me.TableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel9.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
-        Me.TableLayoutPanel9.RowCount = 6
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49!))
-        Me.TableLayoutPanel9.Size = New System.Drawing.Size(358, 557)
-        Me.TableLayoutPanel9.TabIndex = 14
+        Me.tbllayoutMovieFolders.ColumnCount = 4
+        Me.tbllayoutMovieFolders.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 167!))
+        Me.tbllayoutMovieFolders.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.tbllayoutMovieFolders.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101!))
+        Me.tbllayoutMovieFolders.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62!))
+        Me.tbllayoutMovieFolders.Controls.Add(Me.Label134, 0, 0)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.Label184, 0, 3)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.btnMovieManualPathAdd, 3, 4)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.tbMovieManualPath, 0, 4)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.btn_addmoviefolderdialogue, 0, 5)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.btn_removemoviefolder, 2, 5)
+        Me.tbllayoutMovieFolders.Controls.Add(Me.clbx_MovieRoots, 0, 1)
+        Me.tbllayoutMovieFolders.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbllayoutMovieFolders.Location = New System.Drawing.Point(0, 0)
+        Me.tbllayoutMovieFolders.Name = "tbllayoutMovieFolders"
+        Me.tbllayoutMovieFolders.RowCount = 6
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16!))
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36!))
+        Me.tbllayoutMovieFolders.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49!))
+        Me.tbllayoutMovieFolders.Size = New System.Drawing.Size(358, 557)
+        Me.tbllayoutMovieFolders.TabIndex = 14
         '
         'Label134
         '
         Me.Label134.AutoSize = true
-        Me.TableLayoutPanel9.SetColumnSpan(Me.Label134, 3)
+        Me.tbllayoutMovieFolders.SetColumnSpan(Me.Label134, 3)
         Me.Label134.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Label134.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label134.Location = New System.Drawing.Point(4, 6)
@@ -7396,7 +7403,7 @@ Partial Class Form1
         '
         Me.Label184.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label184.AutoSize = true
-        Me.TableLayoutPanel9.SetColumnSpan(Me.Label184, 3)
+        Me.tbllayoutMovieFolders.SetColumnSpan(Me.Label184, 3)
         Me.Label184.Location = New System.Drawing.Point(3, 457)
         Me.Label184.Name = "Label184"
         Me.Label184.Size = New System.Drawing.Size(227, 15)
@@ -7415,7 +7422,7 @@ Partial Class Form1
         '
         'tbMovieManualPath
         '
-        Me.TableLayoutPanel9.SetColumnSpan(Me.tbMovieManualPath, 3)
+        Me.tbllayoutMovieFolders.SetColumnSpan(Me.tbMovieManualPath, 3)
         Me.tbMovieManualPath.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tbMovieManualPath.Location = New System.Drawing.Point(3, 480)
         Me.tbMovieManualPath.Margin = New System.Windows.Forms.Padding(3, 8, 3, 3)
@@ -7437,7 +7444,7 @@ Partial Class Form1
         '
         'btn_removemoviefolder
         '
-        Me.TableLayoutPanel9.SetColumnSpan(Me.btn_removemoviefolder, 2)
+        Me.tbllayoutMovieFolders.SetColumnSpan(Me.btn_removemoviefolder, 2)
         Me.btn_removemoviefolder.Dock = System.Windows.Forms.DockStyle.Left
         Me.btn_removemoviefolder.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.btn_removemoviefolder.Location = New System.Drawing.Point(199, 512)
@@ -7451,83 +7458,83 @@ Partial Class Form1
         'clbx_MovieRoots
         '
         Me.clbx_MovieRoots.AllowDrop = true
-        Me.TableLayoutPanel9.SetColumnSpan(Me.clbx_MovieRoots, 4)
+        Me.tbllayoutMovieFolders.SetColumnSpan(Me.clbx_MovieRoots, 4)
         Me.clbx_MovieRoots.Dock = System.Windows.Forms.DockStyle.Fill
         Me.clbx_MovieRoots.FormattingEnabled = true
         Me.clbx_MovieRoots.Location = New System.Drawing.Point(3, 33)
         Me.clbx_MovieRoots.Name = "clbx_MovieRoots"
-        Me.TableLayoutPanel9.SetRowSpan(Me.clbx_MovieRoots, 2)
+        Me.tbllayoutMovieFolders.SetRowSpan(Me.clbx_MovieRoots, 2)
         Me.clbx_MovieRoots.Size = New System.Drawing.Size(352, 420)
         Me.clbx_MovieRoots.Sorted = true
         Me.clbx_MovieRoots.TabIndex = 14
         Me.clbx_MovieRoots.ThreeDCheckBoxes = true
         '
-        'TableLayoutPanel8
+        'tbllayoutpanelOffLineMovie
         '
-        Me.TableLayoutPanel8.ColumnCount = 6
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 18!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59!))
-        Me.TableLayoutPanel8.Controls.Add(Me.Button102, 0, 7)
-        Me.TableLayoutPanel8.Controls.Add(Me.Button101, 4, 7)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label133, 0, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.ListBox15, 0, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.Button108, 2, 6)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label146, 0, 5)
-        Me.TableLayoutPanel8.Controls.Add(Me.TextBox44, 1, 4)
-        Me.TableLayoutPanel8.Controls.Add(Me.Button107, 5, 4)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label144, 0, 3)
-        Me.TableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel8.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel8.Name = "TableLayoutPanel8"
-        Me.TableLayoutPanel8.RowCount = 8
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38!))
-        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel8.Size = New System.Drawing.Size(346, 557)
-        Me.TableLayoutPanel8.TabIndex = 19
+        Me.tbllayoutpanelOffLineMovie.ColumnCount = 6
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 75!))
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 18!))
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8!))
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120!))
+        Me.tbllayoutpanelOffLineMovie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 59!))
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.btn_OfflineMovFolderAdd, 0, 7)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.btn_OfflineMovFolderRemove, 4, 7)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.Label133, 0, 0)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.lbx_MovOfflineFolders, 0, 1)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.btn_OfflineMovLoadList, 2, 6)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.Label146, 0, 5)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.tb_OfflineMovName, 1, 4)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.btn_OfflineMovAdd, 5, 4)
+        Me.tbllayoutpanelOffLineMovie.Controls.Add(Me.Label144, 0, 3)
+        Me.tbllayoutpanelOffLineMovie.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tbllayoutpanelOffLineMovie.Location = New System.Drawing.Point(0, 0)
+        Me.tbllayoutpanelOffLineMovie.Name = "tbllayoutpanelOffLineMovie"
+        Me.tbllayoutpanelOffLineMovie.RowCount = 8
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38!))
+        Me.tbllayoutpanelOffLineMovie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
+        Me.tbllayoutpanelOffLineMovie.Size = New System.Drawing.Size(346, 557)
+        Me.tbllayoutpanelOffLineMovie.TabIndex = 19
         '
-        'Button102
+        'btn_OfflineMovFolderAdd
         '
-        Me.Button102.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button102.AutoSize = true
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Button102, 3)
-        Me.Button102.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button102.Location = New System.Drawing.Point(4, 523)
-        Me.Button102.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button102.Name = "Button102"
-        Me.Button102.Size = New System.Drawing.Size(151, 30)
-        Me.Button102.TabIndex = 12
-        Me.Button102.Text = "Add Movie Folder Browser"
-        Me.Button102.UseVisualStyleBackColor = true
+        Me.btn_OfflineMovFolderAdd.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btn_OfflineMovFolderAdd.AutoSize = true
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.btn_OfflineMovFolderAdd, 3)
+        Me.btn_OfflineMovFolderAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_OfflineMovFolderAdd.Location = New System.Drawing.Point(4, 523)
+        Me.btn_OfflineMovFolderAdd.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_OfflineMovFolderAdd.Name = "btn_OfflineMovFolderAdd"
+        Me.btn_OfflineMovFolderAdd.Size = New System.Drawing.Size(151, 30)
+        Me.btn_OfflineMovFolderAdd.TabIndex = 12
+        Me.btn_OfflineMovFolderAdd.Text = "Add Movie Folder Browser"
+        Me.btn_OfflineMovFolderAdd.UseVisualStyleBackColor = true
         '
-        'Button101
+        'btn_OfflineMovFolderRemove
         '
-        Me.Button101.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button101.AutoSize = true
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Button101, 2)
-        Me.Button101.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button101.Location = New System.Drawing.Point(173, 523)
-        Me.Button101.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button101.Name = "Button101"
-        Me.Button101.Size = New System.Drawing.Size(166, 30)
-        Me.Button101.TabIndex = 11
-        Me.Button101.Text = "Remove Selected Folder(s)"
-        Me.Button101.UseVisualStyleBackColor = true
+        Me.btn_OfflineMovFolderRemove.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btn_OfflineMovFolderRemove.AutoSize = true
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.btn_OfflineMovFolderRemove, 2)
+        Me.btn_OfflineMovFolderRemove.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_OfflineMovFolderRemove.Location = New System.Drawing.Point(173, 523)
+        Me.btn_OfflineMovFolderRemove.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_OfflineMovFolderRemove.Name = "btn_OfflineMovFolderRemove"
+        Me.btn_OfflineMovFolderRemove.Size = New System.Drawing.Size(166, 30)
+        Me.btn_OfflineMovFolderRemove.TabIndex = 11
+        Me.btn_OfflineMovFolderRemove.Text = "Remove Selected Folder(s)"
+        Me.btn_OfflineMovFolderRemove.UseVisualStyleBackColor = true
         '
         'Label133
         '
         Me.Label133.AutoSize = true
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Label133, 3)
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.Label133, 3)
         Me.Label133.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Label133.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label133.Location = New System.Drawing.Point(4, 0)
@@ -7538,40 +7545,40 @@ Partial Class Form1
         Me.Label133.TabIndex = 9
         Me.Label133.Text = "Offline Movie Folders"
         '
-        'ListBox15
+        'lbx_MovOfflineFolders
         '
-        Me.TableLayoutPanel8.SetColumnSpan(Me.ListBox15, 6)
-        Me.ListBox15.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListBox15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ListBox15.FormattingEnabled = true
-        Me.ListBox15.ItemHeight = 15
-        Me.ListBox15.Location = New System.Drawing.Point(4, 36)
-        Me.ListBox15.Margin = New System.Windows.Forms.Padding(4)
-        Me.ListBox15.Name = "ListBox15"
-        Me.TableLayoutPanel8.SetRowSpan(Me.ListBox15, 2)
-        Me.ListBox15.Size = New System.Drawing.Size(338, 339)
-        Me.ListBox15.Sorted = true
-        Me.ListBox15.TabIndex = 8
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.lbx_MovOfflineFolders, 6)
+        Me.lbx_MovOfflineFolders.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbx_MovOfflineFolders.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbx_MovOfflineFolders.FormattingEnabled = true
+        Me.lbx_MovOfflineFolders.ItemHeight = 15
+        Me.lbx_MovOfflineFolders.Location = New System.Drawing.Point(4, 36)
+        Me.lbx_MovOfflineFolders.Margin = New System.Windows.Forms.Padding(4)
+        Me.lbx_MovOfflineFolders.Name = "lbx_MovOfflineFolders"
+        Me.tbllayoutpanelOffLineMovie.SetRowSpan(Me.lbx_MovOfflineFolders, 2)
+        Me.lbx_MovOfflineFolders.Size = New System.Drawing.Size(338, 339)
+        Me.lbx_MovOfflineFolders.Sorted = true
+        Me.lbx_MovOfflineFolders.TabIndex = 8
         '
-        'Button108
+        'btn_OfflineMovLoadList
         '
-        Me.Button108.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button108.AutoSize = true
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Button108, 3)
-        Me.Button108.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button108.Location = New System.Drawing.Point(118, 486)
-        Me.Button108.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button108.Name = "Button108"
-        Me.Button108.Size = New System.Drawing.Size(144, 29)
-        Me.Button108.TabIndex = 17
-        Me.Button108.Text = "Load offline movie list..."
-        Me.Button108.UseVisualStyleBackColor = true
+        Me.btn_OfflineMovLoadList.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.btn_OfflineMovLoadList.AutoSize = true
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.btn_OfflineMovLoadList, 3)
+        Me.btn_OfflineMovLoadList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_OfflineMovLoadList.Location = New System.Drawing.Point(118, 486)
+        Me.btn_OfflineMovLoadList.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_OfflineMovLoadList.Name = "btn_OfflineMovLoadList"
+        Me.btn_OfflineMovLoadList.Size = New System.Drawing.Size(144, 29)
+        Me.btn_OfflineMovLoadList.TabIndex = 17
+        Me.btn_OfflineMovLoadList.Text = "Load offline movie list..."
+        Me.btn_OfflineMovLoadList.UseVisualStyleBackColor = true
         '
         'Label146
         '
         Me.Label146.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Label146, 6)
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.Label146, 6)
         Me.Label146.Location = New System.Drawing.Point(4, 432)
         Me.Label146.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label146.Name = "Label146"
@@ -7581,34 +7588,34 @@ Partial Class Form1
     "eperate line. Use the browse button below to load the text file."
         Me.Label146.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
-        'TextBox44
+        'tb_OfflineMovName
         '
-        Me.TextBox44.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
+        Me.tb_OfflineMovName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel8.SetColumnSpan(Me.TextBox44, 4)
-        Me.TextBox44.Location = New System.Drawing.Point(79, 404)
-        Me.TextBox44.Margin = New System.Windows.Forms.Padding(4)
-        Me.TextBox44.Name = "TextBox44"
-        Me.TextBox44.Size = New System.Drawing.Size(204, 21)
-        Me.TextBox44.TabIndex = 14
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.tb_OfflineMovName, 4)
+        Me.tb_OfflineMovName.Location = New System.Drawing.Point(79, 404)
+        Me.tb_OfflineMovName.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_OfflineMovName.Name = "tb_OfflineMovName"
+        Me.tb_OfflineMovName.Size = New System.Drawing.Size(204, 21)
+        Me.tb_OfflineMovName.TabIndex = 14
         '
-        'Button107
+        'btn_OfflineMovAdd
         '
-        Me.Button107.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.Button107.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button107.Location = New System.Drawing.Point(293, 401)
-        Me.Button107.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button107.Name = "Button107"
-        Me.Button107.Size = New System.Drawing.Size(49, 24)
-        Me.Button107.TabIndex = 15
-        Me.Button107.Text = "Add"
-        Me.Button107.UseVisualStyleBackColor = true
+        Me.btn_OfflineMovAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btn_OfflineMovAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btn_OfflineMovAdd.Location = New System.Drawing.Point(293, 401)
+        Me.btn_OfflineMovAdd.Margin = New System.Windows.Forms.Padding(4)
+        Me.btn_OfflineMovAdd.Name = "btn_OfflineMovAdd"
+        Me.btn_OfflineMovAdd.Size = New System.Drawing.Size(49, 24)
+        Me.btn_OfflineMovAdd.TabIndex = 15
+        Me.btn_OfflineMovAdd.Text = "Add"
+        Me.btn_OfflineMovAdd.UseVisualStyleBackColor = true
         '
         'Label144
         '
         Me.Label144.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label144.AutoSize = true
-        Me.TableLayoutPanel8.SetColumnSpan(Me.Label144, 6)
+        Me.tbllayoutpanelOffLineMovie.SetColumnSpan(Me.Label144, 6)
         Me.Label144.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label144.Location = New System.Drawing.Point(4, 382)
         Me.Label144.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
@@ -7622,7 +7629,7 @@ Partial Class Form1
         Me.Label145.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label145.AutoSize = true
         Me.Label145.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label145.Location = New System.Drawing.Point(8, 20300)
+        Me.Label145.Location = New System.Drawing.Point(8, 20818)
         Me.Label145.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label145.Name = "Label145"
         Me.Label145.Size = New System.Drawing.Size(66, 15)
@@ -7638,7 +7645,7 @@ Partial Class Form1
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Left
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(327, 51)
+        Me.Panel3.Size = New System.Drawing.Size(327, 607)
         Me.Panel3.TabIndex = 20
         '
         'Label86
@@ -8226,7 +8233,7 @@ Partial Class Form1
         '
         Me.Panel_EpisodeActors.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel_EpisodeActors.Controls.Add(Me.TableLayoutPanel_EpisodeActors)
-        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(542, 337)
+        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(540, 337)
         Me.Panel_EpisodeActors.MaximumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.MinimumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.Name = "Panel_EpisodeActors"
@@ -8694,7 +8701,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 90)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(319, 240)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(317, 240)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -8778,6 +8785,29 @@ Partial Class Form1
         Me.TableLayoutPanel20.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel20.Size = New System.Drawing.Size(721, 603)
         Me.TableLayoutPanel20.TabIndex = 49
+        '
+        'tb_ShVotes
+        '
+        Me.TableLayoutPanel20.SetColumnSpan(Me.tb_ShVotes, 2)
+        Me.tb_ShVotes.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tb_ShVotes.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.tb_ShVotes.Location = New System.Drawing.Point(455, 511)
+        Me.tb_ShVotes.Margin = New System.Windows.Forms.Padding(4)
+        Me.tb_ShVotes.Name = "tb_ShVotes"
+        Me.tb_ShVotes.Size = New System.Drawing.Size(78, 21)
+        Me.tb_ShVotes.TabIndex = 191
+        '
+        'lbl_TvShVotes
+        '
+        Me.lbl_TvShVotes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.lbl_TvShVotes.AutoSize = true
+        Me.lbl_TvShVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbl_TvShVotes.Location = New System.Drawing.Point(404, 518)
+        Me.lbl_TvShVotes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 4)
+        Me.lbl_TvShVotes.Name = "lbl_TvShVotes"
+        Me.lbl_TvShVotes.Size = New System.Drawing.Size(43, 15)
+        Me.lbl_TvShVotes.TabIndex = 190
+        Me.lbl_TvShVotes.Text = "Votes :"
         '
         'Panel_TvShowExtraArtwork
         '
@@ -13918,29 +13948,6 @@ Partial Class Form1
         Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
         Me.tsmiTvWallOpenFolder.Text = "Open Folder"
         '
-        'lbl_TvShVotes
-        '
-        Me.lbl_TvShVotes.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.lbl_TvShVotes.AutoSize = true
-        Me.lbl_TvShVotes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_TvShVotes.Location = New System.Drawing.Point(404, 518)
-        Me.lbl_TvShVotes.Margin = New System.Windows.Forms.Padding(4, 0, 4, 4)
-        Me.lbl_TvShVotes.Name = "lbl_TvShVotes"
-        Me.lbl_TvShVotes.Size = New System.Drawing.Size(43, 15)
-        Me.lbl_TvShVotes.TabIndex = 190
-        Me.lbl_TvShVotes.Text = "Votes :"
-        '
-        'tb_ShVotes
-        '
-        Me.TableLayoutPanel20.SetColumnSpan(Me.tb_ShVotes, 2)
-        Me.tb_ShVotes.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tb_ShVotes.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.tb_ShVotes.Location = New System.Drawing.Point(455, 511)
-        Me.tb_ShVotes.Margin = New System.Windows.Forms.Padding(4)
-        Me.tb_ShVotes.Name = "tb_ShVotes"
-        Me.tb_ShVotes.Size = New System.Drawing.Size(78, 21)
-        Me.tb_ShVotes.TabIndex = 191
-        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -14065,15 +14072,15 @@ Partial Class Form1
         Me.TableLayoutPanel28.ResumeLayout(false)
         Me.TableLayoutPanel28.PerformLayout
         Me.Panel5.ResumeLayout(false)
-        Me.SpltCtnr7.Panel1.ResumeLayout(false)
-        Me.SpltCtnr7.Panel2.ResumeLayout(false)
-        Me.SpltCtnr7.Panel2.PerformLayout
-        CType(Me.SpltCtnr7,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SpltCtnr7.ResumeLayout(false)
-        Me.TableLayoutPanel9.ResumeLayout(false)
-        Me.TableLayoutPanel9.PerformLayout
-        Me.TableLayoutPanel8.ResumeLayout(false)
-        Me.TableLayoutPanel8.PerformLayout
+        Me.SpltCntr_MovFolders.Panel1.ResumeLayout(false)
+        Me.SpltCntr_MovFolders.Panel2.ResumeLayout(false)
+        Me.SpltCntr_MovFolders.Panel2.PerformLayout
+        CType(Me.SpltCntr_MovFolders,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_MovFolders.ResumeLayout(false)
+        Me.tbllayoutMovieFolders.ResumeLayout(false)
+        Me.tbllayoutMovieFolders.PerformLayout
+        Me.tbllayoutpanelOffLineMovie.ResumeLayout(false)
+        Me.tbllayoutpanelOffLineMovie.PerformLayout
         Me.Panel3.ResumeLayout(false)
         Me.Panel3.PerformLayout
         Me.tpMovSets.ResumeLayout(false)
@@ -14307,11 +14314,11 @@ End Sub
     Friend WithEvents TabLevel1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
     Friend WithEvents MovieContextMenu As System.Windows.Forms.ContextMenuStrip
-    Friend WithEvents mov_ToolStripOpenFolder As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mov_ToolStripViewNfo As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mov_ToolStripFanartBrowserAlt As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mov_ToolStripPosterBrowserAlt As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mov_ToolStripEditMovieAlt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_OpenFolder As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_ViewNfo As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_FanartBrowserAlt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_PosterBrowserAlt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_EditMovieAlt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents EditToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -14545,9 +14552,9 @@ End Sub
     Friend WithEvents EditMovieToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OpenFolderToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents mov_ToolStripReloadFromCache As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator5 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_Separator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_ReloadFromCache As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator4 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents btn_TvShState As System.Windows.Forms.Button
     Friend WithEvents lbl_TvShState As System.Windows.Forms.Label
     Friend WithEvents Tv_TreeViewContext_SearchNewEp As System.Windows.Forms.ToolStripMenuItem
@@ -14614,26 +14621,26 @@ End Sub
     Friend WithEvents GoToSelectedMoviePosterSelectorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GoToSelectedMovieFanartSelectorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lbl_movTableMulti As System.Windows.Forms.Label
-    Friend WithEvents mov_ToolStripRescrapeSpecific As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem3 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem4 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem5 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem6 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem7 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem8 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem9 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem10 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem11 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem12 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem13 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem14 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem19 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem20 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem15 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_RescrapeSpecific As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeTitle As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeplot As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeTagline As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeDirector As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeCredits As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeCert As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeGenre As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeOutline As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeRuntime As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeRuntimeImdb As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeRuntimeFile As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeStudio As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeRating As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeVotes As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeActors As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator6 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ToolStripMenuItem16 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem17 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem18 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeFanart As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapePoster As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeMediaTags As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MovieArtworkContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents RescrapePToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RescrapeFanartToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -14645,14 +14652,14 @@ End Sub
     Friend WithEvents DownloadPosterFromTMDBToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DownloadPosterFromMPDBToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DownloadPosterFromIMDBToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ListBox15 As System.Windows.Forms.ListBox
+    Friend WithEvents lbx_MovOfflineFolders As System.Windows.Forms.ListBox
     Friend WithEvents Label133 As System.Windows.Forms.Label
     Friend WithEvents Label134 As System.Windows.Forms.Label
-    Friend WithEvents Button101 As System.Windows.Forms.Button
-    Friend WithEvents Button102 As System.Windows.Forms.Button
+    Friend WithEvents btn_OfflineMovFolderRemove As System.Windows.Forms.Button
+    Friend WithEvents btn_OfflineMovFolderAdd As System.Windows.Forms.Button
     Friend WithEvents Label136 As System.Windows.Forms.Label
     Friend WithEvents Label135 As System.Windows.Forms.Label
-    Friend WithEvents SpltCtnr7 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_MovFolders As System.Windows.Forms.SplitContainer
     Friend WithEvents Tv_TreeViewContext_FindMissArt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ButtonFanartSaveLoRes As System.Windows.Forms.Button
     Friend WithEvents ExportToXBMCToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -14664,18 +14671,18 @@ End Sub
     Friend WithEvents LockAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UnlockAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Label144 As System.Windows.Forms.Label
-    Friend WithEvents TextBox44 As System.Windows.Forms.TextBox
-    Friend WithEvents Button107 As System.Windows.Forms.Button
+    Friend WithEvents tb_OfflineMovName As System.Windows.Forms.TextBox
+    Friend WithEvents btn_OfflineMovAdd As System.Windows.Forms.Button
     Friend WithEvents Label145 As System.Windows.Forms.Label
     Friend WithEvents Label146 As System.Windows.Forms.Label
-    Friend WithEvents Button108 As System.Windows.Forms.Button
+    Friend WithEvents btn_OfflineMovLoadList As System.Windows.Forms.Button
     Friend WithEvents HelpProvider1 As System.Windows.Forms.HelpProvider
     Friend WithEvents Label147 As System.Windows.Forms.Label
     Friend WithEvents TV_BatchRescrapeWizardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tvbckrescrapewizard As System.ComponentModel.BackgroundWorker
     Friend WithEvents ToolStripStatusLabel8 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents ToolStripProgressBar7 As System.Windows.Forms.ToolStripProgressBar
-    Friend WithEvents mov_ToolStripExportMovies As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_ExportMovies As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabPage34 As System.Windows.Forms.TabPage
     Friend WithEvents Label149 As System.Windows.Forms.Label
     Friend WithEvents Label151 As System.Windows.Forms.Label
@@ -14695,7 +14702,7 @@ End Sub
     Friend WithEvents PictureBox10 As System.Windows.Forms.PictureBox
     Friend WithEvents MediaCompanionCodeplexSiteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExportTVShowInfoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem21 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeStars As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator7 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
@@ -14723,12 +14730,12 @@ End Sub
     Friend WithEvents CheckBoxDebugShowTVDBReturnedXML As System.Windows.Forms.CheckBox
     Friend WithEvents MediaCompanionHelpFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_DispByAiredDate As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator17 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents mov_ToolStripPlayMovie As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_PlayMovie As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_RescrapeShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_WatchedShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Tv_TreeViewContext_UnWatchedShowOrEpisode As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents YearToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeYear As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBox23 As System.Windows.Forms.GroupBox
     Friend WithEvents rbTVbanner As System.Windows.Forms.RadioButton
     Friend WithEvents rbTVposter As System.Windows.Forms.RadioButton
@@ -14759,8 +14766,8 @@ End Sub
     Friend WithEvents RadioButton_Fix_Title As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton_Fix_Filename As System.Windows.Forms.RadioButton
     Friend WithEvents GroupBox29 As System.Windows.Forms.GroupBox
-    Friend WithEvents ToolStripSeparator23 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents mov_ToolStripPlayTrailer As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator6 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_PlayTrailer As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBoxFanartExtrathumbs As System.Windows.Forms.GroupBox
     Friend WithEvents rbMovThumb4 As System.Windows.Forms.RadioButton
     Friend WithEvents rbMovThumb2 As System.Windows.Forms.RadioButton
@@ -14769,11 +14776,11 @@ End Sub
     Friend WithEvents rbMovFanart As System.Windows.Forms.RadioButton
     Friend WithEvents Tv_TreeViewContext_Play_Episode As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lb_EpSource As System.Windows.Forms.Label
-    Friend WithEvents mov_ToolStripRescrapeAll As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_RescrapeAll As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SearchALLForNewEpisodesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents mov_ToolStripMovieName As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator24 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_MovieName As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator7 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiRescrapeTrailer As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents setsTxt As System.Windows.Forms.TextBox
     Friend WithEvents btnreverse As System.Windows.Forms.CheckBox
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
@@ -14800,8 +14807,8 @@ End Sub
     Friend WithEvents ToolStripStatusLabel9 As System.Windows.Forms.ToolStripStatusLabel
     Friend WithEvents HToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents SearchForNewHomeMoviesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Mov_ToolStripRemoveMovie As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents Mov_ToolStripRenameMovie As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_RemoveMovie As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_RenameMovie As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RebuildHomeMovieCacheToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tp_HmScrnSht As System.Windows.Forms.TabPage
     Friend WithEvents HomeMovieContextMenu As System.Windows.Forms.ContextMenuStrip
@@ -14829,8 +14836,8 @@ End Sub
     Friend WithEvents SplitContainer4 As System.Windows.Forms.SplitContainer
     Friend WithEvents tv_PictureBoxLeft As System.Windows.Forms.PictureBox
     Friend WithEvents tv_PictureBoxRight As System.Windows.Forms.PictureBox
-    Friend WithEvents tsmiTMDbSetName As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents RenameFilesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeTMDbSetName As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiRescrapeRenameFiles As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnMovieSetsRepopulateFromUsed As System.Windows.Forms.Button
     Friend WithEvents btnMovRefreshAll As System.Windows.Forms.Button
     Friend WithEvents Label126 As System.Windows.Forms.Label
@@ -14870,7 +14877,7 @@ End Sub
     Friend WithEvents SelNewFanartToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RescrapeTvEpThumbToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RescrapeTvEpScreenShotToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents tsmiOpenInMkvmergeGUI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_OpenInMkvmergeGUI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiCheckForNewVersion As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents Label32 As System.Windows.Forms.Label
     Friend WithEvents HmMovPlot As System.Windows.Forms.TextBox
@@ -15023,8 +15030,8 @@ End Sub
     Friend WithEvents Label194 As System.Windows.Forms.Label
     Friend WithEvents WebBrowser2 As System.Windows.Forms.WebBrowser
     Friend WithEvents DataGridView2 As System.Windows.Forms.DataGridView
-    Friend WithEvents tsmiSyncToXBMC As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents tsmiConvertToFrodo As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_SyncToXBMC As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_ConvertToFrodo As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents FixNFOCreateDateToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tagtxt As System.Windows.Forms.TextBox
     Friend WithEvents lbl_movTags As System.Windows.Forms.Label
@@ -15032,8 +15039,8 @@ End Sub
     Friend WithEvents TableLayoutPanel5 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel6 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel7 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents TableLayoutPanel8 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents TableLayoutPanel9 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents tbllayoutpanelOffLineMovie As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents tbllayoutMovieFolders As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel10 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel11 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel13 As System.Windows.Forms.TableLayoutPanel
@@ -15081,8 +15088,8 @@ End Sub
     Friend WithEvents TabCustTv As System.Windows.Forms.TabPage
     Friend WithEvents tpMovStubs As System.Windows.Forms.TabPage
     Friend WithEvents MediaStubs1 As Media_Companion.MediaStubs
-    Friend WithEvents ToolStripSeparator27 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents mov_ToolStripDeleteNfoArtwork As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator2 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_DeleteNfoArtwork As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TableLayoutPanel26 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents Panel4 As System.Windows.Forms.Panel
@@ -15114,9 +15121,9 @@ End Sub
     Friend WithEvents TableLayoutPanel29 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents lbl_movCountry As System.Windows.Forms.Label
     Friend WithEvents countrytxt As System.Windows.Forms.TextBox
-    Friend WithEvents tsmiSetWatched As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents tsmiClearWatched As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator28 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents tsmiMov_SetWatched As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_ClearWatched As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_Separator5 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents tlpMovieButtons As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents tsmicacheclean As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiRescrapeKeyWords As System.Windows.Forms.ToolStripMenuItem
@@ -15347,4 +15354,5 @@ End Sub
     Friend WithEvents Label19 As Label
     Friend WithEvents tb_ShVotes As TextBox
     Friend WithEvents lbl_TvShVotes As Label
+    Friend WithEvents tsmiRescrapeMetascore As ToolStripMenuItem
 End Class

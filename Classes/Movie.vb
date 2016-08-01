@@ -2999,9 +2999,10 @@ Public Class Movie
     End Function
 
     Function RescrapeBody(rl As RescrapeList)
-        Return rl.credits or rl.director or rl.stars   or rl.genre   or rl.mpaa   or rl.plot  or rl.premiered or rl.rating or 
-               rl.runtime or rl.studio   or rl.tagline or rl.outline or rl.top250 or rl.votes or rl.country   or rl.year   or
-               rl.title Or (rl.mediatags AndAlso ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper)))
+        Return rl.credits Or rl.director Or rl.stars   Or rl.genre   Or rl.mpaa   Or rl.plot  Or rl.premiered Or rl.rating Or 
+               rl.runtime Or rl.studio   Or rl.tagline Or rl.outline Or rl.top250 Or rl.votes Or rl.country   Or rl.year   Or
+               rl.title Or (rl.mediatags AndAlso ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper))) Or
+               rl.metascore
     End Function
   
     Public Sub RescrapeSpecific(rl As RescrapeList)
@@ -3054,6 +3055,7 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.rating   , _scrapedMovie.fullmoviebody.rating   , rl.rating    , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.runtime  , _scrapedMovie.fullmoviebody.runtime  , rl.runtime   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.studio   , _scrapedMovie.fullmoviebody.studio   , rl.studio    , rl.EmptyMainTags)
+            UpdateProperty( _rescrapedMovie.fullmoviebody.metascore, _scrapedMovie.fullmoviebody.metascore, rl.metascore , rl.EmptyMainTags)
             If _rescrapedMovie.fullmoviebody.tagline <> Nothing Then    'Only overwrite tagline if there is a new tagline
                 UpdateProperty( _rescrapedMovie.fullmoviebody.tagline  , _scrapedMovie.fullmoviebody.tagline  , rl.tagline   , rl.EmptyMainTags)
             End If

@@ -490,6 +490,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbXbmcTmdbMetascoreFromImdb = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.GroupBox11.SuspendLayout
@@ -2421,6 +2422,7 @@ Partial Class frmPreferences
         '
         'GroupBox46
         '
+        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbMetascoreFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAspectFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbGenreFromImdb)
         Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAkasFromImdb)
@@ -5871,6 +5873,17 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbXbmcTmdbMetascoreFromImdb
+        '
+        Me.cbXbmcTmdbMetascoreFromImdb.AutoSize = true
+        Me.cbXbmcTmdbMetascoreFromImdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXbmcTmdbMetascoreFromImdb.Location = New System.Drawing.Point(116, 102)
+        Me.cbXbmcTmdbMetascoreFromImdb.Name = "cbXbmcTmdbMetascoreFromImdb"
+        Me.cbXbmcTmdbMetascoreFromImdb.Size = New System.Drawing.Size(84, 19)
+        Me.cbXbmcTmdbMetascoreFromImdb.TabIndex = 87
+        Me.cbXbmcTmdbMetascoreFromImdb.Text = "Metascore"
+        Me.cbXbmcTmdbMetascoreFromImdb.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6509,4 +6522,5 @@ End Sub
     Friend WithEvents Label25 As Label
     Friend WithEvents nudMaxTagsInFilter As NumericUpDown
     Friend WithEvents nudMinTagsInFilter As NumericUpDown
+    Friend WithEvents cbXbmcTmdbMetascoreFromImdb As CheckBox
 End Class

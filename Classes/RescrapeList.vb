@@ -19,6 +19,7 @@ Public Class RescrapeList
     Property credits                As Boolean
     Property country                As Boolean
     Property trailer                As Boolean
+    Property metascore              As Boolean
     Property posterurls             As Boolean
     Property actors                 As Boolean
     Property mediatags              As Boolean

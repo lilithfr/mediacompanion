@@ -1,81 +1,81 @@
 ﻿Public Class frmBatchScraper
 
-    Private Sub CheckBox22_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox22.CheckedChanged
-        Form1.rescrapeList.top250 = CheckBox22.Checked
+    Private Sub cbMainTop250_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainTop250.CheckedChanged
+        Form1.rescrapeList.top250 = cbMainTop250.Checked
     End Sub
 
-    Private Sub CheckBox8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox8.CheckedChanged
-        Form1.rescrapeList.runtime = CheckBox8.Checked
+    Private Sub cbMainRuntime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainRuntime.CheckedChanged
+        Form1.rescrapeList.runtime = cbMainRuntime.Checked
     End Sub
 
-    Private Sub CheckBox12_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox12.CheckedChanged
-        Form1.rescrapeList.director = CheckBox12.Checked
+    Private Sub CcbMainDirector_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainDirector.CheckedChanged
+        Form1.rescrapeList.director = cbMainDirector.Checked
     End Sub
 
-    Private Sub CheckBox5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox5.CheckedChanged
-        Form1.rescrapeList.outline = CheckBox5.Checked
+    Private Sub cbMainOutline_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainOutline.CheckedChanged
+        Form1.rescrapeList.outline = cbMainOutline.Checked
     End Sub
 
-    Private Sub CheckBox9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox9.CheckedChanged
-        Form1.rescrapeList.mpaa = CheckBox9.Checked
+    Private Sub cbMainCert_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainCert.CheckedChanged
+        Form1.rescrapeList.mpaa = cbMainCert.Checked
     End Sub
 
-    Private Sub CheckBox13_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox13.CheckedChanged
-        Form1.rescrapeList.premiered = CheckBox13.Checked
+    Private Sub cbMainPremiered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainPremiered.CheckedChanged
+        Form1.rescrapeList.premiered = cbMainPremiered.Checked
     End Sub
 
-    Private Sub CheckBox3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox3.CheckedChanged
-        Form1.rescrapeList.rating = CheckBox3.Checked
+    Private Sub cbMainRating_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainRating.CheckedChanged
+        Form1.rescrapeList.rating = cbMainRating.Checked
     End Sub
 
-    Private Sub CheckBox6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox6.CheckedChanged
-        Form1.rescrapeList.plot = CheckBox6.Checked
+    Private Sub cbMainPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainPlot.CheckedChanged
+        Form1.rescrapeList.plot = cbMainPlot.Checked
     End Sub
 
-    Private Sub CheckBox10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox10.CheckedChanged
-        Form1.rescrapeList.genre = CheckBox10.Checked
+    Private Sub cbMainGenre_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainGenre.CheckedChanged
+        Form1.rescrapeList.genre = cbMainGenre.Checked
     End Sub
 
-    Private Sub CheckBox14_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox14.CheckedChanged
-        Form1.rescrapeList.studio = CheckBox14.Checked
+    Private Sub cbMainStudio_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainStudio.CheckedChanged
+        Form1.rescrapeList.studio = cbMainStudio.Checked
     End Sub
 
-    Private Sub CheckBox4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox4.CheckedChanged
-        Form1.rescrapeList.votes = CheckBox4.Checked
+    Private Sub cbMainVotes_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainVotes.CheckedChanged
+        Form1.rescrapeList.votes = cbMainVotes.Checked
     End Sub
 
-    Private Sub CheckBox7_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox7.CheckedChanged
-        Form1.rescrapeList.tagline = CheckBox7.Checked
+    Private Sub cbMainTagline_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainTagline.CheckedChanged
+        Form1.rescrapeList.tagline = cbMainTagline.Checked
     End Sub
 
-    Private Sub CheckBox11_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox11.CheckedChanged
-        Form1.rescrapeList.credits = CheckBox11.Checked
+    Private Sub cbMainCredits_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainCredits.CheckedChanged
+        Form1.rescrapeList.credits = cbMainCredits.Checked
     End Sub
 
-    Private Sub CheckBox21_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox21.CheckedChanged
-        Form1.rescrapeList.trailer = CheckBox21.Checked
+    Private Sub cbMainTrailer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMainTrailer.CheckedChanged
+        Form1.rescrapeList.trailer = cbMainTrailer.Checked
     End Sub
 
-    Private Sub CheckBox15_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox15.CheckedChanged
-         Form1.rescrapeList.actors = CheckBox15.Checked
+    Private Sub cbRescrapeActors_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRescrapeActors.CheckedChanged
+         Form1.rescrapeList.actors = cbRescrapeActors.Checked
     End Sub
 
-    Private Sub CheckBox19_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox19.CheckedChanged
-        Form1.rescrapeList.mediatags = CheckBox19.Checked
+    Private Sub cbRescrapeMediaTags_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRescrapeMediaTags.CheckedChanged
+        Form1.rescrapeList.mediatags = cbRescrapeMediaTags.Checked
     End Sub
 
-    Private Sub CheckBox16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox16.CheckedChanged
-        Form1.rescrapeList.posterurls = CheckBox16.Checked 
+    Private Sub cbRescrapePosterUrls_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRescrapePosterUrls.CheckedChanged
+        Form1.rescrapeList.posterurls = cbRescrapePosterUrls.Checked 
     End Sub
 
-    Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
+    Private Sub cbMissingFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingFanart.CheckedChanged
         Try
-            If CheckBox17.CheckState = CheckState.Checked Then
+            If cbMissingFanart.CheckState = CheckState.Checked Then
                 If Pref.savefanart Then
                     Form1.rescrapeList.missingfanart = True
                 Else
                     Form1.rescrapeList.missingfanart = False
-                    CheckBox17.Checked = False
+                    cbMissingFanart.Checked = False
                     MsgBox("Movie Preferences set to not download Fanart.", 48, "Movie Preferences")
                 End If
             Else
@@ -86,14 +86,14 @@
         End Try
     End Sub
 
-    Private Sub CheckBox18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox18.CheckedChanged
+    Private Sub cbMissingPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingPosters.CheckedChanged
         Try
-            If CheckBox18.CheckState = CheckState.Checked Then
+            If cbMissingPosters.CheckState = CheckState.Checked Then
                 If Pref.scrapemovieposters Then
                     Form1.rescrapeList.missingposters = True
                 Else
                     Form1.rescrapeList.missingposters = False
-                    CheckBox18.Checked = False
+                    cbMissingPosters.Checked = False
                     MsgBox("Movie Preferences set to not download Posters.", 48, "Movie Preferences")
                 End If
             Else
@@ -121,19 +121,23 @@
         End Try
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
-        Form1.rescrapeList.country = CheckBox1.checked
+    Private Sub cbMainCountry_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainCountry.CheckedChanged
+        Form1.rescrapeList.country = cbMainCountry.checked
     End Sub
 
-    Private Sub CheckBox2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox2.CheckedChanged
-        Form1.rescrapeList.stars =CheckBox2.checked
+    Private Sub cbMainStars_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainStars.CheckedChanged
+        Form1.rescrapeList.stars =cbMainStars.checked
     End Sub
-    Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
-        Form1.rescrapeList.year = CheckBox20.checked
+    Private Sub CcbMainYear_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainYear.CheckedChanged
+        Form1.rescrapeList.year = cbMainYear.checked
     End Sub
 
-    Private Sub cbFromTMDB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFromTMDB.CheckedChanged
+    Private Sub cbFromTMDB_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbFromTMDB.CheckedChanged
         Form1.rescrapeList.FromTMDB = cbFromTMDB.checked
+    End Sub
+    
+    Private Sub cbMainMetascore_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainMetascore.CheckedChanged
+        Form1.rescrapelist.metascore = cbMainMetascore.Checked
     End Sub
 
     Public Sub New()
@@ -143,8 +147,8 @@
         
     End Sub
 
-    Private Sub cbTmdbSetName_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTmdbSetName.CheckedChanged
-        Form1.rescrapeList.tmdb_set_name = cbTmdbSetName.Checked
+    Private Sub cbMainTmdbSetName_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMainTmdbSetName.CheckedChanged
+        Form1.rescrapeList.tmdb_set_name = cbMainTmdbSetName.Checked
     End Sub
 
     ReadOnly Property FilesRenamable As Boolean
@@ -220,16 +224,16 @@
         Form1.rescrapeList.ArtFromFanartTv = cbFanartTv.Checked 
     End Sub
     
-    Private Sub cbMovSetArt_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMovSetArt.CheckedChanged
-        Form1.rescrapeList.missingmovsetart = cbMovSetArt.Checked 
+    Private Sub cbMissingMovSetArt_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMissingMovSetArt.CheckedChanged
+        Form1.rescrapeList.missingmovsetart = cbMissingMovSetArt.Checked 
     End Sub
 
     Private Sub cbDlTrailer_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbDlTrailer.CheckedChanged
         Form1.rescrapeList.Download_Trailer = cbDlTrailer.Checked 
     End Sub
 
-    Private Sub cbTitle_CheckedChanged( sender As Object,  e As EventArgs) Handles cbTitle.CheckedChanged
-        Form1.rescrapeList.title = cbTitle.Checked
+    Private Sub cbMainTitle_CheckedChanged( sender As Object,  e As EventArgs) Handles cbMainTitle.CheckedChanged
+        Form1.rescrapeList.title = cbMainTitle.Checked
     End Sub
 
     Private Sub frmBatchScraper_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
@@ -239,7 +243,7 @@
     Private Sub cb_ScrapeEmptyTags_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cb_ScrapeEmptyTags.CheckedChanged
         Dim ChkBox As CheckBox = Nothing
         Dim Ischecked As Boolean = cb_ScrapeEmptyTags.CheckState 
-        For Each xObject As Object In Me.GroupBox1.Controls
+        For Each xObject As Object In Me.gpbxMainTagsToRescrape.Controls
             If TypeOf xObject Is CheckBox Then
                 ChkBox = xObject
                 If Not ChkBox.Text.ToLower.Contains("tmdb") And Not ChkBox.Text.ToLower.Contains("trailer")Then
@@ -253,4 +257,5 @@
     Private Sub frmBatchScraper_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
     End Sub
+
 End Class

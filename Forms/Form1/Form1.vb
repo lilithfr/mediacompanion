@@ -1055,7 +1055,7 @@ Public Class Form1
                     cbBtnLink.Checked = False
                     cbBtnLink.BackColor = Color.Transparent
                 End If
-                tsmiSyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked
+                tsmiMov_SyncToXBMC.Enabled = cbBtnLink.Enabled And cbBtnLink.Checked
             End If
         End If
         XBMC_Link_Check_Timer.Start()
@@ -2911,80 +2911,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub Mov_OpenMovieFolderToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripOpenFolder.Click
-        Try
-            If Not workingMovieDetails.fileinfo.fullpathandfilename Is Nothing Then
-                Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
-            Else
-                MsgBox("There is no Movie selected to open")
-            End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub Mov_OpenFileToolStripMenuItem2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripViewNfo.Click
-        Try
-            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename, Pref.altnfoeditor)
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-
-    End Sub
-
-    Private Sub PosterBrowserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPosterBrowserAlt.Click
-        Try
-            Dim t As New frmMovieAltPosterArt
-            If Pref.MultiMonitoEnabled Then
-                Dim w As Integer = t.Width
-                Dim h As Integer = t.Height
-                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-                t.StartPosition = FormStartPosition.Manual
-                t.Width = w
-                t.Height = h
-            End If
-            t.ShowDialog()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub mov_ToolStripFanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripFanartBrowserAlt.Click
-        Try
-            Dim t As New frmMovieAltFanart
-            If Pref.MultiMonitoEnabled Then
-                Dim w As Integer = t.Width
-                Dim h As Integer = t.Height
-                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
-                t.StartPosition = FormStartPosition.Manual
-                t.Width = w
-                t.Height = h
-            End If
-            t.ShowDialog()
-            Try
-                If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
-                    util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-                Else
-                    PbMovieFanArt.Image = Nothing
-                End If
-
-            Catch ex As Exception
-#If SilentErrorScream Then
-                Throw ex
-#End If
-            End Try
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub EditMovieToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripEditMovieAlt.Click
-        Try
-            Call mov_Edit()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
 
     Private Sub mov_Edit()
         If outlinetxt.Text = "MC cannot find this file, either the file no longer exists, or MC cannot access the file path" Then
@@ -3162,6 +3088,7 @@ Public Class Form1
             If rescrapeList.stars       AndAlso movie.stars         = "" Then Return False
             If rescrapeList.studio      AndAlso movie.studios       = "" Then Return False
             If rescrapeList.country     AndAlso movie.countries     = "" Then Return False
+            If rescrapeList.metascore   AndAlso movie.metascore     = 0  Then Return False
             Exit For
         Next
         Return True
@@ -3423,15 +3350,15 @@ Public Class Form1
         Dim needtoload As Boolean = False
         Dim done As Boolean = False
         'If selectedRows.Count > 1 Then
-            mov_ToolStripPlayMovie.Visible = (selectedRows.Count = 1)
-            mov_ToolStripOpenFolder.Visible = (selectedRows.Count = 1)
-            mov_ToolStripViewNfo.Visible = (selectedRows.Count = 1)
-            ToolStripSeparator17.Visible = (selectedRows.Count = 1)
-            ToolStripSeparator24.Visible = (selectedRows.Count = 1)
-            mov_ToolStripFanartBrowserAlt.Visible = (selectedRows.Count = 1)
-            mov_ToolStripPosterBrowserAlt.Visible = (selectedRows.Count = 1)
-            mov_ToolStripEditMovieAlt.Visible = (selectedRows.Count = 1)
-            mov_ToolStripReloadFromCache.Visible = (selectedRows.Count = 1)
+            tsmiMov_PlayMovie.Visible = (selectedRows.Count = 1)
+            tsmiMov_OpenFolder.Visible = (selectedRows.Count = 1)
+            tsmiMov_ViewNfo.Visible = (selectedRows.Count = 1)
+            tsmiMov_Separator1.Visible = (selectedRows.Count = 1)
+            tsmiMov_Separator7.Visible = (selectedRows.Count = 1)
+            tsmiMov_FanartBrowserAlt.Visible = (selectedRows.Count = 1)
+            tsmiMov_PosterBrowserAlt.Visible = (selectedRows.Count = 1)
+            tsmiMov_EditMovieAlt.Visible = (selectedRows.Count = 1)
+            tsmiMov_ReloadFromCache.Visible = (selectedRows.Count = 1)
         'End If
 
         If Yield(yielding) Then Return
@@ -3485,7 +3412,7 @@ Public Class Form1
                 workingMovie.year = queryList(0).year
                 workingMovie.FolderSize = queryList(0).FolderSize
                 workingMovie.rootfolder = queryList(0).rootfolder 
-                mov_ToolStripPlayTrailer.Visible = Not queryList(0).MissingTrailer
+                tsmiMov_PlayTrailer.Visible = Not queryList(0).MissingTrailer
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -3720,7 +3647,7 @@ Public Class Form1
     End Sub
 
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
-        mov_ToolStripPlayTrailer.Visible = True
+        tsmiMov_PlayTrailer.Visible = True
 
         If e.Button = MouseButtons.Right Then
             Dim multiselect As Boolean = False
@@ -3731,21 +3658,21 @@ Public Class Form1
             'Otherwise, bring up the context menu for a single movie
 
             If multiselect = True Then
-                mov_ToolStripMovieName.BackColor = Color.Orange
-                mov_ToolStripMovieName.Text = "Multisave Mode"
-                mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-                mov_ToolStripPlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
+                tsmiMov_MovieName.BackColor = Color.Orange
+                tsmiMov_MovieName.Text = "Multisave Mode"
+                tsmiMov_MovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                tsmiMov_PlayTrailer.Visible = False    'multisave mode the "Play Trailer' is always hidden
             Else
 
                 Try
                     'update context menu with movie name & also if we show the 'Play Trailer' menu item
-                    mov_ToolStripMovieName.BackColor = Color.Honeydew
-                    mov_ToolStripMovieName.Text = "'" & DataGridViewMovies.SelectedCells(NFO_INDEX+4).Value.ToString & "'"
-                    mov_ToolStripMovieName.Font = New Font("Arial", 10, FontStyle.Bold)
+                    tsmiMov_MovieName.BackColor = Color.Honeydew
+                    tsmiMov_MovieName.Text = "'" & DataGridViewMovies.SelectedCells(NFO_INDEX+4).Value.ToString & "'"
+                    tsmiMov_MovieName.Font = New Font("Arial", 10, FontStyle.Bold)
 
                     Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
 
-                    mov_ToolStripPlayTrailer.Visible = Not movie.MissingTrailer
+                    tsmiMov_PlayTrailer.Visible = Not movie.MissingTrailer
                 Catch
                 End Try
             End If
@@ -7126,14 +7053,6 @@ Public Class Form1
         End Try
     End Sub
     
-    Private Sub ReloadItemToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripReloadFromCache.Click
-        Try
-            Call mov_FormPopulate()
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
     Private Sub tpMovWall_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovWall.LostFocus
         Try
             tpMovWall.Focus()
@@ -9232,7 +9151,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ExportmoviesMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripExportMovies.Click
+    Private Sub tsmiMov_ExportMovies_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ExportMovies.Click
         Try
             listoffilestomove.Clear()
             If DataGridViewMovies.SelectedRows.Count > 0 Then
@@ -9696,24 +9615,44 @@ Public Class Form1
             tv_CacheRefresh()   'ask to do a refresh or not, user may want to try both methods before do a refresh.
         End If
     End Sub
-    Private Sub PlayMovieToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPlayMovie.Click
-        Try
-            mov_Play("Movie")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+    
+    Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowNfoArt.MouseDown
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        TvDelShowNfoArt(Sh, False, NoDelArt)
     End Sub
-    Private Sub PlayTrailerToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripPlayTrailer.Click
-        Try
-            mov_Play("Trailer")
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+
+    Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowEpNfoArt.MouseDown 
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
+        Dim msgstring As String = "Warning:  This will Remove all nfo's" & If(Not NoDelArt, " and artwork", "") & " for this Show and Episodes"
+        msgstring &= vbcrlf & "and remove the show's folder from MC's ""List Of Separate Folders""." & vbCrLf 
+        msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
+        msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
+        msgstring &= vbCrLf & "Are your sure you wish to continue?"
+        Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
+        If x = MsgBoxResult.Cancel Then Exit Sub
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
+        TvDelEpNfoAst(Sh, seas, ep, True, NoDelArt)
+        TvDelShowNfoArt(Sh, True, NoDelArt)
     End Sub
-    Private Sub RescrapeThisShowToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
+
+    Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelEpNfoArt.MouseDown 
+        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
+        TVContextMenu.Close()
+        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
+        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
+        TvDelEpNfoAst(Sh, seas, ep, False, NoDelArt)
+    End Sub
+
+    Private Sub Tv_TreeViewContext_RescrapeShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
         tv_Rescrape()
     End Sub
-    Private Sub WatchedShowOrEpisodeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
+    Private Sub Tv_TreeViewContext_WatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
         Tv_MarkAs_Watched_UnWatched("1")
     End Sub
     Private Sub Tv_TreeViewContext_UnWatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
@@ -9760,39 +9699,6 @@ Public Class Form1
         End Try
 
         Debug.Print(Me.Controls.Count)
-    End Sub
-
-    Private Sub tsmiTvDelShowNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowNfoArt.MouseDown
-        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
-        TVContextMenu.Close()
-        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-        TvDelShowNfoArt(Sh, False, NoDelArt)
-    End Sub
-
-    Private Sub tsmiTvDelShowEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelShowEpNfoArt.MouseDown 
-        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
-        TVContextMenu.Close()
-        Dim msgstring As String = "Warning:  This will Remove all nfo's" & If(Not NoDelArt, " and artwork", "") & " for this Show and Episodes"
-        msgstring &= vbcrlf & "and remove the show's folder from MC's ""List Of Separate Folders""." & vbCrLf 
-        msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
-        msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
-        msgstring &= vbCrLf & "Are your sure you wish to continue?"
-        Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
-        If x = MsgBoxResult.Cancel Then Exit Sub
-        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
-        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
-        TvDelEpNfoAst(Sh, seas, ep, True, NoDelArt)
-        TvDelShowNfoArt(Sh, True, NoDelArt)
-    End Sub
-
-    Private Sub tsmiTvDelEpNfoArt_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tsmiTvDelEpNfoArt.MouseDown 
-        Dim NoDelArt As Boolean = (e.Button = MouseButtons.Right)
-        TVContextMenu.Close()
-        Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-        Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
-        Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
-        TvDelEpNfoAst(Sh, seas, ep, False, NoDelArt)
     End Sub
 
     Private Sub TvDelShowNfoArt(Show As TvShow, ByVal Ignore As Boolean, Optional ByVal NoDelArt As Boolean = False)
@@ -9890,8 +9796,8 @@ Public Class Form1
             If DataGridViewMovies.SelectedRows.Count = 0 Then
                 e.Cancel = True
             End If
-            RenameFilesToolStripMenuItem.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
-            tsmiOpenInMkvmergeGUI           .Enabled    = (Pref.MkvMergeGuiPath <> "")
+            tsmiRescrapeRenameFiles.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
+            tsmiMov_OpenInMkvmergeGUI           .Enabled    = (Pref.MkvMergeGuiPath <> "")
             tsmiRescrapeFrodo_Poster_Thumbs .Enabled    = Pref.FrodoEnabled
             tsmiRescrapeFrodo_Fanart_Thumbs .Enabled    = Pref.FrodoEnabled
         Catch ex As Exception
@@ -10074,10 +9980,6 @@ Public Class Form1
     '    Return actorthumb
     'End Function
 
-    Private Sub mov_ToolStripRescrapeAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mov_ToolStripRescrapeAll.Click
-        mov_RescrapeAllSelected()
-    End Sub
-
     Private Sub mov_RescrapeAllSelected()
         _rescrapeList.Field = Nothing
         _rescrapeList.FullPathAndFilenames.Clear()
@@ -10153,10 +10055,6 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Mov_ToolStripRemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Mov_ToolStripRemoveMovie.Click
-        Mov_RemoveMovie ()
-    End Sub
-
     Private Sub Mov_RemoveMovie()
         For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
             oMovies.RemoveMovieFromCache(row.Cells("fullpathandfilename").Value.ToString)
@@ -10165,12 +10063,6 @@ Public Class Form1
         DataGridViewMovies.ClearSelection
         oMovies.SaveMovieCache
         UpdateFilteredList
-    End Sub
-
-    Private Sub mov_ToolStripDeleteNfoArtwork_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles mov_ToolStripDeleteNfoArtwork.MouseDown
-        Dim DelArt As Boolean = (e.Button <> MouseButtons.Right)
-        MovieContextMenu.Close()
-        Mov_DeleteNfoArtwork(DelArt)
     End Sub
 
     Private Sub Mov_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
@@ -10287,7 +10179,7 @@ Public Class Form1
     End Sub
 
     Private Sub ApplyMovieFilters
-        tsmiConvertToFrodo.Enabled = (cbFilterGeneral.Text.RemoveAfterMatch="Pre-Frodo poster only") or (cbFilterGeneral.Text.RemoveAfterMatch="Both poster formats")
+        tsmiMov_ConvertToFrodo.Enabled = (cbFilterGeneral.Text.RemoveAfterMatch="Pre-Frodo poster only") or (cbFilterGeneral.Text.RemoveAfterMatch="Both poster formats")
         If ProgState = ProgramState.Other Then
             Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
             DisplayMovie
@@ -10813,85 +10705,198 @@ Public Class Form1
             cbMovieDisplay_MovieSet.SelectedItem = previouslySelected
         End If
     End Sub
+    
+    Private Sub tsmiMov_PlayMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PlayMovie.Click
+        Try
+            mov_Play("Movie")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMov_PlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PlayTrailer.Click
+        Try
+            mov_Play("Trailer")
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMov_OpenFolder_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiMov_OpenFolder.Click
+        Try
+            If Not workingMovieDetails.fileinfo.fullpathandfilename Is Nothing Then
+                Call util_OpenFolder(workingMovieDetails.fileinfo.fullpathandfilename)
+            Else
+                MsgBox("There is no Movie selected to open")
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMov_ViewNfo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewNfo.Click
+        Try
+            Utilities.NfoNotepadDisplay(workingMovieDetails.fileinfo.fullpathandfilename, Pref.altnfoeditor)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+
+    End Sub
+    
+    Private Sub tsmiMov_DeleteNfoArtwork_Click( sender As System.Object,  e As System.Windows.Forms.MouseEventArgs) Handles tsmiMov_DeleteNfoArtwork.MouseDown
+        Dim DelArt As Boolean = (e.Button <> MouseButtons.Right)
+        MovieContextMenu.Close()
+        Mov_DeleteNfoArtwork(DelArt)
+    End Sub
+
+    Private Sub tsmiMov_ReloadFromCache_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ReloadFromCache.Click
+        Try
+            Call mov_FormPopulate()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub tsmiMov_RemoveMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_RemoveMovie.Click
+        Mov_RemoveMovie ()
+    End Sub
+    
+    Private Sub tsmiMov_RescrapeAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_RescrapeAll.Click
+        mov_RescrapeAllSelected()
+    End Sub
+
+    Private Sub tsmiMov_FanartBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_FanartBrowserAlt.Click
+        Try
+            Dim t As New frmMovieAltFanart
+            If Pref.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
+            t.ShowDialog()
+            Try
+                If IO.File.Exists(workingMovieDetails.fileinfo.fanartpath) Then
+                    util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                Else
+                    PbMovieFanArt.Image = Nothing
+                End If
+
+            Catch ex As Exception
+#If SilentErrorScream Then
+                Throw ex
+#End If
+            End Try
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub tsmiMov_PosterBrowserAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PosterBrowserAlt.Click
+        Try
+            Dim t As New frmMovieAltPosterArt
+            If Pref.MultiMonitoEnabled Then
+                Dim w As Integer = t.Width
+                Dim h As Integer = t.Height
+                t.Bounds = screen.AllScreens(CurrentScreen).Bounds
+                t.StartPosition = FormStartPosition.Manual
+                t.Width = w
+                t.Height = h
+            End If
+            t.ShowDialog()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub tsmiMov_EditMovieAlt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_EditMovieAlt.Click
+        Try
+            Call mov_Edit()
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
 #Region "ToolStripmenu Movie Rescrape Specific"
 
-    Private Sub ToolStripMenuItem1_Click_1(sender As System.Object, e As System.EventArgs) Handles ToolStripMenuItem1.Click
+    Private Sub tsmiRescrapeTrailer_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeTrailer.Click
         Call mov_ScrapeSpecific("trailer")
     End Sub                 'trailer
-    Private Sub RenameFilesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RenameFilesToolStripMenuItem.Click
+    Private Sub tsmiRescrapeRenameFiles_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeRenameFiles.Click
         mov_ScrapeSpecific("rename_files")
     End Sub              'rename files
-    Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
+    Private Sub tsmiRescrapeTitle_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeTitle.Click
         Call mov_ScrapeSpecific("title")
     End Sub        'title
-    Private Sub ToolStripMenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem4.Click
+    Private Sub tsmiRescrapeplotClick(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeplot.Click
         Call mov_ScrapeSpecific("plot")
     End Sub        'plot
-    Private Sub ToolStripMenuItem5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem5.Click
+    Private Sub tsmiRescrapeTagline_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeTagline.Click
         Call mov_ScrapeSpecific("tagline")
     End Sub        'tagline
-    Private Sub ToolStripMenuItem6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem6.Click
+    Private Sub tsmiRescrapeDirector_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeDirector.Click
         Call mov_ScrapeSpecific("director")
     End Sub        'director
-    Private Sub ToolStripMenuItem7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem7.Click
+    Private Sub tsmiRescrapeCredits_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeCredits.Click
         Call mov_ScrapeSpecific("credits")
     End Sub        'Credits
-    Private Sub ToolStripMenuItem8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem8.Click
+    Private Sub tsmiRescrapeCert_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeCert.Click
         Call mov_ScrapeSpecific("mpaa")
     End Sub        'mpaa
-    Private Sub ToolStripMenuItem9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem9.Click
+    Private Sub tsmiRescrapeGenre_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeGenre.Click
         Call mov_ScrapeSpecific("genre")
     End Sub        'genre
-    Private Sub ToolStripMenuItem10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem10.Click
+    Private Sub tsmiRescrapeOutline_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeOutline.Click
         Call mov_ScrapeSpecific("outline")
     End Sub      'outline
-    Private Sub ToolStripMenuItem12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem12.Click
+    Private Sub tsmiRescrapeRuntimeImdb_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeRuntimeImdb.Click
         Call mov_ScrapeSpecific("runtime")
     End Sub      'runtime
-    Private Sub ToolStripMenuItem13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem13.Click
+    Private Sub tsmiRescrapeRuntimeFile_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeRuntimeFile.Click
         Call mov_ScrapeSpecific("runtime_file")
     End Sub      'runtime file
-    Private Sub ToolStripMenuItem14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem14.Click
+    Private Sub tsmiRescrapeStudio_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeStudio.Click
         Call mov_ScrapeSpecific("studio")
     End Sub      'studio
-    Private Sub ToolStripMenuItem15_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem15.Click
+    Private Sub tsmiRescrapeActors_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeActors.Click
         Call mov_ScrapeSpecific("actors")
     End Sub      'actors
-    Private Sub ToolStripMenuItem16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem16.Click
+    Private Sub tsmiRescrapeFanart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeFanart.Click
         Call mov_ScrapeSpecific("missingfanart")
     End Sub      'missingfanart
-    Private Sub ToolStripMenuItem17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem17.Click
+    Private Sub tsmiRescrapePoster_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapePoster.Click
         Call mov_ScrapeSpecific("missingposters")
     End Sub      'missingposters
-    Private Sub ToolStripMenuItem18_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem18.Click
+    Private Sub tsmiRescrapeMediaTags_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeMediaTags.Click
         Call mov_ScrapeSpecific("mediatags")
     End Sub      'mediatags
-    Private Sub ToolStripMenuItem19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem19.Click
+    Private Sub tsmiRescrapeRating_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeRating.Click
         Call mov_ScrapeSpecific("rating")
     End Sub      'rating
-    Private Sub ToolStripMenuItem20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem20.Click
+    Private Sub tsmiRescrapeVotes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeVotes.Click
         Call mov_ScrapeSpecific("votes")
     End Sub      'votes
-    Private Sub ToolStripMenuItem21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem21.Click
+    Private Sub tsmiRescrapeStars_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeStars.Click
         Call mov_ScrapeSpecific("stars")
     End Sub      'stars
-    Private Sub YearToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles YearToolStripMenuItem.Click
+    Private Sub tsmiRescrapeYear_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeYear.Click
         Call mov_ScrapeSpecific("year")
     End Sub  'year
-    Private Sub tsmiRescrapeKeyWords_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiRescrapeKeyWords.Click
+    Private Sub tsmiRescrapeKeyWords_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiRescrapeKeyWords.Click
         Call mov_ScrapeSpecific("TagsFromKeywords")
     End Sub    'TagsFromKeywords
-    Private Sub tsmiTMDbSetName_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiTMDbSetName.Click
+    Private Sub tsmiRescrapeTMDbSetName_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
     End Sub                         'tmdb set name
-    Private Sub tsmiSetWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiSetWatched.Click
+    Private Sub tsmiMov_SetWatched_Click( sender As Object,  e As EventArgs) Handles tsmiMov_SetWatched.Click
         Call mov_ScrapeSpecific("SetWatched")
     End Sub                           'set watched
-    Private Sub tsmiClearWatched_Click( sender As System.Object,  e As System.EventArgs) Handles tsmiClearWatched.Click
+    Private Sub tsmiMov_ClearWatched_Click( sender As Object,  e As EventArgs) Handles tsmiMov_ClearWatched.Click
         Call mov_ScrapeSpecific("ClearWatched")
     End Sub                       'clear watched
-    Private Sub tsmiDlTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiDlTrailer.Click
+    Private Sub tsmiDlTrailer_Click(ByVal sender As Object, ByVal e As EventArgs) Handles tsmiDlTrailer.Click
         Call mov_ScrapeSpecific("Download_Trailer")
     End Sub                  'Download Trailer
     Private Sub tsmiRescrapeCountry_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeCountry.Click
@@ -10900,6 +10905,9 @@ Public Class Form1
     Private Sub tsmiRescrapeTop250_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTop250.Click
         mov_ScrapeSpecific("top250")
     End Sub                                 'top250
+    Private Sub tsmiRescrapeMetascore_Click(sender As Object, e As EventArgs) Handles tsmiRescrapeMetascore.Click
+        mov_ScrapeSpecific("metascore")
+    End Sub                                 'metascore
     Private Sub tsmiRescrapePremiered_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapePremiered.Click
         mov_ScrapeSpecific("Premiered")
     End Sub                           'premiered
@@ -10927,9 +10935,9 @@ Public Class Form1
             clbx_MovieRoots.Items.Add(item.rpath, item.selected)
         Next
         AuthorizeCheck = False
-        ListBox15.Items.Clear()
+        lbx_MovOfflineFolders.Items.Clear()
         For Each item In Pref.offlinefolders
-            ListBox15.Items.Add(item)
+            lbx_MovOfflineFolders.Items.Add(item)
         Next
         moviefolderschanged = False
     End Sub
@@ -11481,6 +11489,8 @@ Public Class Form1
                 Call mov_ScrapeSpecific("TagsFromKeywords")
             Case "Top 250"
                 Call mov_ScrapeSpecific("top250")
+            Case "Metascore"
+                Call mov_ScrapeSpecific("metascore")
             Case "Votes"
                 Call mov_ScrapeSpecific("votes")
         End Select
@@ -13921,11 +13931,11 @@ Public Class Form1
     End Sub
 
     'Offline Movie Folders
-    Private Sub Button107_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button107.Click
+    Private Sub btn_OfflineMovAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_OfflineMovAdd.Click
         Try
             'listbox15
-            If ListBox15.SelectedItem <> Nothing Then
-                Dim tempstring As String = TextBox44.Text
+            If lbx_MovOfflineFolders.SelectedItem <> Nothing Then
+                Dim tempstring As String = tb_OfflineMovName.Text
                 tempstring = tempstring.Replace("?", "")
                 tempstring = tempstring.Replace("/", "")
                 tempstring = tempstring.Replace("\", "")
@@ -13936,7 +13946,7 @@ Public Class Form1
                 tempstring = tempstring.Replace("*", "")
                 If tempstring.Length <> 0 Then
                     Try
-                        Dim temppath As String = IO.Path.Combine(ListBox15.SelectedItem, tempstring)
+                        Dim temppath As String = IO.Path.Combine(lbx_MovOfflineFolders.SelectedItem, tempstring)
                         Dim f As New IO.DirectoryInfo(temppath)
                         If Not f.Exists Then
                             IO.Directory.CreateDirectory(temppath)
@@ -13956,9 +13966,9 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button108_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button108.Click
+    Private Sub btn_OfflineMovLoadList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_OfflineMovLoadList.Click
         Try
-            If ListBox15.SelectedItem <> Nothing Then
+            If lbx_MovOfflineFolders.SelectedItem <> Nothing Then
                 Dim tempint As Integer = 0
                 Dim textfilename As String = ""
                 Dim filebrowser As New OpenFileDialog
@@ -13986,7 +13996,7 @@ Public Class Form1
                             tempstring = tempstring.Replace("*", "")
                             If tempstring.Length <> 0 Then
                                 Try
-                                    Dim temppath As String = IO.Path.Combine(ListBox15.SelectedItem, tempstring)
+                                    Dim temppath As String = IO.Path.Combine(lbx_MovOfflineFolders.SelectedItem, tempstring)
                                     Dim f As New IO.DirectoryInfo(temppath)
                                     If Not f.Exists Then
                                         tempint += 1
@@ -14014,7 +14024,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button102_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button102.Click
+    Private Sub btn_OfflineMovFolderAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_OfflineMovFolderAdd.Click
         Try
             'add offline movie folder browser
             Dim allok As Boolean = True
@@ -14028,13 +14038,13 @@ Public Class Form1
             If fb.ShowDialog = Windows.Forms.DialogResult.OK Then
                 thefoldernames = (fb.SelectedPath)
                 Pref.lastpath = thefoldernames
-                For Each item As Object In ListBox15.Items
+                For Each item As Object In lbx_MovOfflineFolders.Items
                     If thefoldernames.ToString = item.ToString Then allok = False
                 Next
 
                 If allok = True Then
-                    ListBox15.Items.Add(thefoldernames)
-                    ListBox15.Refresh()
+                    lbx_MovOfflineFolders.Items.Add(thefoldernames)
+                    lbx_MovOfflineFolders.Refresh()
                 Else
                     MsgBox("        Folder Already Exists")
                 End If
@@ -14044,11 +14054,11 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub Button101_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button101.Click
+    Private Sub btn_OfflineMovFolderRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_OfflineMovFolderRemove.Click
         Try
             'remove selected offline movie folders
-            While ListBox15.SelectedItems.Count > 0
-                ListBox15.Items.Remove(ListBox15.SelectedItems(0))
+            While lbx_MovOfflineFolders.SelectedItems.Count > 0
+                lbx_MovOfflineFolders.Items.Remove(lbx_MovOfflineFolders.SelectedItems(0))
             End While
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -14070,7 +14080,7 @@ Public Class Form1
             Next
             If add = True Then folderstoadd.Add(item)
         Next
-        For Each item In ListBox15.Items
+        For Each item In lbx_MovOfflineFolders.Items
             Dim add As Boolean = True
             For Each folder In Pref.offlinefolders
                 If folder = item Then add = False
@@ -14089,7 +14099,7 @@ Public Class Form1
         Next
         For Each item In Pref.offlinefolders
             Dim remove As Boolean = True
-            For Each folder In ListBox15.Items
+            For Each folder In lbx_MovOfflineFolders.Items
                 If folder = item Then remove = False
             Next
             If remove = True Then offlinefolderstoremove.Add(item)
@@ -17509,7 +17519,7 @@ Public Class Form1
         Pref.usefoldernames = isusefolder
     End Sub
 
-    Private Sub tsmiOpenInMkvmergeGUI_Click(sender As Object, e As EventArgs) Handles tsmiOpenInMkvmergeGUI.Click
+    Private Sub tsmiMov_OpenInMkvmergeGUI_Click(sender As Object, e As EventArgs) Handles tsmiMov_OpenInMkvmergeGUI.Click
 
         If DataGridViewMovies.SelectedRows.Count > 10 Then
             If MsgBox("Are you sure you want to open that many?", MsgBoxStyle.YesNo, "About to open " & DataGridViewMovies.SelectedRows.Count & " instances of Mkvmerge Gui") <> MsgBoxResult.Ok Then Exit Sub
@@ -17524,7 +17534,7 @@ Public Class Form1
         BckWrkCheckNewVersion.RunWorkerAsync(True)
     End Sub
 
-    Private Sub tsmiConvertToFrodo_Click(sender As Object, e As EventArgs) Handles tsmiConvertToFrodo.Click
+    Private Sub tsmiMov_ConvertToFrodo_Click(sender As Object, e As EventArgs) Handles tsmiMov_ConvertToFrodo.Click
         Try
             Call mov_ScrapeSpecific("Convert_To_Frodo")
         Catch ex As Exception
@@ -17852,7 +17862,7 @@ Public Class Form1
     '    UcGenPref_Proxy1.pop()
     'End Sub
 
-    Private Sub tsmiSyncToXBMC_Click(sender As Object, e As EventArgs) Handles tsmiSyncToXBMC.Click
+    Private Sub tsmiMov_SyncToXBMC_Click(sender As Object, e As EventArgs) Handles tsmiMov_SyncToXBMC.Click
         Try
             Call mov_ScrapeSpecific("Xbmc_Sync")
         Catch ex As Exception
