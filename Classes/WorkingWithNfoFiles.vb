@@ -2500,33 +2500,33 @@ Public Class WorkingWithNfoFiles
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
-                    newmovie.fullmoviebody.year = "1850"
-                    newmovie.fullmoviebody.top250 = "0"
-                    newmovie.fullmoviebody.credits = ""
-                    newmovie.fullmoviebody.director = ""
-                    newmovie.fullmoviebody.stars = ""
-                    newmovie.fullmoviebody.filename = ""
-                    newmovie.fullmoviebody.genre = ""
+                    newmovie.fullmoviebody.title        = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
+                    newmovie.fullmoviebody.year         = "1850"
+                    newmovie.fullmoviebody.top250       = "0"
+                    newmovie.fullmoviebody.credits      = ""
+                    newmovie.fullmoviebody.director     = ""
+                    newmovie.fullmoviebody.stars        = ""
+                    newmovie.fullmoviebody.filename     = ""
+                    newmovie.fullmoviebody.genre        = ""
                     newmovie.fullmoviebody.tag.Clear()    ' = ""
-                    newmovie.fullmoviebody.imdbid = ""
-                    newmovie.fullmoviebody.tmdbid = ""
-                    newmovie.fullmoviebody.mpaa = ""
-                    newmovie.fullmoviebody.outline = "This nfo file could not be loaded"
-                    newmovie.fullmoviebody.playcount = "0"
-                    newmovie.fullmoviebody.lastplayed = ""
-                    newmovie.fullmoviebody.plot = errorstring
-                    newmovie.fullmoviebody.premiered = ""
-                    newmovie.fullmoviebody.rating = ""
-                    newmovie.fullmoviebody.usrrated = "0"
-                    newmovie.fullmoviebody.runtime = ""
-                    newmovie.fullmoviebody.studio = ""
-                    newmovie.fullmoviebody.tagline = "Rescraping the movie might fix the problem"
-                    newmovie.fullmoviebody.trailer = ""
-                    newmovie.fullmoviebody.votes = ""
-                    newmovie.fullmoviebody.sortorder = ""
-                    newmovie.fullmoviebody.country = ""
-                    newmovie.fileinfo.createdate = ""
+                    newmovie.fullmoviebody.imdbid       = ""
+                    newmovie.fullmoviebody.tmdbid       = ""
+                    newmovie.fullmoviebody.mpaa         = ""
+                    newmovie.fullmoviebody.outline      = "This nfo file could not be loaded"
+                    newmovie.fullmoviebody.playcount    = "0"
+                    newmovie.fullmoviebody.lastplayed   = ""
+                    newmovie.fullmoviebody.plot         = errorstring
+                    newmovie.fullmoviebody.premiered    = ""
+                    newmovie.fullmoviebody.rating       = ""
+                    newmovie.fullmoviebody.usrrated     = "0"
+                    newmovie.fullmoviebody.runtime      = ""
+                    newmovie.fullmoviebody.studio       = ""
+                    newmovie.fullmoviebody.tagline      = "Rescraping the movie might fix the problem"
+                    newmovie.fullmoviebody.trailer      = ""
+                    newmovie.fullmoviebody.votes        = ""
+                    newmovie.fullmoviebody.sortorder    = ""
+                    newmovie.fullmoviebody.country      = ""
+                    newmovie.fileinfo.createdate        = ""
                     Return newmovie
                 End Try
                 Dim thisresult As XmlNode = Nothing
@@ -2625,7 +2625,7 @@ Public Class WorkingWithNfoFiles
                             'If newmovie.fullmoviebody.tag = "" Then
                             '    newmovie.fullmoviebody.tag = thisresult.InnerText
                             'Else
-                            '    newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & " / " & thisresult.InnerText
+                            '    newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & ", " & thisresult.InnerText
                             'End If
                         Case "id"
                             Dim myresult As String = thisresult.InnerText
@@ -3199,6 +3199,14 @@ Public Class WorkingWithNfoFiles
                 End If
 
                 stage = 38
+                'Dim strArr3() As String
+                'strArr3 = movietosave.fullmoviebody.tag.Split(",")
+                'For count = 0 To strArr3.Length - 1
+                '    child = doc.CreateElement("tag")
+                '    strArr3(count) = strArr3(count).Trim
+                '    child.InnerText = strArr3(count)
+                '    root.AppendChild(child)
+                'Next
                 If movietosave.fullmoviebody.tag.Count <> 0 Then
                     For Each tags In movietosave.fullmoviebody.tag
                         child = doc.CreateElement("tag")
@@ -3212,12 +3220,12 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
 
                 stage = 40
-                    Dim strArr3() As String
-                    strArr3 = movietosave.fullmoviebody.director.Split("/")
-                    For count = 0 To strArr3.Length - 1
+                    Dim strArr9() As String
+                    strArr9 = movietosave.fullmoviebody.director.Split("/")
+                    For count = 0 To strArr9.Length - 1
                         child = doc.CreateElement("director")
-                        strArr3(count) = strArr3(count).Trim
-                        child.InnerText = strArr3(count)
+                        strArr9(count) = strArr9(count).Trim
+                        child.InnerText = strArr9(count)
                         root.AppendChild(child)
                     Next
 

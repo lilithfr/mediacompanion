@@ -559,9 +559,9 @@ Public Class frmPreferences
 
         'MC TVDB Scraper Options
         If Pref.sortorder = "dvd" Then
-            rbTvEpSortDVD.Checked = True
+            rbTvEpSortDVD       .Checked = True
         Else
-            rbTvEpSortDefault.Checked = True
+            rbTvEpSortDefault   .Checked = True
         End If
         cbTvSeriesActorstoEpisodeActors                      .Checked    = Pref.copytvactorthumbs
         cbtvdbIMDbRating                .Checked    = Pref.tvdbIMDbRating
@@ -571,7 +571,7 @@ Public Class frmPreferences
         cbTvDlFanart                    .Checked    = Pref.tvdlfanart
         cbTvDlSeasonArt                 .Checked    = Pref.tvdlseasonthumbs
         cbTvDlXtraFanart                .Checked    = Pref.dlTVxtrafanart
-        cmbxTvXtraFanartQty.SelectedIndex = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
+        cmbxTvXtraFanartQty.SelectedIndex           = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
         cbTvDlFanartTvArt               .Checked    = Pref.TvDlFanartTvArt
         cbTvFanartTvFirst               .Checked    = Pref.TvFanartTvFirst
         'season-all
@@ -611,19 +611,19 @@ Public Class frmPreferences
         CheckBox_tv_EpisodeRenameCase   .Checked    = Pref.eprenamelowercase
         cb_TvRenameReplaceSpace         .Checked    = Pref.TvRenameReplaceSpace
         If Pref.TvRenameReplaceSpaceDot Then
-            rb_TvRenameReplaceSpaceDot.Checked = True
+            rb_TvRenameReplaceSpaceDot.Checked      = True
         Else
             rb_TvRenameReplaceSpaceUnderScore.Checked = True
         End If
 
 
         'Missing Ep Options
-        cbTvMissingSpecials.Checked    = Pref.ignoreMissingSpecials
+        cbTvMissingSpecials             .Checked    = Pref.ignoreMissingSpecials
         cb_TvMissingEpOffset            .Checked    = Pref.TvMissingEpOffset
 
         'Options
         ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
-        cbTvUse_XBMC_TVDB_Scraper  .Checked    = Pref.tvshow_useXBMC_Scraper
+        cbTvUse_XBMC_TVDB_Scraper       .Checked    = Pref.tvshow_useXBMC_Scraper
         CheckBox20                      .Checked    = Pref.enabletvhdtags
         CheckBox17                      .Checked    = Pref.disabletvlogs
         cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
@@ -2343,6 +2343,7 @@ End Sub
         If PrefsLoad Then Exit Sub
         Try
             Pref.MaxTagsInFilter = nudMaxTagsInFilter.Value
+            If Pref.MaxTagsInFilter > 999 AndAlso Pref.MinTagsInFilter < 2 Then nudMinTagsInFilter.Value = 2
             Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -2533,7 +2534,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub RadioButton42_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvEpSortDVD.CheckedChanged
+    Private Sub rbTvEpSortDVD_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvEpSortDVD.CheckedChanged
         If prefsload Then Exit Sub
         Try
             If rbTvEpSortDVD.Checked = True Then

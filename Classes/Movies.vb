@@ -50,12 +50,13 @@ Public Class Movies
     Public Event FileDownloadFailed      (ByVal ex As Exception)
 
     Private _certificateMappings    As CertificateMappings
-    Private _actorDb                As New List(Of ActorDatabase)
-    Public _tmpActorDb              As New List(Of ActorDatabase)
+    Private _actorDb                As New List(Of Databases)
+    Public _tmpActorDb              As New List(Of Databases)
     Private _directorDb             As New List(Of DirectorDatabase)
     Public _tmpDirectorDb           As New List(Of DirectorDatabase)
     Private _moviesetDb             As New List(Of MovieSetInfo)
-    Private _tagDb                  As New List(Of String)
+    Private _tagDb                  As New List(Of TagDatabase)
+    Public _tmpTagDb                As New List(Of TagDatabase)
     Public _tmpMoviesetDb           As New List(Of MovieSetInfo)
     Public Shared movRebuildCaches  As Boolean = False
 
@@ -619,7 +620,6 @@ Public Class Movies
             Else
                 q = From x In q Order by x.ActorName Ascending , x.NumFilms  Descending
             End If
-
             Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxActorsInFilter
         End Get
     End Property    
@@ -648,6 +648,50 @@ Public Class Movies
     Sub ActorsFilter_AddIfMissing(value As String)
         If Not ActorsFilter.Any(Function(x) x.StartsWith(value)) Then
             ActorsFilter_AlsoInclude.Add(value)
+        End If
+    End Sub
+    
+    Public ReadOnly Property TagsFilter_Preferences As IEnumerable(Of String)
+        Get
+            Dim q = From x In TagDb 
+                Group By 
+                    x.TagName Into NumFilms=Count 
+                Where 
+                    NumFilms>= Pref.MinTagsInFilter
+            
+            If Pref.MovFiltersTagsOrder = 0 Then 
+                q = From x In q Order by x.NumFilms  Descending, x.TagName Ascending
+            Else
+                q = From x In q Order by x.TagName Ascending , x.NumFilms  Descending
+            End If
+            Return From x In q Select x.TagName & " (" & x.NumFilms.ToString & ")" Take Pref.MaxTagsInFilter
+        End Get
+    End Property    
+    
+    Public ReadOnly Property TagsFilter As List(Of String)
+        Get
+            Dim r = (From x In TagsFilter_Preferences).Union(From x In TagsFilter_Extras) 
+            Return r.ToList
+        End Get
+    End Property    
+    
+    Public ReadOnly Property TagsFilter_Extras As IEnumerable(Of String)
+        Get
+            Dim q = From x In TagDB 
+                Group By 
+                    x.TagName Into NumFilms=Count 
+                Where 
+                    TagsFilter_AlsoInclude.Contains(IIf(IsNothing(TagName),"N/A",TagName))
+            
+            Return From x In q Select x.TagName & " (" & x.NumFilms.ToString & ")"
+        End Get
+    End Property    
+
+    Property TagsFilter_AlsoInclude As New List(Of String)
+
+    Sub TagsFilter_AddIfMissing(value As String)
+        If Not TagsFilter.Any(Function(x) x.StartsWith(value)) Then
+            TagsFilter_AlsoInclude.Add(value)
         End If
     End Sub
 
@@ -991,7 +1035,7 @@ Public Class Movies
         Next
     End Sub
 
-    Public ReadOnly Property ActorDb As List(Of ActorDatabase)
+    Public ReadOnly Property ActorDb As List(Of Databases)
         Get
             Return _actorDb
         End Get
@@ -1009,7 +1053,7 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property TagDB As List(Of String)
+    Public ReadOnly Property TagDB As List(Of TagDatabase)
         Get
             Return _tagDb
         End Get
@@ -2181,7 +2225,7 @@ Public Class Movies
         LoadPersonCache(_directorDb,"director",Pref.workingProfile.DirectorCache)
     End Sub
 
-    Sub LoadPersonCache(peopleDb As List(Of ActorDatabase),typeName As String,  fileName As String)
+    Sub LoadPersonCache(peopleDb As List(Of Databases),typeName As String,  fileName As String)
         peopleDb.Clear()
         If Not File.Exists(fileName) Then Exit Sub
         Dim peopleList As New XmlDocument
@@ -2201,7 +2245,7 @@ Public Class Movies
                                 movieId = detail.InnerText
                         End Select
                     Next
-                    peopleDb.Add(New ActorDatabase(name, movieId))
+                    peopleDb.Add(New Databases(name, movieId))
             End Select
         Next
     End Sub
@@ -2278,8 +2322,20 @@ Public Class Movies
         Dim thisresult As XmlNode = Nothing
         For Each thisresult In peopleList("tag_cache")
             Select Case thisresult.Name
-                Case "tag"
-                    _tagDb.Add(thisresult.InnerText)
+                Case "Tag"
+                    Dim TagTitle = ""
+                    Dim movieId = ""
+                    Dim detail As XmlNode = Nothing
+                    For Each detail In thisresult.ChildNodes
+                        Select Case detail.Name
+                            Case "TagTitle"
+                                TagTitle = detail.InnerText
+                            Case "id"
+                                movieId = detail.InnerText
+                        End Select
+                    Next
+                    _tagDb.Add(New TagDatabase(TagTitle, movieId))
+                    '_tagDb.Add(thisresult.InnerText)
             End Select
         Next
     End Sub
@@ -2309,8 +2365,7 @@ Public Class Movies
         End If
         Return moviesetID
     End Function
-
-
+    
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Pref.workingProfile.actorcache)
     End Sub
@@ -2323,7 +2378,7 @@ Public Class Movies
         SaveMovieSetCache(MovieSetDB, "movieset", Pref.workingProfile.moviesetcache)
     End Sub
 
-    Sub SavePersonCache(peopleDb As List(Of ActorDatabase), typeName As String, fileName As String)
+    Sub SavePersonCache(peopleDb As List(Of Databases), typeName As String, fileName As String)
         'Threading.Monitor.Enter(Me)
         Dim doc As New XmlDocument
 
@@ -2335,10 +2390,10 @@ Public Class Movies
 
         Dim root  As XmlElement
         Dim child As XmlElement
+        Dim childchild As XmlElement
 
         root = doc.CreateElement(typeName & "_cache")
-
-        Dim childchild As XmlElement
+        
         Try
         For Each actor In peopleDb
             child = doc.CreateElement(typeName)
@@ -2350,7 +2405,6 @@ Public Class Movies
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
-
         doc.AppendChild(root)
 
         Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
@@ -2364,7 +2418,6 @@ Public Class Movies
 
     Sub SavePersonCache(peopleDb As List(Of DirectorDatabase), typeName As String, fileName As String)
         Dim doc As New XmlDocument
-
         Dim thispref As XmlNode = Nothing
         Dim xmlproc  As XmlDeclaration
 
@@ -2373,11 +2426,10 @@ Public Class Movies
 
         Dim root  As XmlElement
         Dim child As XmlElement
-
-        root = doc.CreateElement(typeName & "_cache")
-
         Dim childchild As XmlElement
 
+        root = doc.CreateElement(typeName & "_cache")
+        
         For Each actor In peopleDb
             child = doc.CreateElement(typeName)
             childchild = doc.CreateElement("name")
@@ -2388,7 +2440,6 @@ Public Class Movies
             child.AppendChild(childchild)
             root.AppendChild(child)
         Next
-
         doc.AppendChild(root)
 
         Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
@@ -2455,17 +2506,22 @@ Public Class Movies
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
 
-        Dim root  As XmlElement
-        Dim child As XmlElement
+        Dim root        As XmlElement
+        Dim child       As XmlElement
+        Dim childchild  As XmlElement
 
         root = doc.CreateElement("tag_cache")
         
         For Each tagtosave In TagDb
-            child = doc.CreateElement("tag")
-            child.InnerText = tagtosave.trim
+            child = doc.CreateElement("Tag")
+            childchild = doc.CreateElement("TagTitle")
+            childchild.InnerText = tagtosave.TagName.Trim
+            child.AppendChild(childchild)
+            childchild = doc.CreateElement("id")
+            childchild.InnerText = tagtosave.movieid
+            child.AppendChild(childchild)
             root.AppendChild(child)
         Next
-
         doc.AppendChild(root)
 
         Dim output As New XmlTextWriter(Utilities.applicationPath & "\settings\tagcache.xml", System.Text.Encoding.UTF8)
@@ -2473,6 +2529,7 @@ Public Class Movies
         doc.WriteTo(output)
         output.Close()
     End Sub
+
     Public Sub RebuildCaches
         'If Pref.UseMultipleThreads Then
         '    movRebuildCaches = False
@@ -2521,40 +2578,27 @@ Public Class Movies
             i += 1
             PercentDone = CalcPercentDone(i, MovieCache.Count)
             ReportProgress("Rebuilding caches " & i & " of " & MovieCache.Count)
-
-            'Dim m = New Movie(Me,movie.fullpathandfilename)
-
-            'm.LoadNFO(False)
-            'm.UpdateActorCacheFromEmpty()
-            'm.UpdateDirectorCacheFromEmpty()
+            
             For Each act In movie.Actorlist
-                _actorDb.Add(New ActorDatabase(act.actorname, movie.id))
+                _actorDb.Add(New Databases(act.actorname, movie.id))
             Next
             If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
                 If _tmpMoviesetDb.Count = 0 Then
                     _tmpMoviesetDb.Add(movie.MovieSet)
                 Else
-                    'For each mset In _tmpMoviesetDb
                     Dim q = From item In _tmpMoviesetDb Where item.MovieSetName = movie.MovieSet.MovieSetName
                     If q.Count = 0 Then _tmpMoviesetDb.Add(movie.MovieSet)
                 End If
             End If
-            'Dim tmp2 As New List(Of CollectionMovie)
-            'For Each mset In MovSetDbTmp
-            '    'If movie.MovieSet.MovieSetId = "" Then Exit For
-            '    If movie.MovieSet.MovieSetId = mset.MovieSetId Then
-            '        tmp2.AddRange(mset.Collection)
-            '        Exit For
-            '    End If
-            'Next
-            'If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then _moviesetDb.Add(New MovieSetInfo(movie.MovieSet.MovieSetName, movie.MovieSet.MovieSetId, tmp2))
+
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))
             Next
 
             For each t In movie.movietag
-                If Not _tagdb.Contains(t) Then _tagDb.Add(t)
+                _tagDb.Add(New TagDatabase(t, movie.id))
+                'If Not _tagdb.Contains(t) Then _tagDb.Add(t)
             Next
 
             If Cancelled Then Exit Sub
@@ -2870,7 +2914,7 @@ Public Class Movies
         Return ApplyPeopleFilter(DirectorDb, recs, ccb)
     End Function
 
-    Function ApplyPeopleFilter(PeopleDb As List(Of ActorDatabase), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+    Function ApplyPeopleFilter(PeopleDb As List(Of Databases), recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
 
         Dim fi As New FilteredItems(ccb)
 

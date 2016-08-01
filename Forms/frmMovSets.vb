@@ -4,7 +4,7 @@ Imports System.Windows.Forms
 Imports Media_Companion
 
 Public Class frmMovSets
-    Public Collection As List(Of MovieSetItem)
+    Public Collection As List(Of MovieSetDatabase)
     Public CollectionTitle As String = ""
 
     Public Sub Init()

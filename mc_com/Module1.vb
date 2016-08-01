@@ -22,7 +22,7 @@ Module Module1
     Dim profile As String = "default"
     Dim basictvlist As New List(Of basictvshownfo)
     Dim defaultOfflineArt As String = ""
-    Dim actorDB As New List(Of ActorDatabase)
+    Dim actorDB As New List(Of Databases)
     Dim showstoscrapelist As New List(Of String)
     Dim newEpisodeList As New List(Of episodeinfo)
     Dim defaultPoster As String = ""

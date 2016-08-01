@@ -2538,6 +2538,7 @@ Public Class Form1
         cbFilterActor   .UpdateItems(oMovies.ActorsFilter   )
         cbFilterDirector.UpdateItems(oMovies.DirectorsFilter)
         cbFilterSet     .UpdateItems(oMovies.SetsFilter     )
+        cbFilterTag     .UpdateItems(oMovies.TagsFilter     )
         Dim query = From c As Control In SplitContainer5.Panel2.Controls Where c.Name.IndexOf("cbFilter") = 0 And c.GetType().Namespace = "MC_UserControls"
         For Each c As Object In query
             c.Reset()
@@ -10489,25 +10490,26 @@ Public Class Form1
         Assign_FilterGeneral
         UpdateMinMaxMovieFilters
 
-        If cbFilterCountries            .Visible Then cbFilterCountries            .UpdateItems( oMovies.CountriesFilter             )
-        If cbFilterStudios              .Visible Then cbFilterStudios              .UpdateItems (oMovies.StudiosFilter               )
-        If cbFilterGenre                .Visible Then cbFilterGenre                .UpdateItems( oMovies.GenresFilter                )
-        If cbFilterCertificate          .Visible Then cbFilterCertificate          .UpdateItems( oMovies.CertificatesFilter          )
-        If cbFilterSet                  .Visible Then cbFilterSet                  .UpdateItems( oMovies.SetsFilter                  )
-        If cbFilterTag                  .Visible Then cbFilterTag                  .UpdateItems( oMovies.TagFilter                   )
-        If cbFilterResolution           .Visible Then cbFilterResolution           .UpdateItems( oMovies.ResolutionFilter            )
-        If cbFilterVideoCodec           .Visible Then cbFilterVideoCodec           .UpdateItems( oMovies.VideoCodecFilter            )
-        If cbFilterAudioCodecs          .Visible Then cbFilterAudioCodecs          .UpdateItems( oMovies.AudioCodecsFilter           )
-        If cbFilterAudioChannels        .Visible Then cbFilterAudioChannels        .UpdateItems( oMovies.AudioChannelsFilter         )
-        If cbFilterAudioBitrates        .Visible Then cbFilterAudioBitrates        .UpdateItems( oMovies.AudioBitratesFilter         )
-        If cbFilterNumAudioTracks       .Visible Then cbFilterNumAudioTracks       .UpdateItems( oMovies.NumAudioTracksFilter        )
-        If cbFilterAudioLanguages       .Visible Then cbFilterAudioLanguages       .UpdateItems( oMovies.AudioLanguagesFilter        )
-        If cbFilterAudioDefaultLanguages.Visible Then cbFilterAudioDefaultLanguages.UpdateItems( oMovies.AudioDefaultLanguagesFilter )
-        If cbFilterActor                .Visible Then cbFilterActor                .UpdateItems( oMovies.ActorsFilter                )
-        If cbFilterDirector             .Visible Then cbFilterDirector             .UpdateItems( oMovies.DirectorsFilter             )
-        If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang         .UpdateItems( oMovies.SubTitleLangFilter          )
-        If cbFilterRootFolder           .Visible Then cbFilterRootFolder           .UpdateItems( oMovies.RootFolderFilter            )
-        If cbFilterUserRated            .Visible Then cbFilterUserRated            .UpdateItems( oMovies.UsrRated                    )
+        If cbFilterCountries            .Visible Then cbFilterCountries             .UpdateItems( oMovies.CountriesFilter               )
+        If cbFilterStudios              .Visible Then cbFilterStudios               .UpdateItems (oMovies.StudiosFilter                 )
+        If cbFilterGenre                .Visible Then cbFilterGenre                 .UpdateItems( oMovies.GenresFilter                  )
+        If cbFilterCertificate          .Visible Then cbFilterCertificate           .UpdateItems( oMovies.CertificatesFilter            )
+        If cbFilterSet                  .Visible Then cbFilterSet                   .UpdateItems( oMovies.SetsFilter                    )
+        If cbFilterTag                  .Visible Then cbFilterTag                   .UpdateItems( oMovies.TagFilter                     )
+        If cbFilterResolution           .Visible Then cbFilterResolution            .UpdateItems( oMovies.ResolutionFilter              )
+        If cbFilterVideoCodec           .Visible Then cbFilterVideoCodec            .UpdateItems( oMovies.VideoCodecFilter              )
+        If cbFilterAudioCodecs          .Visible Then cbFilterAudioCodecs           .UpdateItems( oMovies.AudioCodecsFilter             )
+        If cbFilterAudioChannels        .Visible Then cbFilterAudioChannels         .UpdateItems( oMovies.AudioChannelsFilter           )
+        If cbFilterAudioBitrates        .Visible Then cbFilterAudioBitrates         .UpdateItems( oMovies.AudioBitratesFilter           )
+        If cbFilterNumAudioTracks       .Visible Then cbFilterNumAudioTracks        .UpdateItems( oMovies.NumAudioTracksFilter          )
+        If cbFilterAudioLanguages       .Visible Then cbFilterAudioLanguages        .UpdateItems( oMovies.AudioLanguagesFilter          )
+        If cbFilterAudioDefaultLanguages.Visible Then cbFilterAudioDefaultLanguages .UpdateItems( oMovies.AudioDefaultLanguagesFilter   )
+        If cbFilterActor                .Visible Then cbFilterActor                 .UpdateItems( oMovies.ActorsFilter                  )
+        If cbFilterDirector             .Visible Then cbFilterDirector              .UpdateItems( oMovies.DirectorsFilter               )
+        If cbFilterTag                  .Visible Then cbFilterTag                   .UpdateItems( oMovies.TagsFilter                    )
+        If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang          .UpdateItems( oMovies.SubTitleLangFilter            )
+        If cbFilterRootFolder           .Visible Then cbFilterRootFolder            .UpdateItems( oMovies.RootFolderFilter              )
+        If cbFilterUserRated            .Visible Then cbFilterUserRated             .UpdateItems( oMovies.UsrRated                      )
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Try
@@ -12677,9 +12679,24 @@ Public Class Form1
         MovSetDgvLoad()
         MovSetArtworkCheck()
         TagListBox.Items.Clear()
+        'Here we clean up Pref.MovieTags, removing any that are also in the Tags database.
+        Dim ToRemove As New List(Of String)
         For Each mtag In Pref.movietags
-            If Not IsNothing(mtag) Then TagListBox.Items.Add(mtag)
+            If Not IsNothing(mtag) 
+                Dim q = From t In oMovies.TagDB Where t.TagName = mtag
+                If q.Count = 0  Then
+                    TagListBox.Items.Add(mtag)
+                Else
+                    ToRemove.Add(mtag)
+                End If
+            End If
         Next
+        'If any duplicate tags, remove them from Pref.MovieTags
+        If ToRemove.Count > 0 Then
+            For each t In ToRemove
+                Pref.movietags.Remove(t)
+            Next
+        End If
         CurrentMovieTags.Items.Clear()
         If DataGridViewMovies.SelectedRows.Count > 1 Then
             lblMovTagMulti1.Visible = True
@@ -12753,14 +12770,12 @@ Public Class Form1
             For x = 0 To oMovies.MovieCache.Count - 1
                 Dim movtag As List(Of String) = oMovies.MovieCache(x).movietag
                 For Each mtag In movtag
-                    If Not TagListBox.Items.Contains(mtag) Then
-                        TagListBox.Items.Add(mtag)
-                    End If
+                    If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
                 Next
             Next
             Pref.movietags.Clear()
-            For Each mtag In TagListBox.Items
-                Pref.movietags.Add(mtag)
+            For Each mtag In Pref.movietags
+                If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
             Next
             UpdateFilteredList()
         Catch ex As Exception
@@ -12973,12 +12988,12 @@ Public Class Form1
 
             End If
 
-            Dim MovCollectionList As New List(Of MovieSetItem)
+            Dim MovCollectionList As New List(Of MovieSetDatabase)
             For Each mset In oMovies.MovieSetDB
                 If mset.MovieSetId = MovSet.MovieSetId Then
                     If mset.Collection.Count > 0 Then
                         For Each collect In mset.Collection
-                            Dim ac As New MovieSetItem
+                            Dim ac As New MovieSetDatabase
                             ac.title = collect.MovieTitle
                             ac.tmdbid = collect.TmdbMovieId
                             MovCollectionList.Add(ac)
@@ -13305,12 +13320,12 @@ Public Class Form1
                 MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
                 Exit Sub
             End If
-            Dim MovCollectionList As New List(Of MovieSetItem)
+            Dim MovCollectionList As New List(Of MovieSetDatabase)
             For Each mset In oMovies.MovieSetDB
                 If mset.MovieSetId = MovSet.MovieSetId Then
                     If mset.Collection.Count > 0 Then
                         For Each collect In mset.Collection
-                            Dim ac As New MovieSetItem
+                            Dim ac As New MovieSetDatabase
                             ac.title = collect.MovieTitle
                             ac.tmdbid = collect.TmdbMovieId
                             MovCollectionList.Add(ac)
@@ -13468,7 +13483,7 @@ Public Class Form1
                 messbox.Refresh()
                 Dim api As New TMDb
                 api.SetId = item
-                Dim MovCollectionList As New List(Of MovieSetItem)
+                Dim MovCollectionList As New List(Of MovieSetDatabase)
 
                 Try
                     MovCollectionList = api.Collection

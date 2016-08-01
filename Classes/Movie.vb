@@ -359,11 +359,11 @@ Public Class Movie
         End Get
     End Property
 
-    ReadOnly Property Actors As List(Of ActorDatabase)
+    ReadOnly Property Actors As List(Of Databases)
         Get
-            Dim x As New List(Of ActorDatabase )
+            Dim x As New List(Of Databases )
             Try
-                Dim q = From actor In _scrapedMovie.listactors Select New ActorDatabase(actor.actorname,_scrapedMovie.fullmoviebody.imdbid)
+                Dim q = From actor In _scrapedMovie.listactors Select New Databases(actor.actorname,_scrapedMovie.fullmoviebody.imdbid)
 
                 Return q.ToList
             Catch
@@ -416,6 +416,22 @@ Public Class Movie
                 Return Nothing
             End If
             Return tmdb.MovieSet
+        End Get
+    End Property
+
+    ReadOnly Property Tags As List(Of TagDatabase)
+        Get
+            Dim x As New List(Of TagDatabase)
+            Try
+                Dim q = From TagTitle In _scrapedMovie.fullmoviebody.tag Select New TagDatabase(TagTitle,_scrapedMovie.fullmoviebody.imdbid)
+
+                Return q.ToList
+                'If _scrapedMovie.fullmoviebody.tag.Count < 1 Then Return Nothing
+                'Return New TagDatabase(_scrapedMovie.fullmoviebody.tag,_scrapedMovie.fullmoviebody.imdbid)
+            Catch
+                Return x
+            End Try
+            Return Nothing
         End Get
     End Property
     
@@ -3248,11 +3264,13 @@ Public Class Movie
         UpdateDirectorCache
         UpdateMovieCache
         UpdateMovieSetCache 
+        UpdateTagCache
     End Sub
 
     Sub RemoveMovieFromCaches
         RemoveActorsFromCache
         RemoveDirectorFromCache
+        RemoveTagFromCache
         RemoveMovieFromCache
     End Sub
 
@@ -3263,7 +3281,6 @@ Public Class Movie
 
     Sub UpdateDirectorCache
         RemoveDirectorFromCache
-
         If Not IsNothing(Director) Then
             _parent.DirectorDb.Add(Director)
         End If
@@ -3271,13 +3288,17 @@ Public Class Movie
 
     Sub UpdateMovieSetCache
         RemoveMovieSetFromCache
-
         'If IsNothing(McMovieSetInfo) Then Exit Sub
         If IsNothing(McMovieSetInfo) Then Exit Sub
 '       If MovieSet.MovieSetName <> "" Or MovieSet.MovieSetName.ToLower <> "-none-" Then
             _parent.MovieSetDB.Add(McMovieSetInfo)
         '_parent.MovieSetDB.Add(MovieSet)
 '       End If
+    End Sub
+
+    Sub UpdateTagCache
+        RemoveTagFromCache
+        _parent.TagDB.AddRange(Tags)
     End Sub
 
     Sub RemoveActorsFromCache
@@ -3307,6 +3328,15 @@ Public Class Movie
         _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetId = MovieSetId)
     End Sub
 
+    Sub RemoveTagFromCache
+        If Tags.Count = 0 Then Exit Sub
+        RemoveTagFromCache(Tags(0).MovieId)
+    End Sub
+    
+    Sub RemoveTagFromCache(MovieId)
+        _parent.TagDb.RemoveAll(Function(c) c.MovieId = MovieId)
+    End Sub
+
     Sub UpdateActorCacheFromEmpty
         If Actors.Count = 0 Then Exit Sub
         Try
@@ -3333,6 +3363,14 @@ Public Class Movie
         If Not IsNothing(c) Then Return
         'RemoveMovieSetFromCache 
         _parent._tmpMoviesetDb.Add(_movieCache.MovieSet)
+    End Sub
+
+    Sub UpdateTagCacheFromEmpty
+        If Tags.Count = 0 Then Exit Sub
+        Try
+            _parent._tmpTagDb.AddRange(Tags)
+        Catch
+        End Try
     End Sub
 
     Sub UpdateMovieCache
@@ -4169,38 +4207,72 @@ Public Class Movie
                     Next
                 Next
             End If
-            If keywords.Count > 0 AndAlso keywords.Count > Pref.keywordlimit Then
-                _scrapedMovie.fullmoviebody.tag.Clear()
+
+            _scrapedMovie.fullmoviebody.tag.Clear()
+            Dim res As String = ""
+            If Pref.TagRes Then res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+            _scrapedMovie.fullmoviebody.tag.Add(res)
+
+            If keywords.Count > 0 Then
                 Dim i As Integer = 0
                 For Each wd In keywords
                     i = i + 1
                     _scrapedMovie.fullmoviebody.tag.Add(wd)
+                    'If _scrapedMovie.fullmoviebody.tag <> "" Then
+                    '    _scrapedMovie.fullmoviebody.tag &= ", " & wd.Trim
+                    'Else
+                    '    _scrapedMovie.fullmoviebody.tag = wd
+                    'End If
                     If i = Pref.keywordlimit Then Exit For
                 Next
-            ElseIf keywords.Count > 0
-                _scrapedMovie.fullmoviebody.tag = keywords
             End If
         End If
-        If Pref.TagRes Then
-            Dim res As String = ""
-            res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
-            If res <> "" Then
-                If _scrapedMovie.fullmoviebody.tag.Count > 0 AndAlso Isnumeric(_scrapedMovie.fullmoviebody.tag.Item(0)) Then
-                    Dim foundres As String = ""
-                    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
-                        If _scrapedMovie.fullmoviebody.tag.Item(0) = resin Then
-                            foundres = resin
-                            Exit For
-                        End If
-                    Next
-                    If foundres <> "" Then _scrapedMovie.fullmoviebody.tag.RemoveAt(0)
-                End If
-                _scrapedMovie.fullmoviebody.tag.Insert(0, res)
-            End If
-            If _scrapedMovie.fullmoviebody.tag.Count > Pref.keywordlimit Then
-                _scrapedMovie.fullmoviebody.tag.RemoveAt(Pref.keywordlimit)
-            End If
-        End If
+        'If Pref.TagRes Then
+        '    Dim res As String = ""
+        '    res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+        '    If res <> "" Then
+        '        If _scrapedMovie.fullmoviebody.tag <> "" Then 'AndAlso Not _scrapedMovie.fullmoviebody.tag.Contains(res) Then
+        '            Dim strarr() As String = _scrapedMovie.fullmoviebody.tag.Split(",")
+        '            If strarr.Length > 0 Then
+        '                If IsNumeric(strarr(0)) Then
+        '                    Dim foundres As String = ""
+        '                    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
+        '                        If strarr(0) = resin Then
+        '                            foundres = resin
+        '                            Exit For
+        '                        End If
+        '                    Next
+        '                    If foundres <> "" AndAlso foundres <> res Then strarr(0) = foundres
+        '                Else
+        '                    _scrapedMovie.fullmoviebody.tag = res
+        '                    For I = 0 to strarr.Length-1
+        '                        _scrapedMovie.fullmoviebody.tag &= ", " & strarr(I)
+        '                        If I = Pref.keywordlimit Then Exit For
+        '                    Next
+        '                End If
+        '                'If foundres <> "" Then _scrapedMovie.fullmoviebody.tag.RemoveAt(0)
+        '            Else 
+
+        '            End If
+        '        Else
+        '            _scrapedMovie.fullmoviebody.tag = res
+        '        End If
+        '        'If _scrapedMovie.fullmoviebody.tag.Count > 0 AndAlso Isnumeric(_scrapedMovie.fullmoviebody.tag.Item(0)) Then
+        '        '    Dim foundres As String = ""
+        '        '    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
+        '        '        If _scrapedMovie.fullmoviebody.tag.Item(0) = resin Then
+        '        '            foundres = resin
+        '        '            Exit For
+        '        '        End If
+        '        '    Next
+        '        '    If foundres <> "" Then _scrapedMovie.fullmoviebody.tag.RemoveAt(0)
+        '        'End If
+        '        '_scrapedMovie.fullmoviebody.tag.Insert(0, res)
+        '    End If
+        '    'If _scrapedMovie.fullmoviebody.tag.Count > Pref.keywordlimit Then
+        '    '    _scrapedMovie.fullmoviebody.tag.RemoveAt(Pref.keywordlimit)
+        '    'End If
+        'End If
     End Sub
 
     Sub Fixupnfo()

@@ -159,7 +159,7 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\MovieSetInfo.vb" />
-    <Compile Include="Classes\ActorDatabase.vb" />
+    <Compile Include="Classes\Databases.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
     <Compile Include="Classes\ComboList.vb" />
     <Compile Include="Classes\NotifyTaskbar.vb" />
@@ -338,7 +338,6 @@
     <Compile Include="Structures\Genre.vb" />
     <Compile Include="Structures\Fanarttv.vb" />
     <Compile Include="Structures\HomeMovieNFO.vb" />
-    <Compile Include="Classes\MovieSets.vb" />
     <Compile Include="Structures\PossibleShowList.vb" />
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />
