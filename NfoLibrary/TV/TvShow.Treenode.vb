@@ -23,16 +23,7 @@ Partial Public Class TvShow
                 ShowNode.ImageKey = "error"
                 ShowNode.SelectedImageKey = "error"
         End Select
-
-        'If Me.IsAltered Then
-        '    ShowNode.ImageKey = "edit"
-        '    ShowNode.SelectedImageKey = "edit"
-        'End If
         
-        'If Me.Playcount.Value = "1" Then
-        '    ShowNode.ImageKey = "watched"
-        '    ShowNode.SelectedImageKey = "watched"
-        'End If
         Me.Playcount.Value = "1"
         For Each seas In Me.Seasons.Keys
             If Me.Seasons(seas).Playcount.Value = "0" Then
@@ -48,17 +39,6 @@ Partial Public Class TvShow
             ShowNode.ImageKey = "watched"
             ShowNode.SelectedImageKey = "watched"
         End If
-        
-        'Dim numofseasons As Integer = Me.Seasons.Count
-        'If numofseasons > 0 Then
-        '    For i = 0 to numofseasons-1
-        '        If Me.Seasons(i.ToString).Playcount.Value = "0" Then
-        '            Me.Playcount.Value = "0"
-        '            Exit For
-        '        End If
-        '    Next
-            
-        'End If
 
         If Me.FailedLoad Then
             ShowNode.ForeColor = Drawing.Color.Red

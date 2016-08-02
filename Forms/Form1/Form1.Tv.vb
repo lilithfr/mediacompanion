@@ -5053,13 +5053,6 @@ Partial Public Class Form1
         If WorkingTvShow Is Nothing Then Exit Sub
 
         If Not IsNothing(WorkingEpisode) Then
-            'Dim multi As Boolean = TestForMultiepisode(WorkingEpisode.NfoFilePath)
-            'If Not multi Then
-            '    WorkingEpisode.Load()
-            '    WorkingEpisode.PlayCount.Value = toggle
-            '    WorkingEpisode.Save()
-            '    WorkingEpisode.UpdateTreenode()
-            'Else
             Dim episodelist As New List(Of TvEpisode)
             episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
             For Each epis In episodelist
@@ -5081,47 +5074,30 @@ Partial Public Class Form1
             WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
             WorkingEpisode.Load
             WorkingEpisode.UpdateTreenode()
-            'End If
         ElseIf Not IsNothing(WorkingTvSeason) Then
             For Each ep In WorkingTvSeason.Episodes
                 If ep.IsMissing Then Continue For
-                'Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
-                'If Not multi Then
-                '    ep.Load()
-                '    ep.PlayCount.Value = toggle
-                '    ep.Save()
-                '    ep.UpdateTreenode()
-                'Else
-                    Dim episodelist As New List(Of TvEpisode)
-                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
-                    For Each epis In episodelist
-                        epis.PlayCount.Value = toggle
-                    Next
-                    WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
-                    ep.Load
-                    ep.UpdateTreenode()
-               ' End If
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
+                For Each epis In episodelist
+                    epis.PlayCount.Value = toggle
+                Next
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
+                ep.Load
+                ep.UpdateTreenode()
             Next
             WorkingTvSeason.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvShow) Then
             For Each ep In WorkingTvShow.Episodes
                 If ep.IsMissing Then Continue For
-                'Dim multi As Boolean = TestForMultiepisode(ep.NfoFilePath)
-                'If Not multi Then
-                '    ep.Load()
-                '    ep.PlayCount.Value = toggle
-                '    ep.Save()
-                '    ep.UpdateTreenode()
-                'Else
-                    Dim episodelist As New List(Of TvEpisode)
-                    episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
-                    For Each epis In episodelist
-                        epis.PlayCount.Value = toggle
-                    Next
-                    WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
-                    ep.Load
-                    ep.UpdateTreenode()
-                'End If
+                Dim episodelist As New List(Of TvEpisode)
+                episodelist = WorkingWithNfoFiles.ep_NfoLoad(ep.NfoFilePath)
+                For Each epis In episodelist
+                    epis.PlayCount.Value = toggle
+                Next
+                WorkingWithNfoFiles.ep_NfoSave(episodelist, ep.NfoFilePath)
+                ep.Load
+                ep.UpdateTreenode()
             Next
           For Each seas In WorkingTvShow.Seasons.keys  
                 WorkingTvShow.Seasons(seas).UpdateTreenode()

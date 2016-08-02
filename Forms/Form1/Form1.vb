@@ -14590,7 +14590,7 @@ Public Class Form1
         Try
             Dim Btn As Button = sender
             If TypeOf Btn.Tag Is Media_Companion.TvShow Then
-                Dim TempShow As Media_Companion.TvShow = Btn.Tag
+                Dim TempShow As Media_Companion.TvShow = tv_ShowSelectedCurrently(TvTreeview) 'Btn.Tag
                 Select Case TempShow.State
                     Case Media_Companion.ShowState.Locked
                         TempShow.State = Media_Companion.ShowState.Open
