@@ -122,18 +122,22 @@
     End Sub
 
     Private Sub cbMainCountry_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainCountry.CheckedChanged
-        Form1.rescrapeList.country = cbMainCountry.checked
+        Form1.rescrapeList.country = cbMainCountry.Checked
     End Sub
 
     Private Sub cbMainStars_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainStars.CheckedChanged
-        Form1.rescrapeList.stars =cbMainStars.checked
+        Form1.rescrapeList.stars =cbMainStars.Checked
     End Sub
     Private Sub CcbMainYear_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainYear.CheckedChanged
-        Form1.rescrapeList.year = cbMainYear.checked
+        Form1.rescrapeList.year = cbMainYear.Checked
+    End Sub
+
+    Private Sub cbMainImdbAspectRatio_CheckedChanged(sender As Object, e As EventArgs) Handles cbMainImdbAspectRatio.CheckedChanged
+        Form1.rescrapeList.imdbaspect = cbMainImdbAspectRatio.Checked
     End Sub
 
     Private Sub cbFromTMDB_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbFromTMDB.CheckedChanged
-        Form1.rescrapeList.FromTMDB = cbFromTMDB.checked
+        Form1.rescrapeList.FromTMDB = cbFromTMDB.Checked
     End Sub
     
     Private Sub cbMainMetascore_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbMainMetascore.CheckedChanged
@@ -258,4 +262,5 @@
         Me.Bounds = Screen.AllScreens(Form1.CurrentScreen).Bounds
     End Sub
 
+    
 End Class

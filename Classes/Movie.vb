@@ -3000,7 +3000,7 @@ Public Class Movie
 
     Function RescrapeBody(rl As RescrapeList)
         Return rl.credits Or rl.director Or rl.stars   Or rl.genre   Or rl.mpaa   Or rl.plot  Or rl.premiered Or rl.rating Or 
-               rl.runtime Or rl.studio   Or rl.tagline Or rl.outline Or rl.top250 Or rl.votes Or rl.country   Or rl.year   Or
+               rl.runtime Or rl.studio   Or rl.tagline Or rl.outline Or rl.top250 Or rl.votes Or rl.country   Or rl.year   Or rl.imdbaspect or
                rl.title Or (rl.mediatags AndAlso ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper))) Or
                rl.metascore
     End Function
@@ -3066,6 +3066,7 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
 
+
             'If Pref.movies_useXBMC_Scraper Then
             '    If Pref.XbmcTmdbVotesFromImdb Then UpdateProperty(IMDB_Votes, _scrapedMovie.fullmoviebody.votes, rl.votes, rl.EmptyMainTags)
             '    If Pref.XbmcTmdbCertFromImdb Then UpdateProperty(IMDB_Mpaa, _scrapedMovie.fullmoviebody.mpaa, rl.mpaa, rl.EmptyMainTags)
@@ -3113,6 +3114,9 @@ Public Class Movie
                     _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
                 End If
             End If
+        End If
+        If rl.imdbaspect AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
+            _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
         End If
         If Cancelled() Then Exit Sub
         If Not rl.TagsFromKeywords AndAlso Pref.TagRes Then GetKeyWords()

@@ -44,6 +44,7 @@ Public Class RescrapeList
     Property ArtFromFanartTv        As Boolean
     Property FromTMDB               As Boolean
     Property rebuildnfo             As Boolean
+    Property imdbaspect             As Boolean
 
     Sub New
     End Sub

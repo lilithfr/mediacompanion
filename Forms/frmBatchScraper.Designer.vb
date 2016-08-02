@@ -24,6 +24,7 @@ Partial Class frmBatchScraper
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.gpbxMainTagsToRescrape = New System.Windows.Forms.GroupBox()
+        Me.cbMainRating = New System.Windows.Forms.CheckBox()
         Me.cbMainMetascore = New System.Windows.Forms.CheckBox()
         Me.cbMainTitle = New System.Windows.Forms.CheckBox()
         Me.cbMainTmdbSetName = New System.Windows.Forms.CheckBox()
@@ -43,7 +44,6 @@ Partial Class frmBatchScraper
         Me.cbMainPlot = New System.Windows.Forms.CheckBox()
         Me.cbMainOutline = New System.Windows.Forms.CheckBox()
         Me.cbMainVotes = New System.Windows.Forms.CheckBox()
-        Me.cbMainRating = New System.Windows.Forms.CheckBox()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.gpbxArtwork = New System.Windows.Forms.GroupBox()
         Me.cbMissingMovSetArt = New System.Windows.Forms.CheckBox()
@@ -66,6 +66,7 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
         Me.cbFromTMDB = New System.Windows.Forms.CheckBox()
+        Me.cbMainImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.gpbxMainTagsToRescrape.SuspendLayout
         Me.gpbxArtwork.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -73,6 +74,7 @@ Partial Class frmBatchScraper
         '
         'gpbxMainTagsToRescrape
         '
+        Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainImdbAspectRatio)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainRating)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainMetascore)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainTitle)
@@ -93,21 +95,31 @@ Partial Class frmBatchScraper
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainPlot)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainOutline)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainVotes)
-        Me.gpbxMainTagsToRescrape.Location = New System.Drawing.Point(14, 41)
+        Me.gpbxMainTagsToRescrape.Location = New System.Drawing.Point(13, 38)
         Me.gpbxMainTagsToRescrape.Name = "gpbxMainTagsToRescrape"
-        Me.gpbxMainTagsToRescrape.Size = New System.Drawing.Size(456, 134)
+        Me.gpbxMainTagsToRescrape.Size = New System.Drawing.Size(456, 160)
         Me.gpbxMainTagsToRescrape.TabIndex = 0
         Me.gpbxMainTagsToRescrape.TabStop = false
         Me.gpbxMainTagsToRescrape.Text = "Select Main Tags to Rescrape"
+        '
+        'cbMainRating
+        '
+        Me.cbMainRating.AutoSize = true
+        Me.cbMainRating.Location = New System.Drawing.Point(7, 19)
+        Me.cbMainRating.Name = "cbMainRating"
+        Me.cbMainRating.Size = New System.Drawing.Size(57, 17)
+        Me.cbMainRating.TabIndex = 10
+        Me.cbMainRating.Text = "Rating"
+        Me.cbMainRating.UseVisualStyleBackColor = true
         '
         'cbMainMetascore
         '
         Me.cbMainMetascore.AutoSize = true
         Me.cbMainMetascore.Location = New System.Drawing.Point(336, 111)
         Me.cbMainMetascore.Name = "cbMainMetascore"
-        Me.cbMainMetascore.Size = New System.Drawing.Size(50, 17)
+        Me.cbMainMetascore.Size = New System.Drawing.Size(76, 17)
         Me.cbMainMetascore.TabIndex = 29
-        Me.cbMainMetascore.Text = "Stars"
+        Me.cbMainMetascore.Text = "Metascore"
         Me.cbMainMetascore.UseVisualStyleBackColor = true
         '
         'cbMainTitle
@@ -133,7 +145,7 @@ Partial Class frmBatchScraper
         'cbMainYear
         '
         Me.cbMainYear.AutoSize = true
-        Me.cbMainYear.Location = New System.Drawing.Point(6, 111)
+        Me.cbMainYear.Location = New System.Drawing.Point(7, 111)
         Me.cbMainYear.Name = "cbMainYear"
         Me.cbMainYear.Size = New System.Drawing.Size(48, 17)
         Me.cbMainYear.TabIndex = 26
@@ -290,19 +302,9 @@ Partial Class frmBatchScraper
         Me.cbMainVotes.Text = "Votes"
         Me.cbMainVotes.UseVisualStyleBackColor = true
         '
-        'cbMainRating
-        '
-        Me.cbMainRating.AutoSize = true
-        Me.cbMainRating.Location = New System.Drawing.Point(8, 19)
-        Me.cbMainRating.Name = "cbMainRating"
-        Me.cbMainRating.Size = New System.Drawing.Size(57, 17)
-        Me.cbMainRating.TabIndex = 10
-        Me.cbMainRating.Text = "Rating"
-        Me.cbMainRating.UseVisualStyleBackColor = true
-        '
         'btnCancel
         '
-        Me.btnCancel.Location = New System.Drawing.Point(15, 458)
+        Me.btnCancel.Location = New System.Drawing.Point(13, 480)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 50
@@ -316,9 +318,9 @@ Partial Class frmBatchScraper
         Me.gpbxArtwork.Controls.Add(Me.cbXtraFanart)
         Me.gpbxArtwork.Controls.Add(Me.cbMissingPosters)
         Me.gpbxArtwork.Controls.Add(Me.cbMissingFanart)
-        Me.gpbxArtwork.Location = New System.Drawing.Point(14, 296)
+        Me.gpbxArtwork.Location = New System.Drawing.Point(12, 318)
         Me.gpbxArtwork.Name = "gpbxArtwork"
-        Me.gpbxArtwork.Size = New System.Drawing.Size(459, 132)
+        Me.gpbxArtwork.Size = New System.Drawing.Size(457, 132)
         Me.gpbxArtwork.TabIndex = 0
         Me.gpbxArtwork.TabStop = false
         Me.gpbxArtwork.Text = "Fanart && Posters"
@@ -376,7 +378,7 @@ Partial Class frmBatchScraper
         '
         'btnStart
         '
-        Me.btnStart.Location = New System.Drawing.Point(395, 458)
+        Me.btnStart.Location = New System.Drawing.Point(393, 480)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(75, 23)
         Me.btnStart.TabIndex = 60
@@ -394,7 +396,7 @@ Partial Class frmBatchScraper
         Me.gbOther.Controls.Add(Me.cbRescrapePosterUrls)
         Me.gbOther.Controls.Add(Me.cbRescrapeActors)
         Me.gbOther.Controls.Add(Me.cbRescrapeMediaTags)
-        Me.gbOther.Location = New System.Drawing.Point(15, 205)
+        Me.gbOther.Location = New System.Drawing.Point(13, 227)
         Me.gbOther.Name = "gbOther"
         Me.gbOther.Size = New System.Drawing.Size(456, 85)
         Me.gbOther.TabIndex = 0
@@ -523,7 +525,7 @@ Partial Class frmBatchScraper
         '
         Me.cb_ScrapeEmptyTags.AutoSize = true
         Me.cb_ScrapeEmptyTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cb_ScrapeEmptyTags.Location = New System.Drawing.Point(48, 181)
+        Me.cb_ScrapeEmptyTags.Location = New System.Drawing.Point(45, 204)
         Me.cb_ScrapeEmptyTags.Name = "cb_ScrapeEmptyTags"
         Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(380, 17)
         Me.cb_ScrapeEmptyTags.TabIndex = 29
@@ -537,18 +539,28 @@ Partial Class frmBatchScraper
         Me.cbFromTMDB.AutoSize = true
         Me.cbFromTMDB.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cbFromTMDB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbFromTMDB.Location = New System.Drawing.Point(46, 434)
+        Me.cbFromTMDB.Location = New System.Drawing.Point(44, 456)
         Me.cbFromTMDB.Name = "cbFromTMDB"
         Me.cbFromTMDB.Size = New System.Drawing.Size(427, 17)
         Me.cbFromTMDB.TabIndex = 61
         Me.cbFromTMDB.Text = "Scrape main tags from TMDB (excluding those tags exclusive to IMDB)"
         Me.cbFromTMDB.UseVisualStyleBackColor = true
         '
+        'cbMainImdbAspectRatio
+        '
+        Me.cbMainImdbAspectRatio.AutoSize = true
+        Me.cbMainImdbAspectRatio.Location = New System.Drawing.Point(7, 134)
+        Me.cbMainImdbAspectRatio.Name = "cbMainImdbAspectRatio"
+        Me.cbMainImdbAspectRatio.Size = New System.Drawing.Size(89, 17)
+        Me.cbMainImdbAspectRatio.TabIndex = 30
+        Me.cbMainImdbAspectRatio.Text = "IMDB Aspect"
+        Me.cbMainImdbAspectRatio.UseVisualStyleBackColor = true
+        '
         'frmBatchScraper
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(485, 493)
+        Me.ClientSize = New System.Drawing.Size(483, 511)
         Me.ControlBox = false
         Me.Controls.Add(Me.cbFromTMDB)
         Me.Controls.Add(Me.cb_ScrapeEmptyTags)
@@ -559,9 +571,9 @@ Partial Class frmBatchScraper
         Me.Controls.Add(Me.gbOther)
         Me.Controls.Add(Me.lblMain)
         Me.KeyPreview = true
-        Me.MaximumSize = New System.Drawing.Size(493, 520)
+        Me.MaximumSize = New System.Drawing.Size(493, 545)
         Me.MinimizeBox = false
-        Me.MinimumSize = New System.Drawing.Size(493, 520)
+        Me.MinimumSize = New System.Drawing.Size(493, 545)
         Me.Name = "frmBatchScraper"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Batch Update Wizard"
@@ -618,4 +630,5 @@ End Sub
     Friend WithEvents cbFanartTv As System.Windows.Forms.CheckBox
     Friend WithEvents cbMissingMovSetArt As System.Windows.Forms.CheckBox
     Friend WithEvents cbMainMetascore As CheckBox
+    Friend WithEvents cbMainImdbAspectRatio As CheckBox
 End Class
