@@ -17824,11 +17824,13 @@ Public Class Form1
             flags.Add(New KeyValuePair(Of String, String)("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString)))
             flags.Add(New KeyValuePair(Of String, String)("special", If(Is3d, "3d", "")))
 
-            Dim subtitles = If(Pref.DisplayAllSubtitleLang, Vidfiledetails.filedetails_subtitles, From x In Vidfiledetails.filedetails_subtitles Where x = Vidfiledetails.DefaultSubTrack)
+            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, Vidfiledetails.filedetails_subtitles, From x In Vidfiledetails.filedetails_subtitles Where x = Vidfiledetails.DefaultSubTrack))
 
-            For Each subtitle In subtitles
-                flags.Add(New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
-            Next
+            If Not IsNothing(subtitles) Then
+                For Each subtitle In subtitles
+                    flags.Add(New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
+                Next
+            End If
         Catch
         End Try
         Return flags

@@ -5174,11 +5174,13 @@ Partial Public Class Form1
             flags.Add(New KeyValuePair(Of String, string)("codec",      Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
 
-            Dim subtitles = If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack)
+            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack))
 
+            If Not IsNothing(subtitles) Then
             For each subtitle In subtitles
                 flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
             Next
+            End If
         Catch
         End Try
         Return flags
@@ -5206,11 +5208,13 @@ Partial Public Class Form1
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))  'thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
 
-            Dim subtitles = If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack)
+            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack))
 
-            For each subtitle In subtitles
-                flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
-            Next
+            If Not IsNothing(subtitles) Then
+                For each subtitle In subtitles
+                    flags.Add( New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
+                Next
+            End If
         Catch
         End Try
         Return flags

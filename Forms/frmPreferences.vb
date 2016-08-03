@@ -269,16 +269,16 @@ Public Class frmPreferences
         MovGenInit
         MovAdvInit()
         'the following code aligns the 2 groupboxes ontop of each other which cannot be done in the GUI
-        GpBx_TMDB_Scraper_Preferences.Location = GpBx_McIMDbScraperSettings.Location
+        grpbxTMDBScraperPreferences.Location = GpBx_McIMDbScraperSettings.Location
     End Sub
     
     Private Sub MovScraperInit()
         'scraper
         Read_XBMC_TMDB_Scraper_Config
         If Pref.movies_useXBMC_Scraper = True Then
-            CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked
+            cbMovieUseXBMCScraper.CheckState = CheckState.Checked
         Else
-            CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Unchecked
+            cbMovieUseXBMCScraper.CheckState = CheckState.Unchecked
             GpBx_McIMDbScraperSettings.Enabled = True
             GpBx_McIMDbScraperSettings.Visible = True
             GpBx_McIMDbScraperSettings.BringToFront()
@@ -334,7 +334,7 @@ Public Class frmPreferences
         ''Scraping Options
         'Preferred Language
         TMDbControlsIni()
-        comboBoxTMDbSelectedLanguage        .Text = Pref.TMDbSelectedLanguageName
+        cmbxTMDbSelectedLanguage        .Text = Pref.TMDbSelectedLanguageName
         cbUseCustomLanguage                 .Checked = Pref.TMDbUseCustomLanguage
         tbCustomLanguageValue               .Text = Pref.TMDbCustomLanguageValue
         SetLanguageControlsState()
@@ -352,7 +352,7 @@ Public Class frmPreferences
 
         'Other Options
         cbGetMovieSetFromTMDb               .Checked    = Pref.GetMovieSetFromTMDb
-        chkbOriginal_Title                  .Checked    = Pref.Original_Title
+        cbIMDbOriginalTitle                  .Checked    = Pref.Original_Title
 
         'BasicSave Mode
         cbMovieBasicSave                    .Checked    = Pref.basicsavemode
@@ -509,7 +509,7 @@ Public Class frmPreferences
         cbDisableNotMatchingRenamePattern   .Checked        = Pref.DisableNotMatchingRenamePattern
 
         'Offline DVD Text
-        TextBox_OfflineDVDTitle             .Text           = Pref.OfflineDVDTitle
+        tb_OfflineDVDTitle             .Text           = Pref.OfflineDVDTitle
     End Sub
 
     Private Sub MovAdvInit()
@@ -1208,15 +1208,15 @@ Public Class frmPreferences
 #Region "Movie Preferences -> Scraper Tab"
 
 'Choose Default Scraper
-    Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox_Use_XBMC_Scraper.CheckedChanged
+    Private Sub CheckBox_Use_XBMC_Scraper_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovieUseXBMCScraper.CheckedChanged
         Try
-            If CheckBox_Use_XBMC_Scraper.CheckState = CheckState.Checked Then
+            If cbMovieUseXBMCScraper.CheckState = CheckState.Checked Then
                 Pref.movies_useXBMC_Scraper = True
                 GpBx_McIMDbScraperSettings.Enabled = False
                 GpBx_McIMDbScraperSettings.Visible = False
-                GpBx_TMDB_Scraper_Preferences.Enabled = True
-                GpBx_TMDB_Scraper_Preferences.Visible = True
-                GpBx_TMDB_Scraper_Preferences.BringToFront()
+                grpbxTMDBScraperPreferences.Enabled = True
+                grpbxTMDBScraperPreferences.Visible = True
+                grpbxTMDBScraperPreferences.BringToFront()
             Else
                 Pref.movies_useXBMC_Scraper = False
                 GpBx_McIMDbScraperSettings.Enabled = True
@@ -1430,15 +1430,15 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles chkbOriginal_Title.CheckedChanged
+    Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles cbIMDbOriginalTitle.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.Original_Title = chkbOriginal_Title.Checked
+        Pref.Original_Title = cbIMDbOriginalTitle.Checked
         Changes = True
     End Sub
 
 'Preferred Language
-    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles comboBoxTMDbSelectedLanguage.SelectedValueChanged
-        Pref.TMDbSelectedLanguageName = comboBoxTMDbSelectedLanguage.Text
+    Private Sub comboBoxTMDbSelectedLanguage_SelectedValueChanged(sender As System.Object, e As System.EventArgs) Handles cmbxTMDbSelectedLanguage.SelectedValueChanged
+        Pref.TMDbSelectedLanguageName = cmbxTMDbSelectedLanguage.Text
         Changes = True
     End Sub
 
@@ -1630,7 +1630,7 @@ End Sub
 
 'IMDB Cert Priority
     
-    Private Sub Button75_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button75.Click
+    Private Sub Button75_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovImdbPriorityUp.Click
         Try
             Dim mSelectedIndex, mOtherIndex As Integer
             If lb_IMDBCertPriority.SelectedIndex <> 0 Then
@@ -1647,7 +1647,7 @@ End Sub
         End Try
     End Sub
 
-    Private Sub Button74_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button74.Click
+    Private Sub Button74_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovImdbPriorityDown.Click
         Try
             Dim mSelectedIndex, mOtherIndex As Integer
             If lb_IMDBCertPriority.SelectedIndex <> lb_IMDBCertPriority.Items.Count - 1 Then
@@ -2090,9 +2090,9 @@ End Sub
         Changes = True
     End Sub
 
-    Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox_OfflineDVDTitle.TextChanged
+    Private Sub TextBox_OfflineDVDTitle_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tb_OfflineDVDTitle.TextChanged
         If prefsload Then Exit Sub
-        Pref.OfflineDVDTitle = TextBox_OfflineDVDTitle.Text
+        Pref.OfflineDVDTitle = tb_OfflineDVDTitle.Text
         Changes = True
     End Sub
 
@@ -3684,13 +3684,13 @@ End Sub
     End Sub
 
     Private Sub TMDbControlsIni()
-        TMDb.LoadLanguages(comboBoxTMDbSelectedLanguage)
+        TMDb.LoadLanguages(cmbxTMDbSelectedLanguage)
         'SetLanguageControlsState()
     End Sub
 
     Private Sub SetLanguageControlsState()
-        comboBoxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
-        gbCustomLanguage.Enabled = cbUseCustomLanguage.Checked
+        cmbxTMDbSelectedLanguage.Enabled = Not cbUseCustomLanguage.Checked
+        grpbxCustomLanguage.Enabled = cbUseCustomLanguage.Checked
     End Sub
 
     Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick

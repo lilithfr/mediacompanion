@@ -71,15 +71,15 @@ Partial Class frmPreferences
         Me.cbPreferredTrailerResolution = New System.Windows.Forms.ComboBox()
         Me.cbDlTrailerDuringScrape = New System.Windows.Forms.CheckBox()
         Me.cbMovieRuntimeFallbackToFile = New System.Windows.Forms.CheckBox()
-        Me.GroupBox11 = New System.Windows.Forms.GroupBox()
+        Me.grpbxImdbCertPriority = New System.Windows.Forms.GroupBox()
         Me.cbIncludeMpaaRated = New System.Windows.Forms.CheckBox()
         Me.cbExcludeMpaaRated = New System.Windows.Forms.CheckBox()
         Me.cb_MovCertRemovePhrase = New System.Windows.Forms.CheckBox()
         Me.ScrapeFullCertCheckBox = New System.Windows.Forms.CheckBox()
         Me.Label178 = New System.Windows.Forms.Label()
         Me.Label95 = New System.Windows.Forms.Label()
-        Me.Button74 = New System.Windows.Forms.Button()
-        Me.Button75 = New System.Windows.Forms.Button()
+        Me.btnMovImdbPriorityDown = New System.Windows.Forms.Button()
+        Me.btnMovImdbPriorityUp = New System.Windows.Forms.Button()
         Me.Label94 = New System.Windows.Forms.Label()
         Me.lb_IMDBCertPriority = New System.Windows.Forms.ListBox()
         Me.cbMovRootFolderCheck = New System.Windows.Forms.CheckBox()
@@ -183,14 +183,15 @@ Partial Class frmPreferences
         Me.TPMovPref = New System.Windows.Forms.TabPage()
         Me.tcMoviePreferences = New System.Windows.Forms.TabControl()
         Me.tpMoviePreferences_Scraper = New System.Windows.Forms.TabPage()
-        Me.GroupBox6 = New System.Windows.Forms.GroupBox()
+        Me.grpbxTMDbApi = New System.Windows.Forms.GroupBox()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
-        Me.GpBx_ScraperSettings = New System.Windows.Forms.GroupBox()
-        Me.GpBx_TMDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieScraperSettings = New System.Windows.Forms.GroupBox()
+        Me.grpbxTMDBScraperPreferences = New System.Windows.Forms.GroupBox()
         Me.cmbxTMDBPreferredCertCountry = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.GroupBox46 = New System.Windows.Forms.GroupBox()
+        Me.grpbxTmdbfromImdbOptions = New System.Windows.Forms.GroupBox()
+        Me.cbXbmcTmdbMetascoreFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbAspectFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbGenreFromImdb = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbAkasFromImdb = New System.Windows.Forms.CheckBox()
@@ -206,7 +207,7 @@ Partial Class frmPreferences
         Me.cbXbmcTmdbFanart = New System.Windows.Forms.CheckBox()
         Me.cmbxXbmcTmdbHDTrailer = New System.Windows.Forms.ComboBox()
         Me.Label153 = New System.Windows.Forms.Label()
-        Me.CheckBox_Use_XBMC_Scraper = New System.Windows.Forms.CheckBox()
+        Me.cbMovieUseXBMCScraper = New System.Windows.Forms.CheckBox()
         Me.GpBx_McIMDbScraperSettings = New System.Windows.Forms.GroupBox()
         Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
@@ -217,36 +218,35 @@ Partial Class frmPreferences
         Me.Label91 = New System.Windows.Forms.Label()
         Me.lb_IMDBMirrors = New System.Windows.Forms.ListBox()
         Me.gpbxPrefScraperImages = New System.Windows.Forms.GroupBox()
-        Me.GroupBox44 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieTagOptions = New System.Windows.Forms.GroupBox()
         Me.cbTagRes = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.tb_MovTagBlacklist = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label69 = New System.Windows.Forms.Label()
         Me.cb_keywordasTag = New System.Windows.Forms.CheckBox()
-        Me.gbMovieBasicSave = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieBasicSave = New System.Windows.Forms.GroupBox()
         Me.Label162 = New System.Windows.Forms.Label()
         Me.Label109 = New System.Windows.Forms.Label()
-        Me.GroupBox30 = New System.Windows.Forms.GroupBox()
+        Me.grpbxScraperLimits = New System.Windows.Forms.GroupBox()
         Me.lblMaxStudios = New System.Windows.Forms.Label()
         Me.Label92 = New System.Windows.Forms.Label()
-        Me.gbScraperMisc = New System.Windows.Forms.GroupBox()
-        Me.chkbOriginal_Title = New System.Windows.Forms.CheckBox()
-        Me.GroupBox34 = New System.Windows.Forms.GroupBox()
+        Me.grpbxScraperMisc = New System.Windows.Forms.GroupBox()
+        Me.cbIMDbOriginalTitle = New System.Windows.Forms.CheckBox()
+        Me.grpbxMovPreferLang = New System.Windows.Forms.GroupBox()
         Me.Label27 = New System.Windows.Forms.Label()
-        Me.gbCustomLanguage = New System.Windows.Forms.GroupBox()
+        Me.grpbxCustomLanguage = New System.Windows.Forms.GroupBox()
         Me.llLanguagesFile = New System.Windows.Forms.LinkLabel()
         Me.tbCustomLanguageValue = New System.Windows.Forms.TextBox()
         Me.Label174 = New System.Windows.Forms.Label()
         Me.Label177 = New System.Windows.Forms.Label()
         Me.cbUseCustomLanguage = New System.Windows.Forms.CheckBox()
-        Me.comboBoxTMDbSelectedLanguage = New System.Windows.Forms.ComboBox()
-        Me.GroupBox24 = New System.Windows.Forms.GroupBox()
+        Me.cmbxTMDbSelectedLanguage = New System.Windows.Forms.ComboBox()
+        Me.grpbxMovieFolderOptions = New System.Windows.Forms.GroupBox()
         Me.cbMovieAllInFolders = New System.Windows.Forms.CheckBox()
         Me.cbMovieUseFolderNames = New System.Windows.Forms.CheckBox()
-        Me.Button82 = New System.Windows.Forms.Button()
         Me.tpMoviePreferences_Artwork = New System.Windows.Forms.TabPage()
-        Me.GroupBox47 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieSetArtwork = New System.Windows.Forms.GroupBox()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.tbMovSetArtCentralFolder = New System.Windows.Forms.TextBox()
         Me.btnMovSetCentralFolderSelect = New System.Windows.Forms.Button()
@@ -255,9 +255,9 @@ Partial Class frmPreferences
         Me.GrpbxXtraArtwork = New System.Windows.Forms.GroupBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.cmbxMovXtraFanartQty = New System.Windows.Forms.ComboBox()
-        Me.GroupBox38 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMoviesInFoldersArtwork = New System.Windows.Forms.GroupBox()
         Me.cbMovCreateFolderjpg = New System.Windows.Forms.CheckBox()
-        Me.GroupBox10 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMoviePosterPriority = New System.Windows.Forms.GroupBox()
         Me.btn_MovPosterPriorityRemove = New System.Windows.Forms.Button()
         Me.btn_MovPosterPriorityReset = New System.Windows.Forms.Button()
         Me.Label99 = New System.Windows.Forms.Label()
@@ -265,17 +265,17 @@ Partial Class frmPreferences
         Me.btnMovPosterPriorityDown = New System.Windows.Forms.Button()
         Me.btnMovPosterPriorityUp = New System.Windows.Forms.Button()
         Me.lbPosterSourcePriorities = New System.Windows.Forms.ListBox()
-        Me.GroupBox37 = New System.Windows.Forms.GroupBox()
+        Me.grpbxAutoScrapeArtwork = New System.Windows.Forms.GroupBox()
         Me.cbMovCustPosterjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovFanartNaming = New System.Windows.Forms.CheckBox()
         Me.btnMovFanartTvSelect = New System.Windows.Forms.Button()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.GroupBox41 = New System.Windows.Forms.GroupBox()
+        Me.grpbxExtraArtwork = New System.Windows.Forms.GroupBox()
         Me.Label189 = New System.Windows.Forms.Label()
         Me.cbMovSetArtScrape = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_General = New System.Windows.Forms.TabPage()
-        Me.gbMovieFilters = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieFilters = New System.Windows.Forms.GroupBox()
         Me.cmbxMovFiltersTagsOrder = New System.Windows.Forms.ComboBox()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.nudMaxTagsInFilter = New System.Windows.Forms.NumericUpDown()
@@ -296,11 +296,11 @@ Partial Class frmPreferences
         Me.nudMaxActorsInFilter = New System.Windows.Forms.NumericUpDown()
         Me.nudActorsFilterMinFilms = New System.Windows.Forms.NumericUpDown()
         Me.Label165 = New System.Windows.Forms.Label()
-        Me.GroupBox35 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieListOptions = New System.Windows.Forms.GroupBox()
         Me.cbMovieList_ShowColWatched = New System.Windows.Forms.CheckBox()
         Me.cbMovieList_ShowColPlot = New System.Windows.Forms.CheckBox()
         Me.cbMovieShowDateOnList = New System.Windows.Forms.CheckBox()
-        Me.GroupBox27 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieRenameOptions = New System.Windows.Forms.GroupBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.cbMovNewFolderInRootFolder = New System.Windows.Forms.CheckBox()
         Me.cbMovSortIgnArticle = New System.Windows.Forms.CheckBox()
@@ -317,10 +317,10 @@ Partial Class frmPreferences
         Me.cbMovieRenameEnable = New System.Windows.Forms.CheckBox()
         Me.Label100 = New System.Windows.Forms.Label()
         Me.tb_MovieRenameTemplate = New System.Windows.Forms.TextBox()
-        Me.GroupBox9 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieOfflineTitleText = New System.Windows.Forms.GroupBox()
         Me.Label77 = New System.Windows.Forms.Label()
-        Me.TextBox_OfflineDVDTitle = New System.Windows.Forms.TextBox()
-        Me.GroupBox26 = New System.Windows.Forms.GroupBox()
+        Me.tb_OfflineDVDTitle = New System.Windows.Forms.TextBox()
+        Me.grpbxMovieGeneralOptions = New System.Windows.Forms.GroupBox()
         Me.cb_MovRuntimeAsDuration = New System.Windows.Forms.CheckBox()
         Me.cbShowMovieGridToolTip = New System.Windows.Forms.CheckBox()
         Me.cb_MovSetTitleIgnArticle = New System.Windows.Forms.CheckBox()
@@ -337,24 +337,24 @@ Partial Class frmPreferences
         Me.cb_MovDisplayLog = New System.Windows.Forms.CheckBox()
         Me.cb_EnableMediaTags = New System.Windows.Forms.CheckBox()
         Me.cbMovieTrailerUrl = New System.Windows.Forms.CheckBox()
-        Me.grpNameMode = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieNameMode = New System.Windows.Forms.GroupBox()
         Me.Label163 = New System.Windows.Forms.Label()
         Me.lblNameMode = New System.Windows.Forms.Label()
         Me.cbMoviePartsIgnorePart = New System.Windows.Forms.CheckBox()
         Me.lblNameModeEg = New System.Windows.Forms.Label()
         Me.cbMoviePartsNameMode = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_Advanced = New System.Windows.Forms.TabPage()
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieCustomPlaycountTag = New System.Windows.Forms.GroupBox()
         Me.cbMovNfoWatchTag = New System.Windows.Forms.CheckBox()
         Me.Label23 = New System.Windows.Forms.Label()
-        Me.gb_MovieIdentifier = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieSeparateIdentifier = New System.Windows.Forms.GroupBox()
         Me.btn_MovSepReset = New System.Windows.Forms.Button()
         Me.Label198 = New System.Windows.Forms.Label()
         Me.btn_MovSepRem = New System.Windows.Forms.Button()
         Me.btn_MovSepAdd = New System.Windows.Forms.Button()
         Me.tb_MovSeptb = New System.Windows.Forms.TextBox()
         Me.lb_MovSepLst = New System.Windows.Forms.ListBox()
-        Me.GroupBox16 = New System.Windows.Forms.GroupBox()
+        Me.grpbxMovieNfoPosterOptions = New System.Windows.Forms.GroupBox()
         Me.Label88 = New System.Windows.Forms.Label()
         Me.imdb_chk = New System.Windows.Forms.CheckBox()
         Me.mpdb_chk = New System.Windows.Forms.CheckBox()
@@ -460,9 +460,7 @@ Partial Class frmPreferences
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lbl_HmHeader = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -490,10 +488,11 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbXbmcTmdbMetascoreFromImdb = New System.Windows.Forms.CheckBox()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
-        Me.GroupBox11.SuspendLayout
+        Me.grpbxImdbCertPriority.SuspendLayout
         Me.GroupBox36.SuspendLayout
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.TabControl1.SuspendLayout
@@ -516,28 +515,28 @@ Partial Class frmPreferences
         Me.TPMovPref.SuspendLayout
         Me.tcMoviePreferences.SuspendLayout
         Me.tpMoviePreferences_Scraper.SuspendLayout
-        Me.GroupBox6.SuspendLayout
-        Me.GpBx_ScraperSettings.SuspendLayout
-        Me.GpBx_TMDB_Scraper_Preferences.SuspendLayout
-        Me.GroupBox46.SuspendLayout
+        Me.grpbxTMDbApi.SuspendLayout
+        Me.grpbxMovieScraperSettings.SuspendLayout
+        Me.grpbxTMDBScraperPreferences.SuspendLayout
+        Me.grpbxTmdbfromImdbOptions.SuspendLayout
         Me.GpBx_McIMDbScraperSettings.SuspendLayout
         Me.gpbxPrefScraperImages.SuspendLayout
-        Me.GroupBox44.SuspendLayout
-        Me.gbMovieBasicSave.SuspendLayout
-        Me.GroupBox30.SuspendLayout
-        Me.gbScraperMisc.SuspendLayout
-        Me.GroupBox34.SuspendLayout
-        Me.gbCustomLanguage.SuspendLayout
-        Me.GroupBox24.SuspendLayout
+        Me.grpbxMovieTagOptions.SuspendLayout
+        Me.grpbxMovieBasicSave.SuspendLayout
+        Me.grpbxScraperLimits.SuspendLayout
+        Me.grpbxScraperMisc.SuspendLayout
+        Me.grpbxMovPreferLang.SuspendLayout
+        Me.grpbxCustomLanguage.SuspendLayout
+        Me.grpbxMovieFolderOptions.SuspendLayout
         Me.tpMoviePreferences_Artwork.SuspendLayout
-        Me.GroupBox47.SuspendLayout
+        Me.grpbxMovieSetArtwork.SuspendLayout
         Me.GrpbxXtraArtwork.SuspendLayout
-        Me.GroupBox38.SuspendLayout
-        Me.GroupBox10.SuspendLayout
-        Me.GroupBox37.SuspendLayout
-        Me.GroupBox41.SuspendLayout
+        Me.grpbxMoviesInFoldersArtwork.SuspendLayout
+        Me.grpbxMoviePosterPriority.SuspendLayout
+        Me.grpbxAutoScrapeArtwork.SuspendLayout
+        Me.grpbxExtraArtwork.SuspendLayout
         Me.tpMoviePreferences_General.SuspendLayout
-        Me.gbMovieFilters.SuspendLayout
+        Me.grpbxMovieFilters.SuspendLayout
         CType(Me.nudMaxTagsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudMinTagsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudMaxDirectorsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
@@ -546,16 +545,16 @@ Partial Class frmPreferences
         CType(Me.nudSetsFilterMinFilms,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudMaxActorsInFilter,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.nudActorsFilterMinFilms,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.GroupBox35.SuspendLayout
-        Me.GroupBox27.SuspendLayout
-        Me.GroupBox9.SuspendLayout
-        Me.GroupBox26.SuspendLayout
+        Me.grpbxMovieListOptions.SuspendLayout
+        Me.grpbxMovieRenameOptions.SuspendLayout
+        Me.grpbxMovieOfflineTitleText.SuspendLayout
+        Me.grpbxMovieGeneralOptions.SuspendLayout
         Me.PanelDisplayRuntime.SuspendLayout
-        Me.grpNameMode.SuspendLayout
+        Me.grpbxMovieNameMode.SuspendLayout
         Me.tpMoviePreferences_Advanced.SuspendLayout
-        Me.GroupBox7.SuspendLayout
-        Me.gb_MovieIdentifier.SuspendLayout
-        Me.GroupBox16.SuspendLayout
+        Me.grpbxMovieCustomPlaycountTag.SuspendLayout
+        Me.grpbxMovieSeparateIdentifier.SuspendLayout
+        Me.grpbxMovieNfoPosterOptions.SuspendLayout
         Me.TPTVPref.SuspendLayout
         Me.TabControl6.SuspendLayout
         Me.TabPage30.SuspendLayout
@@ -1086,27 +1085,27 @@ Partial Class frmPreferences
         ". Only applicable if 'Scraper' selected above")
         Me.cbMovieRuntimeFallbackToFile.UseVisualStyleBackColor = true
         '
-        'GroupBox11
+        'grpbxImdbCertPriority
         '
-        Me.GroupBox11.Controls.Add(Me.cbIncludeMpaaRated)
-        Me.GroupBox11.Controls.Add(Me.cbExcludeMpaaRated)
-        Me.GroupBox11.Controls.Add(Me.cb_MovCertRemovePhrase)
-        Me.GroupBox11.Controls.Add(Me.ScrapeFullCertCheckBox)
-        Me.GroupBox11.Controls.Add(Me.Label178)
-        Me.GroupBox11.Controls.Add(Me.Label95)
-        Me.GroupBox11.Controls.Add(Me.Button74)
-        Me.GroupBox11.Controls.Add(Me.Button75)
-        Me.GroupBox11.Controls.Add(Me.Label94)
-        Me.GroupBox11.Controls.Add(Me.lb_IMDBCertPriority)
-        Me.GroupBox11.Location = New System.Drawing.Point(343, 229)
-        Me.GroupBox11.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox11.Name = "GroupBox11"
-        Me.GroupBox11.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox11.Size = New System.Drawing.Size(300, 289)
-        Me.GroupBox11.TabIndex = 85
-        Me.GroupBox11.TabStop = false
-        Me.GroupBox11.Text = "Select IMDB Certification Priorities"
-        Me.ToolTip1.SetToolTip(Me.GroupBox11, "You can select a specific locations certification to replace the MPAA entry on IM"& _ 
+        Me.grpbxImdbCertPriority.Controls.Add(Me.cbIncludeMpaaRated)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.cbExcludeMpaaRated)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.cb_MovCertRemovePhrase)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.ScrapeFullCertCheckBox)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.Label178)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.Label95)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.btnMovImdbPriorityDown)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.btnMovImdbPriorityUp)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.Label94)
+        Me.grpbxImdbCertPriority.Controls.Add(Me.lb_IMDBCertPriority)
+        Me.grpbxImdbCertPriority.Location = New System.Drawing.Point(343, 229)
+        Me.grpbxImdbCertPriority.Margin = New System.Windows.Forms.Padding(4)
+        Me.grpbxImdbCertPriority.Name = "grpbxImdbCertPriority"
+        Me.grpbxImdbCertPriority.Padding = New System.Windows.Forms.Padding(4)
+        Me.grpbxImdbCertPriority.Size = New System.Drawing.Size(300, 289)
+        Me.grpbxImdbCertPriority.TabIndex = 85
+        Me.grpbxImdbCertPriority.TabStop = false
+        Me.grpbxImdbCertPriority.Text = "Select IMDB Certification Priorities"
+        Me.ToolTip1.SetToolTip(Me.grpbxImdbCertPriority, "You can select a specific locations certification to replace the MPAA entry on IM"& _ 
         "DB if you wish,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"The Rating will be scraped by the first available from the abov"& _ 
         "e list.")
         '
@@ -1171,27 +1170,27 @@ Partial Class frmPreferences
         Me.Label95.TabIndex = 7
         Me.Label95.Text = "Customise your preference with regards to the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"MPAA movie rating or Cert."
         '
-        'Button74
+        'btnMovImdbPriorityDown
         '
-        Me.Button74.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button74.Location = New System.Drawing.Point(242, 161)
-        Me.Button74.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button74.Name = "Button74"
-        Me.Button74.Size = New System.Drawing.Size(34, 29)
-        Me.Button74.TabIndex = 6
-        Me.Button74.Text = "↓"
-        Me.Button74.UseVisualStyleBackColor = true
+        Me.btnMovImdbPriorityDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnMovImdbPriorityDown.Location = New System.Drawing.Point(242, 161)
+        Me.btnMovImdbPriorityDown.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnMovImdbPriorityDown.Name = "btnMovImdbPriorityDown"
+        Me.btnMovImdbPriorityDown.Size = New System.Drawing.Size(34, 29)
+        Me.btnMovImdbPriorityDown.TabIndex = 6
+        Me.btnMovImdbPriorityDown.Text = "↓"
+        Me.btnMovImdbPriorityDown.UseVisualStyleBackColor = true
         '
-        'Button75
+        'btnMovImdbPriorityUp
         '
-        Me.Button75.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button75.Location = New System.Drawing.Point(242, 83)
-        Me.Button75.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button75.Name = "Button75"
-        Me.Button75.Size = New System.Drawing.Size(34, 29)
-        Me.Button75.TabIndex = 5
-        Me.Button75.Text = "↑"
-        Me.Button75.UseVisualStyleBackColor = true
+        Me.btnMovImdbPriorityUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.btnMovImdbPriorityUp.Location = New System.Drawing.Point(242, 83)
+        Me.btnMovImdbPriorityUp.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnMovImdbPriorityUp.Name = "btnMovImdbPriorityUp"
+        Me.btnMovImdbPriorityUp.Size = New System.Drawing.Size(34, 29)
+        Me.btnMovImdbPriorityUp.TabIndex = 5
+        Me.btnMovImdbPriorityUp.Text = "↑"
+        Me.btnMovImdbPriorityUp.UseVisualStyleBackColor = true
         '
         'Label94
         '
@@ -2328,11 +2327,10 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.AutoScroll = true
         Me.tpMoviePreferences_Scraper.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Scraper.BackColor = System.Drawing.SystemColors.Control
-        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox6)
-        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GpBx_ScraperSettings)
+        Me.tpMoviePreferences_Scraper.Controls.Add(Me.grpbxTMDbApi)
+        Me.tpMoviePreferences_Scraper.Controls.Add(Me.grpbxMovieScraperSettings)
         Me.tpMoviePreferences_Scraper.Controls.Add(Me.gpbxPrefScraperImages)
-        Me.tpMoviePreferences_Scraper.Controls.Add(Me.GroupBox24)
-        Me.tpMoviePreferences_Scraper.Controls.Add(Me.Button82)
+        Me.tpMoviePreferences_Scraper.Controls.Add(Me.grpbxMovieFolderOptions)
         Me.tpMoviePreferences_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tpMoviePreferences_Scraper.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Scraper.Margin = New System.Windows.Forms.Padding(4)
@@ -2342,16 +2340,16 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Scraper.TabIndex = 0
         Me.tpMoviePreferences_Scraper.Text = "Scraper"
         '
-        'GroupBox6
+        'grpbxTMDbApi
         '
-        Me.GroupBox6.Controls.Add(Me.Label22)
-        Me.GroupBox6.Controls.Add(Me.tbTMDbAPI)
-        Me.GroupBox6.Location = New System.Drawing.Point(7, 442)
-        Me.GroupBox6.Name = "GroupBox6"
-        Me.GroupBox6.Size = New System.Drawing.Size(319, 89)
-        Me.GroupBox6.TabIndex = 79
-        Me.GroupBox6.TabStop = false
-        Me.GroupBox6.Text = "TMDb API"
+        Me.grpbxTMDbApi.Controls.Add(Me.Label22)
+        Me.grpbxTMDbApi.Controls.Add(Me.tbTMDbAPI)
+        Me.grpbxTMDbApi.Location = New System.Drawing.Point(7, 442)
+        Me.grpbxTMDbApi.Name = "grpbxTMDbApi"
+        Me.grpbxTMDbApi.Size = New System.Drawing.Size(319, 89)
+        Me.grpbxTMDbApi.TabIndex = 79
+        Me.grpbxTMDbApi.TabStop = false
+        Me.grpbxTMDbApi.Text = "TMDb API"
         '
         'Label22
         '
@@ -2370,38 +2368,38 @@ Partial Class frmPreferences
         Me.tbTMDbAPI.Size = New System.Drawing.Size(293, 21)
         Me.tbTMDbAPI.TabIndex = 0
         '
-        'GpBx_ScraperSettings
+        'grpbxMovieScraperSettings
         '
-        Me.GpBx_ScraperSettings.Controls.Add(Me.GpBx_TMDB_Scraper_Preferences)
-        Me.GpBx_ScraperSettings.Controls.Add(Me.CheckBox_Use_XBMC_Scraper)
-        Me.GpBx_ScraperSettings.Controls.Add(Me.GpBx_McIMDbScraperSettings)
-        Me.GpBx_ScraperSettings.Location = New System.Drawing.Point(7, 6)
-        Me.GpBx_ScraperSettings.Name = "GpBx_ScraperSettings"
-        Me.GpBx_ScraperSettings.Size = New System.Drawing.Size(319, 358)
-        Me.GpBx_ScraperSettings.TabIndex = 72
-        Me.GpBx_ScraperSettings.TabStop = false
-        Me.GpBx_ScraperSettings.Text = "Choose Default Scraper"
+        Me.grpbxMovieScraperSettings.Controls.Add(Me.grpbxTMDBScraperPreferences)
+        Me.grpbxMovieScraperSettings.Controls.Add(Me.cbMovieUseXBMCScraper)
+        Me.grpbxMovieScraperSettings.Controls.Add(Me.GpBx_McIMDbScraperSettings)
+        Me.grpbxMovieScraperSettings.Location = New System.Drawing.Point(7, 6)
+        Me.grpbxMovieScraperSettings.Name = "grpbxMovieScraperSettings"
+        Me.grpbxMovieScraperSettings.Size = New System.Drawing.Size(319, 358)
+        Me.grpbxMovieScraperSettings.TabIndex = 72
+        Me.grpbxMovieScraperSettings.TabStop = false
+        Me.grpbxMovieScraperSettings.Text = "Choose Default Scraper"
         '
-        'GpBx_TMDB_Scraper_Preferences
+        'grpbxTMDBScraperPreferences
         '
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxTMDBPreferredCertCountry)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label5)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.GroupBox46)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbActorFromImdb)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbRename)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label155)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbTitleLanguage)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cbXbmcTmdbFanart)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.cmbxXbmcTmdbHDTrailer)
-        Me.GpBx_TMDB_Scraper_Preferences.Controls.Add(Me.Label153)
-        Me.GpBx_TMDB_Scraper_Preferences.Location = New System.Drawing.Point(10, 40)
-        Me.GpBx_TMDB_Scraper_Preferences.Margin = New System.Windows.Forms.Padding(4)
-        Me.GpBx_TMDB_Scraper_Preferences.Name = "GpBx_TMDB_Scraper_Preferences"
-        Me.GpBx_TMDB_Scraper_Preferences.Padding = New System.Windows.Forms.Padding(4)
-        Me.GpBx_TMDB_Scraper_Preferences.Size = New System.Drawing.Size(300, 310)
-        Me.GpBx_TMDB_Scraper_Preferences.TabIndex = 68
-        Me.GpBx_TMDB_Scraper_Preferences.TabStop = false
-        Me.GpBx_TMDB_Scraper_Preferences.Text = "XBMC Scraper Preferences - TMDB"
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cmbxTMDBPreferredCertCountry)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.Label5)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.grpbxTmdbfromImdbOptions)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cbXbmcTmdbActorFromImdb)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cbXbmcTmdbRename)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.Label155)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cmbxXbmcTmdbTitleLanguage)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cbXbmcTmdbFanart)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cmbxXbmcTmdbHDTrailer)
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.Label153)
+        Me.grpbxTMDBScraperPreferences.Location = New System.Drawing.Point(10, 40)
+        Me.grpbxTMDBScraperPreferences.Margin = New System.Windows.Forms.Padding(4)
+        Me.grpbxTMDBScraperPreferences.Name = "grpbxTMDBScraperPreferences"
+        Me.grpbxTMDBScraperPreferences.Padding = New System.Windows.Forms.Padding(4)
+        Me.grpbxTMDBScraperPreferences.Size = New System.Drawing.Size(300, 310)
+        Me.grpbxTMDBScraperPreferences.TabIndex = 68
+        Me.grpbxTMDBScraperPreferences.TabStop = false
+        Me.grpbxTMDBScraperPreferences.Text = "XBMC Scraper Preferences - TMDB"
         '
         'cmbxTMDBPreferredCertCountry
         '
@@ -2420,25 +2418,36 @@ Partial Class frmPreferences
         Me.Label5.TabIndex = 83
         Me.Label5.Text = "Preferred Country Certificate"
         '
-        'GroupBox46
+        'grpbxTmdbfromImdbOptions
         '
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbMetascoreFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAspectFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbGenreFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbAkasFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbCertFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbVotesFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbTop250FromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbIMDBRatings)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbStarsFromImdb)
-        Me.GroupBox46.Controls.Add(Me.cbXbmcTmdbOutlineFromImdb)
-        Me.GroupBox46.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox46.Location = New System.Drawing.Point(11, 36)
-        Me.GroupBox46.Name = "GroupBox46"
-        Me.GroupBox46.Size = New System.Drawing.Size(244, 126)
-        Me.GroupBox46.TabIndex = 82
-        Me.GroupBox46.TabStop = false
-        Me.GroupBox46.Text = "Scrape the following from IMDB"
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbMetascoreFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbAspectFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbGenreFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbAkasFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbCertFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbVotesFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbTop250FromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbIMDBRatings)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbStarsFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Controls.Add(Me.cbXbmcTmdbOutlineFromImdb)
+        Me.grpbxTmdbfromImdbOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.grpbxTmdbfromImdbOptions.Location = New System.Drawing.Point(11, 36)
+        Me.grpbxTmdbfromImdbOptions.Name = "grpbxTmdbfromImdbOptions"
+        Me.grpbxTmdbfromImdbOptions.Size = New System.Drawing.Size(244, 126)
+        Me.grpbxTmdbfromImdbOptions.TabIndex = 82
+        Me.grpbxTmdbfromImdbOptions.TabStop = false
+        Me.grpbxTmdbfromImdbOptions.Text = "Scrape the following from IMDB"
+        '
+        'cbXbmcTmdbMetascoreFromImdb
+        '
+        Me.cbXbmcTmdbMetascoreFromImdb.AutoSize = true
+        Me.cbXbmcTmdbMetascoreFromImdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbXbmcTmdbMetascoreFromImdb.Location = New System.Drawing.Point(116, 102)
+        Me.cbXbmcTmdbMetascoreFromImdb.Name = "cbXbmcTmdbMetascoreFromImdb"
+        Me.cbXbmcTmdbMetascoreFromImdb.Size = New System.Drawing.Size(84, 19)
+        Me.cbXbmcTmdbMetascoreFromImdb.TabIndex = 87
+        Me.cbXbmcTmdbMetascoreFromImdb.Text = "Metascore"
+        Me.cbXbmcTmdbMetascoreFromImdb.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbAspectFromImdb
         '
@@ -2607,17 +2616,17 @@ Partial Class frmPreferences
         Me.Label153.TabIndex = 69
         Me.Label153.Text = "Preferred language"
         '
-        'CheckBox_Use_XBMC_Scraper
+        'cbMovieUseXBMCScraper
         '
-        Me.CheckBox_Use_XBMC_Scraper.AutoSize = true
-        Me.CheckBox_Use_XBMC_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox_Use_XBMC_Scraper.Location = New System.Drawing.Point(5, 18)
-        Me.CheckBox_Use_XBMC_Scraper.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox_Use_XBMC_Scraper.Name = "CheckBox_Use_XBMC_Scraper"
-        Me.CheckBox_Use_XBMC_Scraper.Size = New System.Drawing.Size(170, 19)
-        Me.CheckBox_Use_XBMC_Scraper.TabIndex = 65
-        Me.CheckBox_Use_XBMC_Scraper.Text = "Use TMDB XBMC Scraper"
-        Me.CheckBox_Use_XBMC_Scraper.UseVisualStyleBackColor = true
+        Me.cbMovieUseXBMCScraper.AutoSize = true
+        Me.cbMovieUseXBMCScraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbMovieUseXBMCScraper.Location = New System.Drawing.Point(5, 18)
+        Me.cbMovieUseXBMCScraper.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbMovieUseXBMCScraper.Name = "cbMovieUseXBMCScraper"
+        Me.cbMovieUseXBMCScraper.Size = New System.Drawing.Size(170, 19)
+        Me.cbMovieUseXBMCScraper.TabIndex = 65
+        Me.cbMovieUseXBMCScraper.Text = "Use TMDB XBMC Scraper"
+        Me.cbMovieUseXBMCScraper.UseVisualStyleBackColor = true
         '
         'GpBx_McIMDbScraperSettings
         '
@@ -2724,12 +2733,12 @@ Partial Class frmPreferences
         '
         'gpbxPrefScraperImages
         '
-        Me.gpbxPrefScraperImages.Controls.Add(Me.GroupBox11)
-        Me.gpbxPrefScraperImages.Controls.Add(Me.GroupBox44)
-        Me.gpbxPrefScraperImages.Controls.Add(Me.gbMovieBasicSave)
-        Me.gpbxPrefScraperImages.Controls.Add(Me.GroupBox30)
-        Me.gpbxPrefScraperImages.Controls.Add(Me.gbScraperMisc)
-        Me.gpbxPrefScraperImages.Controls.Add(Me.GroupBox34)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxImdbCertPriority)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxMovieTagOptions)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxMovieBasicSave)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxScraperLimits)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxScraperMisc)
+        Me.gpbxPrefScraperImages.Controls.Add(Me.grpbxMovPreferLang)
         Me.gpbxPrefScraperImages.Location = New System.Drawing.Point(333, 6)
         Me.gpbxPrefScraperImages.Name = "gpbxPrefScraperImages"
         Me.gpbxPrefScraperImages.Size = New System.Drawing.Size(655, 525)
@@ -2737,22 +2746,22 @@ Partial Class frmPreferences
         Me.gpbxPrefScraperImages.TabStop = false
         Me.gpbxPrefScraperImages.Text = "Scraping options"
         '
-        'GroupBox44
+        'grpbxMovieTagOptions
         '
-        Me.GroupBox44.Controls.Add(Me.cbTagRes)
-        Me.GroupBox44.Controls.Add(Me.cbAllowUserTags)
-        Me.GroupBox44.Controls.Add(Me.Label9)
-        Me.GroupBox44.Controls.Add(Me.tb_MovTagBlacklist)
-        Me.GroupBox44.Controls.Add(Me.Label8)
-        Me.GroupBox44.Controls.Add(Me.Label69)
-        Me.GroupBox44.Controls.Add(Me.cb_keywordlimit)
-        Me.GroupBox44.Controls.Add(Me.cb_keywordasTag)
-        Me.GroupBox44.Location = New System.Drawing.Point(343, 14)
-        Me.GroupBox44.Name = "GroupBox44"
-        Me.GroupBox44.Size = New System.Drawing.Size(300, 208)
-        Me.GroupBox44.TabIndex = 84
-        Me.GroupBox44.TabStop = false
-        Me.GroupBox44.Text = "Keywords As Tags"
+        Me.grpbxMovieTagOptions.Controls.Add(Me.cbTagRes)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.cbAllowUserTags)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.Label9)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.tb_MovTagBlacklist)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.Label8)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.Label69)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.cb_keywordlimit)
+        Me.grpbxMovieTagOptions.Controls.Add(Me.cb_keywordasTag)
+        Me.grpbxMovieTagOptions.Location = New System.Drawing.Point(343, 14)
+        Me.grpbxMovieTagOptions.Name = "grpbxMovieTagOptions"
+        Me.grpbxMovieTagOptions.Size = New System.Drawing.Size(300, 208)
+        Me.grpbxMovieTagOptions.TabIndex = 84
+        Me.grpbxMovieTagOptions.TabStop = false
+        Me.grpbxMovieTagOptions.Text = "Keywords As Tags"
         '
         'cbTagRes
         '
@@ -2810,17 +2819,17 @@ Partial Class frmPreferences
         Me.cb_keywordasTag.Text = "Store Plot keywords in Tags field"
         Me.cb_keywordasTag.UseVisualStyleBackColor = true
         '
-        'gbMovieBasicSave
+        'grpbxMovieBasicSave
         '
-        Me.gbMovieBasicSave.Controls.Add(Me.cbMovieBasicSave)
-        Me.gbMovieBasicSave.Controls.Add(Me.Label162)
-        Me.gbMovieBasicSave.Controls.Add(Me.Label109)
-        Me.gbMovieBasicSave.Location = New System.Drawing.Point(6, 356)
-        Me.gbMovieBasicSave.Name = "gbMovieBasicSave"
-        Me.gbMovieBasicSave.Size = New System.Drawing.Size(331, 131)
-        Me.gbMovieBasicSave.TabIndex = 83
-        Me.gbMovieBasicSave.TabStop = false
-        Me.gbMovieBasicSave.Text = "Basic Save Mode"
+        Me.grpbxMovieBasicSave.Controls.Add(Me.cbMovieBasicSave)
+        Me.grpbxMovieBasicSave.Controls.Add(Me.Label162)
+        Me.grpbxMovieBasicSave.Controls.Add(Me.Label109)
+        Me.grpbxMovieBasicSave.Location = New System.Drawing.Point(6, 356)
+        Me.grpbxMovieBasicSave.Name = "grpbxMovieBasicSave"
+        Me.grpbxMovieBasicSave.Size = New System.Drawing.Size(331, 131)
+        Me.grpbxMovieBasicSave.TabIndex = 83
+        Me.grpbxMovieBasicSave.TabStop = false
+        Me.grpbxMovieBasicSave.Text = "Basic Save Mode"
         '
         'Label162
         '
@@ -2844,18 +2853,18 @@ Partial Class frmPreferences
         Me.Label109.Text = "Some people prefer to save their files as movie.nfo, movie.tbn and fanart.jpg to "& _ 
     "keep compatibility with other media managers."
         '
-        'GroupBox30
+        'grpbxScraperLimits
         '
-        Me.GroupBox30.Controls.Add(Me.cmbxMovieScraper_MaxStudios)
-        Me.GroupBox30.Controls.Add(Me.lblMaxStudios)
-        Me.GroupBox30.Controls.Add(Me.Label92)
-        Me.GroupBox30.Controls.Add(Me.cmbxMovScraper_MaxGenres)
-        Me.GroupBox30.Location = New System.Drawing.Point(6, 196)
-        Me.GroupBox30.Name = "GroupBox30"
-        Me.GroupBox30.Size = New System.Drawing.Size(330, 80)
-        Me.GroupBox30.TabIndex = 75
-        Me.GroupBox30.TabStop = false
-        Me.GroupBox30.Text = "Scraper Limits"
+        Me.grpbxScraperLimits.Controls.Add(Me.cmbxMovieScraper_MaxStudios)
+        Me.grpbxScraperLimits.Controls.Add(Me.lblMaxStudios)
+        Me.grpbxScraperLimits.Controls.Add(Me.Label92)
+        Me.grpbxScraperLimits.Controls.Add(Me.cmbxMovScraper_MaxGenres)
+        Me.grpbxScraperLimits.Location = New System.Drawing.Point(6, 196)
+        Me.grpbxScraperLimits.Name = "grpbxScraperLimits"
+        Me.grpbxScraperLimits.Size = New System.Drawing.Size(330, 80)
+        Me.grpbxScraperLimits.TabIndex = 75
+        Me.grpbxScraperLimits.TabStop = false
+        Me.grpbxScraperLimits.Text = "Scraper Limits"
         '
         'lblMaxStudios
         '
@@ -2879,41 +2888,41 @@ Partial Class frmPreferences
         Me.Label92.TabIndex = 45
         Me.Label92.Text = "Maximum number of genres:"
         '
-        'gbScraperMisc
+        'grpbxScraperMisc
         '
-        Me.gbScraperMisc.Controls.Add(Me.chkbOriginal_Title)
-        Me.gbScraperMisc.Controls.Add(Me.cbGetMovieSetFromTMDb)
-        Me.gbScraperMisc.Location = New System.Drawing.Point(6, 282)
-        Me.gbScraperMisc.Name = "gbScraperMisc"
-        Me.gbScraperMisc.Size = New System.Drawing.Size(331, 68)
-        Me.gbScraperMisc.TabIndex = 52
-        Me.gbScraperMisc.TabStop = false
-        Me.gbScraperMisc.Text = " Other options "
+        Me.grpbxScraperMisc.Controls.Add(Me.cbIMDbOriginalTitle)
+        Me.grpbxScraperMisc.Controls.Add(Me.cbGetMovieSetFromTMDb)
+        Me.grpbxScraperMisc.Location = New System.Drawing.Point(6, 282)
+        Me.grpbxScraperMisc.Name = "grpbxScraperMisc"
+        Me.grpbxScraperMisc.Size = New System.Drawing.Size(331, 68)
+        Me.grpbxScraperMisc.TabIndex = 52
+        Me.grpbxScraperMisc.TabStop = false
+        Me.grpbxScraperMisc.Text = " Other options "
         '
-        'chkbOriginal_Title
+        'cbIMDbOriginalTitle
         '
-        Me.chkbOriginal_Title.AutoSize = true
-        Me.chkbOriginal_Title.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.chkbOriginal_Title.Location = New System.Drawing.Point(12, 39)
-        Me.chkbOriginal_Title.Name = "chkbOriginal_Title"
-        Me.chkbOriginal_Title.Size = New System.Drawing.Size(303, 17)
-        Me.chkbOriginal_Title.TabIndex = 51
-        Me.chkbOriginal_Title.Text = "IMDB - Where available scrape 'Original title' instead of title"
-        Me.chkbOriginal_Title.UseVisualStyleBackColor = true
+        Me.cbIMDbOriginalTitle.AutoSize = true
+        Me.cbIMDbOriginalTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbIMDbOriginalTitle.Location = New System.Drawing.Point(12, 39)
+        Me.cbIMDbOriginalTitle.Name = "cbIMDbOriginalTitle"
+        Me.cbIMDbOriginalTitle.Size = New System.Drawing.Size(303, 17)
+        Me.cbIMDbOriginalTitle.TabIndex = 51
+        Me.cbIMDbOriginalTitle.Text = "IMDB - Where available scrape 'Original title' instead of title"
+        Me.cbIMDbOriginalTitle.UseVisualStyleBackColor = true
         '
-        'GroupBox34
+        'grpbxMovPreferLang
         '
-        Me.GroupBox34.Controls.Add(Me.Label27)
-        Me.GroupBox34.Controls.Add(Me.gbCustomLanguage)
-        Me.GroupBox34.Controls.Add(Me.Label177)
-        Me.GroupBox34.Controls.Add(Me.cbUseCustomLanguage)
-        Me.GroupBox34.Controls.Add(Me.comboBoxTMDbSelectedLanguage)
-        Me.GroupBox34.Location = New System.Drawing.Point(6, 14)
-        Me.GroupBox34.Name = "GroupBox34"
-        Me.GroupBox34.Size = New System.Drawing.Size(331, 168)
-        Me.GroupBox34.TabIndex = 38
-        Me.GroupBox34.TabStop = false
-        Me.GroupBox34.Text = "Preferred Language"
+        Me.grpbxMovPreferLang.Controls.Add(Me.Label27)
+        Me.grpbxMovPreferLang.Controls.Add(Me.grpbxCustomLanguage)
+        Me.grpbxMovPreferLang.Controls.Add(Me.Label177)
+        Me.grpbxMovPreferLang.Controls.Add(Me.cbUseCustomLanguage)
+        Me.grpbxMovPreferLang.Controls.Add(Me.cmbxTMDbSelectedLanguage)
+        Me.grpbxMovPreferLang.Location = New System.Drawing.Point(6, 16)
+        Me.grpbxMovPreferLang.Name = "grpbxMovPreferLang"
+        Me.grpbxMovPreferLang.Size = New System.Drawing.Size(331, 168)
+        Me.grpbxMovPreferLang.TabIndex = 38
+        Me.grpbxMovPreferLang.TabStop = false
+        Me.grpbxMovPreferLang.Text = "Preferred Language"
         '
         'Label27
         '
@@ -2924,18 +2933,18 @@ Partial Class frmPreferences
         Me.Label27.TabIndex = 23
         Me.Label27.Text = "Set language for Images and other info from TMDB"
         '
-        'gbCustomLanguage
+        'grpbxCustomLanguage
         '
-        Me.gbCustomLanguage.Controls.Add(Me.llLanguagesFile)
-        Me.gbCustomLanguage.Controls.Add(Me.tbCustomLanguageValue)
-        Me.gbCustomLanguage.Controls.Add(Me.Label174)
-        Me.gbCustomLanguage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.gbCustomLanguage.Location = New System.Drawing.Point(28, 88)
-        Me.gbCustomLanguage.Name = "gbCustomLanguage"
-        Me.gbCustomLanguage.Size = New System.Drawing.Size(291, 68)
-        Me.gbCustomLanguage.TabIndex = 22
-        Me.gbCustomLanguage.TabStop = false
-        Me.gbCustomLanguage.Text = " Custom string"
+        Me.grpbxCustomLanguage.Controls.Add(Me.llLanguagesFile)
+        Me.grpbxCustomLanguage.Controls.Add(Me.tbCustomLanguageValue)
+        Me.grpbxCustomLanguage.Controls.Add(Me.Label174)
+        Me.grpbxCustomLanguage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.grpbxCustomLanguage.Location = New System.Drawing.Point(28, 88)
+        Me.grpbxCustomLanguage.Name = "grpbxCustomLanguage"
+        Me.grpbxCustomLanguage.Size = New System.Drawing.Size(291, 68)
+        Me.grpbxCustomLanguage.TabIndex = 22
+        Me.grpbxCustomLanguage.TabStop = false
+        Me.grpbxCustomLanguage.Text = " Custom string"
         '
         'llLanguagesFile
         '
@@ -2987,25 +2996,25 @@ Partial Class frmPreferences
         Me.cbUseCustomLanguage.Text = "Or define your own..."
         Me.cbUseCustomLanguage.UseVisualStyleBackColor = true
         '
-        'comboBoxTMDbSelectedLanguage
+        'cmbxTMDbSelectedLanguage
         '
-        Me.comboBoxTMDbSelectedLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.comboBoxTMDbSelectedLanguage.FormattingEnabled = true
-        Me.comboBoxTMDbSelectedLanguage.Location = New System.Drawing.Point(114, 42)
-        Me.comboBoxTMDbSelectedLanguage.Name = "comboBoxTMDbSelectedLanguage"
-        Me.comboBoxTMDbSelectedLanguage.Size = New System.Drawing.Size(130, 23)
-        Me.comboBoxTMDbSelectedLanguage.TabIndex = 19
+        Me.cmbxTMDbSelectedLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbxTMDbSelectedLanguage.FormattingEnabled = true
+        Me.cmbxTMDbSelectedLanguage.Location = New System.Drawing.Point(114, 42)
+        Me.cmbxTMDbSelectedLanguage.Name = "cmbxTMDbSelectedLanguage"
+        Me.cmbxTMDbSelectedLanguage.Size = New System.Drawing.Size(130, 23)
+        Me.cmbxTMDbSelectedLanguage.TabIndex = 19
         '
-        'GroupBox24
+        'grpbxMovieFolderOptions
         '
-        Me.GroupBox24.Controls.Add(Me.cbMovieAllInFolders)
-        Me.GroupBox24.Controls.Add(Me.cbMovieUseFolderNames)
-        Me.GroupBox24.Location = New System.Drawing.Point(7, 370)
-        Me.GroupBox24.Name = "GroupBox24"
-        Me.GroupBox24.Size = New System.Drawing.Size(319, 70)
-        Me.GroupBox24.TabIndex = 78
-        Me.GroupBox24.TabStop = false
-        Me.GroupBox24.Text = "Individual Movie Folder Options"
+        Me.grpbxMovieFolderOptions.Controls.Add(Me.cbMovieAllInFolders)
+        Me.grpbxMovieFolderOptions.Controls.Add(Me.cbMovieUseFolderNames)
+        Me.grpbxMovieFolderOptions.Location = New System.Drawing.Point(7, 370)
+        Me.grpbxMovieFolderOptions.Name = "grpbxMovieFolderOptions"
+        Me.grpbxMovieFolderOptions.Size = New System.Drawing.Size(319, 70)
+        Me.grpbxMovieFolderOptions.TabIndex = 78
+        Me.grpbxMovieFolderOptions.TabStop = false
+        Me.grpbxMovieFolderOptions.Text = "Individual Movie Folder Options"
         '
         'cbMovieAllInFolders
         '
@@ -3030,44 +3039,32 @@ Partial Class frmPreferences
         Me.cbMovieUseFolderNames.Text = "Use Folder Names for Scraping (allows Extrathumbs)"
         Me.cbMovieUseFolderNames.UseVisualStyleBackColor = true
         '
-        'Button82
-        '
-        Me.Button82.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.Button82.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Button82.Location = New System.Drawing.Point(431, -1623)
-        Me.Button82.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button82.Name = "Button82"
-        Me.Button82.Size = New System.Drawing.Size(150, 30)
-        Me.Button82.TabIndex = 51
-        Me.Button82.Text = "Save Changes"
-        Me.Button82.UseVisualStyleBackColor = true
-        '
         'tpMoviePreferences_Artwork
         '
-        Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox47)
+        Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxMovieSetArtwork)
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.GrpbxXtraArtwork)
-        Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox10)
-        Me.tpMoviePreferences_Artwork.Controls.Add(Me.GroupBox37)
+        Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxMoviePosterPriority)
+        Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
         '
-        'GroupBox47
+        'grpbxMovieSetArtwork
         '
-        Me.GroupBox47.Controls.Add(Me.Label37)
-        Me.GroupBox47.Controls.Add(Me.tbMovSetArtCentralFolder)
-        Me.GroupBox47.Controls.Add(Me.btnMovSetCentralFolderSelect)
-        Me.GroupBox47.Controls.Add(Me.rbMovSetArtSetFolder)
-        Me.GroupBox47.Controls.Add(Me.rbMovSetFolder)
-        Me.GroupBox47.Location = New System.Drawing.Point(348, 226)
-        Me.GroupBox47.Name = "GroupBox47"
-        Me.GroupBox47.Size = New System.Drawing.Size(327, 175)
-        Me.GroupBox47.TabIndex = 83
-        Me.GroupBox47.TabStop = false
-        Me.GroupBox47.Text = "MovieSet Artwork"
+        Me.grpbxMovieSetArtwork.Controls.Add(Me.Label37)
+        Me.grpbxMovieSetArtwork.Controls.Add(Me.tbMovSetArtCentralFolder)
+        Me.grpbxMovieSetArtwork.Controls.Add(Me.btnMovSetCentralFolderSelect)
+        Me.grpbxMovieSetArtwork.Controls.Add(Me.rbMovSetArtSetFolder)
+        Me.grpbxMovieSetArtwork.Controls.Add(Me.rbMovSetFolder)
+        Me.grpbxMovieSetArtwork.Location = New System.Drawing.Point(348, 226)
+        Me.grpbxMovieSetArtwork.Name = "grpbxMovieSetArtwork"
+        Me.grpbxMovieSetArtwork.Size = New System.Drawing.Size(327, 175)
+        Me.grpbxMovieSetArtwork.TabIndex = 83
+        Me.grpbxMovieSetArtwork.TabStop = false
+        Me.grpbxMovieSetArtwork.Text = "MovieSet Artwork"
         '
         'Label37
         '
@@ -3126,7 +3123,7 @@ Partial Class frmPreferences
         '
         Me.GrpbxXtraArtwork.Controls.Add(Me.Label30)
         Me.GrpbxXtraArtwork.Controls.Add(Me.cmbxMovXtraFanartQty)
-        Me.GrpbxXtraArtwork.Controls.Add(Me.GroupBox38)
+        Me.GrpbxXtraArtwork.Controls.Add(Me.grpbxMoviesInFoldersArtwork)
         Me.GrpbxXtraArtwork.Controls.Add(Me.cbMovXtraFanart)
         Me.GrpbxXtraArtwork.Controls.Add(Me.cbMovXtraThumbs)
         Me.GrpbxXtraArtwork.Location = New System.Drawing.Point(348, 13)
@@ -3157,18 +3154,18 @@ Partial Class frmPreferences
         Me.cmbxMovXtraFanartQty.Size = New System.Drawing.Size(64, 23)
         Me.cmbxMovXtraFanartQty.TabIndex = 4
         '
-        'GroupBox38
+        'grpbxMoviesInFoldersArtwork
         '
-        Me.GroupBox38.Controls.Add(Me.cbMovCreateFanartjpg)
-        Me.GroupBox38.Controls.Add(Me.cbMoviePosterInFolder)
-        Me.GroupBox38.Controls.Add(Me.cbMovieFanartInFolders)
-        Me.GroupBox38.Controls.Add(Me.cbMovCreateFolderjpg)
-        Me.GroupBox38.Location = New System.Drawing.Point(7, 78)
-        Me.GroupBox38.Name = "GroupBox38"
-        Me.GroupBox38.Size = New System.Drawing.Size(311, 119)
-        Me.GroupBox38.TabIndex = 3
-        Me.GroupBox38.TabStop = false
-        Me.GroupBox38.Text = "If Movies In Folders, Save artwork as:"
+        Me.grpbxMoviesInFoldersArtwork.Controls.Add(Me.cbMovCreateFanartjpg)
+        Me.grpbxMoviesInFoldersArtwork.Controls.Add(Me.cbMoviePosterInFolder)
+        Me.grpbxMoviesInFoldersArtwork.Controls.Add(Me.cbMovieFanartInFolders)
+        Me.grpbxMoviesInFoldersArtwork.Controls.Add(Me.cbMovCreateFolderjpg)
+        Me.grpbxMoviesInFoldersArtwork.Location = New System.Drawing.Point(7, 78)
+        Me.grpbxMoviesInFoldersArtwork.Name = "grpbxMoviesInFoldersArtwork"
+        Me.grpbxMoviesInFoldersArtwork.Size = New System.Drawing.Size(311, 119)
+        Me.grpbxMoviesInFoldersArtwork.TabIndex = 3
+        Me.grpbxMoviesInFoldersArtwork.TabStop = false
+        Me.grpbxMoviesInFoldersArtwork.Text = "If Movies In Folders, Save artwork as:"
         '
         'cbMovCreateFolderjpg
         '
@@ -3182,23 +3179,23 @@ Partial Class frmPreferences
         Me.cbMovCreateFolderjpg.Text = "Create folder.jpg file for each folder"
         Me.cbMovCreateFolderjpg.UseVisualStyleBackColor = true
         '
-        'GroupBox10
+        'grpbxMoviePosterPriority
         '
-        Me.GroupBox10.Controls.Add(Me.btn_MovPosterPriorityRemove)
-        Me.GroupBox10.Controls.Add(Me.btn_MovPosterPriorityReset)
-        Me.GroupBox10.Controls.Add(Me.Label99)
-        Me.GroupBox10.Controls.Add(Me.Label93)
-        Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityDown)
-        Me.GroupBox10.Controls.Add(Me.btnMovPosterPriorityUp)
-        Me.GroupBox10.Controls.Add(Me.lbPosterSourcePriorities)
-        Me.GroupBox10.Location = New System.Drawing.Point(9, 333)
-        Me.GroupBox10.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox10.Name = "GroupBox10"
-        Me.GroupBox10.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox10.Size = New System.Drawing.Size(327, 165)
-        Me.GroupBox10.TabIndex = 39
-        Me.GroupBox10.TabStop = false
-        Me.GroupBox10.Text = "Movie Scraper Poster Priority"
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.btn_MovPosterPriorityRemove)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.btn_MovPosterPriorityReset)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.Label99)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.Label93)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.btnMovPosterPriorityDown)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.btnMovPosterPriorityUp)
+        Me.grpbxMoviePosterPriority.Controls.Add(Me.lbPosterSourcePriorities)
+        Me.grpbxMoviePosterPriority.Location = New System.Drawing.Point(9, 333)
+        Me.grpbxMoviePosterPriority.Margin = New System.Windows.Forms.Padding(4)
+        Me.grpbxMoviePosterPriority.Name = "grpbxMoviePosterPriority"
+        Me.grpbxMoviePosterPriority.Padding = New System.Windows.Forms.Padding(4)
+        Me.grpbxMoviePosterPriority.Size = New System.Drawing.Size(327, 165)
+        Me.grpbxMoviePosterPriority.TabIndex = 39
+        Me.grpbxMoviePosterPriority.TabStop = false
+        Me.grpbxMoviePosterPriority.Text = "Movie Scraper Poster Priority"
         '
         'btn_MovPosterPriorityRemove
         '
@@ -3272,24 +3269,24 @@ Partial Class frmPreferences
         Me.lbPosterSourcePriorities.Size = New System.Drawing.Size(212, 79)
         Me.lbPosterSourcePriorities.TabIndex = 0
         '
-        'GroupBox37
+        'grpbxAutoScrapeArtwork
         '
-        Me.GroupBox37.Controls.Add(Me.cbMovCustPosterjpgNoDelete)
-        Me.GroupBox37.Controls.Add(Me.cbMovCustFolderjpgNoDelete)
-        Me.GroupBox37.Controls.Add(Me.cbMovFanartNaming)
-        Me.GroupBox37.Controls.Add(Me.btnMovFanartTvSelect)
-        Me.GroupBox37.Controls.Add(Me.Label10)
-        Me.GroupBox37.Controls.Add(Me.cbMovFanartTvScrape)
-        Me.GroupBox37.Controls.Add(Me.GroupBox41)
-        Me.GroupBox37.Controls.Add(Me.cbMovSetArtScrape)
-        Me.GroupBox37.Controls.Add(Me.cbMovFanartScrape)
-        Me.GroupBox37.Controls.Add(Me.cbMoviePosterScrape)
-        Me.GroupBox37.Location = New System.Drawing.Point(9, 13)
-        Me.GroupBox37.Name = "GroupBox37"
-        Me.GroupBox37.Size = New System.Drawing.Size(327, 313)
-        Me.GroupBox37.TabIndex = 60
-        Me.GroupBox37.TabStop = false
-        Me.GroupBox37.Text = "Autoscrape artwork"
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovCustPosterjpgNoDelete)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovCustFolderjpgNoDelete)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovFanartNaming)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.btnMovFanartTvSelect)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.Label10)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovFanartTvScrape)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.grpbxExtraArtwork)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovSetArtScrape)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovFanartScrape)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMoviePosterScrape)
+        Me.grpbxAutoScrapeArtwork.Location = New System.Drawing.Point(9, 13)
+        Me.grpbxAutoScrapeArtwork.Name = "grpbxAutoScrapeArtwork"
+        Me.grpbxAutoScrapeArtwork.Size = New System.Drawing.Size(327, 313)
+        Me.grpbxAutoScrapeArtwork.TabIndex = 60
+        Me.grpbxAutoScrapeArtwork.TabStop = false
+        Me.grpbxAutoScrapeArtwork.Text = "Autoscrape artwork"
         '
         'cbMovCustPosterjpgNoDelete
         '
@@ -3337,16 +3334,16 @@ Partial Class frmPreferences
         Me.Label10.TabIndex = 46
         Me.Label10.Text = "Choose Fanart.TV art to Download"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Default is All available."
         '
-        'GroupBox41
+        'grpbxExtraArtwork
         '
-        Me.GroupBox41.Controls.Add(Me.Label189)
-        Me.GroupBox41.Controls.Add(Me.cbDlXtraFanart)
-        Me.GroupBox41.Location = New System.Drawing.Point(4, 136)
-        Me.GroupBox41.Name = "GroupBox41"
-        Me.GroupBox41.Size = New System.Drawing.Size(317, 61)
-        Me.GroupBox41.TabIndex = 44
-        Me.GroupBox41.TabStop = false
-        Me.GroupBox41.Text = "Extra Artwork"
+        Me.grpbxExtraArtwork.Controls.Add(Me.Label189)
+        Me.grpbxExtraArtwork.Controls.Add(Me.cbDlXtraFanart)
+        Me.grpbxExtraArtwork.Location = New System.Drawing.Point(4, 136)
+        Me.grpbxExtraArtwork.Name = "grpbxExtraArtwork"
+        Me.grpbxExtraArtwork.Size = New System.Drawing.Size(317, 61)
+        Me.grpbxExtraArtwork.TabIndex = 44
+        Me.grpbxExtraArtwork.TabStop = false
+        Me.grpbxExtraArtwork.Text = "Extra Artwork"
         '
         'Label189
         '
@@ -3370,48 +3367,48 @@ Partial Class frmPreferences
         'tpMoviePreferences_General
         '
         Me.tpMoviePreferences_General.BackColor = System.Drawing.SystemColors.Control
-        Me.tpMoviePreferences_General.Controls.Add(Me.gbMovieFilters)
-        Me.tpMoviePreferences_General.Controls.Add(Me.GroupBox35)
-        Me.tpMoviePreferences_General.Controls.Add(Me.GroupBox27)
-        Me.tpMoviePreferences_General.Controls.Add(Me.GroupBox9)
-        Me.tpMoviePreferences_General.Controls.Add(Me.GroupBox26)
-        Me.tpMoviePreferences_General.Controls.Add(Me.grpNameMode)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieFilters)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieListOptions)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieRenameOptions)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieOfflineTitleText)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieGeneralOptions)
+        Me.tpMoviePreferences_General.Controls.Add(Me.grpbxMovieNameMode)
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
-        'gbMovieFilters
+        'grpbxMovieFilters
         '
-        Me.gbMovieFilters.Controls.Add(Me.cmbxMovFiltersTagsOrder)
-        Me.gbMovieFilters.Controls.Add(Me.Label25)
-        Me.gbMovieFilters.Controls.Add(Me.nudMaxTagsInFilter)
-        Me.gbMovieFilters.Controls.Add(Me.nudMinTagsInFilter)
-        Me.gbMovieFilters.Controls.Add(Me.cbMovieFilters_Sets_Order)
-        Me.gbMovieFilters.Controls.Add(Me.Label54)
-        Me.gbMovieFilters.Controls.Add(Me.cbMovieFilters_Directors_Order)
-        Me.gbMovieFilters.Controls.Add(Me.nudMaxDirectorsInFilter)
-        Me.gbMovieFilters.Controls.Add(Me.nudMaxSetsInFilter)
-        Me.gbMovieFilters.Controls.Add(Me.nudDirectorsFilterMinFilms)
-        Me.gbMovieFilters.Controls.Add(Me.nudSetsFilterMinFilms)
-        Me.gbMovieFilters.Controls.Add(Me.Label11)
-        Me.gbMovieFilters.Controls.Add(Me.Label12)
-        Me.gbMovieFilters.Controls.Add(Me.cbMovieFilters_Actors_Order)
-        Me.gbMovieFilters.Controls.Add(Me.cbDisableNotMatchingRenamePattern)
-        Me.gbMovieFilters.Controls.Add(Me.Label180)
-        Me.gbMovieFilters.Controls.Add(Me.Label164)
-        Me.gbMovieFilters.Controls.Add(Me.nudMaxActorsInFilter)
-        Me.gbMovieFilters.Controls.Add(Me.nudActorsFilterMinFilms)
-        Me.gbMovieFilters.Controls.Add(Me.Label165)
-        Me.gbMovieFilters.Location = New System.Drawing.Point(657, 172)
-        Me.gbMovieFilters.Margin = New System.Windows.Forms.Padding(0)
-        Me.gbMovieFilters.Name = "gbMovieFilters"
-        Me.gbMovieFilters.Size = New System.Drawing.Size(329, 227)
-        Me.gbMovieFilters.TabIndex = 82
-        Me.gbMovieFilters.TabStop = false
-        Me.gbMovieFilters.Text = " Movie Filters "
+        Me.grpbxMovieFilters.Controls.Add(Me.cmbxMovFiltersTagsOrder)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label25)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudMaxTagsInFilter)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudMinTagsInFilter)
+        Me.grpbxMovieFilters.Controls.Add(Me.cbMovieFilters_Sets_Order)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label54)
+        Me.grpbxMovieFilters.Controls.Add(Me.cbMovieFilters_Directors_Order)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudMaxDirectorsInFilter)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudMaxSetsInFilter)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudDirectorsFilterMinFilms)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudSetsFilterMinFilms)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label11)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label12)
+        Me.grpbxMovieFilters.Controls.Add(Me.cbMovieFilters_Actors_Order)
+        Me.grpbxMovieFilters.Controls.Add(Me.cbDisableNotMatchingRenamePattern)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label180)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label164)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudMaxActorsInFilter)
+        Me.grpbxMovieFilters.Controls.Add(Me.nudActorsFilterMinFilms)
+        Me.grpbxMovieFilters.Controls.Add(Me.Label165)
+        Me.grpbxMovieFilters.Location = New System.Drawing.Point(657, 172)
+        Me.grpbxMovieFilters.Margin = New System.Windows.Forms.Padding(0)
+        Me.grpbxMovieFilters.Name = "grpbxMovieFilters"
+        Me.grpbxMovieFilters.Size = New System.Drawing.Size(329, 227)
+        Me.grpbxMovieFilters.TabIndex = 82
+        Me.grpbxMovieFilters.TabStop = false
+        Me.grpbxMovieFilters.Text = " Movie Filters "
         '
         'cmbxMovFiltersTagsOrder
         '
@@ -3611,19 +3608,19 @@ Partial Class frmPreferences
         Me.Label165.TabIndex = 2
         Me.Label165.Text = "Max list"
         '
-        'GroupBox35
+        'grpbxMovieListOptions
         '
-        Me.GroupBox35.Controls.Add(Me.cbMovieList_ShowColWatched)
-        Me.GroupBox35.Controls.Add(Me.cbMovieList_ShowColPlot)
-        Me.GroupBox35.Controls.Add(Me.tbDateFormat)
-        Me.GroupBox35.Controls.Add(Me.Label179)
-        Me.GroupBox35.Controls.Add(Me.cbMovieShowDateOnList)
-        Me.GroupBox35.Location = New System.Drawing.Point(311, 405)
-        Me.GroupBox35.Name = "GroupBox35"
-        Me.GroupBox35.Size = New System.Drawing.Size(340, 112)
-        Me.GroupBox35.TabIndex = 80
-        Me.GroupBox35.TabStop = false
-        Me.GroupBox35.Text = " Movie List "
+        Me.grpbxMovieListOptions.Controls.Add(Me.cbMovieList_ShowColWatched)
+        Me.grpbxMovieListOptions.Controls.Add(Me.cbMovieList_ShowColPlot)
+        Me.grpbxMovieListOptions.Controls.Add(Me.tbDateFormat)
+        Me.grpbxMovieListOptions.Controls.Add(Me.Label179)
+        Me.grpbxMovieListOptions.Controls.Add(Me.cbMovieShowDateOnList)
+        Me.grpbxMovieListOptions.Location = New System.Drawing.Point(311, 405)
+        Me.grpbxMovieListOptions.Name = "grpbxMovieListOptions"
+        Me.grpbxMovieListOptions.Size = New System.Drawing.Size(340, 112)
+        Me.grpbxMovieListOptions.TabIndex = 80
+        Me.grpbxMovieListOptions.TabStop = false
+        Me.grpbxMovieListOptions.Text = " Movie List "
         '
         'cbMovieList_ShowColWatched
         '
@@ -3658,32 +3655,32 @@ Partial Class frmPreferences
         Me.cbMovieShowDateOnList.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbMovieShowDateOnList.UseVisualStyleBackColor = true
         '
-        'GroupBox27
+        'grpbxMovieRenameOptions
         '
-        Me.GroupBox27.Controls.Add(Me.Label13)
-        Me.GroupBox27.Controls.Add(Me.rbRenameFullStop)
-        Me.GroupBox27.Controls.Add(Me.rbRenameUnderscore)
-        Me.GroupBox27.Controls.Add(Me.cbMovNewFolderInRootFolder)
-        Me.GroupBox27.Controls.Add(Me.cbMovSortIgnArticle)
-        Me.GroupBox27.Controls.Add(Me.cbMovTitleIgnArticle)
-        Me.GroupBox27.Controls.Add(Me.cbMovSetIgnArticle)
-        Me.GroupBox27.Controls.Add(Me.Label197)
-        Me.GroupBox27.Controls.Add(Me.Label196)
-        Me.GroupBox27.Controls.Add(Me.cbMovFolderRename)
-        Me.GroupBox27.Controls.Add(Me.cbRenameUnderscore)
-        Me.GroupBox27.Controls.Add(Me.lblFolderRename)
-        Me.GroupBox27.Controls.Add(Me.tb_MovFolderRename)
-        Me.GroupBox27.Controls.Add(Me.LblFilename)
-        Me.GroupBox27.Controls.Add(Me.cbMovieManualRename)
-        Me.GroupBox27.Controls.Add(Me.cbMovieRenameEnable)
-        Me.GroupBox27.Controls.Add(Me.Label100)
-        Me.GroupBox27.Controls.Add(Me.tb_MovieRenameTemplate)
-        Me.GroupBox27.Location = New System.Drawing.Point(311, 6)
-        Me.GroupBox27.Name = "GroupBox27"
-        Me.GroupBox27.Size = New System.Drawing.Size(340, 393)
-        Me.GroupBox27.TabIndex = 74
-        Me.GroupBox27.TabStop = false
-        Me.GroupBox27.Text = "Rename Movie Settings"
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.Label13)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.rbRenameFullStop)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.rbRenameUnderscore)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovNewFolderInRootFolder)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovSortIgnArticle)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovTitleIgnArticle)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovSetIgnArticle)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.Label197)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.Label196)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovFolderRename)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbRenameUnderscore)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.lblFolderRename)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.tb_MovFolderRename)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.LblFilename)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovieManualRename)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.cbMovieRenameEnable)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.Label100)
+        Me.grpbxMovieRenameOptions.Controls.Add(Me.tb_MovieRenameTemplate)
+        Me.grpbxMovieRenameOptions.Location = New System.Drawing.Point(311, 6)
+        Me.grpbxMovieRenameOptions.Name = "grpbxMovieRenameOptions"
+        Me.grpbxMovieRenameOptions.Size = New System.Drawing.Size(340, 393)
+        Me.grpbxMovieRenameOptions.TabIndex = 74
+        Me.grpbxMovieRenameOptions.TabStop = false
+        Me.grpbxMovieRenameOptions.Text = "Rename Movie Settings"
         '
         'Label13
         '
@@ -3849,16 +3846,16 @@ Partial Class frmPreferences
         Me.tb_MovieRenameTemplate.TabIndex = 69
         Me.tb_MovieRenameTemplate.Text = "%T (%Y)"
         '
-        'GroupBox9
+        'grpbxMovieOfflineTitleText
         '
-        Me.GroupBox9.Controls.Add(Me.Label77)
-        Me.GroupBox9.Controls.Add(Me.TextBox_OfflineDVDTitle)
-        Me.GroupBox9.Location = New System.Drawing.Point(657, 427)
-        Me.GroupBox9.Name = "GroupBox9"
-        Me.GroupBox9.Size = New System.Drawing.Size(329, 61)
-        Me.GroupBox9.TabIndex = 70
-        Me.GroupBox9.TabStop = false
-        Me.GroupBox9.Text = "Offline DVD Title Text"
+        Me.grpbxMovieOfflineTitleText.Controls.Add(Me.Label77)
+        Me.grpbxMovieOfflineTitleText.Controls.Add(Me.tb_OfflineDVDTitle)
+        Me.grpbxMovieOfflineTitleText.Location = New System.Drawing.Point(657, 427)
+        Me.grpbxMovieOfflineTitleText.Name = "grpbxMovieOfflineTitleText"
+        Me.grpbxMovieOfflineTitleText.Size = New System.Drawing.Size(329, 61)
+        Me.grpbxMovieOfflineTitleText.TabIndex = 70
+        Me.grpbxMovieOfflineTitleText.TabStop = false
+        Me.grpbxMovieOfflineTitleText.Text = "Offline DVD Title Text"
         '
         'Label77
         '
@@ -3870,43 +3867,43 @@ Partial Class frmPreferences
         Me.Label77.TabIndex = 70
         Me.Label77.Text = "Use Parameters  -  %T - Movie Title"
         '
-        'TextBox_OfflineDVDTitle
+        'tb_OfflineDVDTitle
         '
-        Me.TextBox_OfflineDVDTitle.Location = New System.Drawing.Point(7, 20)
-        Me.TextBox_OfflineDVDTitle.Name = "TextBox_OfflineDVDTitle"
-        Me.TextBox_OfflineDVDTitle.Size = New System.Drawing.Size(286, 21)
-        Me.TextBox_OfflineDVDTitle.TabIndex = 69
-        Me.TextBox_OfflineDVDTitle.Text = "Please Insert '%T' Media"
+        Me.tb_OfflineDVDTitle.Location = New System.Drawing.Point(7, 20)
+        Me.tb_OfflineDVDTitle.Name = "tb_OfflineDVDTitle"
+        Me.tb_OfflineDVDTitle.Size = New System.Drawing.Size(286, 21)
+        Me.tb_OfflineDVDTitle.TabIndex = 69
+        Me.tb_OfflineDVDTitle.Text = "Please Insert '%T' Media"
         '
-        'GroupBox26
+        'grpbxMovieGeneralOptions
         '
-        Me.GroupBox26.Controls.Add(Me.cb_MovRuntimeAsDuration)
-        Me.GroupBox26.Controls.Add(Me.cbEnableFolderSize)
-        Me.GroupBox26.Controls.Add(Me.cbShowMovieGridToolTip)
-        Me.GroupBox26.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
-        Me.GroupBox26.Controls.Add(Me.cb_MovSetTitleIgnArticle)
-        Me.GroupBox26.Controls.Add(Me.cb_SorttitleIgnoreArticles)
-        Me.GroupBox26.Controls.Add(Me.cbMovRootFolderCheck)
-        Me.GroupBox26.Controls.Add(Me.cb_MovDurationAsRuntine)
-        Me.GroupBox26.Controls.Add(Me.cbMissingMovie)
-        Me.GroupBox26.Controls.Add(Me.cbMovThousSeparator)
-        Me.GroupBox26.Controls.Add(Me.cbMovTitleCase)
-        Me.GroupBox26.Controls.Add(Me.cbXtraFrodoUrls)
-        Me.GroupBox26.Controls.Add(Me.cbNoAltTitle)
-        Me.GroupBox26.Controls.Add(Me.Label102)
-        Me.GroupBox26.Controls.Add(Me.Label78)
-        Me.GroupBox26.Controls.Add(Me.cbPreferredTrailerResolution)
-        Me.GroupBox26.Controls.Add(Me.cbDlTrailerDuringScrape)
-        Me.GroupBox26.Controls.Add(Me.PanelDisplayRuntime)
-        Me.GroupBox26.Controls.Add(Me.cb_MovDisplayLog)
-        Me.GroupBox26.Controls.Add(Me.cb_EnableMediaTags)
-        Me.GroupBox26.Controls.Add(Me.cbMovieTrailerUrl)
-        Me.GroupBox26.Location = New System.Drawing.Point(6, 6)
-        Me.GroupBox26.Name = "GroupBox26"
-        Me.GroupBox26.Size = New System.Drawing.Size(299, 511)
-        Me.GroupBox26.TabIndex = 73
-        Me.GroupBox26.TabStop = false
-        Me.GroupBox26.Text = "General Options"
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovRuntimeAsDuration)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbEnableFolderSize)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbShowMovieGridToolTip)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovPosterTabTMDBSelect)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovSetTitleIgnArticle)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_SorttitleIgnoreArticles)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMovRootFolderCheck)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovDurationAsRuntine)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMissingMovie)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMovThousSeparator)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMovTitleCase)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbXtraFrodoUrls)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbNoAltTitle)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.Label102)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.Label78)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbPreferredTrailerResolution)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbDlTrailerDuringScrape)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.PanelDisplayRuntime)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovDisplayLog)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_EnableMediaTags)
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMovieTrailerUrl)
+        Me.grpbxMovieGeneralOptions.Location = New System.Drawing.Point(6, 6)
+        Me.grpbxMovieGeneralOptions.Name = "grpbxMovieGeneralOptions"
+        Me.grpbxMovieGeneralOptions.Size = New System.Drawing.Size(299, 511)
+        Me.grpbxMovieGeneralOptions.TabIndex = 73
+        Me.grpbxMovieGeneralOptions.TabStop = false
+        Me.grpbxMovieGeneralOptions.Text = "General Options"
         '
         'cb_MovRuntimeAsDuration
         '
@@ -4083,19 +4080,19 @@ Partial Class frmPreferences
         Me.cbMovieTrailerUrl.Text = "Add movie trailer url to nfo file"
         Me.cbMovieTrailerUrl.UseVisualStyleBackColor = true
         '
-        'grpNameMode
+        'grpbxMovieNameMode
         '
-        Me.grpNameMode.Controls.Add(Me.Label163)
-        Me.grpNameMode.Controls.Add(Me.lblNameMode)
-        Me.grpNameMode.Controls.Add(Me.cbMoviePartsIgnorePart)
-        Me.grpNameMode.Controls.Add(Me.lblNameModeEg)
-        Me.grpNameMode.Controls.Add(Me.cbMoviePartsNameMode)
-        Me.grpNameMode.Location = New System.Drawing.Point(657, 6)
-        Me.grpNameMode.Name = "grpNameMode"
-        Me.grpNameMode.Size = New System.Drawing.Size(329, 152)
-        Me.grpNameMode.TabIndex = 78
-        Me.grpNameMode.TabStop = false
-        Me.grpNameMode.Text = "Name Mode"
+        Me.grpbxMovieNameMode.Controls.Add(Me.Label163)
+        Me.grpbxMovieNameMode.Controls.Add(Me.lblNameMode)
+        Me.grpbxMovieNameMode.Controls.Add(Me.cbMoviePartsIgnorePart)
+        Me.grpbxMovieNameMode.Controls.Add(Me.lblNameModeEg)
+        Me.grpbxMovieNameMode.Controls.Add(Me.cbMoviePartsNameMode)
+        Me.grpbxMovieNameMode.Location = New System.Drawing.Point(657, 6)
+        Me.grpbxMovieNameMode.Name = "grpbxMovieNameMode"
+        Me.grpbxMovieNameMode.Size = New System.Drawing.Size(329, 152)
+        Me.grpbxMovieNameMode.TabIndex = 78
+        Me.grpbxMovieNameMode.TabStop = false
+        Me.grpbxMovieNameMode.Text = "Name Mode"
         '
         'Label163
         '
@@ -4155,27 +4152,27 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
-        Me.tpMoviePreferences_Advanced.Controls.Add(Me.GroupBox7)
-        Me.tpMoviePreferences_Advanced.Controls.Add(Me.gb_MovieIdentifier)
-        Me.tpMoviePreferences_Advanced.Controls.Add(Me.GroupBox16)
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieCustomPlaycountTag)
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieSeparateIdentifier)
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieNfoPosterOptions)
         Me.tpMoviePreferences_Advanced.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
-        'GroupBox7
+        'grpbxMovieCustomPlaycountTag
         '
-        Me.GroupBox7.Controls.Add(Me.cbMovNfoWatchTag)
-        Me.GroupBox7.Controls.Add(Me.Label23)
-        Me.GroupBox7.Location = New System.Drawing.Point(401, 130)
-        Me.GroupBox7.Name = "GroupBox7"
-        Me.GroupBox7.Size = New System.Drawing.Size(463, 76)
-        Me.GroupBox7.TabIndex = 77
-        Me.GroupBox7.TabStop = false
-        Me.GroupBox7.Text = "Custom playcount tag"
+        Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.cbMovNfoWatchTag)
+        Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.Label23)
+        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(401, 130)
+        Me.grpbxMovieCustomPlaycountTag.Name = "grpbxMovieCustomPlaycountTag"
+        Me.grpbxMovieCustomPlaycountTag.Size = New System.Drawing.Size(463, 76)
+        Me.grpbxMovieCustomPlaycountTag.TabIndex = 77
+        Me.grpbxMovieCustomPlaycountTag.TabStop = false
+        Me.grpbxMovieCustomPlaycountTag.Text = "Custom playcount tag"
         '
         'cbMovNfoWatchTag
         '
@@ -4196,20 +4193,20 @@ Partial Class frmPreferences
         Me.Label23.TabIndex = 0
         Me.Label23.Text = "Save tag <watched> in movie nfo, mirroring playcount tag."
         '
-        'gb_MovieIdentifier
+        'grpbxMovieSeparateIdentifier
         '
-        Me.gb_MovieIdentifier.Controls.Add(Me.btn_MovSepReset)
-        Me.gb_MovieIdentifier.Controls.Add(Me.Label198)
-        Me.gb_MovieIdentifier.Controls.Add(Me.btn_MovSepRem)
-        Me.gb_MovieIdentifier.Controls.Add(Me.btn_MovSepAdd)
-        Me.gb_MovieIdentifier.Controls.Add(Me.tb_MovSeptb)
-        Me.gb_MovieIdentifier.Controls.Add(Me.lb_MovSepLst)
-        Me.gb_MovieIdentifier.Location = New System.Drawing.Point(7, 8)
-        Me.gb_MovieIdentifier.Name = "gb_MovieIdentifier"
-        Me.gb_MovieIdentifier.Size = New System.Drawing.Size(387, 408)
-        Me.gb_MovieIdentifier.TabIndex = 76
-        Me.gb_MovieIdentifier.TabStop = false
-        Me.gb_MovieIdentifier.Text = "Separate Movie Identifyer"
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.btn_MovSepReset)
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.Label198)
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.btn_MovSepRem)
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.btn_MovSepAdd)
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.tb_MovSeptb)
+        Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.lb_MovSepLst)
+        Me.grpbxMovieSeparateIdentifier.Location = New System.Drawing.Point(7, 8)
+        Me.grpbxMovieSeparateIdentifier.Name = "grpbxMovieSeparateIdentifier"
+        Me.grpbxMovieSeparateIdentifier.Size = New System.Drawing.Size(387, 408)
+        Me.grpbxMovieSeparateIdentifier.TabIndex = 76
+        Me.grpbxMovieSeparateIdentifier.TabStop = false
+        Me.grpbxMovieSeparateIdentifier.Text = "Separate Movie Identifyer"
         '
         'btn_MovSepReset
         '
@@ -4262,22 +4259,22 @@ Partial Class frmPreferences
         Me.lb_MovSepLst.Size = New System.Drawing.Size(191, 304)
         Me.lb_MovSepLst.TabIndex = 0
         '
-        'GroupBox16
+        'grpbxMovieNfoPosterOptions
         '
-        Me.GroupBox16.Controls.Add(Me.Label88)
-        Me.GroupBox16.Controls.Add(Me.imdb_chk)
-        Me.GroupBox16.Controls.Add(Me.mpdb_chk)
-        Me.GroupBox16.Controls.Add(Me.tmdb_chk)
-        Me.GroupBox16.Controls.Add(Me.IMPA_chk)
-        Me.GroupBox16.Controls.Add(Me.Label89)
-        Me.GroupBox16.Location = New System.Drawing.Point(401, 8)
-        Me.GroupBox16.Margin = New System.Windows.Forms.Padding(4)
-        Me.GroupBox16.Name = "GroupBox16"
-        Me.GroupBox16.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox16.Size = New System.Drawing.Size(463, 115)
-        Me.GroupBox16.TabIndex = 49
-        Me.GroupBox16.TabStop = false
-        Me.GroupBox16.Text = "nfo Poster Options"
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.Label88)
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.imdb_chk)
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.mpdb_chk)
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.tmdb_chk)
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.IMPA_chk)
+        Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.Label89)
+        Me.grpbxMovieNfoPosterOptions.Location = New System.Drawing.Point(401, 8)
+        Me.grpbxMovieNfoPosterOptions.Margin = New System.Windows.Forms.Padding(4)
+        Me.grpbxMovieNfoPosterOptions.Name = "grpbxMovieNfoPosterOptions"
+        Me.grpbxMovieNfoPosterOptions.Padding = New System.Windows.Forms.Padding(4)
+        Me.grpbxMovieNfoPosterOptions.Size = New System.Drawing.Size(463, 115)
+        Me.grpbxMovieNfoPosterOptions.TabIndex = 49
+        Me.grpbxMovieNfoPosterOptions.TabStop = false
+        Me.grpbxMovieNfoPosterOptions.Text = "nfo Poster Options"
         '
         'Label88
         '
@@ -5142,7 +5139,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
+        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5541,14 +5538,6 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -5558,14 +5547,6 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5873,16 +5854,21 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbXbmcTmdbMetascoreFromImdb
+        'UcGenPref_Proxy1
         '
-        Me.cbXbmcTmdbMetascoreFromImdb.AutoSize = true
-        Me.cbXbmcTmdbMetascoreFromImdb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbXbmcTmdbMetascoreFromImdb.Location = New System.Drawing.Point(116, 102)
-        Me.cbXbmcTmdbMetascoreFromImdb.Name = "cbXbmcTmdbMetascoreFromImdb"
-        Me.cbXbmcTmdbMetascoreFromImdb.Size = New System.Drawing.Size(84, 19)
-        Me.cbXbmcTmdbMetascoreFromImdb.TabIndex = 87
-        Me.cbXbmcTmdbMetascoreFromImdb.Text = "Metascore"
-        Me.cbXbmcTmdbMetascoreFromImdb.UseVisualStyleBackColor = true
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'frmPreferences
         '
@@ -5907,8 +5893,8 @@ Partial Class frmPreferences
         Me.GroupBox12.PerformLayout
         Me.gbExcludeFolders.ResumeLayout(false)
         Me.gbExcludeFolders.PerformLayout
-        Me.GroupBox11.ResumeLayout(false)
-        Me.GroupBox11.PerformLayout
+        Me.grpbxImdbCertPriority.ResumeLayout(false)
+        Me.grpbxImdbCertPriority.PerformLayout
         Me.GroupBox36.ResumeLayout(false)
         Me.GroupBox36.PerformLayout
         CType(Me.PictureBox1,System.ComponentModel.ISupportInitialize).EndInit
@@ -5946,47 +5932,47 @@ Partial Class frmPreferences
         Me.TPMovPref.ResumeLayout(false)
         Me.tcMoviePreferences.ResumeLayout(false)
         Me.tpMoviePreferences_Scraper.ResumeLayout(false)
-        Me.GroupBox6.ResumeLayout(false)
-        Me.GroupBox6.PerformLayout
-        Me.GpBx_ScraperSettings.ResumeLayout(false)
-        Me.GpBx_ScraperSettings.PerformLayout
-        Me.GpBx_TMDB_Scraper_Preferences.ResumeLayout(false)
-        Me.GpBx_TMDB_Scraper_Preferences.PerformLayout
-        Me.GroupBox46.ResumeLayout(false)
-        Me.GroupBox46.PerformLayout
+        Me.grpbxTMDbApi.ResumeLayout(false)
+        Me.grpbxTMDbApi.PerformLayout
+        Me.grpbxMovieScraperSettings.ResumeLayout(false)
+        Me.grpbxMovieScraperSettings.PerformLayout
+        Me.grpbxTMDBScraperPreferences.ResumeLayout(false)
+        Me.grpbxTMDBScraperPreferences.PerformLayout
+        Me.grpbxTmdbfromImdbOptions.ResumeLayout(false)
+        Me.grpbxTmdbfromImdbOptions.PerformLayout
         Me.GpBx_McIMDbScraperSettings.ResumeLayout(false)
         Me.GpBx_McIMDbScraperSettings.PerformLayout
         Me.gpbxPrefScraperImages.ResumeLayout(false)
-        Me.GroupBox44.ResumeLayout(false)
-        Me.GroupBox44.PerformLayout
-        Me.gbMovieBasicSave.ResumeLayout(false)
-        Me.gbMovieBasicSave.PerformLayout
-        Me.GroupBox30.ResumeLayout(false)
-        Me.GroupBox30.PerformLayout
-        Me.gbScraperMisc.ResumeLayout(false)
-        Me.gbScraperMisc.PerformLayout
-        Me.GroupBox34.ResumeLayout(false)
-        Me.GroupBox34.PerformLayout
-        Me.gbCustomLanguage.ResumeLayout(false)
-        Me.gbCustomLanguage.PerformLayout
-        Me.GroupBox24.ResumeLayout(false)
-        Me.GroupBox24.PerformLayout
+        Me.grpbxMovieTagOptions.ResumeLayout(false)
+        Me.grpbxMovieTagOptions.PerformLayout
+        Me.grpbxMovieBasicSave.ResumeLayout(false)
+        Me.grpbxMovieBasicSave.PerformLayout
+        Me.grpbxScraperLimits.ResumeLayout(false)
+        Me.grpbxScraperLimits.PerformLayout
+        Me.grpbxScraperMisc.ResumeLayout(false)
+        Me.grpbxScraperMisc.PerformLayout
+        Me.grpbxMovPreferLang.ResumeLayout(false)
+        Me.grpbxMovPreferLang.PerformLayout
+        Me.grpbxCustomLanguage.ResumeLayout(false)
+        Me.grpbxCustomLanguage.PerformLayout
+        Me.grpbxMovieFolderOptions.ResumeLayout(false)
+        Me.grpbxMovieFolderOptions.PerformLayout
         Me.tpMoviePreferences_Artwork.ResumeLayout(false)
-        Me.GroupBox47.ResumeLayout(false)
-        Me.GroupBox47.PerformLayout
+        Me.grpbxMovieSetArtwork.ResumeLayout(false)
+        Me.grpbxMovieSetArtwork.PerformLayout
         Me.GrpbxXtraArtwork.ResumeLayout(false)
         Me.GrpbxXtraArtwork.PerformLayout
-        Me.GroupBox38.ResumeLayout(false)
-        Me.GroupBox38.PerformLayout
-        Me.GroupBox10.ResumeLayout(false)
-        Me.GroupBox10.PerformLayout
-        Me.GroupBox37.ResumeLayout(false)
-        Me.GroupBox37.PerformLayout
-        Me.GroupBox41.ResumeLayout(false)
-        Me.GroupBox41.PerformLayout
+        Me.grpbxMoviesInFoldersArtwork.ResumeLayout(false)
+        Me.grpbxMoviesInFoldersArtwork.PerformLayout
+        Me.grpbxMoviePosterPriority.ResumeLayout(false)
+        Me.grpbxMoviePosterPriority.PerformLayout
+        Me.grpbxAutoScrapeArtwork.ResumeLayout(false)
+        Me.grpbxAutoScrapeArtwork.PerformLayout
+        Me.grpbxExtraArtwork.ResumeLayout(false)
+        Me.grpbxExtraArtwork.PerformLayout
         Me.tpMoviePreferences_General.ResumeLayout(false)
-        Me.gbMovieFilters.ResumeLayout(false)
-        Me.gbMovieFilters.PerformLayout
+        Me.grpbxMovieFilters.ResumeLayout(false)
+        Me.grpbxMovieFilters.PerformLayout
         CType(Me.nudMaxTagsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudMinTagsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudMaxDirectorsInFilter,System.ComponentModel.ISupportInitialize).EndInit
@@ -5995,25 +5981,25 @@ Partial Class frmPreferences
         CType(Me.nudSetsFilterMinFilms,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudMaxActorsInFilter,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.nudActorsFilterMinFilms,System.ComponentModel.ISupportInitialize).EndInit
-        Me.GroupBox35.ResumeLayout(false)
-        Me.GroupBox35.PerformLayout
-        Me.GroupBox27.ResumeLayout(false)
-        Me.GroupBox27.PerformLayout
-        Me.GroupBox9.ResumeLayout(false)
-        Me.GroupBox9.PerformLayout
-        Me.GroupBox26.ResumeLayout(false)
-        Me.GroupBox26.PerformLayout
+        Me.grpbxMovieListOptions.ResumeLayout(false)
+        Me.grpbxMovieListOptions.PerformLayout
+        Me.grpbxMovieRenameOptions.ResumeLayout(false)
+        Me.grpbxMovieRenameOptions.PerformLayout
+        Me.grpbxMovieOfflineTitleText.ResumeLayout(false)
+        Me.grpbxMovieOfflineTitleText.PerformLayout
+        Me.grpbxMovieGeneralOptions.ResumeLayout(false)
+        Me.grpbxMovieGeneralOptions.PerformLayout
         Me.PanelDisplayRuntime.ResumeLayout(false)
         Me.PanelDisplayRuntime.PerformLayout
-        Me.grpNameMode.ResumeLayout(false)
-        Me.grpNameMode.PerformLayout
+        Me.grpbxMovieNameMode.ResumeLayout(false)
+        Me.grpbxMovieNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
-        Me.GroupBox7.ResumeLayout(false)
-        Me.GroupBox7.PerformLayout
-        Me.gb_MovieIdentifier.ResumeLayout(false)
-        Me.gb_MovieIdentifier.PerformLayout
-        Me.GroupBox16.ResumeLayout(false)
-        Me.GroupBox16.PerformLayout
+        Me.grpbxMovieCustomPlaycountTag.ResumeLayout(false)
+        Me.grpbxMovieCustomPlaycountTag.PerformLayout
+        Me.grpbxMovieSeparateIdentifier.ResumeLayout(false)
+        Me.grpbxMovieSeparateIdentifier.PerformLayout
+        Me.grpbxMovieNfoPosterOptions.ResumeLayout(false)
+        Me.grpbxMovieNfoPosterOptions.PerformLayout
         Me.TPTVPref.ResumeLayout(false)
         Me.TabControl6.ResumeLayout(false)
         Me.TabPage30.ResumeLayout(false)
@@ -6156,12 +6142,12 @@ End Sub
     Friend WithEvents btn_SettingsClose2 As Button
     Friend WithEvents tcMoviePreferences As TabControl
     Friend WithEvents tpMoviePreferences_Scraper As TabPage
-    Friend WithEvents GpBx_ScraperSettings As GroupBox
-    Friend WithEvents CheckBox_Use_XBMC_Scraper As CheckBox
-    Friend WithEvents GpBx_TMDB_Scraper_Preferences As GroupBox
+    Friend WithEvents grpbxMovieScraperSettings As GroupBox
+    Friend WithEvents cbMovieUseXBMCScraper As CheckBox
+    Friend WithEvents grpbxTMDBScraperPreferences As GroupBox
     Friend WithEvents cmbxTMDBPreferredCertCountry As ComboBox
     Friend WithEvents Label5 As Label
-    Friend WithEvents GroupBox46 As GroupBox
+    Friend WithEvents grpbxTmdbfromImdbOptions As GroupBox
     Friend WithEvents cbXbmcTmdbAkasFromImdb As CheckBox
     Friend WithEvents cbXbmcTmdbCertFromImdb As CheckBox
     Friend WithEvents cbXbmcTmdbVotesFromImdb As CheckBox
@@ -6184,45 +6170,44 @@ End Sub
     Friend WithEvents Label91 As Label
     Friend WithEvents lb_IMDBMirrors As ListBox
     Friend WithEvents gpbxPrefScraperImages As GroupBox
-    Friend WithEvents GroupBox11 As GroupBox
+    Friend WithEvents grpbxImdbCertPriority As GroupBox
     Friend WithEvents ScrapeFullCertCheckBox As CheckBox
     Friend WithEvents Label178 As Label
     Friend WithEvents Label95 As Label
-    Friend WithEvents Button74 As Button
-    Friend WithEvents Button75 As Button
+    Friend WithEvents btnMovImdbPriorityDown As Button
+    Friend WithEvents btnMovImdbPriorityUp As Button
     Friend WithEvents Label94 As Label
     Friend WithEvents lb_IMDBCertPriority As ListBox
-    Friend WithEvents GroupBox44 As GroupBox
+    Friend WithEvents grpbxMovieTagOptions As GroupBox
     Friend WithEvents Label69 As Label
     Friend WithEvents cb_keywordlimit As ComboBox
     Friend WithEvents cb_keywordasTag As CheckBox
-    Friend WithEvents gbMovieBasicSave As GroupBox
+    Friend WithEvents grpbxMovieBasicSave As GroupBox
     Friend WithEvents cbMovieBasicSave As CheckBox
     Friend WithEvents Label162 As Label
     Friend WithEvents Label109 As Label
-    Friend WithEvents GroupBox30 As GroupBox
+    Friend WithEvents grpbxScraperLimits As GroupBox
     Friend WithEvents cmbxMovieScraper_MaxStudios As ComboBox
     Friend WithEvents lblMaxStudios As Label
     Friend WithEvents Label92 As Label
     Friend WithEvents cmbxMovScraper_MaxGenres As ComboBox
-    Friend WithEvents gbScraperMisc As GroupBox
-    Friend WithEvents chkbOriginal_Title As CheckBox
+    Friend WithEvents grpbxScraperMisc As GroupBox
+    Friend WithEvents cbIMDbOriginalTitle As CheckBox
     Friend WithEvents cbGetMovieSetFromTMDb As CheckBox
-    Friend WithEvents GroupBox34 As GroupBox
+    Friend WithEvents grpbxMovPreferLang As GroupBox
     Friend WithEvents Label27 As Label
-    Friend WithEvents gbCustomLanguage As GroupBox
+    Friend WithEvents grpbxCustomLanguage As GroupBox
     Friend WithEvents llLanguagesFile As LinkLabel
     Friend WithEvents tbCustomLanguageValue As TextBox
     Friend WithEvents Label174 As Label
     Friend WithEvents Label177 As Label
     Friend WithEvents cbUseCustomLanguage As CheckBox
-    Friend WithEvents comboBoxTMDbSelectedLanguage As ComboBox
-    Friend WithEvents GroupBox24 As GroupBox
+    Friend WithEvents cmbxTMDbSelectedLanguage As ComboBox
+    Friend WithEvents grpbxMovieFolderOptions As GroupBox
     Friend WithEvents cbMovieAllInFolders As CheckBox
     Friend WithEvents cbMovieUseFolderNames As CheckBox
-    Friend WithEvents Button82 As Button
     Friend WithEvents tpMoviePreferences_Artwork As TabPage
-    Friend WithEvents GroupBox47 As GroupBox
+    Friend WithEvents grpbxMovieSetArtwork As GroupBox
     Friend WithEvents Label37 As Label
     Friend WithEvents tbMovSetArtCentralFolder As TextBox
     Friend WithEvents btnMovSetCentralFolderSelect As Button
@@ -6231,14 +6216,14 @@ End Sub
     Friend WithEvents GrpbxXtraArtwork As GroupBox
     Friend WithEvents Label30 As Label
     Friend WithEvents cmbxMovXtraFanartQty As ComboBox
-    Friend WithEvents GroupBox38 As GroupBox
+    Friend WithEvents grpbxMoviesInFoldersArtwork As GroupBox
     Friend WithEvents cbMovCreateFanartjpg As CheckBox
     Friend WithEvents cbMoviePosterInFolder As CheckBox
     Friend WithEvents cbMovieFanartInFolders As CheckBox
     Friend WithEvents cbMovCreateFolderjpg As CheckBox
     Friend WithEvents cbMovXtraFanart As CheckBox
     Friend WithEvents cbMovXtraThumbs As CheckBox
-    Friend WithEvents GroupBox10 As GroupBox
+    Friend WithEvents grpbxMoviePosterPriority As GroupBox
     Friend WithEvents btn_MovPosterPriorityRemove As Button
     Friend WithEvents btn_MovPosterPriorityReset As Button
     Friend WithEvents Label99 As Label
@@ -6246,19 +6231,19 @@ End Sub
     Friend WithEvents btnMovPosterPriorityDown As Button
     Friend WithEvents btnMovPosterPriorityUp As Button
     Friend WithEvents lbPosterSourcePriorities As ListBox
-    Friend WithEvents GroupBox37 As GroupBox
+    Friend WithEvents grpbxAutoScrapeArtwork As GroupBox
     Friend WithEvents cbMovFanartNaming As CheckBox
     Friend WithEvents btnMovFanartTvSelect As Button
     Friend WithEvents Label10 As Label
     Friend WithEvents cbMovFanartTvScrape As CheckBox
-    Friend WithEvents GroupBox41 As GroupBox
+    Friend WithEvents grpbxExtraArtwork As GroupBox
     Friend WithEvents Label189 As Label
     Friend WithEvents cbDlXtraFanart As CheckBox
     Friend WithEvents cbMovSetArtScrape As CheckBox
     Friend WithEvents cbMovFanartScrape As CheckBox
     Friend WithEvents cbMoviePosterScrape As CheckBox
     Friend WithEvents tpMoviePreferences_General As TabPage
-    Friend WithEvents gbMovieFilters As GroupBox
+    Friend WithEvents grpbxMovieFilters As GroupBox
     Friend WithEvents cbMovieFilters_Sets_Order As ComboBox
     Friend WithEvents Label54 As Label
     Friend WithEvents cbMovieFilters_Directors_Order As ComboBox
@@ -6276,13 +6261,13 @@ End Sub
     Friend WithEvents nudActorsFilterMinFilms As NumericUpDown
     Friend WithEvents Label165 As Label
     Friend WithEvents cbMissingMovie As CheckBox
-    Friend WithEvents GroupBox35 As GroupBox
+    Friend WithEvents grpbxMovieListOptions As GroupBox
     Friend WithEvents cbMovieList_ShowColWatched As CheckBox
     Friend WithEvents cbMovieList_ShowColPlot As CheckBox
     Friend WithEvents tbDateFormat As TextBox
     Friend WithEvents Label179 As Label
     Friend WithEvents cbMovieShowDateOnList As CheckBox
-    Friend WithEvents GroupBox27 As GroupBox
+    Friend WithEvents grpbxMovieRenameOptions As GroupBox
     Friend WithEvents Label13 As Label
     Friend WithEvents rbRenameFullStop As RadioButton
     Friend WithEvents rbRenameUnderscore As RadioButton
@@ -6301,10 +6286,10 @@ End Sub
     Friend WithEvents cbMovieRenameEnable As CheckBox
     Friend WithEvents Label100 As Label
     Friend WithEvents tb_MovieRenameTemplate As TextBox
-    Friend WithEvents GroupBox9 As GroupBox
+    Friend WithEvents grpbxMovieOfflineTitleText As GroupBox
     Friend WithEvents Label77 As Label
-    Friend WithEvents TextBox_OfflineDVDTitle As TextBox
-    Friend WithEvents GroupBox26 As GroupBox
+    Friend WithEvents tb_OfflineDVDTitle As TextBox
+    Friend WithEvents grpbxMovieGeneralOptions As GroupBox
     Friend WithEvents cb_MovDurationAsRuntine As CheckBox
     Friend WithEvents cbMovThousSeparator As CheckBox
     Friend WithEvents cbMovTitleCase As CheckBox
@@ -6322,21 +6307,21 @@ End Sub
     Friend WithEvents cb_MovDisplayLog As CheckBox
     Friend WithEvents cb_EnableMediaTags As CheckBox
     Friend WithEvents cbMovieTrailerUrl As CheckBox
-    Friend WithEvents grpNameMode As GroupBox
+    Friend WithEvents grpbxMovieNameMode As GroupBox
     Friend WithEvents Label163 As Label
     Friend WithEvents lblNameMode As Label
     Friend WithEvents cbMoviePartsIgnorePart As CheckBox
     Friend WithEvents lblNameModeEg As Label
     Friend WithEvents cbMoviePartsNameMode As CheckBox
     Friend WithEvents tpMoviePreferences_Advanced As TabPage
-    Friend WithEvents gb_MovieIdentifier As GroupBox
+    Friend WithEvents grpbxMovieSeparateIdentifier As GroupBox
     Friend WithEvents btn_MovSepReset As Button
     Friend WithEvents Label198 As Label
     Friend WithEvents btn_MovSepRem As Button
     Friend WithEvents btn_MovSepAdd As Button
     Friend WithEvents tb_MovSeptb As TextBox
     Friend WithEvents lb_MovSepLst As ListBox
-    Friend WithEvents GroupBox16 As GroupBox
+    Friend WithEvents grpbxMovieNfoPosterOptions As GroupBox
     Friend WithEvents Label88 As Label
     Friend WithEvents imdb_chk As CheckBox
     Friend WithEvents mpdb_chk As CheckBox
@@ -6501,10 +6486,10 @@ End Sub
     Friend WithEvents rb_MediaPlayerDefault As RadioButton
     Friend WithEvents Label21 As Label
     Friend WithEvents cb_MovRuntimeAsDuration As CheckBox
-    Friend WithEvents GroupBox6 As GroupBox
+    Friend WithEvents grpbxTMDbApi As GroupBox
     Friend WithEvents Label22 As Label
     Friend WithEvents tbTMDbAPI As TextBox
-    Friend WithEvents GroupBox7 As GroupBox
+    Friend WithEvents grpbxMovieCustomPlaycountTag As GroupBox
     Friend WithEvents cbMovNfoWatchTag As CheckBox
     Friend WithEvents Label23 As Label
     Friend WithEvents cbMovCustFolderjpgNoDelete As CheckBox
