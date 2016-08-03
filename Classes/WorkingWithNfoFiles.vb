@@ -1240,9 +1240,11 @@ Public Class WorkingWithNfoFiles
             If newtvshow.Mpaa.Value = Nothing Then newtvshow.Mpaa.Value = "na"
             If newtvshow.Studio.Value = Nothing Then newtvshow.Studio.Value = "-"
             If newtvshow.Runtime.Value = Nothing Then newtvshow.Runtime.Value = "0"
-            If newtvshow.Year.Value <> "" AndAlso newtvshow.Year.Value.ToInt <> 0 AndAlso newtvshow.Year.Value <> "0000" AndAlso Not newtvshow.Premiered.Value.Length = 10 Then
-                Dim tmp As String = newtvshow.Premiered.Value.Substring(0,4)
-                newtvshow.Year.Value = tmp
+            If newtvshow.Year.Value <> "" AndAlso newtvshow.Year.Value.ToInt <> 0 AndAlso newtvshow.Year.Value <> "0000" AndAlso Not IsNothing(newtvshow.Premiered.Value) Then
+                If newtvshow.Premiered.Value.Length = 10 Then
+                    Dim tmp As String = newtvshow.Premiered.Value.Substring(0,4)
+                    newtvshow.Year.Value = tmp
+                End If
             ElseIf String.IsNullOrEmpty(newtvshow.Year.Value) Then
                 newtvshow.Year.Value = "0000"
             End If
