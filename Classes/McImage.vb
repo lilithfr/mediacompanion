@@ -1,11 +1,12 @@
 
 Public Class McImage
-    Public Property hdUrl    As String = ""
-    Public Property ldUrl    As String = ""
-    Public Property hdwidth  As String = ""
-    Public Property hdheight As String = ""
-    Public Property ldwidth  As String = ""
-    Public Property ldheight As String = ""
+    Public Property hdUrl       As String   = ""
+    Public Property ldUrl       As String   = ""
+    Public Property hdwidth     As String   = ""
+    Public Property hdheight    As String   = ""
+    Public Property ldwidth     As String   = ""
+    Public Property ldheight    As String   = ""
+    Public Property votes       As Integer  = 0
 
     Shared Function GetFromTmDbBackDrop( backBrop As Object, Optional hdUrlPrefix As String="", Optional ldUrlPrefix As String="" )
 
@@ -18,7 +19,7 @@ Public Class McImage
         result.ldUrl    = ldUrlPrefix + backBrop.file_path
         result.ldwidth  = "1280"
         result.ldheight = "720"
-
+        result.votes    = backBrop.vote_count
         Return result
 
     End Function

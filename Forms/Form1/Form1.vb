@@ -195,6 +195,7 @@ Public Class Form1
     Dim sandq As Integer = 0
     Dim mouseDelta As Integer = 0
     Dim resLabels As Label
+    Dim votelabels As Label
     Dim fanartArray As New List(Of McImage)
     Dim cropString As String
     Dim thumbedItsMade As Boolean = False
@@ -4064,6 +4065,14 @@ Public Class Form1
                             .Text = "(" & item.hdwidth & " x " & item.hdheight & ") (" & item.ldwidth & " x " & item.ldheight & ")"
                             .Width = 200
                         End With
+                        votelabels = New Label()
+                        With votelabels
+                            .BringToFront()
+                            .Location = New Point(300, location + 235)
+                            .Name = "votelabel" & itemcounter.ToString
+                            .Text = "Votes:  " & item.votes.ToString
+                            '.Width = 200
+                        End With
                         itemcounter += 1
                         location += 260
                     Else
@@ -4072,6 +4081,7 @@ Public Class Form1
                             .BringToFront()
                             .Location = New Point(199, location + 243)
                             .Name = "moviefanartcheckbox" & itemcounter.ToString
+                            .Text = ""
                         End With
                         resLabels = New Label()
                         With resLabels
@@ -4081,12 +4091,21 @@ Public Class Form1
                             .Text = "(" & item.hdwidth & " x " & item.hdheight & ") (" & item.ldwidth & " x " & item.ldheight & ")"
                             .Width = 200
                         End With
+                        votelabels = New Label()
+                        With votelabels
+                            .BringToFront()
+                            .Location = New Point(300, location + 249)
+                            .Name = "votelabel" & itemcounter.ToString
+                            .Text = "Votes:  " & item.votes.ToString
+                            .Width = 200
+                        End With
                         itemcounter += 1
                         location += 275
                     End If
                     Me.Panel2.Controls.Add(fanartBoxes())
                     Me.Panel2.Controls.Add(fanartCheckBoxes())
                     Me.Panel2.Controls.Add(resLabels)
+                    Me.Panel2.Controls.Add(votelabels)
                     Application.DoEvents()
                 Next
                 Me.Panel2.Refresh()

@@ -1510,6 +1510,9 @@ Partial Public Class Form1
         newlist = Utilities.EnumerateFolders(newtvshownfo.FolderPath) 'TODO: Restore loging functions
         newlist.Add(newtvshownfo.FolderPath)
         For Each folder In newlist
+            If folder = "long_path" Then
+                Continue For
+            End If
             Dim dir_info As New System.IO.DirectoryInfo(folder)
             Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
             For Each fs_info As System.IO.FileInfo In fs_infos

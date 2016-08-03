@@ -773,7 +773,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Dim ChildList
             Try
                 ChildList = Directory.GetDirectories(RootPath)
-            Catch ex As UnauthorizedAccessException
+            Catch ex As Exception' As UnauthorizedAccessException
                 Return TempReturn
             End Try
             If Level > 0 Then

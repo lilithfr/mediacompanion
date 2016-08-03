@@ -813,16 +813,28 @@ Public Class TMDb
  
 
     Private Sub AssignMcPosters( tmDbImages As Object, mcImages As List(Of McImage))
+        Dim tmpimages As New List(Of McImage)
         For Each item In tmDbImages
-            mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
+            tmpimages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
+            'mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
         Next
+        If Not tmpimages.Count = 0 Then
+            Dim q = From x In tmpimages Order By x.votes Descending
+            mcImages.AddRange(q.ToList)
+        End If
     End Sub
  
 
     Private Sub AssignMcFanart( tmDbImages As Object, mcImages As List(Of McImage))
+        Dim tmpimages As New List(Of McImage)
         For Each item In tmDbImages
-            mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
+            tmpimages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
+            'mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
         Next
+        If Not tmpimages.Count = 0 Then
+            Dim q = From x In tmpimages Order By x.votes Descending
+            mcImages.AddRange(q.ToList)
+        End If
     End Sub
   
 
