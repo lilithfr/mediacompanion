@@ -2953,7 +2953,7 @@ Partial Public Class Form1
                             stage = "14d1f"
                             tv_EpisodesMissingUpdate(episodearray)
                             stage = "14d1g"
-                            Exit For
+                            'Exit For
                         End If
                         stage = "14d2"
                     'Next
