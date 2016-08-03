@@ -5646,7 +5646,7 @@ Public Class Form1
                         .Height = 225
                     Else
                         .Width = 415
-                        .Height = 250
+                        .Height = 225
                     End If
                     .SizeMode = PictureBoxSizeMode.Zoom
                     .Visible = True
@@ -18164,11 +18164,14 @@ Public Class Form1
         End If
         If ImgBwCancelled Then Exit Function
         Try
+            'Dim image As Image
             Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
                 fs.CopyTo(ms)
                 ms.Seek(0, System.IO.SeekOrigin.Begin)
+                'image = Image.FromStream(ms)
                 PicBox.Image = Image.FromStream(ms)
             End Using
+            'PicBox.Image = Utilities.ResizeImage(image, PicBox.Width, PicBox.Height)
             PicBox.Tag = PathToUse
         Catch
             'Image is invalid e.g. not downloaded correctly -> Delete it

@@ -25,7 +25,7 @@ Partial Class frmProgressScreen
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.SuspendLayout()
+        Me.SuspendLayout
         '
         'ProgressBar1
         '
@@ -37,8 +37,8 @@ Partial Class frmProgressScreen
         '
         'Label1
         '
-        Me.Label1.AutoEllipsis = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.AutoEllipsis = true
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label1.Location = New System.Drawing.Point(20, 19)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
@@ -48,10 +48,10 @@ Partial Class frmProgressScreen
         '
         'Label2
         '
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.AutoSize = True
+        Me.Label2.AutoEllipsis = true
+        Me.Label2.AutoSize = true
         Me.Label2.BackColor = System.Drawing.Color.Bisque
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.Label2.Location = New System.Drawing.Point(20, 101)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
@@ -61,25 +61,27 @@ Partial Class frmProgressScreen
         '
         'frmProgressScreen
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Honeydew
         Me.ClientSize = New System.Drawing.Size(576, 161)
-        Me.ControlBox = False
+        Me.ControlBox = false
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.ProgressBar1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
+        Me.MaximizeBox = false
+        Me.MaximumSize = New System.Drawing.Size(578, 163)
+        Me.MinimizeBox = false
+        Me.MinimumSize = New System.Drawing.Size(578, 163)
         Me.Name = "frmProgressScreen"
-        Me.ShowInTaskbar = False
+        Me.ShowInTaskbar = false
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.ResumeLayout(false)
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
