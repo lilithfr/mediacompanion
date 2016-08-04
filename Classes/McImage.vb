@@ -19,7 +19,11 @@ Public Class McImage
         result.ldUrl    = ldUrlPrefix + backBrop.file_path
         result.ldwidth  = "1280"
         result.ldheight = "720"
-        result.votes    = backBrop.vote_count
+        Try
+            result.votes = backBrop.vote_count
+        Catch
+            result.votes = 0
+        End Try
         Return result
 
     End Function
