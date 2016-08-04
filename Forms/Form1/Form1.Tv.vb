@@ -2665,6 +2665,7 @@ Partial Public Class Form1
                                     stage = "12b2"
                                     If episodearray.Count >= 1 Then
                                         For x As Integer = 0 To episodearray.Count - 1
+                                             episodearray(x).ShowObj = singleepisode.ShowObj
                                             Pref.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
                                         Next
                                         scrapedok = True
