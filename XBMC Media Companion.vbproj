@@ -1264,9 +1264,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\RefreshAll.png" />
-    <None Include="Assets\ffmpeg.exe">
+    <Content Include="Assets\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Resources\Untitled-1.gif" />
     <None Include="Resources\stars2.png" />
     <None Include="Resources\Save.png" />
