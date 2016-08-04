@@ -5588,6 +5588,7 @@ Public Class Form1
         Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId.Value & "/banners.xml"
         Dim apple2(4000) As String
         Dim fanartlinecount As Integer = 0
+        Dim tmplistOfTvFanarts As New List(Of str_FanartList)
         Try
             Dim wrGETURL As WebRequest
             wrGETURL = WebRequest.Create(fanarturl)
@@ -5620,10 +5621,13 @@ Public Class Form1
                                     fanart.type = bannerselection.InnerXml
                                 Case "BannerType2"
                                     fanart.resolution = bannerselection.InnerXml
+                                Case "Rating"
+                                    fanart.rating = bannerselection.InnerXml.ToRating
                             End Select
                         Next
                         If fanart.type = "fanart" Then
-                            listOfTvFanarts.Add(fanart)
+                            tmplistOfTvFanarts.Add(fanart)
+                            'listOfTvFanarts.Add(fanart)
                         End If
                 End Select
             Next
@@ -5631,6 +5635,10 @@ Public Class Form1
             Dim webmsg As String = ex.Message
             MsgBox("TVDB appears to be down at the moment, please try again later")
         End Try
+        If tmplistOfTvFanarts.Count > 1 Then
+            Dim q = From x In tmplistOfTvFanarts Order By x.rating Descending
+            listOfTvFanarts.AddRange(q.ToList)
+        End If
 
         If listOfTvFanarts.Count > 0 Then
             Dim MovFanartPicBox As New List(Of FanartPicBox)
@@ -6410,38 +6418,39 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Dim showlist As New XmlDocument
         Dim tvdbstuff As New TVDBScraper
-        Dim thumblist As String = tvdbstuff.GetPosterList(WorkingTvShow.TvdbId.Value)
-        Try
-            showlist.LoadXml(thumblist)
-        Catch ex As Exception
-            MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
-            Exit Sub
-        End Try
+        Dim thumblist As String = tvdbstuff.GetPosterList(WorkingTvShow.TvdbId.Value, tvdbposterlist)
+        If thumblist <> "ok" Then MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
+        'Try
+        '    showlist.LoadXml(thumblist)
+        'Catch ex As Exception
+        '    MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
+        '    Exit Sub
+        'End Try
         
-        For Each thisresult In showlist("banners")
-            Select Case thisresult.Name
-                Case "banner"
-                    Dim individualposter As New TvBanners
-                    For Each results In thisresult.ChildNodes
-                        Select Case results.Name
-                            Case "id"
-                                individualposter.id = results.InnerText
-                            Case "url"
-                                individualposter.Url = results.InnerText
-                            Case "bannertype"
-                                individualposter.BannerType = results.InnerText
-                            Case "resolution"
-                                individualposter.Resolution = results.InnerText
-                            Case "language"
-                                individualposter.Language = results.InnerText
-                            Case "season"
-                                individualposter.Season = results.InnerText
-                        End Select
-                    Next
-                    individualposter.SmallUrl = individualposter.Url.Replace("http://thetvdb.com/banners/", "http://thetvdb.com/banners/_cache/")
-                    tvdbposterlist.Add(individualposter)
-            End Select
-        Next
+        'For Each thisresult In showlist("banners")
+        '    Select Case thisresult.Name
+        '        Case "banner"
+        '            Dim individualposter As New TvBanners
+        '            For Each results In thisresult.ChildNodes
+        '                Select Case results.Name
+        '                    Case "id"
+        '                        individualposter.id = results.InnerText
+        '                    Case "url"
+        '                        individualposter.Url = results.InnerText
+        '                    Case "bannertype"
+        '                        individualposter.BannerType = results.InnerText
+        '                    Case "resolution"
+        '                        individualposter.Resolution = results.InnerText
+        '                    Case "language"
+        '                        individualposter.Language = results.InnerText
+        '                    Case "season"
+        '                        individualposter.Season = results.InnerText
+        '                End Select
+        '            Next
+        '            individualposter.SmallUrl = individualposter.Url.Replace("http://thetvdb.com/banners/", "http://thetvdb.com/banners/_cache/")
+        '            tvdbposterlist.Add(individualposter)
+        '    End Select
+        'Next
     End Sub
 
     Private Sub tv_PosterPanelPopulate()

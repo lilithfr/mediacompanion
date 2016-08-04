@@ -3923,7 +3923,6 @@ Partial Public Class Form1
         Try
             Dim MaxSeasonNo As Integer = 1
             Dim tvdbstuff As New TVDBScraper
-            Dim showlist As New XmlDocument
             Dim currentshowpath As String = currentshow.NfoFilePath.Replace("tvshow.nfo", "") 
             Dim eden As Boolean = Pref.EdenEnabled
             Dim frodo As Boolean = Pref.FrodoEnabled
@@ -3932,7 +3931,9 @@ Partial Public Class Form1
             Dim doPoster As Boolean = If(Pref.tvdlposter OrElse Pref.TvChgShowDlPoster, True, False)
             Dim doFanart As Boolean = If(Pref.tvdlfanart OrElse Pref.TvChgShowDlFanart, True, False)
             Dim doSeason As Boolean = If(Pref.tvdlseasonthumbs OrElse Pref.TvChgShowDlSeasonthumbs, True, False)
-            Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value)
+            Dim artlist As New List(Of TvBanners)
+            artlist.Clear()
+            Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value, artlist)
             Dim isposter As String = Pref.postertype
             Dim isseasonall As String = Pref.seasonall
 
@@ -3943,36 +3944,10 @@ Partial Public Class Form1
             If Not Langlist.Contains(Pref.TvdbLanguageCode) Then Langlist.Add(Pref.TvdbLanguageCode)
             Langlist.Add("")
 
-            showlist.LoadXml(thumblist)
-            Dim thisresult As XmlNode = Nothing
-            Dim artlist As New List(Of TvBanners)
-            artlist.Clear()
-            For Each thisresult In showlist("banners")
-                Select Case thisresult.Name
-                    Case "banner"
-                        Dim individualposter As New TvBanners
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "id"
-                                    individualposter.id = results.InnerText
-                                Case "url"
-                                    individualposter.Url = results.InnerText
-                                Case "bannertype"
-                                    individualposter.BannerType = results.InnerText
-                                Case "resolution"
-                                    individualposter.Resolution = results.InnerText
-                                Case "language"
-                                    individualposter.Language = results.InnerText
-                                Case "season"
-                                    individualposter.Season = results.InnerText
-                                    If individualposter.Season.ToInt > MaxSeasonNo Then MaxSeasonNo = individualposter.Season.ToInt
-                            End Select
-                        Next
-                        artlist.Add(individualposter)
-                End Select
-            Next
-
             If artlist.Count = 0 Then Exit Function
+            For each art In artlist
+                If Not IsNothing(art.Season) AndAlso art.Season.ToInt > MaxSeasonNo Then MaxSeasonNo = art.Season.ToInt
+            Next
 
             'Posters, Main and Season Including Banners
             If shPosters Then
@@ -4583,40 +4558,20 @@ Partial Public Class Form1
             Dim frodo As Boolean = Pref.FrodoEnabled
             If String.IsNullOrEmpty(language) Then language = "en"
             Dim tvdbstuff As New TVDBScraper
-            Dim showlist As New XmlDocument
-            Dim thumblist As String = tvdbstuff.GetPosterList(id)
-            showlist.LoadXml(thumblist)
-            Dim thisresult As XmlNode = Nothing
             Dim artlist As New List(Of TvBanners)
             artlist.Clear()
-            For Each thisresult In showlist("banners")
-                Select Case thisresult.Name
-                    Case "banner"
-                        Dim individualposter As New TvBanners
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "id"
-                                    individualposter.id = results.InnerText
-                                Case "url"
-                                    individualposter.Url = results.InnerText
-                                Case "bannertype"
-                                    individualposter.BannerType = results.InnerText
-                                Case "resolution"
-                                    individualposter.Resolution = results.InnerText
-                                Case "language"
-                                    individualposter.Language = results.InnerText
-                                Case "season"
-                                    individualposter.Season = results.InnerText
-                            End Select
-                        Next
-                        artlist.Add(individualposter)
-                End Select
-            Next
+            Dim thumblist As String = tvdbstuff.GetPosterList(id, artlist)
+            
             If artlist.Count = 0 Then
                 messbox.Close()
-                MsgBox("No " & If(postertype = "poster", "Poster", "Banner") & " found")
+                If thumblist <> "ok" Then
+                    MsgBox("failed to retrieve any artwork")
+                Else
+                    MsgBox("No " & If(postertype = "poster", "Poster", "Banner") & " found")
+                End If
                 Exit Sub
             End If
+
             If mainimages Then
                 For Each Image In artlist
                     If Image.Language = Pref.TvdbLanguageCode And Image.BannerType = postertype And Image.Season = Nothing Then

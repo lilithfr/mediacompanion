@@ -32,7 +32,7 @@ Public Class TVDBScraper
         Return BannerList
     End Function
 
-    Public Function getposterlist(ByVal tvdbid As String)
+    Public Function getposterlist(ByVal tvdbid As String, ByRef ListOfBanners As List(Of TvBanners)) As String
         Monitor.Enter(Me)
         Try
             Dim mirrors As New List(Of String)
@@ -41,45 +41,55 @@ Public Class TVDBScraper
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
             wrGETURL.Proxy = Utilities.MyProxy
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
             Dim objStream As Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim bannerslist As New XmlDocument
             'Try
-            Dim bannerlist As String = "<banners>"
+            'Dim bannerlist As String = "<banners>"
             bannerslist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
             For Each thisresult In bannerslist("Banners")
 
                 Select Case thisresult.Name
                     Case "Banner"
-                        bannerlist = bannerlist & "<banner>"
+                        Dim banner As New TvBanners
+                        'bannerlist = bannerlist & "<banner>"
                         Dim bannerselection As XmlNode = Nothing
                         For Each bannerselection In thisresult.ChildNodes
                             Select Case bannerselection.Name
                                 Case "id"
-                                    bannerlist = bannerlist & "<id>" & bannerselection.InnerXml & "</id>"
+                                    banner.id = bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<id>" & bannerselection.InnerXml & "</id>"
                                 Case "BannerPath"
-                                    bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+                                    banner.Url = "http://www.thetvdb.com/banners/" & bannerselection.InnerXml
+                                    banner.SmallUrl = "http://thetvdb.com/banners/_cache/" & bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
                                 Case "BannerType"
-                                    bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
+                                    banner.BannerType = bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
                                 Case "BannerType2"
-                                    bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
+                                    banner.Resolution = bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
                                 Case "Language"
-                                    bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
+                                    banner.Language = bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
                                 Case "Season"
-                                    bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
+                                    banner.Season = bannerselection.InnerXml
+                                    'bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
+                                Case "Rating"
+                                    banner.Rating = bannerselection.InnerText.ToRating
                                 Case ""
                             End Select
                         Next
-                        bannerlist = bannerlist & "</banner>"
+                        ListOfBanners.Add(banner)
+                        'bannerlist = bannerlist & "</banner>"
                 End Select
             Next
-            bannerlist = bannerlist & "</banners>"
-            Return bannerlist
+            'bannerlist = bannerlist & "</banners>"
+            Return "ok"
+            'Return bannerlist
         Catch ex As WebException
             Return ex.ToString
         Catch EX As Exception
