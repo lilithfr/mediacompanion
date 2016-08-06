@@ -6418,6 +6418,7 @@ Public Class Form1
         Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
         Dim showlist As New XmlDocument
         Dim tvdbstuff As New TVDBScraper
+        'Dim AListOfBanners As New List(Of TvBanners)
         Dim thumblist As String = tvdbstuff.GetPosterList(WorkingTvShow.TvdbId.Value, tvdbposterlist)
         If thumblist <> "ok" Then MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
         'Try
@@ -6426,7 +6427,7 @@ Public Class Form1
         '    MsgBox(thumblist, MsgBoxStyle.OkOnly, "TVdb site returned.....")
         '    Exit Sub
         'End Try
-        
+
         'For Each thisresult In showlist("banners")
         '    Select Case thisresult.Name
         '        Case "banner"
@@ -6465,10 +6466,10 @@ Public Class Form1
             Exit Sub
         End If
         If Not rbTVbanner.Checked Then
-            If usedlist.Count > Pref.maximumthumbs Then
+            If usedlist.Count > 10 Then
                 btnTvPosterNext.Visible = True
                 btnTvPosterPrev.Visible = True
-                If usedlist.Count >= Pref.maximumthumbs Then
+                If usedlist.Count >= 10 Then
                     Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
                 Else
                     Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
@@ -6481,8 +6482,9 @@ Public Class Form1
             Else
                 btnTvPosterNext.Visible = False
                 btnTvPosterPrev.Visible = False
-                If posterArray.Count >= Pref.maximumthumbs Then
-                    Label72.Text = "Displaying 1 to " & Pref.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
+                If posterArray.Count >= 10 Then
+                    Label72.Text = "Displaying 1 to 10 of " & usedlist.Count.ToString & " Images"
+                    'Label72.Text = "Displaying 1 to " & Pref.maximumthumbs & " of " & usedlist.Count.ToString & " Images"
                 Else
                     Label72.Text = "Displaying 1 to " & usedlist.Count.ToString & " of " & usedlist.Count.ToString & " Images"
                 End If
@@ -6506,7 +6508,7 @@ Public Class Form1
 
     Private Sub tv_PosterSelectionDisplay()
         tv_PosterPanelClear()
-        Dim tempint As Integer = (tvposterpage * (Pref.maximumthumbs) + 1) - Pref.maximumthumbs
+        Dim tempint As Integer = ((tvposterpage * 10) + 1) - 10
         Dim tempint2 As Integer = tvposterpage * 10
 
         If tempint2 > usedlist.Count Then
@@ -6514,7 +6516,7 @@ Public Class Form1
         End If
 
         If Not rbTVbanner.Checked Then
-        Label72.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & usedlist.Count.ToString & " Images"
+            Label72.Text = "Displaying " & tempint.ToString & " to " & tempint2 & " of " & usedlist.Count.ToString & " Images"
         Else
             Label72.Text = "Displaying 1 to " & usedlist.Count.ToString
             tempint2 = usedlist.Count
@@ -6542,7 +6544,7 @@ Public Class Form1
                     'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
                 End With
                 thispicbox.pbox = tvposterpicboxes
-                thispicbox.imagepath = usedlist(f).smallUrl
+                thispicbox.imagepath = usedlist(f).SmallUrl
                 MovFanartPicBox.Add(thispicbox)
 
                 tvpostercheckboxes() = New RadioButton()
@@ -6594,7 +6596,7 @@ Public Class Form1
                     'AddHandler tvposterpicboxes.LoadCompleted, AddressOf imageres
                 End With
                 thispicbox.pbox = tvposterpicboxes
-                thispicbox.imagepath = usedlist(f).smallUrl
+                thispicbox.imagepath = usedlist(f).Url
                 MovFanartPicBox.Add(thispicbox)
 
                 tvpostercheckboxes() = New RadioButton()
@@ -6651,7 +6653,7 @@ Public Class Form1
                 lores(0) = "Save Image (" & picbox.Image.Width & " x " & picbox.Image.Height & ")"
                 lores(1) = picbox.Name
                 For Each poster In usedlist
-                    If poster.smallUrl = sender.tag Then
+                    If poster.url = sender.tag Then
                         If Not IsNothing(poster.Resolution) AndAlso IsNumeric(poster.resolution.Replace("x", "")) Then
                             hires(0) = "Save Image (" & poster.resolution & ")"
                             hires(0) = hires(0).replace("x", " x ")
@@ -6678,11 +6680,12 @@ Public Class Form1
 
     Private Sub tv_PosterDoubleClick(ByVal sender As Object, ByVal e As EventArgs)
         Dim tempstring As String = sender.name.replace("poster", "postercheckbox")
-
+        Dim hdurl As String = ""
         For Each Control In Panel16.Controls
             If Control.name = tempstring Then
                 Dim rb As RadioButton = Control
                 rb.Checked = True
+                hdurl = rb.Tag.ToString
             End If
         Next
         messbox = New frmMessageBox("Please wait,", "", "Downloading Full Image")
@@ -6690,7 +6693,8 @@ Public Class Form1
         messbox.Show()
         Me.Refresh()
         messbox.Refresh()
-        Dim cachefile As String = Utilities.Download2Cache(sender.Tag.ToString)
+        If hdurl = "" Then hdurl = sender.tag.tostring
+        Dim cachefile As String = Utilities.Download2Cache(hdurl)
         Call util_ZoomImage(cachefile)
         messbox.Close()
     End Sub
