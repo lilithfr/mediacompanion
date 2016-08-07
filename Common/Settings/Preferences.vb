@@ -2610,6 +2610,9 @@ Public Class Pref
                         audio.Codec.Value = audio.Codec.Value.ToLower
                     End If
                     audio.Channels.Value = MI.Get_(StreamKind.Audio, curAS, "Channel(s)")
+                    If audio.Channels.Value = "" AndAlso numOfAudioStreams = 1 Then
+                        audio.Channels.Value = "1"
+                    End If
                     audio.Bitrate.Value = MI.Get_(StreamKind.Audio, curAS, "BitRate/String")
                     If audio.Bitrate.Value = "" Then
                         Dim tmpaud1 As String = ""
