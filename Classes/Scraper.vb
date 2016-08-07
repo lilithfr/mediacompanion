@@ -46,6 +46,7 @@ Public Class MovieRegExs
     Public Const REGEX_DURATIONTECH         = "\((.*?) min"
     Public Const REGEX_DURATIONTECH2        = "(\d*?) min"
     Public Const REGEX_ASPECTRATIO          = "class=""inline"">Aspect Ratio:</h4>(.*?)</div>"
+    Public Const REGEX_ASPECTRATIOALL       = "class=""label""> Aspect Ratio </td>(.*?)</td>"
 End Class
 
 
@@ -882,15 +883,41 @@ Public Class Classimdb
         End Get
     End Property
 
-    ReadOnly Property ARImdb As String      'Aspect Ratio from IMDb
+    ReadOnly Property ARImdb (ByVal imdbid As String) As String      'Aspect Ratio from IMDb
         Get
             Try
-                Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
-                If s.Contains("</div>") Then
-                    s = s.Substring(0, s.IndexOf("</div>"))
+                Dim html3 As String = loadwebpage(Pref.proxysettings, Pref.imdbmirror & "title/" & imdbid &"/technical?ref_=tt_dt_spec", True, 10)
+                Dim s As String = ""
+                Dim t As String = ""
+                Dim u() As String = Nothing
+                'Try technical page first as may be multiple AR's
+                Try
+                t = Regex.Match(html3, MovieRegExs.REGEX_ASPECTRATIOALL, RegexOptions.Singleline).Groups(1).Value.Trim
+                t = t.Replace(vbLf, "").Replace("<td>", "").Replace("<br>", "!").Trim
+                u = t.Split("!")
+                Catch
+                    u = Nothing
+                End Try
+                'check if we got results.
+                If IsNothing(u) OrElse u.Length < 1 Then
+                    'No results so get from main movie page
+                    s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
+                    If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
+                    s = s.Substring(0, s.IndexOf(":")).Trim
+                Else
+                    'If multiple results
+                    If u.Length > 1 Then
+                        For each j In u
+                            If j.Contains("negative") Then Continue For
+                            s = j.Substring(0, j.IndexOf(":")).trim
+                            Exit For
+                        Next
+                    Else
+                        'Else use first one.
+                        s = u(0).Substring(0, u(0).IndexOf(":")).trim
+                    End If
+
                 End If
-                s = s.Substring(0, s.IndexOf(":")).Trim
-                's = s.Replace("&quot;", """")
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))
             Catch ex As Exception
                 Return ""
@@ -1269,7 +1296,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
                 totalinfo.AppendTag( "metacritic", metacritic(imdbid))
-                If Pref.MovImdbAspectRatio Then totalinfo.AppendTag( "aspect"    , ARImdb      )
+                If Pref.MovImdbAspectRatio Then totalinfo.AppendTag( "aspect"    , ARImdb(imdbid))
                 totalinfo &= getomdbTomato(imdbid)
                 
                 For f = 0 To 33
@@ -1549,7 +1576,7 @@ Public Class Classimdb
             If Pref.XbmcTmdbTop250FromImdb      Then results.AppendTag      ( "top250"      , Top250    )
             If Pref.XbmcTmdbVotesFromImdb       Then results.AppendTag      ( "votes"       , Votes     )
             If Pref.XbmcTmdbGenreFromImdb       Then results.AppendTag      ( "imdbgenre"   , Genres    )
-            If Pref.XbmcTmdbAspectFromImdb      Then results.AppendTag      ( "aspect"      , ARImdb    )
+            If Pref.XbmcTmdbAspectFromImdb      Then results.AppendTag      ( "aspect"      , ARImdb(IMDbId))
             If Pref.XbmcTmdbMetascoreFromImdb   Then results.AppendTag      ( "metacritic"  , metacritic(IMDbId))
             If Pref.XbmcTmdbCertFromImdb Then
                 For f = 0 To 33
