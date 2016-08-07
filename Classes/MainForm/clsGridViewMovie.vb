@@ -92,22 +92,28 @@ Public Class clsGridViewMovie
         dgv.RowHeadersVisible = False
  
         If GridFieldToDisplay1="TitleAndYear" Then
-            IniColumn(dgv,"DisplayTitle"       ,GridFieldToDisplay2= "Movie Year","Title"       )
-            IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
+
+            If GridFieldToDisplay2="Movie Year" Or GridFieldToDisplay2="Set" Then
+                IniColumn(dgv,"DisplayTitle"       ,True,"Title")
+            Else
+                IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
+            End If
         End If
 
-        IniColumn(dgv,"filename"         ,GridFieldToDisplay1="FileName"    ,"File name"                                                                        )
-        IniColumn(dgv,"foldername"       ,GridFieldToDisplay1="Folder"      ,"Folder name"                                                                      )
-        IniColumn(dgv,"year"             ,GridFieldToDisplay2="Movie Year"  ,"Movie year"       ,"Year"         , -20                                           )
-        IniColumn(dgv,"DisplayFileDate"  ,GridFieldToDisplay2="Modified"    ,"Date Modified"    ,"Modified"                                                     )
-        IniColumn(dgv,"DisplayRating"    ,GridFieldToDisplay2="Rating"      ,"Rating"           ,"Rating"       , -20, DataGridViewContentAlignment.MiddleCenter)
-        IniColumn(dgv,"usrrated"         ,GridFieldToDisplay2="User Rated"  ,"User Rated"       ,"UserRated"    , -20, DataGridViewContentAlignment.MiddleCenter)
-        IniColumn(dgv,"runtime"          ,GridFieldToDisplay2="Runtime"     ,"Runtime"          ,               , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayCreateDate",GridFieldToDisplay2="Date Added"  ,"Date Added"       ,"Added"                                                        )
-        IniColumn(dgv,"votes"            ,GridFieldToDisplay2="Votes"       ,"Votes"            ,               ,    , DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"DisplayFolderSize",GridFieldToDisplay2="Folder Size" ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"Resolution"       ,GridFieldToDisplay2="Resolution"  ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
-        IniColumn(dgv,"Certificate"      ,GridFieldToDisplay2="Certificate" ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
+        IniColumn(dgv,"filename"            ,GridFieldToDisplay1="FileName"            ,"File name"                                                                        )
+        IniColumn(dgv,"foldername"          ,GridFieldToDisplay1="Folder"              ,"Folder name"                                                                      )
+                                                                                       
+        IniColumn(dgv,"year"                ,GridFieldToDisplay2="Movie Year"          ,"Movie year"       ,"Year"         , -20                                           )
+        IniColumn(dgv,"DisplayFileDate"     ,GridFieldToDisplay2="Modified"            ,"Date Modified"    ,"Modified"                                                     )
+        IniColumn(dgv,"DisplayRating"       ,GridFieldToDisplay2="Rating"              ,"Rating"           ,"Rating"       , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"usrrated"            ,GridFieldToDisplay2="User Rated"          ,"User Rated"       ,"UserRated"    , -20, DataGridViewContentAlignment.MiddleCenter)
+        IniColumn(dgv,"runtime"             ,GridFieldToDisplay2="Runtime"             ,"Runtime"          ,               , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayCreateDate"   ,GridFieldToDisplay2="Date Added"          ,"Date Added"       ,"Added"                                                        )
+        IniColumn(dgv,"votes"               ,GridFieldToDisplay2="Votes"               ,"Votes"            ,               ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"DisplayFolderSize"   ,GridFieldToDisplay2="Folder Size"         ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Resolution"          ,GridFieldToDisplay2="Resolution"          ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
+        IniColumn(dgv,"Certificate"         ,GridFieldToDisplay2="Certificate"         ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
+        IniColumn(dgv,"MovieSetDisplayName" ,GridFieldToDisplay2="Set" ,"Set"                                                                                              )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
@@ -168,16 +174,17 @@ Public Class clsGridViewMovie
             If Not IsNothing(dgvMovies.Columns("Watched")) AndAlso dgvMovies.Columns("Watched").Visible then firstColWidth -= dgvMovies.Columns("Watched").Width
             
 
-            If GridFieldToDisplay2 = "Movie Year" Then firstColWidth -= dgvMovies.Columns("year"             ).Width
-            If GridFieldToDisplay2 = "Modified"   Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"  ).Width
-            If GridFieldToDisplay2 = "Rating"     Then firstColWidth -= dgvMovies.Columns("DisplayRating"    ).Width
-            If GridFieldToDisplay2 = "User Rated" Then firstColWidth -= dgvMovies.Columns("usrrated"         ).Width
-            If GridFieldToDisplay2 = "Runtime"    Then firstColWidth -= dgvMovies.Columns("runtime"          ).Width
-            If GridFieldToDisplay2 = "Date Added" Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate").Width
-            If GridFieldToDisplay2 = "Votes"      Then firstColWidth -= dgvMovies.Columns("votes"            ).Width
-            If GridFieldToDisplay2 = "Folder Size"Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize").Width
-            If GridFieldToDisplay2 = "Resolution" Then firstColWidth -= dgvMovies.Columns("Resolution"       ).Width
-            If GridFieldToDisplay2 = "Certificate"Then firstColWidth -= 80 'dgvMovies.Columns("Certificate"      ).Width
+            If GridFieldToDisplay2 = "Movie Year"          Then firstColWidth -= dgvMovies.Columns("year"               ).Width
+            If GridFieldToDisplay2 = "Modified"            Then firstColWidth -= dgvMovies.Columns("DisplayFileDate"    ).Width
+            If GridFieldToDisplay2 = "Rating"              Then firstColWidth -= dgvMovies.Columns("DisplayRating"      ).Width
+            If GridFieldToDisplay2 = "User Rated"          Then firstColWidth -= dgvMovies.Columns("usrrated"           ).Width
+            If GridFieldToDisplay2 = "Runtime"             Then firstColWidth -= dgvMovies.Columns("runtime"            ).Width
+            If GridFieldToDisplay2 = "Date Added"          Then firstColWidth -= dgvMovies.Columns("DisplayCreateDate"  ).Width
+            If GridFieldToDisplay2 = "Votes"               Then firstColWidth -= dgvMovies.Columns("votes"              ).Width
+            If GridFieldToDisplay2 = "Folder Size"         Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize"  ).Width
+            If GridFieldToDisplay2 = "Resolution"          Then firstColWidth -= dgvMovies.Columns("Resolution"         ).Width
+            If GridFieldToDisplay2 = "Set"                 Then firstColWidth -= dgvMovies.Columns("MovieSetDisplayName").Width  
+            If GridFieldToDisplay2 = "Certificate"         Then firstColWidth -= 80 
 
 
             If firstColWidth>0 Then
@@ -215,10 +222,52 @@ Public Class clsGridViewMovie
             End If
         End If
 
+
         'General
         If Form1.cbFilterGeneral.Visible Then
-            Select Form1.cbFilterGeneral.Text.RemoveAfterMatch
 
+            Dim selOption = Form1.cbFilterGeneral.Text.RemoveAfterMatch
+
+            If selOption = "Missing from set" Then
+
+                Form1.cbSort.Text = "Set"
+                Form1.tlpMovies.Enabled = False
+                Form1.Panel6.Enabled = False                    'FanTvArtList
+
+
+                b = From r In Form1.oMovies.TmdbSetMissingMovies Select r.DgvMovie
+
+
+                If GridSort = "Asc" Then
+                    b = From f In b Order By f.DisplayTitle Ascending        
+                Else
+                    b = From f In b Order By f.DisplayTitle Descending         
+                End If
+                If Form1.cbFilterSet.Visible Then b = Form1.oMovies.ApplySetsFilter( b , Form1.cbFilterSet )
+
+                Dim lst2 = b.ToList
+                Form1.DataGridViewBindingSource.DataSource = lst2
+                Form1.DataGridViewMovies       .DataSource = Form1.DataGridViewBindingSource
+        
+                'If Yield Then Return
+
+
+                GridFieldToDisplay1="TitleAndYear" 
+                GridFieldToDisplay2="Set" 
+
+
+                GridviewMovieDesign(Form1)
+
+                Form1.LabelCountFilter.Text = "Displaying " & lst2.Count.ToString 
+
+                Return
+            End If
+
+            Form1.tlpMovies.Enabled = True
+            Form1.Panel6.Enabled = True
+
+
+            Select selOption
                 Case "Watched"                     : b = From f In b Where     f.Watched
                 Case "Unwatched"                   : b = From f In b Where Not f.Watched
                 Case "Scrape Error"                : b = From f In b Where f.genre.ToLower = "problem"
@@ -258,14 +307,17 @@ Public Class clsGridViewMovie
                 Case "Imdb in not folder name"     : b = From f In b Where Not f.ImdbInFolderName
                 Case "Imdb not in folder name & year mismatch" : b = From f In b Where Not f.ImdbInFolderName And f.year<>f.FolderNameYear
                 Case "Plot same as Outline"        : b = (From f In b From m In Form1.oMovies.MovieCache _
-                                                          Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
-                                                          Select f
-                                                          )
+                                                            Where m.PlotEqOutline And f.fullpathandfilename=m.fullpathandfilename
+                                                            Select f
+                                                            )
                 Case "Outline contains html"       : b = From f In b Where f.OutlineContainsHtml
+
             End Select
+
         End If
 
         If Yield Then Return
+
 
         If Form1.cbFilterRating  .Visible Then b = From f In b Where f.Rating     >= Form1.cbFilterRating  .SelectedMin and f.Rating     <= Form1.cbFilterRating  .SelectedMax   
         If Form1.cbFilterVotes   .Visible Then b = From f In b Where f.Votes      >= Form1.cbFilterVotes   .SelectedMin and f.Votes      <= Form1.cbFilterVotes   .SelectedMax   
@@ -295,6 +347,8 @@ Public Class clsGridViewMovie
         If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )     
         If Form1.cbFilterRootFolder            .Visible Then b = Form1.oMovies.ApplyRootFolderFilter            ( b , Form1.cbFilterRootFolder            )
         If Form1.cbFilterUserRated             .Visible Then b = Form1.oMovies.ApplyUserRatedFilter             ( b , Form1.cbFilterUserRated             )
+
+
  
         Select Case Form1.cbSort.Text
             Case "A - Z"
@@ -416,6 +470,13 @@ Public Class clsGridViewMovie
                     Else
                         b = From f In b Order By f.DisplayTitle Descending
                     End If
+                End If
+
+            Case "Set"
+                If GridSort = "Asc" Then
+                    b = From f In b Order By f.MovieSetDisplayName Ascending, f.DisplayTitle 
+                Else
+                    b = From f In b Order By f.MovieSetDisplayName Descending, f.DisplayTitle 
                 End If
         End Select
 

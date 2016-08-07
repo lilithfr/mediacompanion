@@ -3042,7 +3042,7 @@ Partial Class Form1
         Me.cbSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.cbSort.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cbSort.FormattingEnabled = true
-        Me.cbSort.Items.AddRange(New Object() {"A - Z", "Movie Year", "Modified", "Runtime", "Rating", "User Rated", "Sort Order", "Date Added", "Votes", "Resolution", "Certificate", "Folder Size"})
+        Me.cbSort.Items.AddRange(New Object() {"A - Z", "Movie Year", "Modified", "Runtime", "Rating", "User Rated", "Sort Order", "Date Added", "Votes", "Resolution", "Certificate", "Folder Size","Set"})
         Me.cbSort.Location = New System.Drawing.Point(33, 81)
         Me.cbSort.Name = "cbSort"
         Me.cbSort.Size = New System.Drawing.Size(87, 21)
@@ -4343,7 +4343,7 @@ Partial Class Form1
         Me.cbFilterGeneral.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterGeneral.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
         Me.cbFilterGeneral.IntegralHeight = false
-        Me.cbFilterGeneral.Items.AddRange(New Object() {"All", "Watched", "Unwatched", "UnScraped", "Duplicates", "Missing Fanart", "Missing Poster", "Missing Plot", "Missing Trailer"})
+        Me.cbFilterGeneral.Items.AddRange(New Object() {"All", "Watched", "Unwatched", "UnScraped", "Duplicates", "Missing Fanart", "Missing Poster", "Missing Plot", "Missing from set", "Missing Trailer"})
         Me.cbFilterGeneral.Location = New System.Drawing.Point(147, 32767)
         Me.cbFilterGeneral.Margin = New System.Windows.Forms.Padding(4)
         Me.cbFilterGeneral.MaxDropDownItems = 5

@@ -3350,17 +3350,20 @@ Public Class Form1
 
         Dim needtoload As Boolean = False
         Dim done As Boolean = False
-        'If selectedRows.Count > 1 Then
-            tsmiMov_PlayMovie.Visible = (selectedRows.Count = 1)
-            tsmiMov_OpenFolder.Visible = (selectedRows.Count = 1)
-            tsmiMov_ViewNfo.Visible = (selectedRows.Count = 1)
-            tsmiMov_Separator1.Visible = (selectedRows.Count = 1)
-            tsmiMov_Separator7.Visible = (selectedRows.Count = 1)
-            tsmiMov_FanartBrowserAlt.Visible = (selectedRows.Count = 1)
-            tsmiMov_PosterBrowserAlt.Visible = (selectedRows.Count = 1)
-            tsmiMov_EditMovieAlt.Visible = (selectedRows.Count = 1)
-            tsmiMov_ReloadFromCache.Visible = (selectedRows.Count = 1)
-        'End If
+
+            
+        Dim blnShow = (selectedRows.Count=1)
+
+        tsmiMov_PlayMovie.Visible = blnShow
+        tsmiMov_OpenFolder.Visible = blnShow
+        tsmiMov_ViewNfo.Visible = blnShow
+        tsmiMov_Separator1.Visible = blnShow
+        tsmiMov_Separator7.Visible = blnShow
+        tsmiMov_FanartBrowserAlt.Visible = blnShow
+        tsmiMov_PosterBrowserAlt.Visible = blnShow
+        tsmiMov_EditMovieAlt.Visible = blnShow
+        tsmiMov_ReloadFromCache.Visible = blnShow
+
 
         If Yield(yielding) Then Return
 
@@ -3884,6 +3887,10 @@ Public Class Form1
     Private Sub TabControl2_Selecting(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TabControlCancelEventArgs) Handles TabControl2.Selecting
         Try
             If Not IsNothing(messbox) AndAlso messbox.visible Then e.Cancel = True
+
+            Dim selOption = cbFilterGeneral.Text.RemoveAfterMatch
+
+            If selOption = "Missing from set" Then e.Cancel = True
         Catch
         End Try
     End Sub
@@ -18228,4 +18235,5 @@ Public Class Form1
     Private Sub tagtxt_TextChanged(sender As Object, e As EventArgs) Handles tagtxt.TextChanged
         tb_tagtxt_changed = True
     End Sub
+
 End Class

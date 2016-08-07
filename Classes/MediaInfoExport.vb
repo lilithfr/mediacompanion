@@ -285,8 +285,12 @@ Public Class MediaInfoExport
                         End Try
 
                     Case "folder_size"
-                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
-                        strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
+                        Try
+                            fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                            strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
+                        Catch
+                            strNFOprop = "0"
+                        End Try
 
                     Case "folder"
                         fi = New System.IO.FileInfo(movie.fullpathandfilename)
@@ -309,6 +313,9 @@ Public Class MediaInfoExport
                                 If tokenInstr(1).StartsWith("article") Then strNFOprop = M.Groups("article").Value.Trim
                             End If
                         End If
+
+                    Case "movieset" :
+                        strNFOprop = movie.MovieSet.MovieSetName
 
                     Case "movieyear"
                         strNFOprop = If(movie.year <> Nothing, movie.year, "0000")

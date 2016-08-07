@@ -79,7 +79,6 @@ Public Class ComboList
     Property _usrrated            As Integer = 0
     Property _metascore           As Integer = 0
 
-
     Public ReadOnly Property DisplayFolderSize As Double
         Get
             Return Math.Round( FolderSize/(1024*1024*1024),1 )
