@@ -2823,8 +2823,6 @@ Public Class Movies
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()
-        UpdateTmdbSetMissingMovies()
-'       UpdateUserTmdbSetAdditions()
         SaveTagCache()
     End Sub
 
