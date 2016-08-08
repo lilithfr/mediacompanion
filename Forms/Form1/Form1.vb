@@ -3407,7 +3407,7 @@ Public Class Form1
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
             If Yield(yielding) Then Return
-            If Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
+            If Not queryList.Count = 0 AndAlso Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
                 If Mov_MissingMovie(queryList) Then Exit Sub
             End If
 
