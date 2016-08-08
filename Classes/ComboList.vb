@@ -497,4 +497,5 @@ Public Class ComboList
 
     Property UserSetAddition As Boolean = False
     Public Property UnknownSetCount As Boolean = False
+
 End Class

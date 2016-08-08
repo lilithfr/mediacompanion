@@ -3322,7 +3322,10 @@ Public Class Movie
 
         RemoveMovieSetFromCache
 
-        If IsNothing(McMovieSetInfo) Then Exit Sub
+        If IsNothing(McMovieSetInfo) Then
+            MovieSet.MovieSetName = "-None-" 
+            Exit Sub
+        End If
 
         _parent.MovieSetDB.Add(McMovieSetInfo)
 
