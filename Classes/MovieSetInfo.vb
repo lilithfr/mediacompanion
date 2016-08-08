@@ -62,13 +62,22 @@ End Class
 
 Public Class CollectionMovie
 
-    Property MovieTitle  As String = ""
-    Property TmdbMovieId As String = ""
+    Public Property MovieTitle    As String = ""
+    Public Property TmdbMovieId   As String = ""
+    Public Property backdrop_path As String = ""
+    Public Property poster_path   As String = ""
+    Public Property release_date  As String = ""
 
 
-    Sub New(Optional _MovieTitle As String = "", Optional _MovieID As String = "")
-        MovieTitle   = _MovieTitle
-        TmdbMovieId  = _MovieID
+
+    Sub New(Optional _MovieTitle As String = "", Optional _MovieID As String = "",
+            Optional _backdrop_path As String = "", Optional _poster_path As String = "", Optional _release_date As String = "")
+
+        MovieTitle    = _MovieTitle
+        TmdbMovieId   = _MovieID
+        backdrop_path = _backdrop_path
+        poster_path   = _poster_path  
+        release_date  = _release_date 
     End Sub
 
 End Class

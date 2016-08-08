@@ -2483,8 +2483,19 @@ Public Class Movies
                                     Select Case detail2.Name
                                         Case "movietitle"
                                             ac.MovieTitle = detail2.InnerText
+
                                         Case "movieid"
                                             ac.TmdbMovieId = detail2.InnerText
+
+                                        Case "backdrop_path"
+                                            ac.backdrop_path = detail2.InnerText
+
+                                        Case "poster_path"
+                                            ac.poster_path = detail2.InnerText
+
+                                        Case "release_date"
+                                            ac.release_date = detail2.InnerText
+
                                     End Select
                                 Next
                                 movac.Add(ac)
@@ -2666,12 +2677,27 @@ Public Class Movies
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
                     childchild = doc.CreateElement("collection")
+
                     childchildchild = doc.createElement("movietitle")
                     childchildchild.InnerText = item.MovieTitle
                     childchild.AppendChild(childchildchild)
+
                     childchildchild = doc.createElement("movieid")
                     childchildchild.InnerText = item.TmdbMovieId
                     childchild.AppendChild(childchildchild)
+
+                    childchildchild = doc.createElement("backdrop_path")
+                    childchildchild.InnerText = item.backdrop_path
+                    childchild.AppendChild(childchildchild)
+
+                    childchildchild = doc.createElement("poster_path")
+                    childchildchild.InnerText = item.poster_path
+                    childchild.AppendChild(childchildchild)
+
+                    childchildchild = doc.createElement("release_date")
+                    childchildchild.InnerText = item.release_date
+                    childchild.AppendChild(childchildchild)
+
                     child.AppendChild(childchild)
                 Next
             End If

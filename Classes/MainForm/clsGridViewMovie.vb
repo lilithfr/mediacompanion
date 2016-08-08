@@ -231,11 +231,23 @@ Public Class clsGridViewMovie
             If selOption = "Missing from set" Then
 
                 Form1.cbSort.Text = "Set"
+
                 Form1.tlpMovies.Enabled = False
                 Form1.Panel6.Enabled = False                    'FanTvArtList
+                Form1.MovieContextMenu.Enabled = False
 
+                b = From 
+                        r 
+                    In 
+                        Form1.oMovies.TmdbSetMissingMovies
+                    Where
+                        IsDate(r.Movie.release_date) AndAlso (r.Movie.release_date < Date.Now)
+                    Select 
+                        r.DgvMovie
 
-                b = From r In Form1.oMovies.TmdbSetMissingMovies Select r.DgvMovie
+'            backdrop_path
+'            poster_path  
+'            release_date 
 
 
                 If GridSort = "Asc" Then
@@ -265,7 +277,7 @@ Public Class clsGridViewMovie
 
             Form1.tlpMovies.Enabled = True
             Form1.Panel6.Enabled = True
-
+            Form1.MovieContextMenu.Enabled = True
 
             Select selOption
                 Case "Watched"                     : b = From f In b Where     f.Watched
