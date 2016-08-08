@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\TmdbSetMissingMovie.vb" />
     <Compile Include="Classes\MovieSetInfo.vb" />
     <Compile Include="Classes\Databases.vb" />
     <Compile Include="Classes\CertificateMappings.vb" />
@@ -785,6 +786,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="html_templates\CopyMoviesInFolders.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="html_templates\MoviesSetAndTitle.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="media_companion.chm">

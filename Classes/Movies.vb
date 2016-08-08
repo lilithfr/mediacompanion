@@ -55,6 +55,8 @@ Public Class Movies
     Private _directorDb             As New List(Of DirectorDatabase)
     Public _tmpDirectorDb           As New List(Of DirectorDatabase)
     Private _moviesetDb             As New List(Of MovieSetInfo)
+    Private _tmdbSetMissingMovies   As New List(Of TmdbSetMissingMovie)
+
     Private _tagDb                  As New List(Of TagDatabase)
     Public _tmpTagDb                As New List(Of TagDatabase)
     Public _tmpMoviesetDb           As New List(Of MovieSetInfo)
@@ -326,6 +328,7 @@ Public Class Movies
             lst.Add( Duplicates               )
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
             'lst.Add( IncompleteMovieSetInfo   )
+            lst.Add( MissingFromSet           )
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )
@@ -964,26 +967,57 @@ Public Class Movies
             Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
             Return r.ToList
         End Get
-    End Property   
+    End Property
 
     Public ReadOnly Property IncompleteMovieSetInfo As String
         Get
-            Return "Incomplete movie set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")" 
+            Return "Incomplete movie set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")"
         End Get
-    End Property  
+    End Property
+
+
+
+    'Movies missing from a Set
+    '-------------------------
+    'From list Of movies
+    '	Select Case Distinct Set ids
+    'For Each set In list Of Set ids
+    '	For Each movie
+    '		Got Y/N
+    '		N -> Add to Results
+    Public Sub UpdateTmdbSetMissingMovies
+        _tmdbSetMissingMovies.Clear
+
+        For Each mset In MovieSetDB
+            For Each movie In mset.Collection
+                Dim q = From x In MovieCache Where x.tmdbid = movie.TmdbMovieId
+
+                If q.Count = 0 Then
+                    _tmdbSetMissingMovies.Add(New TmdbSetMissingMovie(mset, movie))
+                End If
+            Next
+        Next
+    End Sub
+
+   ' "Missing from set"
+    Public ReadOnly Property MissingFromSet As String
+        Get
+            Return "Missing from set (" & TmdbSetMissingMovies.Count & ")"
+        End Get
+    End Property
 
     Public ReadOnly Property IncompleteMovieSets As List(Of MovieSetInfo)
         Get
-            Dim q = From x In MovieCache 
-                Where
+            Dim q = From x In MovieCache
+                    Where
                     x.IncompleteMovieSet
-                Select
+                    Select
                     x.MovieSet
 
             Return q.AsEnumerable.ToList
         End Get
-    End Property 
- 
+    End Property
+
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get
             Try
@@ -1005,11 +1039,11 @@ Public Class Movies
 
             Return x
         End Get
-    End Property    
+    End Property
 
     Public ReadOnly Property SubTitleLangFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
+            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -1017,9 +1051,9 @@ Public Class Movies
 
     Public ReadOnly Property RootFolderFilter As List(Of String)
         Get
-            Dim q = From x In MovieCache 
-                Group By x.rootfolder Into NumFilms=Count 
-                Order by rootfolder Ascending
+            Dim q = From x In MovieCache
+                    Group By x.rootfolder Into NumFilms = Count
+                    Order By rootfolder Ascending
 
             Dim r = (From x In q Select x.rootfolder & " (" & x.NumFilms.ToString & ")").ToList
 
@@ -1027,8 +1061,8 @@ Public Class Movies
         End Get
     End Property
 
-    Private Sub Rebuild_Data_GridViewMovieCache
-        _data_GridViewMovieCache.Clear
+    Private Sub Rebuild_Data_GridViewMovieCache()
+        _data_GridViewMovieCache.Clear()
 
         For Each item In MovieCache
             _data_GridViewMovieCache.Add(New Data_GridViewMovie(item))
@@ -1053,6 +1087,16 @@ Public Class Movies
         End Get
     End Property
 
+
+    Public ReadOnly Property TmdbSetMissingMovies As List(Of TmdbSetMissingMovie)
+        Get
+            Return _tmdbSetMissingMovies
+        End Get
+    End Property
+
+
+    
+
     Public ReadOnly Property TagDB As List(Of TagDatabase)
         Get
             Return _tagDb
@@ -1062,7 +1106,7 @@ Public Class Movies
     Public Function GetMovieSetIdFromName(mSetName As String) As String
         For Each mset In MovieSetDB
             If mset.MovieSetName = mSetName Then
-                Return mset.MovieSetId 
+                Return mset.MovieSetId
             End If
         Next
         If Not mSetName.ToLower = "-none-" Then
@@ -1075,21 +1119,22 @@ Public Class Movies
 
     Public ReadOnly Property Cancelled As Boolean
         Get
-            Application.DoEvents
-            If Not IsNothing(_bw) AndAlso _bw.WorkerSupportsCancellation AndAlso _bw.CancellationPending Then
-                ReportProgress("Cancelled!",vbCrLf & "!!! Operation cancelled by user")
+            Application.DoEvents()
+
+            If Not IsNothing(_Bw) AndAlso _Bw.WorkerSupportsCancellation AndAlso _Bw.CancellationPending Then
+                ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
                 Return True
             End If
             Return False
         End Get
     End Property
 
-    Sub New(Optional bw As BackgroundWorker=Nothing)
-        _bw = bw
+    Sub New(Optional bw As BackgroundWorker = Nothing)
+        _Bw = bw
 
-        AddHandler Me.XbmcMcMoviesChanged   , AddressOf Handle_XbmcMcMoviesChanged
-        AddHandler Me.XbmcOnlyMoviesChanged , AddressOf Handle_XbmcOnlyMoviesChanged
-       
+        AddHandler Me.XbmcMcMoviesChanged, AddressOf Handle_XbmcMcMoviesChanged
+        AddHandler Me.XbmcOnlyMoviesChanged, AddressOf Handle_XbmcOnlyMoviesChanged
+
     End Sub
 
     Sub newMovie_AmountDownloadedChanged(ByVal iNewProgress As Long)
@@ -1100,29 +1145,29 @@ Public Class Movies
         RaiseEvent FileDownloadSizeObtained(iFileSize)
     End Sub
 
-    Sub newMovie_FileDownloadComplete
-        RaiseEvent FileDownloadComplete
+    Sub newMovie_FileDownloadComplete()
+        RaiseEvent FileDownloadComplete()
     End Sub
 
     Sub newMovie_FileDownloadFailed(ByVal ex As Exception)
         RaiseEvent FileDownloadFailed(ex)
     End Sub
 
-    Sub ReportProgress( Optional progressText As String=Nothing, Optional log As String=Nothing, Optional command As Progress.Commands=Progress.Commands.SetIt )
-        ReportProgress(New Progress(progressText,log,command))
+    Sub ReportProgress(Optional progressText As String = Nothing, Optional log As String = Nothing, Optional command As Progress.Commands = Progress.Commands.SetIt)
+        ReportProgress(New Progress(progressText, log, command))
     End Sub
 
-    Sub ReportProgress( ByVal oProgress As Progress )
-        If Not IsNothing(_bw) AndAlso _bw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) and String.IsNullOrEmpty(oProgress.Message)) Then
+    Sub ReportProgress(ByVal oProgress As Progress)
+        If Not IsNothing(_Bw) AndAlso _Bw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) And String.IsNullOrEmpty(oProgress.Message)) Then
             Try
-                _bw.ReportProgress(PercentDone, oProgress)
+                _Bw.ReportProgress(PercentDone, oProgress)
             Catch
             End Try
         End If
     End Sub
 
     Public Function FindCachedMovie(fullpathandfilename As String) As ComboList
-        Dim q = From m In _movieCache Where m.fullpathandfilename=fullpathandfilename
+        Dim q = From m In _MovieCache Where m.fullpathandfilename = fullpathandfilename
         If q.Count = 0 Then Return Nothing
         Return q.Single
     End Function
@@ -1132,7 +1177,7 @@ Public Class Movies
         If q.Count = 0 Then Return Nothing
         If q.Count > 1 Then Return q(0)
         Try
-            Return q.single
+            Return q.Single
         Catch ex As Exception
             If ex.Message = "Sequence contains more than one element" Then
                 Return q(0)
@@ -1144,12 +1189,12 @@ Public Class Movies
     End Function
 
     Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
-        Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename=fullpathandfilename
-        Return q.Single        
+        Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename = fullpathandfilename
+        Return q.Single
     End Function
 
     Public Function LoadMovie(fullpathandfilename As String, Optional ByVal Cacheupdate As Boolean = True) As Movie
-        Dim movie = New Movie(Me,fullpathandfilename)
+        Dim movie = New Movie(Me, fullpathandfilename)
         If IsNothing(movie) Then Return Nothing
         movie.LoadNFO(Cacheupdate)
         Return movie
@@ -1160,49 +1205,49 @@ Public Class Movies
     '    Return oMovies.LoadMovie(fullpathandfilename)
     'End Function
 
-    Public Sub FindNewMovies(Optional scrape=True)
-        NewMovies.Clear
+    Public Sub FindNewMovies(Optional scrape = True)
+        NewMovies.Clear()
         PercentDone = 0
 
         Dim folders As New List(Of String)
 
-        AddOnlineFolders ( folders , Pref.movieFolders )
-        AddOfflineFolders( folders )
+        AddOnlineFolders(folders, Pref.movieFolders)
+        AddOfflineFolders(folders)
 
         Dim i = 0
         For Each folder In folders
             i += 1
-            PercentDone = CalcPercentDone(i,folders.Count)
+            PercentDone = CalcPercentDone(i, folders.Count)
             ReportProgress("Scanning folder " & i & " of " & folders.Count)
 
             AddNewMovies(folder)
-            
-            If Cancelled then 
-                NewMovies.Clear
+
+            If Cancelled Then
+                NewMovies.Clear()
                 Exit Sub
             End If
         Next
 
-        If scrape then ScrapeNewMovies
+        If scrape Then ScrapeNewMovies()
     End Sub
 
-    Private Sub AddMovieEventHandlers( oMovie As Movie )
-        AddHandler    oMovie.ProgressLogChanged,       AddressOf ReportProgress
-        AddHandler    oMovie.AmountDownloadedChanged,  AddressOf newMovie_AmountDownloadedChanged
-        AddHandler    oMovie.FileDownloadSizeObtained, AddressOf newMovie_FileDownloadSizeObtained
-        AddHandler    oMovie.FileDownloadComplete    , AddressOf newMovie_FileDownloadComplete
-        AddHandler    oMovie.FileDownloadFailed      , AddressOf newMovie_FileDownloadFailed
+    Private Sub AddMovieEventHandlers(oMovie As Movie)
+        AddHandler oMovie.ProgressLogChanged, AddressOf ReportProgress
+        AddHandler oMovie.AmountDownloadedChanged, AddressOf newMovie_AmountDownloadedChanged
+        AddHandler oMovie.FileDownloadSizeObtained, AddressOf newMovie_FileDownloadSizeObtained
+        AddHandler oMovie.FileDownloadComplete, AddressOf newMovie_FileDownloadComplete
+        AddHandler oMovie.FileDownloadFailed, AddressOf newMovie_FileDownloadFailed
     End Sub
-    
-    Private Sub RemoveMovieEventHandlers( oMovie As Movie )
-        RemoveHandler oMovie.ProgressLogChanged,       AddressOf ReportProgress
-        RemoveHandler oMovie.AmountDownloadedChanged,  AddressOf newMovie_AmountDownloadedChanged
+
+    Private Sub RemoveMovieEventHandlers(oMovie As Movie)
+        RemoveHandler oMovie.ProgressLogChanged, AddressOf ReportProgress
+        RemoveHandler oMovie.AmountDownloadedChanged, AddressOf newMovie_AmountDownloadedChanged
         RemoveHandler oMovie.FileDownloadSizeObtained, AddressOf newMovie_FileDownloadSizeObtained
-        RemoveHandler oMovie.FileDownloadComplete    , AddressOf newMovie_FileDownloadComplete
-        RemoveHandler oMovie.FileDownloadFailed      , AddressOf newMovie_FileDownloadFailed
+        RemoveHandler oMovie.FileDownloadComplete, AddressOf newMovie_FileDownloadComplete
+        RemoveHandler oMovie.FileDownloadFailed, AddressOf newMovie_FileDownloadFailed
     End Sub
-    
-    Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of str_RootPaths) )
+
+    Public Sub AddOnlineFolders(folders As List(Of String), searchfolders As List(Of str_RootPaths))
         For Each moviefolder In searchfolders 'Pref.movieFolders
             If Not moviefolder.selected Then Continue For
             Dim dirInfo As New DirectoryInfo(moviefolder.rpath)
@@ -1215,15 +1260,15 @@ Public Class Movies
                         folders.Add(subfolder)
                     Next
                 Catch ex As Exception
-                    ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+                    ExceptionHandler.LogError(ex, "LastRootPath: [" & Utilities.LastRootPath & "]")
                 End Try
             End If
-            
-            If Cancelled then Exit Sub
+
+            If Cancelled Then Exit Sub
         Next
     End Sub
 
-    Public Sub AddOnlineFolders( folders As List(Of String), searchfolders As List(Of String) )
+    Public Sub AddOnlineFolders(folders As List(Of String), searchfolders As List(Of String))
         For Each moviefolder In searchfolders 'Pref.movieFolders
             Dim dirInfo As New DirectoryInfo(moviefolder)
 
@@ -1235,28 +1280,28 @@ Public Class Movies
                         folders.Add(subfolder)
                     Next
                 Catch ex As Exception
-                    ExceptionHandler.LogError(ex,"LastRootPath: [" & Utilities.LastRootPath & "]")
+                    ExceptionHandler.LogError(ex, "LastRootPath: [" & Utilities.LastRootPath & "]")
                 End Try
             End If
-            
-            If Cancelled then Exit Sub
+
+            If Cancelled Then Exit Sub
         Next
     End Sub
 
-    Public Sub AddOfflineFolders( folders As List(Of String) )
+    Public Sub AddOfflineFolders(folders As List(Of String))
         For Each moviefolder In Pref.offlinefolders
 
             Dim dirInfo As New DirectoryInfo(moviefolder)
 
             If dirInfo.Exists Then
-                ReportProgress(,"Found Offline Folder: " & dirInfo.FullName.ToString & vbCrLf & "Checking for subfolders" & vbCrLf)
+                ReportProgress(, "Found Offline Folder: " & dirInfo.FullName.ToString & vbCrLf & "Checking for subfolders" & vbCrLf)
 
                 For Each subfolder In Utilities.EnumerateFolders(moviefolder, 0)
-'                    ReportProgress(,"Subfolder added :- " & subfolder.ToString & vbCrLf)
+                    '                    ReportProgress(,"Subfolder added :- " & subfolder.ToString & vbCrLf)
 
                     Dim DummyFileName As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                     Dim DummyFullName As String = Path.Combine(subfolder, DummyFileName)
-                    Dim NfoFullName   As String = DummyFullName.Replace(Path.GetExtension(DummyFullName), ".nfo")
+                    Dim NfoFullName As String = DummyFullName.Replace(Path.GetExtension(DummyFullName), ".nfo")
 
                     If Not File.Exists(NfoFullName) Then
 
@@ -1283,80 +1328,80 @@ Public Class Movies
 
     Public Sub AddNewMovies(DirPath As String)   'Search for valid video file
 
-        If Pref.ExcludeFolders.Match(DirPath) Then 
-            ReportProgress(,"Skipping excluded folder [" & DirPath & "] from scrape." & vbCrLf)
+        If Pref.ExcludeFolders.Match(DirPath) Then
+            ReportProgress(, "Skipping excluded folder [" & DirPath & "] from scrape." & vbCrLf)
             Return
         End If
 
         Dim dirInfo As New DirectoryInfo(DirPath)
-        Dim found   As Integer = 0
+        Dim found As Integer = 0
 
         For Each ext In Utilities.VideoExtensions
             ext = If((ext = "video_ts.ifo"), ext, "*" & ext)
             Try
                 For Each fileInFo In dirInfo.GetFiles(ext)
-                    If not ValidateFile(fileInFo) then
+                    If Not ValidateFile(fileInFo) Then
                         Continue For
-                    End if
+                    End If
                     found += 1
-                    NewMovies.Add( New Movie(fileInFo.FullName,Me) )
-                Next 
+                    NewMovies.Add(New Movie(fileInFo.FullName, Me))
+                Next
             Catch ex As Exception
-                #If SilentErrorScream Then
+#If SilentErrorScream Then
                     Throw ex
-                #End If
+#End If
             End Try
         Next
-        If found > 0 then
-            ReportProgress(,String.Format("{0} new movie{1} found in [{2}]", found, If(found=1,"","s"), DirPath) & vbCrLf)
+        If found > 0 Then
+            ReportProgress(, String.Format("{0} new movie{1} found in [{2}]", found, If(found = 1, "", "s"), DirPath) & vbCrLf)
             Pref.DoneAMov = True
-        End IF
+        End If
     End Sub
 
-    Public Sub ScrapeFiles(files as List(Of String))
+    Public Sub ScrapeFiles(files As List(Of String))
         AddNewMovies(files)
-        ScrapeNewMovies
-        files.Clear
+        ScrapeNewMovies()
+        files.Clear()
     End Sub
 
-    Public Sub AddNewMovies(files as List(Of String))
-        NewMovies.Clear
+    Public Sub AddNewMovies(files As List(Of String))
+        NewMovies.Clear()
         PercentDone = 0
 
-        Dim i     = 0
+        Dim i = 0
         Dim found = 0
-        Dim msg=""
+        Dim msg = ""
         For Each file In files
             Dim fileInfo = New IO.FileInfo(file)
             i += 1
-            PercentDone = CalcPercentDone(i,files.Count)
-            msg="!!! Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
-            ReportProgress(msg,msg & vbCrLf)
-            If not ValidateFile(fileInFo) then
+            PercentDone = CalcPercentDone(i, files.Count)
+            msg = "!!! Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
+            ReportProgress(msg, msg & vbCrLf)
+            If Not ValidateFile(fileInfo) Then
                 Continue For
-            End if
+            End If
             found += 1
-            NewMovies.Add( New Movie(fileInFo.FullName,Me) )
-            If Cancelled then Exit Sub
+            NewMovies.Add(New Movie(fileInfo.FullName, Me))
+            If Cancelled Then Exit Sub
         Next
 
     End Sub
 
-    Sub ScrapeNewMovies
-        If NewMovies.Count>0 then
-            ReportProgress(,vbCrLf & vbCrLf & "!!! A total of " & NewMovies.Count & " new movie" & If(NewMovies.Count=1,"","s") & " found -> Starting Main Scraper Process..." & vbCrLf & vbCrLf )
+    Sub ScrapeNewMovies()
+        If NewMovies.Count > 0 Then
+            ReportProgress(, vbCrLf & vbCrLf & "!!! A total of " & NewMovies.Count & " new movie" & If(NewMovies.Count = 1, "", "s") & " found -> Starting Main Scraper Process..." & vbCrLf & vbCrLf)
         Else
-            ReportProgress(vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf,vbCrLf & vbCrLf & "!!! No new movies found" & vbCrLf & vbCrLf)
+            ReportProgress(vbCrLf & vbCrLf & "No new movies found" & vbCrLf & vbCrLf, vbCrLf & vbCrLf & "!!! No new movies found" & vbCrLf & vbCrLf)
         End If
- 
+
         Dim i = 0
         For Each newMovie In NewMovies
             i += 1
-            PercentDone = CalcPercentDone(i,NewMovies.Count)
-            ReportProgress( "Scraping " & i & " of " & NewMovies.Count )
+            PercentDone = CalcPercentDone(i, NewMovies.Count)
+            ReportProgress("Scraping " & i & " of " & NewMovies.Count)
             If Pref.MusicVidScrape AndAlso Pref.MVConcertFolders.Count > 0 Then
                 Pref.MusicVidConcertScrape = False
-                For each concertpath In Pref.MVConcertFolders
+                For Each concertpath In Pref.MVConcertFolders
                     If Not concertpath.selected Then Continue For
                     If newMovie.NfoPath.ToLower.Contains(concertpath.rpath.ToLower & If(concertpath.rpath.Contains("\"), "\", "/")) Then
                         Pref.MusicVidConcertScrape = True
@@ -1369,32 +1414,32 @@ Public Class Movies
             Pref.googlecount += 1
             Pref.engineno += 1
             If Pref.engineno = Pref.enginefront.Count Then Pref.engineno = 0
-            If newMovie.TimingsLog <> "" then
-                ReportProgress(,vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
+            If newMovie.TimingsLog <> "" Then
+                ReportProgress(, vbCrLf & "Timings" & vbCrLf & "=======" & newMovie.TimingsLog & vbCrLf & vbCrLf)
             End If
-            If Cancelled then Exit Sub
+            If Cancelled Then Exit Sub
         Next
         Pref.googlecount = 0
-        ReportProgress( ,"!!! " & vbCrLf & "!!! Finished" )
+        ReportProgress(, "!!! " & vbCrLf & "!!! Finished")
     End Sub
 
     Sub ScrapeMovie(movie As Movie)
-        AddMovieEventHandlers   ( movie )
-        movie.Scraped=False
-        movie.Scrape
-        RemoveMovieEventHandlers( movie )
+        AddMovieEventHandlers(movie)
+        movie.Scraped = False
+        movie.Scrape()
+        RemoveMovieEventHandlers(movie)
     End Sub
 
     Sub ChangeMovie(NfoPathAndFilename As String, ChangeMovieId As String, MovieSearchEngine As String)
-        Dim movie = New Movie(Me,NfoPathAndFilename)
+        Dim movie = New Movie(Me, NfoPathAndFilename)
 
         movie.DeleteScrapedFiles(True)
 
         If Not Pref.MusicVidScrape Then
-            movie.ScrapedMovie.Init
+            movie.ScrapedMovie.Init()
         Else
             Pref.MusicVidConcertScrape = False
-            For each concertpath In Pref.MVConcertFolders
+            For Each concertpath In Pref.MVConcertFolders
                 If Not concertpath.selected Then Continue For
                 If movie.NfoPath.ToLower.Contains(concertpath.rpath.ToLower & If(concertpath.rpath.Contains("\"), "\", "/")) Then
                     Pref.MusicVidConcertScrape = True
@@ -1403,79 +1448,79 @@ Public Class Movies
             Next
         End If
 
-        AddMovieEventHandlers   ( movie )
-        movie.Scraped=False
+        AddMovieEventHandlers(movie)
+        movie.Scraped = False
         movie.MovieSearchEngine = MovieSearchEngine
         movie.Scrape(ChangeMovieId)
-        RemoveMovieEventHandlers( movie )
+        RemoveMovieEventHandlers(movie)
     End Sub
 
-    Sub RescrapeSpecificMovie(fullpathandfilename As String,rl As RescrapeList)
+    Sub RescrapeSpecificMovie(fullpathandfilename As String, rl As RescrapeList)
 
-        Dim movie = New Movie(Me,fullpathandfilename)
+        Dim movie = New Movie(Me, fullpathandfilename)
 
-        AddMovieEventHandlers   ( movie )
-        movie.Scraped=False
-        movie.RescrapeSpecific  ( rl    )
-        RemoveMovieEventHandlers( movie )
+        AddMovieEventHandlers(movie)
+        movie.Scraped = False
+        movie.RescrapeSpecific(rl)
+        RemoveMovieEventHandlers(movie)
     End Sub
 
-    Sub RescrapeAll( NfoFilenames As List(Of String) )
-        Dim i=0
-        ReportProgress(,"!!! Rescraping all data for:" & vbCrLf & vbCrLf )
+    Sub RescrapeAll(NfoFilenames As List(Of String))
+        Dim i = 0
+        ReportProgress(, "!!! Rescraping all data for:" & vbCrLf & vbCrLf)
         For Each NfoFilename In NfoFilenames
             i += 1
-            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
+            PercentDone = CalcPercentDone(i, NfoFilenames.Count)
             ReportProgress("Rescraping " & i & " of " & NfoFilenames.Count & " ")
             RescrapeMovie(NfoFilename)
-            If Cancelled then Exit For
+            If Cancelled Then Exit For
         Next
-        SaveCaches
-        ReportProgress(,"!!! " & vbCrLf & "!!! Finished")
+        SaveCaches()
+        ReportProgress(, "!!! " & vbCrLf & "!!! Finished")
     End Sub
 
-    Sub RescrapeSpecific( _rescrapeList As RescrapeSpecificParams )
-        Dim rl As new RescrapeList(_rescrapeList.Field)
-        Dim i=0
+    Sub RescrapeSpecific(_rescrapeList As RescrapeSpecificParams)
+        Dim rl As New RescrapeList(_rescrapeList.Field)
+        Dim i = 0
         For Each FullPathAndFilename In _rescrapeList.FullPathAndFilenames
             i += 1
-            PercentDone = CalcPercentDone(i,_rescrapeList.FullPathAndFilenames.Count)
-            ReportProgress("Rescraping '" & Utilities.TitleCase(_rescrapeList.Field.Replace("_"," ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
-            RescrapeSpecificMovie(FullPathAndFilename,rl)
-            If Cancelled then Exit For
+            PercentDone = CalcPercentDone(i, _rescrapeList.FullPathAndFilenames.Count)
+            ReportProgress("Rescraping '" & Utilities.TitleCase(_rescrapeList.Field.Replace("_", " ")) & "' " & i & " of " & _rescrapeList.FullPathAndFilenames.Count & " ")
+            RescrapeSpecificMovie(FullPathAndFilename, rl)
+            If Cancelled Then Exit For
         Next
-        SaveCaches
+        SaveCaches()
     End Sub
 
     Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
-        Dim i=0
+        Dim i = 0
         Dim NfoFileList As New List(Of String)
-        
+
         For Each item In NfoFilenames
             If IO.File.Exists(item) Then
                 NfoFileList.Add(item)
             Else
-                ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard" )
+                ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard")
             End If
         Next
 
-        If NfoFilenames.count <> NfoFileList.count Then NfoFilenames = NfoFileList
+        If NfoFilenames.Count <> NfoFileList.Count Then NfoFilenames = NfoFileList
         For Each item In NfoFilenames
             i += 1
-            PercentDone = CalcPercentDone(i,NfoFilenames.Count)
-            Dim movie = New Movie(Me,item)
-            AddMovieEventHandlers   ( movie )
+            PercentDone = CalcPercentDone(i, NfoFilenames.Count)
+            Dim movie = New Movie(Me, item)
+            AddMovieEventHandlers(movie)
             ReportProgress("Batch Rescraping " & i & " of " & NfoFilenames.Count & " [" & movie.Title & "] ")
-            movie.Scraped=False
-            movie.RescrapeSpecific  ( rl    )
-            RemoveMovieEventHandlers( movie )
-            If Cancelled then Exit For
+            movie.Scraped = False
+            movie.RescrapeSpecific(rl)
+            RemoveMovieEventHandlers(movie)
+            If Cancelled Then Exit For
         Next
-        SaveCaches
+        SaveCaches()
     End Sub
 
-    Sub RescrapeMovie(NfoFilename as String, Optional ByVal tmdbid As String = "")
-        If Not File.Exists(NfoFilename) Then 
+    Sub RescrapeMovie(NfoFilename As String, Optional ByVal tmdbid As String = "")
+        If Not File.Exists(NfoFilename) Then
             ReportProgress("NFO not found : [" & NfoFilename & "]  ")
             Return
         End If
@@ -1484,18 +1529,18 @@ Public Class Movies
 
         movie.Rescrape = True
 
-        Dim imdbid As String = movie.PossibleImdb 
+        Dim imdbid As String = movie.PossibleImdb
         If Pref.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
             imdbid = tmdbid
         End If
         movie.DeleteScrapedFiles(False)
 
-        movie.ScrapedMovie.Init
+        movie.ScrapedMovie.Init()
 
-        AddMovieEventHandlers   ( movie )
-        movie.Scraped=False
+        AddMovieEventHandlers(movie)
+        movie.Scraped = False
         movie.Scrape(imdbid)
-        RemoveMovieEventHandlers( movie )
+        RemoveMovieEventHandlers(movie)
     End Sub
 
     Function CapsFirstLetter(words As String)
@@ -1504,8 +1549,8 @@ Public Class Movies
 
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
         Try
-            If total = 0 Then total=onNumber
-            Return Math.Min( (100/total)*onNumber , 100 )
+            If total = 0 Then total = onNumber
+            Return Math.Min((100 / total) * onNumber, 100)
         Catch
             Return 1
         End Try
@@ -1513,17 +1558,17 @@ Public Class Movies
 
     Public Function ValidateFile(fileInFo As IO.FileInfo)
         If AlreadyAdded(fileInFo.FullName) Then
-            ReportProgress(," - Already Added!")
+            ReportProgress(, " - Already Added!")
             Return False
         End If
-        Dim log   = ""
+        Dim log = ""
         Dim valid = Movie.IsValidMovieFile(fileInFo, log)
         ReportProgress(log)
         Return valid
     End Function
 
-    Public Function AlreadyAdded(fullName as String) As Boolean
-        Dim q = From m In NewMovies Where m.nfopathandfilename.ToLower = fullName.ToLower
+    Public Function AlreadyAdded(fullName As String) As Boolean
+        Dim q = From m In NewMovies Where m.NfoPathAndFilename.ToLower = fullName.ToLower
         Return (q.Count > 0)
     End Function
 
@@ -1542,11 +1587,13 @@ Public Class Movies
         Return False
     End Function
 
-    Public Sub LoadCaches
-        LoadMovieCache
-        LoadPeopleCaches
+    Public Sub LoadCaches()
+        LoadMovieCache()
+        LoadPeopleCaches()
         LoadMovieSetCache()
         LoadTagCache()
+        UpdateTmdbSetMissingMovies
+
     End Sub
 
     Public Sub SaveCaches
@@ -2636,6 +2683,7 @@ Public Class Movies
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()
+        UpdateTmdbSetMissingMovies()
         SaveTagCache()
     End Sub
 
@@ -2790,16 +2838,17 @@ Public Class Movies
 
     Function ApplySetsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb)
-       
-        If fi.Include.Count>0 Then
-            recs = recs.Where( Function(x)     fi.Include.Contains(x.movieset.MovieSetDisplayName) )
+
+        If fi.Include.Count > 0 Then
+            recs = recs.Where(Function(x) fi.Include.Contains(x.movieset.MovieSetDisplayName))
         End If
-        If fi.Exclude.Count>0 Then
-            recs = recs.Where( Function(x) Not fi.Exclude.Contains(x.movieset.MovieSetDisplayName) )
+        If fi.Exclude.Count > 0 Then
+            recs = recs.Where(Function(x) Not fi.Exclude.Contains(x.movieset.MovieSetDisplayName))
         End If
 
         Return recs
     End Function
+
 
     Function ApplyResolutionsFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
         Dim fi As New FilteredItems(ccb,"Unknown","-1")
