@@ -1033,13 +1033,17 @@ Public Class Movies
 
                 If Not IsNothing(q) Then
 
-                    Dim q2 = From x In q.Collection Where x.TmdbMovieId=movie.tmdbid
+                    Try
+                        Dim q2 = From x In q.Collection Where x.TmdbMovieId=movie.tmdbid
 
-                    If q2.Count=0 Then
-                        _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
+                        If q2.Count=0 Then
+                            _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
 
-                        movie.UserSetAddition = True
-                    End If
+                            movie.UserSetAddition = True
+                        End If
+                    Catch e As Exception
+                        dim yy = e
+                    End Try
                 End If
             End If
         Next
@@ -1660,6 +1664,7 @@ Public Class Movies
         SaveMovieSetCache
         SaveActorCache
         SaveDirectorCache
+        UpdateUserTmdbSetAdditions()
     End Sub
 
     Public Sub LoadMovieCache

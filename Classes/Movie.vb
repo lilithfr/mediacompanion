@@ -3200,7 +3200,7 @@ Public Class Movie
                     Dim skip = False
                     Try
                         Dim movieSet = _parent.FindMovieSetInfoByName(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
-                        If movieSet.DaysOld < 7 Then
+                        If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
                             _scrapedMovie.fullmoviebody.MovieSet = movieSet
                             skip = True
                         End If 
@@ -3325,7 +3325,6 @@ Public Class Movie
         If IsNothing(McMovieSetInfo) Then Exit Sub
 
         _parent.MovieSetDB.Add(McMovieSetInfo)
-        _parent.UpdateTmdbSetMissingMovies()
 
     End Sub
 
@@ -3354,11 +3353,11 @@ Public Class Movie
 
     Sub RemoveMovieSetFromCache
         If IsNothing(MovieSet) Then Exit Sub
-        RemoveMovieSetFromCache(MovieSet.MovieSetId)
+        RemoveMovieSetFromCache(MovieSet.MovieSetName)
     End Sub
 
-    Sub RemoveMovieSetFromCache(MovieSetId As String)
-        _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetId = MovieSetId)
+    Sub RemoveMovieSetFromCache(MovieSetName As String)
+        _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetName = MovieSetName)
     End Sub
 
     Sub RemoveTagFromCache
