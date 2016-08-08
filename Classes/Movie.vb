@@ -1275,8 +1275,67 @@ Public Class Movie
             _movieCache.VideoMissing = Not File.Exists(Fileandpath)
         End If
         _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
+
         AssignMovieToAddMissingData
+        AssignUserTmdbSetAddition
+        AssignUnknownSetCount
+
     End Sub
+
+
+
+    Sub AssignUserTmdbSetAddition
+        _movieCache.UserTmdbSetAddition = "N"
+        If _movieCache.MovieSet.MovieSetName <> "-None-" Then
+            Dim q = (From x In _parent.MovieSetDB  Where x.MovieSetName = _movieCache.MovieSet.MovieSetName).FirstOrDefault
+
+            If Not IsNothing(q) Then
+
+                Try
+                    Dim q2 = From x In q.Collection Where x.TmdbMovieId=_movieCache.tmdbid
+
+                    If q2.Count=0 Then
+'                       _parent.UserTmdbSetAdditions.Add(New UserTmdbSetAddition(_movieCache.tmdbid, _movieCache.MovieSet))
+                        _movieCache.UserTmdbSetAddition = "Y"
+                    End If
+                Catch e As Exception
+                    dim yy = e
+                End Try
+            End If
+        End If
+    End Sub
+
+
+    Sub AssignUnknownSetCount
+
+        _movieCache.UnknownSetCount = "N"
+
+        Dim MovieSetDisplayName = _movieCache.MovieSet.MovieSetDisplayName
+
+        If MovieSetDisplayName="-None-" Then
+            Return
+        End If
+
+        Dim movieSet = _parent.FindMovieSetInfoByName(MovieSetDisplayName)
+
+        If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
+            _movieCache.UnknownSetCount = "Y"
+        End If
+    End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Sub AssignMVToCache
         Dim _mvcache As New MVComboList 
@@ -3312,8 +3371,8 @@ Public Class Movie
         If Not IsNothing(MovieSet) Then
             Try
                 If _parent.FindMovieSetInfoByName(MovieSet.MovieSetDisplayName).DaysOld < 7 Then
-                    _parent.UpdateTmdbSetMissingMovies()
-                    _parent.UpdateUserTmdbSetAdditions()
+'                   _parent.UpdateTmdbSetMissingMovies()
+'                   _parent.UpdateUserTmdbSetAdditions()
                     Return
                 End If 
             Catch
@@ -3323,12 +3382,16 @@ Public Class Movie
         RemoveMovieSetFromCache
 
         If IsNothing(McMovieSetInfo) Then
-            MovieSet.MovieSetName = "-None-" 
-            Exit Sub
+            'If not Pref.moviesets.Contains(MovieSet.MovieSetName) Then
+
+                'MovieSet.MovieSetName = "-None-" 
+                _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" 
+            'End If
+
+            Return
         End If
-
+       
         _parent.MovieSetDB.Add(McMovieSetInfo)
-
     End Sub
 
     Sub UpdateTagCache

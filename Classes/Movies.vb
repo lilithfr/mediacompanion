@@ -56,7 +56,7 @@ Public Class Movies
     Public _tmpDirectorDb           As New List(Of DirectorDatabase)
     Private _moviesetDb             As New List(Of MovieSetInfo)
     Private _tmdbSetMissingMovies   As New List(Of TmdbSetMissingMovie)
-    Private _userTmdbSetAdditions   As New List(Of UserTmdbSetAddition)
+'   Private _userTmdbSetAdditions   As New List(Of UserTmdbSetAddition)
 
     Private _tagDb                  As New List(Of TagDatabase)
     Public _tmpTagDb                As New List(Of TagDatabase)
@@ -963,7 +963,8 @@ Public Class Movies
 
     Function FindUserTmdbSetAdditions(MovieSetDisplayName As String) As IEnumerable(Of MovieSetInfo)
         Try
-            Return (From x In UserTmdbSetAdditions Where x.Msi.MovieSetDisplayName = MovieSetDisplayName Select x.Msi)
+            Return (From x In MovieCache Where x.MovieSet.MovieSetDisplayName = MovieSetDisplayName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
+            'Return (From x In UserTmdbSetAdditions Where x.Msi.MovieSetDisplayName = MovieSetDisplayName Select x.Msi)
         Catch
             Return Nothing
         End Try
@@ -989,13 +990,13 @@ Public Class Movies
 
 
             For Each m In MovieCache
-                m.UnknownSetCount = False
+                m.UnknownSetCount = "N"
             Next
 
             Dim movies = MovieCache.Where(Function(x) lstUnknownSetCount.Contains(x.movieset.MovieSetDisplayName))
 
             For Each m In movies
-                m.UnknownSetCount = True
+                m.UnknownSetCount = "Y"
             Next
             Rebuild_Data_GridViewMovieCache()
 
@@ -1036,35 +1037,40 @@ Public Class Movies
 
     Public ReadOnly Property UserSetAdditions As String
         Get
-            Return "User set additions (" & UserTmdbSetAdditions.Count & ")"
+           'Return "User set additions (" & UserTmdbSetAdditions.Count & ")"
+            Return "User set additions (" & (From x In MovieCache Where x.UserTmdbSetAddition="Y").Count & ")"
         End Get
     End Property
 
     Public ReadOnly Property UnknownSetCounts As String
         Get
-            Dim q = From x In MovieCache Where x.UnknownSetCount
+            Dim q = From x In MovieCache Where x.UnknownSetCount="Y"
             Return "Unknown set count (" & q.Count & ")"
         End Get
     End Property
 
 
 
-    Public Sub UpdateUserTmdbSetAdditions
-        _userTmdbSetAdditions.Clear
+    Public Sub RebuildUserTmdbSetAdditions
+ '       _userTmdbSetAdditions.Clear
 
-        For Each movie In MovieCache
+        Dim lst = From x In MovieCache Where x.UserTmdbSetAddition="" Select x
+
+        For Each movie In lst
+            movie.UserTmdbSetAddition = "N"
+
             If movie.MovieSet.MovieSetName <> "-None-" Then
                 Dim q = (From x In MoviesetDb Where x.MovieSetName = movie.MovieSet.MovieSetName).FirstOrDefault
 
                 If Not IsNothing(q) Then
 
                     Try
-                        Dim q2 = From x In q.Collection Where x.TmdbMovieId=movie.tmdbid
+                        Dim q2 = From x In q.Collection Where x.TmdbMovieId = movie.tmdbid
 
-                        If q2.Count=0 Then
-                            _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
+                        If q2.Count = 0 Then
+'                            _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
 
-                            movie.UserSetAddition = True
+                            movie.UserTmdbSetAddition = "Y"
                         End If
                     Catch e As Exception
                         dim yy = e
@@ -1076,8 +1082,30 @@ Public Class Movies
 
 
 
+    Public Sub RebuildUnknownSetCount
 
-   ' "Missing from set"
+        Dim lst = From x In MovieCache Where x.UnknownSetCount="" Select x
+
+        For Each movie In lst
+            movie.UnknownSetCount = "N"
+
+            Dim MovieSetDisplayName = movie.MovieSet.MovieSetDisplayName
+
+            If MovieSetDisplayName="-None-" Then
+                Return
+            End If
+
+            Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
+
+            If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
+                movie.UnknownSetCount = "Y"
+            End If
+        Next
+    End Sub
+
+
+
+    ' "Missing from set"
     Public ReadOnly Property MissingFromSet As String
         Get
             Return "Missing from set (" & TmdbSetMissingMovies.Count & ")"
@@ -1141,7 +1169,7 @@ Public Class Movies
 
     Public Sub Rebuild_Data_GridViewMovieCache()
 
-        UpdateUserTmdbSetAdditions()        
+'       UpdateUserTmdbSetAdditions()        
 
         _data_GridViewMovieCache.Clear()
 
@@ -1175,11 +1203,11 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property UserTmdbSetAdditions As List(Of UserTmdbSetAddition)
-        Get
-            Return _userTmdbSetAdditions
-        End Get
-    End Property
+    'Public ReadOnly Property UserTmdbSetAdditions As List(Of UserTmdbSetAddition)
+    '    Get
+    '        Return _userTmdbSetAdditions
+    '    End Get
+    'End Property
 
 
     
@@ -1680,7 +1708,7 @@ Public Class Movies
         LoadMovieSetCache()
         LoadTagCache()
         UpdateTmdbSetMissingMovies()
-        UpdateUserTmdbSetAdditions()
+'       UpdateUserTmdbSetAdditions()
         Rebuild_Data_GridViewMovieCache()
     End Sub
 
@@ -1689,7 +1717,7 @@ Public Class Movies
         SaveMovieSetCache
         SaveActorCache
         SaveDirectorCache
-        UpdateUserTmdbSetAdditions()
+'       UpdateUserTmdbSetAdditions()
     End Sub
 
     Public Sub LoadMovieCache
@@ -1795,7 +1823,12 @@ Public Class Movies
                                     Catch
                                         newmovie.FolderSize = -1
                                     End Try                                
-                                Case "RootFolder"           : newmovie.rootfolder = detail.InnerText
+                                Case "RootFolder"           : newmovie.rootfolder          = detail.InnerText
+                                Case "UserTmdbSetAddition"  : newmovie.UserTmdbSetAddition = detail.InnerText
+                                Case "UnknownSetCount"      : newmovie.UnknownSetCount     = detail.InnerText
+
+       
+
                             End Select
                         Next
                         If newmovie.source = Nothing Then
@@ -1921,6 +1954,9 @@ Public Class Movies
             child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
             child.AppendChild(doc, "FolderSize", movie.FolderSize)
             child.AppendChild(doc, "RootFolder", movie.rootfolder)
+            child.AppendChild(doc, "UserTmdbSetAddition", movie.UserTmdbSetAddition)
+            child.AppendChild(doc, "UnknownSetCount", movie.UnknownSetCount)
+  
             root.AppendChild(child)
         Next
 
@@ -2009,6 +2045,8 @@ Public Class Movies
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
+        RebuildUserTmdbSetAdditions()
+        RebuildUnknownSetCount()
         Rebuild_Data_GridViewMovieCache()
 
         If Pref.XbmcLinkReady Then
@@ -2088,6 +2126,8 @@ Public Class Movies
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
+        RebuildUnknownSetCount()
+        RebuildUserTmdbSetAdditions()
 
         Rebuild_Data_GridViewMovieCache
 
@@ -2689,7 +2729,7 @@ Public Class Movies
         RebuildMovieCache
         If Cancelled Then Exit Sub
         'If Not movRebuildCaches Then RebuildMoviePeopleCaches
-         RebuildMoviePeopleCaches
+        RebuildMoviePeopleCaches
         movRebuildCaches = False
     End Sub
 
@@ -2784,7 +2824,7 @@ Public Class Movies
         SaveDirectorCache()
         SaveMovieSetCache()
         UpdateTmdbSetMissingMovies()
-        UpdateUserTmdbSetAdditions()
+'       UpdateUserTmdbSetAdditions()
         SaveTagCache()
     End Sub
 

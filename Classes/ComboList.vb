@@ -480,7 +480,7 @@ Public Class ComboList
         Me.rootfolder           = From.rootfolder
         Me.usrrated             = From.usrrated
         Me.metascore            = From.metascore
-        Me.UserSetAddition      = From.UserSetAddition
+        Me.UserTmdbSetAddition  = From.UserTmdbSetAddition
         Me.UnknownSetCount      = From.UnknownSetCount
     End Sub
 
@@ -495,7 +495,7 @@ Public Class ComboList
         Me.SubLang.AddRange(From)
     End Sub
 
-    Property UserSetAddition As Boolean = False
-    Public Property UnknownSetCount As Boolean = False
+    Public Property UserTmdbSetAddition As Char = ""
+    Public Property UnknownSetCount As Char = ""
 
 End Class

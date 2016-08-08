@@ -49,7 +49,7 @@ Public Class Data_GridViewMovie
     Property FolderSize           As Long = -1
 
     Property tmdbid               As String = ""
-    Property UserSetAddition As Boolean = False
+    Property UserSetAddition As Char = ""
 
     Sub New 
     End Sub
@@ -105,7 +105,7 @@ Public Class Data_GridViewMovie
         usrrated            = movie.usrrated
         metascore           = movie.metascore
         tmdbid = movie.tmdbid
-        UserSetAddition = movie.UserSetAddition
+        UserSetAddition = movie.UserTmdbSetAddition
         UnknownSetCount = movie.UnknownSetCount
     End Sub
 
@@ -157,7 +157,7 @@ Public Class Data_GridViewMovie
         convertedMovie.usrrated             = Me.usrrated
         convertedMovie.metascore            = Me.metascore
         convertedMovie.tmdbid               = Me.tmdbid
-        convertedMovie.UserSetAddition      = Me.UserSetAddition
+        convertedMovie.UserTmdbSetAddition  = Me.UserSetAddition
         convertedMovie.UnknownSetCount      = Me.UnknownSetCount
 
         Return convertedMovie
@@ -881,7 +881,7 @@ Public Class Data_GridViewMovie
         End Get
     End Property
 
-    Public Property UnknownSetCount As Boolean = False
+    Public Property UnknownSetCount As Char = ""
 
 
 End Class
