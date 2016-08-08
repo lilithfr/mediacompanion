@@ -311,8 +311,10 @@ Public Class clsGridViewMovie
                                                             Select f
                                                             )
                 Case "Outline contains html"       : b = From f In b Where f.OutlineContainsHtml
+                Case "User set additions"          : b = From f In b Where f.UserSetAddition
 
             End Select
+
 
         End If
 

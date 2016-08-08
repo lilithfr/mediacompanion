@@ -23,7 +23,7 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
     Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
-    Const NFO_INDEX As Integer = 5
+    Const NFO_INDEX As Integer = 7
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
     Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem

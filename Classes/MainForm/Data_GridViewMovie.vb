@@ -30,8 +30,8 @@ Public Class Data_GridViewMovie
     Dim _TitleUcase As String = ""
     Dim _IntRuntime As Integer=0
     Dim _stars As String = ""
-    Dim _DisplayFileDate   As String = ""
-    Dim _DisplayCreateDate As String = ""
+    Dim _DisplayFileDate   As String
+    Dim _DisplayCreateDate As String
     Dim _movietag As String = ""
     Dim _container As String = ""
     Dim _videomissing As Boolean
@@ -47,6 +47,9 @@ Public Class Data_GridViewMovie
     Property FrodoPosterExists    As Boolean
     Property PreFrodoPosterExists As Boolean
     Property FolderSize           As Long = -1
+
+    Property tmdbid               As String = ""
+    Property UserSetAddition As Boolean = False
 
     Sub New 
     End Sub
@@ -101,6 +104,8 @@ Public Class Data_GridViewMovie
         rootfolder          = movie.rootfolder
         usrrated            = movie.usrrated
         metascore           = movie.metascore
+        tmdbid = movie.tmdbid
+        UserSetAddition = movie.UserSetAddition
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -150,6 +155,8 @@ Public Class Data_GridViewMovie
         convertedMovie.rootfolder           = Me.rootfolder
         convertedMovie.usrrated             = Me.usrrated
         convertedMovie.metascore            = Me.metascore
+        convertedMovie.tmdbid               = Me.tmdbid
+        convertedMovie.UserSetAddition      = Me.UserSetAddition
 
         Return convertedMovie
     End Function

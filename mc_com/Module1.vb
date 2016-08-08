@@ -216,6 +216,7 @@ Module Module1
             If File.Exists(Pref.workingProfile.moviecache) Then
                 ConsoleOrLog("Loading Movie cache")
                 oMovies.LoadMovieCache
+                oMovies.Rebuild_Data_GridViewMovieCache()
             End If
         End If
 

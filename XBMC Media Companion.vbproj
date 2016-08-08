@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\UserTmdbSetAdditions.vb" />
     <Compile Include="Classes\TmdbSetMissingMovie.vb" />
     <Compile Include="Classes\MovieSetInfo.vb" />
     <Compile Include="Classes\Databases.vb" />

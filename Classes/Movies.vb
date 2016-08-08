@@ -56,6 +56,7 @@ Public Class Movies
     Public _tmpDirectorDb           As New List(Of DirectorDatabase)
     Private _moviesetDb             As New List(Of MovieSetInfo)
     Private _tmdbSetMissingMovies   As New List(Of TmdbSetMissingMovie)
+    Private _userTmdbSetAdditions   As New List(Of UserTmdbSetAddition)
 
     Private _tagDb                  As New List(Of TagDatabase)
     Public _tmpTagDb                As New List(Of TagDatabase)
@@ -327,8 +328,9 @@ Public Class Movies
             lst.Add( ScrapeError              )
             lst.Add( Duplicates               )
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
-            'lst.Add( IncompleteMovieSetInfo   )
+            'lst.Add( IncompleteMovieSetInfo  )
             lst.Add( MissingFromSet           )
+            lst.Add( UserSetAdditions         )
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )
@@ -936,10 +938,16 @@ Public Class Movies
 
         Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
  
+        Dim x = FindUserTmdbSetAdditions(MovieSetDisplayName)
+        Dim userAdditions = ""
+        If x.Count>0 Then
+            userAdditions = " *" & x.Count.ToString & " user*"
+        End If
+
         If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
             Return " of unknown"
         Else
-            Return " of " & movieSet.Collection.Count
+            Return " of " & movieSet.Collection.Count & userAdditions
         End If
     End Function
 
@@ -947,6 +955,14 @@ Public Class Movies
     Function FindMovieSetInfoByName(MovieSetDisplayName As String) As MovieSetInfo
         Try
             Return (From x In MovieSetDB Where x.MovieSetDisplayName = MovieSetDisplayName Select x).FirstOrDefault
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
+    Function FindUserTmdbSetAdditions(MovieSetDisplayName As String) As IEnumerable(Of MovieSetInfo)
+        Try
+            Return (From x In UserTmdbSetAdditions Where x.Msi.MovieSetDisplayName = MovieSetDisplayName Select x.Msi)
         Catch
             Return Nothing
         End Try
@@ -998,6 +1014,39 @@ Public Class Movies
             Next
         Next
     End Sub
+
+
+    Public ReadOnly Property UserSetAdditions As String
+        Get
+            Return "User set additions (" & UserTmdbSetAdditions.Count & ")"
+        End Get
+    End Property
+
+
+
+    Public Sub UpdateUserTmdbSetAdditions
+        _userTmdbSetAdditions.Clear
+
+        For Each movie In MovieCache
+            If movie.MovieSet.MovieSetName <> "-None-" Then
+                Dim q = (From x In MoviesetDb Where x.MovieSetName = movie.MovieSet.MovieSetName).FirstOrDefault
+
+                If Not IsNothing(q) Then
+
+                    Dim q2 = From x In q.Collection Where x.TmdbMovieId=movie.tmdbid
+
+                    If q2.Count=0 Then
+                        _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
+
+                        movie.UserSetAddition = True
+                    End If
+                End If
+            End If
+        Next
+    End Sub
+
+
+
 
    ' "Missing from set"
     Public ReadOnly Property MissingFromSet As String
@@ -1061,7 +1110,10 @@ Public Class Movies
         End Get
     End Property
 
-    Private Sub Rebuild_Data_GridViewMovieCache()
+    Public Sub Rebuild_Data_GridViewMovieCache()
+
+        UpdateUserTmdbSetAdditions()        
+
         _data_GridViewMovieCache.Clear()
 
         For Each item In MovieCache
@@ -1091,6 +1143,12 @@ Public Class Movies
     Public ReadOnly Property TmdbSetMissingMovies As List(Of TmdbSetMissingMovie)
         Get
             Return _tmdbSetMissingMovies
+        End Get
+    End Property
+
+    Public ReadOnly Property UserTmdbSetAdditions As List(Of UserTmdbSetAddition)
+        Get
+            Return _userTmdbSetAdditions
         End Get
     End Property
 
@@ -1592,8 +1650,9 @@ Public Class Movies
         LoadPeopleCaches()
         LoadMovieSetCache()
         LoadTagCache()
-        UpdateTmdbSetMissingMovies
-
+        UpdateTmdbSetMissingMovies()
+        UpdateUserTmdbSetAdditions()
+        Rebuild_Data_GridViewMovieCache()
     End Sub
 
     Public Sub SaveCaches
@@ -1724,7 +1783,7 @@ Public Class Movies
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
-        Rebuild_Data_GridViewMovieCache()
+        
     End Sub
 
 
@@ -2695,6 +2754,7 @@ Public Class Movies
         SaveDirectorCache()
         SaveMovieSetCache()
         UpdateTmdbSetMissingMovies()
+        UpdateUserTmdbSetAdditions()
         SaveTagCache()
     End Sub
 

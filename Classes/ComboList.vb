@@ -480,6 +480,7 @@ Public Class ComboList
         Me.rootfolder           = From.rootfolder
         Me.usrrated             = From.usrrated
         Me.metascore            = From.metascore
+        Me.UserSetAddition      = From.UserSetAddition
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -493,4 +494,5 @@ Public Class ComboList
         Me.SubLang.AddRange(From)
     End Sub
 
+    Property UserSetAddition As Boolean = False
 End Class

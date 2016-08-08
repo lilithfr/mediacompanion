@@ -3313,6 +3313,7 @@ Public Class Movie
             Try
                 If _parent.FindMovieSetInfoByName(MovieSet.MovieSetDisplayName).DaysOld < 7 Then
                     _parent.UpdateTmdbSetMissingMovies()
+                    _parent.UpdateUserTmdbSetAdditions()
                     Return
                 End If 
             Catch
