@@ -251,7 +251,7 @@ Public Class TMDb
                 Return Nothing
             End If
 
-            Return New MovieSetInfo(_collection.name, _collection.id, CollectionMovies )
+            Return New MovieSetInfo(_collection.name, _collection.id, CollectionMovies, Date.Now )
         End Get
     End Property
 

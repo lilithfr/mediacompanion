@@ -2335,6 +2335,7 @@ Public Class Movies
                 Case typeName
                     Dim movieset = ""
                     Dim moviesetId = ""
+                    Dim LastUpdatedTs As Date = Date.MinValue
                     Dim detail As XmlNode = Nothing
                     Dim movac As New List(Of CollectionMovie)
                     For Each detail In thisresult.ChildNodes
@@ -2344,6 +2345,8 @@ Public Class Movies
                                 movieset = detail.InnerText
                             Case "id"
                                 moviesetId = setMovieSetID(detail.InnerText, setDb)
+                            Case "LastUpdatedTs"
+                                LastUpdatedTs = detail.InnerText
                             Case "collection"
                                 Dim ac As New CollectionMovie
                                 Dim detail2 As XmlNode = Nothing
@@ -2358,7 +2361,7 @@ Public Class Movies
                                 movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac))
+                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs))
             End Select
         Next
     End Sub
@@ -2517,12 +2520,20 @@ Public Class Movies
         For Each movieset In setDb
             If movieset.MovieSetName.ToLower = "-none-" Then Continue For
             child = doc.CreateElement(typeName)
+
             childchild = doc.CreateElement("moviesetname")
             childchild.InnerText = movieset.MovieSetName
             child.AppendChild(childchild)
+
             childchild = doc.CreateElement("id")
             childchild.InnerText = movieset.MovieSetId 
             child.AppendChild(childchild)
+
+            childchild = doc.CreateElement("LastUpdatedTs")
+            childchild.InnerText = movieset.LastUpdatedTs
+            child.AppendChild(childchild)
+
+
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
                     childchild = doc.CreateElement("collection")

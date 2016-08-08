@@ -5,9 +5,9 @@ Public Class MovieSetInfo
     Private  _movieSetDisplayName As String = ""
 
 
-    Property MovieSetId As String = ""   ' Defaults to Themoviedb.org ID if found
-    Property Collection     As New List(Of CollectionMovie)
-
+    Property MovieSetId   As String = ""   ' Defaults to Themoviedb.org ID if found
+    Property Collection   As New List(Of CollectionMovie)
+    Property LastUpdatedTs As Date = DateTime.MinValue
 
     Property MovieSetName   As String
         Get
@@ -28,20 +28,30 @@ Public Class MovieSetInfo
     End Property
 
 
+    Private newPropertyValue As String
+    Public ReadOnly Property DaysOld As Integer
+        Get
+            Return Date.Now.Subtract(LastUpdatedTs).Days
+        End Get
+    End Property   
+
+
     Sub New
     End Sub
 
-    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie))
-        MovieSetName    = _moviesetname
-        MovieSetId      = _moviesetid
-        Collection      = _collection
+    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date)
+        MovieSetName  = _moviesetname
+        MovieSetId    = _moviesetid
+        Collection    = _collection
+        LastUpdatedTs = _lastUpdatedTs
     End Sub
 
 
     Sub Assign(from As MovieSetInfo)
-        MovieSetName = from.MovieSetName
-        MovieSetId   = from.MovieSetId
-        Collection   = from.Collection
+        MovieSetName  = from.MovieSetName
+        MovieSetId    = from.MovieSetId
+        Collection    = from.Collection
+        LastUpdatedTs = from.LastUpdatedTs
     End Sub
 
     Sub UpdateMovieSetDisplayName
