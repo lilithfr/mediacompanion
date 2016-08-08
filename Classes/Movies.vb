@@ -331,6 +331,7 @@ Public Class Movies
             'lst.Add( IncompleteMovieSetInfo  )
             lst.Add( MissingFromSet           )
             lst.Add( UserSetAdditions         )
+            lst.Add( UnknownSetCounts         )
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )
@@ -981,7 +982,24 @@ Public Class Movies
     Public ReadOnly Property SetsFilter As List(Of String)
         Get
             Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
-            Return r.ToList
+
+            Dim res = r.ToList
+
+            Dim lstUnknownSetCount = From x In res Where x.EndsWith(" unknown)") Select x.RemoveAfterMatch         '      x.MovieSetDisplayName
+
+
+            For Each m In MovieCache
+                m.UnknownSetCount = False
+            Next
+
+            Dim movies = MovieCache.Where(Function(x) lstUnknownSetCount.Contains(x.movieset.MovieSetDisplayName))
+
+            For Each m In movies
+                m.UnknownSetCount = True
+            Next
+            Rebuild_Data_GridViewMovieCache()
+
+            Return res
         End Get
     End Property
 
@@ -1019,6 +1037,13 @@ Public Class Movies
     Public ReadOnly Property UserSetAdditions As String
         Get
             Return "User set additions (" & UserTmdbSetAdditions.Count & ")"
+        End Get
+    End Property
+
+    Public ReadOnly Property UnknownSetCounts As String
+        Get
+            Dim q = From x In MovieCache Where x.UnknownSetCount
+            Return "Unknown set count (" & q.Count & ")"
         End Get
     End Property
 

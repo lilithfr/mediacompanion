@@ -106,6 +106,7 @@ Public Class Data_GridViewMovie
         metascore           = movie.metascore
         tmdbid = movie.tmdbid
         UserSetAddition = movie.UserSetAddition
+        UnknownSetCount = movie.UnknownSetCount
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -157,6 +158,7 @@ Public Class Data_GridViewMovie
         convertedMovie.metascore            = Me.metascore
         convertedMovie.tmdbid               = Me.tmdbid
         convertedMovie.UserSetAddition      = Me.UserSetAddition
+        convertedMovie.UnknownSetCount      = Me.UnknownSetCount
 
         Return convertedMovie
     End Function
@@ -878,5 +880,8 @@ Public Class Data_GridViewMovie
             Return res
         End Get
     End Property
+
+    Public Property UnknownSetCount As Boolean = False
+
 
 End Class

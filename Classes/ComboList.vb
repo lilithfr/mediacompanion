@@ -481,6 +481,7 @@ Public Class ComboList
         Me.usrrated             = From.usrrated
         Me.metascore            = From.metascore
         Me.UserSetAddition      = From.UserSetAddition
+        Me.UnknownSetCount      = From.UnknownSetCount
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -495,4 +496,5 @@ Public Class ComboList
     End Sub
 
     Property UserSetAddition As Boolean = False
+    Public Property UnknownSetCount As Boolean = False
 End Class
