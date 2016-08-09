@@ -4400,7 +4400,7 @@ Public Class Form1
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
         ProgState = ProgramState.ResettingFilters
-        Assign_FilterGeneral
+        Assign_FilterGeneral()
         ProgState = ProgramState.Other
         
         UpdateMissingFanartNav
@@ -4478,7 +4478,7 @@ Public Class Form1
         oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
 
         ProgState = ProgramState.ResettingFilters
-        Assign_FilterGeneral
+        Assign_FilterGeneral()
         ProgState = ProgramState.Other
         
         UpdateMissingPosterNav             
@@ -10462,7 +10462,7 @@ Public Class Form1
         Dim lastSelectedMovie = workingMovie.fullpathandfilename
         filteredList.Clear
         filteredList.AddRange(oMovies.MovieCache)
-        Assign_FilterGeneral
+        Assign_FilterGeneral()
         UpdateMinMaxMovieFilters
 
         If cbFilterCountries            .Visible Then cbFilterCountries             .UpdateItems( oMovies.CountriesFilter               )
@@ -10937,7 +10937,7 @@ Public Class Form1
     End Sub    'TagsFromKeywords
     Private Sub tsmiRescrapeTMDbSetName_Click( sender As Object,  e As EventArgs) Handles tsmiRescrapeTMDbSetName.Click
         Call mov_ScrapeSpecific("tmdb_set_name")
-    End Sub                         'tmdb set name
+    End Sub                         'Tmdb set info
     Private Sub tsmiMov_SetWatched_Click( sender As Object,  e As EventArgs) Handles tsmiMov_SetWatched.Click
         Call mov_ScrapeSpecific("SetWatched")
     End Sub                           'set watched

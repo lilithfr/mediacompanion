@@ -991,16 +991,16 @@ Public Class Movies
             Dim lstUnknownSetCount = From x In res Where x.EndsWith(" unknown)") Select x.RemoveAfterMatch         '      x.MovieSetDisplayName
 
 
-            For Each m In MovieCache
-                m.UnknownSetCount = "N"
-            Next
+            'For Each m In MovieCache
+            '    m.UnknownSetCount = "N"
+            'Next
 
-            Dim movies = MovieCache.Where(Function(x) lstUnknownSetCount.Contains(x.movieset.MovieSetDisplayName))
+            'Dim movies = MovieCache.Where(Function(x) lstUnknownSetCount.Contains(x.movieset.MovieSetDisplayName))
 
-            For Each m In movies
-                m.UnknownSetCount = "Y"
-            Next
-            Rebuild_Data_GridViewMovieCache()
+            'For Each m In movies
+            '    m.UnknownSetCount = "Y"
+            'Next
+            'Rebuild_Data_GridViewMovieCache()
 
             Return res
         End Get

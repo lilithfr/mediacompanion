@@ -2605,7 +2605,7 @@ Partial Class Form1
         '
         Me.tsmiRescrapeTMDbSetName.Name = "tsmiRescrapeTMDbSetName"
         Me.tsmiRescrapeTMDbSetName.Size = New System.Drawing.Size(188, 22)
-        Me.tsmiRescrapeTMDbSetName.Text = "TMDb Set Name"
+        Me.tsmiRescrapeTMDbSetName.Text = "Tmdb set info"
         '
         'tsmiRescrapeTop250
         '

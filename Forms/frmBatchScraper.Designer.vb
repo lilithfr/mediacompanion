@@ -139,7 +139,7 @@ Partial Class frmBatchScraper
         Me.cbMainTmdbSetName.Name = "cbMainTmdbSetName"
         Me.cbMainTmdbSetName.Size = New System.Drawing.Size(102, 17)
         Me.cbMainTmdbSetName.TabIndex = 27
-        Me.cbMainTmdbSetName.Text = "TMDb set name"
+        Me.cbMainTmdbSetName.Text = "Tmdb set info"
         Me.cbMainTmdbSetName.UseVisualStyleBackColor = true
         '
         'cbMainYear
@@ -529,9 +529,9 @@ Partial Class frmBatchScraper
         Me.cb_ScrapeEmptyTags.Name = "cb_ScrapeEmptyTags"
         Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(380, 17)
         Me.cb_ScrapeEmptyTags.TabIndex = 29
-        Me.cb_ScrapeEmptyTags.Text = "Scrape only empty tags (Excludes TMDB set name and Trailer)"
+        Me.cb_ScrapeEmptyTags.Text = "Scrape only empty tags (Excludes Tmdb set info and Trailer)"
         Me.ttBatchUpdateWizard.SetToolTip(Me.cb_ScrapeEmptyTags, "Selecting will re-scrape all selected movies, but ONLY"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"filling fields that are e"& _ 
-        "mpty."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This excludes TMDB set name.  Select this separately if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"required.")
+        "mpty."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"This excludes Tmdb set info.  Select this separately if"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"required.")
         Me.cb_ScrapeEmptyTags.UseVisualStyleBackColor = true
         '
         'cbFromTMDB
