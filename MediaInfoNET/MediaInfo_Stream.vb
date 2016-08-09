@@ -142,6 +142,8 @@ Public Class MediaInfo_Stream
 
 						value = value.Replace(" h", "h")
 						value = value.Replace(" min", "mn")
+                        value = value.Replace(" s", "s")
+                        value = value.Replace(" ms", "ms")
 
 
 						'Example: 2h 15mn 30s 4ms

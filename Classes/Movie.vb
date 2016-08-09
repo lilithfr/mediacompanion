@@ -1590,7 +1590,14 @@ Public Class Movie
 
                 If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
 
-                If Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                ''' Test if XBMC TMDB language is same as Preferred Language
+                ''' So we can scrape the rescrape MovieSet name in the preferred language
+                ''' 
+                Dim custlang As String = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)(0)
+                If Pref.TMDbUseCustomLanguage AndAlso Pref.TMDbCustomLanguageValue<>"" Then custlang = Media_Companion.Pref.TMDbCustomLanguageValue.Split(",").ToList(1)
+                Dim NotMatchLanguage As Boolean = Pref.XbmcTmdbScraperLanguage <> custlang
+
+                If (NotMatchLanguage AndAlso Pref.GetMovieSetFromTMDb) OrElse (Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection)) Then
                     _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
                     _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id 
                 End If
