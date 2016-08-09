@@ -679,7 +679,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app.config">
+    <Content Include="Media Companion.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Assets\scrapers\metadata.musicvideos.imvdb-master\LICENSE">
