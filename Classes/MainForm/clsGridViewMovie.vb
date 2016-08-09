@@ -113,7 +113,7 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"DisplayFolderSize"   ,GridFieldToDisplay2="Folder Size"         ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Resolution"          ,GridFieldToDisplay2="Resolution"          ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Certificate"         ,GridFieldToDisplay2="Certificate"         ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
-        IniColumn(dgv,"MovieSetDisplayName" ,GridFieldToDisplay2="Set" ,"Set"                                                                                              )
+        IniColumn(dgv,"MovieSetDisplayName" ,GridFieldToDisplay2="Set"                 ,"Movie set"        ,"Set"          , -20                                           )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
@@ -249,10 +249,12 @@ Public Class clsGridViewMovie
 
 
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.DisplayTitle Ascending        
+                    b = From f In b Order By f.MovieSetDisplayName Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.DisplayTitle Descending         
+                    b = From f In b Order By f.MovieSetDisplayName Descending, f.DisplayTitle 
                 End If
+
+
                 If Form1.cbFilterSet.Visible Then b = Form1.oMovies.ApplySetsFilter( b , Form1.cbFilterSet )
 
                 Dim lst2 = b.ToList
