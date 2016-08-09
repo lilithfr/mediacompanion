@@ -8,12 +8,12 @@
 
 
     Sub New(_Mso As MovieSetInfo, _Movie As CollectionMovie)
-'       Mso = _Mso
-        Movie = _Movie
-        DgvMovie.title = _Movie.MovieTitle
+
+        Movie             = _Movie
+        DgvMovie.title    = _Movie.MovieTitle
         DgvMovie.movieset = _Mso
-        'DgvMovie.Got = False
         DgvMovie.filename = _Movie.TmdbMovieId.ToString
+        DgvMovie.tmdbid   = _Movie.TmdbMovieId
     End Sub
 
 

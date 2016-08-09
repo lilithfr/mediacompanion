@@ -261,12 +261,8 @@ Public Class clsGridViewMovie
                 Form1.DataGridViewBindingSource.DataSource = lst2
                 Form1.DataGridViewMovies       .DataSource = Form1.DataGridViewBindingSource
         
-                'If Yield Then Return
-
-
                 GridFieldToDisplay1="TitleAndYear" 
                 GridFieldToDisplay2="Set" 
-
 
                 GridviewMovieDesign(Form1)
 
