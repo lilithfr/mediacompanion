@@ -258,7 +258,7 @@ Public Class TMDb
 
     Public ReadOnly Property CollectionMovies As List(Of CollectionMovie)
         Get
-            Dim q = From m In _collection.Parts Select New CollectionMovie( m.title, m.id )
+            Dim q = From m In _collection.Parts Select New CollectionMovie( m.title, m.id, m.backdrop_path, m.poster_path, m.release_date )
 
             Return q.ToList
         End Get
