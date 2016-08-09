@@ -1027,10 +1027,14 @@ Public Class Movies
 
         For Each mset In MovieSetDB
             For Each movie In mset.Collection
-                Dim q = From x In MovieCache Where x.tmdbid = movie.TmdbMovieId
+                    
+                If IsDate(movie.release_date) AndAlso (movie.release_date < Date.Now) Then
 
-                If q.Count = 0 Then
-                    _tmdbSetMissingMovies.Add(New TmdbSetMissingMovie(mset, movie))
+                    Dim q = From x In MovieCache Where x.tmdbid = movie.TmdbMovieId 
+
+                    If q.Count = 0 Then
+                        _tmdbSetMissingMovies.Add(New TmdbSetMissingMovie(mset, movie))
+                    End If
                 End If
             Next
         Next

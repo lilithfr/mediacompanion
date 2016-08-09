@@ -240,8 +240,6 @@ Public Class clsGridViewMovie
                         r 
                     In 
                         Form1.oMovies.TmdbSetMissingMovies
-                    Where
-                        IsDate(r.Movie.release_date) AndAlso (r.Movie.release_date < Date.Now)
                     Select 
                         r.DgvMovie
 
