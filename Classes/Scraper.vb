@@ -1503,7 +1503,7 @@ Public Class Classimdb
 
                 End Try
                 If Not String.IsNullOrEmpty(IMDbId) Then
-                    Dim something As String = getomdbTomato(IMDbId)
+                    Dim something As String = getomdbTomato(IMDbId)   '  placeholder for addition of Rotten Tomatoe Rating
                     FinalScrapResult = FinalScrapResult.Replace("</details>", imdbdatafortmdbscraper(IMDbId) & vbCrLf & "</details>")
                 End If
             End If

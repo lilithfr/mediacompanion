@@ -322,11 +322,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function GetStdAspectRatio(ByVal Ratio As String) As String
         If IsNothing(Ratio) Then Return ""
+        If Not Ratio.Contains(":") AndAlso Ratio.Contains(",") Then Ratio = Ratio.Replace(",", ".")
         If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
         If Ratio.IndexOf(",") > -1 Then
             Ratio = Ratio.Substring(0, Ratio.IndexOf(","))
             If Ratio.Length > 2 AndAlso Not Ratio.Contains(".") Then
-                Dim Somthing As String = Nothing
                 Ratio = Ratio.Insert(1, ".")
             End If
         End If
