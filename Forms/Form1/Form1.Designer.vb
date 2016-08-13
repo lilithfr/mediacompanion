@@ -1006,7 +1006,7 @@ Partial Class Form1
         Me.ToolStripMenuItemRebuildMovieCaches = New System.Windows.Forms.ToolStripMenuItem()
         Me.RefreshMovieNfoFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator20 = New System.Windows.Forms.ToolStripSeparator()
-        Me.tsmiMovieSetIdCheck = New System.Windows.Forms.ToolStripMenuItem()
+'        Me.tsmiMovieSetIdCheck = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReloadMovieCacheToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
@@ -13462,7 +13462,8 @@ Partial Class Form1
         '
         'MoviesToolStripMenuItem
         '
-        Me.MoviesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SearchForNewMoviesToolStripMenuItem, Me.BatchRescraperToolStripMenuItem, Me.ToolStripSeparator8, Me.ToolStripMenuItemRebuildMovieCaches, Me.RefreshMovieNfoFilesToolStripMenuItem, Me.ToolStripSeparator20, Me.tsmiMovieSetIdCheck, Me.ToolStripSeparator9, Me.ReloadMovieCacheToolStripMenuItem, Me.ToolStripSeparator10, Me.ExportMovieListInfoToolStripMenuItem, Me.ToolStripSeparator12, Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem, Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem})
+        ' Removed Me.tsmiMovieSetIdCheck, 
+        Me.MoviesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SearchForNewMoviesToolStripMenuItem, Me.BatchRescraperToolStripMenuItem, Me.ToolStripSeparator8, Me.ToolStripMenuItemRebuildMovieCaches, Me.RefreshMovieNfoFilesToolStripMenuItem, Me.ToolStripSeparator20, Me.ToolStripSeparator9, Me.ReloadMovieCacheToolStripMenuItem, Me.ToolStripSeparator10, Me.ExportMovieListInfoToolStripMenuItem, Me.ToolStripSeparator12, Me.DownsizeAllFanartsToSelectedSizeToolStripMenuItem, Me.DownsizeAllPostersToSelectedSizeToolStripMenuItem})
         Me.MoviesToolStripMenuItem.Name = "MoviesToolStripMenuItem"
         Me.MoviesToolStripMenuItem.Size = New System.Drawing.Size(55, 20)
         Me.MoviesToolStripMenuItem.Tag = "M"
@@ -13504,9 +13505,9 @@ Partial Class Form1
         '
         'tsmiMovieSetIdCheck
         '
-        Me.tsmiMovieSetIdCheck.Name = "tsmiMovieSetIdCheck"
-        Me.tsmiMovieSetIdCheck.Size = New System.Drawing.Size(272, 22)
-        Me.tsmiMovieSetIdCheck.Text = "Movie Set ID Check"
+        'Me.tsmiMovieSetIdCheck.Name = "tsmiMovieSetIdCheck"
+        'Me.tsmiMovieSetIdCheck.Size = New System.Drawing.Size(272, 22)
+        'Me.tsmiMovieSetIdCheck.Text = "Movie Set ID Check"
         '
         'ToolStripSeparator9
         '
@@ -15167,7 +15168,7 @@ End Sub
     Friend WithEvents rbTvDisplayUnWatched As System.Windows.Forms.RadioButton
     Friend WithEvents rbTvDisplayWatched As System.Windows.Forms.RadioButton
     Friend WithEvents ToolStripSeparator20 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents tsmiMovieSetIdCheck As System.Windows.Forms.ToolStripMenuItem
+'    Friend WithEvents tsmiMovieSetIdCheck As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnMovFanartToggle As System.Windows.Forms.Button
     Friend WithEvents btnMovPosterToggle As System.Windows.Forms.Button
     Friend WithEvents tsmiRescrapeMovieSetArt As System.Windows.Forms.ToolStripMenuItem
