@@ -238,7 +238,7 @@ Public Class clsGridViewMovie
 
 '
                 Select selOption
-                    Case "Missing from set"            : b = From r In Form1.oMovies.TmdbMissingFromSet           Select r.DgvMovie
+                    Case "Missing from set"            : b = From r In Form1.oMovies.TmdbMissingFromSetReleased   Select r.DgvMovie
                     Case "Missing from set unreleased" : b = From r In Form1.oMovies.TmdbMissingFromSetUnreleased Select r.DgvMovie
                 End Select
 

@@ -1029,14 +1029,14 @@ Public Class Movies
         For Each mset In MovieSetDB
             For Each movie In mset.Collection
                     
-                If IsDate(movie.release_date) AndAlso (movie.release_date < Date.Now) Then
+            '    If IsDate(movie.release_date) AndAlso (movie.release_date < Date.Now) Then
 
                     Dim q = From x In MovieCache Where x.tmdbid = movie.TmdbMovieId 
 
                     If q.Count = 0 Then
                         _tmdbSetMissingMovies.Add(New TmdbSetMissingMovie(mset, movie))
                     End If
-                End If
+           '     End If
             Next
         Next
     End Sub
@@ -1115,7 +1115,7 @@ Public Class Movies
     ' "Missing from set"
     Public ReadOnly Property MissingFromSet As String
         Get
-            Return "Missing from set (" & TmdbMissingFromSet.Count & ")"
+            Return "Missing from set (" & TmdbMissingFromSetReleased.Count & ")"
         End Get
     End Property
 
@@ -1126,7 +1126,7 @@ Public Class Movies
     End Property
 
 
-    Public ReadOnly Property TmdbMissingFromSet As List(Of TmdbSetMissingMovie)
+    Public ReadOnly Property TmdbMissingFromSetReleased As List(Of TmdbSetMissingMovie)
         Get
             Dim q = From x In TmdbSetMissingMovies
                         Where
@@ -1142,11 +1142,7 @@ Public Class Movies
 
     Public ReadOnly Property TmdbMissingFromSetUnreleased As List(Of TmdbSetMissingMovie)
         Get
-            Dim q = From x In TmdbSetMissingMovies
-                        Where
-                            Not IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now)
-                        Select 
-                            x
+            Dim q = TmdbSetMissingMovies.Where( Function(x) Not TmdbMissingFromSetReleased.Contains(x) )
 
             Return q.ToList
         End Get
