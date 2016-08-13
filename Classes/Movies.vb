@@ -330,6 +330,7 @@ Public Class Movies
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
             'lst.Add( IncompleteMovieSetInfo  )
             lst.Add( MissingFromSet           )
+            lst.Add( MissingFromSetUnreleased )
             lst.Add( UserSetAdditions         )
             lst.Add( UnknownSetCounts         )
             lst.Add( MissingCertificate       )
@@ -1114,9 +1115,43 @@ Public Class Movies
     ' "Missing from set"
     Public ReadOnly Property MissingFromSet As String
         Get
-            Return "Missing from set (" & TmdbSetMissingMovies.Count & ")"
+            Return "Missing from set (" & TmdbMissingFromSet.Count & ")"
         End Get
     End Property
+
+    Public ReadOnly Property MissingFromSetUnreleased As String
+        Get
+            Return "Missing from set unreleased (" & TmdbMissingFromSetUnreleased.Count & ")"
+        End Get
+    End Property
+
+
+    Public ReadOnly Property TmdbMissingFromSet As List(Of TmdbSetMissingMovie)
+        Get
+            Dim q = From x In TmdbSetMissingMovies
+                        Where
+                            IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now)
+                        Select 
+                            x
+
+            Return q.ToList
+        End Get
+    End Property
+
+
+
+    Public ReadOnly Property TmdbMissingFromSetUnreleased As List(Of TmdbSetMissingMovie)
+        Get
+            Dim q = From x In TmdbSetMissingMovies
+                        Where
+                            Not IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now)
+                        Select 
+                            x
+
+            Return q.ToList
+        End Get
+    End Property
+
 
     Public ReadOnly Property IncompleteMovieSets As List(Of MovieSetInfo)
         Get

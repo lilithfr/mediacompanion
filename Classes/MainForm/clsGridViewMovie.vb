@@ -228,7 +228,7 @@ Public Class clsGridViewMovie
 
             Dim selOption = Form1.cbFilterGeneral.Text.RemoveAfterMatch
 
-            If selOption = "Missing from set" Then
+            If selOption.IndexOf("Missing from set")=0 Then
 
                 Form1.cbSort.Text = "Set"
 
@@ -236,12 +236,11 @@ Public Class clsGridViewMovie
                 Form1.Panel6.Enabled = False                    'FanTvArtList
                 Form1.MovieContextMenu.Enabled = False
 
-                b = From 
-                        r 
-                    In 
-                        Form1.oMovies.TmdbSetMissingMovies
-                    Select 
-                        r.DgvMovie
+'
+                Select selOption
+                    Case "Missing from set"            : b = From r In Form1.oMovies.TmdbMissingFromSet           Select r.DgvMovie
+                    Case "Missing from set unreleased" : b = From r In Form1.oMovies.TmdbMissingFromSetUnreleased Select r.DgvMovie
+                End Select
 
 '            backdrop_path
 '            poster_path  
