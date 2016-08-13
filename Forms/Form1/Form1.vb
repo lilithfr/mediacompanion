@@ -23,6 +23,7 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
     Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
+    Const TMDB_SET_URL          = "www.themoviedb.org/collection/"
     Const NFO_INDEX As Integer = 7
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
@@ -3425,7 +3426,10 @@ Public Class Form1
                 workingMovie.year = queryList(0).year
                 workingMovie.FolderSize = queryList(0).FolderSize
                 workingMovie.rootfolder = queryList(0).rootfolder 
+                workingMovie.MovieSet = queryList(0).movieset
+
                 tsmiMov_PlayTrailer.Visible = Not queryList(0).MissingTrailer
+                tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(workingMovie.MovieSet.MovieSetId,Nothing)
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -3661,6 +3665,7 @@ Public Class Form1
 
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
         tsmiMov_PlayTrailer.Visible = True
+        tsmiMov_ViewMovieDbSetPage.Enabled = False
 
         If e.Button = MouseButtons.Right Then
             Dim multiselect As Boolean = False
@@ -3686,8 +3691,10 @@ Public Class Form1
                     Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
 
                     tsmiMov_PlayTrailer.Visible = Not movie.MissingTrailer
+                    tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(movie.MovieSet.MovieSetId,Nothing)
                 Catch
                 End Try
+                
             End If
         End If
     End Sub
@@ -10454,6 +10461,9 @@ Public Class Form1
 #End Region 
 
     Private Sub UpdateFilteredList
+
+        oMovies.UpdateTmdbSetMissingMovies()
+
         Dim lastSelectedRow As Integer = 0
         If DataGridViewMovies.SelectedRows.Count = 1 Then 
             lastSelectedRow = DataGridViewMovies.SelectedRows(0).Index 
@@ -10761,6 +10771,15 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+    Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
+
+        dim tmdbId = workingMovie.MovieSet.MovieSetId
+
+        OpenUrl(TMDB_SET_URL & tmdbId)
+
+    End Sub
+
+
 
     Private Sub tsmiMov_PlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PlayTrailer.Click
         Try
