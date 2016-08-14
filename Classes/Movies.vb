@@ -329,7 +329,7 @@ Public Class Movies
             lst.Add( Duplicates               )
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
             'lst.Add( IncompleteMovieSetInfo  )
-            lst.Add( MissingFromSet           )
+            lst.Add( MissingFromSetReleased   )
             lst.Add( MissingFromSetUnreleased )
             lst.Add( UserSetAdditions         )
             lst.Add( UnknownSetCounts         )
@@ -1112,10 +1112,9 @@ Public Class Movies
 
 
 
-    ' "Missing from set"
-    Public ReadOnly Property MissingFromSet As String
+    Public ReadOnly Property MissingFromSetReleased As String
         Get
-            Return "Missing from set (" & TmdbMissingFromSetReleased.Count & ")"
+            Return "Missing from set released (" & TmdbMissingFromSetReleased.Count & ")"
         End Get
     End Property
 

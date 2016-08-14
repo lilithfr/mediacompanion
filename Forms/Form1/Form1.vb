@@ -3912,7 +3912,7 @@ Public Class Form1
 
             Dim selOption = cbFilterGeneral.Text.RemoveAfterMatch
 
-            If selOption = "Missing from set" Then e.Cancel = True
+            If selOption.IndexOf("Missing from set")=0 Then e.Cancel = True
         Catch
         End Try
     End Sub
