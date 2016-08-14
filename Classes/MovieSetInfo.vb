@@ -69,6 +69,18 @@ Public Class CollectionMovie
     Public Property release_date  As String = ""
 
 
+	 Public ReadOnly Property ReleaseYear As String
+		Get
+			If IsDate(release_date) Then
+				Dim x = Convert.ToDateTime(release_date)
+
+				Return x.Year.ToString
+			Else
+				Return "unknown"
+			End If
+		End Get
+	 End Property
+
 
     Sub New(Optional _MovieTitle As String = "", Optional _MovieID As String = "",
             Optional _backdrop_path As String = "", Optional _poster_path As String = "", Optional _release_date As String = "")

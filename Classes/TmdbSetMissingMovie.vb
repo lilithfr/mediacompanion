@@ -14,6 +14,7 @@
         DgvMovie.movieset = _Mso
         DgvMovie.filename = _Movie.TmdbMovieId.ToString
         DgvMovie.tmdbid   = _Movie.TmdbMovieId
+        DgvMovie.year     = _Movie.ReleaseYear
     End Sub
 
 

@@ -93,8 +93,8 @@ Public Class clsGridViewMovie
  
         If GridFieldToDisplay1="TitleAndYear" Then
 
-            If GridFieldToDisplay2="Movie Year" Or GridFieldToDisplay2="Set" Then
-                IniColumn(dgv,"DisplayTitle"       ,True,"Title")
+            If GridFieldToDisplay2="Movie Year" Then
+                IniColumn(dgv,"DisplayTitle",True,"Title")
             Else
                 IniColumn(dgv,"DisplayTitleAndYear",GridFieldToDisplay2<>"Movie Year","Title & Year")
             End If

@@ -231,11 +231,11 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
-    Public Property year
+    Public Property year As String
         Get
             Return _year
         End Get
-        Set(ByVal value)
+        Set(ByVal value As String)
             _year = value
         End Set
     End Property

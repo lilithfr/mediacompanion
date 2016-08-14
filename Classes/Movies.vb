@@ -877,7 +877,7 @@ Public Class Movies
 
     Public ReadOnly Property SetsFilter_Extras As IEnumerable(Of String)
         Get
-            Dim q = From x In MovieCache 
+            Dim q = From x In MovieCache_NoDups 
                 Group By 
                     x.MovieSet Into NumFilms=Count
                 Where 
@@ -916,7 +916,7 @@ Public Class Movies
 
     Public ReadOnly Property SetsFilter_Preferences As IEnumerable(Of String)
         Get
-            Dim q = From x In MovieCache 
+            Dim q = From x In MovieCache_NoDups 
                 Group By 
                     x.MovieSet.MovieSetDisplayName Into NumFilms=Count
                 Where 
@@ -930,7 +930,15 @@ Public Class Movies
 
             Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxSetsInFilter 
         End Get
-    End Property    
+    End Property 
+	 
+   Public ReadOnly Property MovieCache_NoDups As IEnumerable(Of ComboList)
+        Get
+				Dim q = MovieCache.GroupBy(Function(x) x.id).Select(Function(grp) grp.First)
+
+				Return q.ToList()  
+        End Get
+    End Property 
 
     Function GetMovieSetCollectionCount(MovieSetDisplayName As String) As String
 
