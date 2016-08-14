@@ -23,7 +23,9 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
     Const HOME_PAGE            = "http://mediacompanion.codeplex.com"
-    Const TMDB_SET_URL          = "www.themoviedb.org/collection/"
+    Const TMDB_SITE            = "www.themoviedb.org/"
+    Const TMDB_SET_URL         = TMDB_SITE & "collection/"
+    Const TMDB_MOVIE_URL       = TMDB_SITE & "movie/"           
     Const NFO_INDEX As Integer = 7
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
@@ -3427,9 +3429,11 @@ Public Class Form1
                 workingMovie.FolderSize = queryList(0).FolderSize
                 workingMovie.rootfolder = queryList(0).rootfolder 
                 workingMovie.MovieSet = queryList(0).movieset
+                workingMovie.tmdbid = queryList(0).tmdbid
 
                 tsmiMov_PlayTrailer.Visible = Not queryList(0).MissingTrailer
                 tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(workingMovie.MovieSet.MovieSetId,Nothing)
+                tsmiMov_ViewMovieDbMoviePage.Enabled = Integer.TryParse(workingMovie.tmdbid,Nothing) And Not workingMovie.tmdbid=""
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -3666,6 +3670,7 @@ Public Class Form1
     Private Sub DataGridViewMovies_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridViewMovies.MouseUp
         tsmiMov_PlayTrailer.Visible = True
         tsmiMov_ViewMovieDbSetPage.Enabled = False
+        tsmiMov_ViewMovieDbMoviePage.Enabled = False
 
         If e.Button = MouseButtons.Right Then
             Dim multiselect As Boolean = False
@@ -3692,6 +3697,7 @@ Public Class Form1
 
                     tsmiMov_PlayTrailer.Visible = Not movie.MissingTrailer
                     tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(movie.MovieSet.MovieSetId,Nothing)
+                    tsmiMov_ViewMovieDbMoviePage.Enabled = Integer.TryParse(workingMovie.tmdbid,Nothing) And Not workingMovie.tmdbid=""
                 Catch
                 End Try
                 
@@ -10771,14 +10777,6 @@ Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-    Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
-
-        dim tmdbId = workingMovie.MovieSet.MovieSetId
-
-        OpenUrl(TMDB_SET_URL & tmdbId)
-
-    End Sub
-
 
 
     Private Sub tsmiMov_PlayTrailer_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PlayTrailer.Click
@@ -16132,7 +16130,8 @@ Public Class Form1
     End Property
 
     Private m_AuthorizeCheck As Boolean
-    
+
+
     Private Sub clbx_TvRootFolders_MouseDown(sender As Object, e As MouseEventArgs) Handles clbx_TvRootFolders.MouseDown
         If e.Button = MouseButtons.Right Then
             Dim index As Integer = clbx_TvRootFolders.IndexFromPoint(New Point(e.X, e.Y))
@@ -18266,5 +18265,54 @@ Public Class Form1
     Private Sub tagtxt_TextChanged(sender As Object, e As EventArgs) Handles tagtxt.TextChanged
         tb_tagtxt_changed = True
     End Sub
+
+
+    Public Function cmsMissingMovies() As ContextMenuStrip
+        Dim cms = New ContextMenuStrip
+
+
+        Dim tsmiMissingMovie       = New ToolStripMenuItem("Open TMDb Movie Info Page",My.Resources.TheMovieDB, AddressOf tsmiMissingMovie_Click)
+        Dim tsmiIncompleteMovieSet = New ToolStripMenuItem("Open TMDb Set Info Page"  ,My.Resources.TheMovieDB, AddressOf tsmiMissingSet_Click  )
+  
+        cms.Items.Add(tsmiMissingMovie)
+        cms.Items.Add(tsmiIncompleteMovieSet)
+
+        Return cms
+    End Function
+
+  
+    Private Sub tsmiMissingMovie_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        dim tmdbid As String = DataGridViewMovies.SelectedRows(0).Cells("tmdbid").Value
+
+        OpenUrl(TMDB_MOVIE_URL & tmdbid)
+    End Sub
+
+    Private Sub tsmiMissingSet_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        dim msi As MovieSetInfo = DataGridViewMovies.SelectedRows(0).Cells("movieset").Value
+
+        OpenUrl(TMDB_SET_URL & msi.MovieSetId)
+    End Sub
+
+    
+
+    Private Sub tsmiMov_ViewMovieDbMoviePage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbMoviePage.Click
+
+        dim tmdbId = workingMovie.tmdbid
+
+        OpenUrl(TMDB_MOVIE_URL & tmdbId)
+
+    End Sub
+
+
+    Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
+
+        dim msi As MovieSetInfo = workingMovie.MovieSet
+
+        OpenUrl(TMDB_SET_URL & msi.MovieSetId)
+
+    End Sub
+
 
 End Class

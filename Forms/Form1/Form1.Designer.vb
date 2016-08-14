@@ -138,6 +138,7 @@ Partial Class Form1
         Me.tsmiMov_PlayMovie = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_PlayTrailer = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_ViewMovieDbSetPage = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_ViewMovieDbMoviePage = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_Separator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiMov_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
@@ -2386,7 +2387,7 @@ Partial Class Form1
         '
         'MovieContextMenu
         '
-        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
+        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbMoviePage, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
         Me.MovieContextMenu.Name = "ContextMenuStrip1"
         Me.MovieContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.MovieContextMenu.Size = New System.Drawing.Size(242, 508)
@@ -2416,6 +2417,13 @@ Partial Class Form1
         Me.tsmiMov_ViewMovieDbSetPage.Name = "tsmiMov_ViewMovieDbSetPage"
         Me.tsmiMov_ViewMovieDbSetPage.Size = New System.Drawing.Size(241, 22)
         Me.tsmiMov_ViewMovieDbSetPage.Text = "Open TMDb Set Info Page"
+
+
+        Me.tsmiMov_ViewMovieDbMoviePage.BackgroundImage = Global.Media_Companion.My.Resources.Resources.TheMovieDB
+        Me.tsmiMov_ViewMovieDbMoviePage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
+        Me.tsmiMov_ViewMovieDbMoviePage.Name = "tsmiMov_ViewMovieDbMoviePage"
+        Me.tsmiMov_ViewMovieDbMoviePage.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_ViewMovieDbMoviePage.Text = "Open TMDb Movie Info Page"
 
 
         '
@@ -14780,6 +14788,7 @@ End Sub
     Friend WithEvents tsmiMov_Separator6 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents tsmiMov_PlayTrailer As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiMov_ViewMovieDbSetPage As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_ViewMovieDbMoviePage As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GroupBoxFanartExtrathumbs As System.Windows.Forms.GroupBox
     Friend WithEvents rbMovThumb4 As System.Windows.Forms.RadioButton
     Friend WithEvents rbMovThumb2 As System.Windows.Forms.RadioButton

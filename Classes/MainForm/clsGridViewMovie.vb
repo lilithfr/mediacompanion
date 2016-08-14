@@ -233,18 +233,14 @@ Public Class clsGridViewMovie
                 Form1.cbSort.Text = "Set"
 
                 Form1.tlpMovies.Enabled = False
-                Form1.Panel6.Enabled = False                    'FanTvArtList
-                Form1.MovieContextMenu.Enabled = False
+                Form1.Panel6.Enabled = False                   
+                Form1.DataGridViewMovies.ContextMenuStrip = Form1.cmsMissingMovies()
 
-'
+
                 Select selOption
                     Case "Missing from set"            : b = From r In Form1.oMovies.TmdbMissingFromSetReleased   Select r.DgvMovie
                     Case "Missing from set unreleased" : b = From r In Form1.oMovies.TmdbMissingFromSetUnreleased Select r.DgvMovie
                 End Select
-
-'            backdrop_path
-'            poster_path  
-'            release_date 
 
 
                 If GridSort = "Asc" Then
@@ -272,7 +268,7 @@ Public Class clsGridViewMovie
 
             Form1.tlpMovies.Enabled = True
             Form1.Panel6.Enabled = True
-            Form1.MovieContextMenu.Enabled = True
+            Form1.DataGridViewMovies.ContextMenuStrip = Form1.MovieContextMenu
 
             Select selOption
                 Case "Watched"                     : b = From f In b Where     f.Watched
@@ -506,5 +502,6 @@ Public Class clsGridViewMovie
 
         Form1.LabelCountFilter.Text = "Displaying " & lst.Count.ToString & " of " & Form1.oMovies.MovieCache.Count
     End Sub
+
 
 End Class
