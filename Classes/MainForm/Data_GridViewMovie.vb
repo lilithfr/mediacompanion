@@ -497,7 +497,7 @@ Public Class Data_GridViewMovie
 
 
     Public Function DecodeDateTime(s As String) As String
-
+        If s = "" Then Return ""
         Dim YYYY As String = s.SubString( 0,4)
         Dim MM   As String = s.SubString( 4,2)
         Dim DD   As String = s.SubString( 6,2)

@@ -421,7 +421,7 @@ Public Class Form1
             TabLevel1.TabPages.Remove(Me.TabActorCache)
             TabLevel1.TabPages.Remove(Me.TabRegex)
             TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-            TabControl2.TabPages.Remove(Me.tpMovSets)
+            'TabControl2.TabPages.Remove(Me.tpMovSets)
             TabControl2.TabPages.Remove(Me.tpMovTags)
             
             Call util_ProfilesLoad()
@@ -2739,13 +2739,18 @@ Public Class Form1
                 Next
                 If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
                     Dim first As Boolean = True
+                    tagtxt.Text = ""
                     For Each t In movie.ScrapedMovie.fullmoviebody.tag
-                        If Not first Then tagtxt.Text &= ", "
-                        tagtxt.Text &= t
+                        If Not first Then
+                            tagtxt.Text &= ", " & t
+                        Else 
+                            tagtxt.Text &= t
+                        End If
                         first = False
                     Next
                     tb_tagtxt_changed = False
                 End If
+                
             Else
                 If Pref.AllowUserTags AndAlso tb_tagtxt_changed Then
                     tb_tagtxt_changed = False
@@ -2757,51 +2762,52 @@ Public Class Form1
                         If Not Pref.movietags.Contains(wd) Then
                             Pref.movietags.Add(wd)
                         End If
-                        ConfigSave()
                         If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
                     Next
+                    ConfigSave()
                 End If
             End If
-            If TabControl2.SelectedTab.Name = tpMovSets.Name Then
-                For Each t In NewTagList
-                    Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
-                    If t.Contains("- ") Then
-                        If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-                            movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-                        End If
-                    ElseIf t.Contains("+ ") Then
-                        If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-                            movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-                        End If
-                    End If
-                Next
-                If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
-                    Dim first As Boolean = True
-                    For Each t In movie.ScrapedMovie.fullmoviebody.tag
-                        If Not first Then tagtxt.Text &= ", "
-                        tagtxt.Text &= t
-                        first = False
-                    Next
-                End If
-            Else
-                If Pref.AllowUserTags Then
-                    movie.ScrapedMovie.fullmoviebody.tag.Clear()
-                    For Each wd In tagtxt.Text.Split(",")
-                        wd = wd.Trim
-                        If wd.Length = 0 Then Continue For
-                        movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
-                        If Not Pref.movietags.Contains(wd) Then
-                            Pref.movietags.Add(wd)
-                        End If
-                        ConfigSave()
-                        If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
-                    Next
-                End If
-            End If
+            'If TabControl2.SelectedTab.Name = tpMovSets.Name Then
+            '    For Each t In NewTagList
+            '        Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
+            '        If t.Contains("- ") Then
+            '            If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+            '                movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
+            '            End If
+            '        ElseIf t.Contains("+ ") Then
+            '            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+            '                movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
+            '            End If
+            '        End If
+            '    Next
+            '    If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
+            '        Dim first As Boolean = True
+            '        For Each t In movie.ScrapedMovie.fullmoviebody.tag
+            '            If Not first Then tagtxt.Text &= ", "
+            '            tagtxt.Text &= t
+            '            first = False
+            '        Next
+            '    End If
+            'Else
+            '    If Pref.AllowUserTags Then
+            '        movie.ScrapedMovie.fullmoviebody.tag.Clear()
+            '        For Each wd In tagtxt.Text.Split(",")
+            '            wd = wd.Trim
+            '            If wd.Length = 0 Then Continue For
+            '            movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
+            '            If Not Pref.movietags.Contains(wd) Then
+            '                Pref.movietags.Add(wd)
+            '            End If
+            '            ConfigSave()
+            '            If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
+            '        Next
+            '    End If
+            'End If
             movie.AssignMovieToCache()
             movie.UpdateMovieCache()
             movie.SaveNFO()
             UpdateFilteredList()
+            If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TagsPopulate()
         Else
             messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
             messbox.TextBox3.Text = "Press ESC to cancel"
@@ -2877,33 +2883,33 @@ Public Class Form1
                             End If
                         End If
                     End If
-                    If TabControl2.SelectedTab.Name = tpMovSets.Name Then
-                        For Each t In NewTagList
-                            Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
-                            If t.Contains("- ") Then
-                                If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-                                    movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-                                End If
-                            ElseIf t.Contains("+ ") Then
-                                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-                                    movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-                                End If
-                            End If
-                        Next
-                    Else
-                        If tb_tagtxt_changed Then
-                            tb_tagtxt_changed = False
-                            movie.ScrapedMovie.fullmoviebody.tag.Clear()
-                            If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
-                                Dim tags() As String = tagtxt.Text.Split(",")
-                                For Each strtag In tags
-                                    If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(strtag.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(strtag.Trim())
-                                Next
-                            ElseIf tagtxt.Text <> "" Then
-                                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(tagtxt.Text.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(tagtxt.Text.Trim())
-                            End If
-                        End If
-                    End If
+                    'If TabControl2.SelectedTab.Name = tpMovSets.Name Then
+                    '    For Each t In NewTagList
+                    '        Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
+                    '        If t.Contains("- ") Then
+                    '            If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                    '                movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
+                    '            End If
+                    '        ElseIf t.Contains("+ ") Then
+                    '            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
+                    '                movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
+                    '            End If
+                    '        End If
+                    '    Next
+                    'Else
+                    '    If tb_tagtxt_changed Then
+                    '        tb_tagtxt_changed = False
+                    '        movie.ScrapedMovie.fullmoviebody.tag.Clear()
+                    '        If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
+                    '            Dim tags() As String = tagtxt.Text.Split(",")
+                    '            For Each strtag In tags
+                    '                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(strtag.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(strtag.Trim())
+                    '            Next
+                    '        ElseIf tagtxt.Text <> "" Then
+                    '            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(tagtxt.Text.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(tagtxt.Text.Trim())
+                    '        End If
+                    '    End If
+                    'End If
                     movie.AssignMovieToCache()
                     movie.UpdateMovieCache()
                     movie.SaveNFO()
@@ -2913,6 +2919,7 @@ Public Class Form1
                 If tb_tagtxt_changed Then tb_tagtxt_changed = False
                 UpdateFilteredList()
                 ProgState = ProgramState.Other
+                
             Else
                 messbox.Close()
                 MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
@@ -2921,7 +2928,9 @@ Public Class Form1
             workingMovie.fullpathandfilename = Startfullpathandfilename
             mov_FormPopulate()
             messbox.Close()
+            If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TabControl2.SelectedIndex = 0
         End If
+        
     End Sub
 
 
@@ -12813,6 +12822,10 @@ Public Class Form1
                 Pref.movietags.Remove(t)
             Next
         End If
+        TagsPopulate()
+    End Sub
+
+    Sub TagsPopulate()
         CurrentMovieTags.Items.Clear()
         If DataGridViewMovies.SelectedRows.Count > 1 Then
             lblMovTagMulti1.Visible = True
@@ -12830,6 +12843,7 @@ Public Class Form1
                 End If
             Next
         Next
+        CurrentMovieTags.Refresh()
     End Sub
 
 #Region "Tag(s) Section"
