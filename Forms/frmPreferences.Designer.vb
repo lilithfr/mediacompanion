@@ -460,7 +460,9 @@ Partial Class frmPreferences
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lbl_HmHeader = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -488,8 +490,8 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
+        Me.gpbxPrefOverlay = New System.Windows.Forms.GroupBox()
+        Me.gpbxPrefIgnore = New System.Windows.Forms.GroupBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -578,6 +580,8 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
+        Me.gpbxPrefOverlay.SuspendLayout
+        Me.gpbxPrefIgnore.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -736,7 +740,7 @@ Partial Class frmPreferences
         'cbShowAllAudioTracks
         '
         Me.cbShowAllAudioTracks.AutoSize = true
-        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(12, 318)
+        Me.cbShowAllAudioTracks.Location = New System.Drawing.Point(6, 95)
         Me.cbShowAllAudioTracks.Name = "cbShowAllAudioTracks"
         Me.cbShowAllAudioTracks.Size = New System.Drawing.Size(239, 19)
         Me.cbShowAllAudioTracks.TabIndex = 98
@@ -748,7 +752,7 @@ Partial Class frmPreferences
         'cbDisplayMediaInfoOverlay
         '
         Me.cbDisplayMediaInfoOverlay.AutoSize = true
-        Me.cbDisplayMediaInfoOverlay.Location = New System.Drawing.Point(12, 264)
+        Me.cbDisplayMediaInfoOverlay.Location = New System.Drawing.Point(6, 45)
         Me.cbDisplayMediaInfoOverlay.Name = "cbDisplayMediaInfoOverlay"
         Me.cbDisplayMediaInfoOverlay.Size = New System.Drawing.Size(229, 19)
         Me.cbDisplayMediaInfoOverlay.TabIndex = 96
@@ -760,7 +764,7 @@ Partial Class frmPreferences
         'cbDisplayRatingOverlay
         '
         Me.cbDisplayRatingOverlay.AutoSize = true
-        Me.cbDisplayRatingOverlay.Location = New System.Drawing.Point(12, 237)
+        Me.cbDisplayRatingOverlay.Location = New System.Drawing.Point(6, 20)
         Me.cbDisplayRatingOverlay.Name = "cbDisplayRatingOverlay"
         Me.cbDisplayRatingOverlay.Size = New System.Drawing.Size(207, 19)
         Me.cbDisplayRatingOverlay.TabIndex = 95
@@ -1437,7 +1441,7 @@ Partial Class frmPreferences
         'cbDisplayDefaultSubtitleLang
         '
         Me.cbDisplayDefaultSubtitleLang.AutoSize = true
-        Me.cbDisplayDefaultSubtitleLang.Location = New System.Drawing.Point(12, 343)
+        Me.cbDisplayDefaultSubtitleLang.Location = New System.Drawing.Point(6, 121)
         Me.cbDisplayDefaultSubtitleLang.Name = "cbDisplayDefaultSubtitleLang"
         Me.cbDisplayDefaultSubtitleLang.Size = New System.Drawing.Size(273, 19)
         Me.cbDisplayDefaultSubtitleLang.TabIndex = 108
@@ -1769,7 +1773,7 @@ Partial Class frmPreferences
         'lbl_MediaPlayerUser
         '
         Me.lbl_MediaPlayerUser.AutoSize = true
-        Me.lbl_MediaPlayerUser.Location = New System.Drawing.Point(6, 111)
+        Me.lbl_MediaPlayerUser.Location = New System.Drawing.Point(6, 115)
         Me.lbl_MediaPlayerUser.Name = "lbl_MediaPlayerUser"
         Me.lbl_MediaPlayerUser.Size = New System.Drawing.Size(11, 13)
         Me.lbl_MediaPlayerUser.TabIndex = 8
@@ -1782,7 +1786,7 @@ Partial Class frmPreferences
         Me.btn_MediaPlayerBrowse.Name = "btn_MediaPlayerBrowse"
         Me.btn_MediaPlayerBrowse.Size = New System.Drawing.Size(185, 23)
         Me.btn_MediaPlayerBrowse.TabIndex = 7
-        Me.btn_MediaPlayerBrowse.Text = "Browse to prefferred media player"
+        Me.btn_MediaPlayerBrowse.Text = "Browse to preferred media player"
         Me.btn_MediaPlayerBrowse.UseVisualStyleBackColor = true
         '
         'rb_MediaPlayerUser
@@ -1821,8 +1825,8 @@ Partial Class frmPreferences
         '
         'TPCommonSettings
         '
-        Me.TPCommonSettings.Controls.Add(Me.cbDisplayAllSubtitleLang)
-        Me.TPCommonSettings.Controls.Add(Me.cbDisplayDefaultSubtitleLang)
+        Me.TPCommonSettings.Controls.Add(Me.gpbxPrefIgnore)
+        Me.TPCommonSettings.Controls.Add(Me.gpbxPrefOverlay)
         Me.TPCommonSettings.Controls.Add(Me.cbGenreCustomBefore)
         Me.TPCommonSettings.Controls.Add(Me.btnEditCustomGenreFile)
         Me.TPCommonSettings.Controls.Add(Me.GroupBox4)
@@ -1830,15 +1834,8 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Controls.Add(Me.gbImageResizing)
         Me.TPCommonSettings.Controls.Add(Me.grpCleanFilename)
         Me.TPCommonSettings.Controls.Add(Me.grpVideoSource)
-        Me.TPCommonSettings.Controls.Add(Me.cbShowAllAudioTracks)
-        Me.TPCommonSettings.Controls.Add(Me.cbDisplayMediaInfoOverlay)
-        Me.TPCommonSettings.Controls.Add(Me.cbDisplayMediaInfoFolderSize)
-        Me.TPCommonSettings.Controls.Add(Me.cbDisplayRatingOverlay)
         Me.TPCommonSettings.Controls.Add(Me.gbExcludeFolders)
-        Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreAn)
-        Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreA)
         Me.TPCommonSettings.Controls.Add(Me.cbOverwriteArtwork)
-        Me.TPCommonSettings.Controls.Add(Me.cb_IgnoreThe)
         Me.TPCommonSettings.Controls.Add(Me.CheckBox38)
         Me.TPCommonSettings.Controls.Add(Me.gbxXBMCversion)
         Me.TPCommonSettings.Location = New System.Drawing.Point(4, 24)
@@ -1852,7 +1849,7 @@ Partial Class frmPreferences
         'cbDisplayAllSubtitleLang
         '
         Me.cbDisplayAllSubtitleLang.AutoSize = true
-        Me.cbDisplayAllSubtitleLang.Location = New System.Drawing.Point(12, 368)
+        Me.cbDisplayAllSubtitleLang.Location = New System.Drawing.Point(6, 146)
         Me.cbDisplayAllSubtitleLang.Name = "cbDisplayAllSubtitleLang"
         Me.cbDisplayAllSubtitleLang.Size = New System.Drawing.Size(238, 19)
         Me.cbDisplayAllSubtitleLang.TabIndex = 109
@@ -1862,7 +1859,7 @@ Partial Class frmPreferences
         'cbGenreCustomBefore
         '
         Me.cbGenreCustomBefore.AutoSize = true
-        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 409)
+        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 419)
         Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
         Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
         Me.cbGenreCustomBefore.TabIndex = 107
@@ -1871,7 +1868,7 @@ Partial Class frmPreferences
         '
         'btnEditCustomGenreFile
         '
-        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(21, 434)
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(24, 444)
         Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
         Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
         Me.btnEditCustomGenreFile.TabIndex = 106
@@ -1882,9 +1879,9 @@ Partial Class frmPreferences
         '
         Me.GroupBox4.Controls.Add(Me.Label185)
         Me.GroupBox4.Controls.Add(Me.AutoScrnShtDelay)
-        Me.GroupBox4.Location = New System.Drawing.Point(296, 273)
+        Me.GroupBox4.Location = New System.Drawing.Point(296, 281)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(277, 64)
+        Me.GroupBox4.Size = New System.Drawing.Size(273, 64)
         Me.GroupBox4.TabIndex = 105
         Me.GroupBox4.TabStop = false
         Me.GroupBox4.Text = "Screenshot Delay."
@@ -2094,7 +2091,7 @@ Partial Class frmPreferences
         'cbDisplayMediaInfoFolderSize
         '
         Me.cbDisplayMediaInfoFolderSize.AutoSize = true
-        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(12, 291)
+        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(6, 70)
         Me.cbDisplayMediaInfoFolderSize.Name = "cbDisplayMediaInfoFolderSize"
         Me.cbDisplayMediaInfoFolderSize.Size = New System.Drawing.Size(233, 19)
         Me.cbDisplayMediaInfoFolderSize.TabIndex = 97
@@ -2104,7 +2101,7 @@ Partial Class frmPreferences
         'cb_IgnoreAn
         '
         Me.cb_IgnoreAn.AutoSize = true
-        Me.cb_IgnoreAn.Location = New System.Drawing.Point(296, 239)
+        Me.cb_IgnoreAn.Location = New System.Drawing.Point(7, 68)
         Me.cb_IgnoreAn.Name = "cb_IgnoreAn"
         Me.cb_IgnoreAn.Size = New System.Drawing.Size(195, 19)
         Me.cb_IgnoreAn.TabIndex = 93
@@ -2114,7 +2111,7 @@ Partial Class frmPreferences
         'cb_IgnoreA
         '
         Me.cb_IgnoreA.AutoSize = true
-        Me.cb_IgnoreA.Location = New System.Drawing.Point(296, 214)
+        Me.cb_IgnoreA.Location = New System.Drawing.Point(7, 43)
         Me.cb_IgnoreA.Name = "cb_IgnoreA"
         Me.cb_IgnoreA.Size = New System.Drawing.Size(194, 19)
         Me.cb_IgnoreA.TabIndex = 91
@@ -2124,7 +2121,7 @@ Partial Class frmPreferences
         'cbOverwriteArtwork
         '
         Me.cbOverwriteArtwork.AutoSize = true
-        Me.cbOverwriteArtwork.Location = New System.Drawing.Point(12, 214)
+        Me.cbOverwriteArtwork.Location = New System.Drawing.Point(12, 367)
         Me.cbOverwriteArtwork.Name = "cbOverwriteArtwork"
         Me.cbOverwriteArtwork.Size = New System.Drawing.Size(195, 19)
         Me.cbOverwriteArtwork.TabIndex = 90
@@ -2134,7 +2131,7 @@ Partial Class frmPreferences
         'cb_IgnoreThe
         '
         Me.cb_IgnoreThe.AutoSize = true
-        Me.cb_IgnoreThe.Location = New System.Drawing.Point(296, 192)
+        Me.cb_IgnoreThe.Location = New System.Drawing.Point(7, 21)
         Me.cb_IgnoreThe.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_IgnoreThe.Name = "cb_IgnoreThe"
         Me.cb_IgnoreThe.Size = New System.Drawing.Size(205, 19)
@@ -2145,7 +2142,7 @@ Partial Class frmPreferences
         'CheckBox38
         '
         Me.CheckBox38.AutoSize = true
-        Me.CheckBox38.Location = New System.Drawing.Point(12, 192)
+        Me.CheckBox38.Location = New System.Drawing.Point(12, 393)
         Me.CheckBox38.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox38.Name = "CheckBox38"
         Me.CheckBox38.Size = New System.Drawing.Size(235, 19)
@@ -3047,7 +3044,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3376,7 +3373,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4159,7 +4156,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5139,7 +5136,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5538,6 +5535,14 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
+        'UcGenPref_Proxy1
+        '
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -5547,6 +5552,14 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5854,21 +5867,32 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'UcGenPref_Proxy1
+        'gpbxPrefOverlay
         '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayRatingOverlay)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayAllSubtitleLang)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoFolderSize)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayDefaultSubtitleLang)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoOverlay)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbShowAllAudioTracks)
+        Me.gpbxPrefOverlay.Location = New System.Drawing.Point(6, 175)
+        Me.gpbxPrefOverlay.Name = "gpbxPrefOverlay"
+        Me.gpbxPrefOverlay.Size = New System.Drawing.Size(284, 176)
+        Me.gpbxPrefOverlay.TabIndex = 110
+        Me.gpbxPrefOverlay.TabStop = false
+        Me.gpbxPrefOverlay.Text = "Overlay options"
         '
-        'UcGenPref_XbmcLink1
+        'gpbxPrefIgnore
         '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreAn)
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreThe)
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreA)
+        Me.gpbxPrefIgnore.Location = New System.Drawing.Point(296, 175)
+        Me.gpbxPrefIgnore.Name = "gpbxPrefIgnore"
+        Me.gpbxPrefIgnore.Size = New System.Drawing.Size(273, 100)
+        Me.gpbxPrefIgnore.TabIndex = 111
+        Me.gpbxPrefIgnore.TabStop = false
+        Me.gpbxPrefIgnore.Text = "Ignore Article options"
         '
         'frmPreferences
         '
@@ -6039,6 +6063,10 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
+        Me.gpbxPrefOverlay.ResumeLayout(false)
+        Me.gpbxPrefOverlay.PerformLayout
+        Me.gpbxPrefIgnore.ResumeLayout(false)
+        Me.gpbxPrefIgnore.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6508,4 +6536,6 @@ End Sub
     Friend WithEvents nudMaxTagsInFilter As NumericUpDown
     Friend WithEvents nudMinTagsInFilter As NumericUpDown
     Friend WithEvents cbXbmcTmdbMetascoreFromImdb As CheckBox
+    Friend WithEvents gpbxPrefIgnore As GroupBox
+    Friend WithEvents gpbxPrefOverlay As GroupBox
 End Class
