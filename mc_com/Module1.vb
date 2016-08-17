@@ -180,6 +180,7 @@ Module Module1
         ConsoleOrLog("Loading Config")
         Pref.SetUpPreferences()
         Call InitMediaFileExtensions()
+        If Not Directory.Exists(Utilities.CacheFolderPath) Then Directory.CreateDirectory(Utilities.CacheFolderPath)
 
         If File.Exists(Pref.applicationPath & "\settings\profile.xml") = True Then
              
@@ -1297,6 +1298,11 @@ Module Module1
                     Console.Write(Pref.tvScraperLog.Replace("!!! ", ""))
                     If tempspath <> "false" Then
                         path = tempspath
+                        For each ep In alleps
+                            ep.episodepath = path
+                            ep.mediaextension = path.Replace(".nfo", ep.extension)
+                            ep.filename = path.Replace(ep.filepath, "")
+                        Next
                     End If
                 End If
             Next
@@ -1440,12 +1446,10 @@ Module Module1
     End Sub
 
     Private Sub DlEpThumb(ByVal thisep As episodeinfo, ByVal path As String)
-        Dim eden As Boolean = Pref.EdenEnabled
-        Dim frodo As Boolean = Pref.FrodoEnabled
         Dim aok As Boolean = False
         Dim paths As New List(Of String)
-        If eden Then paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
-        If frodo Then paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
+        If Pref.EdenEnabled  Then   paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
+        If Pref.FrodoEnabled Then   paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
         Dim url As String = thisep.thumb
         If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then
             aok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, 0, 0, True)
