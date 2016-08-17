@@ -177,7 +177,7 @@ Namespace Tasks
                 'tvshow found
                 Me.Show.NfoFilePath = IO.Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
 
-                Dim tvdbstuff As New TVDBScraper
+                Dim tvdbstuff As New TVDBScrapper
 
                 Dim posterurl As String = ""
                 Dim tempstring As String = ""

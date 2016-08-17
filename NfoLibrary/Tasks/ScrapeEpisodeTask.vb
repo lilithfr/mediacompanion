@@ -197,7 +197,7 @@ Namespace Tasks
             '    End If
             'End If
             'Dim episodescraper As New TVDB.tvdbscraper 'commented because of removed TVDB.dll
-            Dim episodescraper As New TVDBScraper
+            Dim episodescraper As New TVDBScrapper
             If sortorder = "" Then sortorder = "default"
             Dim tempsortorder As String = sortorder
             If language = "" Then language = "en"

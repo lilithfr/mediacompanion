@@ -23,8 +23,7 @@
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>
-    </ReferencePath>
+    <ReferencePath>D:\_Development\_MediaComp2\TvdbScrapper\bin\Debug\</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <StartArguments>-e</StartArguments>

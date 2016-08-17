@@ -32,6 +32,7 @@ Module Module1
     Dim logstr As New List(Of String)
     Dim WithEvents scraper As New BackgroundWorker
     Dim WithEvents oMovies As New Movies(scraper)
+    Dim tvdb As New TVDBScraper
     Dim EnvExit As Integer = 0
     Dim DoneAEp As Boolean = False
     Dim ShowTrailerDownloadProgess As Boolean = False
@@ -378,10 +379,6 @@ Module Module1
             Console.WriteLine(str)
         End If
         logstr.Add(str)
-        'Using sw As New StreamWriter(logfile, true)
-        '    sw.WriteLine(str.TrimEnd)
-        '    sw.Close()
-        'End Using
     End Sub
 
     Public Sub Writelogfile(ByVal log As List(Of String))
@@ -660,7 +657,7 @@ Module Module1
                         End If
                     End If
                     singleepisode.showid = tvdbid
-                    Dim episodescraper As New tvdbscraper
+                    Dim episodescraper As New TVDBScraper
                     If sortorder = "" Then sortorder = "default"
                     Dim tempsortorder As String = sortorder
                     If language = "" Then language = "en"
@@ -762,193 +759,6 @@ Module Module1
                                     Else
                                         ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                     End If
-                                    'Dim url As String
-                                    'url = "http://www.imdb.com/title/" & imdbid & "/episodes"
-                                    'Dim tvfblinecount As Integer = 0
-                                    'Dim tvdbwebsource(10000)
-                                    'tvfblinecount = 0
-                                    'Try
-                                    '    Dim wrGETURL As WebRequest
-                                    '    wrGETURL = WebRequest.Create(url)
-                                    '    Dim myProxy As New WebProxy("myproxy", 80)
-                                    '    myProxy.BypassProxyOnLocal = True
-                                    '    Dim objStream As Stream
-                                    '    objStream = wrGETURL.GetResponse.GetResponseStream()
-                                    '    Dim objReader As New StreamReader(objStream)
-                                    '    Dim tvdbsLine As String = ""
-                                    '    tvfblinecount = 0
-
-                                    '    Do While Not tvdbsLine Is Nothing
-                                    '        tvfblinecount += 1
-                                    '        tvdbsLine = objReader.ReadLine
-                                    '        If Not tvdbsLine Is Nothing Then
-                                    '            tvdbwebsource(tvfblinecount) = tvdbsLine
-                                    '        End If
-                                    '    Loop
-                                    '    objReader.Close()
-                                    '    tvfblinecount -= 1
-                                    'Catch ex As WebException
-                                    '    tvdbwebsource(0) = "404"
-                                    'End Try
-
-                                    'If tvfblinecount <> 0 Then
-                                    '    Dim tvtempstring As String
-                                    '    tvtempstring = "Season " & singleepisode.seasonno & ", Episode " & singleepisode.episodeno & ":"
-                                    '    For g = 1 To tvfblinecount
-                                    '        If tvdbwebsource(g).indexof(tvtempstring) <> -1 Then
-                                    '            Dim tvtempint As Integer
-                                    '            tvtempint = tvdbwebsource(g).indexof("<a href=""/title/")
-                                    '            If tvtempint <> -1 Then
-                                    '                tvtempstring = tvdbwebsource(g).substring(tvtempint + 16, 9)
-                                    '                Dim scraperfunction As New Classimdb
-                                    '                Dim actorlist As String = ""
-                                    '                actorlist = scraperfunction.getimdbactors(Pref.imdbmirror, tvtempstring)
-                                    '                Dim tempactorlist As New List(Of str_MovieActors)
-                                    '                Dim thumbstring As New XmlDocument
-                                    '                Dim thisresult As XmlNode = Nothing
-                                    '                Try
-                                    '                    thumbstring.LoadXml(actorlist)
-                                    '                    thisresult = Nothing
-                                    '                    Dim countactors As Integer = 0
-                                    '                    For Each thisresult In thumbstring("actorlist")
-                                    '                        Select Case thisresult.Name
-                                    '                            Case "actor"
-                                    '                                If countactors >= Pref.maxactors Then
-                                    '                                    Exit For
-                                    '                                End If
-                                    '                                countactors += 1
-                                    '                                Dim newactor As New str_MovieActors
-                                    '                                Dim detail As XmlNode = Nothing
-                                    '                                For Each detail In thisresult.ChildNodes
-                                    '                                    Select Case detail.Name
-                                    '                                        Case "name"
-                                    '                                            newactor.actorname = detail.InnerText
-                                    '                                        Case "role"
-                                    '                                            newactor.actorrole = detail.InnerText
-                                    '                                        Case "thumb"
-                                    '                                            newactor.actorthumb = detail.InnerText
-                                    '                                        Case "actorid"
-                                    '                                            If newactor.actorthumb <> Nothing Then
-                                    '                                                If Pref.actorseasy = True And detail.InnerText <> "" Then
-                                    '                                                    Dim workingpath As String = episodearray(0).episodepath.Replace(IO.Path.GetFileName(episodearray(0).episodepath), "")
-                                    '                                                    workingpath = workingpath & ".actors\"
-                                    '                                                    Dim hg As New IO.DirectoryInfo(workingpath)
-                                    '                                                    Dim destsorted As Boolean = False
-                                    '                                                    If Not hg.Exists Then
-                                    '                                                        Try
-                                    '                                                            IO.Directory.CreateDirectory(workingpath)
-                                    '                                                            destsorted = True
-                                    '                                                        Catch ex As Exception
-
-                                    '                                                        End Try
-                                    '                                                    Else
-                                    '                                                        destsorted = True
-                                    '                                                    End If
-                                    '                                                    If destsorted = True Then
-                                    '                                                        Dim filename As String = newactor.actorname.Replace(" ", "_")
-                                    '                                                        filename = filename & ".tbn"
-                                    '                                                        Dim tvshowactorpath As String = realshowpath
-                                    '                                                        tvshowactorpath = tvshowactorpath.Replace(IO.Path.GetFileName(tvshowactorpath), "")
-                                    '                                                        tvshowactorpath = IO.Path.Combine(tvshowactorpath, ".actors\")
-                                    '                                                        tvshowactorpath = IO.Path.Combine(tvshowactorpath, filename)
-                                    '                                                        filename = IO.Path.Combine(workingpath, filename)
-                                    '                                                        If IO.File.Exists(tvshowactorpath) Then
-                                    '                                                            Try
-                                    '                                                                IO.File.Copy(tvshowactorpath, filename, True)
-                                    '                                                            Catch
-                                    '                                                            End Try
-                                    '                                                        End If
-                                    '                                                        If Not IO.File.Exists(filename) Then
-                                    '                                                            Dim buffer(4000000) As Byte
-                                    '                                                            Dim size As Integer = 0
-                                    '                                                            Dim bytesRead As Integer = 0
-                                    '                                                            Dim thumburl As String = newactor.actorthumb
-                                    '                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    '                                                            Dim res As HttpWebResponse = req.GetResponse()
-                                    '                                                            Dim contents As Stream = res.GetResponseStream()
-                                    '                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    '                                                            While bytesToRead > 0
-                                    '                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    '                                                                If size = 0 Then Exit While
-                                    '                                                                bytesToRead -= size
-                                    '                                                                bytesRead += size
-                                    '                                                            End While
-
-                                    '                                                            Dim fstrm As New FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)
-                                    '                                                            fstrm.Write(buffer, 0, bytesRead)
-                                    '                                                            contents.Close()
-                                    '                                                            fstrm.Close()
-                                    '                                                        End If
-                                    '                                                    End If
-                                    '                                                End If
-                                    '                                                If Pref.actorsave = True And detail.InnerText <> "" And Pref.actorseasy = False Then
-                                    '                                                    Dim workingpath As String = ""
-                                    '                                                    Dim networkpath As String = Pref.actorsavepath
-                                    '                                                    Try
-                                    '                                                        tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                    '                                                        Dim hg As New IO.DirectoryInfo(tempstring)
-                                    '                                                        If Not hg.Exists Then
-                                    '                                                            IO.Directory.CreateDirectory(tempstring)
-                                    '                                                        End If
-                                    '                                                        workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                    '                                                        If Not IO.File.Exists(workingpath) Then
-                                    '                                                            Dim buffer(4000000) As Byte
-                                    '                                                            Dim size As Integer = 0
-                                    '                                                            Dim bytesRead As Integer = 0
-                                    '                                                            Dim thumburl As String = newactor.actorthumb
-                                    '                                                            Dim req As HttpWebRequest = WebRequest.Create(thumburl)
-                                    '                                                            Dim res As HttpWebResponse = req.GetResponse()
-                                    '                                                            Dim contents As Stream = res.GetResponseStream()
-                                    '                                                            Dim bytesToRead As Integer = CInt(buffer.Length)
-                                    '                                                            While bytesToRead > 0
-                                    '                                                                size = contents.Read(buffer, bytesRead, bytesToRead)
-                                    '                                                                If size = 0 Then Exit While
-                                    '                                                                bytesToRead -= size
-                                    '                                                                bytesRead += size
-                                    '                                                            End While
-                                    '                                                            Dim fstrm As New FileStream(workingpath, FileMode.OpenOrCreate, FileAccess.Write)
-                                    '                                                            fstrm.Write(buffer, 0, bytesRead)
-                                    '                                                            contents.Close()
-                                    '                                                            fstrm.Close()
-                                    '                                                        End If
-                                    '                                                        newactor.actorthumb = IO.Path.Combine(Pref.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
-                                    '                                                        If Pref.actornetworkpath.IndexOf("/") <> -1 Then
-                                    '                                                            newactor.actorthumb = Pref.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
-                                    '                                                        Else
-                                    '                                                            newactor.actorthumb = Pref.actornetworkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                    '                                                        End If
-                                    '                                                    Catch
-                                    '                                                    End Try
-                                    '                                                End If
-                                    '                                            End If
-                                    '                                    End Select
-                                    '                                Next
-                                    '                                tempactorlist.Add(newactor)
-                                    '                        End Select
-                                    '                    Next
-                                    '                Catch ex As Exception
-                                    '                    ConsoleOrLog("Error scraping episode actors from IMDB, " & ex.Message.ToString)
-                                    '                End Try
-
-                                    '                If tempactorlist.Count > 0 Then
-                                    '                    ConsoleOrLog("Actors scraped from IMDB OK")
-                                    '                    While tempactorlist.Count > Pref.maxactors
-                                    '                        tempactorlist.RemoveAt(tempactorlist.Count - 1)
-                                    '                    End While
-                                    '                    singleepisode.listactors.Clear()
-                                    '                    For Each actor In tempactorlist
-                                    '                        singleepisode.listactors.Add(actor)
-                                    '                    Next
-                                    '                    tempactorlist.Clear()
-                                    '                Else
-                                    '                    ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
-                                    '                End If
-
-                                    '                Exit For
-                                    '            End If
-                                    '        End If
-                                    '    Next
-                                    'End If
                                 End If
                             End If
 
@@ -1488,7 +1298,8 @@ Module Module1
             Dim showlist As New XmlDocument
             Dim eden As Boolean = Pref.EdenEnabled
             Dim frodo As Boolean = Pref.FrodoEnabled
-            Dim thumblist As String = GetPosterList(thisep.showid)
+            Dim artlist As New List(Of TvBanners)
+            Dim thumblist As String = tvdb.GetPosterList(thisep.showid, artlist)
             Dim overwriteimage As Boolean = If(Pref.overwritethumbs, True, False)
             Dim doPoster As Boolean = Pref.tvdlposter
             Dim doFanart As Boolean = Pref.tvdlfanart
@@ -1502,33 +1313,33 @@ Module Module1
             If Not Langlist.Contains(Pref.TvdbLanguageCode) Then Langlist.Add(Pref.TvdbLanguageCode)
             Langlist.Add("")
 
-            showlist.LoadXml(thumblist)
-            Dim thisresult As XmlNode = Nothing
-            Dim artlist As New List(Of TvBanners)
-            artlist.Clear()
-            For Each thisresult In showlist("banners")
-                Select Case thisresult.Name
-                    Case "banner"
-                        Dim individualposter As New TvBanners
-                        For Each results In thisresult.ChildNodes
-                            Select Case results.Name
-                                Case "id"
-                                    individualposter.id = results.InnerText
-                                Case "url"
-                                    individualposter.Url = results.InnerText
-                                Case "bannertype"
-                                    individualposter.BannerType = results.InnerText
-                                Case "resolution"
-                                    individualposter.Resolution = results.InnerText
-                                Case "language"
-                                    individualposter.Language = results.InnerText
-                                Case "season"
-                                    individualposter.Season = results.InnerText
-                            End Select
-                        Next
-                        artlist.Add(individualposter)
-                End Select
-            Next
+            'showlist.LoadXml(thumblist)
+            'Dim thisresult As XmlNode = Nothing
+            ''Dim artlist As New List(Of TvBanners)
+            'artlist.Clear()
+            'For Each thisresult In showlist("banners")
+            '    Select Case thisresult.Name
+            '        Case "banner"
+            '            Dim individualposter As New TvBanners
+            '            For Each results In thisresult.ChildNodes
+            '                Select Case results.Name
+            '                    Case "id"
+            '                        individualposter.id = results.InnerText
+            '                    Case "url"
+            '                        individualposter.Url = results.InnerText
+            '                    Case "bannertype"
+            '                        individualposter.BannerType = results.InnerText
+            '                    Case "resolution"
+            '                        individualposter.Resolution = results.InnerText
+            '                    Case "language"
+            '                        individualposter.Language = results.InnerText
+            '                    Case "season"
+            '                        individualposter.Season = results.InnerText
+            '                End Select
+            '            Next
+            '            artlist.Add(individualposter)
+            '    End Select
+            'Next
             If artlist.Count = 0 Then
                 Exit Sub
             End If
@@ -1574,95 +1385,94 @@ Module Module1
                 End If
             End If
 
-                'SeasonXX Banner
-                If (isposter = "banner" Or frodo) And doSeason Then 'banner
-                    Dim seasonXXbanner As String = Nothing
-                    For Each lang In Langlist 
-                        For Each Image In artlist
-                            If Image.Season = f.ToString AndAlso (Image.Language = lang Or lang = "") AndAlso Image.Resolution = "seasonwide" Then
-                                seasonXXbanner = Image.Url
-                                Exit For
-                            End If
-                        Next
-                        If Not IsNothing(seasonXXbanner) Then Exit For
+            'SeasonXX Banner
+            If (isposter = "banner" Or frodo) And doSeason Then 'banner
+                Dim seasonXXbanner As String = Nothing
+                For Each lang In Langlist 
+                    For Each Image In artlist
+                        If Image.Season = f.ToString AndAlso (Image.Language = lang Or lang = "") AndAlso Image.Resolution = "seasonwide" Then
+                            seasonXXbanner = Image.Url
+                            Exit For
+                        End If
                     Next
-                    If seasonXXbanner <> "" Then
-                        Dim tempstring As String = ""
-                        If f < 10 Then
-                            tempstring = "0" & f.ToString
-                        Else
-                            tempstring = f.ToString
-                        End If
-                        If tempstring = "00" Then tempstring = "-specials"
-                        Dim seasonXXbannerpath As String = ""
-                        If frodo Then
-                            seasonXXbannerpath = realshowpath & "season" & tempstring & "-banner.jpg"
-                        ElseIf eden Then
-                            seasonXXbannerpath = realshowpath & "season" & tempstring & ".tbn"
-                        End If
-                        If Not IO.File.Exists(seasonXXbannerpath) Then
-                            success = Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
-                        End If
-                        If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
-                            success = Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
-                        End If
+                    If Not IsNothing(seasonXXbanner) Then Exit For
+                Next
+                If seasonXXbanner <> "" Then
+                    Dim tempstring As String = ""
+                    If f < 10 Then
+                        tempstring = "0" & f.ToString
+                    Else
+                        tempstring = f.ToString
+                    End If
+                    If tempstring = "00" Then tempstring = "-specials"
+                    Dim seasonXXbannerpath As String = ""
+                    If frodo Then
+                        seasonXXbannerpath = realshowpath & "season" & tempstring & "-banner.jpg"
+                    ElseIf eden Then
+                        seasonXXbannerpath = realshowpath & "season" & tempstring & ".tbn"
+                    End If
+                    If Not IO.File.Exists(seasonXXbannerpath) Then
+                        success = Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
+                    End If
+                    If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
+                        success = Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
                     End If
                 End If
-            'Next
+            End If
         Catch
         End Try
     End Sub
 
-    Public Function getposterlist(ByVal tvdbid As String)
-        Try
-            Dim mirrors As New List(Of String)
-            Dim xmlfile As String
-            Dim wrGETURL As WebRequest
-            Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            xmlfile = objReader.ReadToEnd
-            Dim bannerslist As New XmlDocument
-            'Try
-            Dim bannerlist As String = "<banners>"
-            bannerslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In bannerslist("Banners")
+    'Public Function getposterlist(ByVal tvdbid As String)
+    '    Try
+    '        Dim mirrors As New List(Of String)
+    '        Dim xmlfile As String
+    '        Dim wrGETURL As WebRequest
+    '        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
+    '        wrGETURL = WebRequest.Create(mirrorsurl)
+    '        wrGETURL.Proxy = Utilities.MyProxy
+    '        Dim objStream As Stream
+    '        objStream = wrGETURL.GetResponse.GetResponseStream()
+    '        Dim objReader As New StreamReader(objStream)
+    '        xmlfile = objReader.ReadToEnd
+    '        Dim bannerslist As New XmlDocument
+    '        'Try
+    '        Dim bannerlist As String = "<banners>"
+    '        bannerslist.LoadXml(xmlfile)
+    '        Dim thisresult As XmlNode = Nothing
+    '        For Each thisresult In bannerslist("Banners")
 
-                Select Case thisresult.Name
-                    Case "Banner"
-                        bannerlist = bannerlist & "<banner>"
-                        Dim bannerselection As XmlNode = Nothing
-                        For Each bannerselection In thisresult.ChildNodes
-                            Select Case bannerselection.Name
-                                Case "BannerPath"
+    '            Select Case thisresult.Name
+    '                Case "Banner"
+    '                    bannerlist = bannerlist & "<banner>"
+    '                    Dim bannerselection As XmlNode = Nothing
+    '                    For Each bannerselection In thisresult.ChildNodes
+    '                        Select Case bannerselection.Name
+    '                            Case "BannerPath"
 
-                                    bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
-                                Case "BannerType"
-                                    bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
-                                Case "BannerType2"
-                                    bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
-                                Case "Language"
-                                    bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
-                                Case "Season"
-                                    bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
-                                Case ""
-                            End Select
-                        Next
-                        bannerlist = bannerlist & "</banner>"
-                End Select
-            Next
-            bannerlist = bannerlist & "</banners>"
-            Return bannerlist
-        Catch ex As WebException
-            Return ex.ToString
-        Catch EX As Exception
-            Return EX.ToString
-        End Try
-    End Function
+    '                                bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+    '                            Case "BannerType"
+    '                                bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
+    '                            Case "BannerType2"
+    '                                bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
+    '                            Case "Language"
+    '                                bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
+    '                            Case "Season"
+    '                                bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
+    '                            Case ""
+    '                        End Select
+    '                    Next
+    '                    bannerlist = bannerlist & "</banner>"
+    '            End Select
+    '        Next
+    '        bannerlist = bannerlist & "</banners>"
+    '        Return bannerlist
+    '    Catch ex As WebException
+    '        Return ex.ToString
+    '    Catch EX As Exception
+    '        Return EX.ToString
+    '    End Try
+    'End Function
 
     Private Sub MissingEpThumbDL(ByVal listofshowfolders As List(Of String))
 
@@ -2151,54 +1961,52 @@ Module Module1
         'End If
     End Sub
 
-Private Sub scraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs)  Handles scraper.DoWork
-    oMovies.FindNewMovies
-End Sub
+    Private Sub scraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs)  Handles scraper.DoWork
+        oMovies.FindNewMovies
+    End Sub
 
-Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles scraper.ProgressChanged
-    Dim oProgress As Progress = CType(e.UserState, Progress) 
+    Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles scraper.ProgressChanged
+        Dim oProgress As Progress = CType(e.UserState, Progress) 
 
-    If Not IsNothing(oProgress.Log) Then
-            If oProgress.Log.Contains("!!! ") Then
-                'If Not visible Then
-                '    logstr.Add(oProgress.Log.Replace("!!! ", ""))
-               ' Else
-                    ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
-                'End If
+        If Not IsNothing(oProgress.Log) Then
+                If oProgress.Log.Contains("!!! ") Then
+                    'If Not visible Then
+                    '    logstr.Add(oProgress.Log.Replace("!!! ", ""))
+                   ' Else
+                        ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
+                    'End If
+                End If
             End If
+            Thread.Sleep(1)
+    End Sub
+
+    Private Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
+        FileDownloadSize = iFileSize
+        If ShowTrailerDownloadProgess and visible Then
+            Console.Write("Trailer download progress ")
+            CursorLeft = Console.CursorLeft
+            CursorTop  = Console.CursorTop
         End If
-        Thread.Sleep(1)
-End Sub
+    End Sub
+    
+    Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) Handles oMovies.AmountDownloadedChanged
+        If ShowTrailerDownloadProgess and visible and FileDownloadSize>-1 Then
+            Console.SetCursorPosition(CursorLeft,CursorTop)
+            Console.Write("{0:0.0%}",iTotalBytesRead/FileDownloadSize)
+        End If
+    End Sub
 
-Private Sub FileDownload_SizeObtained(ByVal iFileSize As Long) Handles oMovies.FileDownloadSizeObtained
-    FileDownloadSize = iFileSize
-    If ShowTrailerDownloadProgess and visible Then
-        Console.Write("Trailer download progress ")
-        CursorLeft = Console.CursorLeft
-        CursorTop  = Console.CursorTop
-    End If
-End Sub
+    Private Sub FileDownload_FileDownloadComplete() Handles oMovies.FileDownloadComplete
+        If ShowTrailerDownloadProgess and visible Then
+            Console.WriteLine("")
+            Console.WriteLine("")
+        End If
+    End Sub
 
-
-Private Sub FileDownload_AmountDownloadedChanged(ByVal iTotalBytesRead As Long) Handles oMovies.AmountDownloadedChanged
-    If ShowTrailerDownloadProgess and visible and FileDownloadSize>-1 Then
-        Console.SetCursorPosition(CursorLeft,CursorTop)
-        Console.Write("{0:0.0%}",iTotalBytesRead/FileDownloadSize)
-    End If
-End Sub
-
-Private Sub FileDownload_FileDownloadComplete() Handles oMovies.FileDownloadComplete
-    If ShowTrailerDownloadProgess and visible Then
-        Console.WriteLine("")
-        Console.WriteLine("")
-    End If
-End Sub
-
-Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles scraper.RunWorkerCompleted
+    Private Sub scraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles scraper.RunWorkerCompleted
      
-End Sub
-
-
+    End Sub
+    
 End Module
 
 
@@ -2369,435 +2177,436 @@ Public Class mediainfo
     End Function
 End Class
 
-Public Class tvdbscraper
-    Private Structure possibleshowlist
-        Dim showtitle As String
-        Dim showid As String
-        Dim showbanner As String
-    End Structure
+'Public Class tvdbscraper
 
-    Public Function getposterlist(ByVal tvdbid As String)
-        Monitor.Enter(Me)
-        Try
-            Dim mirrors As New List(Of String)
-            Dim xmlfile As String
-            Dim wrGETURL As WebRequest
-            Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            xmlfile = objReader.ReadToEnd
-            Dim bannerslist As New XmlDocument
-            'Try
-            Dim bannerlist As String = "<banners>"
-            bannerslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In bannerslist("Banners")
+'    'Private Structure possibleshowlist
+'    '    Dim showtitle As String
+'    '    Dim showid As String
+'    '    Dim showbanner As String
+'    'End Structure
 
-                Select Case thisresult.Name
-                    Case "Banner"
-                        bannerlist = bannerlist & "<banner>"
-                        Dim bannerselection As XmlNode = Nothing
-                        For Each bannerselection In thisresult.ChildNodes
-                            Select Case bannerselection.Name
-                                Case "BannerPath"
+'    'Public Function getposterlist(ByVal tvdbid As String)
+'    '    Monitor.Enter(Me)
+'    '    Try
+'    '        Dim mirrors As New List(Of String)
+'    '        Dim xmlfile As String
+'    '        Dim wrGETURL As WebRequest
+'    '        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
+'    '        wrGETURL = WebRequest.Create(mirrorsurl)
+'    '        wrGETURL.Proxy = Utilities.MyProxy
+'    '        Dim objStream As Stream
+'    '        objStream = wrGETURL.GetResponse.GetResponseStream()
+'    '        Dim objReader As New StreamReader(objStream)
+'    '        xmlfile = objReader.ReadToEnd
+'    '        Dim bannerslist As New XmlDocument
+'    '        'Try
+'    '        Dim bannerlist As String = "<banners>"
+'    '        bannerslist.LoadXml(xmlfile)
+'    '        Dim thisresult As XmlNode = Nothing
+'    '        For Each thisresult In bannerslist("Banners")
 
-                                    bannerlist = bannerlist & "<url>http://thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
-                                Case "BannerType"
-                                    bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
-                                Case "BannerType2"
-                                    bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
-                                Case "Language"
-                                    bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
-                                Case "Season"
-                                    bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
-                                Case ""
-                            End Select
-                        Next
-                        bannerlist = bannerlist & "</banner>"
-                End Select
-            Next
-            bannerlist = bannerlist & "</banners>"
-            Return bannerlist
+'    '            Select Case thisresult.Name
+'    '                Case "Banner"
+'    '                    bannerlist = bannerlist & "<banner>"
+'    '                    Dim bannerselection As XmlNode = Nothing
+'    '                    For Each bannerselection In thisresult.ChildNodes
+'    '                        Select Case bannerselection.Name
+'    '                            Case "BannerPath"
 
-        Catch EX As Exception
-            Return EX.ToString
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
+'    '                                bannerlist = bannerlist & "<url>http://thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
+'    '                            Case "BannerType"
+'    '                                bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
+'    '                            Case "BannerType2"
+'    '                                bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
+'    '                            Case "Language"
+'    '                                bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
+'    '                            Case "Season"
+'    '                                bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
+'    '                            Case ""
+'    '                        End Select
+'    '                    Next
+'    '                    bannerlist = bannerlist & "</banner>"
+'    '            End Select
+'    '        Next
+'    '        bannerlist = bannerlist & "</banners>"
+'    '        Return bannerlist
 
-    Public Function getmirrors()
-        Monitor.Enter(Me)
-        Try
-            Dim mirrors As New List(Of String)
-            Dim xmlfile As String
-            Dim wrGETURL As WebRequest
-            Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/mirrors.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            xmlfile = objReader.ReadToEnd
-            Dim mirrorslist As New XmlDocument
-            'Try
-            mirrorslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In mirrorslist("Mirrors")
+'    '    Catch EX As Exception
+'    '        Return EX.ToString
+'    '    Finally
+'    '        Monitor.Exit(Me)
+'    '    End Try
+'    'End Function
 
-                Select Case thisresult.Name
-                    Case "Mirror"
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "mirrorpath"
-                                    If mirrorselection.InnerText <> Nothing Then
-                                        mirrors.Add(mirrorselection.InnerText)
-                                    End If
-                            End Select
-                        Next
-                End Select
-            Next
-            Return mirrors
+'    'Public Function getmirrors()
+'    '    Monitor.Enter(Me)
+'    '    Try
+'    '        Dim mirrors As New List(Of String)
+'    '        Dim xmlfile As String
+'    '        Dim wrGETURL As WebRequest
+'    '        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/mirrors.xml"
+'    '        wrGETURL = WebRequest.Create(mirrorsurl)
+'    '        wrGETURL.Proxy = Utilities.MyProxy
+'    '        Dim objStream As Stream
+'    '        objStream = wrGETURL.GetResponse.GetResponseStream()
+'    '        Dim objReader As New StreamReader(objStream)
+'    '        xmlfile = objReader.ReadToEnd
+'    '        Dim mirrorslist As New XmlDocument
+'    '        'Try
+'    '        mirrorslist.LoadXml(xmlfile)
+'    '        Dim thisresult As XmlNode = Nothing
+'    '        For Each thisresult In mirrorslist("Mirrors")
 
-        Catch EX As Exception
-            Return EX.ToString
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
+'    '            Select Case thisresult.Name
+'    '                Case "Mirror"
+'    '                    Dim mirrorselection As XmlNode = Nothing
+'    '                    For Each mirrorselection In thisresult.ChildNodes
+'    '                        Select Case mirrorselection.Name
+'    '                            Case "mirrorpath"
+'    '                                If mirrorselection.InnerText <> Nothing Then
+'    '                                    mirrors.Add(mirrorselection.InnerText)
+'    '                                End If
+'    '                        End Select
+'    '                    Next
+'    '            End Select
+'    '        Next
+'    '        Return mirrors
 
-    Public Function findshows(ByVal title As String, Optional ByVal mirror As String = "http://thetvdb.com")
-        Monitor.Enter(Me)
-        'Try
-        Dim possibleshows As New List(Of possibleshowlist)
-        Dim xmlfile As String
-        Dim wrGETURL As WebRequest
-        Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
-        wrGETURL = WebRequest.Create(mirrorsurl)
-        wrGETURL.Proxy = Utilities.MyProxy
-        'Dim myProxy As New WebProxy("myproxy", 80)
-        'myProxy.BypassProxyOnLocal = True
-        Dim objStream As Stream
-        objStream = wrGETURL.GetResponse.GetResponseStream()
-        Dim objReader As New StreamReader(objStream)
-        xmlfile = objReader.ReadToEnd
-        Dim showlist As New XmlDocument
-        Try
-            showlist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In showlist("Data")
+'    '    Catch EX As Exception
+'    '        Return EX.ToString
+'    '    Finally
+'    '        Monitor.Exit(Me)
+'    '    End Try
+'    'End Function
 
-                Select Case thisresult.Name
-                    Case "Series"
-                        Dim newshow As New possibleshowlist
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "seriesid"
-                                    newshow.showid = mirrorselection.InnerXml
-                                Case "SeriesName"
-                                    newshow.showtitle = mirrorselection.InnerXml
-                                Case "banner"
-                                    newshow.showbanner = "http://www.thetvdb.com/banners/" & mirrorselection.InnerXml
-                            End Select
-                        Next
-                        possibleshows.Add(newshow)
-                End Select
-            Next
-            Dim returnstring As String
-            Dim ok As Boolean = False
-            If possibleshows.Count > 0 Then
-                returnstring = "<allshows>"
-                For Each show In possibleshows
-                    If show.showid <> Nothing Then
-                        returnstring = returnstring & "<show>"
-                        returnstring = returnstring & "<showid>" & show.showid & "</showid>"
-                        ok = True
-                        If show.showtitle <> Nothing Then
-                            returnstring = returnstring & "<showtitle>" & show.showtitle & "</showtitle>"
-                        End If
-                        If show.showbanner <> Nothing Then
-                            returnstring = returnstring & "<showbanner>" & show.showbanner & "</showbanner>"
-                        End If
-                        returnstring = returnstring & "</show>"
-                    End If
-                Next
-                returnstring = returnstring & "</allshows>"
-            Else
-                returnstring = "none"
-            End If
-            If ok = False Then returnstring = "none"
-            Return returnstring
-            'Catch EX As Exception
-            '    Return EX.ToString
-            'End Try
-        Catch EX As Exception
-            Return "error"
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
+'    'Public Function findshows(ByVal title As String, Optional ByVal mirror As String = "http://thetvdb.com")
+'    '    Monitor.Enter(Me)
+'    '    'Try
+'    '    Dim possibleshows As New List(Of possibleshowlist)
+'    '    Dim xmlfile As String
+'    '    Dim wrGETURL As WebRequest
+'    '    Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
+'    '    wrGETURL = WebRequest.Create(mirrorsurl)
+'    '    wrGETURL.Proxy = Utilities.MyProxy
+'    '    'Dim myProxy As New WebProxy("myproxy", 80)
+'    '    'myProxy.BypassProxyOnLocal = True
+'    '    Dim objStream As Stream
+'    '    objStream = wrGETURL.GetResponse.GetResponseStream()
+'    '    Dim objReader As New StreamReader(objStream)
+'    '    xmlfile = objReader.ReadToEnd
+'    '    Dim showlist As New XmlDocument
+'    '    Try
+'    '        showlist.LoadXml(xmlfile)
+'    '        Dim thisresult As XmlNode = Nothing
+'    '        For Each thisresult In showlist("Data")
 
-    Public Function getshow(ByVal tvdbid As String, ByVal language As String)
-        Monitor.Enter(Me)
-        Try
-            Dim tvshowdetails As String = "<fulltvshow>"
-            Dim xmlfile As String
-            Dim wrGETURL As WebRequest
-            Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
-            Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & language & ".xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
-            objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
-            xmlfile = objReader.ReadToEnd
-            Dim showlist As New XmlDocument
-            'Try
-            showlist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In showlist("Data")
+'    '            Select Case thisresult.Name
+'    '                Case "Series"
+'    '                    Dim newshow As New possibleshowlist
+'    '                    Dim mirrorselection As XmlNode = Nothing
+'    '                    For Each mirrorselection In thisresult.ChildNodes
+'    '                        Select Case mirrorselection.Name
+'    '                            Case "seriesid"
+'    '                                newshow.showid = mirrorselection.InnerXml
+'    '                            Case "SeriesName"
+'    '                                newshow.showtitle = mirrorselection.InnerXml
+'    '                            Case "banner"
+'    '                                newshow.showbanner = "http://www.thetvdb.com/banners/" & mirrorselection.InnerXml
+'    '                        End Select
+'    '                    Next
+'    '                    possibleshows.Add(newshow)
+'    '            End Select
+'    '        Next
+'    '        Dim returnstring As String
+'    '        Dim ok As Boolean = False
+'    '        If possibleshows.Count > 0 Then
+'    '            returnstring = "<allshows>"
+'    '            For Each show In possibleshows
+'    '                If show.showid <> Nothing Then
+'    '                    returnstring = returnstring & "<show>"
+'    '                    returnstring = returnstring & "<showid>" & show.showid & "</showid>"
+'    '                    ok = True
+'    '                    If show.showtitle <> Nothing Then
+'    '                        returnstring = returnstring & "<showtitle>" & show.showtitle & "</showtitle>"
+'    '                    End If
+'    '                    If show.showbanner <> Nothing Then
+'    '                        returnstring = returnstring & "<showbanner>" & show.showbanner & "</showbanner>"
+'    '                    End If
+'    '                    returnstring = returnstring & "</show>"
+'    '                End If
+'    '            Next
+'    '            returnstring = returnstring & "</allshows>"
+'    '        Else
+'    '            returnstring = "none"
+'    '        End If
+'    '        If ok = False Then returnstring = "none"
+'    '        Return returnstring
+'    '        'Catch EX As Exception
+'    '        '    Return EX.ToString
+'    '        'End Try
+'    '    Catch EX As Exception
+'    '        Return "error"
+'    '    Finally
+'    '        Monitor.Exit(Me)
+'    '    End Try
+'    'End Function
 
-                Select Case thisresult.Name
-                    Case "Series"
-                        Dim newshow As New possibleshowlist
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "SeriesName"
-                                    tvshowdetails = tvshowdetails & "<title>" & mirrorselection.InnerXml & "</title>"
-                                Case "ContentRating"
-                                    tvshowdetails = tvshowdetails & "<mpaa>" & mirrorselection.InnerXml & "</mpaa>"
-                                Case "FirstAired"
-                                    tvshowdetails = tvshowdetails & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
-                                Case "Genre"
-                                    tvshowdetails = tvshowdetails & "<genre>" & mirrorselection.InnerXml & "</genre>"
-                                Case "IMDB_ID"
-                                    tvshowdetails = tvshowdetails & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
-                                Case "Network"
-                                    tvshowdetails = tvshowdetails & "<studio>" & mirrorselection.InnerXml & "</studio>"
-                                Case "Overview"
-                                    tvshowdetails = tvshowdetails & "<plot>" & mirrorselection.InnerXml & "</plot>"
-                                Case "Rating"
-                                    tvshowdetails = tvshowdetails & "<rating>" & mirrorselection.InnerXml & "</rating>"
-                                Case "Runtime"
-                                    tvshowdetails = tvshowdetails & "<runtime>" & mirrorselection.InnerXml & "</runtime>"
-                                Case "banner"
-                                    tvshowdetails = tvshowdetails & "<banner>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</banner>"
-                                Case "fanart"
-                                    tvshowdetails = tvshowdetails & "<fanart>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</fanart>"
-                                Case "poster"
-                                    tvshowdetails = tvshowdetails & "<poster>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</poster>"
-                            End Select
-                        Next
-                End Select
-            Next
+'    'Public Function getshow(ByVal tvdbid As String, ByVal language As String)
+'    '    Monitor.Enter(Me)
+'    '    Try
+'    '        Dim tvshowdetails As String = "<fulltvshow>"
+'    '        Dim xmlfile As String
+'    '        Dim wrGETURL As WebRequest
+'    '        Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
+'    '        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & language & ".xml"
+'    '        wrGETURL = WebRequest.Create(mirrorsurl)
+'    '        wrGETURL.Proxy = Utilities.MyProxy
+'    '        'Dim myProxy As New WebProxy("myproxy", 80)
+'    '        'myProxy.BypassProxyOnLocal = True
+'    '        Dim objStream As Stream
+'    '        objStream = wrGETURL.GetResponse.GetResponseStream()
+'    '        Dim objReader As New StreamReader(objStream)
+'    '        xmlfile = objReader.ReadToEnd
+'    '        Dim showlist As New XmlDocument
+'    '        'Try
+'    '        showlist.LoadXml(xmlfile)
+'    '        Dim thisresult As XmlNode = Nothing
+'    '        For Each thisresult In showlist("Data")
 
-            tvshowdetails = tvshowdetails & "<episodeguideurl>" & episodeguideurl & "</episodeguideurl>"
+'    '            Select Case thisresult.Name
+'    '                Case "Series"
+'    '                    Dim newshow As New possibleshowlist
+'    '                    Dim mirrorselection As XmlNode = Nothing
+'    '                    For Each mirrorselection In thisresult.ChildNodes
+'    '                        Select Case mirrorselection.Name
+'    '                            Case "SeriesName"
+'    '                                tvshowdetails = tvshowdetails & "<title>" & mirrorselection.InnerXml & "</title>"
+'    '                            Case "ContentRating"
+'    '                                tvshowdetails = tvshowdetails & "<mpaa>" & mirrorselection.InnerXml & "</mpaa>"
+'    '                            Case "FirstAired"
+'    '                                tvshowdetails = tvshowdetails & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
+'    '                            Case "Genre"
+'    '                                tvshowdetails = tvshowdetails & "<genre>" & mirrorselection.InnerXml & "</genre>"
+'    '                            Case "IMDB_ID"
+'    '                                tvshowdetails = tvshowdetails & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
+'    '                            Case "Network"
+'    '                                tvshowdetails = tvshowdetails & "<studio>" & mirrorselection.InnerXml & "</studio>"
+'    '                            Case "Overview"
+'    '                                tvshowdetails = tvshowdetails & "<plot>" & mirrorselection.InnerXml & "</plot>"
+'    '                            Case "Rating"
+'    '                                tvshowdetails = tvshowdetails & "<rating>" & mirrorselection.InnerXml & "</rating>"
+'    '                            Case "Runtime"
+'    '                                tvshowdetails = tvshowdetails & "<runtime>" & mirrorselection.InnerXml & "</runtime>"
+'    '                            Case "banner"
+'    '                                tvshowdetails = tvshowdetails & "<banner>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</banner>"
+'    '                            Case "fanart"
+'    '                                tvshowdetails = tvshowdetails & "<fanart>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</fanart>"
+'    '                            Case "poster"
+'    '                                tvshowdetails = tvshowdetails & "<poster>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</poster>"
+'    '                        End Select
+'    '                    Next
+'    '            End Select
+'    '        Next
 
-            mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream2 As Stream
-            objStream2 = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
-            xmlfile = objReader2.ReadToEnd
-            Dim showlist2 As New XmlDocument
-            'Try
-            showlist2.LoadXml(xmlfile)
-            thisresult = Nothing
-            For Each thisresult In showlist2("Actors")
+'    '        tvshowdetails = tvshowdetails & "<episodeguideurl>" & episodeguideurl & "</episodeguideurl>"
 
-                Select Case thisresult.Name
-                    Case "Actor"
-                        tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "id"
-                                    tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
-                                Case "Image"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                                        End If
-                                    End If
-                                Case "Name"
-                                    tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
-                                Case "Role"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
-                                        End If
-                                    End If
-                            End Select
-                        Next
-                        tvshowdetails = tvshowdetails & "</actor>"
-                End Select
-            Next
+'    '        mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
+'    '        wrGETURL = WebRequest.Create(mirrorsurl)
+'    '        wrGETURL.Proxy = Utilities.MyProxy
+'    '        Dim objStream2 As Stream
+'    '        objStream2 = wrGETURL.GetResponse.GetResponseStream()
+'    '        Dim objReader2 As New StreamReader(objStream2)
+'    '        xmlfile = objReader2.ReadToEnd
+'    '        Dim showlist2 As New XmlDocument
+'    '        'Try
+'    '        showlist2.LoadXml(xmlfile)
+'    '        thisresult = Nothing
+'    '        For Each thisresult In showlist2("Actors")
 
-            mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
-            wrGETURL = WebRequest.Create(mirrorsurl)
-            wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream3 As Stream
-            objStream3 = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
-            xmlfile = objReader3.ReadToEnd
-            Dim showlist3 As New XmlDocument
-            'Try
-            showlist3.LoadXml(xmlfile)
-            thisresult = Nothing
-            For Each thisresult In showlist3("Actors")
+'    '            Select Case thisresult.Name
+'    '                Case "Actor"
+'    '                    tvshowdetails = tvshowdetails & "<actor>"
+'    '                    Dim newshow As New possibleshowlist
+'    '                    Dim mirrorselection As XmlNode = Nothing
+'    '                    For Each mirrorselection In thisresult.ChildNodes
+'    '                        Select Case mirrorselection.Name
+'    '                            Case "id"
+'    '                                tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
+'    '                            Case "Image"
+'    '                                If mirrorselection.InnerXml <> Nothing Then
+'    '                                    If mirrorselection.InnerXml <> "" Then
+'    '                                        tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+'    '                                    End If
+'    '                                End If
+'    '                            Case "Name"
+'    '                                tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
+'    '                            Case "Role"
+'    '                                If mirrorselection.InnerXml <> Nothing Then
+'    '                                    If mirrorselection.InnerXml <> "" Then
+'    '                                        tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
+'    '                                    End If
+'    '                                End If
+'    '                        End Select
+'    '                    Next
+'    '                    tvshowdetails = tvshowdetails & "</actor>"
+'    '            End Select
+'    '        Next
 
-                Select Case thisresult.Name
-                    Case "Actor"
-                        tvshowdetails = tvshowdetails & "<actor>"
-                        Dim newshow As New possibleshowlist
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "id"
-                                    tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
-                                Case "Image"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                                        End If
-                                    End If
-                                Case "Name"
-                                    tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
-                                Case "Role"
-                                    If mirrorselection.InnerXml <> Nothing Then
-                                        If mirrorselection.InnerXml <> "" Then
-                                            tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
-                                        End If
-                                    End If
-                            End Select
-                        Next
-                        tvshowdetails = tvshowdetails & "</actor>"
-                End Select
-            Next
+'    '        mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
+'    '        wrGETURL = WebRequest.Create(mirrorsurl)
+'    '        wrGETURL.Proxy = Utilities.MyProxy
+'    '        Dim objStream3 As Stream
+'    '        objStream3 = wrGETURL.GetResponse.GetResponseStream()
+'    '        Dim objReader3 As New StreamReader(objStream3)
+'    '        xmlfile = objReader3.ReadToEnd
+'    '        Dim showlist3 As New XmlDocument
+'    '        'Try
+'    '        showlist3.LoadXml(xmlfile)
+'    '        thisresult = Nothing
+'    '        For Each thisresult In showlist3("Actors")
 
-            tvshowdetails = tvshowdetails & "</fulltvshow>"
+'    '            Select Case thisresult.Name
+'    '                Case "Actor"
+'    '                    tvshowdetails = tvshowdetails & "<actor>"
+'    '                    Dim newshow As New possibleshowlist
+'    '                    Dim mirrorselection As XmlNode = Nothing
+'    '                    For Each mirrorselection In thisresult.ChildNodes
+'    '                        Select Case mirrorselection.Name
+'    '                            Case "id"
+'    '                                tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
+'    '                            Case "Image"
+'    '                                If mirrorselection.InnerXml <> Nothing Then
+'    '                                    If mirrorselection.InnerXml <> "" Then
+'    '                                        tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+'    '                                    End If
+'    '                                End If
+'    '                            Case "Name"
+'    '                                tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
+'    '                            Case "Role"
+'    '                                If mirrorselection.InnerXml <> Nothing Then
+'    '                                    If mirrorselection.InnerXml <> "" Then
+'    '                                        tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
+'    '                                    End If
+'    '                                End If
+'    '                        End Select
+'    '                    Next
+'    '                    tvshowdetails = tvshowdetails & "</actor>"
+'    '            End Select
+'    '        Next
 
-            Return tvshowdetails
-        Catch
-            Return "!!!Error!!!"
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
+'    '        tvshowdetails = tvshowdetails & "</fulltvshow>"
 
-    Public Shared Function DownloadFileToString(ByVal URL As String, Optional ByVal ForceDownload As Boolean = False) As String
-        Dim webReq As HttpWebRequest = WebRequest.Create(URL)
-        'If Pref.proxysettings.Item(0).ToLower = "false" Then
-        '    ' Dim myProxy As New WebProxy("myproxy", 80)
-        '    webReq.Proxy = Nothing
-        'Else
-        '    Dim myProxy As New WebProxy(Pref.proxysettings.Item(1), Pref.proxysettings.Item(2).ToInt) 'Convert.ToInt32(Utilities.MCProxy.Item(2)))
-        '    myProxy.Credentials = New NetworkCredential(Pref.proxysettings.Item(3), Pref.proxysettings.item(4))
-        '    webReq.Proxy = myProxy
-        'End If
-        webReq.Proxy = Utilities.MyProxy
-        Dim html As String
-        Using webResp As HttpWebResponse = webReq.GetResponse()
-            Dim responseStream As Stream = webResp.GetResponseStream()
-            If (webResp.ContentEncoding.ToLower().Contains("gzip")) Then
-                responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
+'    '        Return tvshowdetails
+'    '    Catch
+'    '        Return "!!!Error!!!"
+'    '    Finally
+'    '        Monitor.Exit(Me)
+'    '    End Try
+'    'End Function
 
-            ElseIf (webResp.ContentEncoding.ToLower().Contains("deflate")) Then
-                responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
-            End If
-            Dim reader As StreamReader = New StreamReader(responseStream, Encoding.UTF8)
+'    'Public Shared Function DownloadFileToString(ByVal URL As String, Optional ByVal ForceDownload As Boolean = False) As String
+'    '    Dim webReq As HttpWebRequest = WebRequest.Create(URL)
+'    '    'If Pref.proxysettings.Item(0).ToLower = "false" Then
+'    '    '    ' Dim myProxy As New WebProxy("myproxy", 80)
+'    '    '    webReq.Proxy = Nothing
+'    '    'Else
+'    '    '    Dim myProxy As New WebProxy(Pref.proxysettings.Item(1), Pref.proxysettings.Item(2).ToInt) 'Convert.ToInt32(Utilities.MCProxy.Item(2)))
+'    '    '    myProxy.Credentials = New NetworkCredential(Pref.proxysettings.Item(3), Pref.proxysettings.item(4))
+'    '    '    webReq.Proxy = myProxy
+'    '    'End If
+'    '    webReq.Proxy = Utilities.MyProxy
+'    '    Dim html As String
+'    '    Using webResp As HttpWebResponse = webReq.GetResponse()
+'    '        Dim responseStream As Stream = webResp.GetResponseStream()
+'    '        If (webResp.ContentEncoding.ToLower().Contains("gzip")) Then
+'    '            responseStream = New GZipStream(responseStream, CompressionMode.Decompress)
 
-            html = reader.ReadToEnd()
+'    '        ElseIf (webResp.ContentEncoding.ToLower().Contains("deflate")) Then
+'    '            responseStream = New DeflateStream(responseStream, CompressionMode.Decompress)
+'    '        End If
+'    '        Dim reader As StreamReader = New StreamReader(responseStream, Encoding.UTF8)
 
-            responseStream.Close()
+'    '        html = reader.ReadToEnd()
 
-        End Using
-        Return html
-    End Function
+'    '        responseStream.Close()
 
-    Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String)
-        Monitor.Enter(Me)
-        Dim episodestring As String = ""
-        Dim episodeurl As String = ""
-        Try
-            'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
+'    '    End Using
+'    '    Return html
+'    'End Function
 
-            Dim xmlfile As String
-            If language.ToLower.IndexOf(".xml") = -1 Then
-                language = language & ".xml"
-            End If
-            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
-            xmlfile = DownloadFileToString(episodeurl)
-            Dim episode As New XmlDocument
+'    Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seriesno As String, ByVal episodeno As String, ByVal language As String)
+'        Monitor.Enter(Me)
+'        Dim episodestring As String = ""
+'        Dim episodeurl As String = ""
+'        Try
+'            'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
 
-            episode.LoadXml(xmlfile)
+'            Dim xmlfile As String
+'            If language.ToLower.IndexOf(".xml") = -1 Then
+'                language = language & ".xml"
+'            End If
+'            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seriesno & "/" & episodeno & "/" & language
+'            xmlfile = DownloadFileToString(episodeurl)
+'            Dim episode As New XmlDocument
 
-            episodestring = "<episodedetails>"
-            episodestring = episodestring & "<url>" & episodeurl & "</url>"
-            Dim mirrorslist As New XmlDocument
-            'Try
-            mirrorslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In mirrorslist("Data")
+'            episode.LoadXml(xmlfile)
 
-                Select Case thisresult.Name
-                    Case "Episode"
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "EpisodeName"
-                                    episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
-                                Case "FirstAired"
-                                    episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
-                                Case "GuestStars"
-                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
-                                    For Each guest In gueststars
-                                        If Not String.IsNullOrEmpty(guest) Then
-                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
-                                        End If
-                                    Next
-                                Case "Director"
-                                    Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.Trim("|")
-                                    episodestring = episodestring & "<director>" & tempstring & "</director>"
-                                Case "Writer"
-                                    Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.Trim("|")
-                                    episodestring = episodestring & "<credits>" & tempstring & "</credits>"
-                                Case "Overview"
-                                    episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
-                                Case "Rating"
-                                    episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
-                                Case "id"
-                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
-                                Case "IMDB_ID"
-                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
-                                Case "seriesid"
-                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
-                                Case "filename"
-                                    episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                            End Select
-                        Next
-                End Select
-            Next
-            episodestring = episodestring & "</episodedetails>"
-            Return episodestring
-        Catch ex As Exception
-            Return "ERROR - <url>" & episodeurl & "</url>"
-        Finally
-            Monitor.Exit(Me)
-        End Try
+'            episodestring = "<episodedetails>"
+'            episodestring = episodestring & "<url>" & episodeurl & "</url>"
+'            Dim mirrorslist As New XmlDocument
+'            'Try
+'            mirrorslist.LoadXml(xmlfile)
+'            Dim thisresult As XmlNode = Nothing
+'            For Each thisresult In mirrorslist("Data")
 
-    End Function
+'                Select Case thisresult.Name
+'                    Case "Episode"
+'                        Dim mirrorselection As XmlNode = Nothing
+'                        For Each mirrorselection In thisresult.ChildNodes
+'                            Select Case mirrorselection.Name
+'                                Case "EpisodeName"
+'                                    episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
+'                                Case "FirstAired"
+'                                    episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
+'                                Case "GuestStars"
+'                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
+'                                    For Each guest In gueststars
+'                                        If Not String.IsNullOrEmpty(guest) Then
+'                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
+'                                        End If
+'                                    Next
+'                                Case "Director"
+'                                    Dim tempstring As String = mirrorselection.InnerXml
+'                                    tempstring = tempstring.Trim("|")
+'                                    episodestring = episodestring & "<director>" & tempstring & "</director>"
+'                                Case "Writer"
+'                                    Dim tempstring As String = mirrorselection.InnerXml
+'                                    tempstring = tempstring.Trim("|")
+'                                    episodestring = episodestring & "<credits>" & tempstring & "</credits>"
+'                                Case "Overview"
+'                                    episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
+'                                Case "Rating"
+'                                    episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+'                                Case "id"
+'                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+'                                Case "IMDB_ID"
+'                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
+'                                Case "seriesid"
+'                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
+'                                Case "filename"
+'                                    episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+'                            End Select
+'                        Next
+'                End Select
+'            Next
+'            episodestring = episodestring & "</episodedetails>"
+'            Return episodestring
+'        Catch ex As Exception
+'            Return "ERROR - <url>" & episodeurl & "</url>"
+'        Finally
+'            Monitor.Exit(Me)
+'        End Try
 
-End Class
+'    End Function
+
+'End Class

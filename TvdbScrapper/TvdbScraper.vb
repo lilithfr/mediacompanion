@@ -6,7 +6,7 @@ Imports System.Xml
 
 
 
-Public Class TVDBScraper
+Public Class TVDBScrapper
     Const SetDefaults = True
     Private Structure str_possibleshowlist
         Dim showtitle As String
