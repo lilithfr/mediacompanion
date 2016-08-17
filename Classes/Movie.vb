@@ -1595,11 +1595,11 @@ Public Class Movie
                 ''' 
                 Dim custlang As String = Utilities.GetTmdbLanguage(Pref.TMDbSelectedLanguageName)(0)
                 If Pref.TMDbUseCustomLanguage AndAlso Pref.TMDbCustomLanguageValue<>"" Then custlang = Media_Companion.Pref.TMDbCustomLanguageValue.Split(",").ToList(1)
-                Dim NotMatchLanguage As Boolean = Pref.XbmcTmdbScraperLanguage <> custlang
 
-                If (NotMatchLanguage AndAlso Pref.GetMovieSetFromTMDb) OrElse (Pref.GetMovieSetFromTMDb AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection)) Then
-                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
-                    _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id 
+
+                If Pref.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+						_scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
+						_scrapedMovie.fullmoviebody.MovieSet.MovieSetId   = tmdb.Movie.belongs_to_collection.id 
                 End If
             Catch
                 Throw New Exception ("offline")
