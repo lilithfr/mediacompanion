@@ -1283,7 +1283,7 @@ Public Class Classimdb
                 totalinfo.AppendTag( "premiered" , ReleaseDate )
                 totalinfo.AppendTag( "stars"     , Stars       )
                 totalinfo.AppendTag( "title"     , Me.Title    )
-                totalinfo.AppendTag( "year"      , If(year = "", Me.Year, year))
+                totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(year = "", Me.Year, year), Me.Year))
                 totalinfo.AppendTag( "studio"    , Studio      )
                 totalinfo.AppendTag( "outline"   , Outline     )
                 totalinfo.AppendTag( "top250"    , Top250      )
