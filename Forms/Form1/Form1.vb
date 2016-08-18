@@ -13139,6 +13139,7 @@ Public Class Form1
 
                             api.SetId = MovSet.MovieSetId
 
+                            'This should never be called for the scenarios discussed below
                             MovCollectionList = api.Collection
 
                         Catch ex As Exception
@@ -13150,10 +13151,24 @@ Public Class Form1
                         End Try
                         If MovCollectionList.Count > 0 Then
                             For Each Mcol In MovCollectionList
-                                Dim coll As New CollectionMovie
-                                coll.TmdbMovieId = Mcol.tmdbid
-                                coll.MovieTitle = Mcol.title
-                                mset.Collection.Add(coll)
+
+                                'Scenarios...movie is a...
+                                '1. Normal movie                                                   not in a tmdb set -> Nothing to change here
+                                '2. Normal movie                                                       in a tmdb set -> Nothing to change here, TMDb.vb's MovieSet property has already assigned this correctly from tmdb
+                                '3. User has created his own collection and assigned it to a movie not in a tmdb set -> Nothing to change here, just save the collection name in Config
+                                '4. User has created his own collection and assigned it to a movie     in a tmdb set -> Nothing to change here, the change will be saved in the movies NFO file
+                                '5. User has added a movie to                                             a tmdb set -> Nothing to change here, the change will be saved in the movies NFO file
+
+                                'Rob : Let me know if you agree or disagree with the above \ pass me any scenarios not covered above and I'll try to help come up with a matually acceptable solution
+
+
+                                'This should never be called. MovieSetDB must be assigned solely from Tmdb:
+
+                                'Dim coll As New CollectionMovie
+                                'coll.TmdbMovieId = Mcol.tmdbid
+                                'coll.MovieTitle = Mcol.title
+                                'mset.Collection.Add(coll)
+
                             Next
                         End If
                         Exit For
