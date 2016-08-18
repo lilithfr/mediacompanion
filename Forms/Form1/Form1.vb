@@ -13129,28 +13129,28 @@ Public Class Form1
                             MovCollectionList.Add(ac)
                         Next
                         Exit For
-                    Else
-                        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-                        messbox.Show()
-                        messbox.Refresh()
-                        Application.DoEvents()
-                        Try
-                            Dim api As New TMDb
+                    'Else
+                        'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                        'messbox.Show()
+                        'messbox.Refresh()
+                        'Application.DoEvents()
+                        'Try
+                        '    Dim api As New TMDb
 
-                            api.SetId = MovSet.MovieSetId
+                        '    api.SetId = MovSet.MovieSetId
 
-                            'This should never be called for the scenarios discussed below
-                            MovCollectionList = api.Collection
+                        '    'This should never be called for the scenarios discussed below
+                        '    MovCollectionList = api.Collection
 
-                        Catch ex As Exception
-                            If ex.Message.Contains("TMDB") Then
-                                messbox.Close()
-                                MsgBox("Issue getting data from TMDB")
-                                Exit Sub
-                            End If
-                        End Try
-                        If MovCollectionList.Count > 0 Then
-                            For Each Mcol In MovCollectionList
+                        'Catch ex As Exception
+                        '    If ex.Message.Contains("TMDB") Then
+                        '        messbox.Close()
+                        '        MsgBox("Issue getting data from TMDB")
+                        '        Exit Sub
+                        '    End If
+                        'End Try
+                        'If MovCollectionList.Count > 0 Then
+                        '    For Each Mcol In MovCollectionList
 
                                 'Scenarios...movie is a...
                                 '1. Normal movie                                                   not in a tmdb set -> Nothing to change here
@@ -13169,9 +13169,9 @@ Public Class Form1
                                 'coll.MovieTitle = Mcol.title
                                 'mset.Collection.Add(coll)
 
-                            Next
-                        End If
-                        Exit For
+                        '    Next
+                        'End If
+                        'Exit For
                     End If
                 End If
             Next
