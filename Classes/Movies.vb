@@ -1149,8 +1149,13 @@ Public Class Movies
 
     Public ReadOnly Property TmdbMissingFromSetUnreleased As List(Of TmdbSetMissingMovie)
         Get
-            Dim q = TmdbSetMissingMovies.Where( Function(x) Not TmdbMissingFromSetReleased.Contains(x) )
+            'Dim q = TmdbSetMissingMovies.Where( Function(x) Not TmdbMissingFromSetReleased.Contains(x) )
 
+            Dim q = From x In TmdbSetMissingMovies
+                        Where
+                            Not (IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now))
+                        Select 
+                            x
             Return q.ToList
         End Get
     End Property
