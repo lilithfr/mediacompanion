@@ -883,41 +883,47 @@ Public Class Classimdb
         End Get
     End Property
 
-    ReadOnly Property ARImdb (ByVal imdbid As String) As String      'Aspect Ratio from IMDb
+    ''' <summary>
+    ''' Get Aspect Ratio from IMDb.  Code in place to get AR from Technical page, but as so many returned, no guarantee which is correct.
+    ''' Reverted 19/8/2016 to get AR from IMDB main page.
+    ''' </summary>
+    ''' <param name="imdbid"></param>
+    ''' <returns>AR in a String</returns>
+    ReadOnly Property ARImdb (ByVal imdbid As String) As String
         Get
+            Dim s As String = ""
             Try
-                Dim html3 As String = loadwebpage(Pref.proxysettings, Pref.imdbmirror & "title/" & imdbid &"/technical?ref_=tt_dt_spec", True, 10)
-                Dim s As String = ""
-                Dim t As String = ""
-                Dim u() As String = Nothing
-                'Try technical page first as may be multiple AR's
-                Try
-                t = Regex.Match(html3, MovieRegExs.REGEX_ASPECTRATIOALL, RegexOptions.Singleline).Groups(1).Value.Trim
-                t = t.Replace(vbLf, "").Replace("<td>", "").Replace("<br>", "!").Trim
-                u = t.Split("!")
-                Catch
-                    u = Nothing
-                End Try
+                'Dim html3 As String = loadwebpage(Pref.proxysettings, Pref.imdbmirror & "title/" & imdbid &"/technical?ref_=tt_dt_spec", True, 10)
+                'Dim t As String = ""
+                'Dim u() As String = Nothing
+                ''Try technical page first as may be multiple AR's
+                'Try
+                't = Regex.Match(html3, MovieRegExs.REGEX_ASPECTRATIOALL, RegexOptions.Singleline).Groups(1).Value.Trim
+                't = t.Replace(vbLf, "").Replace("<td>", "").Replace("<br>", "!").Trim
+                'u = t.Split("!")
+                'Catch
+                '    u = Nothing
+                'End Try
                 'check if we got results.
-                If IsNothing(u) OrElse u.Length < 1 Then
+               ' If IsNothing(u) OrElse u.Length < 1 Then
                     'No results so get from main movie page
                     s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
                     If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
                     s = s.Substring(0, s.IndexOf(":")).Trim
-                Else
-                    'If multiple results
-                    If u.Length > 1 Then
-                        For each j In u
-                            If j.Contains("negative") Then Continue For
-                            s = j.Substring(0, j.IndexOf(":")).trim
-                            Exit For
-                        Next
-                    Else
-                        'Else use first one.
-                        s = u(0).Substring(0, u(0).IndexOf(":")).trim
-                    End If
+                'Else
+                '    'If multiple results
+                '    If u.Length > 1 Then
+                '        For each j In u
+                '            If j.Contains("negative") Then Continue For
+                '            s = j.Substring(0, j.IndexOf(":")).trim
+                '            Exit For
+                '        Next
+                '    Else
+                '        'Else use first one.
+                '        s = u(0).Substring(0, u(0).IndexOf(":")).trim
+                '    End If
 
-                End If
+                'End If
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))
             Catch ex As Exception
                 Return ""

@@ -404,7 +404,7 @@ Public Class frmPreferences
         'Movie in folders, Extra Artwork
         cbMovXtraThumbs                     .Checked        = Pref.movxtrathumb
         cbMovXtraFanart                     .Checked        = Pref.movxtrafanart
-        cmbxMovXtraFanartQty                .SelectedIndex  = cmbxMovXtraFanartQty.FindStringExact(Pref.movxtrafanartqty.ToString)
+        cmbxMovXtraFanartQty                .SelectedItem   = Pref.movxtrafanartqty.ToString
         'movie in folder, save artwork as
         If Not Pref.usefoldernames AndAlso Not Pref.allfolders then
             cbMovCreateFolderjpg    .Enabled    = False
