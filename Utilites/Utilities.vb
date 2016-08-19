@@ -2142,19 +2142,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '    Return False
     'End Function
 
-    Public Shared Function DeleteFile(ByVal path As String) As Boolean
+    'Public Shared Function DeleteFile(ByVal path As String) As Boolean
 
-        Try
-            If IO.File.Exists(path) Then
-                IO.File.Delete(path)
-            End If
-            Return True
-        Catch
-            Return False
-        Finally
+    '    Try
+    '        If IO.File.Exists(path) Then
+    '            IO.File.Delete(path)
+    '        End If
+    '        Return True
+    '    Catch
+    '        Return False
+    '    Finally
 
-        End Try
-    End Function
+    '    End Try
+    'End Function
 
     Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
 
@@ -2608,16 +2608,16 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return String.Join(Environment.NewLine, lines)
     End Function
 
-    Public Shared Function cleanTvActorRole (ByVal s As String) As String
-        Dim a As Integer = 1
-        Dim Words As String() = s.Split(" ")
-        s = Words(0)
-        Do Until Words(a) = "" and Words(a+1) = ""
-            s &= " " & Words(a)
-            a = a + 1
-        Loop
-        Return s
-    End Function
+    'Public Shared Function cleanTvActorRole (ByVal s As String) As String
+    '    Dim a As Integer = 1
+    '    Dim Words As String() = s.Split(" ")
+    '    s = Words(0)
+    '    Do Until Words(a) = "" and Words(a+1) = ""
+    '        s &= " " & Words(a)
+    '        a = a + 1
+    '    Loop
+    '    Return s
+    'End Function
 
     Public Shared Function SafeDeleteFile(ByVal fileName As String) As Boolean
         If Not File.Exists(fileName) Then Return True
