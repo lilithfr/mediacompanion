@@ -1,6 +1,8 @@
 ﻿Imports System.Globalization
 Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms
+Imports System.Data
+
 
 Public Module ModuleExtensions
 
@@ -142,6 +144,17 @@ Public Module ModuleExtensions
             input = input & "0000"
         End If
         Return input
+    End Function
+
+
+    <Extension()> _
+    Public Function CopyToDataTable(Of T)(ByVal source As IEnumerable(Of T)) As DataTable
+        Return New ObjectShredder(Of T)().Shred(source, Nothing, Nothing)
+    End Function
+
+    <Extension()> _
+    Public Function CopyToDataTable(Of T)(ByVal source As IEnumerable(Of T), ByVal table As DataTable, ByVal options As LoadOption?) As DataTable
+        Return New ObjectShredder(Of T)().Shred(source, table, options)
     End Function
 
 End Module

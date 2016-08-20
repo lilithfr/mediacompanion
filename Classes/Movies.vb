@@ -2514,17 +2514,25 @@ Public Class Movies
                     Dim movieset = ""
                     Dim moviesetId = ""
                     Dim LastUpdatedTs As Date = Date.MinValue
+                    Dim UserMovieSetName = ""
                     Dim detail As XmlNode = Nothing
                     Dim movac As New List(Of CollectionMovie)
                     For Each detail In thisresult.ChildNodes
 
                         Select Case detail.Name
+
                             Case "moviesetname"
                                 movieset = detail.InnerText
+
                             Case "id"
                                 moviesetId = setMovieSetID(detail.InnerText, setDb)
+
                             Case "LastUpdatedTs"
                                 LastUpdatedTs = detail.InnerText
+
+                            Case "UserMovieSetName"
+                                UserMovieSetName = detail.InnerText
+
                             Case "collection"
                                 Dim ac As New CollectionMovie
                                 Dim detail2 As XmlNode = Nothing
@@ -2550,7 +2558,7 @@ Public Class Movies
                                 movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs))
+                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs, UserMovieSetName))
             End Select
         Next
     End Sub
@@ -2722,6 +2730,9 @@ Public Class Movies
             childchild.InnerText = movieset.LastUpdatedTs
             child.AppendChild(childchild)
 
+            childchild = doc.CreateElement("UserMovieSetName")
+            childchild.InnerText = movieset.UserMovieSetName
+            child.AppendChild(childchild)
 
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
@@ -3340,5 +3351,41 @@ Public Class Movies
     End Sub
 
 #End Region
+
+    Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo)
+
+        If IsNothing(movieSetInfo) Then Return
+
+        Dim c As MovieSetInfo = Nothing
+        Try
+            c = FindMovieSetInfoByName(movieSetInfo.MovieSetName)
+        Catch ex As Exception
+        End Try
+
+        If IsNothing(c) Then
+            MoviesetDb.Add(movieSetInfo)
+            Return
+        End If
+
+        c.Assign(movieSetInfo)
+    End Sub
+
+
+
+    Sub UpdateMovieCacheMovieSetInfo(MovieSet As MovieSetInfo)
+
+        Dim res = (From x In MovieCache Where x.MovieSet.MovieSetId=MovieSet.MovieSetId)
+
+        For Each m In res
+            m.MovieSet = MovieSet
+
+            Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
+
+            fmd.fullmoviebody.MovieSet =  m.MovieSet
+
+            Movie.SaveNFO(m.fullpathandfilename, fmd)
+        Next
+    End Sub
+
 
 End Class

@@ -70,20 +70,11 @@ Public Class WorkingWithNfoFiles
         Dim aok As Boolean = False
         Try
             Dim output As New XmlTextWriter(Filename, System.Text.Encoding.UTF8)
+
             output.Formatting = Formatting.Indented
             output.Indentation = 4
             doc.WriteTo(output)
             output.Close()
-
-            '''New Routine not encoding characters correctly, so revert to original routine above.
-            ''Dim settings As New XmlWriterSettings()
-            ''settings.Encoding = New UTF8Encoding(False)
-            ''settings.Indent = True
-            ''settings.IndentChars = (ControlChars.Tab)
-            ''settings.NewLineHandling = NewLineHandling.None
-            ''Dim writer As XmlWriter = XmlWriter.Create(Filename, settings)
-            ''doc.Save(writer)
-            ''writer.Close()
 
             aok = True
         Catch
@@ -3057,7 +3048,7 @@ Public Class WorkingWithNfoFiles
                 stage = 25
                 If movietosave.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
                     child = doc.CreateElement("set")
-                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetName
+                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetDisplayName
                     root.AppendChild(child)
                     child = doc.CreateElement("setid")
                     child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetId

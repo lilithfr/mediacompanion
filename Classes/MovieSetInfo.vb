@@ -5,11 +5,14 @@ Public Class MovieSetInfo
     Private  _movieSetDisplayName As String = ""
 
 
-    Property MovieSetId   As String = ""   ' Defaults to Themoviedb.org ID if found
-    Property Collection   As New List(Of CollectionMovie)
-    Property LastUpdatedTs As Date = DateTime.MinValue
+    Property MovieSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
+    Property Collection          As New List(Of CollectionMovie)
+    Property LastUpdatedTs       As Date = DateTime.MinValue
+    Property UserMovieSetName    As String = ""                     'Stores users preferred set name 
+    Property MergeWithMovieSetId As String = ""                     'Merged sets support    
 
-    Property MovieSetName   As String
+
+    Property MovieSetName As String
         Get
             Return _movieSetName
         End Get
@@ -23,12 +26,11 @@ Public Class MovieSetInfo
 
     Public ReadOnly Property MovieSetDisplayName As String
         Get
-            Return _movieSetDisplayName
+            Return If(UserMovieSetName<>"",UserMovieSetName,_movieSetDisplayName)
         End Get
     End Property
 
 
-    Private newPropertyValue As String
     Public ReadOnly Property DaysOld As Integer
         Get
             Return Date.Now.Subtract(LastUpdatedTs).Days
@@ -39,20 +41,27 @@ Public Class MovieSetInfo
     Sub New
     End Sub
 
-    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date)
-        MovieSetName  = _moviesetname
-        MovieSetId    = _moviesetid
-        Collection    = _collection
-        LastUpdatedTs = _lastUpdatedTs
+    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="")
+        MovieSetName        = _moviesetname
+        MovieSetId          = _moviesetid
+        Collection          = _collection
+        LastUpdatedTs       = _lastUpdatedTs
+        UserMovieSetName    = _userMovieSetName
+        MergeWithMovieSetId = _mergeWithMovieSetId
     End Sub
-
 
     Sub Assign(from As MovieSetInfo)
-        MovieSetName  = from.MovieSetName
-        MovieSetId    = from.MovieSetId
-        Collection    = from.Collection
-        LastUpdatedTs = from.LastUpdatedTs
+        MovieSetName        = from.MovieSetName
+        MovieSetId          = from.MovieSetId
+        Collection          = from.Collection
+        LastUpdatedTs       = from.LastUpdatedTs
+
+        'Preverse user customisations, if any
+        If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName
+        If from.MergeWithMovieSetId<>"" Then MergeWithMovieSetId = from.MergeWithMovieSetId
     End Sub
+
+
 
     Sub UpdateMovieSetDisplayName
         _movieSetDisplayName = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(MovieSetName), MovieSetName)

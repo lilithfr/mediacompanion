@@ -3378,28 +3378,22 @@ Public Class Movie
         If Not IsNothing(MovieSet) Then
             Try
                 If _parent.FindMovieSetInfoByName(MovieSet.MovieSetDisplayName).DaysOld < 7 Then
-'                   _parent.UpdateTmdbSetMissingMovies()
-'                   _parent.UpdateUserTmdbSetAdditions()
                     Return
                 End If 
             Catch
             End Try
         End If
 
-        RemoveMovieSetFromCache
-
         If IsNothing(McMovieSetInfo) Then
-            'If not Pref.moviesets.Contains(MovieSet.MovieSetName) Then
-
-                'MovieSet.MovieSetName = "-None-" 
-                _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" 
-            'End If
-
+            _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" 
             Return
         End If
-       
-        _parent.MovieSetDB.Add(McMovieSetInfo)
+
+        _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
     End Sub
+
+
+
 
     Sub UpdateTagCache
         RemoveTagFromCache
@@ -3424,14 +3418,14 @@ Public Class Movie
         _parent.DirectorDb.RemoveAll(Function(c) c.MovieId = MovieId)
     End Sub
 
-    Sub RemoveMovieSetFromCache
-        If IsNothing(MovieSet) Then Exit Sub
-        RemoveMovieSetFromCache(MovieSet.MovieSetName)
-    End Sub
+    'Sub RemoveMovieSetFromCache
+    '    If IsNothing(MovieSet) Then Exit Sub
+    '    RemoveMovieSetFromCache(MovieSet.MovieSetName)
+    'End Sub
 
-    Sub RemoveMovieSetFromCache(MovieSetName As String)
-        _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetName = MovieSetName)
-    End Sub
+    'Sub RemoveMovieSetFromCache(MovieSetName As String)
+    '    _parent.MovieSetDB.RemoveAll(Function(c) c.MovieSetName = MovieSetName)
+    'End Sub
 
     Sub RemoveTagFromCache
         If Tags.Count = 0 Then Exit Sub
