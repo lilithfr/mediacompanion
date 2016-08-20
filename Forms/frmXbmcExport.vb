@@ -376,7 +376,7 @@ Public Class frmXbmcExport
             root.AppendChild( thismovie, "id"                       , mov.fullmoviebody.imdbid          )
             root.AppendChildList( thismovie, "genre"                , mov.fullmoviebody.genre           )
             root.AppendChildList( thismovie, "country"              , mov.fullmoviebody.country, ","    )
-            Dim MovSet As String = If(mov.fullmoviebody.MovieSet.MovieSetName = "-None-", "", mov.fullmoviebody.MovieSet.MovieSetName)
+            Dim MovSet As String = If(mov.fullmoviebody.SetName = "-None-", "", mov.fullmoviebody.SetName)
             root.AppendChild( thismovie, "set"                      , MovSet                            )
             root.AppendChildList( thismovie, "tag"                  , mov.fullmoviebody.tag             )
             root.AppendChildList( thismovie, "credits"              , mov.fullmoviebody.credits         )

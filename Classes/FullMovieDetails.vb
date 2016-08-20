@@ -1,23 +1,18 @@
 Imports Media_Companion
 
 Public Class FullMovieDetails
-    Public fileinfo          As str_FileDetails
-    Public fullmoviebody     As str_BasicMovieNFO
-    Public alternativetitles As List(Of String)
-    Public listactors        As List(Of str_MovieActors)
-    Public frodoPosterThumbs As List(Of FrodoPosterThumb)
-    Public frodoFanartThumbs As FrodoFanartThumbs
-    Public listthumbs        As List(Of String)
-    Public filedetails       As FullFileDetails
-
-
-    Sub New
-        Init
-    End Sub
+    Public fileinfo          As FileDetails               = New FileDetails()
+    Public fullmoviebody     As BasicMovieNFO             = New BasicMovieNFO()
+    Public alternativetitles As List(Of String)           = New List(Of String)
+    Public listactors        As List(Of str_MovieActors)  = New List(Of str_MovieActors)
+    Public frodoPosterThumbs As List(Of FrodoPosterThumb) = New List(Of FrodoPosterThumb)
+    Public frodoFanartThumbs As FrodoFanartThumbs         = New FrodoFanartThumbs
+    Public listthumbs        As List(Of String)           = New List(Of String)
+    Public filedetails       As FullFileDetails           = New FullFileDetails
 
     Public Sub Init
-        fileinfo          = New str_FileDetails  (True)
-        fullmoviebody     = New str_BasicMovieNFO(True)
+        fileinfo          = New FileDetails()
+        fullmoviebody     = New BasicMovieNFO()
         alternativetitles = New List(Of String)
         listactors        = New List(Of str_MovieActors)
         frodoPosterThumbs = New List(Of FrodoPosterThumb)

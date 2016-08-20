@@ -4,8 +4,8 @@ Imports System.IO
 Imports System.xml
 
 Public Class xbmcmovies
-    Public fileinfo          As str_FileDetails
-    Public fullmoviebody     As str_BasicMovieNFO
+    Public fileinfo          As FileDetails
+    Public fullmoviebody     As BasicMovieNFO
     Public alternativetitles As List(Of String)
     Public listactors        As List(Of str_MovieActors)
     Public frodoPosterThumbs As List(Of FrodoPosterThumb)
@@ -18,8 +18,8 @@ Public Class xbmcmovies
     End Sub
 
     Public Sub Init
-        fileinfo          = New str_FileDetails  (True)
-        fullmoviebody     = New str_BasicMovieNFO(True)
+        fileinfo          = New FileDetails()
+        fullmoviebody     = New BasicMovieNFO()
         alternativetitles = New List(Of String)
         listactors        = New List(Of str_MovieActors)
         frodoPosterThumbs = New List(Of FrodoPosterThumb)

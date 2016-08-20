@@ -1212,7 +1212,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             'public      int     setid         ; //  NA
             'public      Art     art           ; //  Not in Combolist
 
-            Dim fmb As str_BasicMovieNFO = oMovie.ScrapedMovie.fullmoviebody
+            Dim fmb As BasicMovieNFO = oMovie.ScrapedMovie.fullmoviebody
 
             If xbMovie.title                                          <> fmb.title                                      Then Return True
             If xbMovie.year                                           <> fmb.year                                       Then Return True
@@ -1225,7 +1225,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
             If xbMovie.mpaa                                           <> fmb.mpaa                                       Then Return True
             If xbMovie.imdbnumber                                     <> fmb.imdbid                                     Then Return True
             If (xbMovie.runtime\60).ToString                          <> fmb.runtime .Replace(" min"  ,"")              Then Return True
-            If xbMovie.set                                            <> fmb.MovieSet.MovieSetName.Replace("-None-","") Then Return True
+            If xbMovie.set                                            <> fmb.SetName.Replace("-None-","")               Then Return True
             If xbMovie.top250.ToString                                <> fmb.top250                                     Then Return True
             If xbMovie.votes.ToString                                 <> fmb.votes.Replace(",","")                      Then Return True
             If xbMovie.sorttitle                                      <> fmb.sortorder                                  Then Return True

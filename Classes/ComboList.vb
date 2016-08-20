@@ -70,7 +70,9 @@ Public Class ComboList
     Property Container            As String = ""
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
-    Property MovieSet             As New MovieSetInfo 
+    
+    Property SetName              As String = ""
+    Property SetId                As String = ""
     Property stars                As String = ""
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
@@ -84,6 +86,17 @@ Public Class ComboList
             Return Math.Round( FolderSize/(1024*1024*1024),1 )
         End Get
     End Property
+
+    Public ReadOnly Property MovieSet As MovieSetInfo 
+        Get
+            Try
+                Return oMovies.FindMovieSetInfoByName(SetName)
+            Catch
+                Return New MovieSetInfo
+            End Try
+        End Get
+    End Property
+
 
     Public Property title As String
         Get
@@ -430,6 +443,10 @@ Public Class ComboList
         End Set
     End Property
 
+    Property UserTmdbSetAddition As Char = ""
+    Property UnknownSetCount     As Char = ""
+    Property LockedFields        As List(Of String) = New List(Of String)
+
     Public Sub Assign(From As ComboList)
 
         Me.fullpathandfilename  = From.fullpathandfilename
@@ -482,6 +499,7 @@ Public Class ComboList
         Me.metascore            = From.metascore
         Me.UserTmdbSetAddition  = From.UserTmdbSetAddition
         Me.UnknownSetCount      = From.UnknownSetCount
+        Me.LockedFields         = From.LockedFields
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -495,7 +513,10 @@ Public Class ComboList
         Me.SubLang.AddRange(From)
     End Sub
 
-    Public Property UserTmdbSetAddition As Char = ""
-    Public Property UnknownSetCount As Char = ""
+    Function IsLocked(fieldName As string) As Boolean
+        Return LockedFields.Contains(fieldName)
+    End Function
+
+
 
 End Class

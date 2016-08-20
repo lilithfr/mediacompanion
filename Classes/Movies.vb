@@ -1629,6 +1629,13 @@ Public Class Movies
         RemoveMovieEventHandlers(movie)
     End Sub
 
+    Sub LockSpecific(fullpathandfilename As String, field As String)
+
+        Dim movie = New Movie(Me, fullpathandfilename)
+
+        movie.LockSpecific(field)
+    End Sub
+
     Sub RescrapeAll(NfoFilenames As List(Of String))
         Dim i = 0
         ReportProgress(, "!!! Rescraping all data for:" & vbCrLf & vbCrLf)
@@ -1656,6 +1663,22 @@ Public Class Movies
         SaveCaches()
     End Sub
 
+
+    Sub LockSpecific(_lockList As RescrapeSpecificParams)
+
+        Dim i = 0
+        For Each FullPathAndFilename In _lockList.FullPathAndFilenames
+            i += 1
+            PercentDone = CalcPercentDone(i, _lockList.FullPathAndFilenames.Count)
+            ReportProgress("Locking '" & Utilities.TitleCase(_lockList.Field.Replace("_", " ")) & "' " & i & " of " & _lockList.FullPathAndFilenames.Count & " ")
+            LockSpecific(FullPathAndFilename, _lockList.Field)
+            If Cancelled Then Exit For
+        Next
+        SaveCaches()
+    End Sub
+
+
+    
     Sub BatchRescrapeSpecific(NfoFilenames As List(Of String), rl As RescrapeList)
         Dim i = 0
         Dim NfoFileList As New List(Of String)
@@ -2295,8 +2318,8 @@ Public Class Movies
        
             movie.LoadNFO(False)
 
-            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName) Then
-                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
+                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
             End If
             Cache.Add(movie.Cache)
         Next
@@ -2353,8 +2376,8 @@ Public Class Movies
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName) Then
-                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
+                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
                 End If
                 TmpMovieCache.Add(movie.Cache)
             Catch
@@ -3377,11 +3400,13 @@ Public Class Movies
         Dim res = (From x In MovieCache Where x.MovieSet.MovieSetId=MovieSet.MovieSetId)
 
         For Each m In res
-            m.MovieSet = MovieSet
+            m.SetName = MovieSet.MovieSetName
+            m.SetId   = MovieSet.MovieSetId
 
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
 
-            fmd.fullmoviebody.MovieSet =  m.MovieSet
+            fmd.fullmoviebody.SetName = m.SetName
+            fmd.fullmoviebody.SetId   = m.SetId
 
             Movie.SaveNFO(m.fullpathandfilename, fmd)
         Next

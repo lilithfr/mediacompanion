@@ -4,7 +4,8 @@ Imports System.Linq
 
 Public Class Data_GridViewMovie
     Dim _fullpathandfilename As String = ""
-    Dim _movieset As New MovieSetInfo
+    Property SetName              As String = ""
+    Property SetId                As String = ""
     Dim _filename As String = ""
     Dim _foldername As String = ""
     Dim _title As String = ""
@@ -51,6 +52,16 @@ Public Class Data_GridViewMovie
     Property tmdbid               As String = ""
     Property UserSetAddition As Char = ""
 
+    Public ReadOnly Property MovieSet As MovieSetInfo 
+        Get
+            Try
+                Return oMovies.FindMovieSetInfoByName(SetName)
+            Catch
+                Return New MovieSetInfo
+            End Try
+        End Get
+    End Property
+
     Sub New 
     End Sub
 
@@ -60,7 +71,8 @@ Public Class Data_GridViewMovie
 
     Public Sub Assign(movie As ComboList)
         fullpathandfilename = movie.fullpathandfilename
-        movieset = movie.MovieSet
+        SetName = movie.SetName
+        SetId = movie.SetId
         filename = movie.filename
         foldername = movie.foldername
         title = movie.title
@@ -117,7 +129,8 @@ Public Class Data_GridViewMovie
     Public Function Export() As ComboList
         Dim convertedMovie As New ComboList
         convertedMovie.fullpathandfilename  = Me.fullpathandfilename
-        convertedMovie.MovieSet             = Me.movieset
+        convertedMovie.SetName              = Me.SetName
+        convertedMovie.SetId                = Me.SetId
         convertedMovie.filename             = Me.filename
         convertedMovie.foldername           = Me.foldername
         convertedMovie.title                = Me.title
@@ -169,16 +182,6 @@ Public Class Data_GridViewMovie
         End Get
         Set(ByVal value)
             _fullpathandfilename = value
-        End Set
-    End Property
-
-
-    Public Property movieset As MovieSetInfo
-        Get
-            Return _movieset
-        End Get
-        Set
-            _movieset = value
         End Set
     End Property
 

@@ -5,7 +5,7 @@ Imports System.Text.RegularExpressions
 Imports System.Globalization
 Imports Media_Companion
 Imports System.Text
-
+Imports System.Linq
 
 Public Class WorkingWithNfoFiles
     Const SetDefaults = True
@@ -2221,7 +2221,8 @@ Public Class WorkingWithNfoFiles
                     newmovie.id = ""
                     newmovie.tmdbid = ""
                     newmovie.missingdata1 = 0
-                    newmovie.MovieSet = New MovieSetInfo 
+                    newmovie.SetName = ""
+                    newmovie.SetId = ""
                     newmovie.source = ""
                     newmovie.director = ""
                     newmovie.credits = ""
@@ -2535,9 +2536,9 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            newmovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
+                            newmovie.fullmoviebody.SetName = thisresult.InnerText
                         Case "setid"
-                            newmovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText 
+                            newmovie.fullmoviebody.SetId = thisresult.InnerText 
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -2670,6 +2671,8 @@ Public Class WorkingWithNfoFiles
                             newmovie.fileinfo.createdate = thisresult.InnerText
                         Case "showlink"
                             newmovie.fullmoviebody.showlink = thisresult.InnerText 
+                        Case "LockedFields"
+                            newmovie.fullmoviebody.LockedFields = thisresult.InnerText.Split(",").ToList()
                         Case "actor"
                             Dim newactor As New str_MovieActors(SetDefaults)
                             Dim detail As XmlNode = Nothing
@@ -2808,8 +2811,8 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
                 newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
                 newmovie.fileinfo.fanartpath = Pref.GetFanartPath(path, newmovie.fileinfo.filename)
-                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.MovieSet.MovieSetName)
-                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.MovieSet.MovieSetName)
+                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.SetName)
+                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.SetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
@@ -2825,8 +2828,8 @@ Public Class WorkingWithNfoFiles
                 'Else
                 '    newmovie.fileinfo.basepath = newmovie.fileinfo.path
                 'End If
-                If newmovie.fullmoviebody.MovieSet.MovieSetName = "" Then
-                    newmovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                If newmovie.fullmoviebody.SetName = "" Then
+                    newmovie.fullmoviebody.SetName = "-None-"
                 End If
                 If newmovie.fullmoviebody.usrrated = "" Then newmovie.fullmoviebody.usrrated = "0"
                 movie = Nothing
@@ -3046,12 +3049,12 @@ Public Class WorkingWithNfoFiles
                     Next
                 End If
                 stage = 25
-                If movietosave.fullmoviebody.MovieSet.MovieSetName <> "-None-" Then
+                If movietosave.fullmoviebody.SetName <> "-None-" Then
                     child = doc.CreateElement("set")
-                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetDisplayName
+                    child.InnerText = movietosave.fullmoviebody.SetName
                     root.AppendChild(child)
                     child = doc.CreateElement("setid")
-                    child.InnerText = movietosave.fullmoviebody.MovieSet.MovieSetId
+                    child.InnerText = movietosave.fullmoviebody.SetId
                     root.AppendChild(child)
                 End If
                 stage = 26
@@ -3077,6 +3080,11 @@ Public Class WorkingWithNfoFiles
                 child.InnerText = If(movietosave.fullmoviebody.metascore = "", "0", movietosave.fullmoviebody.metascore)
                 root.AppendChild(child)
                 stage = 29
+
+                child = doc.CreateElement("LockedFields")
+                child.InnerText = String.Join(",", movietosave.fullmoviebody.LockedFields.ToArray())
+                root.AppendChild(child)
+
                 child = doc.CreateElement("votes")
                 Dim votes As String = movietosave.fullmoviebody.votes
                 If Not String.IsNullOrEmpty(votes) then

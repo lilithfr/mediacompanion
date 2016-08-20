@@ -388,11 +388,10 @@ Public Class Movie
     ReadOnly Property MovieSet As MovieSetInfo 
         Get
             Try
-                If _scrapedMovie.fullmoviebody.movieset.MovieSetName = "-None-" Then Return Nothing
-                Return New MovieSetInfo(_scrapedMovie.fullmoviebody.movieset.MovieSetName,_scrapedMovie.fullmoviebody.movieset.MovieSetId, New List(Of CollectionMovie), New Date)
-                'Return _parent.MovieSetDB.Find(function(c) c.MovieSetId=_scrapedMovie.fullmoviebody.MovieSet.MovieSetId)
-                'Return _parent.MovieSetDB.Find(function(c) c.MovieSetName =_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
-                'Return _scrapedMovie.fullmoviebody.movieset
+                If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
+
+                Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
+
             Catch
                 Return Nothing
             End Try
@@ -402,7 +401,7 @@ Public Class Movie
     ReadOnly Property MovieSetByName As MovieSetInfo 
         Get
             Try
-                Dim res = _parent.MovieSetDB.Find(function(c) c.MovieSetName=_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+                Dim res = _parent.MovieSetDB.Find(function(c) c.MovieSetName=_scrapedMovie.fullmoviebody.SetName)
                 Return res
             Catch
                 Return Nothing
@@ -1082,8 +1081,8 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.premiered   = tmdb.releasedate
             If Not Pref.XbmcTmdbVotesFromImdb Then _scrapedMovie.fullmoviebody.votes = tmdb.Movie.vote_count
         End If
-        _scrapedMovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
-        _scrapedMovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+        _scrapedMovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.SetName)
+        _scrapedMovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(NfoPathAndFilename, _scrapedMovie.fullmoviebody.SetName)
         If Pref.MovCertRemovePhrase Then
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
             If mpaa.Contains(" for") Then
@@ -1200,7 +1199,10 @@ Public Class Movie
         'End If
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
-        _movieCache.MovieSet            = _scrapedMovie.fullmoviebody.MovieSet
+
+        _movieCache.SetName             = _scrapedMovie.fullmoviebody.SetName
+        _movieCache.SetId               = _scrapedMovie.fullmoviebody.SetId
+
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director
         _movieCache.credits             = _scrapedMovie.fullmoviebody.credits
@@ -1255,25 +1257,28 @@ Public Class Movie
         Else
             _movieCache.createdate = _scrapedMovie.fileinfo.createdate
         End If
-        _movieCache.id          = _scrapedMovie.fullmoviebody.imdbid
-        _movieCache.tmdbid      = _scrapedMovie.fullmoviebody.tmdbid 
-        _movieCache.rating      = _scrapedMovie.fullmoviebody.rating.ToRating
-        _movieCache.top250      = _scrapedMovie.fullmoviebody.top250
-        _movieCache.genre       = _scrapedMovie.fullmoviebody.genre
-        _movieCache.countries   = _scrapedMovie.fullmoviebody.country
-        _movieCache.studios     = _scrapedMovie.fullmoviebody.studio 
-        _movieCache.playcount   = _scrapedMovie.fullmoviebody.playcount
-        _movieCache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
-        _movieCache.Certificate = _scrapedMovie.fullmoviebody.mpaa
-        _movieCache.movietag    = _scrapedMovie.fullmoviebody.tag
-        _movieCache.usrrated    = If(_scrapedMovie.fullmoviebody.usrrated = "", 0, _scrapedMovie.fullmoviebody.usrrated.ToInt)
-        _movieCache.metascore   = If(_scrapedMovie.fullmoviebody.metascore = "", 0, _scrapedMovie.fullmoviebody.metascore.ToInt)
-        _movieCache.Container   = _scrapedMovie.filedetails.filedetails_video.Container.Value
-        _movieCache.Actorlist   = _scrapedMovie.listactors 
+        _movieCache.id           = _scrapedMovie.fullmoviebody.imdbid
+        _movieCache.tmdbid       = _scrapedMovie.fullmoviebody.tmdbid 
+        _movieCache.rating       = _scrapedMovie.fullmoviebody.rating.ToRating
+        _movieCache.top250       = _scrapedMovie.fullmoviebody.top250
+        _movieCache.genre        = _scrapedMovie.fullmoviebody.genre
+        _movieCache.countries    = _scrapedMovie.fullmoviebody.country
+        _movieCache.studios      = _scrapedMovie.fullmoviebody.studio 
+        _movieCache.playcount    = _scrapedMovie.fullmoviebody.playcount
+        _movieCache.lastplayed   = _scrapedMovie.fullmoviebody.lastplayed 
+        _movieCache.Certificate  = _scrapedMovie.fullmoviebody.mpaa
+        _movieCache.movietag     = _scrapedMovie.fullmoviebody.tag
+        _movieCache.usrrated     = If(_scrapedMovie.fullmoviebody.usrrated = "", 0, _scrapedMovie.fullmoviebody.usrrated.ToInt)
+        _movieCache.metascore    = If(_scrapedMovie.fullmoviebody.metascore = "", 0, _scrapedMovie.fullmoviebody.metascore.ToInt)
+        _movieCache.LockedFields = _scrapedMovie.fullmoviebody.LockedFields
+        _movieCache.Container    = _scrapedMovie.filedetails.filedetails_video.Container.Value
+        _movieCache.Actorlist    = _scrapedMovie.listactors 
+
         If Pref.incmissingmovies Then
             Dim Fileandpath As String = Utilities.GetFileName(_movieCache.fullpathandfilename, , _movieCache.Container)
             _movieCache.VideoMissing = Not File.Exists(Fileandpath)
         End If
+
         _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
 
         AssignMovieToAddMissingData
@@ -1473,9 +1478,9 @@ Public Class Movie
                         End If
                     End If
                 Case "set"
-                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = thisresult.InnerText
+                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
                 Case "setid"
-                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetId = thisresult.InnerText
+                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -1578,7 +1583,8 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.playcount = _previousCache.playcount
             _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
-            _scrapedMovie.fullmoviebody.MovieSet = _previousCache.MovieSet
+            _scrapedMovie.fullmoviebody.SetName = _previousCache.SetName
+            _scrapedMovie.fullmoviebody.SetId = _previousCache.SetId
         Else
             Try
                 tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
@@ -1588,7 +1594,7 @@ Public Class Movie
                     If _scrapedMovie.fullmoviebody.mpaa = "Rated " Then _scrapedMovie.fullmoviebody.mpaa = ""
                 End If
 
-                If _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "" Then _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                If _scrapedMovie.fullmoviebody.SetName = "" Then _scrapedMovie.fullmoviebody.SetName = "-None-"
 
                 ''' Test if XBMC TMDB language is same as Preferred Language
                 ''' So we can scrape the rescrape MovieSet name in the preferred language
@@ -1598,8 +1604,8 @@ Public Class Movie
 
 
                 If Pref.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-						_scrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
-						_scrapedMovie.fullmoviebody.MovieSet.MovieSetId   = tmdb.Movie.belongs_to_collection.id 
+						_scrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
+						_scrapedMovie.fullmoviebody.SetId   = tmdb.Movie.belongs_to_collection.id 
                 End If
             Catch
                 Throw New Exception ("offline")
@@ -2389,7 +2395,7 @@ Public Class Movie
     End Sub
 
     Sub DownloadMovieSetArt()
-        If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.MovieSet.MovieSetId <> "" Then
+        If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.SetId <> "" Then
             If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) Or Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Pref.overwritethumbs Then
                 DoDownloadMovieSetArtwork()
             End If
@@ -2400,7 +2406,7 @@ Public Class Movie
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
             Dim _api As New TMDb
 
-            _api.SetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
+            _api.SetId = _scrapedMovie.fullmoviebody.SetId
 
             '_scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
 
@@ -3257,7 +3263,7 @@ Public Class Movie
             If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
             If Cancelled() Then Exit Sub
 
-            If _scrapedMovie.fullmoviebody.MovieSet.MovieSetId="" And rl.missingmovsetart Then
+            If _scrapedMovie.fullmoviebody.SetId="" And rl.missingmovsetart Then
                 rl.tmdb_set_name = True
             End If
 
@@ -3265,38 +3271,40 @@ Public Class Movie
                 Try
                     Dim skip = False
                     Try
-                        Dim movieSet = _parent.FindMovieSetInfoByName(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName)
+                        Dim movieSet = _parent.FindMovieSetInfoByName(_scrapedMovie.fullmoviebody.SetName)
                         If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
-                            _scrapedMovie.fullmoviebody.MovieSet = movieSet
+                            _scrapedMovie.fullmoviebody.SetName = movieSet.MovieSetName
+                            _scrapedMovie.fullmoviebody.SetId   = movieSet.MovieSetId
                             skip = True
                         End If 
                     Catch
                     End Try
 
                     If Not skip Then
-                        _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-"
+                        _rescrapedMovie.fullmoviebody.SetName = "-None-"
                         If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                             If rl.tmdb_set_name Then
-                                _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = tmdb.Movie.belongs_to_collection.name
+                                _rescrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
                             Else
-                                _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
+                                _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
                             End If
-                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = tmdb.Movie.belongs_to_collection.id
+                            _rescrapedMovie.fullmoviebody.SetId = tmdb.Movie.belongs_to_collection.id
 
                             '_scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
 
                         Else
-                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetName = _scrapedMovie.fullmoviebody.MovieSet.MovieSetName
-                            _rescrapedMovie.fullmoviebody.MovieSet.MovieSetId = _scrapedMovie.fullmoviebody.MovieSet.MovieSetId
+                            _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
+                            _rescrapedMovie.fullmoviebody.SetId   = _scrapedMovie.fullmoviebody.SetId
                         End If
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.MovieSet, _scrapedMovie.fullmoviebody.MovieSet, , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetName, , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetId  , _scrapedMovie.fullmoviebody.SetId  , , rl.EmptyMainTags)
                     End If
                 Catch
                 End Try
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.missingmovsetart AndAlso Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.MovieSet.MovieSetId) Then DoDownloadMovieSetArtwork()
+            If rl.missingmovsetart AndAlso Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.SetId) Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
@@ -3336,6 +3344,16 @@ Public Class Movie
         If rl.Rename_Folders Then ReportProgress(, RenameMovFolder)
         
         ReportProgress(, vbCrLf)
+        UpdateCaches()
+    End Sub
+
+    Sub LockSpecific(field As String)
+
+        Dim lst = _scrapedMovie.fullmoviebody.LockedFields
+        
+        If Not lst.Contains(field) then lst.Add(field)
+
+        SaveNFO()
         UpdateCaches()
     End Sub
 
@@ -3385,7 +3403,7 @@ Public Class Movie
         End If
 
         If IsNothing(McMovieSetInfo) Then
-            _scrapedMovie.fullmoviebody.MovieSet.MovieSetName = "-None-" 
+            _scrapedMovie.fullmoviebody.SetName = "-None-" 
             Return
         End If
 
@@ -4071,8 +4089,8 @@ Public Class Movie
                     If s.Contains("%1") Then
                         Dim firstchar As String = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.title.SafeTrim, True).Substring(0,1)
                         If s.Contains("%N") Then
-                            If Not _scrapedMovie.fullmoviebody.MovieSet.MovieSetName.ToLower = "-none-" Then
-                                firstchar = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName.SafeTrim, True).Substring(0,1)
+                            If Not _scrapedMovie.fullmoviebody.SetName.ToLower = "-none-" Then
+                                firstchar = Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.SetName.SafeTrim, True).Substring(0,1)
                             End If
                         End If
                         If IsNumeric(firstchar) Then
@@ -4090,7 +4108,7 @@ Public Class Movie
                     s = s.Replace("%R", _scrapedMovie.fullmoviebody.rating)
                     s = s.Replace("%M", _scrapedMovie.fullmoviebody.mpaa)
                     s = s.Replace("%G", vgenre)
-                    s = s.Replace("%N", If(Pref.MovSetIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.MovieSet.MovieSetName, True), _scrapedMovie.fullmoviebody.MovieSet.MovieSetName))
+                    s = s.Replace("%N", If(Pref.MovSetIgnArticle, Pref.RemoveIgnoredArticles(_scrapedMovie.fullmoviebody.SetName, True), _scrapedMovie.fullmoviebody.SetName))
                     s = s.Replace("%V", vr)        
                     s = s.Replace("%A", ac1)
                     s = s.Replace("%O", ach)

@@ -154,6 +154,7 @@ Partial Class Form1
         Me.tsmiMov_Separator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiMov_RescrapeAll = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_RescrapeSpecific = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_LockSpecific = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeActors = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeCert = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRescrapeCountry = New System.Windows.Forms.ToolStripMenuItem()
@@ -191,6 +192,10 @@ Partial Class Form1
         Me.tsmiDlTrailer = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiRescrapeRenameFiles = New System.Windows.Forms.ToolStripMenuItem()
+
+        Me.tsmiLockSet = New System.Windows.Forms.ToolStripMenuItem()
+
+
         Me.tsmiMov_Separator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiMov_SetWatched = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_ClearWatched = New System.Windows.Forms.ToolStripMenuItem()
@@ -2387,7 +2392,7 @@ Partial Class Form1
         '
         'MovieContextMenu
         '
-        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbMoviePage, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
+        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbMoviePage, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_LockSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
         Me.MovieContextMenu.Name = "ContextMenuStrip1"
         Me.MovieContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.MovieContextMenu.Size = New System.Drawing.Size(242, 508)
@@ -2515,6 +2520,13 @@ Partial Class Form1
         Me.tsmiMov_RescrapeSpecific.Name = "tsmiMov_RescrapeSpecific"
         Me.tsmiMov_RescrapeSpecific.Size = New System.Drawing.Size(241, 22)
         Me.tsmiMov_RescrapeSpecific.Text = "Rescrape Specific"
+
+
+        Me.tsmiMov_LockSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiLockSet})
+        Me.tsmiMov_LockSpecific.Name = "tsmiMov_LockSpecific"
+        Me.tsmiMov_LockSpecific.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_LockSpecific.Text = "Lock Specific"
+
         '
         'tsmiRescrapeActors
         '
@@ -2742,6 +2754,13 @@ Partial Class Form1
         Me.tsmiRescrapeRenameFiles.Size = New System.Drawing.Size(188, 22)
         Me.tsmiRescrapeRenameFiles.Text = "Rename files"
         Me.tsmiRescrapeRenameFiles.ToolTipText = resources.GetString("tsmiRescrapeRenameFiles.ToolTipText")
+
+
+        Me.tsmiLockSet.Name = "tsmiLockSet"
+        Me.tsmiLockSet.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiLockSet.Text = "Lock Set"
+        Me.tsmiLockSet.Tag  = "set"
+
         '
         'tsmiMov_Separator5
         '
@@ -14634,13 +14653,13 @@ End Sub
     Friend WithEvents MovieTableContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents MarkAllSelectedAsWatchedToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MarkAllSelectedAsUnWatchedToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-
     Friend WithEvents btn_movTableApply As System.Windows.Forms.Button
     Friend WithEvents GoToToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GoToSelectedMoviePosterSelectorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GoToSelectedMovieFanartSelectorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lbl_movTableMulti As System.Windows.Forms.Label
     Friend WithEvents tsmiMov_RescrapeSpecific As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_LockSpecific As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiRescrapeTitle As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiRescrapeplot As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiRescrapeTagline As System.Windows.Forms.ToolStripMenuItem
@@ -14859,6 +14878,13 @@ End Sub
     Friend WithEvents tv_PictureBoxRight As System.Windows.Forms.PictureBox
     Friend WithEvents tsmiRescrapeTMDbSetName As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsmiRescrapeRenameFiles As System.Windows.Forms.ToolStripMenuItem
+
+
+    Friend WithEvents tsmiLockSet As System.Windows.Forms.ToolStripMenuItem
+
+
+
+
     Friend WithEvents btnMovieSetsRepopulateFromUsed As System.Windows.Forms.Button
     Friend WithEvents btnMovRefreshAll As System.Windows.Forms.Button
     Friend WithEvents Label126 As System.Windows.Forms.Label
