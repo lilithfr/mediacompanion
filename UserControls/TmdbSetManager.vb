@@ -25,7 +25,7 @@ Public Class TmdbSetManager
 #Region "Properties"
 
 
-    Property MyMovies As Movies
+    Property MoviesLst As Movies
         Get
             Return _movies
         End Get
@@ -71,7 +71,7 @@ Public Class TmdbSetManager
 
     Public Sub UpdateMovieSetsDataTable
 
-        Dim q = From x As MovieSetInfo In MyMovies.MovieSetDB Select x.MovieSetId, x.MovieSetName, x.UserMovieSetName
+        Dim q = From x As MovieSetInfo In MoviesLst.MovieSetDB Select x.MovieSetId, x.MovieSetName, x.UserMovieSetName
 
         dgvCustomSetNames.DataSource = q.CopyToDataTable()
     End Sub
@@ -103,23 +103,13 @@ Public Class TmdbSetManager
             Dim MovieSetId       As String = row("MovieSetId"      ).ToString
             Dim UserMovieSetName As String = row("UserMovieSetName").ToString
 
-            Dim MovieSet = FindMovieSetById(MovieSetId)
+            Dim MovieSet = MoviesLst.FindMovieSetInfoBySetId(MovieSetId)
             
             MovieSet.UserMovieSetName = UserMovieSetName
 
-            MyMovies.UpdateMovieCacheMovieSetInfo(MovieSet)
+            MoviesLst.UpdateMovieCacheSetName(MovieSet)
         Next
     End Sub
-
-#End Region
-
-
-
-#Region "Functions"
-
-    Function FindMovieSetById(MovieSetId As String) As MovieSetInfo
-        Return (From x In MyMovies.MovieSetDB Where x.MovieSetId=MovieSetId).FirstOrDefault
-    End Function
 
 #End Region
 

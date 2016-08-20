@@ -60,7 +60,7 @@ Public Class Movies
 
     Private _tagDb                  As New List(Of TagDatabase)
     Public _tmpTagDb                As New List(Of TagDatabase)
-    Public _tmpMoviesetDb           As New List(Of MovieSetInfo)
+'    Public _tmpMoviesetDb           As New List(Of MovieSetInfo)
     Public Shared movRebuildCaches  As Boolean = False
 
     Public Property Bw              As BackgroundWorker = Nothing
@@ -879,11 +879,11 @@ Public Class Movies
         Get
             Dim q = From x In MovieCache_NoDups 
                 Group By 
-                    x.MovieSet Into NumFilms=Count
+                    x.SetName Into NumFilms=Count
                 Where 
-                    SetsFilter_AlsoInclude.Contains(MovieSet.MovieSetDisplayName)
+                    SetsFilter_AlsoInclude.Contains(SetName)
             
-            Return From x In q Select x.MovieSet.MovieSetDisplayName & " (" & x.NumFilms.ToString  & " of " & GetMovieSetCollectionCount(x.MovieSet.MovieSetDisplayName) & ")"
+            Return From x In q Select x.SetName & " (" & x.NumFilms.ToString  & " of " & GetMovieSetCollectionCount(x.SetName) & ")"
         End Get
     End Property    
 
@@ -918,43 +918,36 @@ Public Class Movies
         Get
             Dim q = From x In MovieCache_NoDups 
                 Group By 
-                    x.MovieSet.MovieSetDisplayName Into NumFilms=Count
+                    x.SetName Into NumFilms=Count
                 Where 
                     NumFilms>=Pref.SetsFilterMinFilms 
 
             If Pref.MovieFilters_Sets_Order=0 Then 
-                q = From x In q Order by x.NumFilms Descending, x.MovieSetDisplayName Ascending
+                q = From x In q Order by x.NumFilms Descending, x.SetName Ascending
             Else
-                q = From x In q Order by x.MovieSetDisplayName.Replace("-None-","") Ascending , x.NumFilms Descending
+                q = From x In q Order by x.SetName.Replace("-None-","") Ascending , x.NumFilms Descending
             End If
 
-            Return From x In q Select x.MovieSetDisplayName & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxSetsInFilter 
-        End Get
-    End Property 
-	 
-   Public ReadOnly Property MovieCache_NoDups As IEnumerable(Of ComboList)
-        Get
-				Dim q = MovieCache.GroupBy(Function(x) x.id).Select(Function(grp) grp.First)
-
-				Return q.ToList()  
+            Return From x In q Select x.SetName & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.SetName) & ")" Take Pref.MaxSetsInFilter 
         End Get
     End Property 
 
-    Function GetMovieSetCollectionCount(MovieSetDisplayName As String) As String
 
-        If MovieSetDisplayName="-None-" Then
+    Function GetMovieSetCollectionCount(SetName As String) As String
+
+        If SetName="-None-" Then
             Return ""
         End If
 
-        Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
+        Dim movieSet = FindMovieSetInfoByName(SetName)
  
-        Dim x = FindUserTmdbSetAdditions(MovieSetDisplayName)
+        Dim x = FindUserTmdbSetAdditions(SetName)
         Dim userAdditions = ""
         If x.Count>0 Then
             userAdditions = " *" & x.Count.ToString & " user*"
         End If
 
-        If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
+        If IsNothing(movieSet) OrElse movieSet.MissingInfo Then
             Return " of unknown"
         Else
             Dim r = From m In movieSet.Collection Where IsDate(m.release_date) AndAlso (m.release_date < Date.Now) Select m
@@ -963,28 +956,27 @@ Public Class Movies
         End If
     End Function
 
+	 
+   Public ReadOnly Property MovieCache_NoDups As IEnumerable(Of ComboList)
+        Get
+			Dim q = MovieCache.GroupBy(Function(x) x.id).Select(Function(grp) grp.First)
 
-    Function FindMovieSetInfoByName(MovieSetDisplayName As String) As MovieSetInfo
-        Try
-            Return (From x In MovieSetDB Where x.MovieSetDisplayName = MovieSetDisplayName Select x).FirstOrDefault
-        Catch
-            Return Nothing
-        End Try
+			Return q.ToList()  
+        End Get
+    End Property 
+
+    Function FindMovieSetInfoByName(SetName As String) As MovieSetInfo
+        Return (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
     End Function
 
-    Function FindUserTmdbSetAdditions(MovieSetDisplayName As String) As IEnumerable(Of MovieSetInfo)
-        Try
-            Return (From x In MovieCache Where x.MovieSet.MovieSetDisplayName = MovieSetDisplayName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
-            'Return (From x In UserTmdbSetAdditions Where x.Msi.MovieSetDisplayName = MovieSetDisplayName Select x.Msi)
-        Catch
-            Return Nothing
-        End Try
+    Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
+        Return (From x In MovieCache Where x.SetName = SetName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
     End Function
 
 
     Public ReadOnly Property TmDbMovieSetIds As List(Of Integer)
         Get
-            Dim q = (From m In MovieCache Where IsNumeric(m.MovieSet.MovieSetId) Select Convert.ToInt32(m.MovieSet.MovieSetId)).Distinct()
+            Dim q = (From m In MovieCache Where IsNumeric(m.SetId) Select Convert.ToInt32(m.SetId)).Distinct()
 
             Return q.AsEnumerable.ToList
         End Get
@@ -1015,9 +1007,9 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property IncompleteMovieSetInfo As String
+    Public ReadOnly Property MissingTmdbMovieSetInfo As String
         Get
-            Return "Incomplete movie set info (" & (From x In MovieCache Where x.IncompleteMovieSet).Count & ")"
+            Return "Missing Tmdb movie set info (" & (From x In MovieCache Where x.MissingTmdbMovieSetInfo).Count & ")"
         End Get
     End Property
 
@@ -1066,58 +1058,43 @@ Public Class Movies
 
 
 
-    Public Sub RebuildUserTmdbSetAdditions
- '       _userTmdbSetAdditions.Clear
+    Public Sub AssignUnknownUserTmdbSetAdditions
 
-        Dim lst = From x In MovieCache Where x.UserTmdbSetAddition="" Select x
+        Dim lst = From x In MovieCache Where x.UserTmdbSetAddition=""
 
         For Each movie In lst
             movie.UserTmdbSetAddition = "N"
 
-            If movie.MovieSet.MovieSetName <> "-None-" Then
-                Dim q = (From x In MoviesetDb Where x.MovieSetName = movie.MovieSet.MovieSetName).FirstOrDefault
+            If movie.SetName <> "-None-" AndAlso Not IsNothing(movie.MovieSet) Then
+                Try
+                    Dim q2 = From x In movie.MovieSet.Collection Where x.TmdbMovieId = movie.tmdbid
 
-                If Not IsNothing(q) Then
-
-                    Try
-                        Dim q2 = From x In q.Collection Where x.TmdbMovieId = movie.tmdbid
-
-                        If q2.Count = 0 Then
-'                            _userTmdbSetAdditions.Add(New UserTmdbSetAddition(movie.tmdbid, movie.MovieSet))
-
-                            movie.UserTmdbSetAddition = "Y"
-                        End If
-                    Catch e As Exception
-                        dim yy = e
-                    End Try
-                End If
+                    If q2.Count = 0 Then
+                        movie.UserTmdbSetAddition = "Y"
+                    End If
+                Catch e As Exception
+                    dim yy = e
+                End Try
             End If
         Next
     End Sub
 
 
-
     Public Sub RebuildUnknownSetCount
-
         Dim lst = From x In MovieCache Where x.UnknownSetCount="" Select x
 
         For Each movie In lst
             movie.UnknownSetCount = "N"
 
-            Dim MovieSetDisplayName = movie.MovieSet.MovieSetDisplayName
-
-            If MovieSetDisplayName="-None-" Then
+            If movie.SetName = "-None-" Then
                 Return
             End If
 
-            Dim movieSet = FindMovieSetInfoByName(MovieSetDisplayName)
-
-            If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
+            If IsNothing(movie.MovieSet) OrElse movie.MovieSet.MissingInfo Then
                 movie.UnknownSetCount = "Y"
             End If
         Next
     End Sub
-
 
 
     Public ReadOnly Property MissingFromSetReleased As String
@@ -1160,25 +1137,21 @@ Public Class Movies
         End Get
     End Property
 
-
-    Public ReadOnly Property IncompleteMovieSets As List(Of MovieSetInfo)
-        Get
-            Dim q = From x In MovieCache
-                    Where
-                    x.IncompleteMovieSet
-                    Select
-                    x.MovieSet
-
-            Return q.AsEnumerable.ToList
-        End Get
-    End Property
+    'Unused
+    'Public ReadOnly Property IncompleteMovieSets As List(Of MovieSetInfo)
+    '    Get
+    '        Dim q = From x In MovieCache Where x.MissingTmdbMovieSetInfo Select x.MovieSet
+    '        Return q.ToList
+    '    End Get
+    'End Property
 
     Public ReadOnly Property MoviesSetsIncNone As List(Of String)
         Get
             Try
-                Dim q = From x In MovieCache Select ms = x.MovieSet.MovieSetName.Split("^~") Distinct
+                Dim q = From x In MovieCache Select ms = x.SetName Distinct     ' ??? x.SetName.Split("^~")  ???
 
-                Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList
+   '            Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList   ????
+                Return q.ToList
             Catch
                 Return New List(Of String)
             End Try
@@ -1336,21 +1309,21 @@ Public Class Movies
         Return q.Single
     End Function
 
-    Public Function FindCachedMovieSet(MovieSetName As String) As MovieSetInfo
-        Dim q = From m In _tmpMoviesetDb Where m.MovieSetName = MovieSetName
-        If q.Count = 0 Then Return Nothing
-        If q.Count > 1 Then Return q(0)
-        Try
-            Return q.Single
-        Catch ex As Exception
-            If ex.Message = "Sequence contains more than one element" Then
-                Return q(0)
-            End If
-            Dim Something As String = Nothing
-        End Try
-        Return Nothing
-        'Return q.single
-    End Function
+    'Public Function FindCachedMovieSet(MovieSetName As String) As MovieSetInfo
+    '    Dim q = From m In _tmpMoviesetDb Where m.MovieSetName = MovieSetName
+    '    If q.Count = 0 Then Return Nothing
+    '    If q.Count > 1 Then Return q(0)
+    '    Try
+    '        Return q.Single
+    '    Catch ex As Exception
+    '        If ex.Message = "Sequence contains more than one element" Then
+    '            Return q(0)
+    '        End If
+    '        Dim Something As String = Nothing
+    '    End Try
+    '    Return Nothing
+    '    'Return q.single
+    'End Function
 
     Public Function FindData_GridViewCachedMovie(fullpathandfilename As String) As Data_GridViewMovie
         Dim q = From m In _data_GridViewMovieCache Where m.fullpathandfilename = fullpathandfilename
@@ -1816,8 +1789,8 @@ Public Class Movies
                                 Case "source"               : newmovie.source = detail.InnerText
                                 Case "director"             : newmovie.director = detail.InnerText
                                 Case "credits"              : newmovie.credits = detail.InnerText
-                                Case "set"                  : newmovie.MovieSet.MovieSetName = detail.InnerText
-                                Case "setid"                : newmovie.MovieSet.MovieSetId = detail.InnerText
+                                Case "set"                  : newmovie.SetName = detail.InnerText
+                                Case "setid"                : newmovie.SetId = detail.InnerText
                                 Case "sortorder"            : newmovie.sortorder = detail.InnerText
                                 Case "filedate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
@@ -1903,15 +1876,11 @@ Public Class Movies
 
                             End Select
                         Next
-                        If newmovie.source = Nothing Then
-                            newmovie.source = ""
+
+                        If newmovie.SetName = "" Then
+                            newmovie.SetName = "-None-"
                         End If
-                        If newmovie.MovieSet.MovieSetName = Nothing Then
-                            newmovie.MovieSet.MovieSetName = "-None-"
-                        End If
-                        If newmovie.MovieSet.MovieSetName = "" Then
-                            newmovie.MovieSet.MovieSetName = "-None-"
-                        End If
+
                         MovieCache.Add(newmovie)
                 End Select
             Next
@@ -1948,13 +1917,13 @@ Public Class Movies
             childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
             childchild = doc.CreateElement("credits") : childchild.InnerText = movie.credits  : child.AppendChild(childchild)
 
-            'If movie.MovieSet.MovieSetName <> Nothing Then
-            If Not String.IsNullOrEmpty(movie.MovieSet.MovieSetName) AndAlso movie.MovieSet.MovieSetName <> "-None-" Then
+            If Movie.InASet Then
                 childchild = doc.CreateElement("set")
-                childchild.InnerText = movie.MovieSet.MovieSetName
+                childchild.InnerText = movie.SetName
                 child.AppendChild(childchild)
+
                 childchild = doc.CreateElement("setid")
-                childchild.InnerText = movie.MovieSet.MovieSetId 
+                childchild.InnerText = movie.SetId 
                 child.AppendChild(childchild)
             Else
                 childchild = doc.CreateElement("set")
@@ -1964,15 +1933,10 @@ Public Class Movies
                 childchild.InnerText = ""
                 child.AppendChild(childchild)
             End If
-            'Else
-            '    childchild = doc.CreateElement("set")
-            '    childchild.InnerText = ""
-            '    child.AppendChild(childchild)
-                
-            'End If
+
             childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
             childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
-            childchild = doc.CreateElement("studios") : childchild.InnerText = movie.studios : child.AppendChild(childchild)
+            childchild = doc.CreateElement("studios"  ) : childchild.InnerText = movie.studios   : child.AppendChild(childchild)
 
             For Each item In movie.movietag
                 childchild = doc.CreateElement("tag")
@@ -2117,7 +2081,7 @@ Public Class Movies
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
-        RebuildUserTmdbSetAdditions()
+        AssignUnknownUserTmdbSetAdditions()
         RebuildUnknownSetCount()
         Rebuild_Data_GridViewMovieCache()
 
@@ -2199,7 +2163,7 @@ Public Class Movies
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
         RebuildUnknownSetCount()
-        RebuildUserTmdbSetAdditions()
+        AssignUnknownUserTmdbSetAdditions()
 
         Rebuild_Data_GridViewMovieCache
 
@@ -2880,14 +2844,14 @@ Public Class Movies
             For Each act In movie.Actorlist
                 _actorDb.Add(New Databases(act.actorname, movie.id))
             Next
-            If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
-                If _tmpMoviesetDb.Count = 0 Then
-                    _tmpMoviesetDb.Add(movie.MovieSet)
-                Else
-                    Dim q = From item In _tmpMoviesetDb Where item.MovieSetName = movie.MovieSet.MovieSetName
-                    If q.Count = 0 Then _tmpMoviesetDb.Add(movie.MovieSet)
-                End If
-            End If
+            'If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
+            '    If _tmpMoviesetDb.Count = 0 Then
+            '        _tmpMoviesetDb.Add(movie.MovieSet)
+            '    Else
+            '        Dim q = From item In _tmpMoviesetDb Where item.MovieSetName = movie.MovieSet.MovieSetName
+            '        If q.Count = 0 Then _tmpMoviesetDb.Add(movie.MovieSet)
+            '    End If
+            'End If
 
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
@@ -2918,17 +2882,17 @@ Public Class Movies
         'For Each item In q3.Distinct()
         '    _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
         'Next
-        If Not _tmpMoviesetDb.Count = 0 AndAlso _tmpMoviesetDb(0).MovieSetName.ToLower = "-none-" Then _tmpMoviesetDb.RemoveAt(0)
-        For each mset As MovieSetInfo In _tmpMoviesetDb
-            Dim q = From item In MovSetDbTmp Where item.MovieSetName = mset.MovieSetName
-            If q.Count <> 1 Then Continue For
-            Dim ac As New MovieSetInfo
-            ac = q.Single
-            mset.Collection = ac.Collection
+        'If Not _tmpMoviesetDb.Count = 0 AndAlso _tmpMoviesetDb(0).MovieSetName.ToLower = "-none-" Then _tmpMoviesetDb.RemoveAt(0)
+        'For each mset As MovieSetInfo In _tmpMoviesetDb
+        '    Dim q = From item In MovSetDbTmp Where item.MovieSetName = mset.MovieSetName
+        '    If q.Count <> 1 Then Continue For
+        '    Dim ac As New MovieSetInfo
+        '    ac = q.Single
+        '    mset.Collection = ac.Collection
 
-        Next
+        'Next
 
-        _moviesetDb.AddRange(_tmpMoviesetDb)
+        '_moviesetDb.AddRange(_tmpMoviesetDb)
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()
@@ -3381,7 +3345,7 @@ Public Class Movies
 
         Dim c As MovieSetInfo = Nothing
         Try
-            c = FindMovieSetInfoByName(movieSetInfo.MovieSetName)
+            c = FindMovieSetInfoBySetId(movieSetInfo.MovieSetId)
         Catch ex As Exception
         End Try
 
@@ -3393,15 +3357,17 @@ Public Class Movies
         c.Assign(movieSetInfo)
     End Sub
 
+    Function FindMovieSetInfoBySetId(SetId As String) As MovieSetInfo
+        Return (From x In MovieSetDB Where x.MovieSetId=SetId).FirstOrDefault
+    End Function
 
 
-    Sub UpdateMovieCacheMovieSetInfo(MovieSet As MovieSetInfo)
+    Sub UpdateMovieCacheSetName(MovieSet As MovieSetInfo)
 
-        Dim res = (From x In MovieCache Where x.MovieSet.MovieSetId=MovieSet.MovieSetId)
+        Dim res = (From x In MovieCache Where x.SetId=MovieSet.MovieSetId)
 
         For Each m In res
-            m.SetName = MovieSet.MovieSetName
-            m.SetId   = MovieSet.MovieSetId
+            m.SetName = MovieSet.MovieSetDisplayName
 
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
 

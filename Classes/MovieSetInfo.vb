@@ -38,6 +38,14 @@ Public Class MovieSetInfo
     End Property   
 
 
+    Public ReadOnly Property MissingInfo As Boolean
+        Get
+            Return MovieSetId="" OrElse MovieSetId="0" OrElse IsNothing(Collection) OrElse Collection.Count=0
+        End Get
+    End Property   
+
+    
+
     Sub New
     End Sub
 

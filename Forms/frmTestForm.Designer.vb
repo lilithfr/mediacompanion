@@ -71,7 +71,7 @@ Partial Class frmTestForm
         '
         Me.TmdbSetManager1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TmdbSetManager1.Location = New System.Drawing.Point(0, 0)
-        Me.TmdbSetManager1.MyMovies = Nothing
+        Me.TmdbSetManager1.MoviesLst = Nothing
         Me.TmdbSetManager1.Name = "TmdbSetManager1"
         Me.TmdbSetManager1.Size = New System.Drawing.Size(645, 335)
         Me.TmdbSetManager1.TabIndex = 0

@@ -18,7 +18,7 @@ Partial Public Class Form1
             Dim frm As New frmTestForm
 
             frm.TmdbSetManager1.Init
-            frm.TmdbSetManager1.MyMovies = oMovies
+            frm.TmdbSetManager1.MoviesLst = oMovies
 
             If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
                 UpdateFilteredList

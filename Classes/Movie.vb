@@ -385,18 +385,18 @@ Public Class Movie
         End Get
     End Property
 
-    ReadOnly Property MovieSet As MovieSetInfo 
-        Get
-            Try
-                If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
+    'ReadOnly Property MovieSet As MovieSetInfo 
+    '    Get
+    '        Try
+    '            If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
 
-                Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
+    '            Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
 
-            Catch
-                Return Nothing
-            End Try
-        End Get
-    End Property
+    '        Catch
+    '            Return Nothing
+    '        End Try
+    '    End Get
+    'End Property
 
     ReadOnly Property MovieSetByName As MovieSetInfo 
         Get
@@ -1213,7 +1213,7 @@ Public Class Movie
         If movRebuildCaches Then 
             UpdateActorCacheFromEmpty
             UpdateDirectorCacheFromEmpty
-            UpdateMovieSetCacheFromEmpty 
+'           UpdateMovieSetCacheFromEmpty 
         End If
 
         If Not Pref.usefoldernames Then
@@ -1284,23 +1284,22 @@ Public Class Movie
         AssignMovieToAddMissingData
         AssignUserTmdbSetAddition
         AssignUnknownSetCount
-
     End Sub
 
 
 
     Sub AssignUserTmdbSetAddition
         _movieCache.UserTmdbSetAddition = "N"
-        If _movieCache.MovieSet.MovieSetName <> "-None-" Then
-            Dim q = (From x In _parent.MovieSetDB  Where x.MovieSetName = _movieCache.MovieSet.MovieSetName).FirstOrDefault
+        If _movieCache.SetId <> "" Then
 
-            If Not IsNothing(q) Then
+            Dim movieSet = _parent.FindMovieSetInfoBySetId(_movieCache.SetId) 
+
+            If Not IsNothing(movieSet) Then
 
                 Try
-                    Dim q2 = From x In q.Collection Where x.TmdbMovieId=_movieCache.tmdbid
+                    Dim q = From x In movieSet.Collection Where x.TmdbMovieId=_movieCache.tmdbid
 
-                    If q2.Count=0 Then
-'                       _parent.UserTmdbSetAdditions.Add(New UserTmdbSetAddition(_movieCache.tmdbid, _movieCache.MovieSet))
+                    If q.Count=0 Then
                         _movieCache.UserTmdbSetAddition = "Y"
                     End If
                 Catch e As Exception
@@ -1315,15 +1314,11 @@ Public Class Movie
 
         _movieCache.UnknownSetCount = "N"
 
-        Dim MovieSetDisplayName = _movieCache.MovieSet.MovieSetDisplayName
-
-        If MovieSetDisplayName="-None-" Then
+        If _movieCache.SetName="-None-" Then
             Return
         End If
 
-        Dim movieSet = _parent.FindMovieSetInfoByName(MovieSetDisplayName)
-
-        If IsNothing(movieSet) OrElse IsNothing(movieSet.Collection) OrElse movieSet.Collection.Count=0 Then
+        If _movieCache.InTmdbSet And _movieCache.MovieSet.Collection.Count=0 Then
             _movieCache.UnknownSetCount = "Y"
         End If
     End Sub
@@ -3393,9 +3388,15 @@ Public Class Movie
 
     Sub UpdateMovieSetCache
 
-        If Not IsNothing(MovieSet) Then
+    '            If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
+
+    '            Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
+
+
+
+        If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
-                If _parent.FindMovieSetInfoByName(MovieSet.MovieSetDisplayName).DaysOld < 7 Then
+                If _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.SetId).DaysOld < 7 Then
                     Return
                 End If 
             Catch
@@ -3467,20 +3468,25 @@ Public Class Movie
         _parent._tmpDirectorDb.Add(Director)
     End Sub
 
-    Sub UpdateMovieSetCacheFromEmpty
-        If IsNothing(MovieSet) Then Exit Sub
-        Dim key = _movieCache.MovieSet.MovieSetName
-        Dim c As MovieSetInfo = Nothing
 
-        Try
-            c = _parent.FindCachedMovieSet(key)
-        Catch ex As Exception
-        End Try
+    'Sub UpdateMovieSetCacheFromEmpty
 
-        If Not IsNothing(c) Then Return
-        'RemoveMovieSetFromCache 
-        _parent._tmpMoviesetDb.Add(_movieCache.MovieSet)
-    End Sub
+    '    If IsNothing(MovieSet) Then Exit Sub
+
+    '    Dim key = _movieCache.MovieSet.MovieSetName
+    '    Dim c As MovieSetInfo = Nothing
+
+    '    Try
+    '        c = _parent.FindCachedMovieSet(key)
+    '    Catch ex As Exception
+    '    End Try
+
+    '    If Not IsNothing(c) Then Return
+
+    '    'RemoveMovieSetFromCache 
+    '  '  _parent._tmpMoviesetDb.Add(_movieCache.MovieSet)
+    'End Sub
+
 
     Sub UpdateTagCacheFromEmpty
         If Tags.Count = 0 Then Exit Sub

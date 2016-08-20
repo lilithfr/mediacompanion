@@ -2267,13 +2267,9 @@ Public Class WorkingWithNfoFiles
                             Case "originaltitle"
                                 newmovie.originaltitle = thisresult.InnerText
                             Case "set"
-                                If newmovie.MovieSet.MovieSetName = "" Then                     'Only one Set per movie.
-                                    newmovie.MovieSet.MovieSetName = thisresult.InnerText
-                                'Else
-                                '    newmovie.MovieSet.MovieSetName = newmovie.MovieSet.MovieSetName & " / " & thisresult.InnerText
-                                End If
+                                newmovie.SetName = thisresult.InnerText
                             Case "setid"
-                                newmovie.MovieSet.MovieSetId = thisresult.InnerText 
+                                newmovie.SetId = thisresult.InnerText 
                             Case "source"
                                 newmovie.source = thisresult.InnerText
                             Case "diretor"
@@ -2438,7 +2434,7 @@ Public Class WorkingWithNfoFiles
                 If newmovie.source = Nothing Then newmovie.source = ""
                 If newmovie.director = Nothing Then newmovie.director = ""
                 If newmovie.credits = Nothing Then newmovie.credits = ""
-                If newmovie.MovieSet.MovieSetName = "" Or newmovie.MovieSet.MovieSetName = Nothing Then newmovie.MovieSet.MovieSetName = "-None-"
+                If newmovie.SetName = "" Then newmovie.SetName = "-None-"
                 'If newmovie.tag = Nothing Then newmovie.tag = ""
                 'if there is no entry for originaltitle, then use the current title. this should only come into use
                 'for old movies since new ones will have the originaltitle created when scraped

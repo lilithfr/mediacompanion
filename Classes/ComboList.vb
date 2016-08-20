@@ -89,11 +89,7 @@ Public Class ComboList
 
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get
-            Try
-                Return oMovies.FindMovieSetInfoByName(SetName)
-            Catch
-                Return New MovieSetInfo
-            End Try
+            Return oMovies.FindMovieSetInfoByName(SetName)
         End Get
     End Property
 
@@ -288,24 +284,32 @@ Public Class ComboList
         End Get
     End Property
 
-    Public ReadOnly Property IncompleteMovieSet As Boolean
+    Public ReadOnly Property MissingTmdbMovieSetInfo As Boolean
         Get
-        '    Try
-                Return InASet And (MovieSet.MovieSetId="" OrElse MovieSet.MovieSetId="0" OrElse IsNothing(MovieSet.Collection) OrElse MovieSet.Collection.Count=0)
-        '    Catch ex As Exception
-        '        Dim d = ex
-        '    End Try
+            Return InASet AndAlso MovieSet.MissingInfo
         End Get
     End Property  
 
 
     Public ReadOnly Property InASet As Boolean
         Get
-            If IsNothing(MovieSet) Then Return False
-            Return MovieSet.MovieSetDisplayName <> "-None-" 
+            Return SetName <> "-None-" 
         End Get
     End Property  
 
+
+    Public ReadOnly Property InTmdbSet As Boolean
+        Get
+            Return Not IsNothing(MovieSet) 
+        End Get
+    End Property  
+
+
+    Public ReadOnly Property GotTmdbId As Boolean
+        Get
+            Return tmdbid<>"" AndAlso Integer.TryParse(tmdbid,Nothing)
+        End Get
+    End Property  
 
 
     Public ReadOnly Property Watched As Boolean
@@ -489,7 +493,10 @@ Public Class ComboList
         Me.Container            = From.Container
         Me.VideoMissing         = From.VideoMissing
         AssignSubtitleLang(From.SubLang)
-        Me.MovieSet.Assign(From.MovieSet)
+
+        Me.SetName              = From.SetName
+        Me.SetId                = From.SetId
+
         Me.stars                = From.stars
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 

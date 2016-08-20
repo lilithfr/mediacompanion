@@ -3443,8 +3443,10 @@ Public Class Form1
                 workingMovie.tmdbid = queryList(0).tmdbid
 
                 tsmiMov_PlayTrailer.Visible = Not queryList(0).MissingTrailer
-                tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(workingMovie.MovieSet.MovieSetId,Nothing)
-                tsmiMov_ViewMovieDbMoviePage.Enabled = Integer.TryParse(workingMovie.tmdbid,Nothing) And Not workingMovie.tmdbid=""
+
+                tsmiMov_ViewMovieDbSetPage  .Enabled = workingMovie.InTmdbSet
+                tsmiMov_ViewMovieDbMoviePage.Enabled = workingMovie.GotTmdbId
+
                 Call mov_FormPopulate(yielding)
             Else
                 If needtoload = True Then Call mov_FormPopulate(yielding)
@@ -3707,8 +3709,9 @@ Public Class Form1
                     Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
 
                     tsmiMov_PlayTrailer.Visible = Not movie.MissingTrailer
-                    tsmiMov_ViewMovieDbSetPage.Enabled = Not IsNothing(workingMovie.MovieSet) AndAlso Integer.TryParse(movie.MovieSet.MovieSetId,Nothing)
-                    tsmiMov_ViewMovieDbMoviePage.Enabled = Integer.TryParse(workingMovie.tmdbid,Nothing) And Not workingMovie.tmdbid=""
+
+                    tsmiMov_ViewMovieDbSetPage  .Enabled = workingMovie.InTmdbSet
+                    tsmiMov_ViewMovieDbMoviePage.Enabled = workingMovie.GotTmdbId
                 Catch
                 End Try
                 
@@ -8255,7 +8258,7 @@ Public Class Form1
             Catch
             End Try
             If oCachedMovie.source <> If(IsDBNull(gridrow.Cells("source").Value), "", gridrow.Cells("source").Value) Then changed = True
-            If oCachedMovie.MovieSet.MovieSetName <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
+            If oCachedMovie.SetName <> If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value) Then changed = True
             If oCachedMovie.usrrated <> gridrow.Cells("userrated").Value Then changed = True
             If changed And IO.File.Exists(oCachedMovie.fullpathandfilename) Then
 
@@ -8289,21 +8292,21 @@ Public Class Form1
                 Try
                     Dim NewSetName As String = If(IsDBNull(gridrow.Cells("set").Value), "", gridrow.Cells("set").Value)
                     If NewSetName = "" Then
-                        oCachedMovie.MovieSet.MovieSetName = ""
-                        oCachedMovie.MovieSet.MovieSetId = ""
+                        oCachedMovie.SetName = ""
+                        oCachedMovie.SetId = ""
                     Else
                         Dim aok As Boolean = False
                         For Each m In oMovies.MovieSetDB
                             If m.MovieSetName = NewSetName Then
-                                oCachedMovie.MovieSet.MovieSetName = m.MovieSetName
-                                oCachedMovie.MovieSet.MovieSetId = m.MovieSetId
+                                oCachedMovie.SetName = m.MovieSetName           ' ********* CHECK **********
+        '                       oCachedMovie.SetId = m.MovieSetId
                                 aok = True
                             End If
                         Next
                         If Not aok Then
                             For each m In Pref.moviesets
                                 If m = NewSetName Then
-                                    oCachedMovie.MovieSet.MovieSetName = m
+                                    oCachedMovie.SetName = m                    ' ********* CHECK **********
                                     Exit For
                                 End If
                             Next
@@ -8335,8 +8338,8 @@ Public Class Form1
                 oMovie.ScrapedMovie.fullmoviebody.genre                 = oCachedMovie.genre
                 oMovie.ScrapedMovie.fullmoviebody.rating                = oCachedMovie.rating
                 oMovie.ScrapedMovie.fullmoviebody.source                = oCachedMovie.source
-                oMovie.ScrapedMovie.fullmoviebody.SetName = oCachedMovie.MovieSet.MovieSetName
-                oMovie.ScrapedMovie.fullmoviebody.SetId   = oCachedMovie.MovieSet.MovieSetId 
+                oMovie.ScrapedMovie.fullmoviebody.SetName               = oCachedMovie.SetName                '***** CHECK ****
+'               oMovie.ScrapedMovie.fullmoviebody.SetId                 = oCachedMovie.MovieSet.MovieSetId 
                 oMovie.ScrapedMovie.fullmoviebody.sortorder             = oCachedMovie.sortorder
                 oMovie.ScrapedMovie.fullmoviebody.top250                = oCachedMovie.top250
                 oMovie.ScrapedMovie.fullmoviebody.director              = oCachedMovie.director 
@@ -13338,7 +13341,7 @@ Public Class Form1
         For Each row As DataGridViewRow In dgvmovset.Rows
             Dim mset As String = row.Cells(0).Value
             For Each mov In oMovies.MovieCache
-                If mov.MovieSet.MovieSetName = mset Then
+                If mov.SetName = mset Then
                     Dim movsetfanart As String = Pref.GetMovSetFanartPath(mov.fullpathandfilename, mset)
                     Dim movsetposter As String = Pref.GetMovSetPosterPath(mov.fullpathandfilename, mset)
                     If File.Exists(movsetfanart) Then
@@ -13362,7 +13365,7 @@ Public Class Form1
         For Each row As DataGridViewRow In dgvMovieSets.Rows
             Dim mset As String = row.Cells(0).Value
             For Each mov In oMovies.MovieCache
-                If mov.MovieSet.MovieSetName = mset Then
+                If mov.SetName = mset Then
                     Dim movsetfanart As String = Pref.GetMovSetFanartPath(mov.fullpathandfilename, mset)
                     Dim movsetposter As String = Pref.GetMovSetPosterPath(mov.fullpathandfilename, mset)
                     If File.Exists(movsetfanart) Then
@@ -13718,7 +13721,7 @@ Public Class Form1
     Private Function RemoveFromMovieSetCache(ByVal s As String) As Boolean
         Dim aok As Boolean = True
         For Each mov In oMovies.MovieCache
-            If mov.MovieSet.MovieSetName = s Then
+            If mov.SetName = s Then
                 aok = False
                 Exit For
             End If
@@ -18386,18 +18389,13 @@ Public Class Form1
 
     Private Sub tsmiMov_ViewMovieDbMoviePage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbMoviePage.Click
 
-        dim tmdbId = workingMovie.tmdbid
-
-        OpenUrl(TMDB_MOVIE_URL & tmdbId)
-
+        OpenUrl(TMDB_MOVIE_URL & workingMovie.tmdbid)
     End Sub
 
 
     Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
 
-        dim msi As MovieSetInfo = workingMovie.MovieSet
-
-        OpenUrl(TMDB_SET_URL & msi.MovieSetId)
+        OpenUrl(TMDB_SET_URL & workingMovie.SetId)
 
     End Sub
 

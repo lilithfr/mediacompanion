@@ -650,11 +650,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property IncompleteMovieSet As Boolean
         Get
-            'Try
-                Return InASet And (MovieSet.MovieSetId="" OrElse MovieSet.MovieSetId="0" OrElse IsNothing(MovieSet.Collection) OrElse MovieSet.Collection.Count=0)
-            'Catch ex As Exception
-            '    Dim d = ex
-            'End Try
+            Return InASet AndAlso MovieSet.MissingInfo
         End Get
     End Property  
 
