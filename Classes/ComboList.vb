@@ -5,7 +5,7 @@ Imports System.Linq
 
 Public Class ComboList
 
-    Property Fullpathandfilename  As String = "" 
+    Property fullpathandfilename  As String = "" 
     'Property MovieSet             As String = ""
     Property filename             As String = ""
     Property foldername           As String = ""
@@ -43,7 +43,7 @@ Public Class ComboList
             Return _setId
         End Get
         Set
-            If Not Locked("setid") Then
+            If Not Locked("set") Then
                 _setId = value
             End If
         End Set
@@ -63,7 +63,7 @@ Public Class ComboList
         End Get
     End Property
 
-    Property studios              As String
+    Property studios As String
 
     Public ReadOnly Property studioslist As List(Of String)
         Get

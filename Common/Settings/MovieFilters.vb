@@ -124,6 +124,7 @@ Public Class MovieFilters
                 lblMode.Visible   = item.Visible
 
                 Dim filter As MC_UserControls.TriStateCheckedComboBox = c
+
                 filter.QuickSelect = item.QuickSelect
 
                 lblMode.Text = If(filter.QuickSelect, "S", "M" )

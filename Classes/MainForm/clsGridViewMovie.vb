@@ -316,11 +316,7 @@ Public Class clsGridViewMovie
                 Case "Outline contains html"       : b = From f In b Where f.OutlineContainsHtml
                 Case "User set additions"          : b = From f In b Where f.UserSetAddition="Y"
                 Case "Missing Tmdb set info"       : b = From f In b Where f.MissingTmdbSetInfo="Y"
-                                                                     
-
             End Select
-
-
         End If
 
         If Yield Then Return
@@ -354,8 +350,9 @@ Public Class clsGridViewMovie
         If Form1.cbFilterSubTitleLang          .Visible Then b = Form1.oMovies.ApplySubtitleLangFilter          ( b , Form1.cbFilterSubTitleLang          )     
         If Form1.cbFilterRootFolder            .Visible Then b = Form1.oMovies.ApplyRootFolderFilter            ( b , Form1.cbFilterRootFolder            )
         If Form1.cbFilterUserRated             .Visible Then b = Form1.oMovies.ApplyUserRatedFilter             ( b , Form1.cbFilterUserRated             )
+        If Form1.cbFilterLocked                .Visible Then b = Form1.oMovies.ApplyLockedFilter                ( b , Form1.cbFilterLocked                )
 
-
+    
  
         Select Case Form1.cbSort.Text
             Case "A - Z"

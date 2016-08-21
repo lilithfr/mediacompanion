@@ -321,7 +321,7 @@ Public Class Movies
 
     Public ReadOnly Property GeneralFilters As List(Of String)
         Get
-            Dim lst As List(Of String) = New List(Of String)
+            Dim lst = New List(Of String)
             lst.Add( "All"                    )
             lst.Add( Watched                  )
             lst.Add( Unwatched                )
@@ -796,7 +796,7 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property UsrRated As List(Of String)
+    Public ReadOnly Property UserRatedFilter As List(Of String)
         Get
             Dim q = From m In MovieCache 
                 Group By NumTracks=m.usrrated Into NumFilms=Count 
@@ -805,6 +805,16 @@ Public Class Movies
             Dim r = (From x In q Select x.NumTracks & " (" & x.NumFilms.ToString & ")").ToList
 
             Return r
+        End Get
+    End Property 
+
+    Public ReadOnly Property LockedFilter As List(Of String)
+        Get
+            Dim lst = New List(Of String)
+
+            lst.Add( "Set" )
+
+            Return lst
         End Get
     End Property 
 
@@ -993,25 +1003,11 @@ Public Class Movies
 
     Public ReadOnly Property SetsFilter As List(Of String)
         Get
-            Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras) 
+            Dim r = (From x In SetsFilter_Preferences).Union(From x In SetsFilter_Extras).ToList
 
-            Dim res = r.ToList
+            Dim lstUnknownSetCount = From x In r Where x.EndsWith(" unknown)") Select x.RemoveAfterMatch
 
-            Dim lstUnknownSetCount = From x In res Where x.EndsWith(" unknown)") Select x.RemoveAfterMatch         '      x.MovieSetDisplayName
-
-
-            'For Each m In MovieCache
-            '    m.UnknownSetCount = "N"
-            'Next
-
-            'Dim movies = MovieCache.Where(Function(x) lstUnknownSetCount.Contains(x.movieset.MovieSetDisplayName))
-
-            'For Each m In movies
-            '    m.UnknownSetCount = "Y"
-            'Next
-            'Rebuild_Data_GridViewMovieCache()
-
-            Return res
+            Return r
         End Get
     End Property
 
@@ -1886,6 +1882,7 @@ Public Class Movies
                                 Case "RootFolder"           : newmovie.rootfolder          = detail.InnerText
                                 Case "UserTmdbSetAddition"  : newmovie.UserTmdbSetAddition = detail.InnerText
                                 Case "UnknownSetCount"      : newmovie.UnknownSetCount     = detail.InnerText
+                                Case "LockedFields"         : newmovie.LockedFields        = detail.InnerText.Split(",").ToList()
 
        
 
@@ -2007,7 +2004,11 @@ Public Class Movies
             child.AppendChild(doc, "RootFolder", movie.rootfolder)
             child.AppendChild(doc, "UserTmdbSetAddition", movie.UserTmdbSetAddition)
             child.AppendChild(doc, "UnknownSetCount", movie.UnknownSetCount)
-  
+
+            If movie.LockedFields.Count>0 Then
+                child.AppendChild(doc, "LockedFields", String.Join(",", movie.LockedFields.ToArray()))
+            End If  
+
             root.AppendChild(child)
         Next
 
@@ -3301,6 +3302,28 @@ Public Class Movies
 
         Return recs
     End Function
+
+    Function ApplyLockedFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+
+        Dim i As Integer = 0
+
+        For Each item As CCBoxItem In ccb.Items
+
+            Dim fieldName = item.Name.ToLower
+
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.LockedFields.Contains(fieldName) )
+                Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.LockedFields.Contains(fieldName) )
+            End Select
+            i += 1
+        Next
+        Return recs
+
+    End Function
+
+
+
+
 
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 

@@ -3329,6 +3329,8 @@ Public Class Movie
 
     Sub SetFieldLockSpecific(field As String, lock As Boolean)
 
+        LoadNFO
+
         Dim lst = _scrapedMovie.fullmoviebody.LockedFields
         
         If lock Then
@@ -3337,8 +3339,9 @@ Public Class Movie
             lst.Remove(field)
         End If
 
-        SaveNFO()
-        UpdateCaches()
+        SaveNFO
+
+        UpdateCaches
     End Sub
 
     Sub UpdateProperty(Of T) (ByVal fromField As T, ByRef toField As T,  Optional rescrape As Boolean=True, Optional ifempty As Boolean = False )  

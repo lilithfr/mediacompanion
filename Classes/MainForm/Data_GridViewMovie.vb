@@ -63,6 +63,7 @@ Public Class Data_GridViewMovie
         End Get
     End Property
 
+    Property LockedFields As List(Of String) = New List(Of String)
 
     Sub New
     End Sub
@@ -122,6 +123,7 @@ Public Class Data_GridViewMovie
         UserSetAddition = movie.UserTmdbSetAddition
         MissingTmdbSetInfo = movie.UnknownSetCount
         oMovies = movie.oMovies
+        LockedFields = movie.LockedFields
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

@@ -26,7 +26,7 @@ Public Class Form1
     Const TMDB_SITE            = "www.themoviedb.org/"
     Const TMDB_SET_URL         = TMDB_SITE & "collection/"
     Const TMDB_MOVIE_URL       = TMDB_SITE & "movie/"           
-    Const NFO_INDEX As Integer = 11
+
     Public Const XBMC_Controller_full_log_file  As String = "XBMC-Controller-full-log-file.txt" 
     Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt" 
     Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
@@ -131,7 +131,7 @@ Public Class Form1
 
     Public DataDirty As Boolean
     Public _yield               As Boolean
-    Public LastMovieDisplayed   As String=""
+    Public lastNfo   As String=""
     Public MainFormLoadedStatus As Boolean = False
     Public tvRefreshNeeded As Boolean = True
     Public messbox As New frmMessageBox("blank", "", "")
@@ -529,6 +529,7 @@ Public Class Form1
             Call util_RegexLoad()
 
             Call util_PrefsLoad()
+
             Statusstrip_Enable(False)
 
             'These lines fixed the associated panel so that they don't automove when the Form1 is resized
@@ -618,6 +619,7 @@ Public Class Form1
                 If Pref.startuptab = 0 Then
                     If Not MoviesFiltersResizeCalled Then
                         MoviesFiltersResizeCalled = True
+                        CreateDynamicMovieFilters
                         Pref.movie_filters.RemoveInvalidMovieFilters
                         Pref.movie_filters.SetMovieFiltersVisibility
                         UpdateMovieFiltersPanel
@@ -764,6 +766,7 @@ Public Class Form1
                     AddHandler pb.Click, AddressOf pbHmScrSht_click
                 End If
             Next 
+
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -1869,7 +1872,7 @@ Public Class Form1
                 cbMovieDisplay_MovieSet.SelectedItem=Nothing
 
                 pop_cbMovieDisplay_MovieSet
-'               cbMovieDisplay_MovieSet.Enabled = workingMovieDetails.fullmoviebody.IsLocked("set")
+                cbMovieDisplay_MovieSet.Enabled = Not workingMovieDetails.fullmoviebody.Locked("set")
 
                 For f = 0 To cbMovieDisplay_Source.Items.Count - 1
                     If cbMovieDisplay_Source.Items(f) = workingMovieDetails.fullmoviebody.source Then
@@ -3362,14 +3365,13 @@ Public Class Form1
 
         Try
             If selectedRows.Count = 1 Then
+                Dim currNfo = CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
 
-                Dim CurrMovie = CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+                If lastNfo = currNfo Then Return
 
-                If LastMovieDisplayed = CurrMovie Then Return
-
-                LastMovieDisplayed = CurrMovie
+                lastNfo = currNfo
             Else
-                LastMovieDisplayed = ""
+                lastNfo = ""
             End If
         Catch
             Return
@@ -3402,9 +3404,6 @@ Public Class Form1
         tsmiMov_EditMovieAlt.Visible = blnShow
         tsmiMov_ReloadFromCache.Visible = blnShow
 
-
-        If Yield(yielding) Then Return
-
         If selectedRows.Count = 1 Then
             'mov_ToolStripPlayMovie.Visible = True
             'mov_ToolStripOpenFolder.Visible = True
@@ -3427,15 +3426,12 @@ Public Class Form1
             Label75.Visible = True
             TextBox34.Visible = True
 
-            If Yield(yielding) Then Return
-
-            If Yield(yielding) Then Return
-
             Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
 
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
             If Yield(yielding) Then Return
+
             If Not queryList.Count = 0 AndAlso Not File.Exists(queryList(0).MoviePathAndFileName) Then   'Detect if video file is missing
                 If Mov_MissingMovie(queryList) Then Exit Sub
             End If
@@ -6942,6 +6938,27 @@ Public Class Form1
         End If
     End Sub
 
+
+    Private Sub ChangeFilterMode(ByVal sender As Object, ByVal e As EventArgs) Handles lblFilterGenreMode.Click, lblFilterSetMode.Click, lblFilterResolutionMode.Click,
+                                                                                       lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
+                                                                                       lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
+                                                                                       lblFilterActorMode.Click, lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click,
+                                                                                       lblFilterVideoCodecMode.Click, lblFilterSubTitleLangMode.Click, lblFilterAudioDefaultLanguagesMode.Click,
+                                                                                       lblFilterCountriesMode.Click, lblFilterStudiosMode.Click , lblFilterRootFolderMode.Click,
+                                                                                       lblFilterUserRatedMode.Click, lblFilterLockedMode.Click
+
+        Dim lbl As Label = sender
+        Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
+
+        filter.QuickSelect = Not filter.QuickSelect
+
+        lbl.Text = If(filter.QuickSelect, "S", "M")
+
+        movie_filters.GetItem(filter.Name).QuickSelect = filter.QuickSelect
+    End Sub
+
+
+
 #Region "Media Info Export"
     Dim exportMovieInfo As Boolean = False  'these are used to allow only a single execution of media export functions
     Dim exportTVInfo As Boolean = False     'when there may be mulitple drop-down events. (Found that out the hard way!)
@@ -7715,7 +7732,7 @@ Public Class Form1
             childchild = doc.CreateElement("filename")              : childchild.InnerText = movie.filename                 : child.AppendChild(childchild)
             childchild = doc.CreateElement("foldername")            : childchild.InnerText = movie.foldername               : child.AppendChild(childchild)
             childchild = doc.CreateElement("fullpathandfilename")   : childchild.InnerText = movie.fullpathandfilename      : child.AppendChild(childchild)
-            childchild = doc.CreateElement("set")                   : childchild.InnerText = movie.movieset.MovieSetName    : child.AppendChild(childchild)
+            childchild = doc.CreateElement("set")                   : childchild.InnerText = movie.SetName                  : child.AppendChild(childchild)
             childchild = doc.CreateElement("source")                : childchild.InnerText = movie.source                   : child.AppendChild(childchild)
             childchild = doc.CreateElement("genre")                 : childchild.InnerText = movie.genre                    : child.AppendChild(childchild)
             childchild = doc.CreateElement("id")                    : childchild.InnerText = movie.id                       : child.AppendChild(childchild)
@@ -10242,77 +10259,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub cbFilterChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterGeneral.SelectedValueChanged, cbFilterSource.TextChanged,
-                                                                                                    cbFilterGenre.TextChanged, cbFilterCertificate.TextChanged,
-                                                                                                    cbFilterSet.TextChanged, cbFilterResolution.TextChanged,
-                                                                                                    cbFilterAudioCodecs.TextChanged, cbFilterAudioChannels.TextChanged,
-                                                                                                    cbFilterAudioBitrates.TextChanged, cbFilterNumAudioTracks.TextChanged,
-                                                                                                    cbFilterAudioLanguages.TextChanged, cbFilterActor.TextChanged, cbFilterTag.TextChanged,
-                                                                                                    cbFilterDirector.TextChanged, cbFilterVideoCodec.TextChanged, cbFilterSubTitleLang.TextChanged,
-                                                                                                    cbFilterAudioDefaultLanguages.TextChanged, cbFilterCountries.TextChanged, 
-                                                                                                    cbFilterStudios.TextChanged, cbFilterRootFolder.TextChanged,
-                                                                                                    cbFilterUserRated.TextChanged
-
-        If TypeName(sender) = "TriStateCheckedComboBox" Then
-            Dim x As MC_UserControls.TriStateCheckedComboBox = sender
-            If x.opState <> 0 Then
-                Return
-            End If
-        End If
-        ApplyMovieFilters()
-    End Sub
-     
-    Private Sub cbFilterRatingChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRating.SelectionChanged, cbFilterVotes.SelectionChanged,
-                                                                                                          cbFilterRuntime.SelectionChanged, cbFilterFolderSizes.SelectionChanged,
-                                                                                                          cbFilterYear.SelectionChanged
-        ApplyMovieFilters
-    End Sub
-
-    'Private Sub cbFilterVotesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterVotes.SelectionChanged
-    '    ApplyMovieFilters
-    'End Sub
-
-    'Private Sub cbFilterRuntimeChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.SelectionChanged
-    '    ApplyMovieFilters
-    'End Sub
-
-    'Private Sub cbFilterFolderSizesChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterFolderSizes.SelectionChanged
-    '    ApplyMovieFilters
-    'End Sub
-
-    'Private Sub cbFilterYearChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterYear.SelectionChanged
-    '    ApplyMovieFilters
-    'End Sub
-
-    Private Sub cbFilterBeginSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.BeginSliding, cbFilterYear.BeginSliding, cbFilterVotes.BeginSliding, cbFilterRating.BeginSliding, cbFilterFolderSizes.BeginSliding
-        SplitContainer5.Panel2.ContextMenuStrip = Nothing
-    End Sub
-
-
-    Private Sub cbFilterEndSliding(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFilterRuntime.EndSliding, cbFilterYear.EndSliding, cbFilterVotes.EndSliding, cbFilterRating.EndSliding, cbFilterFolderSizes.EndSliding
-        SplitContainer5.Panel2.ContextMenuStrip = cmsConfigureMovieFilters
-    End Sub
-
-    Private Sub ApplyMovieFilters
-        tsmiMov_ConvertToFrodo.Enabled = (cbFilterGeneral.Text.RemoveAfterMatch="Pre-Frodo poster only") or (cbFilterGeneral.Text.RemoveAfterMatch="Both poster formats")
-        If ProgState = ProgramState.Other Then
-            Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
-            DisplayMovie
-        End If
-    End Sub
-
-    Sub HandleMovieFilter_SelectedValueChanged(cbFilter As ComboBox, ByRef filterValue As String, Optional replaceUnknown As Boolean = False)
-        If ProgState = ProgramState.Other Then
-            If cbFilter.Text = "All" Then
-                filterValue = ""
-            Else
-                filterValue = cbFilter.Text.RemoveAfterMatch
-                If replaceUnknown Then filterValue = filterValue.Replace("Unknown","-1")
-            End If
-            ApplyMovieFilters
-        End If
-    End Sub
-
     Private Sub TimerToolTip_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerToolTip.Tick
         TimerToolTip.Enabled = False
         TooltipGridViewMovies1.Visible = Pref.ShowMovieGridToolTip
@@ -10503,7 +10449,7 @@ Public Class Form1
             Exit Sub
         End If
         If Not Pref.MusicVidScrape Then
-            LastMovieDisplayed=""   'Force currently displayed movie details to be re-displayed 
+            lastNfo=""   'Force currently displayed movie details to be re-displayed 
             UpdateFilteredList()
         End If
         tsStatusLabel.Visible = False
@@ -10556,7 +10502,11 @@ Public Class Form1
         If cbFilterTag                  .Visible Then cbFilterTag                   .UpdateItems( oMovies.TagsFilter                    )
         If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang          .UpdateItems( oMovies.SubTitleLangFilter            )
         If cbFilterRootFolder           .Visible Then cbFilterRootFolder            .UpdateItems( oMovies.RootFolderFilter              )
-        If cbFilterUserRated            .Visible Then cbFilterUserRated             .UpdateItems( oMovies.UsrRated                      )
+        If cbFilterUserRated            .Visible Then cbFilterUserRated             .UpdateItems( oMovies.UserRatedFilter               )
+        If cbFilterLocked               .Visible Then cbFilterLocked                .UpdateItems( oMovies.LockedFilter                  )
+                   
+                   
+                   
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Try
@@ -17825,158 +17775,6 @@ Public Class Form1
 
 #End Region 'ToolStrip Menus misc
 
-    'Sub MkvMergeGuiPath_ChangeHandler()
-    '    tsmiOpenInMkvmergeGUI.Enabled = True
-    '    tbMkvMergeGuiPath.Text = Pref.MkvMergeGuiPath
-    'End Sub
-
-#Region "Movie Filters"
-
-    Private Sub ConfigureMovieFiltersToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ConfigureMovieFiltersToolStripMenuItem1.Click
-        Dim frm As New frmConfigureMovieFilters
-
-        frm.Init(SplitContainer5.Panel2)
-
-        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-            UpdateMovieFiltersPanel()
-            Pref.ConfigSave()
-            UpdateFilteredList()
-        End If
-    End Sub
-
-    Sub UpdateMovieFiltersPanel()
-        'ResizeBottomLHSPanel
-        Pref.movie_filters.UpdateFromPanel()
-        ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
-        Pref.movie_filters.PositionMovieFilters()
-    End Sub
-
-    ReadOnly Property MovieFiltersPanelMaxHeight As Integer
-        Get
-            Return Pref.movie_filters.CalculatedFilterPanelHeight
-        End Get
-    End Property
-
-    Private Sub SplitContainer5_DoubleClick(sender As Object, e As EventArgs) Handles SplitContainer5.DoubleClick
-
-        If SplitContainer5.Panel2.Height = MovieFiltersPanelMaxHeight - 5 Then
-            ResizeBottomLHSPanel(0)
-        Else
-            ResizeBottomLHSPanel(MovieFiltersPanelMaxHeight)
-        End If
-    End Sub
-
-    Private Sub ResizeBottomLHSPanel(height As Integer, Optional ByVal MaxHeight As Integer = 0)
-        ProgState = ProgramState.ResizingSplitterPanel
-
-        SplitContainer5.SplitterDistance = If((SplitContainer5.Height - height) < 0, 0, SplitContainer5.Height - height)
-
-        DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
-
-        If MaxHeight = 0 Then
-            SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, height - 10)
-        Else
-            SplitContainer5.Panel2.AutoScrollMinSize = New Size(SplitContainer5.Panel2.AutoScrollMinSize.Width, MaxHeight - 10)
-        End If
-
-        ProgState = ProgramState.Other
-    End Sub
-
-    Private Sub ResizeBottomLHSPanel()
-        If ProgState = ProgramState.ResizingSplitterPanel Then Return
-
-        If Not MainFormLoadedStatus Then Return
-        If Not SplitContainer5.Panel2.Visible Then Return
-
-        Dim maxSize = MovieFiltersPanelMaxHeight
-        Dim minSize = 2
-
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - maxSize
-        End If
-
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance < minSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - minSize
-        End If
-
-        'Needed as workaround for splitter panel framework bug:
-        Dim h = SplitContainer5.SplitterDistance - 140
-        If h < minSize Then h = minSize
-        DataGridViewMovies.Height = h
-    End Sub
-
-    Private Sub ResetFilter(sender As Object, e As EventArgs) Handles lblFilterSet.Click, lblFilterVotes.Click, lblFilterRating.Click,
-                                                                        lblFilterCertificate.Click, lblFilterGenre.Click, lblFilterYear.Click,
-                                                                        lblFilterResolution.Click, lblFilterAudioCodecs.Click, lblFilterAudioChannels.Click,
-                                                                        lblFilterAudioBitrates.Click, lblFilterNumAudioTracks.Click, lblFilterAudioLanguages.Click,
-                                                                        lblFilterActor.Click, lblFilterSource.Click, lblFilterTag.Click,
-                                                                        lblFilterDirector.Click, lblFilterVideoCodec.Click, lblFilterSubTitleLang.Click,
-                                                                        lblFilterFolderSizes.Click, lblFilterRuntime.Click, lblFilterAudioDefaultLanguages.Click,
-                                                                        lblFilterCountries.Click, lblFilterStudios.Click, lblFilterRootFolder.Click,
-                                                                        lblFilterUserRated.Click
-                                                                        
-                                                                        
-
-        Dim filter As Object = GetFilterFromLabel(sender)
-
-        ProgState = ProgramState.ResettingFilters
-        filter.Reset()
-        ProgState = ProgramState.Other
-
-        UpdateFilteredList()
-    End Sub
-
-    Private Sub ChangeFilterMode(ByVal sender As Object, ByVal e As EventArgs) Handles lblFilterGenreMode.Click, lblFilterSetMode.Click, lblFilterResolutionMode.Click,
-                                                                                       lblFilterAudioCodecsMode.Click, lblFilterCertificateMode.Click, lblFilterAudioChannelsMode.Click,
-                                                                                       lblFilterAudioBitratesMode.Click, lblFilterNumAudioTracksMode.Click, lblFilterAudioLanguagesMode.Click,
-                                                                                       lblFilterActorMode.Click, lblFilterSourceMode.Click, lblFilterTagMode.Click, lblFilterDirectorMode.Click,
-                                                                                       lblFilterVideoCodecMode.Click, lblFilterSubTitleLangMode.Click, lblFilterAudioDefaultLanguagesMode.Click,
-                                                                                       lblFilterCountriesMode.Click, lblFilterStudiosMode.Click , lblFilterRootFolderMode.Click,
-                                                                                       lblFilterUserRatedMode.Click
-
-        Dim lbl As Label = sender
-        Dim filter As MC_UserControls.TriStateCheckedComboBox = GetFilterFromLabel(lbl)
-
-        filter.QuickSelect = Not filter.QuickSelect
-
-        lbl.Text = If(filter.QuickSelect, "S", "M")
-
-        movie_filters.GetItem(filter.Name).QuickSelect = filter.QuickSelect
-
-    End Sub
-
-    Private Function GetFilterFromLabel(ctl As Control)
-
-        Dim name As String = ctl.Name.RemoveAfterMatch("Mode")
-
-        Return ctl.Parent.Controls("cb" + name.Substring(3, name.Length - 3))
-    End Function
-
-    Private Sub ResetCbGeneralFilter(sender As Control, e As EventArgs) Handles lblFilterGeneral.Click
-        cbFilterGeneral.SelectedIndex = 0
-    End Sub
-
-    Private Sub cbFilterGeneral_DropDown(sender As Object, e As EventArgs) Handles cbFilterGeneral.DropDown
-
-        Dim maxWidth As Integer = cbFilterGeneral.DropDownWidth
-        Dim g As Graphics = cbFilterGeneral.CreateGraphics
-        Dim vertScrollBarWidth As Integer = If(cbFilterGeneral.Items.Count > cbFilterGeneral.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
-        Dim renderedWidth As Integer
-        Dim lbl As Label = New Label()
-
-        lbl.AutoSize = True
-        lbl.Font = cbFilterGeneral.Font
-
-        For Each item As String In cbFilterGeneral.Items
-            lbl.Text = item
-            renderedWidth = lbl.PreferredSize.Width + vertScrollBarWidth
-            maxWidth = Math.Max(maxWidth, renderedWidth)
-        Next
-
-        cbFilterGeneral.DropDownWidth = maxWidth
-    End Sub
-
-#End Region   'Movie Filter code
 
     Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
         Dim flags As New List(Of KeyValuePair(Of String, String))

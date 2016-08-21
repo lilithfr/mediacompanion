@@ -3079,10 +3079,12 @@ Public Class WorkingWithNfoFiles
                 root.AppendChild(child)
                 stage = 29
 
-                child = doc.CreateElement("LockedFields")
-                child.InnerText = String.Join(",", movietosave.fullmoviebody.LockedFields.ToArray())
-                root.AppendChild(child)
-
+                If movietosave.fullmoviebody.LockedFields.Count>0 Then
+                    child = doc.CreateElement("LockedFields")
+                    child.InnerText = String.Join(",", movietosave.fullmoviebody.LockedFields.ToArray())
+                    root.AppendChild(child)
+                End If
+                
                 child = doc.CreateElement("votes")
                 Dim votes As String = movietosave.fullmoviebody.votes
                 If Not String.IsNullOrEmpty(votes) then

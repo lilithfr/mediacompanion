@@ -3,9 +3,7 @@ Public Class BasicMovieNFO
     Property title         As String = ""
     Property originaltitle As String = ""
     Property sortorder     As String = ""
-'    Property MovieSet      As New MovieSetInfo 
-    Property SetName       As String = ""
-    Property TmdbSetId         As String = ""
+'   Property MovieSet      As New MovieSetInfo 
     Property source        As String = ""
     Property year          As String = ""
     Property rating        As String = ""
@@ -40,6 +38,33 @@ Public Class BasicMovieNFO
     Property metascore     As String = ""
     Property LockedFields  As New List(Of String)
 
+    Private _setName As String
+    Private _setId As String
+
+    Public Property SetName As String
+        Get
+            Return _setName 
+        End Get
+        Set
+            If Not Locked("set") Then
+                _setName = value
+            End If
+        End Set
+    End Property
+
+    Public Property TmdbSetId As String
+        Get
+            Return _setId
+        End Get
+        Set
+            If Not Locked("set") Then
+                _setId = value
+            End If
+        End Set
+    End Property
+
+
+
     Sub New
     End Sub
 
@@ -50,8 +75,9 @@ Public Class BasicMovieNFO
     Sub SetWatched()
         playcount = "1"
     End Sub 
-
-    Function IsLocked(fieldName As string) As Boolean
-        Return LockedFields.Contains(fieldName)
+ 
+    Function Locked(field As String) As Boolean
+        Return LockedFields.Contains(field)
     End Function
+
 End Class

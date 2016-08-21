@@ -225,6 +225,9 @@
     <Compile Include="Forms\Form1\Form1.MovieFieldLocking.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Form1\Form1.MovieFilters.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Form1\Form1.Testing.vb">
       <SubType>Form</SubType>
     </Compile>

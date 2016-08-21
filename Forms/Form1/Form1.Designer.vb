@@ -2533,7 +2533,7 @@ Partial Class Form1
         Me.tsmiMov_UnLockSpecific.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiUnLockSet})
         Me.tsmiMov_UnLockSpecific.Name = "tsmiMov_UnLockSpecific"
         Me.tsmiMov_UnLockSpecific.Size = New System.Drawing.Size(241, 22)
-        Me.tsmiMov_UnLockSpecific.Text = "Lock Specific"
+        Me.tsmiMov_UnLockSpecific.Text = "Unlock Specific"
 
         '
         'tsmiRescrapeActors
@@ -2766,14 +2766,14 @@ Partial Class Form1
 
         Me.tsmiLockSet.Name = "tsmiLockSet"
         Me.tsmiLockSet.Size = New System.Drawing.Size(188, 22)
-        Me.tsmiLockSet.Text = "Lock Set"
+        Me.tsmiLockSet.Text = "Set"
         Me.tsmiLockSet.Tag  = "set"
 
 
-        Me.tsmiLockSet.Name = "tsmiLockSet"
-        Me.tsmiLockSet.Size = New System.Drawing.Size(188, 22)
-        Me.tsmiLockSet.Text = "Unlock Set"
-        Me.tsmiLockSet.Tag  = "set"
+        Me.tsmiUnLockSet.Name = "tsmiUnLockSet"
+        Me.tsmiUnLockSet.Size = New System.Drawing.Size(188, 22)
+        Me.tsmiUnLockSet.Text = "Set"
+        Me.tsmiUnLockSet.Tag  = "set"
 
         '
         'tsmiMov_Separator5
