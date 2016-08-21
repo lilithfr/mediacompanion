@@ -856,9 +856,9 @@ Public Class Form1
                 Pref.maximised = True
             End If
 
-            If DataGridView1.Columns.Count > 0 Then
+            If dgvMoviesTableView.Columns.Count > 0 Then
                 Pref.tableview.Clear()
-                For Each column In DataGridView1.Columns
+                For Each column In dgvMoviesTableView.Columns
                     Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
                     Pref.tableview.Add(tempstring)
                 Next
@@ -7648,14 +7648,14 @@ Public Class Form1
     End Sub
 
     Private Sub tpMovTable_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tpMovTable.Leave
-        DataGridView1.EndEdit()
+        dgvMoviesTableView.EndEdit()
         Pref.tableview.Clear()
-        For Each column In DataGridView1.Columns
+        For Each column In dgvMoviesTableView.Columns
             Dim tempstring As String = String.Format("{0}|{1}|{2}|{3}", column.name, column.width, column.displayindex, column.visible)
             Pref.tableview.Add(tempstring)
         Next
-        If IsNothing(DataGridView1.SortedColumn) = False Then
-            Pref.tablesortorder = String.Format("{0} | {1}", DataGridView1.SortedColumn.HeaderText, DataGridView1.SortOrder.ToString)
+        If IsNothing(dgvMoviesTableView.SortedColumn) = False Then
+            Pref.tablesortorder = String.Format("{0} | {1}", dgvMoviesTableView.SortedColumn.HeaderText, dgvMoviesTableView.SortOrder.ToString)
             Pref.ConfigSave()
         End If
 
@@ -7696,7 +7696,7 @@ Public Class Form1
     End Sub
 
     Private Sub mov_TableSetup()
-        DataGridView1.Columns.Clear()
+        dgvMoviesTableView.Columns.Clear()
         If Pref.tablesortorder = Nothing Then Pref.tablesortorder = "Title|Ascending"
         If Pref.tablesortorder = "" Then Pref.tablesortorder = "Title|Ascending"
         If Pref.tableview.Count < 19 Then    'Counter. Increase if adding new tableview column else new columns won't be added to config.xml.
@@ -7714,7 +7714,7 @@ Public Class Form1
             tableSets.Add(newcolumn)
         Next
 
-        DataGridView1.AutoGenerateColumns = False
+        dgvMoviesTableView.AutoGenerateColumns = False
         Dim doc As New XmlDocument
         Dim thispref As XmlNode = Nothing
         Dim xmlproc As XmlDeclaration
@@ -7820,15 +7820,15 @@ Public Class Form1
         Dim newDS As DataSet = New DataSet
         newDS.ReadXml(XMLreader2)
         XMLreader2.Dispose()
-        DataGridView1.DataSource = Nothing
+        dgvMoviesTableView.DataSource = Nothing
         Try
-            DataGridView1.DataSource = newDS.Tables(0)
+            dgvMoviesTableView.DataSource = newDS.Tables(0)
         Catch
         End Try
         
-        DataGridView1.AllowUserToOrderColumns = True
-        DataGridView1.RowHeadersVisible = True
-        DataGridView1.RowHeadersWidth = 25
+        dgvMoviesTableView.AllowUserToOrderColumns = True
+        dgvMoviesTableView.RowHeadersVisible = True
+        dgvMoviesTableView.RowHeadersWidth = 25
 
         Dim titlecolumn As New DataGridViewColumn()
         With titlecolumn
@@ -8043,96 +8043,96 @@ Public Class Form1
                         Case "title"
                             titlecolumn.Width = col.width
                             titlecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, titlecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, titlecolumn)
                             Exit For
                         Case "year"
                             yearcolumn.Width = col.width
                             yearcolumn.Visible =  col.visible
-                            DataGridView1.Columns.Insert(f, yearcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, yearcolumn)
                             Exit For
                         Case "sorttitle"
                             sorttitlecolumn.Width = col.width
                             sorttitlecolumn.Visible =  col.visible
-                            DataGridView1.Columns.Insert(f, sorttitlecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, sorttitlecolumn)
                             Exit For
                         Case "genre"
                             genrecolumn.Width = col.width
                             genrecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, genrecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, genrecolumn)
                             Exit For
                         Case "rating"
                             ratingcolumn.Width = col.width
                             ratingcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, ratingcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, ratingcolumn)
                             Exit For
                         Case "runtime"
                             runtimecolumn.Width = col.width
                             runtimecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, runtimecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, runtimecolumn)
                             Exit For
                         Case "top250"
                             top250column.Width = col.width
                             top250column.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, top250column)
+                            dgvMoviesTableView.Columns.Insert(f, top250column)
                             Exit For
                         Case "certificate"
                             certificatecolumn.Width = col.width
                             certificatecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, certificatecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, certificatecolumn)
                         Case "source"
                             sourcecolumn.Width = col.width
                             sourcecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, sourcecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, sourcecolumn)
                             Exit For
                         Case "playcount"
                             watchedcolumn.Width = col.width
                             watchedcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, watchedcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, watchedcolumn)
                             Exit For
                         Case "set"
                             setscolumn.Width = col.width
                             setscolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, setscolumn)
+                            dgvMoviesTableView.Columns.Insert(f, setscolumn)
                             Exit For
                         Case "outline"
                             outlinecolumn.Width = col.width
                             outlinecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, outlinecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, outlinecolumn)
                             Exit For
                         Case "plot"
                             plotcolumn.Width = col.width
                             plotcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, plotcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, plotcolumn)
                             Exit For
                         Case "stars"
                             starscolumn.Width = col.width
                             starscolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, starscolumn)
+                            dgvMoviesTableView.Columns.Insert(f, starscolumn)
                             Exit For
                         Case "id"
                             idcolumn.Width = col.width
                             idcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, idcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, idcolumn)
                             Exit For
                         Case "missingdata1"
                             artcolumn.Width = col.width
                             artcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, artcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, artcolumn)
                             Exit For
                         Case "fullpathandfilename"
                             pathcolumn.Width = col.width
                             pathcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, pathcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, pathcolumn)
                             Exit For
                         Case "createdate"
                             createdatecolumn.Width = col.width
                             createdatecolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, createdatecolumn)
+                            dgvMoviesTableView.Columns.Insert(f, createdatecolumn)
                             Exit For
                         Case "userrated"
                             usrratedcolumn.Width = col.width
                             usrratedcolumn.Visible = col.visible
-                            DataGridView1.Columns.Insert(f, usrratedcolumn)
+                            dgvMoviesTableView.Columns.Insert(f, usrratedcolumn)
                             Exit For
                     End Select
                 End If
@@ -8146,17 +8146,17 @@ Public Class Form1
         sortheader = tempdata2(0)
         sortord = tempdata2(1)
 
-        For Each col In DataGridView1.Columns
+        For Each col In dgvMoviesTableView.Columns
             If col.headertext = sortheader Then
                 If sortord.ToLower.IndexOf("desc") <> -1 Then
-                    DataGridView1.Sort(DataGridView1.Columns(col.index), ListSortDirection.Descending)
+                    dgvMoviesTableView.Sort(dgvMoviesTableView.Columns(col.index), ListSortDirection.Descending)
                 Else
-                    DataGridView1.Sort(DataGridView1.Columns(col.index), ListSortDirection.Ascending)
+                    dgvMoviesTableView.Sort(dgvMoviesTableView.Columns(col.index), ListSortDirection.Ascending)
                 End If
             End If
         Next
 
-        For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
+        For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.dgvMoviesTableView.Rows
             For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
                 If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then tempCell.Style.BackColor = Color.Red
             Next
@@ -8164,10 +8164,10 @@ Public Class Form1
 
         Call mov_TableEditSetup()
         Try
-            For f = 0 To DataGridView1.Rows.Count-1
-                If DataGridView1.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
-                    DataGridView1.ClearSelection()
-                    DataGridView1.FirstDisplayedScrollingRowIndex = f
+            For f = 0 To dgvMoviesTableView.Rows.Count-1
+                If dgvMoviesTableView.Rows(f).Cells("fullpathandfilename").Value = workingMovieDetails.fileinfo.fullpathandfilename Then
+                    dgvMoviesTableView.ClearSelection()
+                    dgvMoviesTableView.FirstDisplayedScrollingRowIndex = f
                     Exit For
                 End If
             Next
@@ -8182,7 +8182,7 @@ Public Class Form1
         mov_TableEditDGV.Columns.Clear()
         mov_TableEditDGV.AutoGenerateColumns = False
         mov_TableEditDGV.DataSource = Nothing
-        For Each dgvCol As DataGridViewColumn In DataGridView1.Columns
+        For Each dgvCol As DataGridViewColumn In dgvMoviesTableView.Columns
             Dim dgvNewCol As New DataGridViewColumn
             dgvNewCol = DirectCast(dgvCol.Clone(), DataGridViewColumn)
             dgvNewCol.CellTemplate = DirectCast(dgvCol.CellTemplate, DataGridViewCell)
@@ -8203,7 +8203,7 @@ Public Class Form1
         Dim usrrated_add As DataGridViewComboBoxColumn  = DirectCast(Me.mov_TableEditDGV.Columns("userrated"),  DataGridViewComboBoxColumn)
         usrrated_add.Items.Insert(0, "UnChanged")
 
-        mov_TableEditDGV.RowHeadersWidth = DataGridView1.RowHeadersWidth
+        mov_TableEditDGV.RowHeadersWidth = dgvMoviesTableView.RowHeadersWidth
         mov_TableEditDGV.ClearSelection 
         mov_TableEditDGV.ScrollBars = ScrollBars.None
         Me.mov_TableEditDGV.DefaultCellStyle.SelectionBackColor = Me.mov_TableEditDGV.DefaultCellStyle.BackColor
@@ -8220,6 +8220,21 @@ Public Class Form1
         mov_TableEditDGV.CurrentRow.Selected = false
     End Sub
 
+    Private Sub DataGridView1_CellBeginEdit(sender As System.Object, e As System.Windows.Forms.DataGridViewCellCancelEventArgs) Handles dgvMoviesTableView.CellBeginEdit
+
+        Dim colName = (dgvMoviesTableView.Rows(e.RowIndex).Cells(e.ColumnIndex).OwningColumn.Name.ToString).ToLower()
+
+        If colName="set" Then
+            Dim rec = (From x In oMovies.MovieCache Where x.fullpathandfilename=dgvMoviesTableView.Rows(e.RowIndex).Cells("fullpathandfilename").Value.ToString).FirstOrDefault
+
+            If rec.Locked(colName) Then
+                e.Cancel = True
+            End If
+        End If
+
+
+    End Sub
+
     Private Sub mov_TableChangesSave()
 
         DataDirty=False
@@ -8229,7 +8244,7 @@ Public Class Form1
         frmSplash2.Label1.Visible = True
         frmSplash2.Label2.Visible = True
         frmSplash2.ProgressBar1.Visible = True
-        frmSplash2.ProgressBar1.Maximum = DataGridView1.Rows.Count
+        frmSplash2.ProgressBar1.Maximum = dgvMoviesTableView.Rows.Count
         frmSplash2.Show()
 
         Application.DoEvents
@@ -8238,7 +8253,7 @@ Public Class Form1
         Dim changed       As Boolean
         Dim oCachedMovie  As ComboList
 
-        For Each gridrow As DataGridViewRow In DataGridView1.Rows
+        For Each gridrow As DataGridViewRow In dgvMoviesTableView.Rows
             changed    = False
             progcount += 1
             frmSplash2.ProgressBar1.Value = progcount
@@ -8412,7 +8427,7 @@ Public Class Form1
     Private Sub mov_TableUpdate()
         ''Table View is not the best location to edit Outline, Plot, IMDB Id.
         Dim changed As Boolean = False
-        For Each row In DataGridView1.SelectedRows
+        For Each row In dgvMoviesTableView.SelectedRows
             If mov_TableEditDGV.Columns("title").Visible AndAlso mov_TableEditDGV.Rows(0).Cells("title").Value <> "" Then
                 row.cells("title").value = mov_TableEditDGV.Rows(0).Cells("title").Value : changed = True
             End If
@@ -8526,45 +8541,45 @@ Public Class Form1
     End Sub
 
 'Table - DataGridView1 events
-    Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnWidthChanged
+    Private Sub DataGridView1_ColumnWidthChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles dgvMoviesTableView.ColumnWidthChanged
         Try
             mov_TableEditDGV.Columns(e.Column.Index).Width = e.Column.Width
-            Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
+            Dim offSetValue As Integer = dgvMoviesTableView.HorizontalScrollingOffset
             mov_TableEditDGV.HorizontalScrollingOffset = offSetValue
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub dataGridViews1_Scroll(sender As Object, e As ScrollEventArgs) Handles DataGridView1.Scroll
+    Private Sub dataGridViews1_Scroll(sender As Object, e As ScrollEventArgs) Handles dgvMoviesTableView.Scroll
         Try
-	        Dim offSetValue As Integer = DataGridView1.HorizontalScrollingOffset
+	        Dim offSetValue As Integer = dgvMoviesTableView.HorizontalScrollingOffset
 		    mov_TableEditDGV.HorizontalScrollingOffset = offSetValue
 	    Catch
 	    End Try
-	    DataGridView1.Invalidate()
+	    dgvMoviesTableView.Invalidate()
     End Sub
 
-    Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseDown
+    Private Sub DataGridView1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles dgvMoviesTableView.MouseDown
         Try
-            Dim ColIndexFromMouseDown = DataGridView1.HitTest(e.X, e.Y).ColumnIndex
-            Dim objHitTestInfo As DataGridView.HitTestInfo = DataGridView1.HitTest      (e.X, e.Y)
+            Dim ColIndexFromMouseDown = dgvMoviesTableView.HitTest(e.X, e.Y).ColumnIndex
+            Dim objHitTestInfo As DataGridView.HitTestInfo = dgvMoviesTableView.HitTest      (e.X, e.Y)
             Dim MouseRowIndex  As Integer                  = objHitTestInfo.RowIndex
             mov_TableRowNum = MouseRowIndex
             If ColIndexFromMouseDown < 0 Then Exit Sub
-            mov_TableColumnName = DataGridView1.Columns(ColIndexFromMouseDown).Name
+            mov_TableColumnName = dgvMoviesTableView.Columns(ColIndexFromMouseDown).Name
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
 
-    Private Sub DataGridView1_ColumnDisplayIndexChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles DataGridView1.ColumnDisplayIndexChanged
-        Dim ColNewIndex = DataGridView1.Columns(mov_TableColumnName).DisplayIndex 
+    Private Sub DataGridView1_ColumnDisplayIndexChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs) Handles dgvMoviesTableView.ColumnDisplayIndexChanged
+        Dim ColNewIndex = dgvMoviesTableView.Columns(mov_TableColumnName).DisplayIndex 
         mov_TableEditDGV.Columns(mov_TableColumnName).DisplayIndex = ColNewIndex 
     End Sub
 
-    Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged 
-        Dim MultiRowsSelected As Boolean = DataGridView1.SelectedRows.Count > 1
+    Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles dgvMoviesTableView.SelectionChanged 
+        Dim MultiRowsSelected As Boolean = dgvMoviesTableView.SelectedRows.Count > 1
         If MultiRowsSelected Then
             mov_TableEditDGV.Visible = True
             lbl_movTableEdit.Visible = True
@@ -8578,9 +8593,9 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub DataGridView1_Sorted(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.Sorted
+    Private Sub DataGridView1_Sorted(ByVal sender As Object, ByVal e As System.EventArgs) Handles dgvMoviesTableView.Sorted
         Try
-            For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.DataGridView1.Rows
+            For Each tempRow As System.Windows.Forms.DataGridViewRow In Me.dgvMoviesTableView.Rows
                 For Each tempCell As Windows.Forms.DataGridViewCell In tempRow.Cells
                     If tempCell.Value = "Fanart" Or tempCell.Value = "Poster" Or tempCell.Value = "Poster & Fanart" Then
                         tempCell.Style.BackColor = Color.Red
@@ -8600,7 +8615,7 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles DataGridView1.CurrentCellDirtyStateChanged
+    Private Sub DataGridView1_CurrentCellDirtyStateChanged(sender As Object, e As EventArgs) Handles dgvMoviesTableView.CurrentCellDirtyStateChanged
         DataDirty = True
         btn_movTableSave.Enabled = DataDirty
     End Sub
@@ -8609,15 +8624,15 @@ Public Class Form1
     Private Sub MarkAllSelectedAsWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsWatchedToolStripMenuItem.Click
         Try
             Dim selectedrowindex As New List(Of Integer)
-            For Each row in DataGridView1.SelectedRows
+            For Each row in dgvMoviesTableView.SelectedRows
                 selectedrowindex.Add(row.index)
             Next
-            If selectedrowindex.Count = 0 Then selectedrowindex.Add(DataGridView1.CurrentRow.Index)
-            DataGridView1.ClearSelection()            
-            DataGridView1.CurrentCell = DataGridView1.Rows(selectedrowindex.Item(0)).Cells(0)
+            If selectedrowindex.Count = 0 Then selectedrowindex.Add(dgvMoviesTableView.CurrentRow.Index)
+            dgvMoviesTableView.ClearSelection()            
+            dgvMoviesTableView.CurrentCell = dgvMoviesTableView.Rows(selectedrowindex.Item(0)).Cells(0)
             For Each row In selectedrowindex
-                DataGridView1.rows(row).Selected = True
-                DataGridView1.rows(row).Cells("playcount").Value = "Watched"
+                dgvMoviesTableView.rows(row).Selected = True
+                dgvMoviesTableView.rows(row).Cells("playcount").Value = "Watched"
             Next
             DataDirty = True
             btn_movTableSave.Enabled = True
@@ -8629,15 +8644,15 @@ Public Class Form1
     Private Sub MarkAllSelectedAsUnWatchedToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MarkAllSelectedAsUnWatchedToolStripMenuItem.Click
         Try
             Dim selectedrowindex As New List(Of Integer)
-            For Each row in DataGridView1.SelectedRows
+            For Each row in dgvMoviesTableView.SelectedRows
                 selectedrowindex.Add(row.index)
             Next
-            If selectedrowindex.Count = 0 Then selectedrowindex.Add(DataGridView1.CurrentRow.Index)
-            DataGridView1.ClearSelection()            
-            DataGridView1.CurrentCell = DataGridView1.Rows(selectedrowindex.Item(0)).Cells(0)
+            If selectedrowindex.Count = 0 Then selectedrowindex.Add(dgvMoviesTableView.CurrentRow.Index)
+            dgvMoviesTableView.ClearSelection()            
+            dgvMoviesTableView.CurrentCell = dgvMoviesTableView.Rows(selectedrowindex.Item(0)).Cells(0)
             For Each row In selectedrowindex
-                DataGridView1.rows(row).Selected = True
-                DataGridView1.rows(row).Cells("playcount").Value = "UnWatched"
+                dgvMoviesTableView.rows(row).Selected = True
+                dgvMoviesTableView.rows(row).Cells("playcount").Value = "UnWatched"
             Next
             DataDirty = True
             btn_movTableSave.Enabled = True
@@ -8653,7 +8668,7 @@ Public Class Form1
     Private Sub GoToToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
+            tempstring = dgvMoviesTableView.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.Rows.Count - 1
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
@@ -8672,7 +8687,7 @@ Public Class Form1
     Private Sub GoToSelectedMoviePosterSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMoviePosterSelectorToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
+            tempstring = dgvMoviesTableView.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.Rows.Count - 1
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
@@ -8696,7 +8711,7 @@ Public Class Form1
     Private Sub GoToSelectedMovieFanartSelectorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GoToSelectedMovieFanartSelectorToolStripMenuItem.Click
         Try
             Dim tempstring As String = ""
-            tempstring = DataGridView1.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
+            tempstring = dgvMoviesTableView.Rows(mov_TableRowNum).Cells("fullpathandfilename").Value
             For f = 0 To DataGridViewMovies.RowCount - 1
                 If DataGridViewMovies.Rows(f).Cells("fullpathandfilename").Value.ToString = tempstring Then
                     DataGridViewMovies.ClearSelection()
@@ -13095,7 +13110,7 @@ Public Class Form1
             Dim found As Boolean = False
             If e.ColumnIndex < 0 Or e.RowIndex < 0 Then Exit Sub
             Dim MsetName As String = dgvMovieSets.Rows(e.RowIndex).Cells(0).Value
-            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoByName(MsetName) 'GetMovSet(MsetName)
+            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName) 'GetMovSet(MsetName)
             removeDoubleItems(MovSet)
             Dim matchedmovies As New List(Of FullMovieDetails)
             For Each Mov As ComboList In oMovies.MovieCache

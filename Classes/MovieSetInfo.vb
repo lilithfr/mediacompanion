@@ -59,10 +59,11 @@ Public Class MovieSetInfo
     End Sub
 
     Sub Assign(from As MovieSetInfo)
-        MovieSetName        = from.MovieSetName
-        TmdbSetId          = from.TmdbSetId
-        Collection          = from.Collection
-        LastUpdatedTs       = from.LastUpdatedTs
+
+        MovieSetName  = from.MovieSetName
+        TmdbSetId     = from.TmdbSetId
+        Collection    = from.Collection
+        LastUpdatedTs = from.LastUpdatedTs
 
         'Preverse user customisations, if any
         If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName

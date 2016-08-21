@@ -56,7 +56,7 @@ Public Class Data_GridViewMovie
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get
             Try
-                Return Form1.oMovies.FindMovieSetInfoByName(SetName)
+                Return Form1.oMovies.FindMovieSetInfoBySetDisplayName(SetName)
             Catch
                 Return New MovieSetInfo
             End Try

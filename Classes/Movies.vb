@@ -949,7 +949,7 @@ Public Class Movies
             Return ""
         End If
 
-        Dim movieSet = FindMovieSetInfoByName(SetName)
+        Dim movieSet = FindMovieSetInfoBySetDisplayName(SetName)
  
         Dim x = FindUserTmdbSetAdditions(SetName)
         Dim userAdditions = ""
@@ -975,7 +975,7 @@ Public Class Movies
         End Get
     End Property 
 
-    Function FindMovieSetInfoByName(SetName As String) As MovieSetInfo
+    Function FindMovieSetInfoBySetDisplayName(SetName As String) As MovieSetInfo
         
         Dim res = (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
 

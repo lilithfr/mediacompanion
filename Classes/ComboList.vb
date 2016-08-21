@@ -120,7 +120,17 @@ Public Class ComboList
 
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get
-            Return oMovies.FindMovieSetInfoByName(SetName)
+            Dim res As MovieSetInfo = Nothing
+
+            If GotTmdbId Then
+                res = oMovies.FindMovieSetInfoBySetId(TmdbSetId)
+            End If
+            
+            If IsNothing(res) Then
+                res = oMovies.FindMovieSetInfoBySetDisplayName(SetName)
+            End If
+
+            Return res
         End Get
     End Property
 
@@ -487,9 +497,7 @@ Public Class ComboList
     Property UserTmdbSetAddition As Char = ""
     Property UnknownSetCount     As Char = ""
     Property LockedFields        As List(Of String) = New List(Of String)
-
-    Property FieldsLockEnabled As Boolean
-
+    Property FieldsLockEnabled   As Boolean = True
 
     Sub New
     End Sub

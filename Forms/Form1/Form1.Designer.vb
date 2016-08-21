@@ -475,7 +475,7 @@ Partial Class Form1
         Me.tpMovWall = New System.Windows.Forms.TabPage()
         Me.tpMovTable = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel29 = New System.Windows.Forms.TableLayoutPanel()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.dgvMoviesTableView = New System.Windows.Forms.DataGridView()
         Me.MovieTableContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.MarkAllSelectedAsWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MarkAllSelectedAsUnWatchedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -1148,7 +1148,7 @@ Partial Class Form1
         Me.TabControl2.SuspendLayout
         Me.tpMovTable.SuspendLayout
         Me.TableLayoutPanel29.SuspendLayout
-        CType(Me.DataGridView1,System.ComponentModel.ISupportInitialize).BeginInit
+        CType(Me.dgvMoviesTableView,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieTableContextMenu.SuspendLayout
         CType(Me.mov_TableEditDGV,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tpMovFanartTv.SuspendLayout
@@ -6714,7 +6714,7 @@ Partial Class Form1
         Me.TableLayoutPanel29.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 6!))
         Me.TableLayoutPanel29.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104!))
         Me.TableLayoutPanel29.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 4!))
-        Me.TableLayoutPanel29.Controls.Add(Me.DataGridView1, 1, 1)
+        Me.TableLayoutPanel29.Controls.Add(Me.dgvMoviesTableView, 1, 1)
         Me.TableLayoutPanel29.Controls.Add(Me.btn_movTableApply, 6, 7)
         Me.TableLayoutPanel29.Controls.Add(Me.btn_movTableColumnsSelect, 4, 7)
         Me.TableLayoutPanel29.Controls.Add(Me.mov_TableEditDGV, 1, 5)
@@ -6739,22 +6739,22 @@ Partial Class Form1
         '
         'DataGridView1
         '
-        Me.DataGridView1.AllowUserToAddRows = false
-        Me.DataGridView1.AllowUserToResizeRows = false
-        Me.DataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.TableLayoutPanel29.SetColumnSpan(Me.DataGridView1, 8)
-        Me.DataGridView1.ContextMenuStrip = Me.MovieTableContextMenu
-        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
-        Me.DataGridView1.Location = New System.Drawing.Point(8, 8)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.DataGridView1.RowTemplate.Height = 24
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(172, 1)
-        Me.DataGridView1.TabIndex = 0
+        Me.dgvMoviesTableView.AllowUserToAddRows = false
+        Me.dgvMoviesTableView.AllowUserToResizeRows = false
+        Me.dgvMoviesTableView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised
+        Me.dgvMoviesTableView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.TableLayoutPanel29.SetColumnSpan(Me.dgvMoviesTableView, 8)
+        Me.dgvMoviesTableView.ContextMenuStrip = Me.MovieTableContextMenu
+        Me.dgvMoviesTableView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgvMoviesTableView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
+        Me.dgvMoviesTableView.Location = New System.Drawing.Point(8, 8)
+        Me.dgvMoviesTableView.Margin = New System.Windows.Forms.Padding(4)
+        Me.dgvMoviesTableView.Name = "DataGridView1"
+        Me.dgvMoviesTableView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dgvMoviesTableView.RowTemplate.Height = 24
+        Me.dgvMoviesTableView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgvMoviesTableView.Size = New System.Drawing.Size(172, 1)
+        Me.dgvMoviesTableView.TabIndex = 0
         '
         'MovieTableContextMenu
         '
@@ -14097,7 +14097,7 @@ Partial Class Form1
         Me.tpMovTable.ResumeLayout(false)
         Me.TableLayoutPanel29.ResumeLayout(false)
         Me.TableLayoutPanel29.PerformLayout
-        CType(Me.DataGridView1,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.dgvMoviesTableView,System.ComponentModel.ISupportInitialize).EndInit
         Me.MovieTableContextMenu.ResumeLayout(false)
         CType(Me.mov_TableEditDGV,System.ComponentModel.ISupportInitialize).EndInit
         Me.tpMovFanartTv.ResumeLayout(false)
@@ -14661,7 +14661,7 @@ End Sub
     Friend WithEvents tpMovTable As System.Windows.Forms.TabPage
     Friend WithEvents BasicmovienfoBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents BasicmovienfoBindingSource1 As System.Windows.Forms.BindingSource
-    Friend WithEvents DataGridView1 As System.Windows.Forms.DataGridView
+    Friend WithEvents dgvMoviesTableView As System.Windows.Forms.DataGridView
     Friend WithEvents FontDialog1 As System.Windows.Forms.FontDialog
     Friend WithEvents btn_movTableSave As System.Windows.Forms.Button
     Friend WithEvents MovieTableContextMenu As System.Windows.Forms.ContextMenuStrip

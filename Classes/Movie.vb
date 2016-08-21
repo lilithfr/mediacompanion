@@ -819,7 +819,6 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadMovieSetArt         , "MovieSet Art download"     ) )
@@ -829,6 +828,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
@@ -848,9 +848,9 @@ Public Class Movie
  
     Sub AppendScrapeFailedActions
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
     End Sub
 
     Sub AppendMVScrapeFailedActions
@@ -1182,11 +1182,20 @@ Public Class Movie
     Sub AssignMovieToCache
 
         _movieCache.FieldsLockEnabled = False
+
+        _movieCache.oMovies = _parent
+
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
 
-        _movieCache.SetName             = _scrapedMovie.fullmoviebody.SetName
-        _movieCache.TmdbSetId               = _scrapedMovie.fullmoviebody.TmdbSetId
+
+        If _movieCache.GotTmdbSetDetail Then
+            _movieCache.SetName = _movieCache.MovieSet.MovieSetDisplayName
+        Else
+            _movieCache.SetName = _scrapedMovie.fullmoviebody.SetName
+        End If
+
+        _movieCache.TmdbSetId           = _scrapedMovie.fullmoviebody.TmdbSetId
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director
@@ -1458,9 +1467,11 @@ Public Class Movie
                         End If
                     End If
                 Case "set"
-                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
+                    'If Pref.GetMovieSetFromTMDb Then 
+                    _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
                 Case "setid"
-                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.TmdbSetId = thisresult.InnerText
+                   'If Pref.GetMovieSetFromTMDb Then 
+                   _scrapedMovie.fullmoviebody.TmdbSetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -3251,9 +3262,9 @@ Public Class Movie
                 Try
                     Dim skip = False
                     Try
-                        Dim movieSet = _parent.FindMovieSetInfoByName(_scrapedMovie.fullmoviebody.SetName)
+                        Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
                         If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
-                            _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetName
+                            _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetDisplayName
                             _scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
                             skip = True
                         End If 
@@ -3264,7 +3275,13 @@ Public Class Movie
                         _rescrapedMovie.fullmoviebody.SetName = "-None-"
                         If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
                             If rl.tmdb_set_name Then
-                                _rescrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
+                                
+                                If _movieCache.GotTmdbSetDetail Then
+                                     _rescrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
+                                Else
+                                    _rescrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
+                                End If
+                                
                             Else
                                 _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
                             End If
@@ -3273,11 +3290,11 @@ Public Class Movie
                             '_scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
 
                         Else
-                            _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
-                            _rescrapedMovie.fullmoviebody.TmdbSetId   = _scrapedMovie.fullmoviebody.TmdbSetId
+                            _rescrapedMovie.fullmoviebody.SetName   = _scrapedMovie.fullmoviebody.SetName
+                            _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
                         End If
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetName, , rl.EmptyMainTags)
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId  , _scrapedMovie.fullmoviebody.TmdbSetId  , , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName, , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId  , , rl.EmptyMainTags)
                     End If
                 Catch
                 End Try
@@ -3382,6 +3399,7 @@ Public Class Movie
         If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
                 If _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId).DaysOld < 7 Then
+                    _scrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
                     Return
                 End If 
             Catch
@@ -3391,6 +3409,10 @@ Public Class Movie
         If IsNothing(McMovieSetInfo) Then
             _scrapedMovie.fullmoviebody.SetName = "-None-" 
             Return
+        End If
+
+        If _movieCache.GotTmdbSetDetail Then
+            _scrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
         End If
 
         _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
