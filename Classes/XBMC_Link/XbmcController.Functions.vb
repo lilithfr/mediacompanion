@@ -545,40 +545,7 @@ Public Partial Class XbmcController
     'End Sub
 
 
-        'public      int     movieid       ;
-        'public      string  title         ; 
-        'public List<string> genre         ; 
-        'public      int     year          ; 
-        'public      double  rating        ; 
-        'public List<string> director      ;
-        'public      string  trailer       ; 
-        'public      string  tagline       ; 
-        'public      string  plot          ; 
-        'public      string  plotoutline   ; 
-        'public      string  originalTitle ;
-        'public      string  lastPlayed    ; 
-        'public      int     playCount     ; 
-        'public List<string> writer        ; 
-        'public List<string> studio        ; 
-        'public      string  mpaa          ;
-        'public List<string> country       ; 
-        'public      string  imdbnumber    ; 
-        'public      int     runtime       ; 
-        'public      string  set           ; 
-        'public      int     top250        ; 
-        'public      int     votes         ; 
-        'public      string  file          ; 
-        'public      string  sorttitle     ; 
-        'public List<string> tag           ; 
-        'public      string  dateadded     ; 
-        'public List<Cast  > cast          ; 
-        'public List<string> showlink      ; 
-        'public      string  streamdetails ; 
-        'public      string  fanart        ; 
-        'public      string  thumbnail     ; 
-        'public      string  resume        ; 
-        'public      int     setid         ;     
-        'public      Art     art           ;
+
 #End Region
 
 End Class

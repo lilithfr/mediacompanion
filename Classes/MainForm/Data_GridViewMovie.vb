@@ -5,7 +5,7 @@ Imports System.Linq
 Public Class Data_GridViewMovie
     Dim _fullpathandfilename As String = ""
     Property SetName              As String = ""
-    Property SetId                As String = ""
+    Property TmdbSetId                As String = ""
     Dim _filename As String = ""
     Dim _foldername As String = ""
     Dim _title As String = ""
@@ -51,18 +51,20 @@ Public Class Data_GridViewMovie
 
     Property tmdbid               As String = ""
     Property UserSetAddition As Char = ""
+    Property oMovies As Movies
 
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get
             Try
-                Return oMovies.FindMovieSetInfoByName(SetName)
+                Return Form1.oMovies.FindMovieSetInfoByName(SetName)
             Catch
                 Return New MovieSetInfo
             End Try
         End Get
     End Property
 
-    Sub New 
+
+    Sub New
     End Sub
 
     Sub New(movie As ComboList) 
@@ -72,7 +74,7 @@ Public Class Data_GridViewMovie
     Public Sub Assign(movie As ComboList)
         fullpathandfilename = movie.fullpathandfilename
         SetName = movie.SetName
-        SetId = movie.SetId
+        TmdbSetId = movie.TmdbSetId
         filename = movie.filename
         foldername = movie.foldername
         title = movie.title
@@ -118,7 +120,8 @@ Public Class Data_GridViewMovie
         metascore           = movie.metascore
         tmdbid = movie.tmdbid
         UserSetAddition = movie.UserTmdbSetAddition
-        UnknownSetCount = movie.UnknownSetCount
+        MissingTmdbSetInfo = movie.UnknownSetCount
+        oMovies = movie.oMovies
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -126,11 +129,16 @@ Public Class Data_GridViewMovie
         Me.Audio.AddRange(From)
     End Sub
 
-    Public Function Export() As ComboList
-        Dim convertedMovie As New ComboList
+    Public Function Export(oMovies As Movies) As ComboList
+
+        Dim convertedMovie As New ComboList()
+
+        convertedMovie.FieldsLockEnable = False
+
+        convertedMovie.oMovies              = Me.oMovies
         convertedMovie.fullpathandfilename  = Me.fullpathandfilename
         convertedMovie.SetName              = Me.SetName
-        convertedMovie.SetId                = Me.SetId
+        convertedMovie.TmdbSetId            = Me.TmdbSetId
         convertedMovie.filename             = Me.filename
         convertedMovie.foldername           = Me.foldername
         convertedMovie.title                = Me.title
@@ -171,7 +179,9 @@ Public Class Data_GridViewMovie
         convertedMovie.metascore            = Me.metascore
         convertedMovie.tmdbid               = Me.tmdbid
         convertedMovie.UserTmdbSetAddition  = Me.UserSetAddition
-        convertedMovie.UnknownSetCount      = Me.UnknownSetCount
+        convertedMovie.UnknownSetCount      = Me.MissingTmdbSetInfo
+
+        convertedMovie.FieldsLockEnable = True
 
         Return convertedMovie
     End Function
@@ -657,8 +667,9 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property InASet As Boolean
         Get
-            If IsNothing(MovieSet) Then Return False
-            Return MovieSet.MovieSetDisplayName <> "-None-" 
+            'If IsNothing(MovieSet) Then Return False
+            'Return MovieSet.MovieSetDisplayName <> "-None-" 
+            Return SetName <> "-None-" 
         End Get
     End Property  
 
@@ -869,18 +880,18 @@ Public Class Data_GridViewMovie
         End Set
     End Property
 
-    Public ReadOnly Property MovieSetDisplayName As String
-        Get
-            Dim res = "-None-"
-            Try
-                res = movieset.MovieSetDisplayName
-            Catch ex As Exception
-            End Try
-            Return res
-        End Get
-    End Property
+    'Public ReadOnly Property MovieSetDisplayName As String
+    '    Get
+    '        Dim res = "-None-"
+    '        Try
+    '            res = movieset.MovieSetDisplayName
+    '        Catch ex As Exception
+    '        End Try
+    '        Return res
+    '    End Get
+    'End Property
 
-    Public Property UnknownSetCount As Char = ""
+    Public Property MissingTmdbSetInfo As Char = ""
 
 
 End Class

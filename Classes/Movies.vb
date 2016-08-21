@@ -332,7 +332,7 @@ Public Class Movies
             lst.Add( MissingFromSetReleased   )
             lst.Add( MissingFromSetUnreleased )
             lst.Add( UserSetAdditions         )
-            lst.Add( UnknownSetCounts         )
+            lst.Add( MissingTmdbSetInfo         )
             lst.Add( MissingCertificate       )
             lst.Add( MissingPlot              )
             lst.Add( MissingOutline           )
@@ -810,7 +810,7 @@ Public Class Movies
 
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
+            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.Audio Select fullpathandfilename=m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -818,7 +818,7 @@ Public Class Movies
 
     Public ReadOnly Property AudioDefaultLanguages As IEnumerable
         Get
-            Dim result As IEnumerable = From m In MovieCache Select m.fullpathandfilename, field=If(m.DefaultAudioTrack.Language.Value="","Unknown",m.DefaultAudioTrack.Language.Value)
+            Dim result As IEnumerable = From m In MovieCache Select fullpathandfilename=m.fullpathandfilename, field=If(m.DefaultAudioTrack.Language.Value="","Unknown",m.DefaultAudioTrack.Language.Value)
 
             Return result
         End Get
@@ -833,7 +833,7 @@ Public Class Movies
 
     Public ReadOnly Property AudioChannelsFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
+            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select fullpathandfilename=m.fullpathandfilename, field=If(a.Channels.Value="","Unknown",a.Channels.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -841,7 +841,7 @@ Public Class Movies
 
     Public ReadOnly Property AudioBitratesFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Bitrate.Value="","Unknown",a.Bitrate.Value)
+            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select fullpathandfilename=m.fullpathandfilename, field=If(a.Bitrate.Value="","Unknown",a.Bitrate.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -849,7 +849,7 @@ Public Class Movies
 
     Public ReadOnly Property AudioCodecsFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
+            Dim leftOuterJoinTable = From m In MovieCache From a In m.Audio Select fullpathandfilename=m.fullpathandfilename, field=If(a.Codec.Value="","Unknown",a.Codec.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -966,7 +966,15 @@ Public Class Movies
     End Property 
 
     Function FindMovieSetInfoByName(SetName As String) As MovieSetInfo
-        Return (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
+        
+        Dim res = (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
+
+        If IsNothing(res) Then
+            Return New MovieSetInfo
+        Else
+            Return res
+        End If
+
     End Function
 
     Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
@@ -976,7 +984,7 @@ Public Class Movies
 
     Public ReadOnly Property TmDbMovieSetIds As List(Of Integer)
         Get
-            Dim q = (From m In MovieCache Where IsNumeric(m.SetId) Select Convert.ToInt32(m.SetId)).Distinct()
+            Dim q = (From m In MovieCache Where IsNumeric(m.TmdbSetId) Select Convert.ToInt32(m.TmdbSetId)).Distinct()
 
             Return q.AsEnumerable.ToList
         End Get
@@ -1049,10 +1057,10 @@ Public Class Movies
         End Get
     End Property
 
-    Public ReadOnly Property UnknownSetCounts As String
+    Public ReadOnly Property MissingTmdbSetInfo As String
         Get
             Dim q = From x In MovieCache Where x.UnknownSetCount="Y"
-            Return "Unknown set count (" & q.Count & ")"
+            Return "Missing Tmdb set info (" & q.Count & ")"
         End Get
     End Property
 
@@ -1065,7 +1073,7 @@ Public Class Movies
         For Each movie In lst
             movie.UserTmdbSetAddition = "N"
 
-            If movie.SetName <> "-None-" AndAlso Not IsNothing(movie.MovieSet) Then
+            If movie.SetName <> "-None-" AndAlso Not movie.MovieSet.MissingInfo Then
                 Try
                     Dim q2 = From x In movie.MovieSet.Collection Where x.TmdbMovieId = movie.tmdbid
 
@@ -1081,16 +1089,16 @@ Public Class Movies
 
 
     Public Sub RebuildUnknownSetCount
-        Dim lst = From x In MovieCache Where x.UnknownSetCount="" Select x
+        Dim lst = From x In MovieCache 'Where x.UnknownSetCount="" Select x
 
         For Each movie In lst
             movie.UnknownSetCount = "N"
 
             If movie.SetName = "-None-" Then
-                Return
+                Continue For
             End If
 
-            If IsNothing(movie.MovieSet) OrElse movie.MovieSet.MissingInfo Then
+            If movie.MovieSet.MissingInfo Then
                 movie.UnknownSetCount = "Y"
             End If
         Next
@@ -1171,7 +1179,7 @@ Public Class Movies
 
     Public ReadOnly Property SubTitleLangFilter As List(Of String)
         Get
-            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
+            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select fullpathandfilename=m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
 
             Return QryMovieCache(leftOuterJoinTable)
         End Get
@@ -1243,14 +1251,14 @@ Public Class Movies
     Public Function GetMovieSetIdFromName(mSetName As String) As String
         For Each mset In MovieSetDB
             If mset.MovieSetName = mSetName Then
-                Return mset.MovieSetId
+                Return mset.TmdbSetId
             End If
         Next
-        If Not mSetName.ToLower = "-none-" Then
-            Dim newmset As New MovieSetInfo
-            newmset.MovieSetName = mSetName
-            MovieSetDB.Add(newmset)
-        End If
+        'If Not mSetName.ToLower = "-none-" Then
+        '    Dim newmset As New MovieSetInfo
+        '    newmset.MovieSetName = mSetName
+        '    MovieSetDB.Add(newmset)
+        'End If
         Return ""
     End Function
 
@@ -1751,6 +1759,7 @@ Public Class Movies
         LoadMovieCache()
         LoadPeopleCaches()
         LoadMovieSetCache()
+        RebuildUnknownSetCount()
         LoadTagCache()
         UpdateTmdbSetMissingMovies()
 '       UpdateUserTmdbSetAdditions()
@@ -1782,6 +1791,8 @@ Public Class Movies
                 Select Case thisresult.Name
                     Case "movie"
                         Dim newmovie As New ComboList
+                        newmovie.oMovies = Me
+
                         Dim detail As XmlNode = Nothing
                         For Each detail In thisresult.ChildNodes
                             Select Case detail.Name
@@ -1790,7 +1801,7 @@ Public Class Movies
                                 Case "director"             : newmovie.director = detail.InnerText
                                 Case "credits"              : newmovie.credits = detail.InnerText
                                 Case "set"                  : newmovie.SetName = detail.InnerText
-                                Case "setid"                : newmovie.SetId = detail.InnerText
+                                Case "setid"                : newmovie.TmdbSetId = detail.InnerText
                                 Case "sortorder"            : newmovie.sortorder = detail.InnerText
                                 Case "filedate"
                                     If detail.InnerText.Length <> 14 Then 'i.e. invalid date
@@ -1923,7 +1934,7 @@ Public Class Movies
                 child.AppendChild(childchild)
 
                 childchild = doc.CreateElement("setid")
-                childchild.InnerText = movie.SetId 
+                childchild.InnerText = movie.TmdbSetId 
                 child.AppendChild(childchild)
             Else
                 childchild = doc.CreateElement("set")
@@ -2590,8 +2601,8 @@ Public Class Movies
             Dim moviesetTemp As MovieSetInfo
             Dim moviesetTempHighestID = 0
             For Each moviesetTemp In setDb
-                If moviesetTemp.MovieSetId.Chars(0) = "L" Then
-                    Dim moviesetTempID = moviesetTemp.MovieSetId.Substring(1).ToInt()
+                If moviesetTemp.TmdbSetId.Chars(0) = "L" Then
+                    Dim moviesetTempID = moviesetTemp.TmdbSetId.Substring(1).ToInt()
                     If moviesetTempID + 1 > moviesetTempHighestID Then
                         moviesetTempHighestID = moviesetTempID + 1
                     End If
@@ -2710,7 +2721,7 @@ Public Class Movies
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("id")
-            childchild.InnerText = movieset.MovieSetId 
+            childchild.InnerText = movieset.TmdbSetId 
             child.AppendChild(childchild)
 
             childchild = doc.CreateElement("LastUpdatedTs")
@@ -2826,10 +2837,11 @@ Public Class Movies
     Public Sub RebuildMoviePeopleCaches()
         
         Dim MovSetDbTmp As New List(Of MovieSetInfo)
+
         MovSetDbTmp     .AddRange(_moviesetDb)
         _actorDB        .Clear()
         _directorDb     .Clear()
-        _moviesetDb     .Clear()
+        '_moviesetDb     .Clear()
         _tagDb          .Clear()
         _tmpActorDb     .Clear()
         _tmpDirectorDb  .Clear()
@@ -3052,10 +3064,10 @@ Public Class Movies
         Dim fi As New FilteredItems(ccb)
 
         If fi.Include.Count > 0 Then
-            recs = recs.Where(Function(x) fi.Include.Contains(x.movieset.MovieSetDisplayName))
+            recs = recs.Where(Function(x) fi.Include.Contains(x.SetName))
         End If
         If fi.Exclude.Count > 0 Then
-            recs = recs.Where(Function(x) Not fi.Exclude.Contains(x.movieset.MovieSetDisplayName))
+            recs = recs.Where(Function(x) Not fi.Exclude.Contains(x.SetName))
         End If
 
         Return recs
@@ -3345,7 +3357,7 @@ Public Class Movies
 
         Dim c As MovieSetInfo = Nothing
         Try
-            c = FindMovieSetInfoBySetId(movieSetInfo.MovieSetId)
+            c = FindMovieSetInfoBySetId(movieSetInfo.TmdbSetId)
         Catch ex As Exception
         End Try
 
@@ -3357,14 +3369,14 @@ Public Class Movies
         c.Assign(movieSetInfo)
     End Sub
 
-    Function FindMovieSetInfoBySetId(SetId As String) As MovieSetInfo
-        Return (From x In MovieSetDB Where x.MovieSetId=SetId).FirstOrDefault
+    Function FindMovieSetInfoBySetId(TmdbSetId As String) As MovieSetInfo
+        Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
     End Function
 
 
     Sub UpdateMovieCacheSetName(MovieSet As MovieSetInfo)
 
-        Dim res = (From x In MovieCache Where x.SetId=MovieSet.MovieSetId)
+        Dim res = (From x In MovieCache Where x.TmdbSetId=MovieSet.TmdbSetId)
 
         For Each m In res
             m.SetName = MovieSet.MovieSetDisplayName
@@ -3372,7 +3384,7 @@ Public Class Movies
             Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
 
             fmd.fullmoviebody.SetName = m.SetName
-            fmd.fullmoviebody.SetId   = m.SetId
+            fmd.fullmoviebody.TmdbSetId   = m.TmdbSetId
 
             Movie.SaveNFO(m.fullpathandfilename, fmd)
         Next

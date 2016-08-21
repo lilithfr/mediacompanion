@@ -318,10 +318,7 @@ Public Class MediaInfoExport
                         strNFOprop = movie.SetName
 
                     Case "release_date" :
-                        Try
-                            strNFOprop = movie.MovieSet.Collection.Find(function(x) x.TmdbMovieId=movie.tmdbid).release_date
-                        Catch
-                        End Try
+                        strNFOprop = movie.MovieSet.Collection.Find(function(x) x.TmdbMovieId=movie.tmdbid).release_date
 
                    Case "movieyear"
                         strNFOprop = If(movie.year <> Nothing, movie.year, "0000")

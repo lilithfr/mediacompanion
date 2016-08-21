@@ -113,7 +113,7 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"DisplayFolderSize"   ,GridFieldToDisplay2="Folder Size"         ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Resolution"          ,GridFieldToDisplay2="Resolution"          ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Certificate"         ,GridFieldToDisplay2="Certificate"         ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
-        IniColumn(dgv,"MovieSetDisplayName" ,GridFieldToDisplay2="Set"                 ,"Movie set"        ,"Set"          , -20                                           )
+        IniColumn(dgv,"SetName"             ,GridFieldToDisplay2="Set"                 ,"Movie set"        ,"Set"          , -20                                           )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
@@ -183,7 +183,7 @@ Public Class clsGridViewMovie
             If GridFieldToDisplay2 = "Votes"               Then firstColWidth -= dgvMovies.Columns("votes"              ).Width
             If GridFieldToDisplay2 = "Folder Size"         Then firstColWidth -= dgvMovies.Columns("DisplayFolderSize"  ).Width
             If GridFieldToDisplay2 = "Resolution"          Then firstColWidth -= dgvMovies.Columns("Resolution"         ).Width
-            If GridFieldToDisplay2 = "Set"                 Then firstColWidth -= dgvMovies.Columns("MovieSetDisplayName").Width  
+            If GridFieldToDisplay2 = "Set"                 Then firstColWidth -= dgvMovies.Columns("SetName"            ).Width  
             If GridFieldToDisplay2 = "Certificate"         Then firstColWidth -= 80 
 
 
@@ -244,9 +244,9 @@ Public Class clsGridViewMovie
 
 
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.MovieSetDisplayName Ascending, f.DisplayTitle 
+                    b = From f In b Order By f.SetName Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.MovieSetDisplayName Descending, f.DisplayTitle 
+                    b = From f In b Order By f.SetName Descending, f.DisplayTitle 
                 End If
 
 
@@ -315,7 +315,7 @@ Public Class clsGridViewMovie
                                                             )
                 Case "Outline contains html"       : b = From f In b Where f.OutlineContainsHtml
                 Case "User set additions"          : b = From f In b Where f.UserSetAddition="Y"
-                Case "Unknown set count"           : b = From f In b Where f.UnknownSetCount="Y" And f.InASet
+                Case "Missing Tmdb set info"       : b = From f In b Where f.MissingTmdbSetInfo="Y"
                                                                      
 
             End Select
@@ -481,9 +481,9 @@ Public Class clsGridViewMovie
 
             Case "Set"
                 If GridSort = "Asc" Then
-                    b = From f In b Order By f.MovieSetDisplayName Ascending, f.DisplayTitle 
+                    b = From f In b Order By f.SetName Ascending, f.DisplayTitle 
                 Else
-                    b = From f In b Order By f.MovieSetDisplayName Descending, f.DisplayTitle 
+                    b = From f In b Order By f.SetName Descending, f.DisplayTitle 
                 End If
         End Select
 

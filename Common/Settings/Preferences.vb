@@ -2435,14 +2435,12 @@ Public Class Pref
             If Not IO.File.Exists(filename) Then
                 Return Nothing
             End If
+
             Dim MI As New mediainfo
             MI.Open(filename)
-            Dim curVS As Integer = 0
-            Dim addVS As Boolean = False
-            Dim numOfVideoStreams As Integer = MI.Count_Get(StreamKind.Visual)
-            Dim aviFile As MediaFile = New MediaFile(filename)
-            Dim tmpstr As String = ""
 
+            Dim curVS As Integer = 0
+            Dim aviFile As MediaFile = New MediaFile(filename)
             Dim tempmediainfo As String
 
             workingfiledetails.filedetails_video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)

@@ -435,7 +435,7 @@ Public Class ucFanartTv
     End Sub
 
     Private Sub btnMovArtToggle_Click( sender As Object,  e As EventArgs) Handles btnMovArtToggle.Click
-        If workingMovDetails.fullmoviebody.SetId = "" Then Exit Sub
+        If workingMovDetails.fullmoviebody.TmdbSetId = "" Then Exit Sub
         If MovSetToggle Then
             lblftvArtMode.Text = "Displaying Movie Artwork"
             btnMovArtToggle.BackColor = System.Drawing.Color.Lime
@@ -447,7 +447,7 @@ Public Class ucFanartTv
         End If
         MovSetToggle = Not MovSetToggle
         If MovSetToggle Then
-            resetloadedart(workingMovDetails.fullmoviebody.SetId, workingMovDetails.fullmoviebody.SetName)
+            resetloadedart(workingMovDetails.fullmoviebody.TmdbSetId, workingMovDetails.fullmoviebody.SetName)
         Else
             resetloadedart()
         End If

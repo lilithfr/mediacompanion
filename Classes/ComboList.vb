@@ -5,7 +5,7 @@ Imports System.Linq
 
 Public Class ComboList
 
-    Property fullpathandfilename  As String = "" 
+    Property Fullpathandfilename  As String = "" 
     'Property MovieSet             As String = ""
     Property filename             As String = ""
     Property foldername           As String = ""
@@ -19,6 +19,37 @@ Public Class ComboList
     Property top250               As String = 0
     Property genre                As String = ""
     Property countries            As String = ""
+
+
+    Private _setName As String
+    Private _setId As String
+
+
+    Public Property SetName As String
+        Get
+            Return _setName 
+        End Get
+        Set
+            If Not Locked("set") Then
+                _setName = value
+            End If
+        End Set
+    End Property
+
+
+
+    Public Property TmdbSetId As String
+        Get
+            Return _setId
+        End Get
+        Set
+            If Not Locked("setid") Then
+                _setId = value
+            End If
+        End Set
+    End Property
+
+
 
     Public ReadOnly Property countriesList As List(Of String)
         Get
@@ -71,8 +102,6 @@ Public Class ComboList
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
     
-    Property SetName              As String = ""
-    Property SetId                As String = ""
     Property stars                As String = ""
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
@@ -80,6 +109,8 @@ Public Class ComboList
     Property _rootfolder          As String = ""
     Property _usrrated            As Integer = 0
     Property _metascore           As Integer = 0
+
+    Property oMovies As Movies
 
     Public ReadOnly Property DisplayFolderSize As Double
         Get
@@ -298,9 +329,9 @@ Public Class ComboList
     End Property  
 
 
-    Public ReadOnly Property InTmdbSet As Boolean
+    Public ReadOnly Property GotTmdbSetDetail As Boolean
         Get
-            Return Not IsNothing(MovieSet) 
+            Return Not MovieSet.MissingInfo
         End Get
     End Property  
 
@@ -308,6 +339,12 @@ Public Class ComboList
     Public ReadOnly Property GotTmdbId As Boolean
         Get
             Return tmdbid<>"" AndAlso Integer.TryParse(tmdbid,Nothing)
+        End Get
+    End Property  
+
+    Public ReadOnly Property GotTmdbSetId As Boolean
+        Get
+            Return TmdbSetId<>"" AndAlso Integer.TryParse(TmdbSetId,Nothing)
         End Get
     End Property  
 
@@ -451,7 +488,15 @@ Public Class ComboList
     Property UnknownSetCount     As Char = ""
     Property LockedFields        As List(Of String) = New List(Of String)
 
+    Property FieldsLockEnable As Boolean
+
+
+    Sub New
+    End Sub
+
     Public Sub Assign(From As ComboList)
+
+        Me.FieldsLockEnable = False
 
         Me.fullpathandfilename  = From.fullpathandfilename
         'Me.MovieSet             = From.MovieSet           
@@ -495,7 +540,7 @@ Public Class ComboList
         AssignSubtitleLang(From.SubLang)
 
         Me.SetName              = From.SetName
-        Me.SetId                = From.SetId
+        Me.TmdbSetId                = From.TmdbSetId
 
         Me.stars                = From.stars
         Me.Actorlist            = From.Actorlist 
@@ -507,6 +552,8 @@ Public Class ComboList
         Me.UserTmdbSetAddition  = From.UserTmdbSetAddition
         Me.UnknownSetCount      = From.UnknownSetCount
         Me.LockedFields         = From.LockedFields
+
+        Me.FieldsLockEnable = True
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -519,11 +566,10 @@ Public Class ComboList
         Me.SubLang.Clear
         Me.SubLang.AddRange(From)
     End Sub
-
-    Function IsLocked(fieldName As string) As Boolean
-        Return LockedFields.Contains(fieldName)
+ 
+    Function Locked(field As String) As Boolean
+        Return FieldsLockEnable AndAlso LockedFields.Contains(field)
     End Function
-
 
 
 End Class

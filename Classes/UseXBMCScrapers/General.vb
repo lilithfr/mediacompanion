@@ -13,8 +13,6 @@ Module General
     Dim TempXMLEpisode As New TvEpisode
     Dim episodeXMLinformation As New List(Of TvEpisode)
 
-    Public Dim WithEvents oMovies As New Movies
-
 
 #Region "Fields"
     Public mScraperManager As ScraperManager

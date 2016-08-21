@@ -5,7 +5,7 @@ Public Class BasicMovieNFO
     Property sortorder     As String = ""
 '    Property MovieSet      As New MovieSetInfo 
     Property SetName       As String = ""
-    Property SetId         As String = ""
+    Property TmdbSetId         As String = ""
     Property source        As String = ""
     Property year          As String = ""
     Property rating        As String = ""

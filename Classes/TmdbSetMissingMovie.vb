@@ -12,7 +12,7 @@
         Movie             = _Movie
         DgvMovie.title    = _Movie.MovieTitle
         DgvMovie.SetName  = _Mso.MovieSetName
-        DgvMovie.SetId    = _Mso.MovieSetId
+        DgvMovie.TmdbSetId    = _Mso.TmdbSetId
         DgvMovie.filename = _Movie.TmdbMovieId.ToString
         DgvMovie.tmdbid   = _Movie.TmdbMovieId
         DgvMovie.year     = _Movie.ReleaseYear

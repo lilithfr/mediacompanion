@@ -2182,7 +2182,7 @@ Public Class WorkingWithNfoFiles
 
     '  All Movie Load/Save Routines
 #Region " Movie Routines "    
-    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String) As ComboList
+    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String,_oMovies As Movies) As ComboList
 
         Dim newmovie As New ComboList
 
@@ -2191,6 +2191,8 @@ Public Class WorkingWithNfoFiles
                 newmovie.title = "Error"
                 Return newmovie
             End If
+
+            newmovie.oMovies = _oMovies
 
             If mode = "movielist" Then
                 Dim movie As New XmlDocument
@@ -2222,7 +2224,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.tmdbid = ""
                     newmovie.missingdata1 = 0
                     newmovie.SetName = ""
-                    newmovie.SetId = ""
+                    newmovie.TmdbSetId = ""
                     newmovie.source = ""
                     newmovie.director = ""
                     newmovie.credits = ""
@@ -2269,7 +2271,7 @@ Public Class WorkingWithNfoFiles
                             Case "set"
                                 newmovie.SetName = thisresult.InnerText
                             Case "setid"
-                                newmovie.SetId = thisresult.InnerText 
+                                newmovie.TmdbSetId = thisresult.InnerText 
                             Case "source"
                                 newmovie.source = thisresult.InnerText
                             Case "diretor"
@@ -2534,7 +2536,7 @@ Public Class WorkingWithNfoFiles
                         Case "set"
                             newmovie.fullmoviebody.SetName = thisresult.InnerText
                         Case "setid"
-                            newmovie.fullmoviebody.SetId = thisresult.InnerText 
+                            newmovie.fullmoviebody.TmdbSetId = thisresult.InnerText 
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -3050,7 +3052,7 @@ Public Class WorkingWithNfoFiles
                     child.InnerText = movietosave.fullmoviebody.SetName
                     root.AppendChild(child)
                     child = doc.CreateElement("setid")
-                    child.InnerText = movietosave.fullmoviebody.SetId
+                    child.InnerText = movietosave.fullmoviebody.TmdbSetId
                     root.AppendChild(child)
                 End If
                 stage = 26

@@ -71,7 +71,7 @@ Public Class TmdbSetManager
 
     Public Sub UpdateMovieSetsDataTable
 
-        Dim q = From x As MovieSetInfo In MoviesLst.MovieSetDB Select x.MovieSetId, x.MovieSetName, x.UserMovieSetName
+        Dim q = From x As MovieSetInfo In MoviesLst.MovieSetDB Select x.TmdbSetId, x.MovieSetName, x.UserMovieSetName
 
         dgvCustomSetNames.DataSource = q.CopyToDataTable()
     End Sub
@@ -100,10 +100,10 @@ Public Class TmdbSetManager
 
         For Each row As DataRow In dtChanges.Rows
 
-            Dim MovieSetId       As String = row("MovieSetId"      ).ToString
+            Dim TmdbSetId        As String = row("TmdbSetId"       ).ToString
             Dim UserMovieSetName As String = row("UserMovieSetName").ToString
 
-            Dim MovieSet = MoviesLst.FindMovieSetInfoBySetId(MovieSetId)
+            Dim MovieSet = MoviesLst.FindMovieSetInfoBySetId(TmdbSetId)
             
             MovieSet.UserMovieSetName = UserMovieSetName
 

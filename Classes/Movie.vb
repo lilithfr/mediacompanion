@@ -385,19 +385,6 @@ Public Class Movie
         End Get
     End Property
 
-    'ReadOnly Property MovieSet As MovieSetInfo 
-    '    Get
-    '        Try
-    '            If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
-
-    '            Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
-
-    '        Catch
-    '            Return Nothing
-    '        End Try
-    '    End Get
-    'End Property
-
     ReadOnly Property MovieSetByName As MovieSetInfo 
         Get
             Try
@@ -791,6 +778,7 @@ Public Class Movie
     Sub New( parent As Movies, NfoName As String )
         Me.New
         _parent                   = parent
+        _movieCache.oMovies       = parent
         _actualNfoPathAndFilename = NfoName
         mediapathandfilename      = Utilities.GetFileName(NfoName,True)
     End Sub
@@ -820,7 +808,7 @@ Public Class Movie
         Return sb.ToString
     End Function
 
-    Sub AppendScrapeSuccessActions
+    Private Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
@@ -1192,16 +1180,13 @@ Public Class Movie
     End Sub
 
     Sub AssignMovieToCache
-        'If _scrapedMovie.fullmoviebody.title = "Error" AndAlso _scrapedMovie.fullmoviebody.originaltitle = "" Then Exit Sub 
-        'If Pref.MusicVidScrape Then
-        '    ucMusicVideo.MVCacheAdd(_scrapedMovie)
-        '    Exit Sub
-        'End If
+
+        _movieCache.FieldsLockEnable = False
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
 
         _movieCache.SetName             = _scrapedMovie.fullmoviebody.SetName
-        _movieCache.SetId               = _scrapedMovie.fullmoviebody.SetId
+        _movieCache.TmdbSetId               = _scrapedMovie.fullmoviebody.TmdbSetId
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director
@@ -1290,9 +1275,9 @@ Public Class Movie
 
     Sub AssignUserTmdbSetAddition
         _movieCache.UserTmdbSetAddition = "N"
-        If _movieCache.SetId <> "" Then
+        If _movieCache.TmdbSetId <> "" Then
 
-            Dim movieSet = _parent.FindMovieSetInfoBySetId(_movieCache.SetId) 
+            Dim movieSet = _parent.FindMovieSetInfoBySetId(_movieCache.TmdbSetId) 
 
             If Not IsNothing(movieSet) Then
 
@@ -1318,7 +1303,7 @@ Public Class Movie
             Return
         End If
 
-        If _movieCache.InTmdbSet And _movieCache.MovieSet.Collection.Count=0 Then
+        If _movieCache.GotTmdbSetDetail AndAlso _movieCache.MovieSet.Collection.Count=0 Then
             _movieCache.UnknownSetCount = "Y"
         End If
     End Sub
@@ -1475,7 +1460,7 @@ Public Class Movie
                 Case "set"
                     If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
                 Case "setid"
-                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetId = thisresult.InnerText
+                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.TmdbSetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -1579,7 +1564,7 @@ Public Class Movie
             _scrapedMovie.fullmoviebody.lastplayed = _previousCache.lastplayed 
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.SetName = _previousCache.SetName
-            _scrapedMovie.fullmoviebody.SetId = _previousCache.SetId
+            _scrapedMovie.fullmoviebody.TmdbSetId = _previousCache.TmdbSetId
         Else
             Try
                 tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
@@ -1600,7 +1585,7 @@ Public Class Movie
 
                 If Pref.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
 						_scrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
-						_scrapedMovie.fullmoviebody.SetId   = tmdb.Movie.belongs_to_collection.id 
+						_scrapedMovie.fullmoviebody.TmdbSetId   = tmdb.Movie.belongs_to_collection.id 
                 End If
             Catch
                 Throw New Exception ("offline")
@@ -2390,7 +2375,7 @@ Public Class Movie
     End Sub
 
     Sub DownloadMovieSetArt()
-        If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.SetId <> "" Then
+        If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.TmdbSetId <> "" Then
             If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) Or Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Pref.overwritethumbs Then
                 DoDownloadMovieSetArtwork()
             End If
@@ -2401,7 +2386,7 @@ Public Class Movie
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
             Dim _api As New TMDb
 
-            _api.SetId = _scrapedMovie.fullmoviebody.SetId
+            _api.SetId = _scrapedMovie.fullmoviebody.TmdbSetId
 
             '_scrapedMovie.fullmoviebody.MovieSet = _api.MovieSet
 
@@ -3258,7 +3243,7 @@ Public Class Movie
             If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
             If Cancelled() Then Exit Sub
 
-            If _scrapedMovie.fullmoviebody.SetId="" And rl.missingmovsetart Then
+            If _scrapedMovie.fullmoviebody.TmdbSetId="" And rl.missingmovsetart Then
                 rl.tmdb_set_name = True
             End If
 
@@ -3268,8 +3253,8 @@ Public Class Movie
                     Try
                         Dim movieSet = _parent.FindMovieSetInfoByName(_scrapedMovie.fullmoviebody.SetName)
                         If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
-                            _scrapedMovie.fullmoviebody.SetName = movieSet.MovieSetName
-                            _scrapedMovie.fullmoviebody.SetId   = movieSet.MovieSetId
+                            _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetName
+                            _scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
                             skip = True
                         End If 
                     Catch
@@ -3283,23 +3268,23 @@ Public Class Movie
                             Else
                                 _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
                             End If
-                            _rescrapedMovie.fullmoviebody.SetId = tmdb.Movie.belongs_to_collection.id
+                            _rescrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id
 
                             '_scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
 
                         Else
                             _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
-                            _rescrapedMovie.fullmoviebody.SetId   = _scrapedMovie.fullmoviebody.SetId
+                            _rescrapedMovie.fullmoviebody.TmdbSetId   = _scrapedMovie.fullmoviebody.TmdbSetId
                         End If
                         UpdateProperty(_rescrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetName, , rl.EmptyMainTags)
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetId  , _scrapedMovie.fullmoviebody.SetId  , , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId  , _scrapedMovie.fullmoviebody.TmdbSetId  , , rl.EmptyMainTags)
                     End If
                 Catch
                 End Try
             End If
             If Cancelled() Then Exit Sub
 
-            If rl.missingmovsetart AndAlso Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.SetId) Then DoDownloadMovieSetArtwork()
+            If rl.missingmovsetart AndAlso Not String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.TmdbSetId) Then DoDownloadMovieSetArtwork()
             If Cancelled() Then Exit Sub
 
             If rl.actors Then
@@ -3387,16 +3372,9 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieSetCache
-
-    '            If _scrapedMovie.fullmoviebody.SetName = "-None-" Then Return Nothing
-
-    '            Return New MovieSetInfo(_scrapedMovie.fullmoviebody.SetName, _scrapedMovie.fullmoviebody.SetId, New List(Of CollectionMovie), New Date)
-
-
-
         If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
-                If _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.SetId).DaysOld < 7 Then
+                If _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId).DaysOld < 7 Then
                     Return
                 End If 
             Catch

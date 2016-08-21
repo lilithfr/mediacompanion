@@ -5,7 +5,7 @@ Public Class MovieSetInfo
     Private  _movieSetDisplayName As String = ""
 
 
-    Property MovieSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
+    Property TmdbSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
     Property Collection          As New List(Of CollectionMovie)
     Property LastUpdatedTs       As Date = DateTime.MinValue
     Property UserMovieSetName    As String = ""                     'Stores users preferred set name 
@@ -40,7 +40,7 @@ Public Class MovieSetInfo
 
     Public ReadOnly Property MissingInfo As Boolean
         Get
-            Return MovieSetId="" OrElse MovieSetId="0" OrElse IsNothing(Collection) OrElse Collection.Count=0
+            Return TmdbSetId="" OrElse TmdbSetId="0" OrElse IsNothing(Collection) OrElse Collection.Count=0
         End Get
     End Property   
 
@@ -51,7 +51,7 @@ Public Class MovieSetInfo
 
     Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="")
         MovieSetName        = _moviesetname
-        MovieSetId          = _moviesetid
+        TmdbSetId          = _moviesetid
         Collection          = _collection
         LastUpdatedTs       = _lastUpdatedTs
         UserMovieSetName    = _userMovieSetName
@@ -60,7 +60,7 @@ Public Class MovieSetInfo
 
     Sub Assign(from As MovieSetInfo)
         MovieSetName        = from.MovieSetName
-        MovieSetId          = from.MovieSetId
+        TmdbSetId          = from.TmdbSetId
         Collection          = from.Collection
         LastUpdatedTs       = from.LastUpdatedTs
 
