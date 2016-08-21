@@ -1610,12 +1610,6 @@ Public Class Movies
         RemoveMovieEventHandlers(movie)
     End Sub
 
-    Sub LockSpecific(fullpathandfilename As String, field As String)
-
-        Dim movie = New Movie(Me, fullpathandfilename)
-
-        movie.LockSpecific(field)
-    End Sub
 
     Sub RescrapeAll(NfoFilenames As List(Of String))
         Dim i = 0
@@ -1645,14 +1639,24 @@ Public Class Movies
     End Sub
 
 
-    Sub LockSpecific(_lockList As RescrapeSpecificParams)
+    Sub SetFieldLockSpecific(_lockList As LockSpecificParams)
 
         Dim i = 0
+        Dim action As String = "Locking"
+
+        If Not _lockList.Lock Then
+            action = "Unlocking"
+        End If
+
         For Each FullPathAndFilename In _lockList.FullPathAndFilenames
             i += 1
             PercentDone = CalcPercentDone(i, _lockList.FullPathAndFilenames.Count)
-            ReportProgress("Locking '" & Utilities.TitleCase(_lockList.Field.Replace("_", " ")) & "' " & i & " of " & _lockList.FullPathAndFilenames.Count & " ")
-            LockSpecific(FullPathAndFilename, _lockList.Field)
+            ReportProgress( action & " '" & Utilities.TitleCase(_lockList.Field.Replace("_", " ")) & "' " & i & " of " & _lockList.FullPathAndFilenames.Count & " ")
+  
+            Dim movie = New Movie(Me, fullpathandfilename)
+
+            movie.SetFieldLockSpecific(_lockList.Field, _lockList.Lock)
+
             If Cancelled Then Exit For
         Next
         SaveCaches()

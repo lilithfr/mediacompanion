@@ -133,7 +133,7 @@ Public Class Data_GridViewMovie
 
         Dim convertedMovie As New ComboList()
 
-        convertedMovie.FieldsLockEnable = False
+        convertedMovie.FieldsLockEnabled = False
 
         convertedMovie.oMovies              = Me.oMovies
         convertedMovie.fullpathandfilename  = Me.fullpathandfilename
@@ -181,7 +181,7 @@ Public Class Data_GridViewMovie
         convertedMovie.UserTmdbSetAddition  = Me.UserSetAddition
         convertedMovie.UnknownSetCount      = Me.MissingTmdbSetInfo
 
-        convertedMovie.FieldsLockEnable = True
+        convertedMovie.FieldsLockEnabled = True
 
         Return convertedMovie
     End Function

@@ -161,6 +161,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Basics\TaskingSupport.vb" />
+    <Compile Include="Classes\LockSpecificParams.vb" />
     <Compile Include="Classes\TmdbCustomSetName.vb" />
     <Compile Include="Classes\UserTmdbSetAdditions.vb" />
     <Compile Include="Classes\TmdbSetMissingMovie.vb" />
@@ -219,6 +220,9 @@
       <DependentUpon>Form1.CustTv.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form1\Form1.CustTv.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form1\Form1.MovieFieldLocking.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Form1\Form1.Testing.vb">

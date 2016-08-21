@@ -488,7 +488,7 @@ Public Class ComboList
     Property UnknownSetCount     As Char = ""
     Property LockedFields        As List(Of String) = New List(Of String)
 
-    Property FieldsLockEnable As Boolean
+    Property FieldsLockEnabled As Boolean
 
 
     Sub New
@@ -496,7 +496,7 @@ Public Class ComboList
 
     Public Sub Assign(From As ComboList)
 
-        Me.FieldsLockEnable = False
+        Me.FieldsLockEnabled = False
 
         Me.fullpathandfilename  = From.fullpathandfilename
         'Me.MovieSet             = From.MovieSet           
@@ -553,7 +553,7 @@ Public Class ComboList
         Me.UnknownSetCount      = From.UnknownSetCount
         Me.LockedFields         = From.LockedFields
 
-        Me.FieldsLockEnable = True
+        Me.FieldsLockEnabled = True
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -568,7 +568,7 @@ Public Class ComboList
     End Sub
  
     Function Locked(field As String) As Boolean
-        Return FieldsLockEnable AndAlso LockedFields.Contains(field)
+        Return FieldsLockEnabled AndAlso LockedFields.Contains(field)
     End Function
 
 

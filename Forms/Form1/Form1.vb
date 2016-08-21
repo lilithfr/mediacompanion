@@ -106,7 +106,7 @@ Public Class Form1
             Public rescrapeList As New RescrapeList
             Public workingMovieDetails As FullMovieDetails
             Public _rescrapeList As New RescrapeSpecificParams
-            Public _lockList     As New RescrapeSpecificParams
+            Public _lockList     As New LockSpecificParams
             Public ChangeMovieId = ""
             Public droppedItems As New List(Of String)
             Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
@@ -1869,7 +1869,7 @@ Public Class Form1
                 cbMovieDisplay_MovieSet.SelectedItem=Nothing
 
                 pop_cbMovieDisplay_MovieSet
-                cbMovieDisplay_MovieSet.Enabled = workingMovieDetails.fullmoviebody.IsLocked("set")
+'               cbMovieDisplay_MovieSet.Enabled = workingMovieDetails.fullmoviebody.IsLocked("set")
 
                 For f = 0 To cbMovieDisplay_Source.Items.Count - 1
                     If cbMovieDisplay_Source.Items(f) = workingMovieDetails.fullmoviebody.source Then
@@ -2532,7 +2532,7 @@ Public Class Form1
 
             Try
                 If DataGridViewMovies.SelectedRows.Count = 1 Then
-                    If workingMovieDetails.fileinfo.fullpathandfilename = DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString Then Return
+                    If workingMovieDetails.fileinfo.fullpathandfilename = CType(DataGridViewMovies.SelectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString Then Return
                 End If
             Catch
             End Try
@@ -3138,24 +3138,25 @@ Public Class Form1
 
     Private Sub mov_Play(ByVal type As String)
         If DataGridViewMovies.SelectedRows.Count < 1 Then Return
-        Dim tempstring As String
-        tempstring = DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString
+
+        Dim fullpathandfilename = CType(DataGridViewMovies.SelectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
         Dim playlist As New List(Of String)
         Select Case type
             Case "Movie"
-                If tempstring.IndexOf("index.nfo") <> -1 Then
-                    tempstring = tempstring.Replace(".nfo", ".bdmv")
+                If fullpathandfilename.IndexOf("index.nfo") <> -1 Then
+                    fullpathandfilename = fullpathandfilename.Replace(".nfo", ".bdmv")
                 Else
-                    tempstring = Utilities.GetFileName(tempstring)
+                    fullpathandfilename = Utilities.GetFileName(fullpathandfilename)
                 End If
-                playlist = Utilities.GetMediaList(tempstring)
+                playlist = Utilities.GetMediaList(fullpathandfilename)
             Case "Trailer"
-                Dim movie = oMovies.LoadMovie(tempstring)
+                Dim movie = oMovies.LoadMovie(fullpathandfilename)
                 If movie.TrailerExists Then playlist.Add(movie.ActualTrailerPath)
             Case "HomeMovie"
-                tempstring = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
-                tempstring = Utilities.GetFileName(tempstring)
-                playlist = Utilities.GetMediaList(tempstring)
+                fullpathandfilename = CType(ListBox18.SelectedItem, ValueDescriptionPair).Value
+                fullpathandfilename = Utilities.GetFileName(fullpathandfilename)
+                playlist = Utilities.GetMediaList(fullpathandfilename)
         End Select
         If playlist.Count <= 0 Then
             MsgBox("No Media File Found For This nfo")
@@ -3353,12 +3354,20 @@ Public Class Form1
         End Try
     End Sub
 
+
+
+
+
     Public Sub DisplayMovie(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection, yielding As Boolean)
 
         Try
             If selectedRows.Count = 1 Then
-                If LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString Then Return
-                LastMovieDisplayed = selectedCells(NFO_INDEX).Value.ToString
+
+                Dim CurrMovie = CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
+                If LastMovieDisplayed = CurrMovie Then Return
+
+                LastMovieDisplayed = CurrMovie
             Else
                 LastMovieDisplayed = ""
             End If
@@ -3422,7 +3431,7 @@ Public Class Form1
 
             If Yield(yielding) Then Return
 
-            Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = selectedCells(NFO_INDEX).Value.ToString
+            Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
 
             Dim queryList As List(Of Data_GridViewMovie) = query.ToList()
 
@@ -3433,7 +3442,7 @@ Public Class Form1
 
             If queryList.Count > 0 Then
 
-                workingMovie.FieldsLockEnable = False
+                workingMovie.FieldsLockEnabled = False
 
                 workingMovie.oMovies = oMovies
                 workingMovie.filedate = queryList(0).filedate
@@ -3453,7 +3462,7 @@ Public Class Form1
                 workingMovie.TmdbSetId = queryList(0).TmdbSetId
                 workingMovie.tmdbid = queryList(0).tmdbid
 
-                workingMovie.FieldsLockEnable = True
+                workingMovie.FieldsLockEnabled = True
 
                 tsmiMov_PlayTrailer.Visible = Not queryList(0).MissingTrailer
 
@@ -3485,10 +3494,22 @@ Public Class Form1
             cbUsrRated.SelectedIndex = -1
             Dim add As Boolean = True
             Dim watched As String = ""
+
+      '      Dim x = GetDataGridViewSelectedNfo(selectedRows(0))
+
+      ' CType(selectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
+
             For Each sRow As DataGridViewRow In selectedRows
                 Dim old As String = watched
                 For Each item In oMovies.MovieCache
-                    If item.fullpathandfilename = sRow.Cells(NFO_INDEX).Value.ToString Then
+
+
+ '                  If item.fullpathandfilename = sRow.Cells(NFO_INDEX).Value.ToString Then
+
+                    If item.fullpathandfilename = CType(sRow.DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString Then
+
+
                         If watched = "" Then
                             watched = item.playcount
                             old = watched
@@ -3542,11 +3563,7 @@ Public Class Form1
             If info.ColumnX = -1 Then
                 Return
             End If
-            Try
-                If IsNumeric(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString) Then Return
-            Catch
-                Return
-            End Try
+
             If info.Type <> DataGridViewHitTestType.ColumnHeader Then
                 mov_Play("Movie")
             End If
@@ -3706,7 +3723,7 @@ Public Class Form1
             End If
             'Otherwise, bring up the context menu for a single movie
 
-            If multiselect = True Then
+            If multiselect Then
                 tsmiMov_MovieName.BackColor = Color.Orange
                 tsmiMov_MovieName.Text = "Multisave Mode"
                 tsmiMov_MovieName.Font = New Font("Arial", 10, FontStyle.Bold)
@@ -3715,12 +3732,12 @@ Public Class Form1
 
                 Try
                     'update context menu with movie name & also if we show the 'Play Trailer' menu item
+
+                    Dim movie = CType(DataGridViewMovies.selectedRows(0).DataBoundItem,Data_GridViewMovie)
+
                     tsmiMov_MovieName.BackColor = Color.Honeydew
-                    tsmiMov_MovieName.Text = "'" & DataGridViewMovies.SelectedCells(NFO_INDEX+4).Value.ToString & "'"
-                    tsmiMov_MovieName.Font = New Font("Arial", 10, FontStyle.Bold)
-
-                    Dim movie As Data_GridViewMovie = (From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = DataGridViewMovies.selectedCells(NFO_INDEX).Value.ToString).ToList(0)
-
+                    tsmiMov_MovieName.Text      = "'" & movie.DisplayTitleAndYear.ToString & "'"
+                    tsmiMov_MovieName.Font      = New Font("Arial", 10, FontStyle.Bold)
                     tsmiMov_PlayTrailer.Visible = Not movie.MissingTrailer
 
                     tsmiMov_ViewMovieDbSetPage  .Enabled = workingMovie.GotTmdbSetId
@@ -8718,21 +8735,6 @@ Public Class Form1
     End Sub
 
 
-    Private Sub mov_LockSpecific(ByVal field As String)
-
-        _lockList.Field = field
-        _lockList.FullPathAndFilenames.Clear
-
-        For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-            Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
-            If Not File.Exists(fullpath) Then Continue For
-            _lockList.FullPathAndFilenames.Add(fullpath)
-        Next
-
-        RunBackgroundMovieScrape("LockSpecific")
-    End Sub
-
-
     
     
     Private Sub RescrapeFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RescrapeFanartToolStripMenuItem.Click
@@ -9264,13 +9266,16 @@ Public Class Form1
             If DataGridViewMovies.SelectedRows.Count > 0 Then
                 For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
                     Dim playlist As New List(Of String)
-                    Dim tempstring As String = Utilities.GetFileName(DataGridViewMovies.SelectedCells(NFO_INDEX).Value.ToString)
-                    playlist = Utilities.GetMediaList(tempstring)
+
+                    Dim fullpathandfilename As String = CType(sRow.DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
+                    playlist = Utilities.GetMediaList(  Utilities.GetFileName(fullpathandfilename)  )
+
                     If playlist.Count > 0 Then
                         For Each File In playlist
                             If Not listoffilestomove.Contains(File) Then listoffilestomove.Add(File)
                         Next
-                        Dim fullpathandfilename As String = sRow.Cells("fullpathandfilename").Value.ToString
+
                         listoffilestomove.Add(fullpathandfilename)
                         If IO.File.Exists(Pref.GetFanartPath(fullpathandfilename)) Then listoffilestomove.Add(Pref.GetFanartPath(fullpathandfilename))
                         If IO.File.Exists(Pref.GetPosterPath(fullpathandfilename)) Then listoffilestomove.Add(Pref.GetPosterPath(fullpathandfilename))
@@ -10180,8 +10185,11 @@ Public Class Form1
             Dim movielist As New List(Of String)
             Pref.MovieDeleteNfoArtwork = True
             For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-                movielist.Add(row.Cells(NFO_INDEX).Value.ToString)
-                oMovies.DeleteScrapedFiles(row.Cells(NFO_INDEX).Value.ToString, DelArtwork)
+
+                Dim fullpathandfilename = CType(row.DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
+                movielist.Add(fullpathandfilename)
+                oMovies.DeleteScrapedFiles(fullpathandfilename, DelArtwork)
             Next
 
             'Last remove from dataGridViewMovies and update cache.
@@ -10438,10 +10446,7 @@ Public Class Form1
     Public Sub RescrapeSpecific
         oMovies.RescrapeSpecific(_rescrapeList)
     End Sub  
-      
-    Public Sub LockSpecific
-        oMovies.LockSpecific(_lockList)
-    End Sub
+
     
     Public Sub ScrapeDroppedFiles
         oMovies.ScrapeFiles(droppedItems)
@@ -11044,12 +11049,6 @@ Public Class Form1
     End Sub       'MovieSet Artwork
 #End Region  'ToolStripmenu Movie Rescrape Specific
     
-
-#Region "Lock Specific"
-    Private Sub tsmiLockSetClick(sender As ToolStripMenuItem, e As EventArgs) Handles tsmiLockSet.Click
-        mov_LockSpecific(sender.Tag)
-    End Sub    
-#End Region
 
 
     Private Sub mov_PreferencesDisplay()

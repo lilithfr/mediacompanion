@@ -1181,7 +1181,7 @@ Public Class Movie
 
     Sub AssignMovieToCache
 
-        _movieCache.FieldsLockEnable = False
+        _movieCache.FieldsLockEnabled = False
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
 
@@ -3327,11 +3327,15 @@ Public Class Movie
         UpdateCaches()
     End Sub
 
-    Sub LockSpecific(field As String)
+    Sub SetFieldLockSpecific(field As String, lock As Boolean)
 
         Dim lst = _scrapedMovie.fullmoviebody.LockedFields
         
-        If Not lst.Contains(field) then lst.Add(field)
+        If lock Then
+            If Not lst.Contains(field) then lst.Add(field)
+        Else
+            lst.Remove(field)
+        End If
 
         SaveNFO()
         UpdateCaches()
