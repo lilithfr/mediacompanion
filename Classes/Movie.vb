@@ -385,16 +385,16 @@ Public Class Movie
         End Get
     End Property
 
-    ReadOnly Property MovieSetByName As MovieSetInfo 
-        Get
-            Try
-                Dim res = _parent.MovieSetDB.Find(function(c) c.MovieSetName=_scrapedMovie.fullmoviebody.SetName)
-                Return res
-            Catch
-                Return Nothing
-            End Try
-        End Get
-    End Property
+    'ReadOnly Property MovieSetByName As MovieSetInfo 
+    '    Get
+    '        Try
+    '            Dim res = _parent.MovieSetDB.Find(function(c) c.MovieSetName=_scrapedMovie.fullmoviebody.SetName)
+    '            Return res
+    '        Catch
+    '            Return Nothing
+    '        End Try
+    '    End Get
+    'End Property
 
     Public ReadOnly Property McMovieSetInfo As MovieSetInfo
         Get
@@ -825,6 +825,7 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv download"        ) )  'Download images from Fanart.Tv site
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache" ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
@@ -1178,6 +1179,9 @@ Public Class Movie
         AssignMovieToCache
         _movieCache.runtime = "0"
     End Sub
+
+
+
 
     Sub AssignMovieToCache
 
@@ -3371,8 +3375,8 @@ Public Class Movie
     Sub UpdateCaches
         UpdateActorCache
         UpdateDirectorCache
+'       UpdateMovieSetCache 
         UpdateMovieCache
-        UpdateMovieSetCache 
         UpdateTagCache
     End Sub
 
@@ -3396,10 +3400,17 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieSetCache
+
+        _movieCache.oMovies = _parent
+
+        Dim ms As MovieSetInfo
+
         If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
-                If _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId).DaysOld < 7 Then
-                    _scrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
+                ms = _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+
+                If ms.DaysOld < 7 Then
+                    _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
                     Return
                 End If 
             Catch
@@ -3411,11 +3422,12 @@ Public Class Movie
             Return
         End If
 
-        If _movieCache.GotTmdbSetDetail Then
-            _scrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
-        End If
-
         _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
+
+        ms = _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+        _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
+
+
     End Sub
 
 
