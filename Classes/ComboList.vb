@@ -123,7 +123,7 @@ Public Class ComboList
             Dim res As MovieSetInfo = Nothing
 
             If GotTmdbId Then
-                res = oMovies.FindMovieSetInfoBySetId(TmdbSetId)
+                res = oMovies.FindMovieSetInfoByTmdbSetId(TmdbSetId)
             End If
             
             If IsNothing(res) Then

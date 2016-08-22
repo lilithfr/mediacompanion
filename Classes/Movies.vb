@@ -3394,7 +3394,7 @@ Public Class Movies
 
         Dim c As MovieSetInfo = Nothing
         Try
-            c = FindMovieSetInfoBySetId(movieSetInfo.TmdbSetId)
+            c = FindMovieSetInfoByTmdbSetId(movieSetInfo.TmdbSetId)
         Catch ex As Exception
         End Try
 
@@ -3406,7 +3406,7 @@ Public Class Movies
         c.Assign(movieSetInfo)
     End Sub
 
-    Function FindMovieSetInfoBySetId(TmdbSetId As String) As MovieSetInfo
+    Function FindMovieSetInfoByTmdbSetId(TmdbSetId As String) As MovieSetInfo
         Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
     End Function
 
@@ -3437,5 +3437,19 @@ Public Class Movies
         Next
     End Sub
 
+
+
+	Public ReadOnly Property AllMovieSets As List(Of String)
+		Get
+			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
+			Dim resUser = From x In Pref.moviesets Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
+
+			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x)
+
+
+			Return res.ToList
+		End Get
+
+	End Property
 
 End Class

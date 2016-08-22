@@ -103,7 +103,7 @@ Public Class TmdbSetManager
             Dim TmdbSetId        As String = row("TmdbSetId"       ).ToString
             Dim UserMovieSetName As String = row("UserMovieSetName").ToString
 
-            Dim MovieSet = MoviesLst.FindMovieSetInfoBySetId(TmdbSetId)
+            Dim MovieSet = MoviesLst.FindMovieSetInfoByTmdbSetId(TmdbSetId)
             
 				'Update movie set record in 'db'
             MovieSet.UserMovieSetName = UserMovieSetName

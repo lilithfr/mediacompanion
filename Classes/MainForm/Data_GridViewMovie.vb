@@ -55,13 +55,27 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get
-            Try
-                Return Form1.oMovies.FindMovieSetInfoBySetDisplayName(SetName)
-            Catch
-                Return New MovieSetInfo
-            End Try
+            Dim res As MovieSetInfo = Nothing
+
+            If GotTmdbId Then
+                res = oMovies.FindMovieSetInfoByTmdbSetId(TmdbSetId)
+            End If
+            
+            If IsNothing(res) Then
+                res = oMovies.FindMovieSetInfoBySetDisplayName(SetName)
+            End If
+
+            Return res
         End Get
+
     End Property
+
+    Public ReadOnly Property GotTmdbId As Boolean
+        Get
+            Return tmdbid<>"" AndAlso Integer.TryParse(tmdbid,Nothing)
+        End Get
+    End Property  
+
 
     Property LockedFields As List(Of String) = New List(Of String)
 

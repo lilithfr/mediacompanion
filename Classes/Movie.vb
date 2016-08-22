@@ -1288,7 +1288,7 @@ Public Class Movie
         _movieCache.UserTmdbSetAddition = "N"
         If _movieCache.TmdbSetId <> "" Then
 
-            Dim movieSet = _parent.FindMovieSetInfoBySetId(_movieCache.TmdbSetId) 
+            Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_movieCache.TmdbSetId) 
 
             If Not IsNothing(movieSet) Then
 
@@ -3264,7 +3264,9 @@ Public Class Movie
                 Try
                     Dim skip = False
                     Try
-                        Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
+ '                      Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
+                        Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+
                         If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
                             _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetDisplayName
                             _scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
@@ -3405,7 +3407,7 @@ Public Class Movie
 
         If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
-                ms = _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+                ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
 
                 If ms.DaysOld < 7 Then
                     _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
@@ -3422,7 +3424,7 @@ Public Class Movie
 
         _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
 
-        ms = _parent.FindMovieSetInfoBySetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+        ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
         _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
 
 

@@ -10770,9 +10770,13 @@ Public Class Form1
         Dim previouslySelected = cbMovieDisplay_MovieSet.SelectedItem
         cbMovieDisplay_MovieSet.Sorted = True
         cbMovieDisplay_MovieSet.Items.Clear
-        For each item In Pref.moviesets
-            cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
-        Next
+
+        'For each item In Pref.moviesets
+        '    cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
+        'Next
+
+		  cbMovieDisplay_MovieSet.Items.AddRange(oMovies.AllMovieSets.ToArray)
+
         cbMovieDisplay_MovieSet.Sorted = False
         If cbMovieDisplay_MovieSet.Items.Count = 0 Then cbMovieDisplay_MovieSet.Items.Add("-None-")
         If cbMovieDisplay_MovieSet.Items(0) <> "-None-" Then cbMovieDisplay_MovieSet.Items.Insert(0, "-None-")
@@ -10790,6 +10794,7 @@ Public Class Form1
             cbMovieDisplay_MovieSet.SelectedItem = previouslySelected
         End If
     End Sub
+
     
     Private Sub tsmiMov_PlayMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_PlayMovie.Click
         Try
