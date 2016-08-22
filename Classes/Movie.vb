@@ -3276,29 +3276,17 @@ Public Class Movie
                     End Try
 
                     If Not skip Then
-                        _rescrapedMovie.fullmoviebody.SetName = "-None-"
+                        _rescrapedMovie.fullmoviebody.SetName   = "-None-"
+                        _rescrapedMovie.fullmoviebody.TmdbSetId = ""
+
                         If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                            If rl.tmdb_set_name Then
-                                
-                                If _movieCache.GotTmdbSetDetail Then
-                                     _rescrapedMovie.fullmoviebody.SetName = _movieCache.MovieSet.MovieSetDisplayName
-                                Else
-                                    _rescrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
-                                End If
-                                
-                            Else
-                                _rescrapedMovie.fullmoviebody.SetName = _scrapedMovie.fullmoviebody.SetName
-                            End If
                             _rescrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id
-
-                            '_scrapedMovie.fullmoviebody.MovieSet = tmdb.MovieSet
-
-                        Else
-                            _rescrapedMovie.fullmoviebody.SetName   = _scrapedMovie.fullmoviebody.SetName
-                            _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                            _rescrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
+                            UpdateMovieSetCache
                         End If
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName, , rl.EmptyMainTags)
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId  , , rl.EmptyMainTags)
+
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
+                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
                     End If
                 Catch
                 End Try
@@ -3426,8 +3414,6 @@ Public Class Movie
 
         ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
         _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
-
-
     End Sub
 
 

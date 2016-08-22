@@ -31,7 +31,7 @@ Partial Class TmdbSetManager
         Me.lblCustomSetNames = New System.Windows.Forms.Label()
         Me.TmdbSetId = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.MovieSetName = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.UserMovieSetName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+   '     Me.UserMovieSetName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tlpTmdbSetManager.SuspendLayout
         CType(Me.dgvCustomSetNames,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SuspendLayout
@@ -90,7 +90,7 @@ Partial Class TmdbSetManager
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgvCustomSetNames.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgvCustomSetNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomSetNames.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TmdbSetId, Me.MovieSetName, Me.UserMovieSetName})
+        Me.dgvCustomSetNames.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.TmdbSetId, Me.MovieSetName}) ', Me.UserMovieSetName
         Me.tlpTmdbSetManager.SetColumnSpan(Me.dgvCustomSetNames, 4)
         Me.dgvCustomSetNames.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvCustomSetNames.GridColor = System.Drawing.Color.FromArgb(CType(CType(255,Byte),Integer), CType(CType(192,Byte),Integer), CType(CType(192,Byte),Integer))
@@ -163,11 +163,11 @@ Partial Class TmdbSetManager
         '
         'UserMovieSetName
         '
-        Me.UserMovieSetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.UserMovieSetName.DataPropertyName = "UserMovieSetName"
-        Me.UserMovieSetName.HeaderText = "User Preferred Name"
-        Me.UserMovieSetName.MinimumWidth = 150
-        Me.UserMovieSetName.Name = "UserMovieSetName"
+        'Me.UserMovieSetName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        'Me.UserMovieSetName.DataPropertyName = "UserMovieSetName"
+        'Me.UserMovieSetName.HeaderText = "User Preferred Name"
+        'Me.UserMovieSetName.MinimumWidth = 150
+        'Me.UserMovieSetName.Name = "UserMovieSetName"
         '
         'TmdbSetManager
         '
@@ -189,6 +189,6 @@ End Sub
     Friend WithEvents dgvCustomSetNames As System.Windows.Forms.DataGridView
     Friend WithEvents TmdbSetId As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents MovieSetName As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents UserMovieSetName As System.Windows.Forms.DataGridViewTextBoxColumn
+'    Friend WithEvents UserMovieSetName As System.Windows.Forms.DataGridViewTextBoxColumn
 
 End Class

@@ -26,7 +26,7 @@ Partial Class frmTestForm
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnDone = New System.Windows.Forms.Button()
-        Me.TmdbSetManager1 = New Media_Companion.TmdbSetManager()
+    '    Me.TmdbSetManager1 = New Media_Companion.TmdbSetManager()
         Me.Panel1.SuspendLayout
         Me.SuspendLayout
         '
@@ -69,12 +69,12 @@ Partial Class frmTestForm
         '
         'TmdbSetManager1
         '
-        Me.TmdbSetManager1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TmdbSetManager1.Location = New System.Drawing.Point(0, 0)
-        Me.TmdbSetManager1.MoviesLst = Nothing
-        Me.TmdbSetManager1.Name = "TmdbSetManager1"
-        Me.TmdbSetManager1.Size = New System.Drawing.Size(645, 335)
-        Me.TmdbSetManager1.TabIndex = 0
+        'Me.TmdbSetManager1.Dock = System.Windows.Forms.DockStyle.Fill
+        'Me.TmdbSetManager1.Location = New System.Drawing.Point(0, 0)
+        'Me.TmdbSetManager1.MoviesLst = Nothing
+        'Me.TmdbSetManager1.Name = "TmdbSetManager1"
+        'Me.TmdbSetManager1.Size = New System.Drawing.Size(645, 335)
+        'Me.TmdbSetManager1.TabIndex = 0
         '
         'frmTestForm
         '
@@ -90,7 +90,7 @@ Partial Class frmTestForm
 
 End Sub
 
-	Friend WithEvents TmdbSetManager1 As TmdbSetManager
+'	Friend WithEvents TmdbSetManager1 As TmdbSetManager
  Friend WithEvents Panel1 As System.Windows.Forms.Panel
  Friend WithEvents btnCancel As System.Windows.Forms.Button
  Friend WithEvents btnDone As System.Windows.Forms.Button

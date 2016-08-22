@@ -2695,7 +2695,10 @@ Public Class Form1
         If DataGridViewMovies.SelectedRows.Count = 0 Then Return
 
         If DataGridViewMovies.SelectedRows.Count = 1 Then
-            Dim movie As Movie = oMovies.LoadMovie(workingMovieDetails.fileinfo.fullpathandfilename)
+
+            Dim sel = workingMovieDetails.fileinfo.fullpathandfilename
+
+            Dim movie As Movie = oMovies.LoadMovie(sel,False)
             movie.ScrapedMovie.fullmoviebody.title = titletxt.Text.Replace(" (" & workingMovieDetails.fullmoviebody.year & ")", "")
             If movie.ScrapedMovie.fullmoviebody.originaltitle = Nothing Or movie.ScrapedMovie.fullmoviebody.originaltitle = "" Then
                 movie.ScrapedMovie.fullmoviebody.originaltitle = movie.ScrapedMovie.fullmoviebody.title
@@ -2808,10 +2811,19 @@ Public Class Form1
             '        Next
             '    End If
             'End If
-            movie.AssignMovieToCache()
-            movie.UpdateMovieCache()
-            movie.SaveNFO()
-            UpdateFilteredList()
+
+
+            movie.SaveNFO
+            movie.AssignMovieToCache
+            movie.UpdateMovieCache
+            UpdateFilteredList
+
+            DataGridViewMovies.ClearSelection
+            Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString=sel).FirstOrDefault
+            selMovie.Selected = True
+            DisplayMovie
+
+
             If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TagsPopulate()
         Else
             messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
@@ -2823,7 +2835,11 @@ Public Class Form1
             Dim Startfullpathandfilename As String = ""
             If Not ISNothing(DataGridViewMovies.CurrentRow) Then
                 Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-                Startfullpathandfilename = DataGridViewMovies.Item(5, i).Value.ToString
+
+
+                'Startfullpathandfilename = DataGridViewMovies.Item(5, i).Value.ToString
+                Startfullpathandfilename = CType(DataGridViewMovies.SelectedRows(0).DataBoundItem,Data_GridViewMovie).fullpathandfilename.ToString
+
                 messbox.Cancelled = False
                 Dim pos As Integer = 0
                 Dim NfosToSave As List(Of String) = (From x As datagridviewrow In DataGridViewMovies.SelectedRows Select nfo=x.Cells("fullpathandfilename").Value.ToString).ToList
@@ -2915,25 +2931,37 @@ Public Class Form1
                     '        End If
                     '    End If
                     'End If
-                    movie.AssignMovieToCache()
-                    movie.UpdateMovieCache()
-                    movie.SaveNFO()
+
+
+                    movie.SaveNFO
+                    movie.AssignMovieToCache
+                    movie.UpdateMovieCache
+
                     Application.DoEvents()
+
                     If messbox.Cancelled Then Exit For
                 Next
                 If tb_tagtxt_changed Then tb_tagtxt_changed = False
                 UpdateFilteredList()
                 ProgState = ProgramState.Other
+               
+            DataGridViewMovies.ClearSelection
+            Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString=Startfullpathandfilename).FirstOrDefault
+            selMovie.Selected = True
+            DisplayMovie               
                 
             Else
                 messbox.Close()
                 MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
                 Exit Sub
             End If
-            workingMovie.fullpathandfilename = Startfullpathandfilename
-            workingMovie.oMovies = oMovies
-            mov_FormPopulate()
+
+            'workingMovie.fullpathandfilename = Startfullpathandfilename
+            'workingMovie.oMovies = oMovies
+            'mov_FormPopulate()
+
             messbox.Close()
+
             If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TabControl2.SelectedIndex = 0
         End If
         
@@ -10775,7 +10803,7 @@ Public Class Form1
         '    cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
         'Next
 
-		  cbMovieDisplay_MovieSet.Items.AddRange(oMovies.AllMovieSets.ToArray)
+		cbMovieDisplay_MovieSet.Items.AddRange(oMovies.AllMovieSets)
 
         cbMovieDisplay_MovieSet.Sorted = False
         If cbMovieDisplay_MovieSet.Items.Count = 0 Then cbMovieDisplay_MovieSet.Items.Add("-None-")

@@ -2743,9 +2743,9 @@ Public Class Movies
             childchild.InnerText = movieset.LastUpdatedTs
             child.AppendChild(childchild)
 
-            childchild = doc.CreateElement("UserMovieSetName")
-            childchild.InnerText = movieset.UserMovieSetName
-            child.AppendChild(childchild)
+            'childchild = doc.CreateElement("UserMovieSetName")
+            'childchild.InnerText = movieset.UserMovieSetName
+            'child.AppendChild(childchild)
 
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
@@ -3439,15 +3439,15 @@ Public Class Movies
 
 
 
-	Public ReadOnly Property AllMovieSets As List(Of String)
+	Public ReadOnly Property AllMovieSets As String()
 		Get
 			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
-			Dim resUser = From x In Pref.moviesets Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
+			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
 
-			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x)
+			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x).ToArray
 
 
-			Return res.ToList
+			Return res
 		End Get
 
 	End Property

@@ -228,9 +228,6 @@
     <Compile Include="Forms\Form1\Form1.MovieFilters.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1\Form1.Testing.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\frmFanartTvArtSelect.Designer.vb">
       <DependentUpon>frmFanartTvArtSelect.vb</DependentUpon>
     </Compile>
@@ -271,12 +268,6 @@
       <DependentUpon>frmImageBrowseOrUrl.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmImageBrowseOrUrl.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmTestForm.Designer.vb">
-      <DependentUpon>frmTestForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\frmTestForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\frmTextEdit.Designer.vb">
@@ -508,12 +499,6 @@
     <Compile Include="UserControls\ProgressAndStatus.vb">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\TmdbSetManager.Designer.vb">
-      <DependentUpon>TmdbSetManager.vb</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\TmdbSetManager.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="UserControls\TooltipGridViewMovies.Designer.vb">
       <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>
     </Compile>
@@ -619,9 +604,6 @@
       <DependentUpon>frmExceptions.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmTestForm.resx">
-      <DependentUpon>frmTestForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmTextEdit.resx">
       <DependentUpon>frmTextEdit.vb</DependentUpon>
     </EmbeddedResource>
@@ -687,9 +669,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ProgressAndStatus.resx">
       <DependentUpon>ProgressAndStatus.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\TmdbSetManager.resx">
-      <DependentUpon>TmdbSetManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\TooltipGridViewMovies.resx">
       <DependentUpon>TooltipGridViewMovies.vb</DependentUpon>

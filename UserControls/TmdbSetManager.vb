@@ -71,7 +71,7 @@ Public Class TmdbSetManager
 
     Public Sub UpdateMovieSetsDataTable
 
-        Dim q = From x As MovieSetInfo In MoviesLst.MovieSetDB Select x.TmdbSetId, x.MovieSetName, x.UserMovieSetName
+        Dim q = From x As MovieSetInfo In MoviesLst.MovieSetDB Select x.TmdbSetId, x.MovieSetName   ', x.UserMovieSetName
 
         dgvCustomSetNames.DataSource = q.CopyToDataTable()
     End Sub
@@ -106,7 +106,7 @@ Public Class TmdbSetManager
             Dim MovieSet = MoviesLst.FindMovieSetInfoByTmdbSetId(TmdbSetId)
             
 				'Update movie set record in 'db'
-            MovieSet.UserMovieSetName = UserMovieSetName
+   '         MovieSet.UserMovieSetName = UserMovieSetName
 
 				'Update movie cache records and their nfos
             MoviesLst.UpdateMovieCacheSetName(MovieSet)
