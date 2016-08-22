@@ -1,14 +1,12 @@
-Imports System.ComponentModel 
 Imports System.IO
 Imports System.Linq
-Imports System.Text.RegularExpressions
-Imports System.Xml
-Imports System.Threading 
-Imports Media_Companion
 Imports System.Text
-Imports YouTubeFisher
+Imports System.Text.RegularExpressions
+Imports System.Xml 
+Imports Media_Companion
 Imports Media_Companion.Pref
 Imports XBMC.JsonRpc
+Imports YouTubeFisher
 
 Public Class Movie
 

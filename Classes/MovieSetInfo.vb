@@ -2,14 +2,33 @@
 Public Class MovieSetInfo
 
     Private  _movieSetName        As String = ""
+    Private  _userMovieSetName    As String = ""
     Private  _movieSetDisplayName As String = ""
 
 
     Property TmdbSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
     Property Collection          As New List(Of CollectionMovie)
     Property LastUpdatedTs       As Date = DateTime.MinValue
-    Property UserMovieSetName    As String = ""                     'Stores users preferred set name 
     Property MergeWithMovieSetId As String = ""                     'Merged sets support    
+
+
+    Property UserMovieSetName As String				                 'Stores users preferred set name 
+        Get
+            Return _userMovieSetName
+        End Get
+        Set
+            If _userMovieSetName <> Value Then
+
+					If Value=MovieSetName Then
+						_userMovieSetName = ""
+					Else
+						_userMovieSetName = Value
+					End If
+        
+            End If
+        End Set
+    End Property
+
 
 
     Property MovieSetName As String

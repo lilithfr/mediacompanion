@@ -93,7 +93,7 @@ Public Class TmdbSetManager
     'End Sub
 
 
-    Sub UpdateMovieSetDb
+    Sub ApplyUpdates
         Dim dtChanges = dgvCustomSetNames.DataSource.GetChanges
 
         If IsNothing(dtChanges) Then Return
@@ -105,10 +105,16 @@ Public Class TmdbSetManager
 
             Dim MovieSet = MoviesLst.FindMovieSetInfoBySetId(TmdbSetId)
             
+				'Update movie set record in 'db'
             MovieSet.UserMovieSetName = UserMovieSetName
 
+				'Update movie cache records and their nfos
             MoviesLst.UpdateMovieCacheSetName(MovieSet)
         Next
+
+
+		  MoviesLst.SaveMovieCache
+		  MoviesLst.SaveMovieSetCache
     End Sub
 
 #End Region

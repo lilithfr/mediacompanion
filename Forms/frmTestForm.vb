@@ -2,7 +2,7 @@
 
     Private Sub btnDone_Click( sender As Object,  e As EventArgs) Handles btnDone.Click
 
-        TmdbSetManager1.UpdateMovieSetDb
+        TmdbSetManager1.ApplyUpdates
         DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 

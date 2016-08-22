@@ -812,11 +812,21 @@ Public Class Movies
         Get
             Dim lst = New List(Of String)
 
-            lst.Add( "Set" )
+            lst.Add( LockedFieldCount("Set") )
 
             Return lst
         End Get
     End Property 
+
+
+    Function LockedFieldCount(field As String) As String
+
+         Dim q = From m In MovieCache Where m.LockedFields.Contains(field.ToLower) 
+
+         Return field & " (" & q.Count.ToString & ")"
+    End Function  
+
+
 
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
@@ -3309,7 +3319,7 @@ Public Class Movies
 
         For Each item As CCBoxItem In ccb.Items
 
-            Dim fieldName = item.Name.ToLower
+            Dim fieldName = item.Name.RemoveAfterMatch.ToLower
 
             Select ccb.GetItemCheckState(i)
                 Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.LockedFields.Contains(fieldName) )
@@ -3406,14 +3416,24 @@ Public Class Movies
         Dim res = (From x In MovieCache Where x.TmdbSetId=MovieSet.TmdbSetId)
 
         For Each m In res
-            m.SetName = MovieSet.MovieSetDisplayName
+            'm.SetName = MovieSet.MovieSetDisplayName
 
-            Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
+				Dim movie As Movie = LoadMovie(m.fullpathandfilename)
 
-            fmd.fullmoviebody.SetName = m.SetName
-            fmd.fullmoviebody.TmdbSetId   = m.TmdbSetId
+            movie.ScrapedMovie.fullmoviebody.SetName   = m.SetName
+            movie.ScrapedMovie.fullmoviebody.TmdbSetId = m.TmdbSetId
 
-            Movie.SaveNFO(m.fullpathandfilename, fmd)
+            movie.AssignMovieToCache
+            movie.UpdateMovieCache
+            movie.SaveNFO
+
+            'Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
+
+            'fmd.fullmoviebody.SetName   = m.SetName
+            'fmd.fullmoviebody.TmdbSetId = m.TmdbSetId
+
+            'Movie.SaveNFO(m.fullpathandfilename, fmd)
+
         Next
     End Sub
 
