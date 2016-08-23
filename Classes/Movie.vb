@@ -808,6 +808,7 @@ Public Class Movie
 
     Private Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache" ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
@@ -817,17 +818,16 @@ Public Class Movie
         Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadMovieSetArt         , "MovieSet Art download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv download"        ) )  'Download images from Fanart.Tv site
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache" ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
@@ -847,9 +847,9 @@ Public Class Movie
  
     Sub AppendScrapeFailedActions
         Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields  , "Tidy up unscraped fields"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignUnknownMovieToCache , "Assign unknown new movie to cache" ) )
         Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches              , "Updating caches"                   ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                   , "Save Nfo"                          ) )
     End Sub
 
     Sub AppendMVScrapeFailedActions
@@ -1578,6 +1578,7 @@ Public Class Movie
             _scrapedMovie.fileinfo.createdate = _previousCache.createdate
             _scrapedMovie.fullmoviebody.SetName = _previousCache.SetName
             _scrapedMovie.fullmoviebody.TmdbSetId = _previousCache.TmdbSetId
+            _scrapedMovie.fullmoviebody.LockedFields = _previousCache.LockedFields
         Else
             Try
                 tmdb.Imdb = _scrapedMovie.fullmoviebody.imdbid
@@ -2979,16 +2980,17 @@ Public Class Movie
                 checkfolder &= "\" & folder
             Next
         End If
-        If Not Directory.Exists(checkfolder) Then
-                Directory.CreateDirectory(checkfolder)
-                log &= "!!! New path created:- " & checkfolder & vbCrLf 
-        Else
-            If (checkfolder & "\") = FilePath Then
-                log &= "!!! Path for: " & checkfolder & vbCrLf 
-                log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
-                Return log
-            End If
-        End If
+
+         If (checkfolder & "\") = FilePath  Or Directory.Exists(checkfolder) Then
+               log &= "!!! Path for: " & checkfolder & vbCrLf 
+               log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
+               Return log
+         End If
+
+
+         Directory.CreateDirectory(checkfolder)
+          log &= "!!! New path created:- " & checkfolder & vbCrLf 
+
         
         'If not in root, move files to new path and any sub folders
         If Not inrootfolder Then
@@ -3388,6 +3390,15 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieSetCache
+
+        If _scrapedMovie.fullmoviebody.Locked("set") Then 
+            Return
+        End If
+
+        If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+				_scrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
+				_scrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id 
+        End If
 
         _movieCache.oMovies = _parent
 
