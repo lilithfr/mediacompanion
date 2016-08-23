@@ -112,9 +112,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\log4net.2.0.0\lib\net40-client\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Media Companion">
-      <HintPath>obj\Debug\Media Companion.exe</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
