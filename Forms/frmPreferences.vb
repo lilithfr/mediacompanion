@@ -2948,6 +2948,7 @@ End Sub
             End If
             lb_tv_RegexScrape.Items.Add(tb_tv_RegexScrape_New.Text)
             Pref.tv_RegexScraper.Add(tb_tv_RegexScrape_New.Text)
+            tb_tv_RegexScrape_New.Text = ""
             Changes = True
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
@@ -2980,7 +2981,8 @@ End Sub
                 MsgBox("Please Enter a filename or any string to test")
                 Exit Sub
             End If
-            If lb_tv_RegexScrape.SelectedItem = Nothing Then
+            'If lb_tv_RegexScrape.SelectedItem = Nothing Then
+            If tb_tv_RegexScrape_Edit.Text = "" Then
                 MsgBox("Please Select a Regex to test")
                 Exit Sub
             End If
@@ -2989,9 +2991,10 @@ End Sub
             Dim tvepisode As String
             Dim s As String
             Dim tempstring As String = tb_tv_RegexScrape_TestString.Text
+            Dim testregex As String = tb_tv_RegexScrape_Edit.text
             s = tempstring '.ToLower
             Dim M As Match
-            M = Regex.Match(s, lb_tv_RegexScrape.SelectedItem)
+            M = Regex.Match(s, testregex) 'lb_tv_RegexScrape.SelectedItem)
             If M.Success = True Then
                 Try
                     tvseries = M.Groups(1).Value

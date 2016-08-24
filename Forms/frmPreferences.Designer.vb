@@ -137,7 +137,13 @@ Partial Class frmPreferences
         Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
         Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.gpbxPrefIgnore = New System.Windows.Forms.GroupBox()
+        Me.cb_IgnoreAn = New System.Windows.Forms.CheckBox()
+        Me.cb_IgnoreThe = New System.Windows.Forms.CheckBox()
+        Me.cb_IgnoreA = New System.Windows.Forms.CheckBox()
+        Me.gpbxPrefOverlay = New System.Windows.Forms.GroupBox()
         Me.cbDisplayAllSubtitleLang = New System.Windows.Forms.CheckBox()
+        Me.cbDisplayMediaInfoFolderSize = New System.Windows.Forms.CheckBox()
         Me.cbGenreCustomBefore = New System.Windows.Forms.CheckBox()
         Me.btnEditCustomGenreFile = New System.Windows.Forms.Button()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -161,11 +167,7 @@ Partial Class frmPreferences
         Me.txtVideoSourceAdd = New System.Windows.Forms.TextBox()
         Me.btnVideoSourceAdd = New System.Windows.Forms.Button()
         Me.lbVideoSource = New System.Windows.Forms.ListBox()
-        Me.cbDisplayMediaInfoFolderSize = New System.Windows.Forms.CheckBox()
-        Me.cb_IgnoreAn = New System.Windows.Forms.CheckBox()
-        Me.cb_IgnoreA = New System.Windows.Forms.CheckBox()
         Me.cbOverwriteArtwork = New System.Windows.Forms.CheckBox()
-        Me.cb_IgnoreThe = New System.Windows.Forms.CheckBox()
         Me.CheckBox38 = New System.Windows.Forms.CheckBox()
         Me.gbxXBMCversion = New System.Windows.Forms.GroupBox()
         Me.Label129 = New System.Windows.Forms.Label()
@@ -490,8 +492,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.gpbxPrefOverlay = New System.Windows.Forms.GroupBox()
-        Me.gpbxPrefIgnore = New System.Windows.Forms.GroupBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -506,6 +506,8 @@ Partial Class frmPreferences
         Me.GroupBox31.SuspendLayout
         Me.GroupBox3.SuspendLayout
         Me.TPCommonSettings.SuspendLayout
+        Me.gpbxPrefIgnore.SuspendLayout
+        Me.gpbxPrefOverlay.SuspendLayout
         Me.GroupBox4.SuspendLayout
         Me.gbImageResizing.SuspendLayout
         Me.grpCleanFilename.SuspendLayout
@@ -580,8 +582,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.gpbxPrefOverlay.SuspendLayout
-        Me.gpbxPrefIgnore.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1234,7 +1234,7 @@ Partial Class frmPreferences
         'btn_tv_RegexRename_MoveDown
         '
         Me.btn_tv_RegexRename_MoveDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexRename_MoveDown.Location = New System.Drawing.Point(401, 237)
+        Me.btn_tv_RegexRename_MoveDown.Location = New System.Drawing.Point(401, 263)
         Me.btn_tv_RegexRename_MoveDown.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexRename_MoveDown.Name = "btn_tv_RegexRename_MoveDown"
         Me.btn_tv_RegexRename_MoveDown.Size = New System.Drawing.Size(36, 31)
@@ -1258,7 +1258,7 @@ Partial Class frmPreferences
         'btn_tv_RegexScrape_MoveDown
         '
         Me.btn_tv_RegexScrape_MoveDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_MoveDown.Location = New System.Drawing.Point(398, 71)
+        Me.btn_tv_RegexScrape_MoveDown.Location = New System.Drawing.Point(398, 127)
         Me.btn_tv_RegexScrape_MoveDown.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_MoveDown.Name = "btn_tv_RegexScrape_MoveDown"
         Me.btn_tv_RegexScrape_MoveDown.Size = New System.Drawing.Size(36, 29)
@@ -1846,6 +1846,64 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
         '
+        'gpbxPrefIgnore
+        '
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreAn)
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreThe)
+        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreA)
+        Me.gpbxPrefIgnore.Location = New System.Drawing.Point(296, 175)
+        Me.gpbxPrefIgnore.Name = "gpbxPrefIgnore"
+        Me.gpbxPrefIgnore.Size = New System.Drawing.Size(273, 100)
+        Me.gpbxPrefIgnore.TabIndex = 111
+        Me.gpbxPrefIgnore.TabStop = false
+        Me.gpbxPrefIgnore.Text = "Ignore Article options"
+        '
+        'cb_IgnoreAn
+        '
+        Me.cb_IgnoreAn.AutoSize = true
+        Me.cb_IgnoreAn.Location = New System.Drawing.Point(7, 68)
+        Me.cb_IgnoreAn.Name = "cb_IgnoreAn"
+        Me.cb_IgnoreAn.Size = New System.Drawing.Size(195, 19)
+        Me.cb_IgnoreAn.TabIndex = 93
+        Me.cb_IgnoreAn.Text = "Ignore article ""An"" when sorting"
+        Me.cb_IgnoreAn.UseVisualStyleBackColor = true
+        '
+        'cb_IgnoreThe
+        '
+        Me.cb_IgnoreThe.AutoSize = true
+        Me.cb_IgnoreThe.Location = New System.Drawing.Point(7, 21)
+        Me.cb_IgnoreThe.Margin = New System.Windows.Forms.Padding(4)
+        Me.cb_IgnoreThe.Name = "cb_IgnoreThe"
+        Me.cb_IgnoreThe.Size = New System.Drawing.Size(205, 19)
+        Me.cb_IgnoreThe.TabIndex = 89
+        Me.cb_IgnoreThe.Text = "Ignore article ""The "" when sorting"
+        Me.cb_IgnoreThe.UseVisualStyleBackColor = true
+        '
+        'cb_IgnoreA
+        '
+        Me.cb_IgnoreA.AutoSize = true
+        Me.cb_IgnoreA.Location = New System.Drawing.Point(7, 43)
+        Me.cb_IgnoreA.Name = "cb_IgnoreA"
+        Me.cb_IgnoreA.Size = New System.Drawing.Size(194, 19)
+        Me.cb_IgnoreA.TabIndex = 91
+        Me.cb_IgnoreA.Text = "Ignore article ""A ""  when sorting"
+        Me.cb_IgnoreA.UseVisualStyleBackColor = true
+        '
+        'gpbxPrefOverlay
+        '
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayRatingOverlay)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayAllSubtitleLang)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoFolderSize)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayDefaultSubtitleLang)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoOverlay)
+        Me.gpbxPrefOverlay.Controls.Add(Me.cbShowAllAudioTracks)
+        Me.gpbxPrefOverlay.Location = New System.Drawing.Point(6, 175)
+        Me.gpbxPrefOverlay.Name = "gpbxPrefOverlay"
+        Me.gpbxPrefOverlay.Size = New System.Drawing.Size(284, 176)
+        Me.gpbxPrefOverlay.TabIndex = 110
+        Me.gpbxPrefOverlay.TabStop = false
+        Me.gpbxPrefOverlay.Text = "Overlay options"
+        '
         'cbDisplayAllSubtitleLang
         '
         Me.cbDisplayAllSubtitleLang.AutoSize = true
@@ -1855,6 +1913,16 @@ Partial Class frmPreferences
         Me.cbDisplayAllSubtitleLang.TabIndex = 109
         Me.cbDisplayAllSubtitleLang.Text = "Show all Subtitle lang in Media Overlay"
         Me.cbDisplayAllSubtitleLang.UseVisualStyleBackColor = true
+        '
+        'cbDisplayMediaInfoFolderSize
+        '
+        Me.cbDisplayMediaInfoFolderSize.AutoSize = true
+        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(6, 70)
+        Me.cbDisplayMediaInfoFolderSize.Name = "cbDisplayMediaInfoFolderSize"
+        Me.cbDisplayMediaInfoFolderSize.Size = New System.Drawing.Size(233, 19)
+        Me.cbDisplayMediaInfoFolderSize.TabIndex = 97
+        Me.cbDisplayMediaInfoFolderSize.Text = "Display Folder Size over Fanart Image"
+        Me.cbDisplayMediaInfoFolderSize.UseVisualStyleBackColor = true
         '
         'cbGenreCustomBefore
         '
@@ -2088,36 +2156,6 @@ Partial Class frmPreferences
         Me.lbVideoSource.Size = New System.Drawing.Size(185, 394)
         Me.lbVideoSource.TabIndex = 0
         '
-        'cbDisplayMediaInfoFolderSize
-        '
-        Me.cbDisplayMediaInfoFolderSize.AutoSize = true
-        Me.cbDisplayMediaInfoFolderSize.Location = New System.Drawing.Point(6, 70)
-        Me.cbDisplayMediaInfoFolderSize.Name = "cbDisplayMediaInfoFolderSize"
-        Me.cbDisplayMediaInfoFolderSize.Size = New System.Drawing.Size(233, 19)
-        Me.cbDisplayMediaInfoFolderSize.TabIndex = 97
-        Me.cbDisplayMediaInfoFolderSize.Text = "Display Folder Size over Fanart Image"
-        Me.cbDisplayMediaInfoFolderSize.UseVisualStyleBackColor = true
-        '
-        'cb_IgnoreAn
-        '
-        Me.cb_IgnoreAn.AutoSize = true
-        Me.cb_IgnoreAn.Location = New System.Drawing.Point(7, 68)
-        Me.cb_IgnoreAn.Name = "cb_IgnoreAn"
-        Me.cb_IgnoreAn.Size = New System.Drawing.Size(195, 19)
-        Me.cb_IgnoreAn.TabIndex = 93
-        Me.cb_IgnoreAn.Text = "Ignore article ""An"" when sorting"
-        Me.cb_IgnoreAn.UseVisualStyleBackColor = true
-        '
-        'cb_IgnoreA
-        '
-        Me.cb_IgnoreA.AutoSize = true
-        Me.cb_IgnoreA.Location = New System.Drawing.Point(7, 43)
-        Me.cb_IgnoreA.Name = "cb_IgnoreA"
-        Me.cb_IgnoreA.Size = New System.Drawing.Size(194, 19)
-        Me.cb_IgnoreA.TabIndex = 91
-        Me.cb_IgnoreA.Text = "Ignore article ""A ""  when sorting"
-        Me.cb_IgnoreA.UseVisualStyleBackColor = true
-        '
         'cbOverwriteArtwork
         '
         Me.cbOverwriteArtwork.AutoSize = true
@@ -2127,17 +2165,6 @@ Partial Class frmPreferences
         Me.cbOverwriteArtwork.TabIndex = 90
         Me.cbOverwriteArtwork.Text = "Don’t overwrite existing artwork"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         Me.cbOverwriteArtwork.UseVisualStyleBackColor = true
-        '
-        'cb_IgnoreThe
-        '
-        Me.cb_IgnoreThe.AutoSize = true
-        Me.cb_IgnoreThe.Location = New System.Drawing.Point(7, 21)
-        Me.cb_IgnoreThe.Margin = New System.Windows.Forms.Padding(4)
-        Me.cb_IgnoreThe.Name = "cb_IgnoreThe"
-        Me.cb_IgnoreThe.Size = New System.Drawing.Size(205, 19)
-        Me.cb_IgnoreThe.TabIndex = 89
-        Me.cb_IgnoreThe.Text = "Ignore article ""The "" when sorting"
-        Me.cb_IgnoreThe.UseVisualStyleBackColor = true
         '
         'CheckBox38
         '
@@ -5136,7 +5163,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
+        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5156,7 +5183,7 @@ Partial Class frmPreferences
         Me.GroupBox_tv_RegexRename.Controls.Add(Me.btn_tv_RegexRename_Edit)
         Me.GroupBox_tv_RegexRename.Location = New System.Drawing.Point(514, 7)
         Me.GroupBox_tv_RegexRename.Name = "GroupBox_tv_RegexRename"
-        Me.GroupBox_tv_RegexRename.Size = New System.Drawing.Size(450, 480)
+        Me.GroupBox_tv_RegexRename.Size = New System.Drawing.Size(450, 506)
         Me.GroupBox_tv_RegexRename.TabIndex = 36
         Me.GroupBox_tv_RegexRename.TabStop = false
         Me.GroupBox_tv_RegexRename.Text = "Rename"
@@ -5165,7 +5192,7 @@ Partial Class frmPreferences
         '
         Me.btn_tv_RegexRename_Restore.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexRename_Restore.Location = New System.Drawing.Point(266, 426)
+        Me.btn_tv_RegexRename_Restore.Location = New System.Drawing.Point(266, 452)
         Me.btn_tv_RegexRename_Restore.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexRename_Restore.Name = "btn_tv_RegexRename_Restore"
         Me.btn_tv_RegexRename_Restore.Size = New System.Drawing.Size(168, 31)
@@ -5185,14 +5212,14 @@ Partial Class frmPreferences
         Me.lb_tv_RegexRename.MaximumSize = New System.Drawing.Size(2000, 275)
         Me.lb_tv_RegexRename.MinimumSize = New System.Drawing.Size(4, 79)
         Me.lb_tv_RegexRename.Name = "lb_tv_RegexRename"
-        Me.lb_tv_RegexRename.Size = New System.Drawing.Size(374, 244)
+        Me.lb_tv_RegexRename.Size = New System.Drawing.Size(374, 259)
         Me.lb_tv_RegexRename.TabIndex = 35
         '
         'btn_tv_RegexRename_Remove
         '
         Me.btn_tv_RegexRename_Remove.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexRename_Remove.Location = New System.Drawing.Point(269, 290)
+        Me.btn_tv_RegexRename_Remove.Location = New System.Drawing.Point(269, 316)
         Me.btn_tv_RegexRename_Remove.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexRename_Remove.Name = "btn_tv_RegexRename_Remove"
         Me.btn_tv_RegexRename_Remove.Size = New System.Drawing.Size(168, 31)
@@ -5204,7 +5231,7 @@ Partial Class frmPreferences
         '
         Me.Label158.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label158.AutoSize = true
-        Me.Label158.Location = New System.Drawing.Point(16, 353)
+        Me.Label158.Location = New System.Drawing.Point(16, 379)
         Me.Label158.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label158.Name = "Label158"
         Me.Label158.Size = New System.Drawing.Size(71, 15)
@@ -5215,7 +5242,7 @@ Partial Class frmPreferences
         '
         Me.Label159.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label159.AutoSize = true
-        Me.Label159.Location = New System.Drawing.Point(16, 396)
+        Me.Label159.Location = New System.Drawing.Point(16, 422)
         Me.Label159.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label159.Name = "Label159"
         Me.Label159.Size = New System.Drawing.Size(67, 15)
@@ -5226,7 +5253,7 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexRename_New.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexRename_New.Location = New System.Drawing.Point(98, 349)
+        Me.tb_tv_RegexRename_New.Location = New System.Drawing.Point(98, 375)
         Me.tb_tv_RegexRename_New.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexRename_New.Name = "tb_tv_RegexRename_New"
         Me.tb_tv_RegexRename_New.Size = New System.Drawing.Size(263, 21)
@@ -5236,7 +5263,7 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexRename_Edit.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexRename_Edit.Location = New System.Drawing.Point(98, 389)
+        Me.tb_tv_RegexRename_Edit.Location = New System.Drawing.Point(98, 415)
         Me.tb_tv_RegexRename_Edit.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexRename_Edit.Name = "tb_tv_RegexRename_Edit"
         Me.tb_tv_RegexRename_Edit.Size = New System.Drawing.Size(263, 21)
@@ -5245,7 +5272,7 @@ Partial Class frmPreferences
         'btn_tv_RegexRename_Add
         '
         Me.btn_tv_RegexRename_Add.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexRename_Add.Location = New System.Drawing.Point(369, 347)
+        Me.btn_tv_RegexRename_Add.Location = New System.Drawing.Point(369, 373)
         Me.btn_tv_RegexRename_Add.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexRename_Add.Name = "btn_tv_RegexRename_Add"
         Me.btn_tv_RegexRename_Add.Size = New System.Drawing.Size(66, 31)
@@ -5256,7 +5283,7 @@ Partial Class frmPreferences
         'btn_tv_RegexRename_Edit
         '
         Me.btn_tv_RegexRename_Edit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexRename_Edit.Location = New System.Drawing.Point(369, 389)
+        Me.btn_tv_RegexRename_Edit.Location = New System.Drawing.Point(369, 415)
         Me.btn_tv_RegexRename_Edit.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexRename_Edit.Name = "btn_tv_RegexRename_Edit"
         Me.btn_tv_RegexRename_Edit.Size = New System.Drawing.Size(66, 31)
@@ -5280,7 +5307,7 @@ Partial Class frmPreferences
         Me.GroupBox_tv_RegexScrape.Controls.Add(Me.GroupBox_tv_RegexScrape_Test)
         Me.GroupBox_tv_RegexScrape.Location = New System.Drawing.Point(7, 7)
         Me.GroupBox_tv_RegexScrape.Name = "GroupBox_tv_RegexScrape"
-        Me.GroupBox_tv_RegexScrape.Size = New System.Drawing.Size(450, 480)
+        Me.GroupBox_tv_RegexScrape.Size = New System.Drawing.Size(450, 506)
         Me.GroupBox_tv_RegexScrape.TabIndex = 34
         Me.GroupBox_tv_RegexScrape.TabStop = false
         Me.GroupBox_tv_RegexScrape.Text = "Scrape"
@@ -5294,17 +5321,15 @@ Partial Class frmPreferences
         Me.lb_tv_RegexScrape.ItemHeight = 15
         Me.lb_tv_RegexScrape.Location = New System.Drawing.Point(16, 21)
         Me.lb_tv_RegexScrape.Margin = New System.Windows.Forms.Padding(4)
-        Me.lb_tv_RegexScrape.MaximumSize = New System.Drawing.Size(2000, 79)
-        Me.lb_tv_RegexScrape.MinimumSize = New System.Drawing.Size(4, 79)
         Me.lb_tv_RegexScrape.Name = "lb_tv_RegexScrape"
-        Me.lb_tv_RegexScrape.Size = New System.Drawing.Size(374, 79)
+        Me.lb_tv_RegexScrape.Size = New System.Drawing.Size(374, 139)
         Me.lb_tv_RegexScrape.TabIndex = 23
         '
         'btn_tv_RegexScrape_Remove
         '
         Me.btn_tv_RegexScrape_Remove.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_Remove.Location = New System.Drawing.Point(266, 108)
+        Me.btn_tv_RegexScrape_Remove.Location = New System.Drawing.Point(265, 171)
         Me.btn_tv_RegexScrape_Remove.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_Remove.Name = "btn_tv_RegexScrape_Remove"
         Me.btn_tv_RegexScrape_Remove.Size = New System.Drawing.Size(168, 29)
@@ -5316,7 +5341,7 @@ Partial Class frmPreferences
         '
         Me.Label119.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label119.AutoSize = true
-        Me.Label119.Location = New System.Drawing.Point(16, 156)
+        Me.Label119.Location = New System.Drawing.Point(15, 215)
         Me.Label119.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label119.Name = "Label119"
         Me.Label119.Size = New System.Drawing.Size(71, 15)
@@ -5327,7 +5352,7 @@ Partial Class frmPreferences
         '
         Me.Label117.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label117.AutoSize = true
-        Me.Label117.Location = New System.Drawing.Point(16, 198)
+        Me.Label117.Location = New System.Drawing.Point(15, 251)
         Me.Label117.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label117.Name = "Label117"
         Me.Label117.Size = New System.Drawing.Size(67, 15)
@@ -5338,7 +5363,7 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexScrape_New.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexScrape_New.Location = New System.Drawing.Point(98, 152)
+        Me.tb_tv_RegexScrape_New.Location = New System.Drawing.Point(97, 212)
         Me.tb_tv_RegexScrape_New.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexScrape_New.Name = "tb_tv_RegexScrape_New"
         Me.tb_tv_RegexScrape_New.Size = New System.Drawing.Size(262, 21)
@@ -5348,7 +5373,7 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexScrape_Edit.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexScrape_Edit.Location = New System.Drawing.Point(98, 192)
+        Me.tb_tv_RegexScrape_Edit.Location = New System.Drawing.Point(97, 248)
         Me.tb_tv_RegexScrape_Edit.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexScrape_Edit.Name = "tb_tv_RegexScrape_Edit"
         Me.tb_tv_RegexScrape_Edit.Size = New System.Drawing.Size(262, 21)
@@ -5357,7 +5382,7 @@ Partial Class frmPreferences
         'btn_tv_RegexScrape_Add
         '
         Me.btn_tv_RegexScrape_Add.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_Add.Location = New System.Drawing.Point(368, 145)
+        Me.btn_tv_RegexScrape_Add.Location = New System.Drawing.Point(367, 208)
         Me.btn_tv_RegexScrape_Add.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_Add.Name = "btn_tv_RegexScrape_Add"
         Me.btn_tv_RegexScrape_Add.Size = New System.Drawing.Size(66, 29)
@@ -5368,7 +5393,7 @@ Partial Class frmPreferences
         'btn_tv_RegexScrape_Edit
         '
         Me.btn_tv_RegexScrape_Edit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_Edit.Location = New System.Drawing.Point(368, 187)
+        Me.btn_tv_RegexScrape_Edit.Location = New System.Drawing.Point(367, 244)
         Me.btn_tv_RegexScrape_Edit.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_Edit.Name = "btn_tv_RegexScrape_Edit"
         Me.btn_tv_RegexScrape_Edit.Size = New System.Drawing.Size(66, 29)
@@ -5380,7 +5405,7 @@ Partial Class frmPreferences
         '
         Me.btn_tv_RegexScrape_Restore.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_Restore.Location = New System.Drawing.Point(266, 425)
+        Me.btn_tv_RegexScrape_Restore.Location = New System.Drawing.Point(266, 467)
         Me.btn_tv_RegexScrape_Restore.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_Restore.Name = "btn_tv_RegexScrape_Restore"
         Me.btn_tv_RegexScrape_Restore.Size = New System.Drawing.Size(168, 29)
@@ -5396,11 +5421,11 @@ Partial Class frmPreferences
         Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.btn_tv_RegexScrape_Test)
         Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.tb_tv_RegexScrape_TestString)
         Me.GroupBox_tv_RegexScrape_Test.Controls.Add(Me.Label118)
-        Me.GroupBox_tv_RegexScrape_Test.Location = New System.Drawing.Point(16, 228)
+        Me.GroupBox_tv_RegexScrape_Test.Location = New System.Drawing.Point(16, 283)
         Me.GroupBox_tv_RegexScrape_Test.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox_tv_RegexScrape_Test.Name = "GroupBox_tv_RegexScrape_Test"
         Me.GroupBox_tv_RegexScrape_Test.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox_tv_RegexScrape_Test.Size = New System.Drawing.Size(418, 189)
+        Me.GroupBox_tv_RegexScrape_Test.Size = New System.Drawing.Size(418, 176)
         Me.GroupBox_tv_RegexScrape_Test.TabIndex = 27
         Me.GroupBox_tv_RegexScrape_Test.TabStop = false
         Me.GroupBox_tv_RegexScrape_Test.Text = "Test Selected Regex"
@@ -5409,17 +5434,17 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexScrape_TestResult.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexScrape_TestResult.Location = New System.Drawing.Point(8, 62)
+        Me.tb_tv_RegexScrape_TestResult.Location = New System.Drawing.Point(8, 59)
         Me.tb_tv_RegexScrape_TestResult.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexScrape_TestResult.Multiline = true
         Me.tb_tv_RegexScrape_TestResult.Name = "tb_tv_RegexScrape_TestResult"
-        Me.tb_tv_RegexScrape_TestResult.Size = New System.Drawing.Size(402, 119)
+        Me.tb_tv_RegexScrape_TestResult.Size = New System.Drawing.Size(402, 104)
         Me.tb_tv_RegexScrape_TestResult.TabIndex = 3
         '
         'btn_tv_RegexScrape_Test
         '
         Me.btn_tv_RegexScrape_Test.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btn_tv_RegexScrape_Test.Location = New System.Drawing.Point(334, 20)
+        Me.btn_tv_RegexScrape_Test.Location = New System.Drawing.Point(334, 17)
         Me.btn_tv_RegexScrape_Test.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_tv_RegexScrape_Test.Name = "btn_tv_RegexScrape_Test"
         Me.btn_tv_RegexScrape_Test.Size = New System.Drawing.Size(66, 29)
@@ -5431,7 +5456,7 @@ Partial Class frmPreferences
         '
         Me.tb_tv_RegexScrape_TestString.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.tb_tv_RegexScrape_TestString.Location = New System.Drawing.Point(81, 24)
+        Me.tb_tv_RegexScrape_TestString.Location = New System.Drawing.Point(81, 21)
         Me.tb_tv_RegexScrape_TestString.Margin = New System.Windows.Forms.Padding(4)
         Me.tb_tv_RegexScrape_TestString.Name = "tb_tv_RegexScrape_TestString"
         Me.tb_tv_RegexScrape_TestString.Size = New System.Drawing.Size(243, 21)
@@ -5441,7 +5466,7 @@ Partial Class frmPreferences
         '
         Me.Label118.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.Label118.AutoSize = true
-        Me.Label118.Location = New System.Drawing.Point(5, 28)
+        Me.Label118.Location = New System.Drawing.Point(5, 25)
         Me.Label118.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label118.Name = "Label118"
         Me.Label118.Size = New System.Drawing.Size(65, 15)
@@ -5867,33 +5892,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'gpbxPrefOverlay
-        '
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayRatingOverlay)
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayAllSubtitleLang)
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoFolderSize)
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayDefaultSubtitleLang)
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbDisplayMediaInfoOverlay)
-        Me.gpbxPrefOverlay.Controls.Add(Me.cbShowAllAudioTracks)
-        Me.gpbxPrefOverlay.Location = New System.Drawing.Point(6, 175)
-        Me.gpbxPrefOverlay.Name = "gpbxPrefOverlay"
-        Me.gpbxPrefOverlay.Size = New System.Drawing.Size(284, 176)
-        Me.gpbxPrefOverlay.TabIndex = 110
-        Me.gpbxPrefOverlay.TabStop = false
-        Me.gpbxPrefOverlay.Text = "Overlay options"
-        '
-        'gpbxPrefIgnore
-        '
-        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreAn)
-        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreThe)
-        Me.gpbxPrefIgnore.Controls.Add(Me.cb_IgnoreA)
-        Me.gpbxPrefIgnore.Location = New System.Drawing.Point(296, 175)
-        Me.gpbxPrefIgnore.Name = "gpbxPrefIgnore"
-        Me.gpbxPrefIgnore.Size = New System.Drawing.Size(273, 100)
-        Me.gpbxPrefIgnore.TabIndex = 111
-        Me.gpbxPrefIgnore.TabStop = false
-        Me.gpbxPrefIgnore.Text = "Ignore Article options"
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -5937,6 +5935,10 @@ Partial Class frmPreferences
         Me.GroupBox3.PerformLayout
         Me.TPCommonSettings.ResumeLayout(false)
         Me.TPCommonSettings.PerformLayout
+        Me.gpbxPrefIgnore.ResumeLayout(false)
+        Me.gpbxPrefIgnore.PerformLayout
+        Me.gpbxPrefOverlay.ResumeLayout(false)
+        Me.gpbxPrefOverlay.PerformLayout
         Me.GroupBox4.ResumeLayout(false)
         Me.GroupBox4.PerformLayout
         Me.gbImageResizing.ResumeLayout(false)
@@ -6063,10 +6065,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.gpbxPrefOverlay.ResumeLayout(false)
-        Me.gpbxPrefOverlay.PerformLayout
-        Me.gpbxPrefIgnore.ResumeLayout(false)
-        Me.gpbxPrefIgnore.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
