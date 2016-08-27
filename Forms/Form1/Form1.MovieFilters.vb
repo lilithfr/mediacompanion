@@ -38,7 +38,7 @@ Partial Public Class Form1
 
 	ReadOnly Property MovieFilterLabels As List(Of Label)
 		Get
-			Dim res = From c As Control In MovieFiltersPanel.Controls Where c.Name.IndexOf("lblFilter") = 0 AndAlso c.Name.EndsWith("Mode")=False
+			Dim res = From c As Control In MovieFiltersPanel.Controls Where c.Name.IndexOf("lblFilter") = 0 AndAlso Not c.Name.EndsWith("Mode") AndAlso Not (c.Name="lblFilterGeneral")
 			Return (From X As Label In res).ToList
 		End Get
 	End Property	
