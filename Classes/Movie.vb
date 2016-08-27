@@ -1189,7 +1189,7 @@ Public Class Movie
 
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
-
+        _movieCache.TmdbSetId           = _scrapedMovie.fullmoviebody.TmdbSetId
 
         If _movieCache.GotTmdbSetDetail Then
             _movieCache.SetName = _movieCache.MovieSet.MovieSetDisplayName
@@ -1197,7 +1197,6 @@ Public Class Movie
             _movieCache.SetName = _scrapedMovie.fullmoviebody.SetName
         End If
 
-        _movieCache.TmdbSetId           = _scrapedMovie.fullmoviebody.TmdbSetId
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director
@@ -2981,15 +2980,15 @@ Public Class Movie
             Next
         End If
 
-         If (checkfolder & "\") = FilePath  Or Directory.Exists(checkfolder) Then
-               log &= "!!! Path for: " & checkfolder & vbCrLf 
-               log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
-               Return log
-         End If
+        If (checkfolder & "\") = FilePath  Or Directory.Exists(checkfolder) Then
+				log &= "!!! Path for: " & checkfolder & vbCrLf 
+				log &= "!!! already Exists, no need to move files" & vbCrLf & vbcrlf
+				Return log
+        End If
 
 
-         Directory.CreateDirectory(checkfolder)
-          log &= "!!! New path created:- " & checkfolder & vbCrLf 
+        Directory.CreateDirectory(checkfolder)
+        log &= "!!! New path created:- " & checkfolder & vbCrLf 
 
         
         'If not in root, move files to new path and any sub folders
@@ -3002,9 +3001,18 @@ Public Class Movie
             Else
                 Moviename = stackname   
             End If
+
             For Each file As IO.FileInfo In fromPathInfo.GetFiles((Moviename & "*"))    'Move Matching Files to Moviename.
-                file.MoveTo(Path.Combine(checkfolder, file.Name))
+
+					Dim newName = Path.Combine(checkfolder, file.Name)
+
+					If IO.File.Exists(newName) Then
+						IO.File.Delete(newName)
+					End If
+
+               file.MoveTo(newName)
             Next
+
             Dim OtherMoviesInFolder As Boolean = False
             For Each file As IO.FileInfo In fromPathInfo.GetFiles()
                 For each extn in Utilities.VideoExtensions

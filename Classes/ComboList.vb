@@ -21,8 +21,8 @@ Public Class ComboList
     Property countries            As String = ""
 
 
-    Private _setName As String
-    Private _setId As String
+    Private _setName              As String = ""
+    Private _setId                As String = ""
 
 
     Public Property SetName As String
@@ -122,7 +122,7 @@ Public Class ComboList
         Get
             Dim res As MovieSetInfo = Nothing
 
-            If GotTmdbId Then
+            If GotTmdbSetId Then
                 res = oMovies.FindMovieSetInfoByTmdbSetId(TmdbSetId)
             End If
             

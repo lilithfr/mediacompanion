@@ -57,7 +57,7 @@ Public Class Data_GridViewMovie
         Get
             Dim res As MovieSetInfo = Nothing
 
-            If GotTmdbId Then
+            If GotTmdbSetId Then
                 res = oMovies.FindMovieSetInfoByTmdbSetId(TmdbSetId)
             End If
             
@@ -69,6 +69,12 @@ Public Class Data_GridViewMovie
         End Get
 
     End Property
+
+    Public ReadOnly Property GotTmdbSetId As Boolean
+        Get
+            Return TmdbSetId<>"" AndAlso Integer.TryParse(TmdbSetId,Nothing)
+        End Get
+    End Property  
 
     Public ReadOnly Property GotTmdbId As Boolean
         Get

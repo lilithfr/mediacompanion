@@ -23,7 +23,7 @@ Partial Public Class Form1
 
 		lblFilterMode = CreateFilterLabel            ("lblFilter" & name & "Mode", "M"  , panel, 129,  17)
 		lblFilter     = CreateFilterLabel            ("lblFilter" & name         , name , panel,   4, 124)
-        cbFilter      = CreateTriStateCheckedComboBox("cbFilter"  & name                , panel, 147     )
+      cbFilter      = CreateTriStateCheckedComboBox("cbFilter"  & name                , panel, 147     )
     End Sub
 
 
@@ -80,6 +80,103 @@ Partial Public Class Form1
         cb.ValueSeparator             = " "  
   
         Return cb
+    End Function
+
+
+
+    Private Sub UpdateFilteredList
+
+        oMovies.UpdateTmdbSetMissingMovies()
+
+        Dim lastSelectedRow As Integer = 0
+        If DataGridViewMovies.SelectedRows.Count = 1 Then 
+            lastSelectedRow = DataGridViewMovies.SelectedRows(0).Index 
+        End If
+        ProgState = ProgramState.UpdatingFilteredList
+        Dim lastSelectedMovie = workingMovie.fullpathandfilename
+        filteredList.Clear
+        filteredList.AddRange(oMovies.MovieCache)
+        Assign_FilterGeneral()
+        UpdateMinMaxMovieFilters
+
+        If cbFilterCountries            .Visible Then cbFilterCountries             .UpdateItems( oMovies.CountriesFilter               )
+        If cbFilterStudios              .Visible Then cbFilterStudios               .UpdateItems (oMovies.StudiosFilter                 )
+        If cbFilterGenre                .Visible Then cbFilterGenre                 .UpdateItems( oMovies.GenresFilter                  )
+        If cbFilterCertificate          .Visible Then cbFilterCertificate           .UpdateItems( oMovies.CertificatesFilter            )
+        If cbFilterSet                  .Visible Then cbFilterSet                   .UpdateItems( oMovies.SetsFilter                    )
+        If cbFilterTag                  .Visible Then cbFilterTag                   .UpdateItems( oMovies.TagFilter                     )
+        If cbFilterResolution           .Visible Then cbFilterResolution            .UpdateItems( oMovies.ResolutionFilter              )
+        If cbFilterVideoCodec           .Visible Then cbFilterVideoCodec            .UpdateItems( oMovies.VideoCodecFilter              )
+        If cbFilterAudioCodecs          .Visible Then cbFilterAudioCodecs           .UpdateItems( oMovies.AudioCodecsFilter             )
+        If cbFilterAudioChannels        .Visible Then cbFilterAudioChannels         .UpdateItems( oMovies.AudioChannelsFilter           )
+        If cbFilterAudioBitrates        .Visible Then cbFilterAudioBitrates         .UpdateItems( oMovies.AudioBitratesFilter           )
+        If cbFilterNumAudioTracks       .Visible Then cbFilterNumAudioTracks        .UpdateItems( oMovies.NumAudioTracksFilter          )
+        If cbFilterAudioLanguages       .Visible Then cbFilterAudioLanguages        .UpdateItems( oMovies.AudioLanguagesFilter          )
+        If cbFilterAudioDefaultLanguages.Visible Then cbFilterAudioDefaultLanguages .UpdateItems( oMovies.AudioDefaultLanguagesFilter   )
+        If cbFilterActor                .Visible Then cbFilterActor                 .UpdateItems( oMovies.ActorsFilter                  )
+        If cbFilterDirector             .Visible Then cbFilterDirector              .UpdateItems( oMovies.DirectorsFilter               )
+        If cbFilterTag                  .Visible Then cbFilterTag                   .UpdateItems( oMovies.TagsFilter                    )
+        If cbFilterSubTitleLang         .Visible Then cbFilterSubTitleLang          .UpdateItems( oMovies.SubTitleLangFilter            )
+        If cbFilterRootFolder           .Visible Then cbFilterRootFolder            .UpdateItems( oMovies.RootFolderFilter              )
+        If cbFilterUserRated            .Visible Then cbFilterUserRated             .UpdateItems( oMovies.UserRatedFilter               )
+        If cbFilterLocked               .Visible Then cbFilterLocked                .UpdateItems( oMovies.LockedFilter                  )
+                   
+                 
+                   
+                                          
+        Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
+        Try
+            If DataGridViewMovies.SelectedRows.Count = 0 Then
+                For Each row As DataGridViewRow In DataGridViewMovies.Rows
+                    row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
+                Next
+            ElseIf DataGridViewMovies.SelectedRows.Count = 1 Then
+                DataGridViewMovies.ClearSelection()
+                DataGridViewMovies.Rows(lastSelectedRow).Selected = True
+            End If
+        Catch
+        End Try
+        
+        If DataGridViewMovies.SelectedRows.Count=0 And DataGridViewMovies.Rows.Count>0 Then
+            DataGridViewMovies.Rows(0).Selected=True
+        End If
+        DisplayMovie()
+        ProgState = ProgramState.Other
+    End Sub
+
+    Sub Assign_FilterGeneral
+        If cbFilterGeneral.Visible Then
+            Dim selected = cbFilterGeneral.Text
+
+            cbFilterGeneral.Items.Clear
+            cbFilterGeneral.Items.AddRange( oMovies.GeneralFilters.ToArray )
+
+            If cbFilterGeneral.Text = "" Then cbFilterGeneral.Text = "All"
+
+            If selected<>"" Then
+                For Each item As String In cbFilterGeneral.Items
+                    If item.RemoveAfterMatch=selected.RemoveAfterMatch Then
+                        cbFilterGeneral.SelectedItem=item    
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+
+
+
+    Private Function TriStateFilter_OnFormatItem(ByVal item As String) As String Handles cbFilterGenre.OnFormatItem, cbFilterCertificate.OnFormatItem,
+                                                                                    cbFilterSet.OnFormatItem, cbFilterResolution.OnFormatItem,
+                                                                                    cbFilterAudioCodecs.OnFormatItem, cbFilterAudioChannels.OnFormatItem,
+                                                                                    cbFilterAudioBitrates.OnFormatItem, cbFilterNumAudioTracks.OnFormatItem,
+                                                                                    cbFilterAudioLanguages.OnFormatItem, cbFilterActor.OnFormatItem,
+                                                                                    cbFilterSource.OnFormatItem, cbFilterTag.OnFormatItem, cbFilterTag.OnFormatItem,
+                                                                                    cbFilterDirector.OnFormatItem, cbFilterVideoCodec.OnFormatItem, cbFilterSubTitleLang.OnFormatItem,
+                                                                                    cbFilterAudioDefaultLanguages.OnFormatItem, cbFilterCountries.OnFormatItem, 
+                                                                                    cbFilterStudios.OnFormatItem, cbFilterRootFolder.OnFormatItem, cbFilterUserRated.OnFormatItem, cbFilterLocked.OnFormatItem
+        Return item.RemoveAfterMatch
     End Function
 
 
