@@ -113,7 +113,7 @@ Public Class clsGridViewMovie
         IniColumn(dgv,"DisplayFolderSize"   ,GridFieldToDisplay2="Folder Size"         ,"Folder Size (GB)" ,"Size"         , -20, DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Resolution"          ,GridFieldToDisplay2="Resolution"          ,"Resolution"       ,"Res"          ,    , DataGridViewContentAlignment.MiddleRight )
         IniColumn(dgv,"Certificate"         ,GridFieldToDisplay2="Certificate"         ,"Certificate"      ,"Cert"         ,    , DataGridViewContentAlignment.MiddleLeft  )
-        IniColumn(dgv,"SetName"             ,GridFieldToDisplay2="Set"                 ,"Movie set"        ,"Set"          , -20                                           )
+        IniColumn(dgv,"SetName"             ,GridFieldToDisplay2="Set"                 ,"Movie set"        ,"Set"          ,                                               )
          
         dgv.Columns("DisplayFolderSize").DefaultCellStyle.Format="0.0"
           
