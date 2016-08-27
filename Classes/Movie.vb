@@ -3831,6 +3831,9 @@ Public Class Movie
         Dim newpatharr As New List(Of String)
         newpatharr.AddRange(newFolder.Split("\"))
         
+
+        Dim SetNoneFound As Boolean = False
+
         'Remove -none- if no Movieset
         If newpatharr.Count > 0 Then
             Dim badfolder As Integer = 0
@@ -3839,6 +3842,7 @@ Public Class Movie
                 For num = 0 to newpatharr.Count-1
                     If newpatharr(num).ToLower = "-none-" Then 
                         badfolder = num
+                        SetNoneFound = True
                         Exit For
                     End If
                 Next
@@ -3856,7 +3860,7 @@ Public Class Movie
         FilePath = FilePath.Replace("BDMV\","")             'If BD BDMV folder, step back one folder so we copy folder as well.
         Dim checkfolder As String = currentroot
         If newpatharr.Count = 1 And Not inrootfolder Then                       'If only one folder in new folder pattern,
-            If Pref.MovNewFolderInRootFolder Then
+            If Pref.MovNewFolderInRootFolder OrElse SetNoneFound Then       'Do we really need Pref.MovNewFolderInRootFolder?
                 checkfolder &= "\" & newpatharr(0)
             Else
                 If lastfolder.ToLower.Contains("video_ts") OrElse lastfolder.ToLower.Contains("bdmv") Then
