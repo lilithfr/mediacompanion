@@ -972,7 +972,7 @@ Public Class Movies
         Else
             Dim r = From m In movieSet.Collection Where IsDate(m.release_date) AndAlso (m.release_date < Date.Now) Select m
 
-            Return " of " & r.Count & userAdditions
+            Return " of " & (r.Count+x.Count) & userAdditions
         End If
     End Function
 

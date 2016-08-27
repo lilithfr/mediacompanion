@@ -2766,9 +2766,9 @@ Public Class Form1
 		Else
 			messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
 			messbox.TextBox3.Text = "Press ESC to cancel"
-		'	messbox.TopMost = True
-		'	messbox.Show()
-		'	messbox.Refresh()
+			messbox.TopMost = True
+			messbox.Show()
+			messbox.Refresh()
 			Application.DoEvents()
 			Dim Startfullpathandfilename As String = ""
 			If Not ISNothing(DataGridViewMovies.CurrentRow) Then
