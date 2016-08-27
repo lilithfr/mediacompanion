@@ -21,7 +21,7 @@ Public Class ComboList
     Property countries            As String = ""
 
 
-    Private _setName              As String = ""
+    Private _setName              As String = "-None-"
     Private _setId                As String = ""
 
 

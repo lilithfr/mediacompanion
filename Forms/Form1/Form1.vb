@@ -2752,12 +2752,15 @@ Public Class Form1
 			movie.SaveNFO
 			movie.AssignMovieToCache
 			movie.UpdateMovieCache
-			UpdateFilteredList
 
 			DataGridViewMovies.ClearSelection
-			Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = sel).FirstOrDefault
-			selMovie.Selected = True
-			DisplayMovie
+
+			UpdateFilteredList
+
+			'DataGridViewMovies.ClearSelection
+			'Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = sel).FirstOrDefault
+			'selMovie.Selected = True
+			'DisplayMovie
 
 
 			If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TagsPopulate()
@@ -7516,28 +7519,35 @@ Public Class Form1
 					ratingtxt.Font = newFont
 					votestxt.Font = newFont
 					top250txt.Font = newFont
+
 					cbUsrRated.Font = newFont
 					cbFilterGeneral.Font = newFont
-					cbFilterGenre.Font = newFont
-					cbFilterCountries.Font = newFont
-					cbFilterStudios.Font = newFont
-					cbFilterSet.Font = newFont
-					cbFilterActor.Font = newFont
-					cbFilterTag.Font = newFont
-					cbFilterDirector.Font = newFont
-					cbFilterSource.Font = newFont
-					cbFilterResolution.Font = newFont
-					cbFilterVideoCodec.Font = newFont
-					cbFilterSubTitleLang.Font = newFont
-					cbFilterRootFolder.Font = newfont
-					cbFilterUserRated.Font = newfont
-					cbFilterAudioCodecs.Font = newFont
-					cbFilterAudioLanguages.Font = newFont
-					cbFilterAudioDefaultLanguages.Font = newFont
-					cbFilterAudioBitrates.Font = newFont
-					cbFilterAudioChannels.Font = newFont
-					cbFilterNumAudioTracks.Font = newFont
-					cbFilterCertificate.Font = newFont
+
+					For Each x In MovieFilters
+						x.Font = newFont
+					Next
+
+					'cbFilterGenre.Font = newFont
+					'cbFilterCountries.Font = newFont
+					'cbFilterStudios.Font = newFont
+					'cbFilterSet.Font = newFont
+					'cbFilterActor.Font = newFont
+					'cbFilterTag.Font = newFont
+					'cbFilterDirector.Font = newFont
+					'cbFilterSource.Font = newFont
+					'cbFilterResolution.Font = newFont
+					'cbFilterVideoCodec.Font = newFont
+					'cbFilterSubTitleLang.Font = newFont
+					'cbFilterRootFolder.Font = newfont
+					'cbFilterUserRated.Font = newfont
+					'cbFilterAudioCodecs.Font = newFont
+					'cbFilterAudioLanguages.Font = newFont
+					'cbFilterAudioDefaultLanguages.Font = newFont
+					'cbFilterAudioBitrates.Font = newFont
+					'cbFilterAudioChannels.Font = newFont
+					'cbFilterNumAudioTracks.Font = newFont
+					'cbFilterCertificate.Font = newFont
+
 					LabelCountFilter.Font = newFont
 					Me.Refresh()
 					Application.DoEvents()

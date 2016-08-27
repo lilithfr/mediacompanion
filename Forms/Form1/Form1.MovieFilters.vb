@@ -175,14 +175,21 @@ Partial Public Class Form1
                                           
         Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
         Try
-            If DataGridViewMovies.SelectedRows.Count = 0 Then
-                For Each row As DataGridViewRow In DataGridViewMovies.Rows
-                    row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
-                Next
-            ElseIf DataGridViewMovies.SelectedRows.Count = 1 Then
-                DataGridViewMovies.ClearSelection()
-                DataGridViewMovies.Rows(lastSelectedRow).Selected = True
-            End If
+				Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie).FirstOrDefault
+
+				If Not IsNothing(selMovie) Then
+					DataGridViewMovies.ClearSelection
+					selMovie.Selected = True
+				End If
+
+            'If DataGridViewMovies.SelectedRows.Count = 0 Then
+                'For Each row As DataGridViewRow In DataGridViewMovies.Rows
+                '    row.Selected = (row.Cells("fullpathandfilename").Value.ToString = lastSelectedMovie)
+                'Next
+            'ElseIf DataGridViewMovies.SelectedRows.Count = 1 Then
+            '    DataGridViewMovies.ClearSelection()
+            '    DataGridViewMovies.Rows(lastSelectedRow).Selected = True
+            'End If
         Catch
         End Try
         

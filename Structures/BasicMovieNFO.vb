@@ -38,7 +38,7 @@ Public Class BasicMovieNFO
     Property metascore     As String = ""
     Property LockedFields  As New List(Of String)
 
-    Private _setName       As String = ""
+    Private _setName       As String = "-None-"
     Private _setId         As String = ""
 
     Public Property SetName As String

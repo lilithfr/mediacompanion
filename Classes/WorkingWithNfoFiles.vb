@@ -3051,10 +3051,14 @@ Public Class WorkingWithNfoFiles
                     child = doc.CreateElement("set")
                     child.InnerText = movietosave.fullmoviebody.SetName
                     root.AppendChild(child)
+					 End If
+
+					 If movietosave.fullmoviebody.TmdbSetId <> "" Then
                     child = doc.CreateElement("setid")
                     child.InnerText = movietosave.fullmoviebody.TmdbSetId
                     root.AppendChild(child)
                 End If
+
                 stage = 26
                 If String.IsNullOrEmpty(movietosave.fullmoviebody.sortorder) Then
                     movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title

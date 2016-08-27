@@ -1191,11 +1191,11 @@ Public Class Movie
         _actualNfoPathAndFilename       = NfoPathPrefName 
         _movieCache.TmdbSetId           = _scrapedMovie.fullmoviebody.TmdbSetId
 
-        If _movieCache.GotTmdbSetDetail Then
-            _movieCache.SetName = _movieCache.MovieSet.MovieSetDisplayName
-        Else
+        'If _movieCache.GotTmdbSetDetail Then
+        '    _movieCache.SetName = _movieCache.MovieSet.MovieSetDisplayName
+        'Else
             _movieCache.SetName = _scrapedMovie.fullmoviebody.SetName
-        End If
+        'End If
 
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
