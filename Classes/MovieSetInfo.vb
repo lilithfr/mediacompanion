@@ -1,4 +1,6 @@
 
+Imports System.Linq
+
 Public Class MovieSetInfo
 
     Private  _movieSetName        As String = ""
@@ -95,6 +97,12 @@ Public Class MovieSetInfo
     Sub UpdateMovieSetDisplayName
         _movieSetDisplayName = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(MovieSetName), MovieSetName)
     End Sub
+
+    
+    Function MovieBelongsToCollection( tmdbId )
+        Dim res = From x In Collection Where x.TmdbMovieId=tmdbId
+        Return (res.Count=1)
+    End Function
 
 End Class
 

@@ -3277,9 +3277,9 @@ Public Class Movie
  '                      Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
                         Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
 
-                        If (movieSet.DaysOld<7) and (movieSet.Collection.Count>0) Then
+                        If (movieSet.DaysOld<7) AndAlso (movieSet.Collection.Count>0) AndAlso movieSet.MovieBelongsToCollection(_scrapedMovie.fullmoviebody.TmdbSetId)  Then
                             _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetDisplayName
-                            _scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
+                            '_scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
                             skip = True
                         End If 
                     Catch
@@ -3906,7 +3906,11 @@ Public Class Movie
             End If
             For Each file As IO.FileInfo In fromPathInfo.GetFiles()   '((Moviename & "*"))    'Move Matching Files to Moviename.
                 If file.Name.Contains(Moviename) OrElse Utilities.fanarttvfiles.Contains(file.Name) Then
-                    file.MoveTo(Path.Combine(checkfolder, file.Name))
+						  Dim x = Path.Combine(checkfolder, file.Name)
+						  If IO.File.Exists(x) Then
+								IO.File.Delete(x)
+						  End If
+                    file.MoveTo(x)
                 End If
             Next
             Dim OtherMoviesInFolder As Boolean = False

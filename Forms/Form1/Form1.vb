@@ -2754,7 +2754,6 @@ Public Class Form1
 			movie.UpdateMovieCache
 
 			DataGridViewMovies.ClearSelection
-
 			UpdateFilteredList
 
 			'DataGridViewMovies.ClearSelection
@@ -2767,9 +2766,9 @@ Public Class Form1
 		Else
 			messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
 			messbox.TextBox3.Text = "Press ESC to cancel"
-			messbox.TopMost = True
-			messbox.Show()
-			messbox.Refresh()
+		'	messbox.TopMost = True
+		'	messbox.Show()
+		'	messbox.Refresh()
 			Application.DoEvents()
 			Dim Startfullpathandfilename As String = ""
 			If Not ISNothing(DataGridViewMovies.CurrentRow) Then
@@ -2881,13 +2880,16 @@ Public Class Form1
 					If messbox.Cancelled Then Exit For
 				Next
 				If tb_tagtxt_changed Then tb_tagtxt_changed = False
-				UpdateFilteredList()
-				ProgState = ProgramState.Other
 
 				DataGridViewMovies.ClearSelection
-				Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = Startfullpathandfilename).FirstOrDefault
-				selMovie.Selected = True
-				DisplayMovie
+				UpdateFilteredList
+
+				ProgState = ProgramState.Other
+
+				
+				'Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = Startfullpathandfilename).FirstOrDefault
+				'selMovie.Selected = True
+				'DisplayMovie
 
 			Else
 				messbox.Close()
