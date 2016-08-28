@@ -10633,7 +10633,7 @@ Public Class Form1
 		'    cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
 		'Next
 
-		cbMovieDisplay_MovieSet.Items.AddRange(oMovies.AllMovieSets)
+		cbMovieDisplay_MovieSet.Items.AddRange(oMovies.UsedMovieSets)
 
 		cbMovieDisplay_MovieSet.Sorted = False
 		If cbMovieDisplay_MovieSet.Items.Count = 0 Then cbMovieDisplay_MovieSet.Items.Add("-None-")

@@ -3439,9 +3439,11 @@ Public Class Movies
 
 
 
-	Public ReadOnly Property AllMovieSets As String()
+	Public ReadOnly Property UsedMovieSets As String()
 		Get
-			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
+'			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
+			Dim resTmdb = From x In MoviesSetsExNone
+
 			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
 
 			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x).ToArray
