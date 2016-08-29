@@ -250,6 +250,7 @@ Public Class Form1
 #Region "Form1 Events"
 	Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 		PictureBoxAssignedMoviePoster.AllowDrop = True
+
 		Try
 			Pref.movie_filters.FilterPanel = MovieFiltersPanel
 			Label73.Text = ""

@@ -6661,7 +6661,7 @@ Partial Class Form1
         Me.TabControl2.Controls.Add(Me.tpMovChange)
         Me.TabControl2.Controls.Add(Me.tpMovFolders)
         Me.TabControl2.Controls.Add(Me.tpMovPrefs)
-        Me.TabControl2.Controls.Add(Me.tpMovSets)
+'       Me.TabControl2.Controls.Add(Me.tpMovSets)
         Me.TabControl2.Controls.Add(Me.tpMovTags)
         Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
@@ -7762,6 +7762,7 @@ Partial Class Form1
         Me.tpMovSets.TabIndex = 16
         Me.tpMovSets.Text = "Movie Sets"
         Me.tpMovSets.UseVisualStyleBackColor = true
+
         '
         'scMovieSets
         '
