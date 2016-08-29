@@ -99,7 +99,7 @@ Public Class MovieSetInfo
     End Sub
 
     
-    Function MovieBelongsToCollection( tmdbId )
+    Function MovieBelongsInCollection( tmdbId )
         Dim res = From x In Collection Where x.TmdbMovieId=tmdbId
         Return (res.Count=1)
     End Function
