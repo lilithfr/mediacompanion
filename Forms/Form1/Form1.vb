@@ -12992,7 +12992,8 @@ Public Class Form1
                     End If
                 Next
                 If matchedmovies.Count = 0 Then
-                    MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
+                    tbMovieSetTitle.Text = "No Data found for this collection!!"
+                    'MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
                     Exit Sub
                 End If
 
