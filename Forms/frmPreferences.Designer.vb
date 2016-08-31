@@ -102,6 +102,7 @@ Partial Class frmPreferences
         Me.Label19 = New System.Windows.Forms.Label()
         Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
         Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
+        Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
@@ -462,9 +463,7 @@ Partial Class frmPreferences
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lbl_HmHeader = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -492,7 +491,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
+        Me.lbExternalBrowserPath = New System.Windows.Forms.Label()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1318,7 +1319,7 @@ Partial Class frmPreferences
         'cbDisplayLocalActor
         '
         Me.cbDisplayLocalActor.AutoSize = true
-        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(355, 352)
+        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(416, 352)
         Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
         Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
         Me.cbDisplayLocalActor.TabIndex = 113
@@ -1330,7 +1331,7 @@ Partial Class frmPreferences
         'cbCheckForNewVersion
         '
         Me.cbCheckForNewVersion.AutoSize = true
-        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(355, 297)
+        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(416, 297)
         Me.cbCheckForNewVersion.Margin = New System.Windows.Forms.Padding(4)
         Me.cbCheckForNewVersion.Name = "cbCheckForNewVersion"
         Me.cbCheckForNewVersion.Size = New System.Drawing.Size(198, 19)
@@ -1343,7 +1344,7 @@ Partial Class frmPreferences
         'cbUseMultipleThreads
         '
         Me.cbUseMultipleThreads.AutoSize = true
-        Me.cbUseMultipleThreads.Location = New System.Drawing.Point(24, 376)
+        Me.cbUseMultipleThreads.Location = New System.Drawing.Point(21, 402)
         Me.cbUseMultipleThreads.Margin = New System.Windows.Forms.Padding(4)
         Me.cbUseMultipleThreads.Name = "cbUseMultipleThreads"
         Me.cbUseMultipleThreads.Size = New System.Drawing.Size(278, 19)
@@ -1451,6 +1452,18 @@ Partial Class frmPreferences
         "First subtitle language."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"If unselected, First subtitle language is shown.")
         Me.cbDisplayDefaultSubtitleLang.UseVisualStyleBackColor = true
         '
+        'cbSetIdAsCollectionnumber
+        '
+        Me.cbSetIdAsCollectionnumber.AutoSize = true
+        Me.cbSetIdAsCollectionnumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbSetIdAsCollectionnumber.Location = New System.Drawing.Point(37, 36)
+        Me.cbSetIdAsCollectionnumber.Name = "cbSetIdAsCollectionnumber"
+        Me.cbSetIdAsCollectionnumber.Size = New System.Drawing.Size(207, 17)
+        Me.cbSetIdAsCollectionnumber.TabIndex = 52
+        Me.cbSetIdAsCollectionnumber.Text = "Save setid also as <collectionnumber>"
+        Me.ToolTip1.SetToolTip(Me.cbSetIdAsCollectionnumber, "Compatibility for Emby manager.")
+        Me.cbSetIdAsCollectionnumber.UseVisualStyleBackColor = true
+        '
         'cbXbmcTmdbActorFromImdb
         '
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
@@ -1512,6 +1525,7 @@ Partial Class frmPreferences
         '
         'TPGeneral
         '
+        Me.TPGeneral.Controls.Add(Me.lbExternalBrowserPath)
         Me.TPGeneral.Controls.Add(Me.cbAutoHideStatusBar)
         Me.TPGeneral.Controls.Add(Me.cbMcCloseMCForDLNewVersion)
         Me.TPGeneral.Controls.Add(Me.Label2)
@@ -1539,7 +1553,7 @@ Partial Class frmPreferences
         'cbAutoHideStatusBar
         '
         Me.cbAutoHideStatusBar.AutoSize = true
-        Me.cbAutoHideStatusBar.Location = New System.Drawing.Point(24, 425)
+        Me.cbAutoHideStatusBar.Location = New System.Drawing.Point(21, 451)
         Me.cbAutoHideStatusBar.Name = "cbAutoHideStatusBar"
         Me.cbAutoHideStatusBar.Size = New System.Drawing.Size(222, 19)
         Me.cbAutoHideStatusBar.TabIndex = 117
@@ -1548,7 +1562,7 @@ Partial Class frmPreferences
         '
         'cbMcCloseMCForDLNewVersion
         '
-        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(364, 313)
+        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(425, 313)
         Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
         Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
         Me.cbMcCloseMCForDLNewVersion.TabIndex = 116
@@ -1570,7 +1584,7 @@ Partial Class frmPreferences
         'cbMultiMonitorEnable
         '
         Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(355, 401)
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(416, 401)
         Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
         Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
         Me.cbMultiMonitorEnable.TabIndex = 114
@@ -1580,7 +1594,7 @@ Partial Class frmPreferences
         'cbRenameNFOtoINFO
         '
         Me.cbRenameNFOtoINFO.AutoSize = true
-        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(355, 378)
+        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(416, 378)
         Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
         Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
         Me.cbRenameNFOtoINFO.TabIndex = 111
@@ -1590,7 +1604,7 @@ Partial Class frmPreferences
         'cbShowLogOnError
         '
         Me.cbShowLogOnError.AutoSize = true
-        Me.cbShowLogOnError.Location = New System.Drawing.Point(24, 399)
+        Me.cbShowLogOnError.Location = New System.Drawing.Point(21, 425)
         Me.cbShowLogOnError.Margin = New System.Windows.Forms.Padding(4)
         Me.cbShowLogOnError.Name = "cbShowLogOnError"
         Me.cbShowLogOnError.Size = New System.Drawing.Size(123, 19)
@@ -1612,7 +1626,7 @@ Partial Class frmPreferences
         'chkbx_disablecache
         '
         Me.chkbx_disablecache.AutoSize = true
-        Me.chkbx_disablecache.Location = New System.Drawing.Point(24, 352)
+        Me.chkbx_disablecache.Location = New System.Drawing.Point(21, 378)
         Me.chkbx_disablecache.Margin = New System.Windows.Forms.Padding(4)
         Me.chkbx_disablecache.Name = "chkbx_disablecache"
         Me.chkbx_disablecache.Size = New System.Drawing.Size(315, 19)
@@ -3073,7 +3087,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3402,7 +3416,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4185,7 +4199,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -5165,7 +5179,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
+        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5562,14 +5576,6 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -5579,14 +5585,6 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5894,17 +5892,30 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbSetIdAsCollectionnumber
+        'lbExternalBrowserPath
         '
-        Me.cbSetIdAsCollectionnumber.AutoSize = true
-        Me.cbSetIdAsCollectionnumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbSetIdAsCollectionnumber.Location = New System.Drawing.Point(37, 36)
-        Me.cbSetIdAsCollectionnumber.Name = "cbSetIdAsCollectionnumber"
-        Me.cbSetIdAsCollectionnumber.Size = New System.Drawing.Size(207, 17)
-        Me.cbSetIdAsCollectionnumber.TabIndex = 52
-        Me.cbSetIdAsCollectionnumber.Text = "Save setid also as <collectionnumber>"
-        Me.ToolTip1.SetToolTip(Me.cbSetIdAsCollectionnumber, "Compatibility for Emby manager.")
-        Me.cbSetIdAsCollectionnumber.UseVisualStyleBackColor = true
+        Me.lbExternalBrowserPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbExternalBrowserPath.Location = New System.Drawing.Point(17, 348)
+        Me.lbExternalBrowserPath.Name = "lbExternalBrowserPath"
+        Me.lbExternalBrowserPath.Size = New System.Drawing.Size(380, 23)
+        Me.lbExternalBrowserPath.TabIndex = 118
+        Me.lbExternalBrowserPath.Text = "-None-"
+        '
+        'UcGenPref_Proxy1
+        '
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'frmPreferences
         '
@@ -6551,4 +6562,5 @@ End Sub
     Friend WithEvents gpbxPrefIgnore As GroupBox
     Friend WithEvents gpbxPrefOverlay As GroupBox
     Friend WithEvents cbSetIdAsCollectionnumber As CheckBox
+    Friend WithEvents lbExternalBrowserPath As Label
 End Class

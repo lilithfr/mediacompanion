@@ -1807,6 +1807,12 @@ Public Class Pref
                 MkvMergeGuiPath = ""
             End If
         End If
+        If Not String.IsNullOrEmpty(selectedBrowser) Then
+            If Not IO.File.Exists(selectedBrowser) Then
+                selectedBrowser = ""
+                externalbrowser = False
+            End If
+        End If
         If Not MovSepLst.Contains("3DTAB") Then MovSepLst.Insert(0,"3DTAB")
         If Not MovSepLst.Contains("3DSBS") Then MovSepLst.Insert(0,"3DSBS")
         If maxmoviegenre > 99 Then maxmoviegenre = 99     'Fix original setting of maxmoviegenre All Available was 9999

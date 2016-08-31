@@ -193,6 +193,8 @@ Public Class frmPreferences
         End If
         txtbx_minrarsize            .Text       = Pref.rarsize.ToString
         cbExternalbrowser           .Checked    = Pref.externalbrowser
+        btnFindBrowser              .Enabled    = Pref.externalbrowser
+        lbExternalBrowserPath       .Text       = If(Pref.selectedBrowser="", "-none-", Pref.selectedBrowser)
         chkbx_disablecache          .Checked    = Not Pref.startupCache
         cbUseMultipleThreads        .Checked    = Pref.UseMultipleThreads
         cbShowLogOnError            .Checked    = Pref.ShowLogOnError

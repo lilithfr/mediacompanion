@@ -10112,18 +10112,19 @@ Public Class Form1
 #End If
 		End Try
 	End Sub
-
-	'AnotherPhil bug fix - If the default browser is <goz> IE <goz/> then not stating the exe throws an exception
+    
 	Public Sub OpenUrl(ByVal url As String)
-		'Dim testprocess As New Process
-		'testprocess.Start("notepad.exe")
+        Dim aok As Boolean = True
 		Try
 			If Pref.selectedBrowser <> "" Then
-				'testprocess.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
-				Process.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
-			Else
+                Try
+				    Process.Start(Pref.selectedBrowser, Uri.EscapeUriString(url))
+                Catch
+                    aok = False
+                End Try
+			End If
+            If Pref.selectedBrowser = "" Or Not aok Then
 				Try
-					'testprocess.Start(url)
 					Process.Start(url)
 				Catch ex As Exception
 					MessageBox.Show("An error occurred while trying to launch the default browser - Under 'General Preferences' check 'Use external Browser...' and then locate your browser to fix this error", "", MessageBoxButtons.OK)
@@ -10132,8 +10133,6 @@ Public Class Form1
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
-		'testprocess.Close()
-		'testprocess.Dispose()
 	End Sub
 
 	Private Sub ZoomActorPictureBox(pictureBox As PictureBox)

@@ -2563,19 +2563,25 @@ Public Class Movie
     End Sub
 
     Sub ShowTakeOwnsershipHelp
-       Try
+        Dim aok As Boolean = True
+        Try
             Dim FileName = Pref.applicationPath & "\Assets\TakeOwnership.htm"
             Dim helpFile =  "file:///" & FileName.Replace(" ", "%20").Replace("\","/")
 
             If Pref.selectedBrowser <> "" then
-                Process.Start(Pref.selectedBrowser,helpFile)
-            Else
+                Try
+                    Process.Start(Pref.selectedBrowser,helpFile)
+                Catch
+                    aok = False
+                End Try
+            End If
+            If Pref.selectedBrowser = "" Or Not aok Then
                 Try
                     Process.Start(helpFile)
-                Catch ex As Exception
-                    MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
+                Catch
+                    MessageBox.Show( "An error occurred while trying to launch a browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
                 End Try
-            End If 
+            End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
