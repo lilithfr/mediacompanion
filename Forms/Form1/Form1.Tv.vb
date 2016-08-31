@@ -4109,7 +4109,7 @@ Partial Public Class Form1
         Dim success As Boolean = True
         Dim tvdbstuff As New TVDBScraper
         Dim tempstring As String = ""
-        Dim TvdbActors As List(Of str_MovieActors) = tvdbstuff.GetActors(NewShow.TvdbId.Value, templanguage)
+        Dim TvdbActors As List(Of str_MovieActors) = tvdbstuff.GetActors(NewShow.TvdbId.Value)
         Dim workingpath As String = ""
         If Pref.actorseasy AndAlso Not Pref.tvshowautoquick Then
             workingpath = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "") & ".actors\"

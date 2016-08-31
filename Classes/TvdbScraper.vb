@@ -255,7 +255,7 @@ Public Class TVDBScraper
         Return DownloadCache.Savexmltopath(url, SeriesXmlPath, TvdbId & ".xml", True)
     End Function
 
-    Public Function GetActors(ByVal TvdbId As String, ByVal Language As String, Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors) 'Tvdb.Actors
+    Public Function GetActors(ByVal TvdbId As String, Optional ByVal maxactors As Integer = 9999) As List(Of str_MovieActors) 'Tvdb.Actors
         If maxactors = 9999 Then 
             maxactors= Pref.maxactors
         End If

@@ -352,7 +352,8 @@ Public Class frmPreferences
 
         'Other Options
         cbGetMovieSetFromTMDb               .Checked    = Pref.GetMovieSetFromTMDb
-        cbIMDbOriginalTitle                  .Checked    = Pref.Original_Title
+        cbSetIdAsCollectionnumber           .Checked    = Pref.SetIdAsCollectionnumber
+        cbIMDbOriginalTitle                 .Checked    = Pref.Original_Title
 
         'BasicSave Mode
         cbMovieBasicSave                    .Checked    = Pref.basicsavemode
@@ -1428,7 +1429,13 @@ Public Class frmPreferences
         If prefsload Then Exit Sub
         Pref.GetMovieSetFromTMDb = cbGetMovieSetFromTMDb.Checked
         Changes = True
-    End Sub
+    End Sub 
+
+    Private Sub cbSetIdAsCollectionnumber_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbSetIdAsCollectionnumber.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.SetIdAsCollectionnumber = cbSetIdAsCollectionnumber.Checked
+        Changes = True
+    End Sub 
 
     Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles cbIMDbOriginalTitle.CheckedChanged
         If prefsload Then Exit Sub

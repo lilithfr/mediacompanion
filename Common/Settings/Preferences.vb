@@ -352,6 +352,7 @@ Public Class Pref
     Public Shared GenreCustomBefore As Boolean
     Public Shared CustomTmdbApiKey As String = ""
     Public Shared MovNfoWatchTag As Boolean
+    Public Shared SetIdAsCollectionnumber As Boolean
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -718,6 +719,7 @@ Public Class Pref
         MovieImdbGenreRegEx = "/genre/.*?>(?<genre>.*?)</a>"
         MovFiltLastSize = 384
         RenameSpaceCharacter = "_"
+        SetIdAsCollectionnumber = False
 
 
         'TV
@@ -1085,6 +1087,7 @@ Public Class Pref
         root.AppendChild(doc, "GenreCustomBefore"           , GenreCustomBefore         ) 'cbGenreCustomBefore
         root.AppendChild(doc, "CustomTmdbApiKey"            , CustomTmdbApiKey          ) 'tbTMDbAPI
         root.AppendChild(doc, "MovNfoWatchTag"              , MovNfoWatchTag            ) 'cbMovNfoWatchTag
+        root.AppendChild(doc, "SetIdAsCollectionnumber"     , SetIdAsCollectionnumber   ) 'cbSetIdAsCollectionnumber
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1546,6 +1549,7 @@ Public Class Pref
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml
                     Case "CustomTmdbApiKey"                     : CustomTmdbApiKey = thisresult.InnerText
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
+                    Case "SetIdAsCollectionnumber"              : SetIdAsCollectionnumber = thisresult.InnerXml
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "ignoretrailers"                       : ignoretrailers = thisresult.InnerXml
                     Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml

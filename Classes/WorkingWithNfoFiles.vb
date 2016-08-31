@@ -2536,7 +2536,12 @@ Public Class WorkingWithNfoFiles
                         Case "set"
                             newmovie.fullmoviebody.SetName = thisresult.InnerText
                         Case "setid"
-                            newmovie.fullmoviebody.TmdbSetId = thisresult.InnerText 
+                            newmovie.fullmoviebody.TmdbSetId = thisresult.InnerText
+                        Case "collectionnumber"
+                            'prefer Set Id from <setid>, so don't overwrite if coming from <collectionnumber>
+                            If newmovie.fullmoviebody.TmdbSetId = "" Then
+                                newmovie.fullmoviebody.TmdbSetId = thisresult.InnerText
+                            End If
                         Case "videosource"
                             newmovie.fullmoviebody.source = thisresult.InnerText
                         Case "sortorder"
@@ -3051,12 +3056,17 @@ Public Class WorkingWithNfoFiles
                     child = doc.CreateElement("set")
                     child.InnerText = movietosave.fullmoviebody.SetName
                     root.AppendChild(child)
-					 End If
+				End If
 
-					 If movietosave.fullmoviebody.TmdbSetId <> "" Then
+				If movietosave.fullmoviebody.TmdbSetId <> "" Then
                     child = doc.CreateElement("setid")
                     child.InnerText = movietosave.fullmoviebody.TmdbSetId
                     root.AppendChild(child)
+                    If Pref.SetIdAsCollectionnumber Then
+                        child = doc.CreateElement("collectionnumber")
+                        child.InnerText = movietosave.fullmoviebody.TmdbSetId
+                        root.AppendChild(child)
+                    End If
                 End If
 
                 stage = 26

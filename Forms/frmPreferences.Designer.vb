@@ -492,6 +492,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -2848,7 +2849,7 @@ Partial Class frmPreferences
         Me.grpbxMovieBasicSave.Controls.Add(Me.cbMovieBasicSave)
         Me.grpbxMovieBasicSave.Controls.Add(Me.Label162)
         Me.grpbxMovieBasicSave.Controls.Add(Me.Label109)
-        Me.grpbxMovieBasicSave.Location = New System.Drawing.Point(6, 356)
+        Me.grpbxMovieBasicSave.Location = New System.Drawing.Point(6, 380)
         Me.grpbxMovieBasicSave.Name = "grpbxMovieBasicSave"
         Me.grpbxMovieBasicSave.Size = New System.Drawing.Size(331, 131)
         Me.grpbxMovieBasicSave.TabIndex = 83
@@ -2885,7 +2886,7 @@ Partial Class frmPreferences
         Me.grpbxScraperLimits.Controls.Add(Me.cmbxMovScraper_MaxGenres)
         Me.grpbxScraperLimits.Location = New System.Drawing.Point(6, 196)
         Me.grpbxScraperLimits.Name = "grpbxScraperLimits"
-        Me.grpbxScraperLimits.Size = New System.Drawing.Size(330, 80)
+        Me.grpbxScraperLimits.Size = New System.Drawing.Size(331, 80)
         Me.grpbxScraperLimits.TabIndex = 75
         Me.grpbxScraperLimits.TabStop = false
         Me.grpbxScraperLimits.Text = "Scraper Limits"
@@ -2914,11 +2915,12 @@ Partial Class frmPreferences
         '
         'grpbxScraperMisc
         '
+        Me.grpbxScraperMisc.Controls.Add(Me.cbSetIdAsCollectionnumber)
         Me.grpbxScraperMisc.Controls.Add(Me.cbIMDbOriginalTitle)
         Me.grpbxScraperMisc.Controls.Add(Me.cbGetMovieSetFromTMDb)
         Me.grpbxScraperMisc.Location = New System.Drawing.Point(6, 282)
         Me.grpbxScraperMisc.Name = "grpbxScraperMisc"
-        Me.grpbxScraperMisc.Size = New System.Drawing.Size(331, 68)
+        Me.grpbxScraperMisc.Size = New System.Drawing.Size(331, 92)
         Me.grpbxScraperMisc.TabIndex = 52
         Me.grpbxScraperMisc.TabStop = false
         Me.grpbxScraperMisc.Text = " Other options "
@@ -2927,7 +2929,7 @@ Partial Class frmPreferences
         '
         Me.cbIMDbOriginalTitle.AutoSize = true
         Me.cbIMDbOriginalTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbIMDbOriginalTitle.Location = New System.Drawing.Point(12, 39)
+        Me.cbIMDbOriginalTitle.Location = New System.Drawing.Point(12, 59)
         Me.cbIMDbOriginalTitle.Name = "cbIMDbOriginalTitle"
         Me.cbIMDbOriginalTitle.Size = New System.Drawing.Size(303, 17)
         Me.cbIMDbOriginalTitle.TabIndex = 51
@@ -5163,7 +5165,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5892,6 +5894,18 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbSetIdAsCollectionnumber
+        '
+        Me.cbSetIdAsCollectionnumber.AutoSize = true
+        Me.cbSetIdAsCollectionnumber.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbSetIdAsCollectionnumber.Location = New System.Drawing.Point(37, 36)
+        Me.cbSetIdAsCollectionnumber.Name = "cbSetIdAsCollectionnumber"
+        Me.cbSetIdAsCollectionnumber.Size = New System.Drawing.Size(207, 17)
+        Me.cbSetIdAsCollectionnumber.TabIndex = 52
+        Me.cbSetIdAsCollectionnumber.Text = "Save setid also as <collectionnumber>"
+        Me.ToolTip1.SetToolTip(Me.cbSetIdAsCollectionnumber, "Compatibility for Emby manager.")
+        Me.cbSetIdAsCollectionnumber.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6536,4 +6550,5 @@ End Sub
     Friend WithEvents cbXbmcTmdbMetascoreFromImdb As CheckBox
     Friend WithEvents gpbxPrefIgnore As GroupBox
     Friend WithEvents gpbxPrefOverlay As GroupBox
+    Friend WithEvents cbSetIdAsCollectionnumber As CheckBox
 End Class
