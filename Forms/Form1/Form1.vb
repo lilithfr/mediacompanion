@@ -12981,6 +12981,7 @@ Public Class Form1
             Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName) 'GetMovSet(MsetName)
             'removeDoubleItems(MovSet)
             If MsetName <> tbMovieSetTitle.Text Then
+                Dim dirtycollection As Boolean = False
                 Dim matchedmovies As New List(Of FullMovieDetails)
                 For Each Mov As ComboList In oMovies.MovieCache
                     If Mov.TmdbSetId = MovSet.TmdbSetId Then
@@ -13000,6 +13001,7 @@ Public Class Form1
                 Dim MovCollectionList As New List(Of MovieSetDatabase)
                 For Each mset In oMovies.MovieSetDB
                     If mset.TmdbSetId = MovSet.TmdbSetId Then
+                        dirtycollection = mset.dirty
                         If mset.Collection.Count > 0 Then
                             For Each collect In mset.Collection
                                 Dim ac As New MovieSetDatabase
@@ -13038,12 +13040,14 @@ Public Class Form1
                     row.CreateCells(DataGridViewSelectedMovieSet, If(item.present, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.missing24), item.title)
                     DataGridViewSelectedMovieSet.Rows.Add(row)
                 Next
+                If Not dirtycollection Then
+                    lbCollectionCount.BackColor = Color.LightYellow
+                    lbCollectionCount.Text = "Movies in collection:  " & MovCollectionList.Count 
+                Else
+                    lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
+                    lbCollectionCount.BackColor = Color.Red
+                End If
             End If
-            'If e.ColumnIndex = 2 Then
-
-            'ElseIf e.ColumnIndex = 3 Then
-
-            'End If
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try

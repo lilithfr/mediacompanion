@@ -3283,7 +3283,7 @@ Public Class Movie
  '                      Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
                         Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
 
-                        If (movieSet.DaysOld<7) AndAlso (movieSet.Collection.Count>0) AndAlso movieSet.MovieBelongsInCollection(_scrapedMovie.fullmoviebody.tmdbid) Then
+                        If (movieSet.DaysOld<7) AndAlso (movieSet.Collection.Count>0) AndAlso movieSet.MovieBelongsInCollection(_scrapedMovie.fullmoviebody.tmdbid) AndAlso Not movieSet.dirty Then
                             _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetDisplayName
                             '_scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
                             skip = True
@@ -3422,7 +3422,7 @@ Public Class Movie
             Try
                 ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
 
-                If ms.DaysOld < 7 Then
+                If ms.DaysOld < 7 And Not ms.dirty Then
                     _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
                     Return
                 End If 
