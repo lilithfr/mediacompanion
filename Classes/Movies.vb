@@ -2871,6 +2871,20 @@ Public Class Movies
             For Each act In movie.Actorlist
                 _actorDb.Add(New Databases(act.actorname, movie.id))
             Next
+            If movie.TmdbSetId <> "" Then
+                Dim c As MovieSetInfo = Nothing
+                Try
+                    c = FindMovieSetInfoByTmdbSetId(movie.TmdbSetId)
+                Catch
+                End Try
+                If IsNothing(c) Then
+                    Dim d As New MovieSetInfo
+                    d.MovieSetName      = movie.SetName
+                    d.TmdbSetId         = movie.TmdbSetId
+                    d.LastUpdatedTs = Date.Now()
+                    AddUpdateMovieSetInCache(d)
+                End If
+            End If
             'If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
             '    If _tmpMoviesetDb.Count = 0 Then
             '        _tmpMoviesetDb.Add(movie.MovieSet)

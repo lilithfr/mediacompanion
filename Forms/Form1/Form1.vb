@@ -12992,6 +12992,7 @@ Public Class Form1
                 Next
                 If matchedmovies.Count = 0 Then
                     tbMovieSetTitle.Text = "No Data found for this collection!!"
+                    DataGridViewSelectedMovieSet.Rows.Clear()
                     'MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
                     Exit Sub
                 End If
@@ -13021,9 +13022,9 @@ Public Class Form1
                     Next
                 Next
                 If Not found Then
-                    Dim message As String = matchedmovies.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no TMBD ID's match" & vbCrLf
-                    message &= "Recommend Batch Wizard to populate movie's TMDb Id's" & vbCrLf
-                    message &= "Select ""Attempt to Locate & Download Fanart for Movies""" & vbCrLf & "is sufficient to populate TMBD Id"
+                    Dim message As String = matchedmovies.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no matching movies found in collection." & vbCrLf
+                    message &= "Recommend Rescrape Wizard to populate Movie Collection data." & vbCrLf
+                    message &= "Select to rescrape ""TMDb set info""" & vbCrLf & "is sufficient to populate Collection info."
                     MsgBox(message)
                     Exit Sub
                 End If
@@ -13131,7 +13132,7 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click
+	Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click, btnMovieSetsRepopulate.Click
 		MovSetsRepopulate()
 		MovSetDgvLoad()
 		MovSetArtworkCheck()
