@@ -11,6 +11,7 @@ Public Class MovieSetInfo
     Property TmdbSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
     Property Collection          As New List(Of CollectionMovie)
     Property LastUpdatedTs       As Date = DateTime.MinValue
+    Property dirty              As Boolean = False
   '  Property MergeWithMovieSetId As String = ""                     'Merged sets support    
 
 
@@ -71,21 +72,23 @@ Public Class MovieSetInfo
     Sub New
     End Sub
 
-    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="")
+    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="", Optional _dirty As Boolean = False)
         MovieSetName        = _moviesetname
-        TmdbSetId          = _moviesetid
+        TmdbSetId           = _moviesetid
         Collection          = _collection
         LastUpdatedTs       = _lastUpdatedTs
+        dirty               = _dirty
     '    UserMovieSetName    = _userMovieSetName
    '     MergeWithMovieSetId = _mergeWithMovieSetId
     End Sub
 
     Sub Assign(from As MovieSetInfo)
 
-        MovieSetName  = from.MovieSetName
-        TmdbSetId     = from.TmdbSetId
-        Collection    = from.Collection
-        LastUpdatedTs = from.LastUpdatedTs
+        MovieSetName    = from.MovieSetName
+        TmdbSetId       = from.TmdbSetId
+        Collection      = from.Collection
+        LastUpdatedTs   = from.LastUpdatedTs
+        dirty           = from.dirty
 
         'Preverse user customisations, if any
   '      If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName

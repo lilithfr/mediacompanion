@@ -2528,6 +2528,7 @@ Public Class Movies
                     Dim moviesetId = ""
                     Dim LastUpdatedTs As Date = Date.MinValue
                     Dim UserMovieSetName = ""
+                    Dim Dirty As Boolean = False
                     Dim detail As XmlNode = Nothing
                     Dim movac As New List(Of CollectionMovie)
                     For Each detail In thisresult.ChildNodes
@@ -2545,6 +2546,9 @@ Public Class Movies
 
                             Case "UserMovieSetName"
                                 UserMovieSetName = detail.InnerText
+
+                            Case "DirtyData"
+                                Dirty = detail.InnerXml
 
                             Case "collection"
                                 Dim ac As New CollectionMovie
@@ -2571,7 +2575,7 @@ Public Class Movies
                                 movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs, UserMovieSetName))
+                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs, UserMovieSetName, _dirty:= Dirty))
             End Select
         Next
     End Sub
@@ -2743,6 +2747,10 @@ Public Class Movies
             childchild.InnerText = movieset.LastUpdatedTs
             child.AppendChild(childchild)
 
+            childchild = doc.CreateElement("DirtyData")
+            childchild.InnerText = movieset.Dirty
+            child.AppendChild(childchild)
+
             'childchild = doc.CreateElement("UserMovieSetName")
             'childchild.InnerText = movieset.UserMovieSetName
             'child.AppendChild(childchild)
@@ -2881,8 +2889,30 @@ Public Class Movies
                     Dim d As New MovieSetInfo
                     d.MovieSetName      = movie.SetName
                     d.TmdbSetId         = movie.TmdbSetId
-                    d.LastUpdatedTs = Date.Now()
+                    d.LastUpdatedTs     = Date.Now()
+                    d.dirty             = True
+                    Dim e As New CollectionMovie
+                    e.MovieTitle        = movie.title
+                    e.TmdbMovieId       = movie.tmdbid
+                    e.release_date      = movie.Premiered
+                    d.Collection.Add(e)
                     AddUpdateMovieSetInCache(d)
+                Else
+                    If c.dirty Then
+                        Dim add As Boolean = False
+                        Try
+                            Dim q = From x In c.Collection Where x.TmdbMovieId = movie.tmdbid
+                            If q.Count = 0 Then add = True
+                        Catch
+                        End Try
+                        If add Then
+                            Dim e As New CollectionMovie
+                            e.MovieTitle        = movie.title
+                            e.TmdbMovieId       = movie.tmdbid
+                            e.release_date      = movie.Premiered
+                            c.Collection.Add(e)
+                        End If
+                    End If
                 End If
             End If
             'If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
@@ -3415,6 +3445,12 @@ Public Class Movies
         If IsNothing(c) Then
             MoviesetDb.Add(movieSetInfo)
             Return
+        End If
+        If Not IsNothing(c) Then
+            If c.dirty Then
+                MovieSetDB.Remove(c)
+                MovieSetDB.Add(movieSetInfo)
+            End If
         End If
 
         c.Assign(movieSetInfo)
