@@ -420,8 +420,7 @@ Public Class Form1
 			TabLevel1.TabPages.Remove(Me.TabActorCache)
 			TabLevel1.TabPages.Remove(Me.TabRegex)
 			TabLevel1.TabPages.Remove(Me.TabCustTv)     'Hide customtv tab while Work-In-Progress
-			'TabControl2.TabPages.Remove(Me.tpMovSets)  'Hide new Movie Sets tab while Work-In-Progress
-			TabControl2.TabPages.Remove(Me.tpMovTags)
+			TabControl2.TabPages.Remove(Me.tpMovSetsTags)
 
 			Call util_ProfilesLoad()
 			For Each prof In profileStruct.ProfileList
@@ -3882,33 +3881,25 @@ Public Class Form1
 			currentTabIndex = TabControl2.SelectedIndex
 			If Panel2.Controls.Count > 1 Then EnableFanartScrolling()
 		ElseIf tab = tpMovPoster.Name Then   'Poster Tab
-			'ElseIf tab.ToLower = "posters" Then
 			currentTabIndex = TabControl2.SelectedIndex
 			gbMoviePostersAvailable.Refresh()
 			btnMovPosterToggle.Visible = workingMovieDetails.fullmoviebody.TmdbSetId <> ""
 			UpdateMissingPosterNav()
 			If Pref.MovPosterTabTMDBSelect Then btn_TMDb_posters.PerformClick()
 		ElseIf tab = tpMovChange.Name Then         'Change Movie
-			'ElseIf tab.ToLower = "change movie" Then
 			Call mov_ChangeMovieSetup(MovieSearchEngine)
 			currentTabIndex = TabControl2.SelectedIndex
 		ElseIf tab = tpMovWall.Name Then        'Wall Tab
-			'ElseIf tab.ToLower = "wall" Then
 			Call mov_WallSetup()
-		ElseIf tab = tpMovSetsTags.Name Then         'This will become obsolete
-			'ElseIf tab.ToLower = "moviesets & tags" Then
-			Call MovieSetsAndTagsSetup()
+		'ElseIf tab = tpMovSetsTags.Name Then         'This will become obsolete
+		'	Call MovieSetsAndTagsSetup()
 		ElseIf tab = tpMovSets.Name Then         'Movie Sets & Tags tab
-			'ElseIf tab.ToLower = "moviesets & tags" Then
-			Call MovieSetsAndTagsSetup()   '' Change this to split Movie Sets and Tags
+			Call MovieSetstabSetup()   '' Change this to split Movie Sets and Tags
 		ElseIf tab = tpMovTags.Name Then         'Movie Sets & Tags tab
-			'ElseIf tab.ToLower = "moviesets & tags" Then
-			Call MovieSetsAndTagsSetup()   '' Change this to split Movie Sets and Tags
+			Call MovieTagsSetup()   '' Change this to split Movie Sets and Tags
 		ElseIf tab = tpMovFanartTv.Name Then       'Fanart.Tv tab
-			'ElseIf tab.ToLower = "fanart.tv"
 			UcFanartTv1.ucFanartTv_Refresh(workingMovieDetails)
 		ElseIf tab = tpMovTable.Name Then    'Table tab
-			'ElseIf tab.ToLower = "table" Then
 			currentTabIndex = TabControl2.SelectedIndex
 			Call mov_TableSetup()
 		Else
@@ -12677,11 +12668,9 @@ Public Class Form1
 
 #Region "Movie Sets & Tags Tab"
 
-	Private Sub MovieSetsAndTagsSetup()   '' split this in Tags and Sets
-		MovSetDgvLoad()
-		MovSetArtworkCheck()
+	Private Sub MovieTagsSetup()
 		TagListBox.Items.Clear()
-		'Here we clean up Pref.MovieTags, removing any that are also in the Tags database.
+		''Here we clean up Pref.MovieTags, removing any that are also in the Tags database.
 		Dim ToRemove As New List(Of String)
 		For Each mtag In Pref.movietags
 			If Not IsNothing(mtag)
@@ -12693,7 +12682,8 @@ Public Class Form1
 				End If
 			End If
 		Next
-		'If any duplicate tags, remove them from Pref.MovieTags
+
+		''If any duplicate tags, remove them from Pref.MovieTags
 		If ToRemove.Count > 0 Then
 			For each t In ToRemove
 				Pref.movietags.Remove(t)
@@ -12866,57 +12856,65 @@ Public Class Form1
     Private Sub tpMovSets_Enter(sender As Object, e As EventArgs) Handles tpMovSets.Enter
 
     End Sub
+
+    Private Sub MovieSetstabSetup()
+        MovSetDgvLoad()
+		MovSetArtworkCheck()
+    End Sub
     
 
 	''' <summary>
 	''' Main column with a list of all known movie sets (both themoviedb.org and manual sets)
 	''' </summary>
 	Private Sub MovSetDgvLoad()
-		Dim MsetCache As New List(Of MovieSetInfo)
-		oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.MovieSetCache)
 		dgvMovieSets.Rows.Clear()
 		dgvmovset.Rows.Clear() '' will be deleted later with the moviesets&tags tab
 		Pref.moviesets.Sort()
         RemoveHandler dgvMovieSets.CellEnter, Addressof dgvMovieSets_CellEnter
+
+        ''Get custom Sets first
+        Dim Tmplist As New List(Of TmdbCustomSetName)
 		For Each mset In Pref.moviesets
-			'' will be deleted later with the moviesets&tags tab
-			If mset <> "-None-" Then
-				Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
-				Dim msetid As String = ""
-				For Each movset In MsetCache
-					If movset.MovieSetName.ToLower = mset.ToLower Then
-						msetid = movset.TmdbSetId
-						Exit For
-					End If
-				Next
-				row.CreateCells(dgvmovset, mset, If(msetid <> "", Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.incorrect))
-				If msetid <> "" Then row.Cells(1).Tag = msetid
-				dgvmovset.Rows.Add(row)
-			End If
-			'' End of what must be deleted later
-			If mset <> "-None-" Then
+            If mset.ToLower = "-none-" Then Continue For
+            Dim tmpmov As New TmdbCustomSetName("", "", mset)
+            Tmplist.Add(tmpmov)
+        Next
+
+        ''Now add Movies from MovieSetCache.
+        For each mset In oMovies.MovieSetDB
+            Dim q = From x In oMovies.MovieCache Where x.TmdbSetId = mset.TmdbSetId
+            If q.Count = 0 Then Continue For
+            Dim tmpmov As New TmdbCustomSetName(mset.TmdbSetId, "", mset.MovieSetName)
+            Tmplist.Add(tmpmov)
+        Next
+        If Tmplist.Count > 1 Then Tmplist = Tmplist.OrderBy(Function(x) x.MovieSetName).ToList
+        
+        ''Populate MovieSets DataGridView.
+        For Each mset In Tmplist
+
+			''' will be deleted later with the moviesets&tags tab
+			'If mset.MovieSetName <> "-None-" Then
+			'	Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
+   '             row.CreateCells(dgvmovset, mset.MovieSetName, If(mset.MovieSetId = "", Global.Media_Companion.My.Resources.Resources.incorrect, Global.Media_Companion.My.Resources.correct))
+   '             dgvmovset.Rows.Add(row)
+			'End If
+			''' End of what must be deleted later
+
+            ''New MovieSetTab population
+			If mset.MovieSetName <> "-None-" Then
 				Dim row As DataGridViewRow = DirectCast(dgvMovieSets.RowTemplate.Clone(), DataGridViewRow)
-				Dim msetid As String = ""
-				For Each movset In MsetCache
-					If movset.MovieSetName.ToLower = mset.ToLower Then
-						msetid = movset.TmdbSetId
-						Exit For
-					End If
-				Next
 				'' fanart and poster columns not functional yet!
 				' if a set has films but not completed, then show missing
 				' if a set has all movies, then show is correct (change to complete)
 				' if a set is done manually don't show themoviedb ID at all (empty) but some other marking (other color?)
-				If msetid = String.Empty Then
-					row.CreateCells(dgvMovieSets, mset, Global.Media_Companion.My.Resources.Resources.error24)
-				ElseIf msetid.Chars(0) = "L" Then
-					row.CreateCells(dgvMovieSets, mset, Global.Media_Companion.My.Resources.Resources.correct_manual24)
+				If mset.MovieSetId = String.Empty Then
+					row.CreateCells(dgvMovieSets, mset.MovieSetName, Global.Media_Companion.My.Resources.Resources.error24)
+				ElseIf mset.MovieSetId.Chars(0) = "L" Then
+					row.CreateCells(dgvMovieSets, mset.MovieSetName, Global.Media_Companion.My.Resources.Resources.correct_manual24)
 				Else
-					row.CreateCells(dgvMovieSets, mset, Global.Media_Companion.My.Resources.Resources.correct)
+					row.CreateCells(dgvMovieSets, mset.MovieSetName, Global.Media_Companion.My.Resources.Resources.correct)
 				End If
-
-				' row.CreateCells(dgvMovieSettings, mset, If(msetid <> "", Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.error24))
-				If msetid <> "" Then row.Cells(1).Tag = msetid
+				If mset.MovieSetId <> "" Then row.Cells(1).Tag = mset.MovieSetId
 				dgvMovieSets.Rows.Add(row)
 			End If
 		Next
@@ -12944,27 +12942,27 @@ Public Class Form1
 	''' Not sure how this happens. But sometimes a movie/item is added twice to the set.
 	''' should be make obsolete once this error has been found. Keep it active just to be sure though?
 	''' </summary>
-	Private Sub removeDoubleItems(MovSet As MovieSetInfo)
-		Dim itemToDelete(MovSet.Collection.Count - 1) As Boolean  'array to hold the items which are double and needs to be deleted
+	'Private Sub removeDoubleItems(MovSet As MovieSetInfo)
+	'	Dim itemToDelete(MovSet.Collection.Count - 1) As Boolean  'array to hold the items which are double and needs to be deleted
 
-		' Find out which items are double in the MovSet Collection
-		For item As Integer = 0 To itemToDelete.Length - 1
-			For item2 As Integer = item + 1 To itemToDelete.Length - 1
-				If Not (item = item2) Then
-					If MovSet.Collection(item2).TmdbMovieId = MovSet.Collection(item).TmdbMovieId Then
-						itemToDelete(item2) = True
-					End If
-				End If
-			Next
-		Next
+	'	' Find out which items are double in the MovSet Collection
+	'	For item As Integer = 0 To itemToDelete.Length - 1
+	'		For item2 As Integer = item + 1 To itemToDelete.Length - 1
+	'			If Not (item = item2) Then
+	'				If MovSet.Collection(item2).TmdbMovieId = MovSet.Collection(item).TmdbMovieId Then
+	'					itemToDelete(item2) = True
+	'				End If
+	'			End If
+	'		Next
+	'	Next
 
-		' Now delete the double items (backwards of course)
-		For item As Integer = itemToDelete.Length - 1 To 0 Step -1
-			If itemToDelete(item) = True Then
-				MovSet.Collection.RemoveAt(item)
-			End If
-		Next
-	End Sub
+	'	' Now delete the double items (backwards of course)
+	'	For item As Integer = itemToDelete.Length - 1 To 0 Step -1
+	'		If itemToDelete(item) = True Then
+	'			MovSet.Collection.RemoveAt(item)
+	'		End If
+	'	Next
+	'End Sub
 
     ''' <summary>
     ''' Region to fill the current movies in the selected collection
@@ -12974,66 +12972,72 @@ Public Class Form1
     Private Sub dgvMovieSets_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvMovieSets.CellEnter
         Try
             Application.DoEvents()
-            'messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
             Dim found As Boolean = False
             If e.ColumnIndex < 0 Or e.RowIndex < 0 Then Exit Sub
             Dim MsetName As String = dgvMovieSets.Rows(e.RowIndex).Cells(0).Value
             Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName) 'GetMovSet(MsetName)
             'removeDoubleItems(MovSet)
             If MsetName <> tbMovieSetTitle.Text Then
+                Dim CustomCollection As Boolean = False
                 Dim dirtycollection As Boolean = False
-                Dim matchedmovies As New List(Of FullMovieDetails)
-                For Each Mov As ComboList In oMovies.MovieCache
-                    If Mov.TmdbSetId = MovSet.TmdbSetId Then
-                        Dim filepath As String = Mov.fullpathandfilename
-                        Dim fmd As New FullMovieDetails
-                        fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
-                        matchedmovies.Add(fmd)
-                    End If
-                Next
-                If matchedmovies.Count = 0 Then
-                    tbMovieSetTitle.Text = "No Data found for this collection!!"
-                    DataGridViewSelectedMovieSet.Rows.Clear()
-                    'MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
-                    Exit Sub
-                End If
-
                 Dim MovCollectionList As New List(Of MovieSetDatabase)
-                For Each mset In oMovies.MovieSetDB
-                    If mset.TmdbSetId = MovSet.TmdbSetId Then
-                        dirtycollection = mset.dirty
-                        If mset.Collection.Count > 0 Then
-                            For Each collect In mset.Collection
-                                Dim ac As New MovieSetDatabase
-                                ac.title = collect.MovieTitle
-                                ac.tmdbid = collect.TmdbMovieId
-                                MovCollectionList.Add(ac)
-                            Next
-                            Exit For
-                        End If
-                    End If
-                Next
-            
-                For Each x In MovCollectionList
-                    For Each y In matchedmovies
-                        If y.fullmoviebody.tmdbid = x.tmdbid Then
+
+                '''Check if custom set, get collection from MovieCache.
+                If MovSet.TmdbSetId = "" Then
+                    CustomCollection = True
+                    For Each Mov As ComboList In oMovies.MovieCache
+                        If Mov.SetName = Msetname Then
+                            Dim ac As New MovieSetDatabase
+                            ac.title = Mov.title
+                            ac.tmdbid = Mov.tmdbid
+                            ac.present = True
                             found = True
-                            x.present = True
-                            Exit For
+                            MovCollectionList.Add(ac)
                         End If
                     Next
-                Next
+                    If MovCollectionList.Count = 0 Then
+                        tbMovieSetTitle.Text = "No Data found for this collection!!"
+                        DataGridViewSelectedMovieSet.Rows.Clear()
+                        lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
+                        lbCollectionCount.BackColor = Color.Red
+                        Exit Sub
+                    End If
+
+                Else    'Belongs to a Collection and is in MovieSetDb
+                    For Each mset In oMovies.MovieSetDB
+                        If mset.TmdbSetId = MovSet.TmdbSetId Then
+                            dirtycollection = mset.Dirty
+                            If mset.Collection.Count > 0 Then
+                                For Each collect In mset.Collection
+                                    Dim ac As New MovieSetDatabase
+                                    ac.title = collect.MovieTitle
+                                    ac.tmdbid = collect.TmdbMovieId
+                                    MovCollectionList.Add(ac)
+                                Next
+                                Exit For
+                            End If
+                        End If
+                    Next
+            
+                    For Each x In MovCollectionList
+                        Dim q = From y In oMovies.MovieCache Where y.tmdbid = x.tmdbid
+                        If q.Count = 0 Then
+                            Continue For
+                        End If
+                        found = True
+                        x.present = True
+                    Next
+                End If
+                
                 If Not found Then
-                    Dim message As String = matchedmovies.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no matching movies found in collection." & vbCrLf
+                    Dim message As String = MovCollectionList.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no matching movies found in collection." & vbCrLf
                     message &= "Recommend Rescrape Wizard to populate Movie Collection data." & vbCrLf
                     message &= "Select to rescrape ""TMDb set info""" & vbCrLf & "is sufficient to populate Collection info."
                     MsgBox(message)
                     Exit Sub
                 End If
             
-                'lbl_CollectionTitle.Text = MovSet.MovieSetName
-                tbMovieSetTitle.Text = MovSet.MovieSetName
-                ' vincent add text title
+                tbMovieSetTitle.Text = If(CustomCollection, MsetName, MovSet.MovieSetName)
                 DataGridViewSelectedMovieSet.Rows.Clear()
                 For Each item In MovCollectionList
                     Dim row As DataGridViewRow = DirectCast(DataGridViewSelectedMovieSet.RowTemplate.Clone(), DataGridViewRow)
@@ -13060,38 +13064,16 @@ Public Class Form1
 			util_ZoomImage(dgvMovieSets.SelectedCells(0).Tag.ToString)
 		End If
 	End Sub
-
-    Private Sub btnMovieSetAddOld_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAddOld.Click
-		Try
-			If tbMovSetEntry.Text <> "" Then
-				Dim ex As Boolean = False
-				For Each mset In Pref.moviesets
-					If mset.ToLower = tbMovSetEntry.Text.ToLower Then
-						ex = True
-						Exit For
-					End If
-				Next
-				If ex = False Then
-					Pref.moviesets.Add(tbMovSetEntry.Text)
-					Pref.moviesets.Sort()
-					MovSetDgvLoad()
-					pop_cbMovieDisplay_MovieSet()
-					tbMovSetEntry.Clear()
-				Else
-					MsgBox("This Movie Set Already Exists")
-				End If
-			End If
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
+    
 	Private Sub btnMovieSetAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAdd.Click
 		Try
 			Dim newForm As New frmMovSetAdd()
-			newForm.ShowDialog()
+			If newForm.ShowDialog() <> DialogResult.OK Then
+			    Exit Sub
+			End If
 
 			MovSetDgvLoad()
+            MovSetArtworkCheck()
 			pop_cbMovieDisplay_MovieSet()
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
@@ -13106,29 +13088,35 @@ Public Class Form1
 
 	End Sub
 
-	Private Sub btnMovieSetRemoveOld_Click(sender As Object, e As EventArgs) Handles btnMovieSetRemoveOld.Click
-		Try
-			Dim SelectedMovieSet As String = dgvmovset.SelectedCells(0).Value
-			If Not RemoveFromMovieSetCache(SelectedMovieSet) Then
-				MsgBox("Setname selected is already allocated to a" & vbCrLf & "   movie in Media Companions cache" & vbCrLf & "      unable to remove is in use.")
-				Exit Sub
-			End If
-			Pref.moviesets.Remove(SelectedMovieSet)
-			dgvmovset.Rows.RemoveAt(dgvmovset.CurrentRow.Index)
-			pop_cbMovieDisplay_MovieSet()
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
+	'Private Sub btnMovieSetRemoveOld_Click(sender As Object, e As EventArgs) Handles btnMovieSetRemoveOld.Click
+	'	Try
+	'		Dim SelectedMovieSet As String = dgvmovset.SelectedCells(0).Value
+	'		If Not RemoveFromMovieSetCache(SelectedMovieSet) Then
+	'			MsgBox("Setname selected is already allocated to a" & vbCrLf & "   movie in Media Companions cache" & vbCrLf & "      unable to remove is in use.")
+	'			Exit Sub
+	'		End If
+	'		Pref.moviesets.Remove(SelectedMovieSet)
+	'		dgvmovset.Rows.RemoveAt(dgvmovset.CurrentRow.Index)
+	'		pop_cbMovieDisplay_MovieSet()
+	'	Catch ex As Exception
+	'		ExceptionHandler.LogError(ex)
+	'	End Try
+	'End Sub
 
-	Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+	Private Sub btnMovieSetRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetRemove.Click
 		Try
 			Dim SelectedMovieSet As String = dgvMovieSets.SelectedCells(0).Value
+            Dim q = From x In oMovies.MovieSetDB Where x.MovieSetName = SelectedMovieSet
+            If Not q.Count = 0 Then 
+                MsgBox("Selected collection name is allocated to Movies, and" & vbCrLf & _
+                       "            has valid TMDB Set Id present" & vbcrlf &  _
+                       "          Can not be removed from this tab.")
+                Exit Sub
+            End If
 			If Not RemoveFromMovieSetCache(SelectedMovieSet) Then
 				MsgBox("Setname selected is already allocated to a" & vbCrLf & "   movie in Media Companions cache" & vbCrLf & "      unable to remove is in use.")
 				Exit Sub
 			End If
-			Pref.moviesets.Remove(SelectedMovieSet)
 			dgvMovieSets.Rows.RemoveAt(dgvMovieSets.CurrentRow.Index)
 			pop_cbMovieDisplay_MovieSet()
 		Catch ex As Exception
@@ -13136,7 +13124,14 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click, btnMovieSetsRepopulate.Click
+	'Private Sub btnMovieSetsRepopulateFromUsed_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulateFromUsed.Click, btnMovieSetsRepopulate.Click
+	'	MovSetsRepopulate()
+	'	MovSetDgvLoad()
+	'	MovSetArtworkCheck()
+	'	pop_cbMovieDisplay_MovieSet()
+	'End Sub
+
+    Private Sub btnMovieSetsRepopulate_Click(sender As System.Object, e As System.EventArgs) Handles btnMovieSetsRepopulate.Click
 		MovSetsRepopulate()
 		MovSetDgvLoad()
 		MovSetArtworkCheck()
@@ -13146,35 +13141,11 @@ Public Class Form1
 	Private Sub MovSetsRepopulate()
 		Pref.moviesets.Clear()
 		Pref.moviesets.Add("-None-")
-		Pref.moviesets.AddRange(oMovies.MoviesSetsExNone)
+		Pref.moviesets.AddRange(oMovies.MovieSetsNoSetId)
 		'oMovies.SaveMovieSetCache()
 	End Sub
 
 	Private Sub MovSetArtworkCheck()
-		For Each row As DataGridViewRow In dgvmovset.Rows
-			Dim mset As String = row.Cells(0).Value
-			For Each mov In oMovies.MovieCache
-				If mov.SetName = mset Then
-					Dim movsetfanart As String = Pref.GetMovSetFanartPath(mov.fullpathandfilename, mset)
-					Dim movsetposter As String = Pref.GetMovSetPosterPath(mov.fullpathandfilename, mset)
-					If File.Exists(movsetfanart) Then
-						row.Cells(2).Value = Global.Media_Companion.My.Resources.Resources.correct
-						row.Cells(2).Tag = movsetfanart
-					Else
-						row.Cells(2).Value = Global.Media_Companion.My.Resources.Resources.incorrect
-						row.Cells(2).Tag = Nothing
-					End If
-					If File.Exists(movsetposter) Then
-						row.Cells(3).Value = Global.Media_Companion.My.Resources.Resources.correct
-						row.Cells(3).Tag = movsetposter
-					Else
-						row.Cells(3).Value = Global.Media_Companion.My.Resources.Resources.incorrect
-						row.Cells(3).Tag = Nothing
-					End If
-					Exit For
-				End If
-			Next
-		Next
 		For Each row As DataGridViewRow In dgvMovieSets.Rows
 			Dim mset As String = row.Cells(0).Value
 			For Each mov In oMovies.MovieCache
@@ -13200,352 +13171,105 @@ Public Class Form1
 			Next
 		Next
 	End Sub
+    
+    Private Sub dgvMovieSets_MouseDown(sender As Object, e As MouseEventArgs) Handles dgvMovieSets.MouseDown
+        Dim Fail As Boolean = False
+        If Not e.Button = MouseButtons.Right Then Exit Sub
+        Dim ColIndexFromMouseDown = dgvMovieSets.HitTest(e.X, e.Y).ColumnIndex
+        If ColIndexFromMouseDown < 0 Then
+            tsmiMovSetName.Text = ""
+            Exit Sub
+        End If
+        Dim RowIndexFromMouseDown = dgvMovieSets.HitTest(e.X, e.Y).RowIndex
+        If RowIndexFromMouseDown < 0 Then Exit Sub
+        
+        Dim MsetName As String = dgvMovieSets.Rows(RowIndexFromMouseDown).Cells(0).Value
+        
+        If ColIndexFromMouseDown = 0 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetGetFanart.Visible = False
+            tsmiMovSetGetPoster.Visible = False
+        ElseIf ColIndexFromMouseDown = 2 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetGetFanart.Visible = True
+            tsmiMovSetGetPoster.Visible = False
+        ElseIf ColIndexFromMouseDown = 3 Then
+            tsmiMovSetName.Text = MsetName
+            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetGetFanart.Visible = False
+            tsmiMovSetGetPoster.Visible = True
+        End If
+    End Sub
 
-	'Private Sub dgvmovset_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles dgvmovset.MouseDoubleClick
-	'	Dim columnno As Integer = dgvmovset.SelectedCells(0).ColumnIndex
-	'	If columnno < 2 Then Exit Sub
-	'	If dgvmovset.SelectedCells(0).Tag <> Nothing Then
-	'		util_ZoomImage(dgvmovset.SelectedCells(0).Tag.ToString)
-	'	End If
-	'End Sub
+    Private Sub MovSetsContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovSetsContextMenu.Opening
+        If tsmiMovSetName.Text = "" Then
+            e.Cancel = True
+        End If
+        tsmiMovSetName.BackColor = Color.Honeydew
+        tsmiMovSetName.Font = New Font("Arial", 10, FontStyle.Bold)
+    End Sub
 
-	'Private Sub dgvmovset_MouseDown(sender As Object, e As MouseEventArgs) Handles dgvmovset.MouseDown
-	'    Dim Fail As Boolean = False
-	'    If Not e.Button = MouseButtons.Right Then Exit Sub
-	'    Dim ColIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).ColumnIndex
-	'    If ColIndexFromMouseDown < 0 Then
-	'        tsmiMovSetName.Text = ""
-	'        Exit Sub
-	'    End If
-	'    Dim RowIndexFromMouseDown = dgvmovset.HitTest(e.X, e.Y).RowIndex
-	'    If RowIndexFromMouseDown < 0 Then Exit Sub
-	'    messbox = New frmMessageBox("Updating Movies in this collection with", "entered Set ID")
-	'    Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
-	'    If ColIndexFromMouseDown = 1 Then
-	'        Try
-	'            'Dim MsetName As String = dgvmovset.Rows(RowIndexFromMouseDown).Cells(0).Value
-	'            If MsetName = "" Then
-	'                MsgBox("", "No Movie Set Title!", "")
-	'                Exit Sub
-	'            End If
-	'            Dim CurrentTMDbId As String = ""
-	'            Dim MsetCache As New List(Of MovieSetInfo)
-	'            oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.MovieSetCache)
-	'            Dim q = From x In MsetCache Where x.MovieSetName = MsetName Select x.MovieSetId
-	'            If q.Count > 0 Then  'AndAlso q.ToString <> Nothing AndAlso q.ToString <> "Enumeration yielded no results"
-	'                CurrentTMDbId = q(0).ToString
-	'            End If
-	'            Dim iboxmsg As String = "Enter TMDB Set ID:"
-	'            If CurrentTMDbId <> "" Then iboxmsg = "Replace current TMDB Set ID?:"
-	'            Dim NewTMDBID As String = InputBox(iboxmsg & vbCrLf & "Note: Numerical only!", "TMDB Set ID", CurrentTMDbId)
-	'            If NewTMDBID = "" Then Exit Sub
-	'            If Regex.IsMatch(NewTMDBID, "^[0-9]+$") Then
-	'                messbox.Show()
-	'                messbox.Refresh()
-	'                Application.DoEvents()
-	'                'oMovies.LoadMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
-	'                Dim found As Boolean = False
-	'                For Each s As MovieSetInfo In oMovies.MovieSetDB 'MsetCache
-	'                    If s.MovieSetName = MsetName Then
-	'                        If s.MovieSetId <> NewTMDBID Then
-	'                            If s.MovieSetId <> "" Then
-	'                                Dim tempint = MsgBox("This Set already has an ID" & vbCrLf & "Are you sure you wish to overwrite?", MessageBoxButtons.YesNoCancel)
-	'                                If tempint = Windows.Forms.DialogResult.No Or tempint = DialogResult.Cancel Then
-	'                                    Fail = True
-	'                                    Exit For
-	'                                End If
-	'                            End If
-	'                            s.MovieSetId = NewTMDBID
-	'                            oMovies.SaveMovieSetCache()
-	'                            'oMovies.SaveMovieSetCache(MsetCache, "movieset", Pref.workingProfile.moviesetcache)
-	'                            found = True
-	'                            Exit For
-	'                        End If
-	'                    End If
-	'                Next
-	'                If Not Fail Then
-	'                    If Not found Then
-	'                        Dim newset As New MovieSetInfo
-	'                        newset.MovieSetName = MsetName
-	'                        newset.MovieSetId = NewTMDBID
-	'                        oMovies.MovieSetDB.Add(newset)
-	'                        oMovies.SaveMovieSetCache()
-	'                    End If
-	'                    dgvmovset.Rows(RowIndexFromMouseDown).Cells(ColIndexFromMouseDown).Value = Global.Media_Companion.My.Resources.Resources.correct
-	'                    Dim matchedmovies As New List(Of String)
-	'                    For Each Mov As ComboList In oMovies.MovieCache
-	'                        If Mov.MovieSet.MovieSetName = MsetName Then
-	'                            Mov.MovieSet.MovieSetId = NewTMDBID
-	'                            Dim filepath As String = Mov.fullpathandfilename
-	'                            Dim fmd As New FullMovieDetails
-	'                            fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
-	'                            fmd.fullmoviebody.TmdbSetId = NewTMDBID
-	'                            Movie.SaveNFO(filepath, fmd)
-	'                        End If
-	'                    Next
-	'                End If
-	'            Else
-	'                Fail = True
-	'                MsgBox("Invalid ID." & vbCrLf & "Numerical Only!", , "Invalid TMDB Set ID")
-	'            End If
-	'        Catch
-	'        End Try
-	'    ElseIf ColIndexFromMouseDown = 0 Then
-	'        tsmiMovSetName.Text = MsetName
-	'        tsmiMovSetShowCollection.Visible = True
-	'        tsmiMovSetGetFanart.Visible = False
-	'        tsmiMovSetGetPoster.Visible = False
-	'    ElseIf ColIndexFromMouseDown = 2 Then
-	'        tsmiMovSetName.Text = MsetName
-	'        tsmiMovSetShowCollection.Visible = False
-	'        tsmiMovSetGetFanart.Visible = True
-	'        tsmiMovSetGetPoster.Visible = False
-	'    ElseIf ColIndexFromMouseDown = 3 Then
-	'        tsmiMovSetName.Text = MsetName
-	'        tsmiMovSetShowCollection.Visible = False
-	'        tsmiMovSetGetFanart.Visible = False
-	'        tsmiMovSetGetPoster.Visible = True
-	'    End If
-	'    messbox.Close()
-	'    messbox = Nothing
-	'    If Fail Then Exit Sub
-	'End Sub
+    Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
+        Try
+            Dim MovSet As MovieSetInfo = GetMovSetDetails()
+            If MovSet.TmdbSetId = "" Then Exit Sub
+            For f = 0 To DataGridViewMovies.RowCount - 1
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
+                    mov_FanartGet(True)
+                    MovSetArtworkCheck()
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
-	Private Sub MovSetsContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MovSetsContextMenu.Opening
-		If tsmiMovSetName.Text = "" Then
-			e.Cancel = True
-		End If
-		tsmiMovSetName.BackColor = Color.Honeydew
-		tsmiMovSetName.Font = New Font("Arial", 10, FontStyle.Bold)
-	End Sub
+    Private Sub tsmiMovSetGetPoster_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetPoster.Click
+        Try
+            Dim MovSet As MovieSetInfo = GetMovSetDetails()
+            If MovSet.TmdbSetId = "" Then Exit Sub
+            For f = 0 To DataGridViewMovies.RowCount - 1
+                If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
+                    DataGridViewMovies.ClearSelection()
+                    DataGridViewMovies.Rows(f).Selected = True
+                    DisplayMovie()
+                    mov_PosterGet("tmdb", True)
+                    MovSetArtworkCheck()
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
 
-	'Private Sub tsmiMovSetShowCollection_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetShowCollection.Click
-	'    Try
-	'        MovSetsContextMenu.Close()
-	'        Application.DoEvents()
-	'        messbox = New frmMessageBox("Getting Collection data from TMDb.", "......", "Please Wait")
-	'        Dim found As Boolean = False
-	'        Dim MovSet As MovieSetInfo = GetMovSetDetails()
-	'        Dim matchedmovies As New List(Of FullMovieDetails)
-	'        For Each Mov As ComboList In oMovies.MovieCache
-	'            If Mov.MovieSet.MovieSetId = MovSet.MovieSetId Then
-	'                Dim filepath As String = Mov.fullpathandfilename
-	'                Dim fmd As New FullMovieDetails
-	'                fmd = WorkingWithNfoFiles.mov_NfoLoadFull(filepath)
-	'                matchedmovies.Add(fmd)
-	'            End If
-	'        Next
-	'        If matchedmovies.Count = 0 Then
-	'            MsgBox("No movies found for this collection" & vbCrLf & "recommend click ""Repopulate from Used""" & vbCrLf & "to update your Collection List")
-	'            Exit Sub
-	'        End If
-	'        Dim MovCollectionList As New List(Of MovieSetDatabase)
-	'        For Each mset In oMovies.MovieSetDB
-	'            If mset.MovieSetId = MovSet.MovieSetId Then
-	'                If mset.Collection.Count > 0 Then
-	'                    For Each collect In mset.Collection
-	'                        Dim ac As New MovieSetDatabase
-	'                        ac.title = collect.MovieTitle
-	'                        ac.tmdbid = collect.TmdbMovieId
-	'                        MovCollectionList.Add(ac)
-	'                    Next
-	'                    Exit For
-	'                Else
-	'                    System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-	'                    messbox.Show()
-	'                    messbox.Refresh()
-	'                    Application.DoEvents()
-	'                    Try
-	'                        Dim api As New TMDb
-
-	'                        api.SetId = MovSet.MovieSetId
-
-	'                        MovCollectionList = api.Collection
-
-	'                    Catch ex As Exception
-	'                        If ex.Message.Contains("TMDB") Then
-	'                            messbox.Close()
-	'                            MsgBox("Issue getting data from TMDB")
-	'                            Exit Sub
-	'                        End If
-	'                    End Try
-	'                    If MovCollectionList.Count > 0 Then
-	'                        For Each Mcol In MovCollectionList
-	'                            Dim coll As New CollectionMovie
-	'                            coll.TmdbMovieId = Mcol.tmdbid
-	'                            coll.MovieTitle = Mcol.title
-	'                            mset.Collection.Add(coll)
-	'                        Next
-	'                    End If
-	'                    Exit For
-	'                End If
-	'            End If
-	'        Next
-	'        If Not IsNothing(messbox) Then messbox.Close()
-	'        For Each x In MovCollectionList
-	'            For Each y In matchedmovies
-	'                If y.fullmoviebody.tmdbid = x.tmdbid Then
-	'                    found = True
-	'                    x.present = True
-	'                    Exit For
-	'                End If
-	'            Next
-	'        Next
-	'        If Not found Then
-	'            Dim message As String = matchedmovies.Count & " Movie(s) found for:  " & MovSet.MovieSetName & vbCrLf & "But no TMBD ID's match" & vbCrLf
-	'            message &= "Recommend Batch Wizard to populate movie's TMDb Id's" & vbCrLf
-	'            message &= "Select ""Attempt to Locate & Download Fanart for Movies""" & vbCrLf & "is sufficient to populate TMBD Id"
-	'            MsgBox(message)
-	'            Exit Sub
-	'        End If
-
-	'        If Not IsNothing(messbox) Then messbox.Close()
-	'        Dim frm As New frmMovSets
-	'        frm.CollectionTitle = MovSet.MovieSetName
-	'        frm.Collection = MovCollectionList
-	'        frm.Init()
-	'        frm.ShowDialog()
-	'    Catch ex As Exception
-	'        ExceptionHandler.LogError(ex)
-	'    Finally
-	'        If Not IsNothing(messbox) Then messbox.Close()
-	'    End Try
-	'End Sub
-
-	Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
-		Try
-			Dim MovSet As MovieSetInfo = GetMovSetDetails()
-			If MovSet.TmdbSetId = "" Then Exit Sub
-			For f = 0 To DataGridViewMovies.RowCount - 1
-				If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
-					DataGridViewMovies.ClearSelection()
-					DataGridViewMovies.Rows(f).Selected = True
-					DisplayMovie()
-					mov_FanartGet(True)
-					MovSetArtworkCheck()
-					Exit For
-				End If
-			Next
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
-	Private Sub tsmiMovSetGetPoster_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetPoster.Click
-		Try
-			Dim MovSet As MovieSetInfo = GetMovSetDetails()
-			If MovSet.TmdbSetId = "" Then Exit Sub
-			For f = 0 To DataGridViewMovies.RowCount - 1
-				If DataGridViewMovies.Rows(f).Cells("movieset").Value.MovieSetName = MovSet.MovieSetName Then
-					DataGridViewMovies.ClearSelection()
-					DataGridViewMovies.Rows(f).Selected = True
-					DisplayMovie()
-					mov_PosterGet("tmdb", True)
-					MovSetArtworkCheck()
-					Exit For
-				End If
-			Next
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
-	Private Function GetMovSetDetails() As MovieSetInfo
-		Dim t As New MovieSetInfo
-		For Each p In oMovies.MovieSetDB
-			If p.MovieSetName = tsmiMovSetName.Text Then
-				t = p
-				Exit For
-			End If
-		Next
-		Return t
-	End Function
-
-	'Private Sub tsmiMovieSetIdCheck_Click(sender As Object, e As EventArgs) Handles tsmiMovieSetIdCheck.Click
-	'    Application.DoEvents()
-	'    rescrapeList.ResetFields()
-	'    _rescrapeList.FullPathAndFilenames.Clear()
-	'    Dim MovieSetIds As New List(Of String)
-	'    For Each movie As ComboList In oMovies.MovieCache
-	'        If movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
-	'            MovieSetIds.Add(movie.MovieSet.MovieSetId)
-	'            If movie.MovieSet.MovieSetId = "" Or movie.tmdbid = "" Then
-	'                _rescrapeList.FullPathAndFilenames.Add(movie.fullpathandfilename)
-	'            End If
-	'        End If
-	'    Next
-	'    If Not _rescrapeList.FullPathAndFilenames.Count = 0 Then
-	'        rescrapeList.tmdb_set_id = True
-	'        RunBackgroundMovieScrape("BatchRescrape")
-	'    End If
-	'    If MovieSetIds.Count > 0 Then RebuildMovieSetCollectionList(MovieSetIds)
-	'    UpdateFilteredList()
-	'End Sub
-
-	'Private Sub RebuildMovieSetCollectionList(ByVal SetIds As List(Of String))
-	'    Try
-	'        messbox = New frmMessageBox("Updating Movie Collections", "with Movies in the collection", "...Checking TMDB is accessible...")
-	'        System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-	'        messbox.Show()
-	'        messbox.Refresh()
-	'        Application.DoEvents()
-	'        If Not Utilities.UrlIsValid("https://api.themoviedb.org") Then
-	'            MsgBox("TMDB not accessible," & vbCrLf & "Try again later")
-	'            Exit Sub
-	'        End If
-	'        SetIds.Sort()
-	'        For x As Integer = SetIds.Count - 1 To 1 Step -1
-	'            If SetIds(x) = SetIds(x - 1) Then SetIds.RemoveAt(x)
-	'        Next x
-	'        Dim totalsets As Integer = SetIds.Count
-	'        Dim currentset As Integer = 0
-	'        For Each item In SetIds
-	'            currentset += 1
-	'            messbox.TextBox3.Text = currentset.ToString & " of " & totalsets.ToString
-	'            messbox.Refresh()
-	'            Dim api As New TMDb
-	'            api.SetId = item
-	'            Dim MovCollectionList As New List(Of MovieSetDatabase)
-
-	'            Try
-	'                MovCollectionList = api.Collection
-	'            Catch
-	'                Continue For
-	'            End Try
-	'            For Each mset In oMovies.MovieSetDB
-	'                If mset.MovieSetId = item Then
-	'                    If Not IsNothing(mset.Collection) Then mset.Collection.Clear()
-	'                    For Each movset In MovCollectionList
-	'                        Dim ac As New CollectionMovie
-	'                        ac.TmdbMovieId = movset.tmdbid
-	'                        ac.MovieTitle = movset.title
-	'                        mset.Collection.Add(ac)
-	'                    Next
-	'                End If
-	'            Next
-	'        Next
-	'        oMovies.SaveMovieSetCache()
-	'    Catch ex As Exception
-	'    Finally
-	'        If Not IsNothing(messbox) Then messbox.Close()
-	'    End Try
-	'End Sub
-
-	Private Function RemoveFromMovieSetCache(ByVal s As String) As Boolean
+    Private Function GetMovSetDetails() As MovieSetInfo
+        Dim t As New MovieSetInfo
+        For Each p In oMovies.MovieSetDB
+            If p.MovieSetName = tsmiMovSetName.Text Then
+                t = p
+                Exit For
+            End If
+        Next
+        Return t
+    End Function
+    
+    Private Function RemoveFromMovieSetCache(ByVal s As String) As Boolean
 		Dim aok As Boolean = True
-		For Each mov In oMovies.MovieCache
-			If mov.SetName = s Then
-				aok = False
-				Exit For
-			End If
-		Next
+        Dim q = From x In oMovies.MovieCache Where x.SetName = s
+        If Not q.Count = 0 Then aok = False
+
+        ''If set is allocated to one or more Movies, do not allow its removal.
 		If Not aok Then Return aok
-		'Dim res = oMovies.MovieSetDB.Find(Function(c) c.MovieSetName = s)
-		'If Not IsNothing(res) Then
-		'    Dim msetdb As Integer = oMovies.MovieSetDB.IndexOf(res)
-		'    Dim something As String = Nothing
-		'    oMovies.MovieSetDB.RemoveAt(msetdb)
-		'End If
+
+        ''Remove only from Pref.moviesets, not from MovieSetDB
+        Pref.moviesets.Remove(s)
 		Return aok
 	End Function
 

@@ -27,15 +27,15 @@ Partial Class frmMovSetAdd
         Me.tbMovSetAdd = New System.Windows.Forms.TextBox()
         Me.lblMovSetAdd = New System.Windows.Forms.Label()
         Me.btnMovSetAdd = New System.Windows.Forms.Button()
-        Me.tlpMovSetAdd.SuspendLayout()
-        Me.SuspendLayout()
+        Me.tlpMovSetAdd.SuspendLayout
+        Me.SuspendLayout
         '
         'tlpMovSetAdd
         '
         Me.tlpMovSetAdd.ColumnCount = 3
-        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
-        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.0!))
-        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.0!))
+        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33!))
+        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34!))
+        Me.tlpMovSetAdd.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33!))
         Me.tlpMovSetAdd.Controls.Add(Me.tbMovSetAdd, 0, 1)
         Me.tlpMovSetAdd.Controls.Add(Me.lblMovSetAdd, 0, 0)
         Me.tlpMovSetAdd.Controls.Add(Me.btnMovSetAdd, 1, 2)
@@ -43,9 +43,9 @@ Partial Class frmMovSetAdd
         Me.tlpMovSetAdd.Location = New System.Drawing.Point(0, 0)
         Me.tlpMovSetAdd.Name = "tlpMovSetAdd"
         Me.tlpMovSetAdd.RowCount = 3
-        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
+        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
+        Me.tlpMovSetAdd.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
         Me.tlpMovSetAdd.Size = New System.Drawing.Size(384, 81)
         Me.tlpMovSetAdd.TabIndex = 1
         '
@@ -59,8 +59,8 @@ Partial Class frmMovSetAdd
         '
         'lblMovSetAdd
         '
-        Me.lblMovSetAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.lblMovSetAdd.AutoSize = True
+        Me.lblMovSetAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.lblMovSetAdd.AutoSize = true
         Me.tlpMovSetAdd.SetColumnSpan(Me.lblMovSetAdd, 3)
         Me.lblMovSetAdd.Location = New System.Drawing.Point(3, 7)
         Me.lblMovSetAdd.Name = "lblMovSetAdd"
@@ -77,23 +77,32 @@ Partial Class frmMovSetAdd
         Me.btnMovSetAdd.Size = New System.Drawing.Size(75, 23)
         Me.btnMovSetAdd.TabIndex = 2
         Me.btnMovSetAdd.Text = "Add"
-        Me.btnMovSetAdd.UseMnemonic = False
-        Me.btnMovSetAdd.UseVisualStyleBackColor = True
+        Me.btnMovSetAdd.UseMnemonic = false
+        Me.btnMovSetAdd.UseVisualStyleBackColor = true
         '
         'frmMovSetAdd
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(384, 81)
         Me.Controls.Add(Me.tlpMovSetAdd)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
+        Me.KeyPreview = true
+        Me.MaximizeBox = false
+        Me.MaximumSize = New System.Drawing.Size(394, 115)
+        Me.MinimizeBox = false
+        Me.MinimumSize = New System.Drawing.Size(394, 115)
         Me.Name = "frmMovSetAdd"
+        Me.ShowIcon = false
+        Me.ShowInTaskbar = false
+        Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Add Movie Set"
-        Me.tlpMovSetAdd.ResumeLayout(False)
-        Me.tlpMovSetAdd.PerformLayout()
-        Me.ResumeLayout(False)
+        Me.tlpMovSetAdd.ResumeLayout(false)
+        Me.tlpMovSetAdd.PerformLayout
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
 
     Friend WithEvents tlpMovSetAdd As TableLayoutPanel
     Friend WithEvents tbMovSetAdd As TextBox

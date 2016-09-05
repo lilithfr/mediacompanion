@@ -1,4 +1,6 @@
-﻿Public Class frmMovSetAdd
+﻿Imports System.ComponentModel
+
+Public Class frmMovSetAdd
     Private Sub tbMovSetAdd_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tbMovSetAdd.KeyPress
         If e.KeyChar = Convert.ToChar(Keys.Enter) Then
             btnMovSetAdd.PerformClick()
@@ -20,6 +22,7 @@
                     Pref.moviesets.Add(tbMovSetAdd.Text)
                     Pref.moviesets.Sort()
                     tbMovSetAdd.Clear()
+                    Me.DialogResult = DialogResult.OK
                     Me.Close()
                 Else
                     MsgBox("This Movie Set Already Exists")
@@ -29,5 +32,12 @@
             ExceptionHandler.LogError(ex)
             Me.Close()
         End Try
+    End Sub
+
+    Private Sub frmMovSetAdd_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.Escape Then
+            Me.DialogResult = DialogResult.Cancel
+            Me.Close()
+        End If
     End Sub
 End Class

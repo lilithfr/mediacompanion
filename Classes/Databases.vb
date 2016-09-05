@@ -46,6 +46,12 @@ Public Class MovieSetDatabase
     Sub New()
 
     End Sub
+
+    Sub New(Optional _tmdbid As String = "", Optional _title As String = "", Optional _present As Boolean = False)
+        tmdbid      = _tmdbid
+        title       = _title
+        present     = _present
+    End Sub
 End Class
 
 Public Class TagDatabase

@@ -3,15 +3,16 @@ Imports System.Linq
 
 Public Class MovieSetInfo
 
-    Private  _movieSetName        As String = ""
-    Private  _userMovieSetName    As String = ""
-    Private  _movieSetDisplayName As String = ""
+    Private  _movieSetName          As String = ""
+    Private  _userMovieSetName      As String = ""
+    Private  _movieSetDisplayName   As String = ""
+    Private _dirty                  As Boolean = False
 
 
-    Property TmdbSetId          As String = ""                     ' Defaults to Themoviedb.org ID if found
-    Property Collection          As New List(Of CollectionMovie)
-    Property LastUpdatedTs       As Date = DateTime.MinValue
-    Property dirty              As Boolean = False
+    Property TmdbSetId              As String = ""                     ' Defaults to Themoviedb.org ID if found
+    Property Collection             As New List(Of CollectionMovie)
+    Property LastUpdatedTs          As Date = DateTime.MinValue
+    'Property dirty                  As Boolean = False
   '  Property MergeWithMovieSetId As String = ""                     'Merged sets support    
 
 
@@ -67,6 +68,14 @@ Public Class MovieSetInfo
         End Get
     End Property   
 
+    Property Dirty As Boolean
+        Get
+            Return _dirty
+        End Get
+        Set(value As Boolean)
+            _dirty = Value
+        End Set
+    End Property
     
 
     Sub New
@@ -77,7 +86,7 @@ Public Class MovieSetInfo
         TmdbSetId           = _moviesetid
         Collection          = _collection
         LastUpdatedTs       = _lastUpdatedTs
-        dirty               = _dirty
+        Dirty               = _dirty
     '    UserMovieSetName    = _userMovieSetName
    '     MergeWithMovieSetId = _mergeWithMovieSetId
     End Sub
@@ -88,7 +97,7 @@ Public Class MovieSetInfo
         TmdbSetId       = from.TmdbSetId
         Collection      = from.Collection
         LastUpdatedTs   = from.LastUpdatedTs
-        dirty           = from.dirty
+        Dirty           = from.dirty
 
         'Preverse user customisations, if any
   '      If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName

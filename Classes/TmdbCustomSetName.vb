@@ -1,8 +1,8 @@
 
 Public Class TmdbCustomSetName
-    Public MovieSetId       As String
-    Public UserMovieSetName As String
-    Public MovieSetName     As String
+    Public MovieSetId       As String = ""
+    Public UserMovieSetName As String = ""
+    Public MovieSetName     As String = ""
 
  
     Sub New (_MovieSetId As String, _UserMovieSetName As String, _MovieSetName As String)

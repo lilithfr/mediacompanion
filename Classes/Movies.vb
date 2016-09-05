@@ -1183,6 +1183,18 @@ Public Class Movies
         End Get
     End Property
 
+    Public ReadOnly Property MovieSetsNoSetId As List(Of String)
+        Get
+            Try
+                Dim q = From x In MovieCache Where x.TmdbSetId = "" AndAlso x.SetName <> "-None-" Select ms = x.SetName Distinct
+                Return q.tolist
+
+            Catch ex As Exception
+                Return New List(Of String)
+            End Try
+        End Get
+    End Property
+
     Public ReadOnly Property SubTitleLangFilter As List(Of String)
         Get
             Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select fullpathandfilename=m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
@@ -2886,30 +2898,28 @@ Public Class Movies
                 Catch
                 End Try
                 If IsNothing(c) Then
-                    Dim d As New MovieSetInfo
-                    d.MovieSetName      = movie.SetName
-                    d.TmdbSetId         = movie.TmdbSetId
-                    d.LastUpdatedTs     = Date.Now()
-                    d.dirty             = True
-                    Dim e As New CollectionMovie
-                    e.MovieTitle        = movie.title
-                    e.TmdbMovieId       = movie.tmdbid
-                    e.release_date      = movie.Premiered
+                    Dim d As MovieSetInfo = New MovieSetInfo(movie.SetName, movie.TmdbSetId, New List(Of CollectionMovie), Date.Now(), _dirty:= True)
+                    Dim e As CollectionMovie = New CollectionMovie(movie.title, movie.tmdbid, _release_date:=movie.Premiered)
                     d.Collection.Add(e)
                     AddUpdateMovieSetInCache(d)
                 Else
-                    If c.dirty Then
+                    If c.Dirty Then
                         Dim add As Boolean = False
-                        Try
-                            Dim q = From x In c.Collection Where x.TmdbMovieId = movie.tmdbid
-                            If q.Count = 0 Then add = True
-                        Catch
-                        End Try
+                        If Not movie.tmdbid = String.Empty Then  'Check if in collection by TMDBId
+                            Try
+                                Dim q = From x In c.Collection Where x.TmdbMovieId = movie.tmdbid
+                                If q.Count = 0 Then add = True
+                            Catch
+                            End Try
+                        Else                                      'Else check if in collection by movie title
+                            Try
+                                Dim q = From x In c.Collection Where x.MovieTitle = movie.title
+                                If q.Count = 0 Then add = True
+                            Catch
+                            End Try
+                        End If
                         If add Then
-                            Dim e As New CollectionMovie
-                            e.MovieTitle        = movie.title
-                            e.TmdbMovieId       = movie.tmdbid
-                            e.release_date      = movie.Premiered
+                            Dim e As CollectionMovie = New CollectionMovie(movie.title, movie.tmdbid, _release_date:=movie.Premiered)
                             c.Collection.Add(e)
                         End If
                     End If
@@ -3447,7 +3457,7 @@ Public Class Movies
             Return
         End If
         If Not IsNothing(c) Then
-            If c.dirty Then
+            If c.Dirty Then
                 MovieSetDB.Remove(c)
                 MovieSetDB.Add(movieSetInfo)
             End If

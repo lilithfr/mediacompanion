@@ -847,7 +847,9 @@
     <Content Include="Resources\chimes.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\correct_manual24.png" />
+    <Content Include="Resources\correct_manual24.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\default_tvbanner.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -857,7 +859,9 @@
     <Content Include="Resources\default_tvposter.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\error24.png" />
+    <Content Include="Resources\error24.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\lockwatched.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1047,7 +1051,9 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\correct.png" />
+    <Content Include="Resources\correct.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\incorrect.png" />
     <Content Include="Resources\mc-xbmc-link.ico" />
     <None Include="Assets\Newtonsoft.Json.Net20.dll">
