@@ -1289,7 +1289,8 @@ Public Class Classimdb
                 totalinfo.AppendTag( "premiered" , ReleaseDate )
                 totalinfo.AppendTag( "stars"     , Stars       )
                 totalinfo.AppendTag( "title"     , Me.Title    )
-                totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(Me.Year<>"", Me.Year, year), year))
+                totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(year = "", Me.Year, year), Me.Year))
+                'totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(Me.Year<>"", Me.Year, year), year)) ' fails if movie title is the same, ie: Italian Job change movie get 1901 as year.
                 totalinfo.AppendTag( "studio"    , Studio      )
                 totalinfo.AppendTag( "outline"   , Outline     )
                 totalinfo.AppendTag( "top250"    , Top250      )
