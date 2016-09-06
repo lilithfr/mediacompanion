@@ -2320,9 +2320,9 @@ Public Class Movies
        
             movie.LoadNFO(False)
 
-            If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
-                Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
-            End If
+            'If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
+            '    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
+            'End If
             Cache.Add(movie.Cache)
         Next
     End Sub
@@ -2378,9 +2378,9 @@ Public Class Movies
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
 
-                If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
-                    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
-                End If
+                'If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
+                '    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
+                'End If
                 TmpMovieCache.Add(movie.Cache)
             Catch
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")

@@ -1862,6 +1862,8 @@ Public Class Form1
 							Exit For
 						End If
 					Next
+                    Dim q = From x In oMovies.MovieSetDB Where x.MovieSetName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
+                    If q.Count > 0 Then add = False
 					If add Then
 						Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
 					End If
