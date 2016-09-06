@@ -2668,7 +2668,7 @@ Public Class Form1
 				movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 			End If
 			movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-			If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then
+			If TabControl2.SelectedTab.Name = tpMovTags.Name Then
 				For Each t In NewTagList
 					Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
 					If t.Contains("- ") Then
@@ -2762,7 +2762,7 @@ Public Class Form1
 			'DisplayMovie
 
 
-			If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TagsPopulate()
+			If TabControl2.SelectedTab.Name = tpMovTags.Name Then TagsPopulate()
 		Else
 			messbox = New frmMessageBox("Saving Selected Movies", , "     Please Wait.     ")  'Multiple movies selected
 			messbox.TextBox3.Text = "Press ESC to cancel"
@@ -2815,7 +2815,7 @@ Public Class Form1
 					End If
 					If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString 'text
 					movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
-					If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then
+					If TabControl2.SelectedTab.Name = tpMovTags.Name Then
 						For Each t In NewTagList
 							Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
 							If t.Contains("- ") Then
@@ -2903,7 +2903,7 @@ Public Class Form1
 
 			messbox.Close()
 
-			If TabControl2.SelectedTab.Name = tpMovSetsTags.Name Then TabControl2.SelectedIndex = 0
+			If TabControl2.SelectedTab.Name = tpMovTags.Name Then TabControl2.SelectedIndex = 0
 		End If
 
 	End Sub
@@ -12666,193 +12666,8 @@ Public Class Form1
 
 #End Region
 
-#Region "Movie Sets & Tags Tab"
+#Region "Movie Set Tab"
 
-	Private Sub MovieTagsSetup()
-		TagListBox.Items.Clear()
-		''Here we clean up Pref.MovieTags, removing any that are also in the Tags database.
-		Dim ToRemove As New List(Of String)
-		For Each mtag In Pref.movietags
-			If Not IsNothing(mtag)
-				Dim q = From t In oMovies.TagDB Where t.TagName = mtag
-				If q.Count = 0 Then
-					TagListBox.Items.Add(mtag)
-				Else
-					ToRemove.Add(mtag)
-				End If
-			End If
-		Next
-
-		''If any duplicate tags, remove them from Pref.MovieTags
-		If ToRemove.Count > 0 Then
-			For each t In ToRemove
-				Pref.movietags.Remove(t)
-			Next
-		End If
-		TagsPopulate()
-	End Sub
-
-	Sub TagsPopulate()
-		CurrentMovieTags.Items.Clear()
-		If DataGridViewMovies.SelectedRows.Count > 1 Then
-			lblMovTagMulti1.Visible = True
-			lblMovTagMulti2.Visible = True
-		Else
-			lblMovTagMulti1.Visible = False
-			lblMovTagMulti2.Visible = False
-		End If
-		For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
-			Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
-			Dim movie As Movie = oMovies.LoadMovie(filepath, False)
-			For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
-				If Not IsNothing(ctag) Then
-					If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
-				End If
-			Next
-		Next
-		CurrentMovieTags.Refresh()
-	End Sub
-
-#Region "Tag(s) Section"
-	Private Sub btnMovTagListAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListAdd.Click
-		Try
-			If txtbxMovTagEntry.Text <> "" Then
-				Dim ex As Boolean = False
-				For Each mtag In Pref.movietags
-					If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
-						ex = True
-						Exit For
-					End If
-				Next
-				If ex = False Then
-					Pref.movietags.Add(txtbxMovTagEntry.Text)
-					TagListBox.Items.Add(txtbxMovTagEntry.Text)
-					txtbxMovTagEntry.Clear()
-				Else
-					MsgBox("This Movie Tag Already Exists")
-				End If
-			End If
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
-	Private Sub btnMovTagListRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListRemove.Click
-		Try
-			For i = 0 To TagListBox.SelectedItems.Count - 1
-				Dim tempboolean As Boolean = False
-				If TagListBox.SelectedItems(i) <> Nothing And TagListBox.SelectedItems(i) <> "" Then
-					For Each mtag In Pref.movietags
-						If mtag = TagListBox.SelectedItems(i) Then
-							Pref.movietags.Remove(mtag)
-							Exit For
-						End If
-					Next
-				End If
-			Next
-
-			TagListBox.Items.Clear()
-
-			For Each mset In Pref.movietags
-				If Not IsNothing(mset) Then TagListBox.Items.Add(mset)
-			Next
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
-	Private Sub btnMovTagListRefresh_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListRefresh.Click
-		Try
-			TagListBox.Items.Clear()
-			For x = 0 To oMovies.MovieCache.Count - 1
-				Dim movtag As List(Of String) = oMovies.MovieCache(x).movietag
-				For Each mtag In movtag
-					If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
-				Next
-			Next
-			Pref.movietags.Clear()
-			For Each mtag In Pref.movietags
-				If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
-			Next
-			UpdateFilteredList()
-		Catch ex As Exception
-
-		End Try
-	End Sub
-
-	Private Sub btnMovTagAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagAdd.Click
-		Try
-			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
-			If TagListBox.SelectedIndex <> -1 Then
-				For Each item In TagListBox.SelectedItems
-					If item = "" Then Exit For
-					If Not CurrentMovieTags.Items.Contains("+ " & item) Then
-						If CurrentMovieTags.Items.Contains("- " & item) Then
-							Dim i As Integer = CurrentMovieTags.Items.IndexOf("- " & item)
-							CurrentMovieTags.Items(i) = item
-						ElseIf CurrentMovieTags.Items.Contains(item) Then
-							Dim i As Integer = CurrentMovieTags.Items.IndexOf(item)
-							CurrentMovieTags.Items(i) = "+ " & item
-						Else
-							CurrentMovieTags.Items.Add("+ " & item)
-						End If
-					End If
-				Next
-			End If
-		Catch
-
-		End Try
-	End Sub
-
-	Private Sub btnMovTagRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagRemove.Click
-		Try
-			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
-			If CurrentMovieTags.SelectedIndex <> -1 Then
-				Dim i As Integer = CurrentMovieTags.SelectedIndex
-				Dim item As String = CurrentMovieTags.Items(i)
-				If item.Contains("+ ") Then
-					CurrentMovieTags.Items.RemoveAt(i)
-					Exit Sub
-				End If
-				If item.Contains("- ") Then Exit Sub
-				item = "- " & item
-				CurrentMovieTags.Items(i) = item
-			End If
-		Catch
-
-		End Try
-	End Sub
-
-	Private Sub btnMovTagSavetoNfo_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
-		Try
-			If CurrentMovieTags.Items.Count <> -1 Then
-				NewTagList.Clear()
-				For Each tags In CurrentMovieTags.Items
-					NewTagList.Add(tags)
-				Next
-				Call mov_SaveQuick()
-
-			End If
-		Catch ex As Exception
-
-		End Try
-	End Sub
-
-	Private Sub txtbxMovTagEntry_KeyPress(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles txtbxMovTagEntry.KeyPress
-		If e.KeyChar = Convert.ToChar(Keys.Enter) Then
-
-			btnMovTagListAdd.PerformClick()
-
-			'This tells the system not to process
-			'the key, as you've already taken care 
-			'of it 
-			e.Handled = True
-		End If
-
-	End Sub
-#End Region 'Tag(s) Section
-
-#Region "Movie Set Routines"
     Private Sub tpMovSets_Enter(sender As Object, e As EventArgs) Handles tpMovSets.Enter
 
     End Sub
@@ -13274,8 +13089,191 @@ Public Class Form1
 	End Function
 
 #End Region 'Movie Set Routines
+	
+#Region "Movie Tag(s) Tab"
 
-#End Region
+    Private Sub MovieTagsSetup()
+		TagListBox.Items.Clear()
+		''Here we clean up Pref.MovieTags, removing any that are also in the Tags database.
+		Dim ToRemove As New List(Of String)
+		For Each mtag In Pref.movietags
+			If Not IsNothing(mtag)
+				Dim q = From t In oMovies.TagDB Where t.TagName = mtag
+				If q.Count = 0 Then
+					TagListBox.Items.Add(mtag)
+				Else
+					ToRemove.Add(mtag)
+				End If
+			End If
+		Next
+
+		''If any duplicate tags, remove them from Pref.MovieTags
+		If ToRemove.Count > 0 Then
+			For each t In ToRemove
+				Pref.movietags.Remove(t)
+			Next
+		End If
+		TagsPopulate()
+	End Sub
+
+	Sub TagsPopulate()
+		CurrentMovieTags.Items.Clear()
+		If DataGridViewMovies.SelectedRows.Count > 1 Then
+			lblMovTagMulti1.Visible = True
+			lblMovTagMulti2.Visible = True
+		Else
+			lblMovTagMulti1.Visible = False
+			lblMovTagMulti2.Visible = False
+		End If
+		For Each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+			Dim filepath As String = item.Cells("fullpathandfilename").Value.ToString
+			Dim movie As Movie = oMovies.LoadMovie(filepath, False)
+			For Each ctag In movie.ScrapedMovie.fullmoviebody.tag
+				If Not IsNothing(ctag) Then
+					If Not CurrentMovieTags.Items.Contains(ctag) Then CurrentMovieTags.Items.Add(ctag)
+				End If
+			Next
+		Next
+		CurrentMovieTags.Refresh()
+	End Sub
+    
+	Private Sub btnMovTagListAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListAdd.Click
+		Try
+			If txtbxMovTagEntry.Text <> "" Then
+				Dim ex As Boolean = False
+				For Each mtag In Pref.movietags
+					If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
+						ex = True
+						Exit For
+					End If
+				Next
+				If ex = False Then
+					Pref.movietags.Add(txtbxMovTagEntry.Text)
+					TagListBox.Items.Add(txtbxMovTagEntry.Text)
+					txtbxMovTagEntry.Clear()
+				Else
+					MsgBox("This Movie Tag Already Exists")
+				End If
+			End If
+		Catch ex As Exception
+			ExceptionHandler.LogError(ex)
+		End Try
+	End Sub
+
+	Private Sub btnMovTagListRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListRemove.Click
+		Try
+			For i = 0 To TagListBox.SelectedItems.Count - 1
+				Dim tempboolean As Boolean = False
+				If TagListBox.SelectedItems(i) <> Nothing And TagListBox.SelectedItems(i) <> "" Then
+					For Each mtag In Pref.movietags
+						If mtag = TagListBox.SelectedItems(i) Then
+							Pref.movietags.Remove(mtag)
+							Exit For
+						End If
+					Next
+				End If
+			Next
+
+			TagListBox.Items.Clear()
+
+			For Each mset In Pref.movietags
+				If Not IsNothing(mset) Then TagListBox.Items.Add(mset)
+			Next
+		Catch ex As Exception
+			ExceptionHandler.LogError(ex)
+		End Try
+	End Sub
+
+	Private Sub btnMovTagListRefresh_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagListRefresh.Click
+		Try
+			TagListBox.Items.Clear()
+			For x = 0 To oMovies.MovieCache.Count - 1
+				Dim movtag As List(Of String) = oMovies.MovieCache(x).movietag
+				For Each mtag In movtag
+					If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
+				Next
+			Next
+			Pref.movietags.Clear()
+			For Each mtag In Pref.movietags
+				If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
+			Next
+			UpdateFilteredList()
+		Catch ex As Exception
+
+		End Try
+	End Sub
+
+	Private Sub btnMovTagAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagAdd.Click
+		Try
+			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
+			If TagListBox.SelectedIndex <> -1 Then
+				For Each item In TagListBox.SelectedItems
+					If item = "" Then Exit For
+					If Not CurrentMovieTags.Items.Contains("+ " & item) Then
+						If CurrentMovieTags.Items.Contains("- " & item) Then
+							Dim i As Integer = CurrentMovieTags.Items.IndexOf("- " & item)
+							CurrentMovieTags.Items(i) = item
+						ElseIf CurrentMovieTags.Items.Contains(item) Then
+							Dim i As Integer = CurrentMovieTags.Items.IndexOf(item)
+							CurrentMovieTags.Items(i) = "+ " & item
+						Else
+							CurrentMovieTags.Items.Add("+ " & item)
+						End If
+					End If
+				Next
+			End If
+		Catch
+
+		End Try
+	End Sub
+
+	Private Sub btnMovTagRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagRemove.Click
+		Try
+			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
+			If CurrentMovieTags.SelectedIndex <> -1 Then
+				Dim i As Integer = CurrentMovieTags.SelectedIndex
+				Dim item As String = CurrentMovieTags.Items(i)
+				If item.Contains("+ ") Then
+					CurrentMovieTags.Items.RemoveAt(i)
+					Exit Sub
+				End If
+				If item.Contains("- ") Then Exit Sub
+				item = "- " & item
+				CurrentMovieTags.Items(i) = item
+			End If
+		Catch
+
+		End Try
+	End Sub
+
+	Private Sub btnMovTagSavetoNfo_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
+		Try
+			If CurrentMovieTags.Items.Count <> -1 Then
+				NewTagList.Clear()
+				For Each tags In CurrentMovieTags.Items
+					NewTagList.Add(tags)
+				Next
+				Call mov_SaveQuick()
+
+			End If
+		Catch ex As Exception
+
+		End Try
+	End Sub
+
+	Private Sub txtbxMovTagEntry_KeyPress(sender As System.Object, e As System.Windows.Forms.KeyPressEventArgs) Handles txtbxMovTagEntry.KeyPress
+		If e.KeyChar = Convert.ToChar(Keys.Enter) Then
+
+			btnMovTagListAdd.PerformClick()
+
+			'This tells the system not to process
+			'the key, as you've already taken care 
+			'of it 
+			e.Handled = True
+		End If
+
+	End Sub
+#End Region 'Tag(s) Section
 
 #Region "Movie Web Tab"
 
