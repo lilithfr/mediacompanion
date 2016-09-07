@@ -330,10 +330,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Ratio = Ratio.Insert(1, ".")
             End If
         End If
+        
+        Dim aspectRatio As Double
+        If Double.TryParse(Ratio, aspectRatio) Then
+            aspectRatio = Math.Round(aspectRatio, 2)
+            Ratio = aspectRatio.ToString
+        End If
         Return Ratio
-        'Dim aspectRatio As Double
-        'If Double.TryParse(Ratio, aspectRatio) Then
-
         '    'This taken from XBMC StreamDetails.cpp CStreamDetails::VideoAspectToAspectDescription()
         '    If (aspectRatio = 0.0) Then Return ""
 
@@ -355,6 +358,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         '    Return "2.35"
         'End If
         'Return ""
+    End Function
+
+    Public Shared Function FixIntlAspectRatio(ByVal Ratio As String) As String
+        If Ratio.Contains(",") Then
+            Dim pos As Integer = Ratio.IndexOf(",")
+            If pos > 3 Then
+                If Not Ratio.Contains(".") And IsNumeric(Ratio.Substring(1,1)) Then
+                    Ratio = Ratio.Replace(",", "")
+                    Ratio = Ratio.Insert(1, ",")
+                End If
+            End If
+        End If
+        Return Ratio
     End Function
 
     Public Shared Function GetCodecCommonName(ByVal codec As String) As String

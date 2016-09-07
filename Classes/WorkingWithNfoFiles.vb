@@ -231,7 +231,7 @@ Public Class WorkingWithNfoFiles
                                                                 Case "height"
                                                                     newtvepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
                                                                 Case "aspect"
-                                                                    newtvepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+                                                                    newtvepisode.Details.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
                                                                 Case "codec"
                                                                     newtvepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                                 Case "format"
@@ -434,7 +434,7 @@ Public Class WorkingWithNfoFiles
                                                                             Case "height"
                                                                                 anotherepisode.Details.StreamDetails.Video.Height.Value = videodetails.InnerText
                                                                             Case "aspect"
-                                                                                anotherepisode.Details.StreamDetails.Video.Aspect.Value = videodetails.InnerText
+                                                                                anotherepisode.Details.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
                                                                             Case "codec"
                                                                                 anotherepisode.Details.StreamDetails.Video.Codec.Value = videodetails.InnerText
                                                                             Case "format"
@@ -2712,7 +2712,7 @@ Public Class WorkingWithNfoFiles
                                                             Case "height"
                                                                 newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
                                                             Case "aspect"
-                                                                newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
+                                                                newfilenfo.filedetails_video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
                                                             Case "codec"
                                                                 newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
                                                             Case "format"
@@ -3464,7 +3464,7 @@ Public Class WorkingWithNfoFiles
                                                                 Case "height"
                                                                     newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
                                                                 Case "aspect"
-                                                                    newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
+                                                                    newfilenfo.filedetails_video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
                                                                 Case "codec"
                                                                     newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
                                                                 Case "format"
@@ -4128,7 +4128,7 @@ Public Class WorkingWithNfoFiles
                                                     Case "height"
                                                         newfilenfo.filedetails_video.Height.Value = videodetails.InnerText
                                                     Case "aspect"
-                                                        newfilenfo.filedetails_video.Aspect.Value = videodetails.InnerText
+                                                        newfilenfo.filedetails_video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
                                                     Case "codec"
                                                         newfilenfo.filedetails_video.Codec.Value = videodetails.InnerText
                                                     Case "format"
