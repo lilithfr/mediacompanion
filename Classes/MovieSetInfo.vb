@@ -12,26 +12,25 @@ Public Class MovieSetInfo
     Property TmdbSetId              As String = ""                     ' Defaults to Themoviedb.org ID if found
     Property Collection             As New List(Of CollectionMovie)
     Property LastUpdatedTs          As Date = DateTime.MinValue
-    'Property dirty                  As Boolean = False
-  '  Property MergeWithMovieSetId As String = ""                     'Merged sets support    
+    '  Property MergeWithMovieSetId As String = ""                     'Merged sets support    
 
 
-    'Property UserMovieSetName As String				                 'Stores users preferred set name 
-    '    Get
-    '        Return _userMovieSetName
-    '    End Get
-    '    Set
-    '        If _userMovieSetName <> Value Then
+    Property UserMovieSetName As String                              'Stores users preferred set name 
+        Get
+            Return _userMovieSetName
+        End Get
+        Set
+            If _userMovieSetName <> Value Then
 
-				'	If Value=MovieSetName Then
-				'		_userMovieSetName = ""
-				'	Else
-				'		_userMovieSetName = Value
-				'	End If
-        
-    '        End If
-    '    End Set
-    'End Property
+                If Value = MovieSetName Then
+                    _userMovieSetName = ""
+                Else
+                    _userMovieSetName = Value
+                End If
+
+            End If
+        End Set
+    End Property
 
 
 
@@ -49,8 +48,8 @@ Public Class MovieSetInfo
 
     Public ReadOnly Property MovieSetDisplayName As String
         Get
-'            Return If(UserMovieSetName<>"",UserMovieSetName,_movieSetDisplayName)
-            Return _movieSetDisplayName
+            Return If(UserMovieSetName<>"",UserMovieSetName,_movieSetDisplayName)
+            'Return _movieSetDisplayName
         End Get
     End Property
 
@@ -87,7 +86,7 @@ Public Class MovieSetInfo
         Collection          = _collection
         LastUpdatedTs       = _lastUpdatedTs
         Dirty               = _dirty
-    '    UserMovieSetName    = _userMovieSetName
+        UserMovieSetName    = _userMovieSetName
    '     MergeWithMovieSetId = _mergeWithMovieSetId
     End Sub
 
@@ -100,7 +99,7 @@ Public Class MovieSetInfo
         Dirty           = from.dirty
 
         'Preverse user customisations, if any
-  '      If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName
+        If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName
   '      If from.MergeWithMovieSetId<>"" Then MergeWithMovieSetId = from.MergeWithMovieSetId
     End Sub
 

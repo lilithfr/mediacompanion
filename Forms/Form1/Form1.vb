@@ -3924,7 +3924,7 @@ Public Class Form1
 		If e.Button = Windows.Forms.MouseButtons.Right Then
 			For index As Integer = 0 To TabControl2.TabCount - 1 Step 1
 				If TabControl2.GetTabRect(index).Contains(e.Location) Then
-					If index = 8 Then
+					If index = 9 Then
 						Dim tpi As Integer = tpMovWebBrowser.ImageIndex
 						If tpi = 0 Then
 							tpMovWebBrowser.ImageIndex = 1

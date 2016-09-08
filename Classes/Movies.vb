@@ -2763,9 +2763,9 @@ Public Class Movies
             childchild.InnerText = movieset.Dirty
             child.AppendChild(childchild)
 
-            'childchild = doc.CreateElement("UserMovieSetName")
-            'childchild.InnerText = movieset.UserMovieSetName
-            'child.AppendChild(childchild)
+            childchild = doc.CreateElement("UserMovieSetName")
+            childchild.InnerText = movieset.UserMovieSetName
+            child.AppendChild(childchild)
 
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
