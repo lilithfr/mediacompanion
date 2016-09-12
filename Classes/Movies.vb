@@ -997,6 +997,18 @@ Public Class Movies
 
     End Function
 
+    Function FindMovieSetInfoBySetName(SetName As String) As MovieSetInfo
+        
+        Dim res = (From x In MovieSetDB Where x.MovieSetName = SetName Select x).FirstOrDefault
+
+        If IsNothing(res) Then
+            Return New MovieSetInfo
+        Else
+            Return res
+        End If
+
+    End Function
+
     Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
         Return (From x In MovieCache Where x.SetName = SetName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
     End Function
@@ -2746,6 +2758,9 @@ Public Class Movies
         For Each movieset In setDb
             If movieset.MovieSetName.ToLower = "-none-" Then Continue For
             child = doc.CreateElement(typeName)
+            Dim attr As XmlAttribute = doc.CreateAttribute("title")  ' just to pretty it up in notepad++ when colapsing <movieset> node.
+            attr.Value = movieset.MovieSetName
+            child.SetAttributeNode(attr)
 
             childchild = doc.CreateElement("moviesetname")
             childchild.InnerText = movieset.MovieSetName

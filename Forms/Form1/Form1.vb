@@ -12708,15 +12708,7 @@ Public Class Form1
         
         ''Populate MovieSets DataGridView.
         For Each mset In Tmplist
-
-			''' will be deleted later with the moviesets&tags tab
-			'If mset.MovieSetName <> "-None-" Then
-			'	Dim row As DataGridViewRow = DirectCast(dgvmovset.RowTemplate.Clone(), DataGridViewRow)
-   '             row.CreateCells(dgvmovset, mset.MovieSetName, If(mset.MovieSetId = "", Global.Media_Companion.My.Resources.Resources.incorrect, Global.Media_Companion.My.Resources.correct))
-   '             dgvmovset.Rows.Add(row)
-			'End If
-			''' End of what must be deleted later
-
+            
             ''New MovieSetTab population
 			If mset.MovieSetName <> "-None-" Then
 				Dim row As DataGridViewRow = DirectCast(dgvMovieSets.RowTemplate.Clone(), DataGridViewRow)
@@ -12792,7 +12784,7 @@ Public Class Form1
             Dim found As Boolean = False
             If e.ColumnIndex < 0 Or e.RowIndex < 0 Then Exit Sub
             Dim MsetName As String = dgvMovieSets.Rows(e.RowIndex).Cells(0).Value
-            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName) 'GetMovSet(MsetName)
+            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetName(MsetName) 'GetMovSet(MsetName)
             'removeDoubleItems(MovSet)
             If MsetName <> tbMovieSetTitle.Text Then
                 Dim CustomCollection As Boolean = False
@@ -12856,14 +12848,26 @@ Public Class Form1
             
                 tbMovieSetTitle.Text = If(CustomCollection, MsetName, MovSet.MovieSetName)
                 DataGridViewSelectedMovieSet.Rows.Clear()
+                Dim count As Integer = 0
                 For Each item In MovCollectionList
                     Dim row As DataGridViewRow = DirectCast(DataGridViewSelectedMovieSet.RowTemplate.Clone(), DataGridViewRow)
                     row.CreateCells(DataGridViewSelectedMovieSet, If(item.present, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.missing24), item.title)
                     DataGridViewSelectedMovieSet.Rows.Add(row)
+                    If Not item.present Then count += 1
                 Next
                 If Not dirtycollection Then
+                    Dim label As String = "Movies in collection:  " & MovCollectionList.Count
+                    If Not count = 0 Then
+                        label &= "    :- Missing " & count & " movie" & If(count > 1, "s", "")
+                    Else
+                        If Not CustomCollection Then
+                            label &= "   : - Collection is Complete!"
+                        Else
+                            label &= "   : - Custom Collection."
+                        End If
+                    End If
                     lbCollectionCount.BackColor = Color.LightYellow
-                    lbCollectionCount.Text = "Movies in collection:  " & MovCollectionList.Count 
+                    lbCollectionCount.Text = label
                 Else
                     lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
                     lbCollectionCount.BackColor = Color.Red
