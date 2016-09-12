@@ -5,8 +5,9 @@ Public Class SubtitleDetails
     Inherits ProtoPropertyGroup
 
 
-    Public Property Language As New ProtoProperty(Me, "language", "")
-    Public Property Primary As Boolean = False
+    Public Property Language    As New ProtoProperty(Me, "language" , "")
+    Public Property Primary     As Boolean = False
+    Public Property Forced      As Boolean = False
 
     Public Sub New()
         MyBase.New(Nothing, Nothing)
@@ -24,7 +25,8 @@ Public Class SubtitleDetails
 
         Dim child = doc.CreateElement("subtitlelang")
 
-        child.AppendChild(Language    .GetChild(doc))
+        child.AppendChild(Language  .GetChild(doc))
+        child.AppendChild(doc, "forced", Forced)
 
         Return child
     End Function

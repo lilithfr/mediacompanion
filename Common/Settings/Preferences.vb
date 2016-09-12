@@ -2644,6 +2644,9 @@ Public Class Pref
                     sublanguage.Language.Value = Utilities.GetLangCode(MI.Get_(StreamKind.Text, curSS, "Language/String"))
                     Dim DefaultSub As String = MI.Get_(StreamKind.Text, curSS, "Default")
                     sublanguage.Primary = If(DefaultSub = "Yes", True, False)
+                    Dim Forced As String = MI.Get_(StreamKind.Text, curSS, "Forced")
+                    sublanguage.Forced = If(Forced.ToLower = "yes", True, False)
+                    Dim Something As String = Nothing
                     workingfiledetails.filedetails_subtitles.Add(sublanguage)
                     curSS += 1
                 End While

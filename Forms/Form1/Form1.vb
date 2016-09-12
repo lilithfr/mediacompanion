@@ -17375,7 +17375,8 @@ Public Class Form1
 			Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, Vidfiledetails.filedetails_subtitles, From x In Vidfiledetails.filedetails_subtitles Where x = Vidfiledetails.DefaultSubTrack))
 
 			If Not IsNothing(subtitles) Then
-				For Each subtitle In subtitles
+				For Each subtitle In subtitles  
+                    If subtitle.Forced Then Continue For        'Skip displaying forced language on overlay.
 					flags.Add(New KeyValuePair(Of String, String)("sublang", subtitle.Language.Value))
 				Next
 			End If

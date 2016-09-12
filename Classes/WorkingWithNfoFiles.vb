@@ -2763,9 +2763,11 @@ Public Class WorkingWithNfoFiles
                                                     For Each subsdetails In detail.ChildNodes
                                                         Select Case subsdetails.Name
                                                             Case "language"
-                                                                sublang.Language.Value = subsdetails.InnerText
+                                                                sublang.Language.Value  = subsdetails.InnerText
                                                             Case "default"
-                                                                sublang.Primary = subsdetails.InnerXml 
+                                                                sublang.Primary         = subsdetails.InnerXml
+                                                            Case "forced"
+                                                                sublang.Forced          = subsdetails.InnerXml
                                                         End Select
                                                     Next
                                                     newfilenfo.filedetails_subtitles.Add(sublang)
@@ -3012,6 +3014,9 @@ Public Class WorkingWithNfoFiles
                             filedetailschild.AppendChild(filedetailschildchild)
                             filedetailschildchild = doc.CreateElement("default")
                             filedetailschildchild.InnerXml = entry.Primary
+                            filedetailschild.AppendChild(filedetailschildchild)
+                            filedetailschildchild = doc.CreateElement("forced")
+                            filedetailschildchild.InnerXml = entry.Forced
                             filedetailschild.AppendChild(filedetailschildchild)
                             anotherchild.AppendChild(filedetailschild)
                         End If
