@@ -808,7 +808,7 @@ Public Class Movie
 
     Private Sub AppendScrapeSuccessActions
         Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache" ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache         , "Updating movie set cache"  ) )
         Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
         Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
         Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                    ) )
@@ -1177,10 +1177,7 @@ Public Class Movie
         AssignMovieToCache
         _movieCache.runtime = "0"
     End Sub
-
-
-
-
+    
     Sub AssignMovieToCache
 
         _movieCache.FieldsLockEnabled = False
@@ -1280,9 +1277,7 @@ Public Class Movie
         AssignUserTmdbSetAddition
         AssignUnknownSetCount
     End Sub
-
-
-
+    
     Sub AssignUserTmdbSetAddition
         _movieCache.UserTmdbSetAddition = "N"
         If _movieCache.TmdbSetId <> "" Then
@@ -1303,8 +1298,7 @@ Public Class Movie
             End If
         End If
     End Sub
-
-
+    
     Sub AssignUnknownSetCount
 
         _movieCache.UnknownSetCount = "N"
@@ -1317,21 +1311,7 @@ Public Class Movie
             _movieCache.UnknownSetCount = "Y"
         End If
     End Sub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     Sub AssignMVToCache
         Dim _mvcache As New MVComboList 
         _mvcache.nfopathandfilename = NfoPathPrefName
@@ -1468,11 +1448,9 @@ Public Class Movie
                         End If
                     End If
                 Case "set"
-                    'If Pref.GetMovieSetFromTMDb Then 
-                    _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
+                    If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.SetName = thisresult.InnerText
                 Case "setid"
-                   'If Pref.GetMovieSetFromTMDb Then 
-                   _scrapedMovie.fullmoviebody.TmdbSetId = thisresult.InnerText
+                   If Pref.GetMovieSetFromTMDb Then _scrapedMovie.fullmoviebody.TmdbSetId = thisresult.InnerText
                 Case "cert"
                     _certificates.Add(thisresult.InnerText)
                 Case "actor"
@@ -1596,7 +1574,7 @@ Public Class Movie
                 If Pref.TMDbUseCustomLanguage AndAlso Pref.TMDbCustomLanguageValue<>"" Then custlang = Media_Companion.Pref.TMDbCustomLanguageValue.Split(",").ToList(1)
 
 
-                If Pref.GetMovieSetFromTMDb And Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+                If Pref.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
 						_scrapedMovie.fullmoviebody.SetName = tmdb.Movie.belongs_to_collection.name
 						_scrapedMovie.fullmoviebody.TmdbSetId   = tmdb.Movie.belongs_to_collection.id 
                 End If
@@ -1817,8 +1795,7 @@ Public Class Movie
             End Try
         End If
     End Sub
-
-
+    
     Sub GetFrodoFanartThumbs
         _scrapedMovie.frodoFanartThumbs.Thumbs.Clear
 
@@ -3404,12 +3381,12 @@ Public Class Movie
     End Sub
 
     Sub UpdateMovieSetCache
-
+        
         If _scrapedMovie.fullmoviebody.Locked("set") Then 
             Return
         End If
 
-        If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+        If Pref.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
 				_scrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
 				_scrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id 
         End If
@@ -3440,9 +3417,6 @@ Public Class Movie
         ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
         _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
     End Sub
-
-
-
 
     Sub UpdateTagCache
         RemoveTagFromCache
