@@ -12685,7 +12685,6 @@ Public Class Form1
 		MovSetArtworkCheck()
     End Sub
     
-
 	''' <summary>
 	''' Main column with a list of all known movie sets (both themoviedb.org and manual sets)
 	''' </summary>
@@ -13044,7 +13043,6 @@ Public Class Form1
         tsmiMovSetName.BackColor = Color.Honeydew
         tsmiMovSetName.Font = New Font("Arial", 10, FontStyle.Bold)
     End Sub
-
     
     Private Sub tsmiMovSetEditName_Click(sender As Object, e As EventArgs) Handles tsmiMovSetEditName.Click
         Dim newForm As New frmMovSetAdd()
