@@ -3052,7 +3052,7 @@ Public Class Movie
     End Function
 
     Function NeedTMDb(rl As RescrapeList)
-        Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or rl.tmdb_set_id Or
+        Return rl.trailer Or rl.Download_Trailer Or rl.posterurls Or rl.missingposters Or rl.missingfanart Or rl.tmdb_set_name Or rl.tmdb_set_info Or
                rl.Frodo_Poster_Thumbs Or rl.Frodo_Fanart_Thumbs or rl.dlxtraart Or rl.TagsFromKeywords or rl.actors or rl.ArtFromFanartTv Or rl.missingmovsetart
     End Function
 
@@ -3253,33 +3253,54 @@ Public Class Movie
                 rl.tmdb_set_name = True
             End If
 
-            If rl.tmdb_set_name OrElse rl.tmdb_set_id Then
+            If rl.tmdb_set_name OrElse rl.tmdb_set_info Then
                 Try
                     Dim skip = False
-                    Try
- '                      Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
-                        Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
-
-                        If (movieSet.DaysOld<7) AndAlso (movieSet.Collection.Count>0) AndAlso movieSet.MovieBelongsInCollection(_scrapedMovie.fullmoviebody.tmdbid) AndAlso Not movieSet.Dirty Then
-                            _scrapedMovie.fullmoviebody.SetName   = movieSet.MovieSetDisplayName
-                            '_scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
-                            skip = True
-                        End If 
-                    Catch
-                    End Try
+                    ''' On Batch Rescrape if user has chosen to rescrape all, ie rl.tmdb_set_info = True
+                    ''' we shouldn't care if set data is younger than 7 days.  User has chosen to rescrape this data.
+     '               If rl.tmdb_set_id Then  
+     '                   Try
+     ''                      Dim movieSet = _parent.FindMovieSetInfoBySetDisplayName(_scrapedMovie.fullmoviebody.SetName)
+     '                       Dim movieSet = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
+     '                       If Not IsNothing(movieSet) Then
+     '                           If (movieSet.DaysOld<7) AndAlso (movieSet.Collection.Count>0) AndAlso movieSet.MovieBelongsInCollection(_scrapedMovie.fullmoviebody.tmdbid) AndAlso Not movieSet.Dirty Then
+     '                               _scrapedMovie.fullmoviebody.SetName   = If(movieSet.UserMovieSetName<> "", movieSet.UserMovieSetName, movieSet.MovieSetDisplayName)
+     '                               '_scrapedMovie.fullmoviebody.TmdbSetId = movieSet.TmdbSetId
+     '                               skip = True
+     '                           End If
+     '                       End If
+     '                   Catch
+     '                   End Try
+     '               End If
 
                     If Not skip Then
                         _rescrapedMovie.fullmoviebody.SetName   = "-None-"
                         _rescrapedMovie.fullmoviebody.TmdbSetId = ""
-
+                        Dim ChangedSet As Boolean = False
                         If Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-                            _rescrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id
-                            _rescrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
-                            UpdateMovieSetCache
-                        End If
+                            If rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id
 
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
-                        UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
+                            ''' Only change name if is 
+                            ''' a.  User has chosen to scrape TMDB Set Name
+                            ''' b.  Current set is "-None" or Empty.
+                            ''' Else keep existing setname (may be customized set name)
+                            If rl.tmdb_set_name OrElse (_scrapedMovie.fullmoviebody.SetName = "-None" OrElse _scrapedMovie.fullmoviebody.SetName = "") Then
+                                _rescrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
+                                If Not rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                            Else
+                                _rescrapedMovie.fullmoviebody.SetName   = _scrapedMovie.fullmoviebody.SetName
+                                If Not rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                            End If
+                            ChangedSet = True
+                            UpdateMovieSetCache(True)
+                        End If
+                        
+                        ''' Update set only if there was a Change.
+                        ''' Need to improve this to support usernamed Sets that exist on TMDb 
+                        If ChangedSet Then
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
+                        End If
                     End If
                 Catch
                 End Try
@@ -3380,16 +3401,17 @@ Public Class Movie
         End If
     End Sub
 
-    Sub UpdateMovieSetCache
+    Sub UpdateMovieSetCache(Optional ByVal clearusernameing As Boolean = False)
         
         If _scrapedMovie.fullmoviebody.Locked("set") Then 
             Return
         End If
-
-        If Pref.GetMovieSetFromTMDb AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-				_scrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
-				_scrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id 
-        End If
+        
+        ''' This data is set on Rescrape Specific routine.
+    '    If (Rescrape OrElse Pref.GetMovieSetFromTMDb) AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
+				'_scrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
+				'_scrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id 
+    '    End If
 
         _movieCache.oMovies = _parent
 
@@ -3398,8 +3420,8 @@ Public Class Movie
         If Not _scrapedMovie.fullmoviebody.SetName = "-None-" Then
             Try
                 ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
-
-                If ms.DaysOld < 7 And Not ms.Dirty Then
+                If clearusernameing Then ms.UserMovieSetName = ""
+                If Not IsNothing(ms) AndAlso ms.DaysOld < 7 AndAlso Not ms.Dirty Then
                     _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
                     Return
                 End If 

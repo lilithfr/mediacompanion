@@ -24,6 +24,7 @@ Partial Class frmBatchScraper
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.gpbxMainTagsToRescrape = New System.Windows.Forms.GroupBox()
+        Me.cbMainImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.cbMainRating = New System.Windows.Forms.CheckBox()
         Me.cbMainMetascore = New System.Windows.Forms.CheckBox()
         Me.cbMainTitle = New System.Windows.Forms.CheckBox()
@@ -66,7 +67,7 @@ Partial Class frmBatchScraper
         Me.ttBatchUpdateWizard = New System.Windows.Forms.ToolTip(Me.components)
         Me.cb_ScrapeEmptyTags = New System.Windows.Forms.CheckBox()
         Me.cbFromTMDB = New System.Windows.Forms.CheckBox()
-        Me.cbMainImdbAspectRatio = New System.Windows.Forms.CheckBox()
+        Me.cbMainTmdbSetInfo = New System.Windows.Forms.CheckBox()
         Me.gpbxMainTagsToRescrape.SuspendLayout
         Me.gpbxArtwork.SuspendLayout
         Me.gbOther.SuspendLayout
@@ -74,6 +75,7 @@ Partial Class frmBatchScraper
         '
         'gpbxMainTagsToRescrape
         '
+        Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainTmdbSetInfo)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainImdbAspectRatio)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainRating)
         Me.gpbxMainTagsToRescrape.Controls.Add(Me.cbMainMetascore)
@@ -101,6 +103,16 @@ Partial Class frmBatchScraper
         Me.gpbxMainTagsToRescrape.TabIndex = 0
         Me.gpbxMainTagsToRescrape.TabStop = false
         Me.gpbxMainTagsToRescrape.Text = "Select Main Tags to Rescrape"
+        '
+        'cbMainImdbAspectRatio
+        '
+        Me.cbMainImdbAspectRatio.AutoSize = true
+        Me.cbMainImdbAspectRatio.Location = New System.Drawing.Point(7, 134)
+        Me.cbMainImdbAspectRatio.Name = "cbMainImdbAspectRatio"
+        Me.cbMainImdbAspectRatio.Size = New System.Drawing.Size(89, 17)
+        Me.cbMainImdbAspectRatio.TabIndex = 30
+        Me.cbMainImdbAspectRatio.Text = "IMDB Aspect"
+        Me.cbMainImdbAspectRatio.UseVisualStyleBackColor = true
         '
         'cbMainRating
         '
@@ -135,11 +147,11 @@ Partial Class frmBatchScraper
         'cbMainTmdbSetName
         '
         Me.cbMainTmdbSetName.AutoSize = true
-        Me.cbMainTmdbSetName.Location = New System.Drawing.Point(116, 110)
+        Me.cbMainTmdbSetName.Location = New System.Drawing.Point(116, 134)
         Me.cbMainTmdbSetName.Name = "cbMainTmdbSetName"
-        Me.cbMainTmdbSetName.Size = New System.Drawing.Size(102, 17)
+        Me.cbMainTmdbSetName.Size = New System.Drawing.Size(99, 17)
         Me.cbMainTmdbSetName.TabIndex = 27
-        Me.cbMainTmdbSetName.Text = "Tmdb set info"
+        Me.cbMainTmdbSetName.Text = "Tmdb set name"
         Me.cbMainTmdbSetName.UseVisualStyleBackColor = true
         '
         'cbMainYear
@@ -527,7 +539,7 @@ Partial Class frmBatchScraper
         Me.cb_ScrapeEmptyTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.cb_ScrapeEmptyTags.Location = New System.Drawing.Point(45, 204)
         Me.cb_ScrapeEmptyTags.Name = "cb_ScrapeEmptyTags"
-        Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(380, 17)
+        Me.cb_ScrapeEmptyTags.Size = New System.Drawing.Size(367, 17)
         Me.cb_ScrapeEmptyTags.TabIndex = 29
         Me.cb_ScrapeEmptyTags.Text = "Scrape only empty tags (Excludes Tmdb set info and Trailer)"
         Me.ttBatchUpdateWizard.SetToolTip(Me.cb_ScrapeEmptyTags, "Selecting will re-scrape all selected movies, but ONLY"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"filling fields that are e"& _ 
@@ -546,15 +558,15 @@ Partial Class frmBatchScraper
         Me.cbFromTMDB.Text = "Scrape main tags from TMDB (excluding those tags exclusive to IMDB)"
         Me.cbFromTMDB.UseVisualStyleBackColor = true
         '
-        'cbMainImdbAspectRatio
+        'cbMainTmdbSetInfo
         '
-        Me.cbMainImdbAspectRatio.AutoSize = true
-        Me.cbMainImdbAspectRatio.Location = New System.Drawing.Point(7, 134)
-        Me.cbMainImdbAspectRatio.Name = "cbMainImdbAspectRatio"
-        Me.cbMainImdbAspectRatio.Size = New System.Drawing.Size(89, 17)
-        Me.cbMainImdbAspectRatio.TabIndex = 30
-        Me.cbMainImdbAspectRatio.Text = "IMDB Aspect"
-        Me.cbMainImdbAspectRatio.UseVisualStyleBackColor = true
+        Me.cbMainTmdbSetInfo.AutoSize = true
+        Me.cbMainTmdbSetInfo.Location = New System.Drawing.Point(226, 134)
+        Me.cbMainTmdbSetInfo.Name = "cbMainTmdbSetInfo"
+        Me.cbMainTmdbSetInfo.Size = New System.Drawing.Size(90, 17)
+        Me.cbMainTmdbSetInfo.TabIndex = 31
+        Me.cbMainTmdbSetInfo.Text = "Tmdb set info"
+        Me.cbMainTmdbSetInfo.UseVisualStyleBackColor = true
         '
         'frmBatchScraper
         '
@@ -631,4 +643,5 @@ End Sub
     Friend WithEvents cbMissingMovSetArt As System.Windows.Forms.CheckBox
     Friend WithEvents cbMainMetascore As CheckBox
     Friend WithEvents cbMainImdbAspectRatio As CheckBox
+    Friend WithEvents cbMainTmdbSetInfo As CheckBox
 End Class

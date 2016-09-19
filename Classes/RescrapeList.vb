@@ -29,7 +29,7 @@ Public Class RescrapeList
     Property dlxtraart              As Boolean
     Property runtime_file           As Boolean
     Property tmdb_set_name          As Boolean
-    Property tmdb_set_id            As Boolean
+    Property tmdb_set_info          As Boolean
     Property Download_Trailer       As Boolean
     Property Rename_Files           As Boolean
     Property Rename_Folders         As Boolean
@@ -92,7 +92,7 @@ Public Class RescrapeList
     ReadOnly Property AnyNonMainEnabled As Boolean
         Get
             Return  trailer Or posterurls Or actors Or mediatags Or missingposters Or missingfanart Or missingmovsetart Or dlxtraart Or runtime_file Or
-                tmdb_set_name Or tmdb_set_id Or Download_Trailer Or Rename_Files Or Rename_Folders Or Frodo_Poster_Thumbs Or Frodo_Fanart_Thumbs Or
+                tmdb_set_name Or tmdb_set_info Or Download_Trailer Or Rename_Files Or Rename_Folders Or Frodo_Poster_Thumbs Or Frodo_Fanart_Thumbs Or
                 Xbmc_Sync Or Convert_To_Frodo Or TagsFromKeywords Or SetWatched Or ClearWatched Or ArtFromFanartTv
         End Get
     End Property

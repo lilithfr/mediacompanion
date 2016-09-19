@@ -129,6 +129,7 @@ Public Class Form1
 	Public DataDirty As Boolean
 	Public _yield As Boolean
 	Public lastNfo As String = ""
+    Private lastTvNfo As String = ""
 	Public MainFormLoadedStatus As Boolean = False
 	'Public tvRefreshNeeded As Boolean = True
 	Public messbox As New frmMessageBox("blank", "", "")
@@ -1862,7 +1863,7 @@ Public Class Form1
 							Exit For
 						End If
 					Next
-                    Dim q = From x In oMovies.MovieSetDB Where x.MovieSetName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
+                    Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
                     If q.Count > 0 Then add = False
 					If add Then
 						Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
@@ -5106,7 +5107,12 @@ Public Class Form1
 		If TextBox35.Text = "" Then
 			TextBox35.Text = Pref.ScrShtDelay
 		End If
-	End Sub
+        Dim currNfo As String = WorkingEpisode.NfoFilePath
+        If lastTvNfo = currNfo Then Exit Sub
+        lastTvNfo = currNfo
+        pbepscrsht_Clear()
+        tv_EpThumbScreenShot.PerformClick()
+    End Sub
 
 	Private Sub tv_TableView()
 		Dim availableshows As New List(Of TvShow)
@@ -12697,19 +12703,19 @@ Public Class Form1
             Tmplist.Add(tmpmov)
         Next
 
-        ''Now add Movies from MovieSetCache.
+        '' Now add Movies from MovieSetCache.
         For each mset In oMovies.MovieSetDB
             Dim q = From x In oMovies.MovieCache Where x.TmdbSetId = mset.TmdbSetId
             If q.Count = 0 Then Continue For
-            Dim tmpmov As New TmdbCustomSetName(mset.TmdbSetId, "", mset.MovieSetName)
+            Dim tmpmov As New TmdbCustomSetName(mset.TmdbSetId, "", mset.MovieSetDisplayName)
             Tmplist.Add(tmpmov)
         Next
         If Tmplist.Count > 1 Then Tmplist = Tmplist.OrderBy(Function(x) x.MovieSetName).ToList
         
-        ''Populate MovieSets DataGridView.
+        '' Populate MovieSets DataGridView.
         For Each mset In Tmplist
             
-            ''New MovieSetTab population
+            ''' New MovieSetTab population
 			If mset.MovieSetName <> "-None-" Then
 				Dim row As DataGridViewRow = DirectCast(dgvMovieSets.RowTemplate.Clone(), DataGridViewRow)
 				'' fanart and poster columns not functional yet!
@@ -12784,9 +12790,9 @@ Public Class Form1
             Dim found As Boolean = False
             If e.ColumnIndex < 0 Or e.RowIndex < 0 Then Exit Sub
             Dim MsetName As String = dgvMovieSets.Rows(e.RowIndex).Cells(0).Value
-            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetName(MsetName) 'GetMovSet(MsetName)
+            Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName) 'GetMovSet(MsetName)
             'removeDoubleItems(MovSet)
-            If MsetName <> tbMovieSetTitle.Text Then
+            If MsetName <> tbMovieSetTitle.Text OrElse dgvMovieSets.Rows.Count = 1 Then
                 Dim CustomCollection As Boolean = False
                 Dim dirtycollection As Boolean = False
                 Dim MovCollectionList As New List(Of MovieSetDatabase)
@@ -12891,7 +12897,13 @@ Public Class Form1
 			Dim newForm As New frmMovSetAdd()
 			If newForm.ShowDialog() <> DialogResult.OK Then
 			    Exit Sub
+            Else
+                If newForm.newset <> ""
+                    Pref.moviesets.Add(newForm.newset)
+                    Pref.moviesets.Sort()
+                End If
 			End If
+            newForm = Nothing
 
 			MovSetDgvLoad()
             MovSetArtworkCheck()
@@ -12971,6 +12983,7 @@ Public Class Form1
 			Dim mset As String = row.Cells(0).Value
 			For Each mov In oMovies.MovieCache
 				If mov.SetName = mset Then
+                    
 					Dim movsetfanart As String = Pref.GetMovSetFanartPath(mov.fullpathandfilename, mset)
 					Dim movsetposter As String = Pref.GetMovSetPosterPath(mov.fullpathandfilename, mset)
 					If File.Exists(movsetfanart) Then
@@ -13008,17 +13021,17 @@ Public Class Form1
         
         If ColIndexFromMouseDown = 0 Then
             tsmiMovSetName.Text = MsetName
-            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetEditName.Visible = True
             tsmiMovSetGetFanart.Visible = False
             tsmiMovSetGetPoster.Visible = False
         ElseIf ColIndexFromMouseDown = 2 Then
             tsmiMovSetName.Text = MsetName
-            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetEditName.Visible = False
             tsmiMovSetGetFanart.Visible = True
             tsmiMovSetGetPoster.Visible = False
         ElseIf ColIndexFromMouseDown = 3 Then
             tsmiMovSetName.Text = MsetName
-            tsmiMovSetShowCollection.Visible = False
+            tsmiMovSetEditName.Visible = False
             tsmiMovSetGetFanart.Visible = False
             tsmiMovSetGetPoster.Visible = True
         End If
@@ -13030,6 +13043,61 @@ Public Class Form1
         End If
         tsmiMovSetName.BackColor = Color.Honeydew
         tsmiMovSetName.Font = New Font("Arial", 10, FontStyle.Bold)
+    End Sub
+
+    
+    Private Sub tsmiMovSetEditName_Click(sender As Object, e As EventArgs) Handles tsmiMovSetEditName.Click
+        Dim newForm As New frmMovSetAdd()
+        newForm.Text = "Edit Collection Title"
+        newForm.lblMovSetAdd.Text = "Enter new title for collection"
+        If newForm.ShowDialog() <> DialogResult.OK Then
+			Exit Sub
+        Else
+            If newForm.newset <> ""
+                Dim changedSet As Boolean = False
+                Dim OldSetName As String = tsmiMovSetName.Text
+
+                ''' Check change against MovieSetDb, allocate to UserMovieSetName
+                For Each p In oMovies.MovieSetDB
+                    If p.MovieSetDisplayName = OldSetName Then
+                        p.UserMovieSetName = newForm.newset
+                        changedSet = True
+                        Exit For
+                    End If
+                Next
+                
+
+                ''' If Not in database, probably custom Movie Set
+                If Not changedSet Then
+                    If Pref.moviesets.Contains(OldSetName) Then
+                        Dim setindex As Integer = Pref.moviesets.IndexOf(OldSetName)
+                        Pref.moviesets(setindex) = newForm.newset
+                        Pref.moviesets.Sort()
+                        changedSet = True
+                    End If
+                End If
+
+                If changedSet Then
+
+                    ''' Update all movies belonging to set to new Set Title.
+                    For each mov In oMovies.MovieCache
+                        If mov.SetName = OldSetName Then
+                            mov.SetName = newForm.newset
+                            Dim tmpmov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(mov.fullpathandfilename)
+                            tmpmov.fullmoviebody.SetName = newForm.newset
+                            WorkingWithNfoFiles.mov_NfoSave(mov.fullpathandfilename, tmpmov, True)
+                        End If
+                    Next
+                    oMovies.SaveMovieCache
+                    oMovies.SaveMovieSetCache()
+                    pop_cbMovieDisplay_MovieSet
+                    UpdateFilteredList()
+                    MovieSetstabSetup()
+                    Exit Sub
+                End If
+                Dim Something As String = Nothing
+            End If
+		End If
     End Sub
 
     Private Sub tsmiMovSetGetFanart_Click(sender As System.Object, e As System.EventArgs) Handles tsmiMovSetGetFanart.Click
@@ -14463,7 +14531,7 @@ Public Class Form1
 #End Region  'Tv Browser Form functions
 
 #Region "Tv Screenshot Form"
-
+    
 	Private Sub TextBox35_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles TextBox35.KeyPress
 		If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
 			If TextBox35.Text <> "" AndAlso Convert.ToInt32(TextBox35.Text) > 0 Then
@@ -14493,6 +14561,18 @@ Public Class Form1
 		Next
 		If Not IsNothing(pbEpScrSht0.Tag) Then util_ImageLoad(pbTvEpScrnShot, pbEpScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
 	End Sub
+
+    Private Sub pbepscrsht_Clear()
+        Dim matches() As Control
+        For i = 0 To 4
+			matches = Me.Controls.Find("pbEpScrSht" & i, True)
+			If matches.Length > 0 Then
+				Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
+				pb.Image = Nothing
+                pb.Tag = Nothing
+			End If
+		Next
+    End Sub
 
 	Private Sub TextBox35_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox35.Leave
 		If TextBox35.Text = "" Then
@@ -14552,8 +14632,7 @@ Public Class Form1
 			ExceptionHandler.LogError(ex)
 		End Try
 	End Sub
-	'pbEpScrSht0 - pbEpScrSht4
-
+	
 	Private Sub pbepscrsht_click(ByVal sender As Object, ByVal e As EventArgs)
 		Dim pb As PictureBox = sender
 		If IsNothing(pb.Image) OrElse IsNothing(pb.Tag) Then Exit Sub
@@ -14581,7 +14660,7 @@ Public Class Form1
 					'messbox.Show()
 					'messbox.Refresh()
 					Application.DoEvents()
-					Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 10)
+					Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, paths(0), seconds, 5, 1)
 					If cachepathandfilename <> "" Then
 						Return cachepathandfilename
 					End If
@@ -17788,6 +17867,5 @@ Public Class Form1
 		OpenUrl(TMDB_SET_URL & workingMovie.TmdbSetId)
 
 	End Sub
-
 
 End Class

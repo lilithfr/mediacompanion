@@ -151,8 +151,22 @@
         
     End Sub
 
+    ''' <summary>
+    ''' Choose if wanting to update Collection Title only
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub cbMainTmdbSetName_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMainTmdbSetName.CheckedChanged
         Form1.rescrapeList.tmdb_set_name = cbMainTmdbSetName.Checked
+    End Sub
+    
+    ''' <summary>
+    ''' Choose if wanting to update collection information completely
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub cbMainTmdbSetinfo_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbMainTmdbSetinfo.CheckedChanged
+        Form1.rescrapeList.tmdb_set_info = cbMainTmdbSetinfo.Checked
     End Sub
 
     ReadOnly Property FilesRenamable As Boolean

@@ -1,6 +1,8 @@
 ﻿Imports System.ComponentModel
 
 Public Class frmMovSetAdd
+    Public newset As String = ""
+
     Private Sub tbMovSetAdd_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tbMovSetAdd.KeyPress
         If e.KeyChar = Convert.ToChar(Keys.Enter) Then
             btnMovSetAdd.PerformClick()
@@ -19,8 +21,9 @@ Public Class frmMovSetAdd
                     End If
                 Next
                 If ex = False Then
-                    Pref.moviesets.Add(tbMovSetAdd.Text)
-                    Pref.moviesets.Sort()
+                    newset = tbMovSetAdd.text
+                    'Pref.moviesets.Add(tbMovSetAdd.Text)
+                    'Pref.moviesets.Sort()
                     tbMovSetAdd.Clear()
                     Me.DialogResult = DialogResult.OK
                     Me.Close()
