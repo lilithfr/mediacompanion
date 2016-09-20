@@ -829,7 +829,7 @@ Public Class WorkingWithNfoFiles
                 newtvshow.Url.Node.SetAttributeValue("cache", newtvshow.TvdbId.Value)
             End If
             'end fix
-            If IsNothing(newtvshow.Year) Then
+            If IsNothing(newtvshow.Year.Value) Then
                 If newtvshow.Premiered.Value.Length = 10 Then
                     newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
                 End If
