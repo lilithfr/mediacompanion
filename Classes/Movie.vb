@@ -577,22 +577,23 @@ Public Class Movie
 
     Public ReadOnly Property PossibleYear As String
         Get
-            Dim s As String = ""
-            If Pref.usefoldernames Then
-                s = Title
-            Else
-                s = nfopathandfilename 
-            End If
-            Dim M As Match = Regex.Match(s, "[\(\[]([\d]{4})[\)\]]")
-            If M.Success = True Then
-                Return M.Groups(1).Value
-            End If
-            Dim N As Match = Regex.Match(s, "\.([\d]{4})\.")
-            If N.Success = True Then
-                Return N.Groups(1).Value
-            End If
+            'Dim s As String = ""
+            'If Pref.usefoldernames Then
+            '    s = Title
+            'Else
+            '    s = nfopathandfilename 
+            'End If
+            'Dim M As Match = Regex.Match(s, "[\(\[]([\d]{4})[\)\]]")
+            'If M.Success = True Then
+            '    Return M.Groups(1).Value
+            'End If
+            'Dim N As Match = Regex.Match(s, "\.([\d]{4})\.")
+            'If N.Success = True Then
+            '    Return N.Groups(1).Value
+            'End If
 
-            Return ""
+            'Return ""
+            Return Utilities.GetYearByFilename(If(Pref.usefoldernames, Title, NfoPathAndFilename))
         End Get
     End Property
 
@@ -960,10 +961,11 @@ Public Class Movie
 
         If PossibleImdb <> "" Then ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
 
-        ReportProgress( String.Format(" - Using '{0}{1}'", title.Replace(PossibleYear, ""), If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
+        'ReportProgress( String.Format(" - Using '{0}{1}'", title.Replace(PossibleYear, ""), If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
 
-        ReportProgress( "- Main body " )
-   
+        'ReportProgress( "- Main body " )
+        ReportProgress(String.Format(" - Using '{0} {1}'", Title, PossibleYear) & " - Main body ")
+
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
     End Function
 

@@ -849,49 +849,18 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetYearByFilename(ByVal filename As String, Optional ByVal trimBrackets As Boolean = True, Optional ByVal Scraper As String = "")
-        Try
-            Dim movieyear As String
-            Dim S As String = filename
-            If S.Length < 7 Then Return Nothing    'check if year IS actual Title, ie: movie  2013
-            Dim M As Match
-            M = Regex.Match(S, "(\([\d]{4}\))")
+        Dim movieyear As String = ""
+        If filename.Length > 6 Then    'check if year IS actual Title, ie: movie  2013
+            Dim M As Match = Regex.Match(filename, "[ \(\[\.]([\d]{4})[\)\] \.]")
             If M.Success = True Then
-                movieyear = M.Value
-            Else
-                movieyear = Nothing
+                movieyear = If(trimBrackets, M.Groups(1).Value, M.Value)
             End If
-            If movieyear = Nothing Then
-                M = Regex.Match(S, "(\[[\d]{4}\])")
-                If M.Success = True Then
-                    movieyear = M.Value
-                Else
-                    movieyear = Nothing
-                    'Return movieyear
-                End If
+            If IsNothing(movieyear) AndAlso Scraper.ToLower = "tmdb" Then
+                M = Regex.Match(filename, "\d{4}")
+                If M.Success = True Then movieyear = M.Value
             End If
-            If movieyear = Nothing AndAlso Scraper.ToLower = "tmdb" Then
-                M = Regex.Match(S, "\d{4}")
-                If M.Success = True Then
-                    movieyear = M.Value
-                Else
-                    movieyear = Nothing
-                    Return movieyear
-                End If
-            End If
-            Try
-                If Not String.IsNullOrEmpty(movieyear) Then
-                    movieyear = movieyear.Trim
-                    If movieyear.Length = 6 AndAlso trimBrackets Then
-                        movieyear = movieyear.Remove(0, 1)
-                        movieyear = movieyear.Remove(4, 1)
-                    End If
-                End If
-            Catch
-            End Try
-            Return movieyear
-        Catch
-        End Try
-        Return "error"
+        End If
+        Return movieyear
     End Function
 
     Public Shared Function RemoveFilenameExtension(filename As String)
@@ -969,7 +938,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
             '7: remove year from filename, don't panic tho' - MC will still scrape with the year
             Dim movieyear As String = GetYearByFilename(filename, False, Scraper)
-            If movieyear <> Nothing And movieyear <> "error" Then
+            If movieyear <> Nothing Then
                 Dim posYear As Integer = filename.IndexOf(movieyear)
                 If posYear <> -1 And posYear < currentposition Then currentposition = posYear
             End If
