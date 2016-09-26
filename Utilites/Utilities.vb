@@ -334,7 +334,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim aspectRatio As Double
         If Double.TryParse(Ratio, aspectRatio) Then
             aspectRatio = Math.Round(aspectRatio, 2)
-            Ratio = aspectRatio.ToString
+            Ratio = aspectRatio.ToString("F2")
         End If
         Return Ratio
         '    'This taken from XBMC StreamDetails.cpp CStreamDetails::VideoAspectToAspectDescription()
