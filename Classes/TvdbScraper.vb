@@ -412,28 +412,21 @@ Public Class TVDBScraper
         Dim episodeurl As String = ""
         Try
             'http://thetvdb.com/api/6E82FED600783400/series/70726/default/1/1/en.xml
-            Dim SeriesXmlPath As String = Form1.SeriesXmlPath
+            Dim SeriesXmlPath As String = Utilities.SeriesXmlPath
 
             Dim xmlfile As String = Nothing
             If language.ToLower.IndexOf(".xml") = -1 Then
                 language = language & ".xml"
             End If
             episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
-
-            'xmlfile = Utilities.DownloadTextFiles(episodeurl, forcedownload) 'this function has gzip detection in it 
-            'Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
-
-            'Dim episode As New XmlDocument
-
-            'episode.LoadXml(xmlfile)
-
+            
             'First try seriesxml data
             'check if present, download if not
             Dim gotseriesxml As Boolean = False
             Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
             Dim xmlfile2 As String = SeriesXmlPath & tvdbid & ".xml"
             Dim SeriesInfo As New Tvdb.ShowData
-            If Not File.Exists(SeriesXmlPath & tvdbid & ".xml") Then
+            If Not File.Exists(xmlfile2) Then
                 gotseriesxml = DownloadCache.Savexmltopath(url, SeriesXmlPath, tvdbid & ".xml", True)
             Else
                 'Check series xml isn't older than Five days.  If so, re-download it.

@@ -83,6 +83,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property CacheFolderPath As String
     Public Shared Property PosterCachePath As String
     Public Shared Property MissingPath As String
+    Public Shared Property SeriesXmlPath As String
 
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
@@ -146,6 +147,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
             PosterCachePath             = IO.Path.Combine(_ApplicationPath, "Settings\postercache\")
             MissingPath                 = IO.Path.Combine(_ApplicationPath, "missing\")
+            SeriesXmlPath               = IO.Path.Combine(_ApplicationPath, "SeriesXml\")
             DownloadCache.CacheFolder   = CacheFolderPath
         End Set
     End Property
