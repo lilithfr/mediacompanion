@@ -219,6 +219,7 @@ Public Class Form1
 	Dim MovMaxWallCount As Integer = 0
 	Dim tvMaxWallCount As Integer = 0
 	Dim moviecount_bak As Integer = 0
+    Dim MovieRefresh As Boolean = False
 	Dim tvCount_bak As Integer = 0
 	Dim lastSort As String = ""
 	Dim lastinvert As String = ""
@@ -3339,9 +3340,10 @@ Public Class Form1
 			If selectedRows.Count = 1 Then
 				Dim currNfo = CType(selectedRows(0).DataBoundItem, Data_GridViewMovie).fullpathandfilename.ToString
 
-				If lastNfo = currNfo Then Return
-
-				lastNfo = currNfo
+				'If lastNfo = currNfo Then Return
+                If Not MovieRefresh AndAlso lastNfo = currNfo Then Return
+                MovieRefresh = False
+                lastNfo = currNfo
 			Else
 				lastNfo = ""
 			End If
@@ -13161,8 +13163,12 @@ Public Class Form1
 	End Function
 
 #End Region 'Movie Set Routines
-	
+
 #Region "Movie Tag(s) Tab"
+
+    Private Sub tpMovTags_Leave(sender As Object, e As EventArgs) Handles tpMovTags.Leave
+        MovieRefresh = True
+    End Sub
 
     Private Sub MovieTagsSetup()
 		TagListBox.Items.Clear()
@@ -13269,7 +13275,30 @@ Public Class Form1
 			For Each mtag In Pref.movietags
 				If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
 			Next
+            Dim selectedrows As New List(Of Integer)
+            Dim selectedCell As Integer = Nothing
+            If Not IsNothing(DataGridViewMovies.CurrentCell) Then
+                selectedcell = DataGridViewMovies.CurrentCell.ColumnIndex
+                If DataGridViewMovies.SelectedRows.Count > 1 Then
+                    For each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+                        selectedrows.Add(row.Index)
+                    Next
+                End If
+            End If
 			UpdateFilteredList()
+            If selectedrows.Count > 1 Then
+                Dim first As Boolean = True
+                DataGridViewMovies.ClearSelection()
+                For each t In selectedrows
+                    If first Then
+                        DataGridViewMovies.CurrentCell = DataGridViewMovies.Rows(t).Cells(selectedcell)
+                        first = False
+                    Else
+                        DataGridViewMovies.Rows(t).Selected = True
+                    End If
+                    
+                Next
+            End If
 		Catch ex As Exception
 
 		End Try
@@ -13277,7 +13306,6 @@ Public Class Form1
 
 	Private Sub btnMovTagAdd_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagAdd.Click
 		Try
-			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
 			If TagListBox.SelectedIndex <> -1 Then
 				For Each item In TagListBox.SelectedItems
 					If item = "" Then Exit For
@@ -13301,7 +13329,6 @@ Public Class Form1
 
 	Private Sub btnMovTagRemove_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagRemove.Click
 		Try
-			Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
 			If CurrentMovieTags.SelectedIndex <> -1 Then
 				Dim i As Integer = CurrentMovieTags.SelectedIndex
 				Dim item As String = CurrentMovieTags.Items(i)
@@ -13320,13 +13347,13 @@ Public Class Form1
 
 	Private Sub btnMovTagSavetoNfo_Click(sender As System.Object, e As System.EventArgs) Handles btnMovTagSavetoNfo.Click
 		Try
+            Dim MultiMovie As Boolean = DataGridViewMovies.SelectedRows.Count > 1
 			If CurrentMovieTags.Items.Count <> -1 Then
 				NewTagList.Clear()
 				For Each tags In CurrentMovieTags.Items
 					NewTagList.Add(tags)
 				Next
-				Call mov_SaveQuick()
-
+				mov_SaveQuick()
 			End If
 		Catch ex As Exception
 
@@ -17865,5 +17892,5 @@ Public Class Form1
 		OpenUrl(TMDB_SET_URL & workingMovie.TmdbSetId)
 
 	End Sub
-
+    
 End Class
