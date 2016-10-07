@@ -2333,107 +2333,12 @@ Public Class Pref
             Dim tmpaud As String = ""
             Dim possibleISO As String = String.Empty 
             Dim workingfiledetails As New FullFileDetails
-            If IO.Path.GetExtension(filename).ToLower = ".iso" Then
-                possibleISO = Get_ISO_HDTags(filename)
-                If possibleISO <> "" AndAlso Not possibleISO.ToLower.Contains("unable to get image file") Then
-                    Dim MInform As New XmlDocument
-                    MInform.LoadXml(possibleISO)
-                    For Each thisresult In MInform("File")
-                        Select Case thisresult.name
-                            Case "track"
-                                Dim check As String = thisresult.outerxml.ToString
-                                If check.Contains("""Video""") Then
-                                    For Each result In thisresult
-                                        Select Case result.name
-                                            Case "Format"
-                                                workingfiledetails.filedetails_video.Codec.Value = result.InnerText
-                                            Case "Format_version"
-                                                workingfiledetails.filedetails_video.FormatInfo.Value = result.InnerText
-                                            Case "Width"
-                                                workingfiledetails.filedetails_video.Width.Value = result.InnerText
-                                            Case "Height"
-                                                workingfiledetails.filedetails_video.Height.Value = result.InnerText
-                                            Case "Bit_rate_mode"
-                                                workingfiledetails.filedetails_video.BitrateMode.Value = result.InnerText
-                                            Case "Maximum_bit_rate"
-                                                workingfiledetails.filedetails_video.BitrateMax.Value = result.InnerText
-                                            Case "Display_aspect_ratio"
-                                                Dim Asp As String = result.InnerText
-                                                If Not Asp = "" Then
-                                                    If Asp = "16:9" Then Asp = "1.56:1"
-                                                    workingfiledetails.filedetails_video.Aspect.Value = Asp.Substring(0, Asp.IndexOf(":"))
-                                                End If
-                                            Case "Scan_type"
-                                                workingfiledetails.filedetails_video.ScanType.Value = result.InnerText
-                                        End Select
-                                    Next
-                                    If workingfiledetails.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfiledetails.filedetails_video.FormatInfo.Value.Contains("2") Then
-                                        workingfiledetails.filedetails_video.Codec.Value = "MPEG2VIDEO"
-                                    End If
-                                    If workingfiledetails.filedetails_video.Codec.Value.ToLower = "avc" Then workingfiledetails.filedetails_video.Codec.Value = "avc1"
-                                    workingfiledetails.filedetails_video.Width.Value = workingfiledetails.filedetails_video.Width.Value.Replace(" pixels", "").Replace(" ", "")
-                                    workingfiledetails.filedetails_video.Height.Value = workingfiledetails.filedetails_video.Height.Value.Replace(" pixels", "").Replace(" ", "")
-                                    workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
-                                    workingfiledetails.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
-                                End If
 
-                                If check.Contains("""Audio""") Then
-                                    tmpaud = ""
-                                    Dim audio As New AudioDetails
-                                    For Each result In thisresult
-                                        Select Case result.name
-                                            Case "Format"
-                                                audio.Codec.Value = result.InnerText
-                                            Case "Format_Info"
-                                                tmpaud = result.InnerText
-                                                tmpaud = tmpaud.ToLower
-                                            Case "Channel_s_"
-                                                audio.Channels.Value = result.InnerText
-                                            Case "Bit_rate"
-                                                audio.Bitrate.Value = result.InnerText
-                                            Case "Language"
-                                                audio.Language.Value = Utilities.GetLangCode(result.InnerText)
-                                            Case "Default"
-                                                audio.DefaultTrack.Value = result.InnerText
-                                        End Select
-                                    Next
-                                    If audio.Codec.Value.ToLower.IndexOf("truehd")>-1 Then audio.Codec.Value = "truehd"
-                                    If audio.Codec.Value = "DTS" Then
-                                        If tmpaud.ToLower = "dts ma / core" Then
-                                            audio.Codec.Value = "dtshd_ma"
-                                        ElseIf tmpaud.ToLower = "dts hra / core" Then
-                                            audio.Codec.Value = "dtshd_hra"
-                                        ElseIf tmpaud.ToLower = "dts es" Then
-                                            audio.Codec.Value = "dts"
-                                        Else
-                                            audio.Codec.Value = "dts"
-                                        End If
-                                    End If
-                                    If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
-                                    workingfiledetails.filedetails_audio.Add(audio)
-                                End If
-                                
-                                If check.Contains("""Text""") Then
-                                    Dim SubTitle As New SubtitleDetails
-                                    For each result In thisresult
-                                        Select Case result.name
-                                            Case "Language"
-                                                SubTitle.Language.Value = Utilities.GetLangCode(result.InnerText)
-                                        End Select
-                                    Next
-                                    workingfiledetails.filedetails_subtitles.Add(SubTitle)
-                                End If
-                        End Select
-                    Next
-                    If workingfiledetails.filedetails_audio.Count = 0 Then
-                        Dim audio As New AudioDetails
-                        workingfiledetails.filedetails_audio.Add(audio)    'Must have at least one audio track, even if it's blank
-                    End If
-                    Return workingfiledetails
-                Else
-                    Return workingfiledetails
-                End If
+            ' If Iso file
+            If IO.Path.GetExtension(filename).ToLower = ".iso" Then
+                Return Get_HDIsoTags(filename)
             End If
+
             Dim playlist As New List(Of String)
             Dim tempstring As String
             tempstring = Utilities.GetFileName(filename)
@@ -2459,11 +2364,12 @@ Public Class Pref
             Try
                 Dim tmp As Double = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).AspectRatio)
                 If tmp <> 0 AndAlso tmp < 4 Then
-                    workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")
+                    workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")  'Utilities.FixIntlAspectRatio(tmp.ToString("F2"))
                 Else
                     Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
                     If Not DisplayAspectRatio = "" Then
-                        workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio).ToString("F2")
+                        'DisplayAspectRatio = Utilities.CheckAspectRatio(DisplayAspectRatio)
+                        workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio, Utilities.defaultculture).ToString("F2")
                     End If
                 End If
             Catch ex As Exception
@@ -2656,6 +2562,117 @@ Public Class Pref
         Catch ex As Exception
 
         Finally
+        End Try
+        Return Nothing
+    End Function
+
+    Public Shared Function Get_HDIsoTags(BYVal filename As String) As FullFileDetails
+        Dim workingfile As New FullFileDetails
+        Dim possibleISO As String = String.Empty
+        Try
+            possibleISO = Get_ISO_HDTags(filename)
+            If possibleISO <> "" AndAlso Not possibleISO.ToLower.Contains("unable to get image file") Then
+                Dim tmpaud As String = ""
+                Dim MInform As New XmlDocument
+                MInform.LoadXml(possibleISO)
+                For Each thisresult In MInform("File")
+                    Select Case thisresult.name
+                        Case "track"
+                            Dim check As String = thisresult.outerxml.ToString
+                            If check.Contains("""Video""") Then
+                                For Each result In thisresult
+                                    Select Case result.name
+                                        Case "Format"
+                                            workingfile.filedetails_video.Codec.Value = result.InnerText
+                                        Case "Format_version"
+                                            workingfile.filedetails_video.FormatInfo.Value = result.InnerText
+                                        Case "Width"
+                                            workingfile.filedetails_video.Width.Value = result.InnerText
+                                        Case "Height"
+                                            workingfile.filedetails_video.Height.Value = result.InnerText
+                                        Case "Bit_rate_mode"
+                                            workingfile.filedetails_video.BitrateMode.Value = result.InnerText
+                                        Case "Maximum_bit_rate"
+                                            workingfile.filedetails_video.BitrateMax.Value = result.InnerText
+                                        Case "Display_aspect_ratio"
+                                            Dim Asp As String = result.InnerText
+                                            If Not Asp = "" Then
+                                                If Asp = "16:9" Then Asp = "1.56:1"
+                                                workingfile.filedetails_video.Aspect.Value = Asp.Substring(0, Asp.IndexOf(":"))
+                                            End If
+                                        Case "Scan_type"
+                                            workingfile.filedetails_video.ScanType.Value = result.InnerText
+                                    End Select
+                                Next
+                                If workingfile.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfile.filedetails_video.FormatInfo.Value.Contains("2") Then
+                                    workingfile.filedetails_video.Codec.Value = "MPEG2VIDEO"
+                                End If
+                                If workingfile.filedetails_video.Codec.Value.ToLower = "avc" Then workingfile.filedetails_video.Codec.Value = "avc1"
+                                workingfile.filedetails_video.Width.Value = workingfile.filedetails_video.Width.Value.Replace(" pixels", "").Replace(" ", "")
+                                workingfile.filedetails_video.Height.Value = workingfile.filedetails_video.Height.Value.Replace(" pixels", "").Replace(" ", "")
+                                workingfile.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
+                                workingfile.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
+                            End If
+
+                            If check.Contains("""Audio""") Then
+                                tmpaud = ""
+                                Dim audio As New AudioDetails
+                                For Each result In thisresult
+                                    Select Case result.name
+                                        Case "Format"
+                                            audio.Codec.Value = result.InnerText
+                                        Case "Format_Info"
+                                            tmpaud = result.InnerText
+                                            tmpaud = tmpaud.ToLower
+                                        Case "Channel_s_"
+                                            audio.Channels.Value = result.InnerText
+                                        Case "Bit_rate"
+                                            audio.Bitrate.Value = result.InnerText
+                                        Case "Language"
+                                            audio.Language.Value = Utilities.GetLangCode(result.InnerText)
+                                        Case "Default"
+                                            audio.DefaultTrack.Value = result.InnerText
+                                    End Select
+                                Next
+                                If audio.Codec.Value.ToLower.IndexOf("truehd")>-1 Then audio.Codec.Value = "truehd"
+                                If audio.Codec.Value = "DTS" Then
+                                    If tmpaud.ToLower = "dts ma / core" Then
+                                        audio.Codec.Value = "dtshd_ma"
+                                    ElseIf tmpaud.ToLower = "dts hra / core" Then
+                                        audio.Codec.Value = "dtshd_hra"
+                                    ElseIf tmpaud.ToLower = "dts es" Then
+                                        audio.Codec.Value = "dts"
+                                    Else
+                                        audio.Codec.Value = "dts"
+                                    End If
+                                End If
+                                If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
+                                workingfile.filedetails_audio.Add(audio)
+                            End If
+                                
+                            If check.Contains("""Text""") Then
+                                Dim SubTitle As New SubtitleDetails
+                                For each result In thisresult
+                                    Select Case result.name
+                                        Case "Language"
+                                            SubTitle.Language.Value = Utilities.GetLangCode(result.InnerText)
+                                    End Select
+                                Next
+                                workingfile.filedetails_subtitles.Add(SubTitle)
+                            End If
+                    End Select
+                Next
+                If workingfile.filedetails_audio.Count = 0 Then
+                    Dim audio As New AudioDetails
+                    workingfile.filedetails_audio.Add(audio)    'Must have at least one audio track, even if it's blank
+                End If
+                Return workingfile
+            Else
+                Return workingfile
+            End If
+            Return workingfile
+        Catch ex As Exception
+
         End Try
         Return Nothing
     End Function

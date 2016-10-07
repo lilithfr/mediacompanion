@@ -3,10 +3,10 @@ Imports System.Net
 Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Xml
-Imports System.IO.Compression
-Imports System.Text
-Imports System.Web
-Imports System.Reflection
+'Imports System.IO.Compression
+'Imports System.Text
+'Imports System.Web
+'Imports System.Reflection
 Imports System.Drawing
 Imports System.Security.Cryptography
 Imports Microsoft.Win32
@@ -70,6 +70,8 @@ ByRef lpFreeBytesAvailableToCaller As Long, _
 ByRef lpTotalNumberOfBytes As Long, _
 ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
+    Public Shared ReadOnly defaultculture As System.Globalization.CultureInfo = New Globalization.CultureInfo("en-us")
+    'Public Shared ReadOnly trueculture As System.Globalization.CultureInfo = Thread.CurrentThread.CurrentCulture
     Public Shared Property DefaultPosterPath As String
     Public Shared Property DefaultBannerPath As String
     Public Shared Property DefaultFanartPath As String
@@ -279,10 +281,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 If i = 0 Then Returnpath = cachepath
             End If
         Next
-        'Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename)
-        'If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
-        '    Return CachePath 
-        'End If
         Return Returnpath  '""
     End Function
 
@@ -307,7 +305,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     myProcess.WaitForExit()
                     If File.Exists(SavePath) Then Return True
                 Catch ex As Exception
-                    Throw ex
+                    Throw
                 Finally
                     myProcess.Close()
                 End Try
@@ -323,58 +321,32 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetStdAspectRatio(ByVal Ratio As String) As String
-        If IsNothing(Ratio) Then Return ""
-        If Not Ratio.Contains(":") AndAlso Ratio.Contains(",") Then Ratio = Ratio.Replace(",", ".")
-        If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
-        If Ratio.IndexOf(",") > -1 Then
-            Ratio = Ratio.Substring(0, Ratio.IndexOf(","))
-            If Ratio.Length > 2 AndAlso Not Ratio.Contains(".") Then
-                Ratio = Ratio.Insert(1, ".")
-            End If
-        End If
-        
-        Dim aspectRatio As Double
-        If Double.TryParse(Ratio, aspectRatio) Then
-            aspectRatio = Math.Round(aspectRatio, 2)
-            Ratio = aspectRatio.ToString("F2")
-        End If
-        Return Ratio
-        '    'This taken from XBMC StreamDetails.cpp CStreamDetails::VideoAspectToAspectDescription()
-        '    If (aspectRatio = 0.0) Then Return ""
 
-        '    ' Given that we're never going to be able to handle every single possibility in
-        '    ' aspect ratios, particularly when cropping prior to video encoding is taken into account
-        '    ' the best we can do is take the "common" aspect ratios, and return the closest one available.
-        '    ' The cutoffs are the geometric mean of the two aspect ratios either side.
-        '    If (aspectRatio < 1.4859) Then      ' sqrt(1.33*1.66)
-        '        Return "1.33"
-        '    ElseIf (aspectRatio < 1.719) Then   'sqrt(1.66*1.78)
-        '        Return "1.66"
-        '    ElseIf (aspectRatio < 1.8147) Then  'sqrt(1.78*1.85)
-        '        Return "1.78"
-        '    ElseIf (aspectRatio < 2.0174) Then  'sqrt(1.85*2.20)
-        '        Return "1.85"
-        '    ElseIf (aspectRatio < 2.2738) Then  'sqrt(2.20*2.35)
-        '        Return "2.20"
-        '    End If
-        '    Return "2.35"
+        If String.IsNullOrEmpty(Ratio) Then Return ""
+        If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
+        
+        'Dim aspectRatio As Double
+        'If Double.TryParse(Ratio, aspectRatio) Then
+        '    aspectRatio = Math.Round(aspectRatio, 2)
+        '    Ratio = aspectRatio.ToString("F2", testculture)
         'End If
-        'Return ""
+        Return Ratio
     End Function
 
     Public Shared Function FixIntlAspectRatio(ByVal Ratio As String) As String
         If Ratio.Contains(",") Then
             Dim pos As Integer = Ratio.IndexOf(",")
-            If pos > 3 Then
+            If pos > 2 Then
                 If Not Ratio.Contains(".") And IsNumeric(Ratio.Substring(1,1)) Then
                     Ratio = Ratio.Replace(",", "")
                     Ratio = Ratio.Insert(1, ",")
+                    If Ratio.Length > 4 Then Ratio = Ratio.Substring(0,4)
                 End If
             End If
         End If
         Return Ratio
     End Function
-
+    
     Public Shared Function GetCodecCommonName(ByVal codec As String) As String
         If codec.ToLower.Contains("div") or codec.ToLower.Contains("dx50")Then codec = "divx"
         Return codec

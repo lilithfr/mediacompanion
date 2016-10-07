@@ -251,6 +251,7 @@ Public Class Form1
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
 	Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'Application.CurrentCulture = New Globalization.CultureInfo("de-de")
 		PictureBoxAssignedMoviePoster.AllowDrop = True
 
 		Try

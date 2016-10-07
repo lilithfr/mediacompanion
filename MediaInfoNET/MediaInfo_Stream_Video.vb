@@ -196,7 +196,7 @@ Public Class MediaInfo_Stream_Video
                 If value IsNot Nothing AndAlso value.contains(":") Then
                     Dim s() As String = value.Split(":")
                     If s(0) <> "" Then 
-                        Double.TryParse(s(0), i)
+                        Double.TryParse(s(0), Globalization.NumberStyles.Any, Globalization.CultureInfo.CurrentCulture, i)
                     End If
                     'Return i
                 End If

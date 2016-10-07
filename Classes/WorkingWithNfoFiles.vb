@@ -935,8 +935,9 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             stage = 5
-            child = doc.CreateElement("title") : child.InnerText = tvshowtosave.title.Value
-            root.AppendChild(child)
+            root.AppendChild(doc, "title"           , tvshowtosave.Title.Value      )
+            'child = doc.CreateElement("title") : child.InnerText = tvshowtosave.title.Value
+            'root.AppendChild(child)
                              
             child = doc.CreateElement("showtitle") : child.InnerText = tvshowtosave.title.Value
             root.AppendChild(child)
