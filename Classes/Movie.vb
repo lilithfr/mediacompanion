@@ -3283,13 +3283,19 @@ Public Class Movie
                             ''' Else keep existing setname (may be customized set name)
                             If rl.tmdb_set_name OrElse (_scrapedMovie.fullmoviebody.SetName = "-None" OrElse _scrapedMovie.fullmoviebody.SetName = "") Then
                                 _rescrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
-                                If Not rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
                             Else
                                 _rescrapedMovie.fullmoviebody.SetName   = _scrapedMovie.fullmoviebody.SetName
-                                If Not rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                                'If Not rl.tmdb_set_info Then _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                            End If
+                            If Not rl.tmdb_set_info Then
+                                If String.IsNullOrEmpty(_scrapedMovie.fullmoviebody.TmdbSetId) Then
+                                    _rescrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id
+                                Else
+                                    _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
+                                End If
                             End If
                             ChangedSet = True
-                            UpdateMovieSetCache(True)
+                            
                         End If
                         
                         ''' Update set only if there was a Change.
@@ -3297,6 +3303,7 @@ Public Class Movie
                         If ChangedSet Then
                             UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
+                            UpdateMovieSetCache(True)
                         End If
                     End If
                 Catch
