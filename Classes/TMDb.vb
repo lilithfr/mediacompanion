@@ -1,6 +1,7 @@
 ﻿Imports System.Linq
 Imports System.Collections.Generic
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class TMDb
 

@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Linq
 Imports System.Xml
 Imports Media_Companion
@@ -1483,13 +1484,13 @@ Public Class Movies
                         'Create temporary "tempoffline.ttt" file
                         If Not File.Exists(Path.Combine(subfolder, "tempoffline.ttt")) Then
                             Dim sTempFileName As String = Path.Combine(subfolder, "tempoffline.ttt")
-                            Dim fsTemp As New FileStream(sTempFileName, IO.FileMode.Create)
+                            Dim fsTemp As IO.FileStream = File.Open(sTempFileName, IO.FileMode.Create)
                             fsTemp.Close()
                         End If
 
                         'Create temporary "whatever.avi"' file
                         If Not File.Exists(DummyFullName) Then
-                            Dim fsTemp2 As New FileStream(DummyFullName, FileMode.Create)
+                            Dim fsTemp2 As IO.FileStream = File.Open(DummyFullName, IO.FileMode.Create)
                             fsTemp2.Close()
                         End If
 
@@ -1514,12 +1515,12 @@ Public Class Movies
         For Each ext In Utilities.VideoExtensions
             ext = If((ext = "video_ts.ifo"), ext, "*" & ext)
             Try
-                For Each fileInFo In dirInfo.GetFiles(ext)
-                    If Not ValidateFile(fileInFo) Then
+                For Each Filefound As FileInfo In dirInfo.GetFiles(ext)
+                    If Not ValidateFile(Filefound) Then
                         Continue For
                     End If
                     found += 1
-                    NewMovies.Add(New Movie(fileInFo.FullName, Me))
+                    NewMovies.Add(New Movie(Filefound.FullName, Me))
                 Next
             Catch ex As Exception
 #If SilentErrorScream Then
@@ -1547,7 +1548,7 @@ Public Class Movies
         Dim found = 0
         Dim msg = ""
         For Each file In files
-            Dim fileInfo = New IO.FileInfo(file)
+            Dim fileInfo = New FileInfo(file)
             i += 1
             PercentDone = CalcPercentDone(i, files.Count)
             msg = "!!! Validating file " & fileInfo.Name & "(" & i & " of " & files.Count & ")"
@@ -1699,7 +1700,7 @@ Public Class Movies
         Dim NfoFileList As New List(Of String)
 
         For Each item In NfoFilenames
-            If IO.File.Exists(item) Then
+            If File.Exists(item) Then
                 NfoFileList.Add(item)
             Else
                 ReportProgress("Could Not find " & item & vbCrLf & "Please Refresh All Movies before running Batch Rescraper Wizard")
@@ -1758,7 +1759,7 @@ Public Class Movies
         End Try
     End Function
 
-    Public Function ValidateFile(fileInFo As IO.FileInfo)
+    Public Function ValidateFile(fileInFo As FileInfo)
         If AlreadyAdded(fileInFo.FullName) Then
             ReportProgress(, " - Already Added!")
             Return False
@@ -1776,7 +1777,7 @@ Public Class Movies
 
     Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = IO.File.OpenText(fullPathandFilename)
+        Dim filechck As IO.StreamReader = File.OpenText(fullPathandFilename)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
         If tempstring = Nothing Then
@@ -1813,7 +1814,7 @@ Public Class Movies
         MovieCache.Clear
 
         Dim movielist  As New XmlDocument
-        Dim objReader  As New StreamReader(Pref.workingProfile.MovieCache)
+        Dim objReader  As New IO.StreamReader(Pref.workingProfile.MovieCache)
         Dim tempstring As String = objReader.ReadToEnd
         objReader.Close
         objReader = Nothing
@@ -3028,11 +3029,11 @@ Public Class Movies
 
     Shared Sub bw_SpinupDrive(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) 
         Try
-            Dim file As String = Path.Combine( DirectCast(e.Argument,String) , "delme.tmp" )
+            Dim filet As String = Path.Combine( DirectCast(e.Argument,String) , "delme.tmp" )
 
-            IO.File.WriteAllText(file, "Anything")
-
-            Utilities.SafeDeleteFile(file)
+            File.WriteAllText(filet, "Anything")
+            
+            Utilities.SafeDeleteFile(filet)
         Catch
         End Try
     End Sub

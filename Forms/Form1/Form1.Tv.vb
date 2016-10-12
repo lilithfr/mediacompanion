@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Text
 Imports Media_Companion.WorkingWithNfoFiles
@@ -132,7 +133,7 @@ Partial Public Class Form1
         Dim files() As String
         files = e.Data.GetData(DataFormats.FileDrop)
         For f = 0 To UBound(files)
-            If IO.Directory.Exists(files(f)) Then
+            If Directory.Exists(files(f)) Then
                 If files(f).ToLower.Contains(".actors") Or files(f).ToLower.Contains("season") Then Continue For
                 For each fol In Pref.tvRootFolders
                     If fol.rpath = files(f) Then Continue For
@@ -146,7 +147,7 @@ Partial Public Class Form1
                     End If
                 Next
                 'If Pref.tvRootFolders.Contains(files(f)) Then Continue For
-                Dim di As New IO.DirectoryInfo(files(f))
+                Dim di As New DirectoryInfo(files(f))
                 If Pref.tvFolders.Contains(files(f)) Then Continue For
                 Dim skip As Boolean = False
                 For Each item In droppedItems
@@ -398,7 +399,7 @@ Partial Public Class Form1
         End If
         'end fix
 
-        Dim hg As New IO.DirectoryInfo(Show.FolderPath)
+        Dim hg As New DirectoryInfo(Show.FolderPath)
         If Not hg.Exists Then
             tb_ShPlot.Text = "Unable to find folder: " & Show.FolderPath
             tb_Sh_Ep_Title.Text = "Unable to find folder: " & Show.FolderPath
@@ -599,9 +600,9 @@ Partial Public Class Form1
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorname = cbTvActor.Text Then
                     Dim temppath As String = Pref.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ID.Value)
-                    If IO.File.Exists(temppath) Then
+                    If File.Exists(temppath) Then
                         imgLocation = temppath
-                    ElseIf (Not Pref.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
+                    ElseIf (Not Pref.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse File.Exists(actor.actorthumb)) Then
                         imgLocation = actor.actorthumb
                     End If
                     Exit For
@@ -628,9 +629,9 @@ Partial Public Class Form1
             For Each actor In WorkingTvShow.ListActors
                 If actor.actorrole = cbTvActorRole.Text Then
                     Dim temppath As String = Pref.GetActorPath(WorkingTvShow.NfoFilePath, actor.actorname, actor.ID.Value)
-                    If IO.File.Exists(temppath) Then
+                    If File.Exists(temppath) Then
                         imgLocation = temppath
-                    ElseIf (Not Pref.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse IO.File.Exists(actor.actorthumb)) Then
+                    ElseIf (Not Pref.LocalActorImage) AndAlso actor.actorthumb <> Nothing AndAlso (actor.actorthumb.IndexOf("http") <> -1 OrElse File.Exists(actor.actorthumb)) Then
                         imgLocation = actor.actorthumb
                     End If
                     Exit For
@@ -827,10 +828,10 @@ Partial Public Class Form1
         Dim multiepisode As Boolean = False
         Try
             Dim firstline As String = ""
-            If IO.File.Exists(path) Then
+            If File.Exists(path) Then
                 Dim listText As New List(Of String)
                 Dim objLine As String = ""
-                Using objReader As StreamReader = New StreamReader(path)
+                Using objReader As IO.StreamReader = File.OpenText(path)
                     Do
                         objLine = objReader.ReadLine()
                         If objLine.IndexOf("<multiepisodenfo>") <> -1 Then
@@ -873,9 +874,9 @@ Partial Public Class Form1
         lb_EpDetails.Items.Clear()
 
         cmbxEpActor.Items.Clear()
-        tb_EpFilename.Text = Utilities.ReplaceNothing(IO.Path.GetFileName(Episode.NfoFilePath))
+        tb_EpFilename.Text = Utilities.ReplaceNothing(Path.GetFileName(Episode.NfoFilePath))
         tb_EpPath.Text = Utilities.ReplaceNothing(Episode.FolderPath)
-        If Not IO.File.Exists(Episode.NfoFilePath) Then
+        If Not File.Exists(Episode.NfoFilePath) Then
             tb_Sh_Ep_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
             Panel_EpisodeInfo.Visible = True
             Panel_EpisodeActors.Visible = True
@@ -1195,9 +1196,9 @@ Partial Public Class Form1
             Exit Function 
         End If
         Try
-            Using fs As New System.IO.FileStream(PathToUse, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+            Using fs As IO.FileStream = File.Open(PathToUse, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
                 fs.CopyTo(ms)
-                ms.Seek(0, System.IO.SeekOrigin.Begin)
+                ms.Seek(0, IO.SeekOrigin.Begin)
                 If ms.Length = 0 Then Throw New Exception()
                 PicBox.Image = Image.FromStream(ms)
             End Using
@@ -1209,9 +1210,9 @@ Partial Public Class Form1
             Catch
             End Try
             Try
-                Using fs As New System.IO.FileStream(DefaultPic, System.IO.FileMode.Open, System.IO.FileAccess.Read), ms As System.IO.MemoryStream = New System.IO.MemoryStream()
+                Using fs As IO.FileStream = File.Open(DefaultPic, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
                     fs.CopyTo(ms)
-                    ms.Seek(0, System.IO.SeekOrigin.Begin)
+                    ms.Seek(0, IO.SeekOrigin.Begin)
                     PicBox.Image = Image.FromStream(ms)
                 End Using
                 PicBox.ImageLocation = DefaultPic
@@ -1325,7 +1326,7 @@ Partial Public Class Form1
             prgCount += 1
             Application.DoEvents()
             Dim newtvshownfo As New TvShow
-            newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
+            newtvshownfo.NfoFilePath = Path.Combine(tvfolder, "tvshow.nfo")
 
             newtvshownfo = nfoFunction.tvshow_NfoLoad(newtvshownfo.NfoFilePath) '.Load()
             If (IsNothing(newtvshownfo.Year.Value) OrElse newtvshownfo.Year.Value.ToInt = 0) Then
@@ -1513,10 +1514,10 @@ Partial Public Class Form1
             If folder = "long_path" Then
                 Continue For
             End If
-            Dim dir_info As New System.IO.DirectoryInfo(folder)
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
-            For Each fs_info As System.IO.FileInfo In fs_infos
-                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
+            Dim dir_info As New DirectoryInfo(folder)
+            Dim fs_infos() As FileInfo = dir_info.GetFiles("*.NFO", IO.SearchOption.TopDirectoryOnly)
+            For Each fs_info As FileInfo In fs_infos
+                If Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
                     Dim EpNfoPath As String = fs_info.FullName
                     If ep_NfoValidate(EpNfoPath) Then
                         Dim multiepisodelist As New List(Of TvEpisode)
@@ -1526,7 +1527,7 @@ Partial Public Class Form1
                             If Ep.ShowId.Value <> newtvshownfo.TvdbId.Value AndAlso newtvshownfo.TvdbId.Value <> "" Then need2resave = True
                             Ep.ShowObj = newtvshownfo
                             Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                            If IO.File.Exists(missingNfoPath) Then Utilities.SafeDeleteFile(missingNfoPath)
+                            If File.Exists(missingNfoPath) Then Utilities.SafeDeleteFile(missingNfoPath)
                             episodelist.Add(Ep)
                         Next
                         If need2resave Then ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
@@ -1696,7 +1697,7 @@ Partial Public Class Form1
                 tvprogresstxt = ""
                 i += 1
                 Dim NewShow As New TvShow
-                NewShow.NfoFilePath = IO.Path.Combine(newTvFolders(0), "tvshow.nfo")
+                NewShow.NfoFilePath = Path.Combine(newTvFolders(0), "tvshow.nfo")
                 NewShow.TvdbId.Value = searchTVDbID
                 NewShow.State = Media_Companion.ShowState.Unverified
                 tvprogresstxt &= "Scraping Show " & i.ToString & " of " & x & " : "
@@ -2332,7 +2333,7 @@ Partial Public Class Form1
             
             Dim TvFolder As String
             For Each TvShow As Media_Companion.TvShow In ListOfShows
-                TvFolder = IO.Path.GetDirectoryName(TvShow.FolderPath)
+                TvFolder = Path.GetDirectoryName(TvShow.FolderPath)
                 Dim Add As Boolean = True
                 If TvShow.State <> Media_Companion.ShowState.Open Then
                     If manual = False Then
@@ -2349,7 +2350,7 @@ Partial Public Class Form1
                         Exit Sub
                     End If
                     tempstring = "" 'tvfolder
-                    Dim hg As New IO.DirectoryInfo(TvFolder)
+                    Dim hg As New DirectoryInfo(TvFolder)
                     If hg.Exists Then
                         scraperLog = scraperLog & "Found " & hg.FullName.ToString & vbCrLf
                         newtvfolders.Add(TvFolder)
@@ -2378,7 +2379,7 @@ Partial Public Class Form1
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 For Each f In Utilities.VideoExtensions
                     dirpath = newtvfolders(g)
-                    Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                    Dim dir_info As New DirectoryInfo(dirpath)
                     tv_NewFind(dirpath, f)
                 Next f
                 tempint = newEpisodeList.Count - mediacounter
@@ -2530,7 +2531,7 @@ Partial Public Class Form1
                 Else
                     WhichScraper = "MC TVDB"
                 End If
-                progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & IO.Path.GetFileName(eps.VideoFilePath) & "'")
+                progresstext = String.Concat("ESC to Cancel : Stage 3 of 3 : Scraping New Episodes : Using " & WhichScraper & "Scraper : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & Path.GetFileName(eps.VideoFilePath) & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 Dim removal As String = ""
                 If (eps.Season.Value = "-1" Or eps.Episode.Value = "-1") AndAlso eps.Aired.Value = Nothing Then
@@ -2935,7 +2936,7 @@ Partial Public Class Form1
                             stage = "14d1b"
                             If epseason = "0" Then Seasonxx = episodearray(0).ShowObj.FolderPath & "season-specials" & (If(Pref.FrodoEnabled, "-poster.jpg", ".tbn"))
                             stage = "14d1c"
-                            If Not IO.File.Exists(Seasonxx) Then
+                            If Not File.Exists(Seasonxx) Then
                                 TvGetArtwork(episodearray(0).ShowObj, False, False, True, False)
                             End If
                             stage = "14d1d"
@@ -3424,7 +3425,7 @@ Partial Public Class Form1
                         edenart = episode.Thumbnail.Path
                         frodoart = episode.Thumbnail.Path.Replace(".tbn", "-thumb.jpg")
                         If (Not String.IsNullOrEmpty(episode.Thumbnail.FileName)) Then
-                            If ((eden And Not frodo) AndAlso IO.File.Exists(edenart)) Or ((frodo And Not eden) AndAlso IO.File.Exists(frodoart)) Or ((frodo And eden) And (IO.File.Exists(edenart) And IO.File.Exists(frodoart))) Then
+                            If ((eden And Not frodo) AndAlso File.Exists(edenart)) Or ((frodo And Not eden) AndAlso File.Exists(frodoart)) Or ((frodo And eden) And (File.Exists(edenart) And File.Exists(frodoart))) Then
                                 episode.Visible = False
                             Else
                                 episode.Visible = True
@@ -3531,7 +3532,7 @@ Partial Public Class Form1
                     edenpost = Season.Poster.Path
                     frodopost = Season.Poster.Path.Replace(".tbn", "-poster.jpg")
                     frodobann = Season.Banner.Path 
-                    If ((eden And frodo) AndAlso (IO.File.Exists(edenpost) And (IO.File.Exists(frodopost) AndAlso IO.File.Exists(frodobann)))) Or ((eden And Not frodo) AndAlso IO.File.Exists(edenpost)) Or ((frodo And Not eden) AndAlso (IO.File.Exists(frodopost) Or IO.File.Exists(frodobann))) Then
+                    If ((eden And frodo) AndAlso (File.Exists(edenpost) And (File.Exists(frodopost) AndAlso File.Exists(frodobann)))) Or ((eden And Not frodo) AndAlso File.Exists(edenpost)) Or ((frodo And Not eden) AndAlso (File.Exists(frodopost) Or File.Exists(frodobann))) Then
                         Season.Visible = False
                     Else
                         Season.Visible = True
@@ -3540,7 +3541,7 @@ Partial Public Class Form1
                         Episode.Visible = False
                     Next
                 Next
-                If frodo And Not IO.File.Exists(item.FolderPath + "poster.jpg") Then
+                If frodo And Not File.Exists(item.FolderPath + "poster.jpg") Then
                     item.Visible = True
                 ElseIf eden And Not frodo Then
                     item.Visible = Not item.ImagePoster.Exists
@@ -3685,16 +3686,16 @@ Partial Public Class Form1
                     For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
                         If Pref.ignoreMissingSpecials AndAlso NewEpisode.SeasonNumber.Value = "0" Then
                             Dim missingspecialnfo As String = Utilities.MissingPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
-                            If IO.File.Exists(missingspecialnfo) Then
+                            If File.Exists(missingspecialnfo) Then
                                 Utilities.SafeDeleteFile(missingspecialnfo)
                             End If
                             Continue For
                         End If
                         Dim Episode As TvEpisode = item.GetEpisode(NewEpisode.SeasonNumber.Value, NewEpisode.EpisodeNumber.Value)
-                        If Episode Is Nothing OrElse Not IO.File.Exists(Episode.NfoFilePath) Then
+                        If Episode Is Nothing OrElse Not File.Exists(Episode.NfoFilePath) Then
                             Dim MissingEpisode As New Media_Companion.TvEpisode
                             MissingEpisode.NfoFilePath = Utilities.MissingPath & item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo"
-                            If Not IO.File.Exists(MissingEpisode.NfoFilePath) OrElse Pref.DlMissingEpData Then
+                            If Not File.Exists(MissingEpisode.NfoFilePath) OrElse Pref.DlMissingEpData Then
                                 MissingEpisode.AbsorbTvdbEpisode(NewEpisode)
                                 MissingEpisode.IsMissing = True
                                 MissingEpisode.IsCache = True
@@ -3716,13 +3717,13 @@ Partial Public Class Form1
     Public Function tv_EpisodesMissingUpdate(ByRef newEpList As List(Of TvEpisode)) As Boolean
         Dim Removed As Boolean = False
         Try
-            'Dim missingPath = IO.Path.Combine(Pref.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
+            'Dim missingPath = Path.Combine(Pref.applicationPath, "missing\") '& item.TvdbId.Value & "." & NewEpisode.SeasonNumber.Value & "." & NewEpisode.EpisodeNumber.Value & ".nfo")
             
             For Each Ep In newEpList
-                If IO.File.Exists(Ep.NfoFilePath) Then
+                If File.Exists(Ep.NfoFilePath) Then
                     Dim missingEpNfoPath As String = Utilities.MissingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                    If IO.File.Exists(missingEpNfoPath) Then
-                        IO.File.Delete(missingEpNfoPath)
+                    If File.Exists(missingEpNfoPath) Then
+                        File.Delete(missingEpNfoPath)
                         Dim Ep2Remove As New TvEpisode
                         For Each epis As TvEpisode In Cache.TvCache.Episodes 
                             If epis.TvdbId.Value = Ep.TvdbId.Value Then
@@ -3743,11 +3744,11 @@ Partial Public Class Form1
     End Function
 
     'Public Sub tv_EpisodesMissingClean()
-    '    Dim dir_info As New IO.DirectoryInfo(Utilities.MissingPath)
+    '    Dim dir_info As New DirectoryInfo(Utilities.MissingPath)
     '    For Each File in dir_info.GetFiles(".nfo")
-    '        If IO.File.Exists(File.Fullname) Then
+    '        If File.Exists(File.Fullname) Then
     '            Try
-    '                IO.File.Delete(File.FullName)
+    '                File.Delete(File.FullName)
     '            Catch
     '            End Try
     '        End If
@@ -4112,7 +4113,7 @@ Partial Public Class Form1
         Dim TvdbActors As List(Of str_MovieActors) = tvdbstuff.GetActors(NewShow.TvdbId.Value)
         Dim workingpath As String = ""
         If Pref.actorseasy AndAlso Not Pref.tvshowautoquick Then
-            workingpath = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "") & ".actors\"
+            workingpath = NewShow.NfoFilePath.Replace(Path.GetFileName(NewShow.NfoFilePath), "") & ".actors\"
             Utilities.EnsureFolderExists(workingpath)
         End If
         For Each NewAct In TvdbActors
@@ -4125,7 +4126,7 @@ Partial Public Class Form1
                 'Save to .actor folder
                 If NewAct.actorthumb <> "" And Pref.actorseasy = True And Pref.tvshowautoquick = False Then
                     If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
-                        Dim ActorFilename As String = IO.Path.Combine(workingpath, filename)
+                        Dim ActorFilename As String = Path.Combine(workingpath, filename)
                         Dim actorpaths As New List(Of String)
                         If Pref.FrodoEnabled Then actorpaths.Add(ActorFilename & ".jpg")
                         If Pref.EdenEnabled Then actorpaths.Add(ActorFilename & ".tbn")
@@ -4180,7 +4181,7 @@ Partial Public Class Form1
         Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewShow.ImdbId.Value, actmax)
         Dim workingpath As String = ""
         If Pref.actorseasy And Not Pref.tvshowautoquick Then
-            workingpath = NewShow.NfoFilePath.Replace(IO.Path.GetFileName(NewShow.NfoFilePath), "")
+            workingpath = NewShow.NfoFilePath.Replace(Path.GetFileName(NewShow.NfoFilePath), "")
             workingpath = workingpath & ".actors\"
             Utilities.EnsureFolderExists(workingpath)
         End If
@@ -4190,7 +4191,7 @@ Partial Public Class Form1
                     Dim actorpaths As New List(Of String)
                     Dim filename As String = Utilities.cleanFilenameIllegalChars(thisresult.actorname)
                     filename = filename.Replace(" ", "_")
-                    filename = IO.Path.Combine(workingpath, filename)
+                    filename = Path.Combine(workingpath, filename)
                     If Pref.FrodoEnabled Then actorpaths.Add(filename & ".jpg")
                     If Pref.EdenEnabled Then actorpaths.Add(filename & ".tbn")
                     Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
@@ -4277,7 +4278,7 @@ Partial Public Class Form1
 
             Dim artextn() As String = "*.jpg:*.tbn:*.png".Split(":")
             For Each arttype In artextn
-                For Each filepath In Directory.GetFiles(workingpath, arttype, SearchOption.TopDirectoryOnly)
+                For Each filepath In Directory.GetFiles(workingpath, arttype, IO.SearchOption.TopDirectoryOnly)
                     File.Delete(filepath)
                 Next
             Next
@@ -4361,7 +4362,7 @@ Partial Public Class Form1
                 If Pref.FrodoEnabled Then paths.Add(WorkingEpisode.NfoFilePath.Replace(".nfo", "-thumb.jpg"))
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
                 Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
-                If IO.File.Exists(tempstring2) Then
+                If File.Exists(tempstring2) Then
                     Dim seconds As Integer = Pref.ScrShtDelay
                     If Convert.ToInt32(TextBox35.Text) > 0 Then
                         seconds = Convert.ToInt32(TextBox35.Text)
@@ -4480,7 +4481,7 @@ Partial Public Class Form1
                     messbox.Show()
                     messbox.Refresh()
                     Application.DoEvents()
-                    Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(IO.Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
+                    Dim tempstring As String = WorkingEpisode.VideoFilePath.Replace(Path.GetExtension(WorkingEpisode.VideoFilePath), ".tbn")
                     Dim cachename As String = Utilities.Download2Cache(thumburl)
                     If cachename <> "" Then
                         If eden Then Utilities.SafeCopyFile(cachename, tempstring, True)
@@ -4952,7 +4953,7 @@ Partial Public Class Form1
         Dim status As Boolean = False
         If IsNothing(nofolder) Then
             For Each item In Pref.tvFolders
-                If Not IO.Directory.Exists(item) Then
+                If Not Directory.Exists(item) Then
                     remfolder.Add(item)
                 Else
                     Dim tvnfopath As String = item & "\tvshow.nfo"

@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Xml
@@ -32,7 +33,7 @@ Module Module1
     Dim newEpisodeList As New List(Of episodeinfo)
     'Dim defaultPoster As String = ""
     Dim visible As Boolean = True
-    Dim sw As StreamWriter
+    Dim sw As IO.StreamWriter
     Dim logfile As String = "mc_com.log"
     Dim logstr As New List(Of String)
     Dim WithEvents scraper As New BackgroundWorker
@@ -266,7 +267,7 @@ Module Module1
 
     Public Sub Writelogfile(ByVal log As List(Of String))
         Try
-            Using sw As New StreamWriter(logfile, true)
+            Using sw As New IO.StreamWriter(logfile, true)
                 For Each line In log
                     sw.WriteLine(line.TrimEnd)
                 Next
@@ -355,11 +356,11 @@ Module Module1
     End Sub
 
     Public Sub DoTvEpisodeOrMissingThumb()
-        If IO.File.Exists(Pref.workingProfile.tvcache) Then
+        If File.Exists(Pref.workingProfile.tvcache) Then
             ConsoleOrLog("Loading Tv cache")
             Call tvcacheLoad()
         End If
-        If IO.File.Exists(Pref.workingProfile.regexlist) Then util_RegexLoad()
+        If File.Exists(Pref.workingProfile.regexlist) Then util_RegexLoad()
         If Pref.tv_RegexScraper.Count = 0 Then Pref.util_RegexSetDefaultScraper()
         If Pref.tv_RegexRename.Count = 0 Then Pref.util_RegexSetDefaultRename()
 
@@ -429,9 +430,9 @@ Module Module1
                 End If
             Next
             If add = True Then
-                tvfolder = IO.Path.GetDirectoryName(tvfolder)
+                tvfolder = Path.GetDirectoryName(tvfolder)
                 tempstring = "" 'tvfolder
-                Dim hg As New IO.DirectoryInfo(tvfolder)
+                Dim hg As New DirectoryInfo(tvfolder)
                 If hg.Exists Then
                     newtvfolders.Add(tvfolder)
                     Try
@@ -462,7 +463,7 @@ Module Module1
         Dim mediacounter As Integer = newEpisodeList.Count
         For g = 0 To newtvfolders.Count - 1
             dirpath = newtvfolders(g)
-            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            Dim dir_info As New DirectoryInfo(dirpath)
             If (dir_info.FullName.EndsWith(".actors", CompareType)) Then Continue For
             findnewepisodes(dirpath)
             tempint = newEpisodeList.Count - mediacounter
@@ -512,8 +513,8 @@ Module Module1
                         newepisode.episodeno = M.Groups(2).Value.ToString
                         If newepisode.seasonno <> "-1" And newepisode.episodeno <> "-1" Then
                             Dim file As String = newepisode.episodepath
-                            Dim fileName As String = System.IO.Path.GetFileNameWithoutExtension(file)
-                            newepisode.filename = System.IO.Path.GetFileName(newepisode.mediaextension)
+                            Dim fileName As String = Path.GetFileNameWithoutExtension(file)
+                            newepisode.filename = Path.GetFileName(newepisode.mediaextension)
                             newepisode.filepath = newepisode.mediaextension.Replace(newepisode.filename, "")
                             ConsoleOrLog("Season and Episode information found for : " & fileName)
                         Else
@@ -1026,11 +1027,13 @@ Module Module1
             'doc.Save(writer)
             'writer.Close()
             'doc.AppendChild(root)
-            Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
+            
+            'Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
+            'output.Formatting = Formatting.Indented
 
-            doc.WriteTo(output)
-            output.Close()
+            'doc.WriteTo(output)
+            'output.Close()
+            WorkingWithNfoFiles.SaveXMLDoc(doc, path)
         Catch
         End Try
     End Sub
@@ -1086,21 +1089,21 @@ Module Module1
 
     End Sub
 
-    Private Sub findnewepisodes(ByVal path As String)
-        Dim dir_info As New System.IO.DirectoryInfo(path)
-        Dim fs_infos As List(Of System.IO.FileInfo) = dir_info.GetFiles().ToList
-        Dim filteredFiles As List(Of IO.FileInfo) = fs_infos.Where(AddressOf IsMediaExtension).ToList
-        For Each fs_info As System.IO.FileInfo In filteredFiles
+    Private Sub findnewepisodes(ByVal eppath As String)
+        Dim dir_info As New DirectoryInfo(eppath)
+        Dim fs_infos As List(Of FileInfo) = dir_info.GetFiles().ToList
+        Dim filteredFiles As List(Of FileInfo) = fs_infos.Where(AddressOf IsMediaExtension).ToList
+        For Each fs_info As FileInfo In filteredFiles
             Try
-                Dim filename As String = IO.Path.Combine(path, fs_info.Name)
-                Dim filename2 As String = filename.Replace(IO.Path.GetExtension(filename), ".nfo")
+                Dim filename As String = Path.Combine(eppath, fs_info.Name)
+                Dim filename2 As String = filename.Replace(Path.GetExtension(filename), ".nfo")
 
-                If Not IO.File.Exists(filename2) Then
+                If Not File.Exists(filename2) Then
                     Dim add As Boolean = True
                     If fs_info.Extension = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
                         Dim name As String = filename2
-                        name = name.Replace(IO.Path.GetFileName(name), "VIDEO_TS.IFO")
-                        If IO.File.Exists(name) Then
+                        name = name.Replace(Path.GetFileName(name), "VIDEO_TS.IFO")
+                        If File.Exists(name) Then
                             add = False
                         End If
                     End If
@@ -1108,9 +1111,9 @@ Module Module1
                         Dim tempmovie As String = String.Empty
                         Dim tempint2 As Integer
                         Dim tempmovie2 As String = fs_info.FullName
-                        If IO.Path.GetExtension(tempmovie2).ToLower = ".rar" Then
-                            If IO.File.Exists(tempmovie2) = True Then
-                                If IO.File.Exists(tempmovie) = False Then
+                        If Path.GetExtension(tempmovie2).ToLower = ".rar" Then
+                            If File.Exists(tempmovie2) = True Then
+                                If File.Exists(tempmovie) = False Then
                                     Dim rarname As String = tempmovie2
                                     Dim SizeOfFile As Integer
                                     tempint2 = Convert.ToInt32(Pref.rarsize) * 1048576
@@ -1125,7 +1128,7 @@ Module Module1
                                                 rarname = tempmovie.Replace(".nfo", ".rar")
                                                 If rarname.ToLower.IndexOf(".part1.rar") <> -1 Then
                                                     rarname = rarname.Replace(".part1.rar", ".nfo")
-                                                    If IO.File.Exists(rarname) Then
+                                                    If File.Exists(rarname) Then
                                                         'stackrarexists = True
                                                         tempmovie = rarname
                                                     Else
@@ -1135,7 +1138,7 @@ Module Module1
                                                 End If
                                                 If rarname.ToLower.IndexOf(".part01.rar") <> -1 Then
                                                     rarname = rarname.Replace(".part01.rar", ".nfo")
-                                                    If IO.File.Exists(rarname) Then
+                                                    If File.Exists(rarname) Then
                                                         'stackrarexists = True
                                                         tempmovie = rarname
                                                     Else
@@ -1145,7 +1148,7 @@ Module Module1
                                                 End If
                                                 If rarname.ToLower.IndexOf(".part001.rar") <> -1 Then
                                                     rarname = rarname.Replace(".part001.rar", ".nfo")
-                                                    If IO.File.Exists(rarname) Then
+                                                    If File.Exists(rarname) Then
                                                         tempmovie = rarname
                                                         'stackrarexists = True
                                                     Else
@@ -1155,7 +1158,7 @@ Module Module1
                                                 End If
                                                 If rarname.ToLower.IndexOf(".part0001.rar") <> -1 Then
                                                     rarname = rarname.Replace(".part0001.rar", ".nfo")
-                                                    If IO.File.Exists(rarname) Then
+                                                    If File.Exists(rarname) Then
                                                         tempmovie = rarname
                                                         'stackrarexists = True
                                                     Else
@@ -1178,7 +1181,7 @@ Module Module1
                         Dim newep As New episodeinfo
                         newep.episodepath = filename2
                         newep.mediaextension = filename
-                        newep.extension = IO.Path.GetExtension(filename)
+                        newep.extension = Path.GetExtension(filename)
                         newEpisodeList.Add(newep)
                     End If
                 End If
@@ -1188,11 +1191,11 @@ Module Module1
         fs_infos = Nothing
     End Sub
 
-    Private Sub DlEpThumb(ByVal thisep As episodeinfo, ByVal path As String)
+    Private Sub DlEpThumb(ByVal thisep As episodeinfo, ByVal eppath As String)
         Dim aok As Boolean = False
         Dim paths As New List(Of String)
-        If Pref.EdenEnabled  Then   paths.Add(path.Replace(IO.Path.GetExtension(path), ".tbn"))
-        If Pref.FrodoEnabled Then   paths.Add(path.Replace(IO.Path.GetExtension(path), "-thumb.jpg"))
+        If Pref.EdenEnabled  Then   paths.Add(eppath.Replace(Path.GetExtension(eppath), ".tbn"))
+        If Pref.FrodoEnabled Then   paths.Add(eppath.Replace(Path.GetExtension(eppath), "-thumb.jpg"))
         Dim url As String = thisep.thumb
         If Not url = Nothing AndAlso url <> "http://www.thetvdb.com/banners/" Then
             aok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, 0, 0, True)
@@ -1270,10 +1273,10 @@ Module Module1
                     ElseIf eden Then
                         seasonXXposterpath = realshowpath & "season" & tempstring & ".tbn"
                     End If
-                    If Not IO.File.Exists(seasonXXposterpath) Then
+                    If Not File.Exists(seasonXXposterpath) Then
                         Utilities.DownloadFile(seasonXXposter, seasonXXposterpath)
                     End If
-                    If IO.File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
+                    If File.Exists(seasonXXposterpath) And frodo And eden And isposter = "poster" Then
                         Utilities.SafeCopyFile(seasonXXposterpath, seasonXXposterpath.Replace("-poster.jpg", ".tbn"), overwriteimage)
                     End If
                     If Pref.seasonfolderjpg AndAlso thisep.filepath.Replace(realshowpath, "") <> "" Then
@@ -1311,10 +1314,10 @@ Module Module1
                     ElseIf eden Then
                         seasonXXbannerpath = realshowpath & "season" & tempstring & ".tbn"
                     End If
-                    If Not IO.File.Exists(seasonXXbannerpath) Then
+                    If Not File.Exists(seasonXXbannerpath) Then
                         Utilities.DownloadFile(seasonXXbanner, seasonXXbannerpath)
                     End If
-                    If IO.File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
+                    If File.Exists(seasonXXbannerpath) And frodo And eden And isposter = "banner" Then
                         Utilities.SafeCopyFile(seasonXXbannerpath, seasonXXbannerpath.Replace("-banner.jpg", ".tbn"), overwriteimage)
                     End If
                 End If
@@ -1374,7 +1377,7 @@ Module Module1
                     Dim newtvshow As New basictvshownfo
                     If (thisresult.Attributes.Count > 0) Then
                         newtvshow.fullpath = thisresult.Attributes(0).Value
-                        If IO.File.Exists(newtvshow.fullpath) Then
+                        If File.Exists(newtvshow.fullpath) Then
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
@@ -1447,7 +1450,10 @@ Module Module1
             'fill in blanks
             Dim tvshowdata As New XmlDocument
             If String.IsNullOrEmpty(show.language) Then      'if user still on old tvcache, fill in blanks from tvshow's nfo.
-                tvshowdata.Load(show.fullpath)
+                Using tmpstrm As IO.StreamReader = File.OpenText(show.fullpath)
+                    tvshowdata.Load(tmpstrm)
+                End Using
+                
                 For Each thisresult In tvshowdata("tvshow")
                     Select Case thisresult.Name
                         Case "sortorder"
@@ -1475,8 +1481,8 @@ Module Module1
 
     Private Sub tvcacheSave()
         Dim fullpath As String = Pref.workingProfile.tvcache
-        If IO.File.Exists(fullpath) Then
-            IO.File.Delete(fullpath)
+        If File.Exists(fullpath) Then
+            File.Delete(fullpath)
         End If
         Dim document As New XmlDocument
         Dim root As XmlElement
@@ -1563,7 +1569,7 @@ Module Module1
         Pref.tv_RegexScraper.Clear()
         Pref.tv_RegexRename.Clear()
         Dim path As String = tempstring
-        If IO.File.Exists(path) Then
+        If File.Exists(path) Then
             Try
                 Dim regexlist As New XmlDocument
                 regexlist.Load(path)
@@ -1584,25 +1590,25 @@ Module Module1
         End If
     End Sub
 
-    Public Function getfilename(ByVal path As String)
+    Public Function getfilename(ByVal eppath As String)
         'todo getfilename
         Dim monitorobject As New Object
         Monitor.Enter(monitorobject)
         Try
             Dim tempstring As String
-            Dim tempfilename As String = path
+            Dim tempfilename As String = eppath
             Dim actualpathandfilename As String = ""
 
-            If String.IsNullOrEmpty(path) Then Return Nothing
+            If String.IsNullOrEmpty(eppath) Then Return Nothing
 
-            If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
-                actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
+            If File.Exists(tempfilename.Replace(Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
+                actualpathandfilename = tempfilename.Replace(Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
             End If
 
             If actualpathandfilename = "" Then
                 For Each extn In MediaFileExtensions
-                    tempfilename = tempfilename.Replace(IO.Path.GetExtension(tempfilename), extn)
-                    If IO.File.Exists(tempfilename) Then
+                    tempfilename = tempfilename.Replace(Path.GetExtension(tempfilename), extn)
+                    If File.Exists(tempfilename) Then
                         actualpathandfilename = tempfilename
                         Exit For
                     End If
@@ -1614,12 +1620,12 @@ Module Module1
                     Dim possiblemovies(1000) As String
                     Dim possiblemoviescount As Integer = 0
                     For Each extn In MediaFileExtensions
-                        Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
-                        Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+                        Dim dirpath As String = tempfilename.Replace(Path.GetFileName(tempfilename), "")
+                        Dim dir_info As New DirectoryInfo(dirpath)
                         Dim pattern As String = "*" & extn
-                        Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles(pattern)
-                        For Each fs_info As System.IO.FileInfo In fs_infos
-                            If IO.File.Exists(fs_info.FullName) Then
+                        Dim fs_infos() As FileInfo = dir_info.GetFiles(pattern)
+                        For Each fs_info As FileInfo In fs_infos
+                            If File.Exists(fs_info.FullName) Then
                                 tempstring = fs_info.FullName.ToLower
                                 If tempstring.IndexOf("-trailer") = -1 And tempstring.IndexOf("-sample") = -1 And tempstring.IndexOf(".trailer") = -1 And tempstring.IndexOf(".sample") = -1 Then
                                     possiblemoviescount += 1
@@ -1674,9 +1680,9 @@ Module Module1
 
     Public Function get_hdtags(ByVal filename As String)
         Try
-            If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
-                Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
-                If IO.File.Exists(temppath) Then
+            If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
+                Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
+                If File.Exists(temppath) Then
                     filename = temppath
                 End If
             End If
@@ -1778,7 +1784,7 @@ Module Module1
         Next
     End Sub
 
-    Private Function IsMediaExtension(ByVal fileinfo As System.IO.FileInfo) As Boolean
+    Private Function IsMediaExtension(ByVal fileinfo As FileInfo) As Boolean
         Dim extension As String = fileinfo.Extension
         Return MediaFileExtensions.Contains(extension.ToLower)
     End Function

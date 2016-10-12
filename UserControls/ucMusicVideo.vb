@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
@@ -140,7 +141,7 @@ Public Class ucMusicVideo
 #Region " Music Video Cache Routines"
     Public Sub MVCacheSave()
         Dim fullpath As String = Pref.workingProfile.MusicVideoCache
-        If IO.File.Exists(fullpath) Then 
+        If File.Exists(fullpath) Then 
             Dim aok As Boolean = Utilities.SafeDeleteFile(fullpath)
             If Not aok Then
                 MsgBox(" Error Overwriting existing MusicVideo Cache! ")
@@ -303,7 +304,7 @@ Public Class ucMusicVideo
         Try
             If Clipboard.GetDataObject.GetDataPresent(DataFormats.Filedrop) Then
                 Dim pth As String = CType(Clipboard.GetData(DataFormats.FileDrop), Array).GetValue(0).ToString
-                Dim FInfo As IO.FileInfo = New IO.FileInfo(pth)
+                Dim FInfo As FileInfo = New FileInfo(pth)
                 If FInfo.Extension.ToLower() = ".jpg" Or FInfo.Extension.ToLower() = ".tbn" Or FInfo.Extension.ToLower() = ".bmp" Or FInfo.Extension.ToLower() = ".png" Then
                     Form1.util_ImageLoad(picBox, pth, Utilities.DefaultPosterPath)
                     Return True
@@ -357,7 +358,7 @@ Public Class ucMusicVideo
                 Dim isroot As Boolean = Pref.GetRootFolderCheck(workingMusicVideo.fileinfo.fullpathandfilename)
                 Dim tempstring = ""
                 If Pref.usefoldernames = False OrElse isroot Then
-                    tempstring = Utilities.RemoveFilenameExtension(IO.Path.GetFileName(workingMusicVideo.fileinfo.fullpathandfilename))
+                    tempstring = Utilities.RemoveFilenameExtension(Path.GetFileName(workingMusicVideo.fileinfo.fullpathandfilename))
                 Else
                     tempstring = Utilities.GetLastFolder(workingMusicVideo.fileinfo.fullpathandfilename)
                 End If
@@ -459,7 +460,7 @@ Public Class ucMusicVideo
 
     Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = IO.File.OpenText(fullPathandFilename)
+        Dim filechck As IO.StreamReader = File.OpenText(fullPathandFilename)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
         If tempstring = Nothing Then
@@ -565,7 +566,7 @@ Public Class ucMusicVideo
                 Dim video_flags = Form1.VidMediaFlags(workingMusicVideo.filedetails)
                 movieGraphicInfo.OverlayInfo(PcBxMusicVideoScreenShot, "", video_flags)
                 
-                If IO.File.Exists(workingMusicVideo.fileinfo.posterpath) Then
+                If File.Exists(workingMusicVideo.fileinfo.posterpath) Then
                     Form1.util_ImageLoad(PcBxPoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
                     Form1.util_ImageLoad(pcBxSinglePoster, workingMusicVideo.fileinfo.posterpath, Utilities.DefaultFanartPath)
                     Label19.Text = pcBxSinglePoster.Image.Width
@@ -679,7 +680,7 @@ Public Class ucMusicVideo
             If IsNumeric(txtScreenshotTime.Text) Then
                 Dim path As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(".nfo", "-fanart.jpg")
                 Dim tempstring2 As String = workingMusicVideo.fileinfo.filenameandpath
-                If IO.File.Exists(tempstring2) Then
+                If File.Exists(tempstring2) Then
                     Dim seconds = Convert.ToInt32(txtScreenshotTime.Text)
                     System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
                     Application.DoEvents()
@@ -846,9 +847,14 @@ Public Class ucMusicVideo
                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                     t.startposition = formstartposition.manual
                 end if
-                t.img = New Bitmap(pcBxScreenshot.Tag.ToString)
+                Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                Using r As IO.Filestream = File.Open(pcBxScreenshot.Tag.ToString, IO.FileMode.Open)
+                    r.CopyTo(ms)
+                End Using
+                t.img = New Bitmap(ms)
                 t.cropmode = "fanart"
                 t.title = workingMusicVideo.fullmoviebody.title 
+                ms.Dispose()
                 t.Setup()
                 t.ShowDialog()
                 If Not IsNothing(t.newimg) Then
@@ -871,7 +877,7 @@ Public Class ucMusicVideo
 
     Private Sub btnSaveCrop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveCrop.Click
         Dim bitmap3 As New Bitmap(pcBxScreenshot.Image)
-        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-fanart.jpg")
+        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-fanart.jpg")
         bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
         bitmap3.Dispose()
         btnCropReset.Enabled = False
@@ -952,9 +958,14 @@ Public Class ucMusicVideo
                     t.bounds = screen.allscreens(form1.currentscreen).bounds
                     t.startposition = formstartposition.manual
                 end if
-                t.img = New Bitmap(pcBxSinglePoster.Tag.ToString)
+                Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                Using r As IO.Filestream = File.Open(pcBxSinglePoster.Tag.ToString, IO.FileMode.Open)
+                    r.CopyTo(ms)
+                End Using
+                t.img = New Bitmap(ms)
                 t.cropmode = "poster"
                 t.title = workingMusicVideo.fullmoviebody.title 
+                ms.Dispose()
                 t.Setup()
                 t.ShowDialog()
                 If Not IsNothing(t.newimg) Then
@@ -976,7 +987,7 @@ Public Class ucMusicVideo
 
     Private Sub btnPosterSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPosterSave.Click
         Dim bitmap3 As New Bitmap(pcBxSinglePoster.Image)
-        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(IO.Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
+        Dim thumbpathandfilename As String = workingMusicVideo.fileinfo.fullpathandfilename.Replace(Path.GetExtension(workingMusicVideo.fileinfo.fullpathandfilename), "-poster.jpg")
         bitmap3.Save(thumbpathandfilename, System.Drawing.Imaging.ImageFormat.Jpeg)
         bitmap3.Dispose()
         btnCropReset.Enabled = False
@@ -1130,7 +1141,7 @@ Public Class ucMusicVideo
             If exists = True Then
                 MsgBox("        Folder Already Exists")
             Else
-                Dim f As New IO.DirectoryInfo(tempstring)
+                Dim f As New DirectoryInfo(tempstring)
                 If f.Exists Then
                     AuthorizeCheck = True
                     clbxMvFolders.Items.Add(tempstring, True)
@@ -1300,7 +1311,7 @@ Public Class ucMusicVideo
             If exists = True Then
                 MsgBox("        Folder Already Exists")
             Else
-                Dim f As New IO.DirectoryInfo(tempstring)
+                Dim f As New DirectoryInfo(tempstring)
                 If f.Exists Then
                     AuthorizeCheck = True
                     clbxMVConcertFolder.Items.Add(tempstring, True)

@@ -1,6 +1,6 @@
 ﻿'Imports System.Threading
 Imports System.Net
-Imports System.IO
+'Imports System.IO
 'Imports System.Data
 'Imports System.Text.RegularExpressions
 
@@ -23,9 +23,9 @@ Public Class getimpaposters
         ReDim apple2(10000)
         Dim wrGETURL2 As WebRequest = WebRequest.Create(fanarturl)
         wrGETURL2.Proxy = MCProxy 
-        Dim objStream2 As Stream
+        Dim objStream2 As IO.Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-        Dim objReader2 As New StreamReader(objStream2)
+        Dim objReader2 As New IO.StreamReader(objStream2)
         Dim sLine2 As String = ""
         fanartlinecount = 0
 
@@ -60,9 +60,9 @@ Public Class getimpaposters
             Dim wrGETURL4 As WebRequest = WebRequest.Create(fanarturl)
             wrGETURL4.Proxy = MCProxy
             
-            Dim objStream4 As Stream
+            Dim objStream4 As IO.Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-            Dim objReader4 As New StreamReader(objStream4)
+            Dim objReader4 As New IO.StreamReader(objStream4)
             Dim sLine4 As String = ""
             fanartlinecount = 0
 
@@ -96,9 +96,9 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL As WebRequest = WebRequest.Create(fanarturl)
             wrGETURL.Proxy = MCProxy 
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = -1
             Dim vertest As Boolean = False
@@ -191,9 +191,9 @@ Public Class getimpaposters
         ReDim apple2(10000)
         Dim wrGETURL2 As WebRequest = WebRequest.Create(url)
         wrGETURL2.Proxy = MCProxy 
-        Dim objStream2 As Stream
+        Dim objStream2 As IO.Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-        Dim objReader2 As New StreamReader(objStream2)
+        Dim objReader2 As New IO.StreamReader(objStream2)
         Dim sLine2 As String = ""
         fanartlinecount = 0
 
@@ -227,9 +227,9 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL4 As WebRequest = WebRequest.Create(url)
             wrGETURL4.Proxy = MCProxy 
-            Dim objStream4 As Stream
+            Dim objStream4 As IO.Stream
             objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-            Dim objReader4 As New StreamReader(objStream4)
+            Dim objReader4 As New IO.StreamReader(objStream4)
             Dim sLine4 As String = ""
             fanartlinecount = 0
 
@@ -263,9 +263,9 @@ Public Class getimpaposters
             fanartlinecount = 0
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = -1
             Dim vertest As Boolean = False
@@ -332,9 +332,9 @@ Public Class getimpaposters
         Try
             Dim wrGETURL As WebRequest = WebRequest.Create(url)
             wrGETURL.Proxy = MCProxy 
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
+            Dim objReader As New IO.StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
             Dim sLine As String = ""
 
             If method = False Then

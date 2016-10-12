@@ -1,4 +1,5 @@
 ﻿Imports ProtoXML
+Imports Alphaleonis.Win32.Filesystem
 Imports Media_Companion
 'Imports MediaInfoNET
 
@@ -23,7 +24,7 @@ Public Class TvEpisode
                 If Not IsMissing Then
                     If String.IsNullOrEmpty(EpExtn.Value) Then
                         For Each Item As String In Utilities.VideoExtensions
-                            If IO.File.Exists(_PureName & Item) Then
+                            If File.Exists(_PureName & Item) Then
                                 _VideoFilePath = _PureName & Item
                                 EpExtn.value = Item
                                 Me.MediaExtension = Item
@@ -35,7 +36,7 @@ Public Class TvEpisode
                     End If
                 End If
             Else
-                'If IO.File.Exists(_PureName & Me.MediaExtension) Then
+                'If File.Exists(_PureName & Me.MediaExtension) Then
                 _VideoFilePath = _PureName & Me.MediaExtension
                 'End If
             End If
@@ -52,7 +53,7 @@ Public Class TvEpisode
             Return MyBase.NfoFilePath
         End Get
         Set(ByVal value As String)
-            Me.PureName = value.Replace(IO.Path.GetExtension(value), "")
+            Me.PureName = value.Replace(Path.GetExtension(value), "")
             MyBase.NfoFilePath = value
         End Set
     End Property
@@ -63,7 +64,7 @@ Public Class TvEpisode
             Return _VideoFilePath
         End Get
         Set(ByVal value As String)
-            Me.MediaExtension = IO.Path.GetExtension(value)
+            Me.MediaExtension = Path.GetExtension(value)
             Me.PureName = value.Replace(Me.MediaExtension, "")
             _VideoFilePath = value
         End Set
@@ -119,7 +120,7 @@ Public Class TvEpisode
     Public Property EpBookmark As New ProtoProperty(Me, "epbookmark")
 
 
-    Public Property Details As New FileInfo(Me, "fileinfo")
+    Public Property Details As New FileStrmInfo(Me, "fileinfo")
 
     Public Property ListActors As New ActorList(Me, "actor")
     Public Property Source As New ProtoProperty(Me, "videosource")

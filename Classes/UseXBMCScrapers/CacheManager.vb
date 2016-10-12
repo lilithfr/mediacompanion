@@ -14,7 +14,8 @@
 ' You should have received a copy of the GNU General Public License
 ' along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Linq
 
@@ -79,7 +80,7 @@ Public Class CacheManager
    Public Sub RefreshDiskCache()
       mCachedFiles.Clear()
 
-      For Each s In Directory.GetFiles(mCacheDirectory, "*.*", SearchOption.AllDirectories)
+      For Each s In Directory.GetFiles(mCacheDirectory, "*.*", IO.SearchOption.AllDirectories)
          mCachedFiles.Add(Path.GetFileName(s))
       Next
    End Sub
@@ -126,8 +127,8 @@ Public Class CacheManager
                 TMDBRequest.ContentType = "application/json"
                 TMDBRequest.Credentials = CredentialCache.DefaultCredentials
                 Dim TMDBResponse As HttpWebResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
-                Dim dataStream As Stream = TMDBResponse.GetResponseStream()
-                Dim reader As New StreamReader(dataStream)
+                Dim dataStream As IO.Stream = TMDBResponse.GetResponseStream()
+                Dim reader As New IO.StreamReader(dataStream)
                 contents = reader.ReadToEnd()
                 reader.Close()
                 dataStream.Close()
@@ -143,7 +144,7 @@ Public Class CacheManager
                File.Delete(fullFilename)
             End If
 
-            Using sw As StreamWriter = New StreamWriter(fullFilename)
+            Using sw As IO.StreamWriter = New IO.StreamWriter(fullFilename)
                sw.Write(contents)
             End Using
 
@@ -155,7 +156,7 @@ Public Class CacheManager
       ElseIf (Not mFilesLoaded.Keys.Contains(filename)) Then
          Trace.WriteLine("Cache manager (" + filename + "), reading from disk.")
 
-         Using sr As New StreamReader(fullFilename)
+         Using sr As New IO.StreamReader(fullFilename)
             mFilesLoaded(filename) = sr.ReadToEnd()
          End Using
 

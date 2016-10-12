@@ -1,7 +1,8 @@
 ﻿Imports System.ComponentModel
 Imports System.Runtime.InteropServices
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports System.Xml
@@ -49,7 +50,7 @@ Public Class frmPreferences
             If Changes Then
                 Dim tempint As Integer = MessageBox.Show("You appear to have made changes to your preferences," & vbCrLf & "Do wish to save the changes", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 If tempint = DialogResult.Yes Then
-                    'If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
+                    'If Pref.videomode = 4 AndAlso Not File.Exists(Pref.selectedvideoplayer) Then
                     '    MsgBox("You Have Not Selected Your Preferred Media Player")
                     '    e.Cancel = True
                     '    Exit Sub
@@ -124,7 +125,7 @@ Public Class frmPreferences
 #End Region 'Form Events
 
     Private Function SaveSettings() As Boolean
-        If Pref.videomode = 4 AndAlso Not IO.File.Exists(Pref.selectedvideoplayer) Then
+        If Pref.videomode = 4 AndAlso Not File.Exists(Pref.selectedvideoplayer) Then
             MsgBox("You Have Not Selected Your Preferred Media Player")
             Return False
         End If
@@ -145,7 +146,7 @@ Public Class frmPreferences
 
         If XbmcTMDbScraperChanged Then XBMCTMDBConfigSave()
         If XbmcTvdbScraperChanged Then XBMCTVDBConfigSave()
-        mScraperManager = New ScraperManager(IO.Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
+        mScraperManager = New ScraperManager(Path.Combine(My.Application.Info.DirectoryPath, "Assets\scrapers"))
         cleanfilenameprefchanged = False
         videosourceprefchanged = False
         XbmcTMDbScraperChanged = False

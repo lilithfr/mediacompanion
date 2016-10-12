@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Text
 Imports Media_Companion.WorkingWithNfoFiles

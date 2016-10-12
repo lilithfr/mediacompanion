@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
 Imports System.Linq
 
@@ -125,7 +126,7 @@ Public Class frmMovieAltFanart
 
     Private Sub moviefanart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
-            Dim exists As Boolean = System.IO.File.Exists(fanartpath)
+            Dim exists As Boolean = File.Exists(fanartpath)
             If exists = True Then
                 mainfanart = New PictureBox
                 With mainfanart
@@ -137,9 +138,14 @@ Public Class frmMovieAltFanart
                     .BorderStyle = BorderStyle.Fixed3D
                 End With
                 mainfanart.Visible = True
-                Dim OriginalImage As New Bitmap(fanartpath)
+                Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                Using r As IO.Filestream = File.Open(fanartpath, IO.FileMode.Open)
+                    r.CopyTo(ms)
+                End Using
+                Dim OriginalImage As New Bitmap(ms)
                 Dim Image2 As New Bitmap(OriginalImage)
                 mainfanart.Image = Image2
+                ms.Dispose()
                 OriginalImage.Dispose()
                 Me.Panel1.Controls.Add(mainfanart)
                 Label2.Visible = False
@@ -332,7 +338,7 @@ Public Class frmMovieAltFanart
                     'Next
                     Movie.SaveFanartImageToCacheAndPaths(tempstring2, paths)
                  '  If Utilities.DownloadImage(tempstring2, fanartpath, True, Pref.resizefanart) Then
-                    If IO.File.Exists(fanartpath) Then 'Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
+                    If File.Exists(fanartpath) Then 'Movie.SaveFanartImageToCacheAndPath(tempstring2, fanartpath) Then
 
                         'mainfanart = New PictureBox
                         'Dim OriginalImage As New Bitmap(fanartpath)
@@ -389,7 +395,7 @@ Public Class frmMovieAltFanart
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
         Try
             'browse pc
-            openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
+            openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
             openFD.Title = "Select a jpeg image File"
             openFD.FileName = ""
             openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"

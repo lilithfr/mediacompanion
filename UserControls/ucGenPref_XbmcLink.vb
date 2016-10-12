@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class ucGenPref_XbmcLink
 
@@ -38,13 +39,13 @@ Public Class ucGenPref_XbmcLink
         ofd.Description         = "Locate 'XBMC\userdata' folder"
         ofd.ShowNewFolderButton = False
 
-        If IO.Directory.Exists(tbXBMC_UserdataFolder.Text) Then
+        If Directory.Exists(tbXBMC_UserdataFolder.Text) Then
             ofd.SelectedPath = tbXBMC_UserdataFolder.Text
         Else
             ofd.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
 
-            If IO.Directory.Exists(IO.Path.Combine(ofd.SelectedPath,"XBMC\userdata")) Then
-                ofd.SelectedPath = IO.Path.Combine(ofd.SelectedPath,"XBMC\userdata")
+            If Directory.Exists(Path.Combine(ofd.SelectedPath,"XBMC\userdata")) Then
+                ofd.SelectedPath = Path.Combine(ofd.SelectedPath,"XBMC\userdata")
             End If
         End If
 

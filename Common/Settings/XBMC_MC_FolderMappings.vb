@@ -2,7 +2,8 @@
 Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.Linq
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Runtime.CompilerServices
 
 Public Module LinkExt

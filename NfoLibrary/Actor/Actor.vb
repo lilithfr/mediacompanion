@@ -1,4 +1,5 @@
 ﻿Imports ProtoXML
+Imports Alphaleonis.Win32.Filesystem
 Imports Media_Companion
 Imports Media_Companion.Tasks
 
@@ -74,6 +75,6 @@ Public Class Actor
     End Function
 
     Public Sub DownloadThumb()
-        Common.Tasks.Add(New DownloadFileTask(Me.Thumb.Value, IO.Path.Combine(Me.FolderPath, ".actor\" & Me.actorname.Replace(" ", "_"))))
+        Common.Tasks.Add(New DownloadFileTask(Me.Thumb.Value, Path.Combine(Me.FolderPath, ".actor\" & Me.actorname.Replace(" ", "_"))))
     End Sub
 End Class

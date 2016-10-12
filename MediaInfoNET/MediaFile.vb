@@ -18,12 +18,12 @@
 'MA 02110-1301, USA.
 '==============================================================================
 
-Imports System.IO
+'Imports System.IO
 Imports System.Collections
 Imports System.Text.RegularExpressions
 
 Public Class MediaFile
-    Inherits File
+    Inherits MediaInfoFile
     Public Description As String = ""
     Public Info_Text As String = ""
     Public Info_HTML As String = ""

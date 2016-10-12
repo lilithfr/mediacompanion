@@ -1,6 +1,7 @@
 ﻿Imports System.Security.Cryptography
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.IO.Compression
 Imports System.Text
 Imports System
@@ -14,7 +15,7 @@ Public Class DownloadCache
         Dim Buffer As Byte() = Utilities.ComputeHashValueToByte(URL)
 
         Dim Extention As String = URL.Split("?")(0)
-        Extention = IO.Path.GetExtension(Extention)
+        Extention = Path.GetExtension(Extention)
 
         Dim Result As String = ""
         For Each Item As Byte In Buffer
@@ -24,21 +25,21 @@ Public Class DownloadCache
         Return Result & Extention
     End Function
 
-    Public Shared Function SaveImageToCacheAndPath(ByVal URL As String, Path As String, Optional ByVal ForceDownload As Boolean = False, _
+    Public Shared Function SaveImageToCacheAndPath(ByVal URL As String, SavePath As String, Optional ByVal ForceDownload As Boolean = False, _
                                            Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0, _
                                            Optional ByVal Overwrite As Boolean = True) As Boolean
         Dim CacheFileName As String = ""
-        If Not SaveImageToCache(URL, Path, ForceDownload, CacheFileName) Then Return False
+        If Not SaveImageToCache(URL, SavePath, ForceDownload, CacheFileName) Then Return False
 
-        Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
+        Dim CachePath = Path.Combine(CacheFolder, CacheFileName)
 
         If IfNotValidImage_Delete(CachePath) Then
 
             'Resize cache image only if need to
             If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
-            Utilities.EnsureFolderExists(Path)
-            File.Copy(CachePath, Path, Overwrite)
+            Utilities.EnsureFolderExists(SavePath)
+            File.Copy(CachePath, SavePath, Overwrite)
         Else
             Return False
         End If
@@ -57,7 +58,7 @@ Public Class DownloadCache
         Dim CacheFileName = ""
         If Not SaveImageToCache(URL, verifiedPaths(0), ForceDownload, CacheFileName) Then Return False
 
-        Dim CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
+        Dim CachePath = Path.Combine(CacheFolder, CacheFileName)
 
         If IfNotValidImage_Delete(CachePath) Then
 
@@ -78,8 +79,13 @@ Public Class DownloadCache
     Public Shared Function IfNotValidImage_Delete(filename As String) As Boolean
         Dim ok As Boolean = True
         Try
-            Dim testImage = new Drawing.Bitmap(filename)
+            Dim ms As IO.MemoryStream = New IO.MemoryStream()
+            Using r As IO.Filestream = File.Open(filename, IO.FileMode.Open)
+                r.CopyTo(ms)
+            End Using
+            Dim testImage = new Drawing.Bitmap(ms)
             testImage.Dispose()
+            ms.Dispose()
         Catch ex As Exception
             Try
                 File.Delete(filename)
@@ -116,21 +122,21 @@ Public Class DownloadCache
         End Try
     End Sub
 
-    Public Shared Function DownloadFileAndCache(ByVal URL As String, Optional ByVal Path As String = "", _
+    Public Shared Function DownloadFileAndCache(ByVal URL As String, Optional ByVal SavePath As String = "", _
                                           Optional ByVal ForceDownload As Boolean = False, _
                                           Optional ByVal resizeFanart As Integer = 0, _
                                           Optional ByVal retcachename As Boolean = False, _
                                           Optional ByRef strValue As String = "") As Boolean
 
         Dim CacheFileName As String = ""
-        Dim returnCode As Boolean = SaveImageToCache(URL, Path, ForceDownload, CacheFileName)
+        Dim returnCode As Boolean = SaveImageToCache(URL, SavePath, ForceDownload, CacheFileName)
         If returnCode Then
-            Dim CachePath As String = IO.Path.Combine(CacheFolder, CacheFileName)
-            If String.IsNullOrEmpty(Path) Then
-                strValue = IO.File.ReadAllText(CachePath)
+            Dim CachePath As String = Path.Combine(CacheFolder, CacheFileName)
+            If String.IsNullOrEmpty(SavePath) Then
+                strValue = File.ReadAllText(CachePath)
             Else
                 If Not retcachename Then
-                    Utilities.copyImage(CachePath, Path, resizeFanart)
+                    Utilities.copyImage(CachePath, SavePath, resizeFanart)
                 Else
                     strValue = CachePath 
                 End If
@@ -140,7 +146,7 @@ Public Class DownloadCache
         Return returncode
     End Function
 
-    Public Shared Function SaveImageToCache(ByVal URL As String, ByVal Path As String, ByVal ForceDownload As Boolean, ByRef CacheFileName As String) As Boolean
+    Public Shared Function SaveImageToCache(ByVal URL As String, ByVal SavePath As String, ByVal ForceDownload As Boolean, ByRef CacheFileName As String) As Boolean
         Dim returnCode As Boolean = True
         Dim CachePath As String = ""
         Try
@@ -148,7 +154,7 @@ Public Class DownloadCache
 
             If URL = "" Then Return False
             CacheFileName = GetCacheFileName(URL)
-            CachePath = IO.Path.Combine(CacheFolder, CacheFileName)
+            CachePath = Path.Combine(CacheFolder, CacheFileName)
 
             If Not File.Exists(CachePath) OrElse ForceDownload Then
 
@@ -171,14 +177,14 @@ Public Class DownloadCache
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
 
                     Using webResp As HttpWebResponse = webReq.GetResponse()
-                        Using responseStreamData As Stream = webResp.GetResponseStream()
+                        Using responseStreamData As IO.Stream = webResp.GetResponseStream()
                             'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
-                            If String.IsNullOrEmpty(Path) Then
-                                IO.File.WriteAllText(CachePath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
+                            If String.IsNullOrEmpty(SavePath) Then
+                                File.WriteAllText(CachePath, New IO.StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                             Else
                                 Utilities.SafeDeleteFile(CachePath)
 
-                                Using fileStream As New FileStream(CachePath, FileMode.OpenOrCreate, FileAccess.Write)
+                                Using fileStream As IO.FileStream = File.Open(CachePath, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
                                     Dim buffer(webResp.ContentLength) As Byte
                                     Dim bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
                                     While bytesRead > 0
@@ -196,8 +202,8 @@ Public Class DownloadCache
                 Catch ex As WebException
                     If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
                     Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
-                        Using errorRespStream As Stream = errorResp.GetResponseStream()
-                            Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+                        Using errorRespStream As IO.Stream = errorResp.GetResponseStream()
+                            Dim errorText As String = New IO.StreamReader(errorRespStream).ReadToEnd()
 
                             'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
                             returnCode = False
@@ -230,15 +236,15 @@ Public Class DownloadCache
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
                     Using webResp As HttpWebResponse = webReq.GetResponse()
-                        Using responseStreamData As Stream = webResp.GetResponseStream()
-                            IO.File.WriteAllText(Fullpath, New StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
+                        Using responseStreamData As IO.Stream = webResp.GetResponseStream()
+                            File.WriteAllText(Fullpath, New IO.StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                         End Using
                     End Using
                 Catch ex As WebException
                     If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
                     Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
-                        Using errorRespStream As Stream = errorResp.GetResponseStream()
-                            Dim errorText As String = New StreamReader(errorRespStream).ReadToEnd()
+                        Using errorRespStream As IO.Stream = errorResp.GetResponseStream()
+                            Dim errorText As String = New IO.StreamReader(errorRespStream).ReadToEnd()
                             returnCode = False
                         End Using
                     End Using

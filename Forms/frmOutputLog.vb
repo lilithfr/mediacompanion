@@ -1,4 +1,4 @@
-﻿Imports System.IO
+﻿'Imports System.IO
 Imports System.Text
 
 Public Class frmoutputlog
@@ -50,8 +50,8 @@ Public Class frmoutputlog
             If SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
                 Try
                     strFileName = SaveFileDialog1.FileName
-                    Dim file As StreamWriter
-                    file = New StreamWriter(strFileName, False)
+                    Dim file As IO.StreamWriter
+                    file = New IO.StreamWriter(strFileName, False)
                     file.WriteLine(Now())
                     file.WriteLine()
                     file.Write(TextBox1.Text)

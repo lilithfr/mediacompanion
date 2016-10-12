@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Threading
 
@@ -41,9 +42,9 @@ Public Class TVDBScraper
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/banners.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
             wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream As Stream
+            Dim objStream As IO.stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.streamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim bannerslist As New XmlDocument
             'Try
@@ -111,9 +112,9 @@ Public Class TVDBScraper
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.streamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim mirrorslist As New XmlDocument
             'Try
@@ -152,9 +153,9 @@ Public Class TVDBScraper
         Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
         Dim wrGETURL As WebRequest = WebRequest.Create(mirrorsurl)
         wrGETURL.Proxy = Utilities.MyProxy
-        Dim objStream As Stream
+        Dim objStream As IO.stream
         objStream = wrGETURL.GetResponse.GetResponseStream()
-        Dim objReader As New StreamReader(objStream)
+        Dim objReader As New IO.streamReader(objStream)
         xmlfile = objReader.ReadToEnd
         Dim showlist As New XmlDocument
         Try
@@ -303,9 +304,9 @@ Public Class TVDBScraper
     '        wrGETURL = WebRequest.Create(mirrorsurl)
     '        Dim myProxy As New WebProxy("myproxy", 80)
     '        myProxy.BypassProxyOnLocal = True
-    '        Dim objStream As Stream
+    '        Dim objStream As IO.stream
     '        objStream = wrGETURL.GetResponse.GetResponseStream()
-    '        Dim objReader As New StreamReader(objStream)
+    '        Dim objReader As New IO.streamReader(objStream)
     '        xmlfile = objReader.ReadToEnd
     '        Dim showlist As New XmlDocument
     '        'Try
@@ -354,9 +355,9 @@ Public Class TVDBScraper
 
     '        mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
     '        wrGETURL = WebRequest.Create(mirrorsurl)
-    '        Dim objStream2 As Stream
+    '        Dim objStream2 As IO.stream
     '        objStream2 = wrGETURL.GetResponse.GetResponseStream()
-    '        Dim objReader2 As New StreamReader(objStream2)
+    '        Dim objReader2 As New IO.streamReader(objStream2)
     '        xmlfile = objReader2.ReadToEnd
     '        Dim showlist2 As New XmlDocument
     '        'Try

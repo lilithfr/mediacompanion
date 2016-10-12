@@ -1,6 +1,6 @@
 ﻿Imports System.Threading
 Imports System.Net
-Imports System.IO
+'Imports System.IO
 'Imports System.Data
 'Imports System.Text.RegularExpressions
 
@@ -23,9 +23,9 @@ Public Class Class1
         wrGETURL2.Proxy = MCProxy
         'Dim myProxy2 As New WebProxy("myproxy", 80)
         'myProxy2.BypassProxyOnLocal = True
-        Dim objStream2 As Stream
+        Dim objStream2 As IO.Stream
         objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-        Dim objReader2 As New StreamReader(objStream2)
+        Dim objReader2 As New IO.StreamReader(objStream2)
         Dim sLine2 As String = ""
         fanartlinecount = 0
 
@@ -132,9 +132,9 @@ Public Class Class1
             wrGETURL.Proxy = MCProxy 
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
+            Dim objReader As New IO.StreamReader(objStream, System.Text.UTF8Encoding.UTF7)
             Dim sLine As String = ""
 
             If method = False Then
@@ -201,9 +201,9 @@ Public Class Class1
             wrGETURL2.Proxy = MCProxy 
             'Dim myProxy2 As New WebProxy("myproxy", 80)
             'myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.StreamReader(objStream2)
             Dim sLine2 As String = ""
             fanartlinecount = 0
 
@@ -248,9 +248,9 @@ Public Class Class1
                 wrGETURL.Proxy = MCProxy 
                 'Dim myProxy As New WebProxy("myproxy", 80)
                 'myProxy.BypassProxyOnLocal = True
-                Dim objStream As Stream
+                Dim objStream As IO.Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
+                Dim objReader As New IO.StreamReader(objStream)
                 Dim sLine As String = ""
                 fanartlinecount = 0
 

@@ -1,5 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Xml
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class MediaStubs
 #Region "Properties"
@@ -143,7 +144,7 @@ Public Class MediaStubs
     Private Function savestub As Boolean
         Dim success As Boolean = False
         Dim StubFileToSave As String = Pref.stubfolder & "\" & StubFilename
-        If IO.File.Exists(StubFileToSave) Then
+        If File.Exists(StubFileToSave) Then
             Dim fsize As Long = Utilities.GetFileSize(StubFileToSave)
                 If fsize > 600 Then
                     MsgBox("Filename :- " & StubFileToSave & vbCrLf & "Already exists and is larger than valid" & vbCrLf & "Media Stub file")
@@ -158,15 +159,17 @@ Public Class MediaStubs
             root.AppendChild(doc, "message", tb_Stub_Message.Text.Trim)
             doc.AppendChild(root)
 
-            Dim output As XmlTextWriter = Nothing
+            'Dim output As XmlTextWriter = Nothing
             Try
-                output = New XmlTextWriter(Pref.stubfolder & "\" & StubFilename, System.Text.Encoding.UTF8)
-                output.Formatting = Formatting.Indented
-                doc.WriteTo(output)
+                Dim aok As Boolean = WorkingWithNfoFiles.SaveXMLDoc(doc, Pref.stubfolder & "\" & StubFilename)
+                If Not aok Then Return False
+                'output = New XmlTextWriter(Pref.stubfolder & "\" & StubFilename, System.Text.Encoding.UTF8)
+                'output.Formatting = Formatting.Indented
+                'doc.WriteTo(output)
             Catch 
                 Return False
-            Finally
-                If Not IsNothing(output) Then output.Close
+            'Finally
+                'If Not IsNothing(output) Then output.Close
             End Try
 
             success = True
@@ -182,7 +185,9 @@ Public Class MediaStubs
         Try
             Dim lstub As New XmlDocument
             Try
-                lstub.Load(StubFileToLoad)
+                Using tmpstrm As IO.StreamReader = File.OpenText(StubFileToLoad)
+                    lstub.Load(tmpstrm)
+                End Using
             Catch
                 Dim fsize As Long = Utilities.GetFileSize(StubFileToLoad)
                 If fsize < 600 Then

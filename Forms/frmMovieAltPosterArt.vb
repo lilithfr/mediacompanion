@@ -1,4 +1,5 @@
 ﻿Imports System.Xml
+Imports Alphaleonis.Win32.Filesystem
 
 
 Public Class frmMovieAltPosterArt
@@ -36,18 +37,23 @@ Public Class frmMovieAltPosterArt
     Private Sub coverart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
             posterpath = Form1.workingMovieDetails.fileinfo.posterpath
-            folderjpgpath = posterpath.Replace(IO.Path.GetFileName(posterpath), "folder.jpg")
+            folderjpgpath = posterpath.Replace(Path.GetFileName(posterpath), "folder.jpg")
             If Form1.workingMovieDetails.fullmoviebody.year <> Nothing Then movieyear = Form1.workingMovieDetails.fullmoviebody.year
             TextBox1.Text = 6 'Pref.maximumthumbs.ToString
             btnSourceMPDB.Enabled = False
             
             Dim aok As Boolean = False
-            If IO.File.Exists(posterpath) = True Then
+            If File.Exists(posterpath) = True Then
                 Dim tempstring As String
                 mainposter = New PictureBox
                 Try
-                    Dim OriginalImage As New Bitmap(posterpath)
+                    Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                    Using r As IO.Filestream = File.Open(posterpath, IO.FileMode.Open)
+                        r.CopyTo(ms)
+                    End Using
+                    Dim OriginalImage As New Bitmap(ms)
                     Dim Image2 As New Bitmap(OriginalImage)
+                    ms.Dispose()
                     OriginalImage.Dispose()
 
                     With mainposter
@@ -718,7 +724,7 @@ Public Class frmMovieAltPosterArt
 
     Private Sub btnthumbbrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnthumbbrowse.Click
         Try
-            openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(IO.Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
+            openFD.InitialDirectory = Form1.workingMovieDetails.fileinfo.fullpathandfilename.Replace(Path.GetFileName(Form1.workingMovieDetails.fileinfo.fullpathandfilename), "")
             openFD.Title = "Select a jpeg image file File"
             openFD.FileName = ""
             openFD.Filter = "Media Companion Image Files|*.jpg;*.tbn;*.png;*.bmp|All Files|*.*"

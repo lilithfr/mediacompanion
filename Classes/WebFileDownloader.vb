@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Threading
 
 Public Class WebFileDownloader
@@ -43,7 +44,7 @@ Public Class WebFileDownloader
 	    Form1.blnAbortFileDownload = False
 	    Monitor.Exit(Form1.countLock)
 
-        Dim FS As FileStream = Nothing
+        Dim FS As IO.FileStream = Nothing
         Try
             mCurrentFile = GetFileName(URL)
             Dim wRemote As WebRequest
@@ -55,7 +56,7 @@ Public Class WebFileDownloader
             Dim iMaxRetries as Integer = 10
             Dim FileDownloadAborted As Boolean
             
-            FS = New FileStream(Location, FileMode.Create, FileAccess.Write)
+            FS = New IO.FileStream(Location, IO.FileMode.Create, IO.FileAccess.Write)
             wRemote = WebRequest.Create(URL)
             wRemote.Proxy = Utilities.MyProxy
             wRemote.Timeout = 10000
@@ -64,7 +65,7 @@ Public Class WebFileDownloader
             Dim fSize As long = myWebResponse.ContentLength
             RaiseEvent FileDownloadSizeObtained(fSize)
 
-            Dim sChunks As Stream = myWebResponse.GetResponseStream
+            Dim sChunks As IO.Stream = myWebResponse.GetResponseStream
 
             Do
                 iBytesRead = sChunks.Read(bBuffer, 0, bBuffer.Length-10)

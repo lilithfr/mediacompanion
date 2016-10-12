@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Text
 Imports Media_Companion.WorkingWithNfoFiles
@@ -66,7 +67,7 @@ Partial Public Class Form1
             Dim picBox As PictureBox = sender
             Dim imageLocation As String = picBox.tag
             If imageLocation <> Nothing Then
-                If IO.File.Exists(imageLocation) Then
+                If File.Exists(imageLocation) Then
                     Me.ControlBox = False
                     MenuStrip1.Enabled = False
                     Call util_ZoomImage(imageLocation)
@@ -415,7 +416,7 @@ Partial Public Class Form1
             prgCount += 1
             Application.DoEvents()
             Dim newtvshownfo As New TvShow
-            newtvshownfo.NfoFilePath = IO.Path.Combine(tvfolder, "tvshow.nfo")
+            newtvshownfo.NfoFilePath = Path.Combine(tvfolder, "tvshow.nfo")
             newtvshownfo.Load() 
             fulltvshowlist.Add(newtvshownfo)
             Dim episodelist As New List(Of TvEpisode)

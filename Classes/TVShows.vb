@@ -1,4 +1,6 @@
-﻿Public Class SeasonEpisodeComparer
+﻿Imports Alphaleonis.Win32.Filesystem
+
+Public Class SeasonEpisodeComparer
     Implements IComparer(Of String)
     Private Shared Function ParseSeasonEpisode(ByVal item As String, ByVal type As Boolean) As Integer
         Dim hyphenIndex As Integer = item.IndexOf("-")
@@ -29,15 +31,15 @@ End Class
 
 Public Class TVShows
 
-    Public Shared Function episodeRename(ByVal path As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String, ByVal EpSpaces As Boolean, ByVal IsDot As Boolean)
+    Public Shared Function episodeRename(ByVal eppath As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String, ByVal EpSpaces As Boolean, ByVal IsDot As Boolean)
         showtitle = Pref.RemoveIgnoredArticles(showtitle)
         Dim returnpath As String = "false"
 
-        Dim medianame As String = path.Replace(IO.Path.GetExtension(path), "")
+        Dim medianame As String = eppath.Replace(Path.GetExtension(eppath), "")
         For Each ext In Utilities.VideoExtensions
             If ext = "VIDEO_TS.IFO" Then Continue For
             Dim actualname As String = medianame & ext
-            If IO.File.Exists(actualname) Then
+            If File.Exists(actualname) Then
                 Dim newfilename As String
                 newfilename = ""
                 If seasonno.Length = 1 Then
@@ -69,13 +71,13 @@ Public Class TVShows
                 Dim listtorename As New List(Of String)
                 listtorename.Clear()
                 Dim done As String = ""
-                Dim temppath As String = path
+                Dim temppath As String = eppath
 
                 listtorename.Add(actualname)
 
-                Dim di As IO.DirectoryInfo = New IO.DirectoryInfo(path.Replace(IO.Path.GetFileName(path), ""))
-                Dim filenama As String = IO.Path.GetFileNameWithoutExtension(path)
-                Dim fils As IO.FileInfo() = di.GetFiles(filenama & ".*")
+                Dim di As DirectoryInfo = New DirectoryInfo(eppath.Replace(Path.GetFileName(eppath), ""))
+                Dim filenama As String = Path.GetFileNameWithoutExtension(eppath)
+                Dim fils As FileInfo() = di.GetFiles(filenama & ".*")
                 For Each fiNext In fils
                     Dim extn As String = Utilities.GetExtension(fiNext.FullName)
                     Dim tmpname As String = fiNext.FullName.Replace(extn, extn.ToLower)
@@ -84,29 +86,29 @@ Public Class TVShows
                     End If
                 Next
 
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".nfo")
-                If IO.File.Exists(temppath) Then
+                temppath = temppath.Replace(Path.GetExtension(temppath), ".nfo")
+                If File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
                     End If
                 End If
 
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".rar")
-                If IO.File.Exists(temppath) Then
+                temppath = temppath.Replace(Path.GetExtension(temppath), ".rar")
+                If File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
                     End If
                 End If
 
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), ".jpg")
-                If IO.File.Exists(temppath) Then
+                temppath = temppath.Replace(Path.GetExtension(temppath), ".jpg")
+                If File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
                     End If
                 End If
 
-                temppath = temppath.Replace(IO.Path.GetExtension(temppath), "-thumb.jpg")
-                If IO.File.Exists(temppath) Then
+                temppath = temppath.Replace(Path.GetExtension(temppath), "-thumb.jpg")
+                If File.Exists(temppath) Then
                     If Not listtorename.Contains(temppath) Then
                         listtorename.Add(temppath)
                     End If
@@ -117,8 +119,8 @@ Public Class TVShows
                 For Each ITEMS In listtorename
                     Dim newname As String = ITEMS.Replace(filenama, newfilename)
                     'newname = newname.Replace("..", ".")
-                    Dim fi As New IO.FileInfo(ITEMS)
-                    If IO.File.Exists(newname) Then
+                    Dim fi As New FileInfo(ITEMS)
+                    If File.Exists(newname) Then
                         RenameFailedFile = newname
                         StillOk = False
                     End If
@@ -129,10 +131,10 @@ Public Class TVShows
                     For Each ITEMS In listtorename
                         Dim newname As String = ITEMS.Replace(filenama, newfilename)
                         'newname = newname.Replace("..", ".")
-                        done = newname.Replace(IO.Path.GetExtension(newname), ".nfo")
+                        done = newname.Replace(Path.GetExtension(newname), ".nfo")
                         If done.Contains("-thumb.") Then done = done.Replace("-thumb", "")
                         Try
-                            Dim fi As New IO.FileInfo(ITEMS)
+                            Dim fi As New FileInfo(ITEMS)
                             fi.MoveTo(newname)
                             If FirstCount = True Then  'we only want to show the renamed mediafile in the brief view
                                 Pref.tvScraperLog &= "!!! Renamed to: " & newname & vbCrLf
@@ -142,7 +144,7 @@ Public Class TVShows
                             End If
 
                         Catch ex As Exception
-                            done = path
+                            done = eppath
                             Pref.tvScraperLog &= "!!! *** Rename FAILED for : " & newname & vbCrLf
                             Pref.tvScraperLog &= "!!! *** Reported Message  : " & ex.Message & vbCrLf
                             Pref.tvScraperLog &= "!!! *** Resolve the indicated issue, & then try to rename the files again." & vbCrLf

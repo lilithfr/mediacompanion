@@ -1,4 +1,4 @@
-﻿Imports System.IO
+﻿'Imports System.IO
 Imports System.Net
 Imports System.Threading
 
@@ -43,9 +43,9 @@ Public Class TVDBScrapper
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim bannerslist As New XmlDocument
             'Try
@@ -99,9 +99,9 @@ Public Class TVDBScrapper
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim mirrorslist As New XmlDocument
             'Try
@@ -143,9 +143,9 @@ Public Class TVDBScrapper
         wrGETURL.Proxy = Utilities.MyProxy
         'Dim myProxy As New WebProxy("myproxy", 80)
         'myProxy.BypassProxyOnLocal = True
-        Dim objStream As Stream
+        Dim objStream As IO.Stream
         objStream = wrGETURL.GetResponse.GetResponseStream()
-        Dim objReader As New StreamReader(objStream)
+        Dim objReader As New IO.StreamReader(objStream)
         xmlfile = objReader.ReadToEnd
         Dim showlist As New XmlDocument
         Try
@@ -244,9 +244,9 @@ Public Class TVDBScrapper
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim showlist As New XmlDocument
             'Try
@@ -296,9 +296,9 @@ Public Class TVDBScrapper
             mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
             wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.Stream
             objStream2 = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.StreamReader(objStream2)
             xmlfile = objReader2.ReadToEnd
             Dim showlist2 As New XmlDocument
             'Try
@@ -338,9 +338,9 @@ Public Class TVDBScrapper
             mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
             wrGETURL = WebRequest.Create(mirrorsurl)
             wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream3 As Stream
+            Dim objStream3 As IO.Stream
             objStream3 = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
+            Dim objReader3 As New IO.StreamReader(objStream3)
             xmlfile = objReader3.ReadToEnd
             Dim showlist3 As New XmlDocument
             'Try
@@ -408,9 +408,9 @@ Public Class TVDBScrapper
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             xmlfile = objReader.ReadToEnd
             'If Form1.CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(episodeurl & Environment.NewLine & Environment.NewLine & xmlfile, MsgBoxStyle.OkOnly, "TvdbScraper.vb - Returned data from thetvdb")
 

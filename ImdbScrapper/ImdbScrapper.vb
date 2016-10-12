@@ -1,5 +1,5 @@
 ﻿Imports System.Threading
-Imports System.IO
+'Imports System.IO
 Imports System.Net
 Imports System.Xml
 
@@ -109,9 +109,9 @@ Public Class ImdbScrapper
                 wrGETURL = WebRequest.Create(tvdburl)
                 Dim myProxy As New WebProxy("myproxy", 80)
                 myProxy.BypassProxyOnLocal = True
-                Dim objStream As Stream
+                Dim objStream As IO.Stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
+                Dim objReader As New IO.StreamReader(objStream)
                 Dim tvdbsLine As String = ""
                 tvfblinecount = 0
 
@@ -197,9 +197,9 @@ Public Class ImdbScrapper
 
             Dim myProxy As New WebProxy("myproxy", 80)
             myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = 0
 
@@ -355,9 +355,9 @@ Public Class ImdbScrapper
             wrGETURL2 = WebRequest.Create(fanarturl)
             Dim myProxy2 As New WebProxy("myproxy", 80)
             myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.StreamReader(objStream2)
             Dim sLine2 As String = ""
             fanartlinecount = 0
 
@@ -393,9 +393,9 @@ Public Class ImdbScrapper
                         wrGETURL4 = WebRequest.Create(fanarturl)
                         Dim myProxy4 As New WebProxy("myproxy", 80)
                         myProxy4.BypassProxyOnLocal = True
-                        Dim objStream4 As Stream
+                        Dim objStream4 As IO.Stream
                         objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-                        Dim objReader4 As New StreamReader(objStream4)
+                        Dim objReader4 As New IO.StreamReader(objStream4)
                         Dim sLine4 As String = ""
                         fanartlinecount = 0
 
@@ -439,9 +439,9 @@ Public Class ImdbScrapper
             wrGETURL3 = WebRequest.Create(fanarturl)
             Dim myProxy3 As New WebProxy("myproxy", 80)
             myProxy3.BypassProxyOnLocal = True
-            Dim objStream3 As Stream
+            Dim objStream3 As IO.Stream
             objStream3 = wrGETURL3.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
+            Dim objReader3 As New IO.StreamReader(objStream3)
             Dim sLine3 As String = ""
 
             Do While Not sLine3 Is Nothing
@@ -505,9 +505,9 @@ Public Class ImdbScrapper
             wrGETURL = WebRequest.Create(fanarturl)
             Dim myProxy As New WebProxy("myproxy", 80)
             myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = 0
 

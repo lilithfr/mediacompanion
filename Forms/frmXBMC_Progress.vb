@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class frmXBMC_Progress
 

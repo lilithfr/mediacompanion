@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Text
 Imports System.Xml
@@ -249,7 +250,7 @@ Public Class frmXbmcExport
             For Each actr In mov.listactors
                 If Cancelled Then Exit Sub
                 Dim temppath = Pref.GetActorPath(mov.fileinfo.fullpathandfilename, actr.actorname, actr.actorid)
-                If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
+                If Not String.IsNullOrEmpty(temppath) AndAlso File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
                     File.Copy(temppath, opActors & actfilename, True)
                 End If
@@ -264,7 +265,7 @@ Public Class frmXbmcExport
             For Each actr In TvActor
                 If Cancelled Then Exit Sub
                 Dim temppath = Pref.GetActorPath(nfopath, actr.actorname, actr.actorid)
-                If Not String.IsNullOrEmpty(temppath) AndAlso IO.File.Exists(temppath) Then
+                If Not String.IsNullOrEmpty(temppath) AndAlso File.Exists(temppath) Then
                     Dim actfilename As String = Utilities.GetFileNameFromPath(temppath)
                     File.Copy(temppath, opActors & actfilename, True)
                 End If
@@ -311,7 +312,7 @@ Public Class frmXbmcExport
         End Try
         'test path is writeable
         Try
-            Dim fs As FileStream = File.Create(outputfolder & xbmcexportfolder & "\mc_dmmy.txt")
+            Dim fs As IO.FileStream = File.Create(outputfolder & xbmcexportfolder & "\mc_dmmy.txt")
 
             ' Add text to the file. 
             Dim info As Byte() = New UTF8Encoding(True).GetBytes("This is some text in the file.")
@@ -745,7 +746,7 @@ Public Class frmXbmcExport
 
     Private Function GetBasePath(ByVal thismov As FullMovieDetails) As String
         Dim ThisBasePath As String = thismov.fileinfo.fullpathandfilename
-        If IO.Path.GetFileName(ThisBasePath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(ThisBasePath).ToLower = "index.nfo" Then
+        If Path.GetFileName(ThisBasePath).ToLower = "video_ts.nfo" Or Path.GetFileName(ThisBasePath).ToLower = "index.nfo" Then
             Return Utilities.RootVideoTsFolder(ThisBasePath)
         Else
             Return thismov.fileinfo.filenameandpath 

@@ -1,4 +1,5 @@
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
 
 Public Class Profiles
@@ -16,7 +17,7 @@ Public Class Profiles
 
         profilepath = Path.Combine(profilepath, "profile.xml")
 
-        If IO.File.Exists(profilepath) Then
+        If File.Exists(profilepath) Then
             Dim xmlDoc As New XmlDocument
             xmlDoc.Load(profilepath)
             If xmlDoc.DocumentElement.Name = "profile" Then

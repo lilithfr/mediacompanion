@@ -1,7 +1,7 @@
 ﻿Imports ProtoXML
 
 
-Public Class FileInfo
+Public Class FileStrmInfo
     Inherits ProtoPropertyGroup
 
     Public Property StreamDetails As New StreamDetails(Me, "streamdetails")
@@ -15,6 +15,6 @@ Public Class FileInfo
     End Sub
 
     Public Overrides Function CreateNew() As ProtoXML.IProtoXChild
-        Return New FileInfo
+        Return New FileStrmInfo
     End Function
 End Class

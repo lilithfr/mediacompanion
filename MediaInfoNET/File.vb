@@ -18,11 +18,12 @@
 'MA 02110-1301, USA.
 '==============================================================================
 
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Collections
 Imports System.Text.RegularExpressions
 
-Public Class File
+Public Class MediaInfoFile
     Public File, Name, ParentFolder, Title, Extension As String
 
     Sub New(ByVal SourceFile As String)

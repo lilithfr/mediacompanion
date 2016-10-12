@@ -1,4 +1,5 @@
 ﻿Imports System.Linq
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class ucFanartTvTv
     Dim WithEvents artposterpicboxes As PictureBox
@@ -344,7 +345,7 @@ Public Class ucFanartTvTv
         Dim LoadPath As String = Nothing
         LoadPath = WorkingShow.FolderPath
         LoadPath &= artType
-        If IO.File.Exists(LoadPath) Then
+        If File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
         Else
             pbexists.Image = Nothing

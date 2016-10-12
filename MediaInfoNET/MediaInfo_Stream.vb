@@ -18,8 +18,8 @@
 'MA 02110-1301, USA.
 '==============================================================================
 
-Imports System.IO
-Imports System.Collections
+'Imports System.IO
+'Imports System.Collections
 Imports System.Text.RegularExpressions
 
 Public Class MediaInfo_Stream

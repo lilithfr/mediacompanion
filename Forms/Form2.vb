@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports System.Linq
@@ -418,7 +419,7 @@ Public Class Form2
             thumbeditsmade = False
             Dim tempstring As String
             tempstring = Form1.workingMovieDetails.fileinfo.posterpath
-            Dim stream As New System.IO.MemoryStream
+            Dim stream As New IO.MemoryStream
             moviethumb.Image.Save(tempstring, System.Drawing.Imaging.ImageFormat.Jpeg)
             Form1.PbMoviePoster.Image = moviethumb.Image
             btnresetimage.Enabled = False
@@ -525,7 +526,7 @@ Public Class Form2
             Dim exists As Boolean = False
             Label16.Text = moviethumb.Image.Width
             Label17.Text = moviethumb.Image.Height
-            exists = System.IO.File.Exists(Form1.workingMovieDetails.fileinfo.posterpath)
+            exists = File.Exists(Form1.workingMovieDetails.fileinfo.posterpath)
             If exists = True Then
                 Dim lngSizeOfFile As Decimal
                 lngSizeOfFile = FileLen(Form1.workingMovieDetails.fileinfo.posterpath)
@@ -659,7 +660,7 @@ Public Class Form2
             If theFolderBrowser.ShowDialog = Windows.Forms.DialogResult.OK Then
                 strfolder = (theFolderBrowser.SelectedPath)
                 If strfolder <> "" AndAlso Directory.Exists(strfolder) Then
-                    Dim nfopath As String = IO.Path.Combine(strfolder, "tvshow.nfo")
+                    Dim nfopath As String = Path.Combine(strfolder, "tvshow.nfo")
                     If File.Exists(nfopath) Then
                         Dim tvshownfo As New TvShow
                         tvshownfo.NfoFilePath = nfopath

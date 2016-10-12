@@ -4,6 +4,7 @@ Imports System.Text
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Windows.Forms
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class UserRect
     Implements IDisposable
@@ -47,7 +48,12 @@ Public Class UserRect
 	End Sub
 
 	Public Sub SetBitmapFile(filename As String)
-		Me.mBmp = New Bitmap(filename)
+        Dim ms As IO.MemoryStream = New IO.MemoryStream()
+        Using r As IO.Filestream = File.Open(filename, IO.FileMode.Open)
+            r.CopyTo(ms)
+        End Using
+		Me.mBmp = New Bitmap(ms)
+        ms.Dispose()
         frmMovPosterCrop.PicBox.image = Me.mBmp 
 	End Sub
 

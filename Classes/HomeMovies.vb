@@ -1,15 +1,16 @@
 ﻿Imports System.Text.RegularExpressions
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class HomeMovies
 
     Public Shared newHomeMovieList As New List(Of str_BasicHomeMovie)
-    Public Shared Function listHomeMovieFiles(ByVal dir_info As IO.DirectoryInfo, ByVal moviePattern As String, Optional ByRef scraperLog As String = "")
+    Public Shared Function listHomeMovieFiles(ByVal dir_info As DirectoryInfo, ByVal moviePattern As String, Optional ByRef scraperLog As String = "")
         newHomeMovieList.Clear()
         Try
-            Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(moviePattern)
-            For Each fs_info As IO.FileInfo In fs_infos
+            Dim fs_infos() As FileInfo = dir_info.GetFiles(moviePattern)
+            For Each fs_info As FileInfo In fs_infos
                 Dim titleFull As String = fs_info.FullName
-                Dim titleDir As String = fs_info.Directory.ToString & IO.Path.DirectorySeparatorChar
+                Dim titleDir As String = fs_info.Directory.ToString & Path.DirectorySeparatorChar
                 Dim titleExt As String = fs_info.Extension
                 Dim doNotAdd As Boolean = False
                 Dim newHomeMovieDetails As New str_BasicHomeMovie(Pref.SetDefaults)
@@ -26,7 +27,7 @@ Public Class HomeMovies
 
                 If Utilities.findFileOfType(movieNfoFile, ".nfo") Then
                     Try
-                        Dim filechck As IO.StreamReader = IO.File.OpenText(movieNfoFile)
+                        Dim filechck As IO.StreamReader = File.OpenText(movieNfoFile)
                         Dim tempstring As String
                         Do
                             tempstring = filechck.ReadToEnd
@@ -56,7 +57,7 @@ Public Class HomeMovies
                         filechck.Dispose()
                         If needtorename = True Then
                             scraperLog &= " - invalid MC .nfo found - Renaming to .info"
-                            Dim fi As New IO.FileInfo(movieNfoFile)
+                            Dim fi As New FileInfo(movieNfoFile)
                             Dim newname As String = movieNfoFile.Replace(".nfo", ".info")
                             fi.MoveTo(newname)
                         End If
@@ -68,7 +69,7 @@ Public Class HomeMovies
                 End If
 
                 If moviePattern = "*.vob" Then
-                    If IO.File.Exists(titleDir & "video_ts.ifo") Then
+                    If File.Exists(titleDir & "video_ts.ifo") Then
                         scraperLog &= " VOB Pattern Found! DVD File Structure Found!"
                     Else
                         scraperLog &= " WARNING: No DVD File Structure Found - (VIDEO_TS.IFO missing)"
@@ -78,7 +79,7 @@ Public Class HomeMovies
                 Else
 
                     If Not doNotAdd And titleExt <> "ttt" Then
-                        newHomeMovieDetails.Title = IO.Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
+                        newHomeMovieDetails.Title = Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
                         newHomeMovieDetails.FullPathAndFilename = titleFull
                     End If
                     Dim alreadyadded As Boolean = False

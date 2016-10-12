@@ -1,7 +1,8 @@
 ﻿
 
 Imports System.Net
-Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
+'Imports System.IO
 
 Public Class frmTvFanart
     Dim totalpages As Integer = 0
@@ -39,14 +40,19 @@ Public Class frmTvFanart
             TextBox1.Text = maxthumbs.ToString
             Me.Refresh()
             Application.DoEvents()
-            Dim exists As Boolean = System.IO.File.Exists(posterpath)
+            Dim exists As Boolean = File.Exists(posterpath)
             If exists = True Then
 
                 Dim tempstring As String
                 mainposter = New PictureBox
                 Try
-                    Dim OriginalImage As New Bitmap(posterpath)
+                    Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                    Using r As IO.Filestream = File.Open(posterpath, IO.FileMode.Open)
+                        r.CopyTo(ms)
+                    End Using
+                    Dim OriginalImage As New Bitmap(ms)
                     Dim Image2 As New Bitmap(OriginalImage)
+                    ms.Dispose()
                     OriginalImage.Dispose()
 
                     With mainposter
@@ -391,9 +397,9 @@ Public Class frmTvFanart
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             urllinecount = 0
 

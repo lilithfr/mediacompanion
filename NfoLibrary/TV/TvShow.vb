@@ -1,6 +1,7 @@
 ﻿Imports ProtoXML
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
 Imports Media_Companion
 
@@ -262,12 +263,12 @@ Public Class TvShow
         newlist.Insert(0, Me.FolderPath)
 
         For Each folder In newlist
-            Dim dir_info As New System.IO.DirectoryInfo(folder)
+            Dim dir_info As New directoryInfo(folder)
 
-            Dim fs_infos() As System.IO.FileInfo = dir_info.GetFiles("*.NFO", SearchOption.TopDirectoryOnly)
-            For Each fs_info As System.IO.FileInfo In fs_infos
+            Dim fs_infos() As FileInfo = dir_info.GetFiles("*.NFO", IO.SearchOption.TopDirectoryOnly)
+            For Each fs_info As FileInfo In fs_infos
                 'Application.DoEvents()
-                If IO.Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
+                If Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
                     Dim NewEpisode As New TvEpisode
                     NewEpisode.NfoFilePath = fs_info.FullName
                     NewEpisode.Load()

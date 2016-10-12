@@ -3,7 +3,7 @@ Imports System.Text.RegularExpressions
 
 Imports System.Xml
 Imports System.Net
-Imports System.IO
+'Imports System.IO
 Namespace Tasks
     Public Class ScrapeEpisodeTask
         Inherits TaskBase
@@ -332,9 +332,9 @@ Namespace Tasks
                             wrGETURL.Proxy = Utilities.MyProxy
                             'Dim myProxy As New WebProxy("myproxy", 80)
                             'myProxy.BypassProxyOnLocal = True
-                            Dim objStream As Stream
+                            Dim objStream As IO.Stream
                             objStream = wrGETURL.GetResponse.GetResponseStream()
-                            Dim objReader As New StreamReader(objStream)
+                            Dim objReader As New IO.StreamReader(objStream)
                             Dim tvdbsLine As String = ""
                             tvfblinecount = 0
 
@@ -401,13 +401,13 @@ Namespace Tasks
                             '                                    Case "actorid"
                             '                                        If newactor.actorthumb <> Nothing Then
                             '                                            If Pref.actorseasy = True And detail.InnerText <> "" Then
-                            '                                                Dim workingpath As String = episodearray(0).VideoFilePath.Replace(IO.Path.GetFileName(episodearray(0).VideoFilePath), "")
+                            '                                                Dim workingpath As String = episodearray(0).VideoFilePath.Replace(Path.GetFileName(episodearray(0).VideoFilePath), "")
                             '                                                workingpath = workingpath & ".actors\"
-                            '                                                Dim hg As New IO.DirectoryInfo(workingpath)
+                            '                                                Dim hg As New DirectoryInfo(workingpath)
                             '                                                Dim destsorted As Boolean = False
                             '                                                If Not hg.Exists Then
 
-                            '                                                    IO.Directory.CreateDirectory(workingpath)
+                            '                                                    Directory.CreateDirectory(workingpath)
                             '                                                    destsorted = True
 
                             '                                                Else
@@ -417,16 +417,16 @@ Namespace Tasks
                             '                                                    Dim filename As String = newactor.actorname.Replace(" ", "_")
                             '                                                    filename = filename & ".tbn"
                             '                                                    Dim tvshowactorpath As String = realshowpath
-                            '                                                    tvshowactorpath = tvshowactorpath.Replace(IO.Path.GetFileName(tvshowactorpath), "")
-                            '                                                    tvshowactorpath = IO.Path.Combine(tvshowactorpath, ".actors\")
-                            '                                                    tvshowactorpath = IO.Path.Combine(tvshowactorpath, filename)
-                            '                                                    filename = IO.Path.Combine(workingpath, filename)
-                            '                                                    If IO.File.Exists(tvshowactorpath) Then
+                            '                                                    tvshowactorpath = tvshowactorpath.Replace(Path.GetFileName(tvshowactorpath), "")
+                            '                                                    tvshowactorpath = Path.Combine(tvshowactorpath, ".actors\")
+                            '                                                    tvshowactorpath = Path.Combine(tvshowactorpath, filename)
+                            '                                                    filename = Path.Combine(workingpath, filename)
+                            '                                                    If File.Exists(tvshowactorpath) Then
 
-                            '                                                        IO.File.Copy(tvshowactorpath, filename, True)
+                            '                                                        File.Copy(tvshowactorpath, filename, True)
 
                             '                                                    End If
-                            '                                                    If Not IO.File.Exists(filename) Then
+                            '                                                    If Not File.Exists(filename) Then
                             '                                                        Dim buffer(4000000) As Byte
                             '                                                        Dim size As Integer = 0
                             '                                                        Dim bytesRead As Integer = 0
@@ -454,12 +454,12 @@ Namespace Tasks
                             '                                                Dim networkpath As String = Pref.actorsavepath
 
                             '                                                tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                            '                                                Dim hg As New IO.DirectoryInfo(tempstring)
+                            '                                                Dim hg As New DirectoryInfo(tempstring)
                             '                                                If Not hg.Exists Then
-                            '                                                    IO.Directory.CreateDirectory(tempstring)
+                            '                                                    Directory.CreateDirectory(tempstring)
                             '                                                End If
                             '                                                workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                            '                                                If Not IO.File.Exists(workingpath) Then
+                            '                                                If Not File.Exists(workingpath) Then
                             '                                                    Dim buffer(4000000) As Byte
                             '                                                    Dim size As Integer = 0
                             '                                                    Dim bytesRead As Integer = 0
@@ -479,7 +479,7 @@ Namespace Tasks
                             '                                                    contents.Close()
                             '                                                    fstrm.Close()
                             '                                                End If
-                            '                                                newactor.actorthumb = IO.Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                            '                                                newactor.actorthumb = Path.Combine(Preferences.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                             '                                                If Pref.actornetworkpath.IndexOf("/") <> -1 Then
                             '                                                    newactor.actorthumb = Pref.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                             '                                                Else

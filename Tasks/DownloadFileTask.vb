@@ -72,10 +72,10 @@ Namespace Tasks
                 Me.RaiseError()
             End If
 
-            If IO.File.Exists(Path) Then
+            If File.Exists(Path) Then
                 If Me.Arguments.ContainsKey("overwrite") AndAlso Me.Arguments("overwrite") = True Then
                     Try
-                        IO.File.Delete(Path)
+                        File.Delete(Path)
                     Catch
                         Me.Messages.Add(New Exception("File already exists, can't be deleted"))
                         Me.State = TaskState.Fault

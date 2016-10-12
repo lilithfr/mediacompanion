@@ -1,6 +1,7 @@
 ﻿Imports Sanford.StateMachineToolkit
 Imports XBMC.JsonRpc
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Data.SQLite
 Imports System.Linq
 

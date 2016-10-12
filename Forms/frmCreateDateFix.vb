@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Linq
 
 Public Class frmCreateDateFix
@@ -61,11 +62,11 @@ Public Class frmCreateDateFix
                                                                                     Key .NFOpath = c.fullpathandfilename}
         For Each row In data
             'Dim i As Integer
-            'If IO.File.Exists(row.File) AndAlso Integer.TryParse(row.CreateDate, i) Then   'row.Title and row.NFOpath wil add, even if empty - test NFO later
+            'If File.Exists(row.File) AndAlso Integer.TryParse(row.CreateDate, i) Then   'row.Title and row.NFOpath wil add, even if empty - test NFO later
             Try
                 _lst.Rows.Add(row.Title, _
                               Date.ParseExact(row.CreateDate, Pref.datePattern, Globalization.DateTimeFormatInfo.InvariantInfo), _
-                              IO.File.GetLastWriteTime(row.File), _
+                              File.GetLastWriteTime(row.File), _
                               row.NFOpath)
             Catch ex As Exception
                 'Originally thought testing each item would be the way to go, but Try...Catch will do, and probably faster!

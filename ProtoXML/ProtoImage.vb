@@ -1,4 +1,6 @@
-﻿Public Class ProtoImage
+﻿Imports Alphaleonis.Win32.Filesystem
+
+Public Class ProtoImage
     Inherits ProtoXChildBase
 
 
@@ -68,9 +70,9 @@
             Dim TempPath As String
             If Me.FolderPath Is Nothing OrElse Me.FileName Is Nothing Then Return Nothing
 
-            TempPath = IO.Path.Combine(Me.FolderPath, Me.FileName)
+            TempPath = Alphaleonis.Win32.Filesystem.Path.Combine(Me.FolderPath, Me.FileName)
 
-            'If IO.File.Exists(TempPath) Then
+            'If File.Exists(TempPath) Then
             Return TempPath
             'End If
 
@@ -78,7 +80,7 @@
         End Get
         Set(ByVal value As String)
             '_PathOveride = value
-            Me.FileName = IO.Path.GetFileName(value)
+            Me.FileName = Alphaleonis.Win32.Filesystem.Path.GetFileName(value)
             Me.FolderPath = value.Replace(Me.FileName, "")
             If PathAttribute IsNot Nothing Then
                 PathAttribute.Value = value
@@ -91,7 +93,7 @@
                     Me.Node.Add(PathAttribute)
                 End If
             End If
-            'If IO.File.Exists(value) Then
+            'If File.Exists(value) Then
             '    _Image = Drawing.Bitmap.FromFile(value)
             'End If
         End Set
@@ -103,7 +105,7 @@
     Public Property Image As Drawing.Image
         Get
             If _Image Is Nothing Then
-                If IO.File.Exists(Me.Path) Then
+                If File.Exists(Me.Path) Then
                     _Image = Drawing.Bitmap.FromFile(Me.Path)
                 Else
                     _Image = Drawing.Bitmap.FromFile(Me.DefaultPath)
@@ -124,7 +126,7 @@
 
     Public ReadOnly Property Exists As Boolean
         Get
-            Return IO.File.Exists(IO.Path.Combine(Me.FolderPath, Me.FileName))
+            Return File.Exists(Alphaleonis.Win32.Filesystem.Path.Combine(Me.FolderPath, Me.FileName))
         End Get
     End Property
 

@@ -1,4 +1,4 @@
-﻿Imports System.IO
+﻿'Imports System.IO
 Imports System.Net
 Imports System.Threading
 
@@ -27,9 +27,9 @@ Public Class Class1
             wrGETURL2.Proxy = MCProxy 
             'Dim myProxy2 As New WebProxy("myproxy", 80)
             'myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.StreamReader(objStream2)
             Dim sLine2 As String = ""
             fanartlinecount = 0
 
@@ -86,9 +86,9 @@ Public Class Class1
                         'Dim myProxy3 As New WebProxy("myproxy", 80)
                         'myProxy3.BypassProxyOnLocal = True
                         ReDim apple2(10000)
-                        Dim objStream3 As Stream
+                        Dim objStream3 As IO.Stream
                         objStream3 = wrGETURL3.GetResponse.GetResponseStream()
-                        Dim objReader3 As New StreamReader(objStream3)
+                        Dim objReader3 As New IO.StreamReader(objStream3)
                         Dim sLine3 As String = ""
                         fanartlinecount = 0
                         fanartlinecount = 0

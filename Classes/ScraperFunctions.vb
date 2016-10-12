@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+'Imports Alphaleonis.Win32.Filesystem
 Imports System.Threading
 Imports System.Xml
 Public Class ScraperFunctions
@@ -95,9 +96,9 @@ Public Class ScraperFunctions
                 Dim wrGETURL As WebRequest
                 wrGETURL = WebRequest.Create(tvdburl)
                 wrGETURL.Proxy = Utilities.MyProxy
-                Dim objStream As Stream
+                Dim objStream As IO.stream
                 objStream = wrGETURL.GetResponse.GetResponseStream()
-                Dim objReader As New StreamReader(objStream)
+                Dim objReader As New IO.streamReader(objStream)
                 Dim tvdbsLine As String = ""
                 tvfblinecount = 0
 
@@ -140,9 +141,9 @@ Public Class ScraperFunctions
             Dim wrGETURL As WebRequest
             wrGETURL = WebRequest.Create(fanarturl)
             wrGETURL.Proxy = Utilities.MyProxy
-            Dim objStream As Stream
+            Dim objStream As IO.stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.streamReader(objStream)
             Dim sLine As String = ""
             fanartlinecount = 0
 
@@ -221,9 +222,9 @@ Public Class ScraperFunctions
             Dim wrGETURL2 As WebRequest
             wrGETURL2 = WebRequest.Create(fanarturl)
             wrGETURL2.Proxy = Utilities.MyProxy
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.streamReader(objStream2)
             Dim sLine2 As String = ""
             fanartlinecount = 0
 
@@ -254,9 +255,9 @@ Public Class ScraperFunctions
                         Dim wrGETURL4 As WebRequest
                         wrGETURL4 = WebRequest.Create(fanarturl)
                         wrGETURL4.Proxy = Utilities.MyProxy
-                        Dim objStream4 As Stream
+                        Dim objStream4 As IO.stream
                         objStream4 = wrGETURL4.GetResponse.GetResponseStream()
-                        Dim objReader4 As New StreamReader(objStream4)
+                        Dim objReader4 As New IO.streamReader(objStream4)
                         Dim sLine4 As String = ""
                         fanartlinecount = 0
 
@@ -295,9 +296,9 @@ Public Class ScraperFunctions
 
             wrGETURL3 = WebRequest.Create(fanarturl)
             wrGETURL3.Proxy = Utilities.MyProxy
-            Dim objStream3 As Stream
+            Dim objStream3 As IO.stream
             objStream3 = wrGETURL3.GetResponse.GetResponseStream()
-            Dim objReader3 As New StreamReader(objStream3)
+            Dim objReader3 As New IO.streamReader(objStream3)
             Dim sLine3 As String = ""
 
             Do While Not sLine3 Is Nothing
@@ -357,9 +358,9 @@ Public Class ScraperFunctions
                 Dim wrGETURL2 As WebRequest
                 wrGETURL2 = WebRequest.Create(fanarturl)
                 wrGETURL2.Proxy = Utilities.MyProxy
-                Dim objStream2 As Stream
+                Dim objStream2 As IO.stream
                 objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-                Dim objReader2 As New StreamReader(objStream2)
+                Dim objReader2 As New IO.streamReader(objStream2)
                 Dim sLine2 As String = ""
                 fanartlinecount = 0
 

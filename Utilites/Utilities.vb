@@ -1,6 +1,7 @@
 ﻿Imports System.Threading
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Xml
 'Imports System.IO.Compression
@@ -136,20 +137,20 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Get
         Set(value As String)
             _ApplicationPath            = value
-            DefaultPosterPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
-            DefaultBannerPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
-            DefaultFanartPath           = IO.Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
-            DefaultTvPosterPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvposter.jpg")
-            DefaultTvBannerPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvbanner.jpg")
-            DefaultTvFanartPath         = IO.Path.Combine(_ApplicationPath, "Resources\default_tvfanart.jpg")
-            DefaultPreFrodoBannerPath   = IO.Path.Combine(_ApplicationPath, "Resources\prefrodo_banner.jpg")
-            DefaultOfflineArtPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
-            DefaultActorPath            = IO.Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
-            DefaultScreenShotPath       = IO.Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
-            CacheFolderPath             = IO.Path.Combine(_ApplicationPath, "cache\")
-            PosterCachePath             = IO.Path.Combine(_ApplicationPath, "Settings\postercache\")
-            MissingPath                 = IO.Path.Combine(_ApplicationPath, "missing\")
-            SeriesXmlPath               = IO.Path.Combine(_ApplicationPath, "SeriesXml\")
+            DefaultPosterPath           = Path.Combine(_ApplicationPath, "Resources\default_poster.jpg")
+            DefaultBannerPath           = Path.Combine(_ApplicationPath, "Resources\default_banner.jpg")
+            DefaultFanartPath           = Path.Combine(_ApplicationPath, "Resources\default_fanart.jpg")
+            DefaultTvPosterPath         = Path.Combine(_ApplicationPath, "Resources\default_tvposter.jpg")
+            DefaultTvBannerPath         = Path.Combine(_ApplicationPath, "Resources\default_tvbanner.jpg")
+            DefaultTvFanartPath         = Path.Combine(_ApplicationPath, "Resources\default_tvfanart.jpg")
+            DefaultPreFrodoBannerPath   = Path.Combine(_ApplicationPath, "Resources\prefrodo_banner.jpg")
+            DefaultOfflineArtPath       = Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            DefaultActorPath            = Path.Combine(_ApplicationPath, "Resources\default_actor.jpg")
+            DefaultScreenShotPath       = Path.Combine(_ApplicationPath, "Resources\default_offline.jpg")
+            CacheFolderPath             = Path.Combine(_ApplicationPath, "cache\")
+            PosterCachePath             = Path.Combine(_ApplicationPath, "Settings\postercache\")
+            MissingPath                 = Path.Combine(_ApplicationPath, "missing\")
+            SeriesXmlPath               = Path.Combine(_ApplicationPath, "SeriesXml\")
             DownloadCache.CacheFolder   = CacheFolderPath
         End Set
     End Property
@@ -197,7 +198,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared tvScraperLog As String = ""
 
     Private Shared Sub langlibraryload()
-        Dim libraryfile As String = IO.Path.Combine(_ApplicationPath, "Assets\LangList.csv")
+        Dim libraryfile As String = Path.Combine(_ApplicationPath, "Assets\LangList.csv")
         Dim libline As New langlib
         Dim lst As New List(Of String)
         lst = LoadTextLines(libraryfile)
@@ -276,7 +277,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         For i = 0 To count-1
             Dim cachename2 As String = cachename & "-" & i.tostring & ".jpg"
             sec = sec + (i * gap)
-            Dim CachePath As String = IO.Path.Combine(CacheFolderPath, cachename2)
+            Dim CachePath As String = Path.Combine(CacheFolderPath, cachename2)
             If CreateScreenShot(FullPathAndFilename, CachePath, sec, True) Then
                 If i = 0 Then Returnpath = cachepath
             End If
@@ -287,11 +288,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function CreateScreenShot(ByVal FullPathAndFilename As String, ByVal SavePath As String, ByVal sec As Integer, Optional ByVal Overwrite As Boolean = False) As Boolean
         If Not File.Exists(SavePath) Or Overwrite Then
             Try
-                IO.File.Delete(SavePath)
+                File.Delete(SavePath)
             Catch
                 Return False
             End Try
-            If IO.File.Exists(FullPathAndFilename) Then
+            If File.Exists(FullPathAndFilename) Then
                 Dim myProcess As Process = New Process
                 Try
                     Dim seconds As Integer = sec
@@ -355,13 +356,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetCRC32(ByVal sFileName As String) As String
         Dim oCRC As New CRC32
         Dim oEnc As System.Text.UTF7Encoding = New System.Text.UTF7Encoding()
-        Return (oCRC.GetCrc32(New System.IO.MemoryStream(oEnc.GetBytes(sFileName))))
+        Return (oCRC.GetCrc32(New IO.MemoryStream(oEnc.GetBytes(sFileName))))
     End Function
 
     Public Shared Function GetLastFolder(ByVal FullPath As String) As String
 
         If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
-            FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
+            FullPath = FullPath.Replace(Path.GetFileName(FullPath), "")
         End If
 
         Dim foldername As String = ""
@@ -382,19 +383,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Try
             Dim vobsetName As String = ""
             Dim vobsetcount As Integer = 0
-            Dim Path As String = IO.Path.GetDirectoryName(Filename)
-            Dim di As New DirectoryInfo(Path)
-            Dim aryFi As IO.FileInfo() = di.GetFiles("vts*.vob")
+            Dim vobPath As String = Path.GetDirectoryName(Filename)
+            Dim di As New DirectoryInfo(vobPath)
+            Dim aryFi As FileInfo() = di.GetFiles("vts*.vob")
             For each fi In aryFi
                 Dim vset As String = "vts_" & fi.Name.Substring(4,2) & "*.vob"
-                Dim grp As IO.FileInfo() = di.GetFiles(vset)
+                Dim grp As FileInfo() = di.GetFiles(vset)
                 If grp.Count > vobsetcount Then
                     vobsetcount = grp.Count
                     vobsetName = vset
                 End If
             Next
             If vobsetName <> "" Then
-                Dim fileifo As IO.FileInfo() = di.GetFiles(vobsetName.Replace("vob", "ifo"))
+                Dim fileifo As FileInfo() = di.GetFiles(vobsetName.Replace("vob", "ifo"))
                 If fileifo.Count = 1 Then returnfilename = fileifo(0).FullName
             End If
         Catch
@@ -406,11 +407,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                                             Optional ByRef stackType As String = "", Optional ByRef nextPart As String = "") _
                                         As Boolean
         Dim returnCode As Boolean = False
-        If nameOnly OrElse IO.File.Exists(workingFileName) Then
-            Dim pathOnly As String = IO.Path.GetDirectoryName(workingFileName) & "\"
-            Dim filename As String = IO.Path.GetFileNameWithoutExtension(workingFileName)
+        If nameOnly OrElse File.Exists(workingFileName) Then
+            Dim pathOnly As String = Path.GetDirectoryName(workingFileName) & "\"
+            Dim filename As String = Path.GetFileNameWithoutExtension(workingFileName)
             Dim stackName As String = filename.ToLower
-            Dim extension As String = IO.Path.GetExtension(workingFileName).ToLower
+            Dim extension As String = Path.GetExtension(workingFileName).ToLower
             Dim M As Match
             If extension = ".rar" AndAlso FileLen(workingFileName) > (RARsize * 1048576) Then
                 'process RAR stack that contains digits in the style of ".part1" to ".part0001"
@@ -455,7 +456,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         End If
                     End If
                     Mid(workingFileName, pathOnly.Length + grpPartNo.Index + 1, grpPartNo.Length) = partNo
-                    If nameOnly OrElse IO.File.Exists(workingFileName) Then
+                    If nameOnly OrElse File.Exists(workingFileName) Then
                         returnCode = True
                         stackName = filename.Substring(0, M.Index)
                         isFirstPart = first
@@ -476,7 +477,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function findFileOfType(ByRef fullPath As String, ByVal fileType As String, Optional ByVal basicsave As Boolean = False, Optional ByVal fanartjpg As Boolean = False, Optional ByVal posterjpg As Boolean = False) As Boolean
-        Dim pathOnly As String = IO.Path.GetDirectoryName(fullPath) & "\"
+        Dim pathOnly As String = Path.GetDirectoryName(fullPath) & "\"
         Dim returnCode As Boolean = False
         Dim typeOfFile As New List(Of String)
         typeOfFile.Add(pathOnly & GetStackName(fullPath) & fileType)                             'multi-part string removed
@@ -490,11 +491,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If posterjpg Then
             typeOfFile.Add(pathOnly & "poster.jpg")
         End If
-        typeOfFile.Add(pathOnly & IO.Path.GetFileNameWithoutExtension(fullPath) & fileType)      'match filename sans extension
-        For Each file As String In typeOfFile
-            If IO.File.Exists(file) Then
+        typeOfFile.Add(pathOnly & Path.GetFileNameWithoutExtension(fullPath) & fileType)      'match filename sans extension
+        For Each filet As String In typeOfFile
+            If File.Exists(filet) Then
                 returnCode = True
-                fullPath = file
+                fullPath = filet
                 'Exit For
             End If
         Next
@@ -503,7 +504,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function GetFileSize(ByVal filePath As String) As Long
         If File.Exists(filePath) Then
-            Dim file As New IO.FileInfo(filePath)
+            Dim file As New FileInfo(filePath)
             Return file.Length
         End If
         Return 0
@@ -534,7 +535,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         fileTypes.AddRange(acceptedAnciliaryExts)
         fileTypes.AddRange(acceptedsubextn)
         For Each item As String In fileTypes 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
-            If System.IO.File.Exists(targetMovieFile & item) Then
+            If File.Exists(targetMovieFile & item) Then
                 aFileExists = True
                 Exit For
             End If
@@ -547,7 +548,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim fileTypes As New ArrayList
         fileTypes.AddRange(acceptedsubextn)
         For Each item As String In fileTypes 'issue - if part found mc doesn't use part for fanart & tbn so this test is not right yet
-            If System.IO.File.Exists(subFilename & item) Then
+            If File.Exists(subFilename & item) Then
                 aFileExists = item
                 Exit For
             End If
@@ -560,7 +561,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim fileTypes As New ArrayList
         fileTypes.AddRange(acceptedsubextn)
         For Each item As String In fileTypes
-            If System.IO.File.Exists(subFilename & item) Then
+            If File.Exists(subFilename & item) Then
                 aFileExists.Add(item)
             End If
         Next
@@ -570,35 +571,35 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetbdMainStream(ByVal path) As String
         If path.ToString.Contains(".nfo") Then Return path
         Dim di As New DirectoryInfo(path.Replace("index.bdmv","STREAM\"))
-        Dim fi As IO.FileInfo() = di.GetFiles("*.m2ts")
+        Dim fi As FileInfo() = di.GetFiles("*.m2ts")
         Dim sort =  fi.OrderByDescending(Function(f) f.Length)
         Return sort(0).FullName
     End Function
 
-    Public Shared Function GetFileName(ByVal path As String, Optional strict As Boolean = True, Optional VideoExtn As String = Nothing) As String
+    Public Shared Function GetFileName(ByVal filepath As String, Optional strict As Boolean = True, Optional VideoExtn As String = Nothing) As String
         Dim tempstring As String
-        Dim tempfilename As String = path
+        Dim tempfilename As String = filepath
         Dim actualpathandfilename As String = ""
 
-        If String.IsNullOrEmpty(path) Then Return Nothing
+        If String.IsNullOrEmpty(filepath) Then Return Nothing
 
-        If IO.File.Exists(tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
-            actualpathandfilename = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
+        If File.Exists(tempfilename.Replace(Path.GetFileName(tempfilename), "VIDEO_TS.IFO")) Then
+            actualpathandfilename = tempfilename.Replace(Path.GetFileName(tempfilename), "VIDEO_TS.IFO")
         End If
-        If path.ToLower.Contains(".bdmv") Then
-            Dim bdlargestfile As String = GetbdMainStream(path)
+        If filepath.ToLower.Contains(".bdmv") Then
+            Dim bdlargestfile As String = GetbdMainStream(filepath)
             actualpathandfilename = bdlargestfile
         End If
 
         If actualpathandfilename = "" AndAlso Not String.IsNullOrEmpty(VideoExtn) Then
             Dim tempname As String = tempfilename.Replace(GetExtension(tempfilename), VideoExtn.Trim("."))
-            If IO.File.Exists(tempname) Then actualpathandfilename = tempname
+            If File.Exists(tempname) Then actualpathandfilename = tempname
         End If
 
         If actualpathandfilename = "" Then
-            Dim tempname As String = tempfilename.Replace(IO.Path.GetExtension(tempfilename), "")
+            Dim tempname As String = tempfilename.Replace(Path.GetExtension(tempfilename), "")
             For Each extn In VideoExtensions
-                If IO.File.Exists(tempname & extn) Then
+                If File.Exists(tempname & extn) Then
                     actualpathandfilename = tempname & extn
                     Exit For
                 End If
@@ -607,19 +608,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         If actualpathandfilename = "" Then
             Dim possiblemovies As New List(Of String)
-            Dim filenamewithoutextension As String = IO.Path.GetFileNameWithoutExtension(path)
-            Dim dirpath As String = tempfilename.Replace(IO.Path.GetFileName(tempfilename), "")
+            Dim filenamewithoutextension As String = Path.GetFileNameWithoutExtension(filepath)
+            Dim dirpath As String = tempfilename.Replace(Path.GetFileName(tempfilename), "")
             If Not Directory.Exists(dirpath) Then Return "none"
-            Dim dir_info As New System.IO.DirectoryInfo(dirpath)
+            Dim dir_info As New DirectoryInfo(dirpath)
             Dim pattern As String = "*.*" 
-            If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*.*" ' & videoextn
-            Dim fs_infos() As IO.FileInfo = dir_info.GetFiles(pattern)
+            If strict and Not filepath.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*.*" ' & videoextn
+            Dim fs_infos() As FileInfo = dir_info.GetFiles(pattern)
             For Each vidextn In VideoExtensions
                 'Dim pattern As String = "*" & videoextn
                 'If strict and Not path.Contains("movie.nfo") Then pattern = filenamewithoutextension & "*" & videoextn
                 Try
-                    'Dim fs_infos() As IO.FileInfo = dir_info.GetFiles("*.*")
-                    For Each fs_info As IO.FileInfo In fs_infos
+                    'Dim fs_infos() As FileInfo = dir_info.GetFiles("*.*")
+                    For Each fs_info As FileInfo In fs_infos
                         If fs_info.Extension <> vidextn Then Continue For
                         If vidextn = ".rar" Then
                             If fs_info.length < 8388608 Then Continue For  'If Rar file size less than 8MB, ignore it as probably subtitle file.
@@ -667,7 +668,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function GetTvEpExtension(ByVal epnfopath As String) As String
         Dim epfilename As String = RemoveFilenameExtension(epnfopath)
         For Each extn In VideoExtensions
-            If IO.File.Exists(epfilename & extn) Then
+            If File.Exists(epfilename & extn) Then
                 Return extn
             End If
         Next
@@ -714,7 +715,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
+        Dim filechck As IO.StreamReader = File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
         filechck = Nothing
@@ -838,7 +839,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function RemoveFilenameExtension(filename As String)
-        Return filename.Replace(IO.Path.GetExtension(filename), "")
+        Return filename.Replace(Path.GetExtension(filename), "")
     End Function
 
     Public Shared Function checktitle(ByVal fulltitle As String, ByVal movseplst As List(Of String)) As String
@@ -960,7 +961,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Try
             Dim tempstring As String = pathandfilename
             Dim playlist As New List(Of String)
-            If IO.File.Exists(tempstring) Then
+            If File.Exists(tempstring) Then
                 playlist.Add(tempstring)
             End If
             tempstring = tempstring.ToLower
@@ -974,7 +975,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                         If tempstring.IndexOf(partindex) = -1 Then Exit For
                         partindex2 = part & sep & (i+1).ToString
                         tempstring = tempstring.Replace(partindex, partindex2)
-                        If IO.File.Exists(tempstring) Then
+                        If File.Exists(tempstring) Then
                             playlist.Add(tempstring)
                             gotit = True
                         End If
@@ -990,9 +991,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function save2postercache(ByVal fullpathandfilename As String, ByVal posterpath As String, optional ByVal Width As Integer = 150, Optional ByVal Height As Integer = 200) As String
-        Dim bitmap3 As New Bitmap(posterpath)
+        Dim ms As IO.MemoryStream = New IO.MemoryStream()
+        Using r As IO.Filestream = File.Open(posterpath, IO.FileMode.Open)
+            r.CopyTo(ms)
+        End Using
+        Dim bitmap3 As New Bitmap(ms)
         Dim bitmap2 As New Bitmap(bitmap3)
         bitmap3.Dispose()
+        ms.Dispose()
+        ms = Nothing
         Dim bm_source As New Bitmap(bitmap2)
         Dim bm_dest As New Bitmap(Width, Height)
         Dim gr As Graphics = Graphics.FromImage(bm_dest)
@@ -2081,7 +2088,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     'Public Shared Function SaveText(ByVal text As String, ByVal path As String) As Boolean
 
     '    Try
-    '        Dim file As IO.StreamWriter = IO.File.CreateText(path)
+    '        Dim file As IO.StreamWriter = File.CreateText(path)
     '        Try
     '            file.Write(text, False, Encoding.UTF8)
     '            file.Close()
@@ -2089,7 +2096,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '        Catch ex As Exception
     '            file.Close()
     '            Try
-    '                IO.File.Delete(path)
+    '                File.Delete(path)
     '            Catch
     '            End Try
     '            Return False
@@ -2104,8 +2111,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     'Public Shared Function DeleteFile(ByVal path As String) As Boolean
 
     '    Try
-    '        If IO.File.Exists(path) Then
-    '            IO.File.Delete(path)
+    '        If File.Exists(path) Then
+    '            File.Delete(path)
     '        End If
     '        Return True
     '    Catch
@@ -2119,11 +2126,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Dim listoflines As New List(Of String)
         Try
-            If Not IO.File.Exists(path) Then
+            If Not File.Exists(path) Then
                 listoflines.Add("nofile")
                 Return listoflines
             Else
-                Dim lines As IO.StreamReader = IO.File.OpenText(path)
+                Dim lines As IO.StreamReader = File.OpenText(path)
                 Dim line As String
                 Do
                     line = lines.ReadLine
@@ -2153,11 +2160,11 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Dim text As String = String.Empty
         Try
-            If Not IO.File.Exists(path) Then
+            If Not File.Exists(path) Then
                 text = "nofile"
                 Return text
             Else
-                Dim lines As IO.StreamReader = IO.File.OpenText(path)
+                Dim lines As IO.StreamReader = File.OpenText(path)
                 text = lines.ReadToEnd
                 lines.Close()
                 lines = Nothing
@@ -2188,7 +2195,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '            Try
     '                output.Close()
     '                Try
-    '                    IO.File.Delete(path)
+    '                    File.Delete(path)
     '                Catch
     '                End Try
     '            Catch
@@ -2209,13 +2216,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim imgPoster As String = If(isPoster, Utilities.DefaultPosterPath, Utilities.DefaultBannerPath)
         Try
             'First, check if source image is legitimate. If so, create the unique filename, otherwise the default image will be used.
-            If IO.File.Exists(origImage) Then
+            If File.Exists(origImage) Then
                 Dim origBitmap As Image = Image.FromFile(origImage)
                 Dim origRatio As Single = 0
                 origRatio = origBitmap.Height / origBitmap.Width
                 If isPoster And origRatio >= 1 Or Not isPoster And origRatio < 1 Then
                     If sizeLimit = 0 Then sizeLimit = If(isPoster, origBitmap.Height, origBitmap.Width) 'sizeLimit = 0 denotes keep original dimensions
-                    filename = IO.File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
+                    filename = File.GetLastWriteTime(origImage).ToFileTimeUtc & "_" & Utilities.GetCRC32(origImage) & "_" & sizeLimit.ToString & ".jpg"
                     imgPoster = origImage
                 End If
                 origBitmap.Dispose()
@@ -2227,8 +2234,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Try
             'Second, if the target image already exists, don't bother creating it again.
-            If Not IO.File.Exists(IO.Path.Combine(target, filename)) Then
-                Dim srcBitmap As New Bitmap(imgPoster)
+            If Not File.Exists(Path.Combine(target, filename)) Then
+                Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                Using r As IO.Filestream = File.Open(imgPoster, IO.FileMode.Open)
+                    r.CopyTo(ms)
+                End Using
+                Dim srcBitmap As New Bitmap(ms)
+                ms.dispose
                 Dim height As Integer = srcBitmap.Height
                 Dim width As Integer = srcBitmap.Width
                 Dim dstBitmap As New Bitmap(srcBitmap)
@@ -2243,7 +2255,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 End If
                 srcBitmap.Dispose()
                 dstBitmap = Utilities.ResizeImage(dstBitmap, width, height)
-                dstBitmap.Save(IO.Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
+                dstBitmap.Save(Path.Combine(target, filename), System.Drawing.Imaging.ImageFormat.Jpeg)
                 dstBitmap.Dispose()
             End If
         Catch ex As Exception
@@ -2302,7 +2314,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function GetImage(src As String) As Bitmap
 
-        Dim bm As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(src))  'As New Bitmap(src)
+        Dim bm As New IO.MemoryStream(My.Computer.FileSystem.ReadAllBytes(src))  'As New Bitmap(src)
         Dim bm2 As New Bitmap(bm)
 
         bm.Dispose()
@@ -2312,11 +2324,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function LoadImage(ByVal path As String) As Bitmap
         Try
-            Using img As Bitmap = New Bitmap(path)
-                Return Utilities.ResizeImage(img, img.Width, img.Height)
+            Dim ms As IO.MemoryStream = New IO.MemoryStream()
+            Using r As IO.Filestream = File.Open(path, IO.FileMode.Open)
+                r.CopyTo(ms)
+                Using img As Bitmap = New Bitmap(ms)
+                    ms.Dispose()
+                    Return Utilities.ResizeImage(img, img.Width, img.Height)
+                End Using
             End Using
         Catch
             Return Nothing
+
         End Try
     End Function
 
@@ -2389,22 +2407,22 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     '    Return asm.GetManifestResourceStream(resfile)
     'End Function
 
-    Public Shared Function EnsureFolderExists(ByVal Path As String) As Boolean
-        Dim Parts As String() = Split(IO.Path.GetDirectoryName(Path), "\")
+    Public Shared Function EnsureFolderExists(ByVal foldPath As String) As Boolean
+        Dim Parts As String() = Split(Path.GetDirectoryName(foldPath), "\")
         Dim currentPath As String = Parts(0)
         Dim addStart As Integer = 1
 
-        If Left(Path, 2) = "\\" Then 'Network path
+        If Left(foldPath, 2) = "\\" Then 'Network path
             currentPath &= "\" & Parts(1) & "\" & Parts(2) & "\" & Parts(3)
             addStart = 4
         End If
 
         For I = addStart To Parts.GetUpperBound(0)
-            currentPath = IO.Path.Combine(currentPath & "\", Parts(I))
+            currentPath = Path.Combine(currentPath & "\", Parts(I))
 
-            If Not IO.Directory.Exists(currentPath) Then
+            If Not Directory.Exists(currentPath) Then
                 Try
-                    IO.Directory.CreateDirectory(currentPath)
+                    Directory.CreateDirectory(currentPath)
                 Catch
                 End Try
             End If
@@ -2551,7 +2569,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function ReplaceXMLIllegalChars(ByVal xmlfile As String, ByVal linenumber As Long, ByVal charpos As Integer) As String
         Dim lines As New List(Of String)
-        Using reader As New StringReader(xmlfile)   'Using StringReader to take care of unknown newlines
+        Using reader As New IO.StringReader(xmlfile)   'Using StringReader to take care of unknown newlines
             While reader.Peek() <> -1
                 lines.Add(reader.ReadLine())
             End While
@@ -2585,7 +2603,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             While (True)
                 numTries += 1
                 Try
-                    Using fs As New FileStream(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 100)
+                    
+                    Using fs As IO.Stream = File.Open(fileName, IO.FileMode.Open, IO.FileAccess.ReadWrite, IO.FileShare.None, 100)
                         fs.ReadByte()
                         Exit While
                     End Using
@@ -2610,7 +2629,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Return False
             End If
         End If
-        IO.File.Copy(srcFile, destFile)
+        File.Copy(srcFile, destFile)
         Return True
     End Function
 
@@ -2641,7 +2660,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function RootVideoTsFolder(ByVal FullPath As String) As String
         If Right(FullPath, 1) <> Path.DirectorySeparatorChar Then
-            FullPath = FullPath.Replace(IO.Path.GetFileName(FullPath), "")
+            FullPath = FullPath.Replace(Path.GetFileName(FullPath), "")
         End If
         Dim length As integer
         Dim foldername As String = ""
@@ -2661,7 +2680,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     End Function
 
     Public Shared Function GetLastFolderInPath(ByVal path As String) As String
-        Return New IO.DirectoryInfo(path.TrimEnd("\")).Name
+        Return New DirectoryInfo(path.TrimEnd("\")).Name
     End Function
 
     Public Shared Function GetExtension(path As String) As String
@@ -2688,7 +2707,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If File.Exists(genrepath) Then
             Dim line As String = String.Empty
             Try
-                Dim userConfig As StreamReader = File.OpenText(genrepath)
+                Dim userConfig As IO.StreamReader = File.OpenText(genrepath)
                 Do
                     Try
                         line = userConfig.ReadLine

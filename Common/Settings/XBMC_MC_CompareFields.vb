@@ -2,7 +2,7 @@
 Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.Linq
-Imports System.IO
+'Imports System.IO
 
 
 Public Class XBMC_MC_CompareField

@@ -1,10 +1,11 @@
 ﻿
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 
 
 Public Class frmCopyProgress
     Private Function GetFileSize(ByVal MyFilePath As String) As Long
-        Dim MyFile As New System.IO.FileInfo(MyFilePath)
+        Dim MyFile As New FileInfo(MyFilePath)
         Dim FileSize As Long = MyFile.Length
         Return FileSize
     End Function
@@ -40,7 +41,7 @@ Public Class frmCopyProgress
         Dim savepath As String = ""
         If FolderBrowserDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
             savepath = FolderBrowserDialog1.SelectedPath
-            drive = IO.Path.GetPathRoot(savepath)
+            drive = Path.GetPathRoot(savepath)
             Me.Visible = True
             Me.Show()
             Me.Refresh()
@@ -78,10 +79,10 @@ Public Class frmCopyProgress
                     Try
                         Application.DoEvents()
                         Me.Refresh()
-                        Dim filename As String = IO.Path.GetFileName(item)
-                        Dim dest As String = IO.Path.Combine(savepath, filename)
+                        Dim filename As String = Path.GetFileName(item)
+                        Dim dest As String = Path.Combine(savepath, filename)
                         Dim mediafile As String = filename
-                        Dim fi As New IO.FileInfo(mediafile)
+                        Dim fi As New FileInfo(mediafile)
                         Dim sr As New IO.FileStream(item, IO.FileMode.Open) 'source file
                         Dim sw As New IO.FileStream(dest, IO.FileMode.Create) 'target file, defaults overwrite
                         Dim len As Long = sr.Length - 1
@@ -98,7 +99,7 @@ Public Class frmCopyProgress
                                 End If
                                 If closing = True Then
                                     sw.Close()
-                                    IO.File.Delete(dest)
+                                    File.Delete(dest)
                                     Exit For
                                 End If
                             Catch

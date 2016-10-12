@@ -1,5 +1,6 @@
 ﻿Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports Media_Companion
 Imports System.Text.RegularExpressions
 Imports Media_Companion.Tvdb
@@ -104,7 +105,7 @@ Namespace Tasks
             ' Should be identical to Form1.Tv.vb:bckgrnd_tvshowscraper_DoWork()
 
             If String.IsNullOrEmpty(Me.Show.NfoFilePath) Then
-                Me.Show.NfoFilePath = IO.Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
+                Me.Show.NfoFilePath = Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
             End If
 
 
@@ -168,14 +169,14 @@ Namespace Tasks
                 Dim ScrapeEpTask As New ScrapeEpisodeTask()
                 ScrapeEpTask.Show = Me.Show
                 ScrapeEpTask.VideoPath = Item
-                If Utilities.VideoExtensions.Contains(IO.Path.GetExtension(Item)) Then
+                If Utilities.VideoExtensions.Contains(Path.GetExtension(Item)) Then
                     Common.Tasks.Add(ScrapeEpTask)
                 End If
             Next
 
             If Me.Show.TvdbId.Value IsNot Nothing Then
                 'tvshow found
-                Me.Show.NfoFilePath = IO.Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
+                Me.Show.NfoFilePath = Path.Combine(Me.Show.FolderPath, "tvshow.nfo")
 
                 Dim tvdbstuff As New TVDBScrapper
 
@@ -210,16 +211,16 @@ Namespace Tasks
                         If Not String.IsNullOrEmpty(NewAct.actorthumb) Then
                             If NewAct.actorthumb <> "" And Pref.actorseasy = True Then
                                 If Me.Show.TvShowActorSource.Value <> "imdb" Or Me.Show.ImdbId = Nothing Then
-                                    Dim workingpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "")
+                                    Dim workingpath As String = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "")
                                     workingpath = workingpath & ".actors\"
 
                                     Utilities.EnsureFolderExists(workingpath)
                                     '**Commented out the following as fairly certain Utilities.EnsureFolderExists() replaces this - Huey
-                                    'Dim hg As New IO.DirectoryInfo(workingpath)
+                                    'Dim hg As New DirectoryInfo(workingpath)
                                     'Dim destsorted As Boolean = False
                                     'If Not hg.Exists Then
 
-                                    '    IO.Directory.CreateDirectory(workingpath)
+                                    '    IDirectory.CreateDirectory(workingpath)
                                     '    destsorted = True
 
                                     'Else
@@ -229,7 +230,7 @@ Namespace Tasks
                                     Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
                                     filename = filename.Replace(" ", "_")
                                     filename = filename & ".tbn"
-                                    filename = IO.Path.Combine(workingpath, filename)
+                                    filename = Path.Combine(workingpath, filename)
 
                                     Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, filename)
                                     'End If
@@ -240,19 +241,19 @@ Namespace Tasks
                                 Dim networkpath As String = Pref.actorsavepath
 
                                 tempstring = networkpath & "\" & id.Substring(id.Length - 2, 2)
-                                Dim hg As New IO.DirectoryInfo(tempstring)
+                                Dim hg As New DirectoryInfo(tempstring)
                                 If Not hg.Exists Then
-                                    IO.Directory.CreateDirectory(tempstring)
+                                    Directory.CreateDirectory(tempstring)
                                 End If
                                 workingpath = networkpath & "\" & id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg"
-                                If Not IO.File.Exists(workingpath) Then
+                                If Not File.Exists(workingpath) Then
                                     Utilities.DownloadFile("http://thetvdb.com/banners/_cache/" & NewAct.actorthumb, workingpath)
                                 End If
-                                NewAct.actorthumb = IO.Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2))
+                                NewAct.actorthumb = Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2))
                                 If Pref.actornetworkpath.IndexOf("/") <> -1 Then
-                                    NewAct.actorthumb = IO.Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
+                                    NewAct.actorthumb = Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2) & "/tv" & id & ".jpg")
                                 Else
-                                    NewAct.actorthumb = IO.Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
+                                    NewAct.actorthumb = Path.Combine(Pref.actornetworkpath, id.Substring(id.Length - 2, 2) & "\tv" & id & ".jpg")
                                 End If
 
 
@@ -304,15 +305,15 @@ Namespace Tasks
                                                     Dim networkpath As String = Pref.actorsavepath
 
                                                     tempstring = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2)
-                                                    Dim hg As New IO.DirectoryInfo(tempstring)
+                                                    Dim hg As New DirectoryInfo(tempstring)
                                                     If Not hg.Exists Then
-                                                        IO.Directory.CreateDirectory(tempstring)
+                                                        Directory.CreateDirectory(tempstring)
                                                     End If
                                                     workingpath = networkpath & "\" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "\" & detail.InnerText & ".jpg"
-                                                    If Not IO.File.Exists(workingpath) Then
+                                                    If Not File.Exists(workingpath) Then
                                                         Utilities.DownloadFile(newactor.actorthumb, workingpath)
                                                     End If
-                                                    newactor.actorthumb = IO.Path.Combine(Pref.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
+                                                    newactor.actorthumb = Path.Combine(Pref.actornetworkpath, detail.InnerText.Substring(detail.InnerText.Length - 2, 2))
                                                     If Pref.actornetworkpath.IndexOf("/") <> -1 Then
                                                         newactor.actorthumb = Pref.actornetworkpath & "/" & detail.InnerText.Substring(detail.InnerText.Length - 2, 2) & "/" & detail.InnerText & ".jpg"
                                                     Else
@@ -365,11 +366,11 @@ Namespace Tasks
                                 Else
                                     tempstring = f.ToString
                                 End If
-                                Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "season" & tempstring & ".tbn")
+                                Dim seasonpath As String = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "season" & tempstring & ".tbn")
                                 If tempstring = "00" Then
-                                    seasonpath = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "season-specials.tbn")
+                                    seasonpath = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "season-specials.tbn")
                                 End If
-                                If Not IO.File.Exists(seasonpath) Then
+                                If Not File.Exists(seasonpath) Then
 
                                     Utilities.DownloadFile(seasonposter, seasonpath)
 
@@ -407,7 +408,7 @@ Namespace Tasks
                         End If
                         If fanartposter <> "" Then
 
-                            Dim seasonpath = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
+                            Dim seasonpath = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "fanart.jpg")
 
                             Dim point = GetBackDropResolution(Pref.BackDropResolutionSI)
 
@@ -481,8 +482,8 @@ Namespace Tasks
 
                         If posterurlpath <> "" Then
 
-                            Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "folder.jpg")
-                            If Not IO.File.Exists(seasonpath) Then
+                            Dim seasonpath As String = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "folder.jpg")
+                            If Not File.Exists(seasonpath) Then
 
                                 Utilities.DownloadFile(posterurlpath, seasonpath)
 
@@ -541,16 +542,16 @@ Namespace Tasks
 
                         If seasonallpath <> "" Then
 
-                            Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "season-all.tbn")
-                            If Not IO.File.Exists(seasonpath) Then 'Or CheckBox6.CheckState = CheckState.Checked Then
+                            Dim seasonpath As String = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "season-all.tbn")
+                            If Not File.Exists(seasonpath) Then 'Or CheckBox6.CheckState = CheckState.Checked Then
 
                                 Utilities.DownloadFile(seasonallpath, seasonallpath)
 
                             End If
                         End If
                     ElseIf Pref.seasonall <> "none" And seasonallpath <> "" Then
-                        Dim seasonpath As String = Me.Show.NfoFilePath.Replace(IO.Path.GetFileName(Me.Show.NfoFilePath), "season-all.tbn")
-                        If Not IO.File.Exists(seasonpath) Then
+                        Dim seasonpath As String = Me.Show.NfoFilePath.Replace(Path.GetFileName(Me.Show.NfoFilePath), "season-all.tbn")
+                        If Not File.Exists(seasonpath) Then
                             Utilities.DownloadFile(seasonallpath, seasonpath)
                         End If
                     End If

@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 
 Public Class frmTextEdit
@@ -13,7 +14,7 @@ Public Class frmTextEdit
 
     Private Sub LoadTextbox()
         Dim line As String = String.Empty
-        Using fs As StreamReader = File.OpenText(CustomPath)
+        Using fs As IO.StreamReader = File.OpenText(CustomPath)
             Do While fs.Peek() >= 0
             line = fs.ReadLine
             If line <> Nothing Then
@@ -32,7 +33,7 @@ Public Class frmTextEdit
 
     Private Sub SaveCustomGenre()
         If File.Exists(CustomPath) Then File.Delete(CustomPath)
-        Using fs As IO.StreamWriter = IO.File.CreateText(CustomPath)
+        Using fs As IO.StreamWriter = File.CreateText(CustomPath)
             Try
                 fs.Write(tbText.Text)
             Catch ex As Exception

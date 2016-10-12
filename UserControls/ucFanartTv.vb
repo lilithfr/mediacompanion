@@ -1,4 +1,5 @@
 ﻿Imports System.Linq
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Drawing
 Imports Media_Companion
 
@@ -324,7 +325,7 @@ Public Class ucFanartTv
 
     Private Sub DisplayExistingArt()
         Dim LoadPath As String = Nothing
-        LoadPath = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
+        LoadPath = Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\"
         If MovSetToggle Then
             LoadPath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", "")
         ElseIf Pref.MovFanartNaming Then 
@@ -334,7 +335,7 @@ Public Class ucFanartTv
         '    LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
         'End If
         LoadPath &= artType
-        If IO.File.Exists(LoadPath) Then
+        If File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
         Else
             pbexists.Image = Nothing
@@ -343,7 +344,7 @@ Public Class ucFanartTv
 
     Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
         If Not IsNothing(pbexists.Image) Then
-            'Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
+            'Dim loadpath As String = Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
             Form1.util_ZoomImage(pbexists.Tag.ToString) 'loadpath)
         End If
     End Sub
@@ -354,7 +355,7 @@ Public Class ucFanartTv
             Dim tempint = MessageBox.show("Do you wish to delete this image from" & vbCrLf & "this Movie?", "Fanart.Tv Artwork Delete", MessageBoxButtons.YesNoCancel)
             If tempint = Windows.Forms.DialogResult.No or tempint = DialogResult.Cancel Then Exit Sub
             If tempint = Windows.Forms.DialogResult.Yes Then
-                Dim loadpath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
+                Dim loadpath As String = Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
                 pbexists.Image = Nothing
                 Utilities.SafeDeleteFile(loadpath)
                 Form1.MovPanel6Update()
@@ -377,7 +378,7 @@ Public Class ucFanartTv
             Me.Refresh()
             messbox.Refresh()
             Try
-                Dim savepath As String = IO.Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
+                Dim savepath As String = Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType
                 If MovSetToggle Then
                     savepath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", artType)
                 Else

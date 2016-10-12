@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.Globalization
@@ -13,7 +14,7 @@ Public Class WorkingWithNfoFiles
 
     Public Shared Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = IO.File.OpenText(nfopath)
+        Dim filechck As IO.StreamReader = File.OpenText(nfopath)
         tempstring = filechck.ReadToEnd.ToLower
         filechck.Close()
         filechck = Nothing
@@ -28,10 +29,10 @@ Public Class WorkingWithNfoFiles
     End Function
 
     Public Shared Sub ConvertFileToUTF8IfNotAlready(FileName As String)
-        If Not IO.File.Exists(FileName) Then Exit Sub
+        If Not File.Exists(FileName) Then Exit Sub
         Dim _Detected As Encoding
 
-        Dim r = New StreamReader(FileName, Encoding.Default)
+        Dim r As IO.StreamReader = File.Opentext(FileName)
         Dim s = r.ReadToEnd
 
         _Detected = r.CurrentEncoding
@@ -69,7 +70,13 @@ Public Class WorkingWithNfoFiles
     Public Shared Function SaveXMLDoc(ByVal doc As XmlDocument, ByVal Filename As String) As Boolean
         Dim aok As Boolean = False
         Try
-            Dim output As New XmlTextWriter(Filename, System.Text.Encoding.UTF8)
+            ' Get around Long Path for XMLTextWriter by saving to cache first
+            ' then moving to final destination.
+            Dim tmpxml As String = Utilities.CacheFolderPath & "tmpxml.nfo"
+            If File.Exists(tmpxml) Then
+                File.Delete(tmpxml, True)
+            End If
+            Dim output As New XmlTextWriter(tmpxml, System.Text.Encoding.UTF8)
 
             output.Formatting = Formatting.Indented
             output.Indentation = 4
@@ -77,6 +84,9 @@ Public Class WorkingWithNfoFiles
             output.Close()
 
             aok = True
+            If aok Then
+                File.Move(tmpxml, Filename)
+            End If
         Catch
         End Try
         Return aok
@@ -85,29 +95,32 @@ Public Class WorkingWithNfoFiles
     '  All Tv Load/Save Routines
 #Region " Tv Routines "
     
-    Public Shared Function ep_NfoLoad(ByVal path As String)
+    Public Shared Function ep_NfoLoad(ByVal loadpath As String)
         'Try
         Dim episodelist As New List(Of TvEpisode)
         Dim fixmulti As Boolean = False
         Dim newtvshow As New TvEpisode
-        If Not IO.File.Exists(path) Then
+        If Not File.Exists(loadpath) Then
             Return episodelist '"Error"
         Else
             Dim tvshow As New XmlDocument
             Try
-                tvshow.Load(path)
+                Using tmpstrm As IO.StreamReader = File.OpenText(loadpath)
+                    tvshow.Load(tmpstrm)
+                End Using
+                
             Catch ex As Exception
                 'If Not validate_nfo(path) Then
                 '    Exit Function
                 'End If
                 Try
-                newtvshow.Title.Value = IO.Path.GetFileName(path)
+                newtvshow.Title.Value = Path.GetFileName(loadpath)
                 Catch
-                    newtvshow.Title.Value = path
+                    newtvshow.Title.Value = loadpath
                 End Try
-                'newtvshow.title = newtvshow.title.Replace(IO.Path.GetExtension(newtvshow.title), "")
+                'newtvshow.title = newtvshow.title.Replace(Path.GetExtension(newtvshow.title), "")
                 newtvshow.ImdbId.Value = "xml error"
-                newtvshow.NfoFilePath = path
+                newtvshow.NfoFilePath = loadpath
                 newtvshow.TvdbId.Value = ""
 
                 If newtvshow.Episode.Value = Nothing Or newtvshow.Episode.Value = Nothing Then
@@ -153,7 +166,7 @@ Public Class WorkingWithNfoFiles
                 Dim newtvepisode As New TvEpisode
                 For Each thisresult In tvshow("episodedetails")
                     Try
-                        newtvepisode.NfoFilePath = path
+                        newtvepisode.NfoFilePath = loadpath
                         Select Case thisresult.Name
                             Case "title"
                                 newtvepisode.Title.Value = thisresult.InnerText
@@ -501,7 +514,7 @@ Public Class WorkingWithNfoFiles
                                 End Try
                             Next f
                             Try
-                                anotherepisode.NfoFilePath = path
+                                anotherepisode.NfoFilePath = loadpath
                                 If anotherepisode.Episode.Value = Nothing Or anotherepisode.Episode.Value = Nothing Then
                                     For Each regexp In Pref.tv_RegexScraper
 
@@ -537,7 +550,7 @@ Public Class WorkingWithNfoFiles
                     End Select
                 Next
                 If fixmulti Then
-                    ep_NfoSave(episodelist, path)
+                    ep_NfoSave(episodelist, loadpath)
                 End If
             End If
 
@@ -801,7 +814,7 @@ Public Class WorkingWithNfoFiles
 
 
         Dim newtvshow As New TvShow
-        If Not IO.File.Exists(path) Then
+        If Not File.Exists(path) Then
             newtvshow.Title.Value = Utilities.GetLastFolder(path)
             'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
             newtvshow.Plot.Value = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
@@ -848,7 +861,7 @@ Public Class WorkingWithNfoFiles
 
     Public Function tv_NfoLoad(ByVal path As String) As TvShow
         Dim newtvshow As New TvShow
-        If Not IO.File.Exists(path) Then
+        If Not File.Exists(path) Then
             newtvshow.Title.Value = Utilities.GetLastFolder(path)
             'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
             newtvshow.NfoFilePath = path
@@ -869,7 +882,7 @@ Public Class WorkingWithNfoFiles
     End Function
 
     Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
-        If IO.File.Exists(Path) And Not overwrite Then Exit Sub
+        If File.Exists(Path) And Not overwrite Then Exit Sub
 
         Show.Save(Path)
     End Sub
@@ -879,7 +892,9 @@ Public Class WorkingWithNfoFiles
         Dim aok As Boolean = True
         Try
             Dim thistvshow As New XmlDocument
-            thistvshow.Load(Path)
+            Using tmpstrm As IO.StreamReader = File.OpenText(Path)
+                thistvshow.Load(tmpstrm)
+            End Using
             Dim nodeToFind As XmlNode
 		    Dim root As XmlElement = thistvshow.DocumentElement
 
@@ -907,7 +922,7 @@ Public Class WorkingWithNfoFiles
             Dim filenameandpath As String = tvshowtosave.NfoFilePath
 
             If tvshowtosave Is Nothing Then Exit Sub
-            If IO.File.Exists(filenameandpath) AndAlso Not overwrite Then Exit Sub
+            If File.Exists(filenameandpath) AndAlso Not overwrite Then Exit Sub
             Dim doc As New XmlDocument
             Dim root As XmlElement
             Dim child As XmlElement
@@ -1139,7 +1154,9 @@ Public Class WorkingWithNfoFiles
             Dim newtvshow As New TvShow
             Dim tvshow As New XmlDocument
             Try
-                tvshow.Load(path)
+                Using tmpstrm As IO.StreamReader = File.OpenText(path)
+                    tvshow.Load(tmpstrm)
+                End Using
             Catch ex As Exception
                 Return blanktvshow(path)
                 Exit Function
@@ -1226,7 +1243,7 @@ Public Class WorkingWithNfoFiles
             
             newtvshow.NfoFilePath = path
 
-            Dim filecreation As IO.FileInfo = New IO.FileInfo(path)
+            Dim filecreation As FileInfo = New FileInfo(path)
             Dim myDate As Date = filecreation.LastWriteTime
 
             If newtvshow.tvdbid = Nothing Then newtvshow.TvdbId.Value = ""
@@ -1291,8 +1308,8 @@ Public Class WorkingWithNfoFiles
 
     '    Dim newepisodelist As New List(Of TvEpisode)
     '    Dim newepisode As New TvEpisode
-    '    If Not IO.File.Exists(path) Then
-    '        newepisode.Title.Value = IO.Path.GetFileName(path)
+    '    If Not File.Exists(path) Then
+    '        newepisode.Title.Value = Path.GetFileName(path)
     '        newepisode.Plot.Value = "missing file"
 
     '        newepisode.NfoFilePath = path
@@ -1330,7 +1347,7 @@ Public Class WorkingWithNfoFiles
     '            'If Not validate_nfo(path) Then
     '            '    Exit Function
     '            'End If
-    '            newepisode.Title.Value = IO.Path.GetFileName(path)
+    '            newepisode.Title.Value = Path.GetFileName(path)
     '            newepisode.Plot.Value = "problem / xml error"
     '            newepisode.NfoFilePath = path
     '            'newepisode.VideoFilePath = path
@@ -2183,12 +2200,12 @@ Public Class WorkingWithNfoFiles
 
     '  All Movie Load/Save Routines
 #Region " Movie Routines "    
-    Public Function mov_NfoLoadBasic(ByVal path As String, ByVal mode As String,_oMovies As Movies) As ComboList
+    Public Function mov_NfoLoadBasic(ByVal loadpath As String, ByVal mode As String,_oMovies As Movies) As ComboList
 
         Dim newmovie As New ComboList
 
         Try
-            If Not IO.File.Exists(path) Then
+            If Not File.Exists(loadpath) Then
                 newmovie.title = "Error"
                 Return newmovie
             End If
@@ -2198,27 +2215,29 @@ Public Class WorkingWithNfoFiles
             If mode = "movielist" Then
                 Dim movie As New XmlDocument
                 Try
-                    movie.Load(path)
+                    Using tmpstrm As IO.StreamReader = File.OpenText(loadpath)
+                        movie.Load(tmpstrm)
+                    End Using
                 'Catch
                 '    newmovie.title = "Error"
                 '    Return newmovie
                 'End Try
                 Catch ex As Exception
-                    If Not util_NfoValidate(path) Then
+                    If Not util_NfoValidate(loadpath) Then
                         newmovie.title = "Error"
                         Return newmovie
                     End If
 
                     newmovie.createdate = "999999999999"
-                    Dim filecreation2 As New IO.FileInfo(path)
+                    Dim filecreation2 As New FileInfo(loadpath)
                     Dim myDate2 As Date = filecreation2.LastWriteTime
                     Try
                         newmovie.filedate = Format(myDate2, Pref.datePattern).ToString
                     Catch
                     End Try
-                    newmovie.filename = IO.Path.GetFileName(path)
-                    newmovie.foldername = Utilities.GetLastFolder(path)
-                    newmovie.fullpathandfilename = path
+                    newmovie.filename = Path.GetFileName(loadpath)
+                    newmovie.foldername = Utilities.GetLastFolder(loadpath)
+                    newmovie.fullpathandfilename = loadpath
                     newmovie.genre = "problem / xml error"
                     newmovie.movietag.Clear()
                     newmovie.id = ""
@@ -2238,7 +2257,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.rating = ""
                     newmovie.runtime = "0"
                     newmovie.sortorder = ""
-                    newmovie.title = IO.Path.GetFileName(path)
+                    newmovie.title = Path.GetFileName(loadpath)
             '           newmovie.titleandyear = newmovie.title & " (0000)"
                     newmovie.top250 = "0"
                     newmovie.year = "1850"
@@ -2415,7 +2434,7 @@ Public Class WorkingWithNfoFiles
                 Next
 
                 'Now we need to make sure no varibles are still set to NOTHING before returning....
-                Dim filecreation As New IO.FileInfo(path)
+                Dim filecreation As New FileInfo(loadpath)
                 Dim myDate As Date = filecreation.LastWriteTime
 
 
@@ -2426,10 +2445,10 @@ Public Class WorkingWithNfoFiles
                 Catch ex As Exception
                     MsgBox(ex.ToString)
                 End Try
-                newmovie.filename = IO.Path.GetFileName(path)
-                newmovie.foldername = Utilities.GetLastFolder(path)
-                newmovie.fullpathandfilename = path
-                newmovie.rootfolder = Pref.GetRootFolder(path) & "\"
+                newmovie.filename = Path.GetFileName(loadpath)
+                newmovie.foldername = Utilities.GetLastFolder(loadpath)
+                newmovie.fullpathandfilename = loadpath
+                newmovie.rootfolder = Pref.GetRootFolder(loadpath) & "\"
                 If newmovie.genre = Nothing Then newmovie.genre = ""
                 If newmovie.id = Nothing Then newmovie.id = ""
                 If newmovie.tmdbid = Nothing Then newmovie.tmdbid = ""
@@ -2472,9 +2491,9 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Shared Function mov_NfoLoadFull(ByVal path As String) As FullMovieDetails
+    Public Shared Function mov_NfoLoadFull(ByVal loadpath As String) As FullMovieDetails
 
-        ConvertFileToUTF8IfNotAlready(path)
+        ConvertFileToUTF8IfNotAlready(loadpath)
 
         Try
             Dim newmovie As New FullMovieDetails
@@ -2485,21 +2504,23 @@ Public Class WorkingWithNfoFiles
             newmovie.filedetails = newfilenfo
             Dim thumbstring As String = String.Empty
             Dim watched As Boolean = False
-            If Not IO.File.Exists(path) Then
+            If Not File.Exists(loadpath) Then
             Else
                 Dim movie As New XmlDocument
                 Try
-                    movie.Load(path)
+                    Using tmpstrm As IO.StreamReader = File.OpenText(loadpath)
+                        movie.Load(tmpstrm)
+                    End Using
                 Catch ex As Exception
-                    If Not util_NfoValidate(path) Then
-                        IO.File.Move(path,path.Replace(".nfo",".info"))
+                    If Not util_NfoValidate(loadpath) Then
+                        File.Move(loadpath, loadpath.Replace(".nfo",".info"))
                         newmovie.fullmoviebody.title = "Error"
                         Return newmovie
                     End If
                     Dim errorstring As String
                     errorstring = ex.Message.ToString & vbCrLf & vbCrLf
                     errorstring += ex.StackTrace.ToString
-                    newmovie.fullmoviebody.title        = "Unknown" 'Utilities.CleanFileName(IO.Path.GetFileName(workingMovie.fullpathandfilename))
+                    newmovie.fullmoviebody.title        = "Unknown" 'Utilities.CleanFileName(Path.GetFileName(workingMovie.fullpathandfilename))
                     newmovie.fullmoviebody.year         = "1850"
                     newmovie.fullmoviebody.top250       = "0"
                     newmovie.fullmoviebody.credits      = ""
@@ -2803,26 +2824,26 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.imdbid = "0"
                 End If
                 If watched Then newmovie.fullmoviebody.playcount = "1"
-                newmovie.fileinfo.fullpathandfilename = path
-                newmovie.fileinfo.filename = IO.Path.GetFileName(path)
-                newmovie.fileinfo.foldername = Utilities.GetLastFolder(path)
-                If IO.Path.GetFileName(path).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(path).ToLower = "index.nfo" Then
-                    newmovie.fileinfo.videotspath = Utilities.RootVideoTsFolder(path)
+                newmovie.fileinfo.fullpathandfilename = loadpath
+                newmovie.fileinfo.filename = Path.GetFileName(loadpath)
+                newmovie.fileinfo.foldername = Utilities.GetLastFolder(loadpath)
+                If Path.GetFileName(loadpath).ToLower = "video_ts.nfo" Or Path.GetFileName(loadpath).ToLower = "index.nfo" Then
+                    newmovie.fileinfo.videotspath = Utilities.RootVideoTsFolder(loadpath)
                 Else
                     newmovie.fileinfo.videotspath = ""
                 End If
-                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(path) & "\"
-                newmovie.fileinfo.posterpath = Pref.GetPosterPath(path, newmovie.fileinfo.filename)
+                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(loadpath) & "\"
+                newmovie.fileinfo.posterpath = Pref.GetPosterPath(loadpath, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
-                newmovie.fileinfo.path = IO.Path.GetDirectoryName(path) & "\"
+                newmovie.fileinfo.path = Path.GetDirectoryName(loadpath) & "\"
                 newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
-                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(path, newmovie.fileinfo.filename)
-                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(path, newmovie.fullmoviebody.SetName)
-                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(path, newmovie.fullmoviebody.SetName)
+                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(loadpath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(loadpath, newmovie.fullmoviebody.SetName)
+                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(loadpath, newmovie.fullmoviebody.SetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
-                    newmovie.fileinfo.filenameandpath = path.Replace(".nfo", container)
+                    newmovie.fileinfo.filenameandpath = loadpath.Replace(".nfo", container)
                 End If
 
                 'If newmovie.fileinfo.path.ToLower.Contains("video_ts") or newmovie.fileinfo.path.ToLower.Contains("bdmv") Then
@@ -2856,7 +2877,7 @@ Public Class WorkingWithNfoFiles
         Dim doc As New XmlDocument
         Try
             If movietosave Is Nothing Then Exit Sub
-            If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
+            If Not File.Exists(filenameandpath) Or overwrite = True Then
                 'Try
                 
                 'Dim thumbnailstring As String = "" Test code?
@@ -3387,7 +3408,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim newmovie As New HomeMovieDetails
             newmovie.fileinfo.fullpathandfilename = filepath
-            If Not IO.File.Exists(filepath) Then
+            If Not File.Exists(filepath) Then
                 Return "Error"
                 Exit Function
             Else
@@ -3395,7 +3416,9 @@ Public Class WorkingWithNfoFiles
                 Dim movie As New XmlDocument
 
                 Try
-                    movie.Load(filepath)
+                    Using tmpstrm As IO.StreamReader = File.OpenText(filepath)
+                        movie.Load(tmpstrm)
+                    End Using
                 Catch ex As Exception
                     If Not util_NfoValidate(filepath, True) Then
                         newmovie.fullmoviebody.title = "ERROR"
@@ -3538,7 +3561,7 @@ Public Class WorkingWithNfoFiles
                 'Now we need to make sure no varibles are still set to NOTHING before returning....
 
                 If newmovie.fullmoviebody.title = Nothing Then newmovie.fullmoviebody.title = "ERR - This Movie Has No TITLE!"
-                newmovie.fullmoviebody.filename = IO.Path.GetFileName(filepath)
+                newmovie.fullmoviebody.filename = Path.GetFileName(filepath)
                 If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
                 If newmovie.fullmoviebody.plot = Nothing Then newmovie.fullmoviebody.plot = ""
                 If newmovie.fullmoviebody.runtime = Nothing Then newmovie.fullmoviebody.runtime = ""
@@ -3546,12 +3569,12 @@ Public Class WorkingWithNfoFiles
 
                 If newmovie.fullmoviebody.year = Nothing Then newmovie.fullmoviebody.year = "1901"
                 newmovie.fileinfo.fullpathandfilename = filepath
-                newmovie.fileinfo.filename = IO.Path.GetFileName(filepath)
+                newmovie.fileinfo.filename = Path.GetFileName(filepath)
                 newmovie.fileinfo.foldername = Utilities.GetLastFolder(filepath)
                 newmovie.fileinfo.posterpath = Pref.GetPosterPath(filepath, newmovie.fileinfo.filename)
                 newmovie.fileinfo.trailerpath = ""
                 newmovie.fileinfo.rootfolder = Pref.GetRootFolder(filepath) & "\"
-                newmovie.fileinfo.path = IO.Path.GetDirectoryName(filepath) & "\"
+                newmovie.fileinfo.path = Path.GetDirectoryName(filepath) & "\"
                 newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
                 newmovie.fileinfo.fanartpath = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
                 If Not String.IsNullOrEmpty(newmovie.filedetails.filedetails_video.Container.Value) Then
@@ -3575,7 +3598,7 @@ Public Class WorkingWithNfoFiles
     Public Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
 
         If homemovietosave Is Nothing Then Exit Sub
-        If Not IO.File.Exists(filenameandpath) Or overwrite = True Then
+        If Not File.Exists(filenameandpath) Or overwrite = True Then
             'Try
             Dim doc As New XmlDocument
             Dim thispref As XmlNode = Nothing
@@ -4082,7 +4105,7 @@ Public Class WorkingWithNfoFiles
         doc.AppendChild(root)
 
         'Dim nfopath As String = filenameandpath
-        'nfopath = nfopath.Replace(IO.Path.GetExtension(nfopath), ".nfo")
+        'nfopath = nfopath.Replace(Path.GetExtension(nfopath), ".nfo")
 
         Try
             SaveXMLDoc(doc, filenameandpath)
@@ -4099,7 +4122,9 @@ Public Class WorkingWithNfoFiles
         Dim NewMusicVideo As New FullMovieDetails 
         NewMusicVideo.fileinfo.fullPathAndFilename = filePath
         Dim document As New XmlDocument
-        document.Load(filePath)
+        Using tmpstrm As IO.StreamReader = File.OpenText(filepath)
+            document.Load(tmpstrm)
+        End Using
         Dim thisresult As XmlNode = Nothing
         Dim newfilenfo As New FullFileDetails
         For Each thisresult In document("musicvideo")
@@ -4200,12 +4225,12 @@ Public Class WorkingWithNfoFiles
             End Select
         Next
         NewMusicVideo.fileinfo.fullpathandfilename = filepath
-        NewMusicVideo.fileinfo.filename     = IO.Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.filedetails_video.Container.Value)
+        NewMusicVideo.fileinfo.filename     = Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.filedetails_video.Container.Value)
         NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
         NewMusicVideo.fileinfo.posterpath   = Pref.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
         NewMusicVideo.fileinfo.trailerpath  = ""
         NewMusicVideo.fileinfo.rootfolder   = Pref.GetRootFolder(filePath) & "\"
-        NewMusicVideo.fileinfo.path         = IO.Path.GetDirectoryName(filepath) & "\"
+        NewMusicVideo.fileinfo.path         = Path.GetDirectoryName(filepath) & "\"
         NewMusicVideo.fileinfo.basepath     = Pref.GetMovBasePath(NewMusicVideo.fileinfo.path)
         NewMusicVideo.fileinfo.fanartpath   = Pref.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
         If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.filedetails_video.Container.Value) Then

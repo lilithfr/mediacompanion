@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
 Imports System.Threading
 Imports System.ComponentModel
@@ -172,7 +173,7 @@ Public Class Pref
     '        Return _MkvMergeGuiPath
     '    End Get
     '    Set (ByVal value As String)
-    '        If IO.File.Exists(value) Then
+    '        If File.Exists(value) Then
     '            _MkvMergeGuiPath = value
     '            RaiseEvent PropertyChanged_MkvMergeGuiPath
     '        End If
@@ -559,7 +560,7 @@ Public Class Pref
 
     ReadOnly Shared Property XBMC_TexturesDbFile_Valid As Boolean
         Get
-            Return IO.File.Exists(XBMC_TexturesDb_Path)
+            Return File.Exists(XBMC_TexturesDb_Path)
         End Get
     End Property
 
@@ -1337,7 +1338,7 @@ Public Class Pref
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(workingProfile.Config) Then
-            workingProfile.Config = IO.Path.Combine(applicationPath, "settings\config.xml")
+            workingProfile.Config = Path.Combine(applicationPath, "settings\config.xml")
         End If
         Dim output As XmlTextWriter = Nothing
         Try
@@ -1374,7 +1375,7 @@ Public Class Pref
         ExcludeFolders.Clear()
 
 
-        If Not IO.File.Exists(workingProfile.Config) Then
+        If Not File.Exists(workingProfile.Config) Then
             Exit Sub
         End If
 
@@ -1803,12 +1804,12 @@ Public Class Pref
             End If
         Next
         If Not String.IsNullOrEmpty(MkvMergeGuiPath) Then
-            If Not IO.File.Exists(MkvMergeGuiPath) Then
+            If Not File.Exists(MkvMergeGuiPath) Then
                 MkvMergeGuiPath = ""
             End If
         End If
         If Not String.IsNullOrEmpty(selectedBrowser) Then
-            If Not IO.File.Exists(selectedBrowser) Then
+            If Not File.Exists(selectedBrowser) Then
                 selectedBrowser = ""
                 externalbrowser = False
             End If
@@ -1871,26 +1872,26 @@ Public Class Pref
     End Function
 
     Public Shared Function TrailerExists(NfoPathPrefName As String) As Boolean
-        Return IO.File.Exists(ActualTrailerPath(NfoPathPrefName))
+        Return File.Exists(ActualTrailerPath(NfoPathPrefName))
     End Function
     
     Public Shared Function FanartExists(NfoPathPrefName As String) As Boolean
-        If Pref.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
+        If Pref.FrodoEnabled AndAlso Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
-            Return IO.File.Exists(NfoPathPrefName + "fanart.jpg")
+            Return File.Exists(NfoPathPrefName + "fanart.jpg")
         End If
-        Return IO.File.Exists(Pref.GetFanartPath(NfoPathPrefName))
+        Return File.Exists(Pref.GetFanartPath(NfoPathPrefName))
     End Function
     
     Public Shared Function PosterExists(NfoPathPrefName As String) As Boolean
-        If Pref.FrodoEnabled AndAlso IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
+        If Pref.FrodoEnabled AndAlso Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Then
             NfoPathPrefName = Utilities.RootVideoTsFolder(NfoPathPrefName)
-            Return IO.File.Exists(NfoPathPrefName + "poster.jpg")
+            Return File.Exists(NfoPathPrefName + "poster.jpg")
         End If
         If Not Pref.EdenEnabled AndAlso Pref.posterjpg AndAlso Not GetRootFolderCheck(NfoPathPrefName) Then
-            Return IO.File.Exists(IO.Path.GetDirectoryName(NfoPathPrefName) & "\poster.jpg")
+            Return File.Exists(Path.GetDirectoryName(NfoPathPrefName) & "\poster.jpg")
         End If
-        Return IO.File.Exists(Pref.GetPosterPath(NfoPathPrefName))
+        Return File.Exists(Pref.GetPosterPath(NfoPathPrefName))
     End Function
     
     Public Shared Function GetMissingData(NfoPathPrefName As String) As Byte
@@ -1906,20 +1907,20 @@ Public Class Pref
         Dim FileName As String = ""
         For each tra In Utilities.acceptedtrailernaming
             For each extn In Utilities.TrailerExtensions
-                FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & extn)
-                If IO.File.Exists(FileName) Then Return FileName
+                FileName = Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & extn)
+                If File.Exists(FileName) Then Return FileName
             Next
         Next
         'For Each item In "mp4,flv,webm,mov,m4v".Split(",")
-        '    FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
-        '    If IO.File.Exists(FileName) Then Return FileName
+        '    FileName = Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
+        '    If File.Exists(FileName) Then Return FileName
         'Next
-        Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+        Return Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
     End Function
     
     Public Shared Function GetActorPath(ByVal FullPath As String, ByVal ActorName As String, ByVal actorid As String) As String
         If String.IsNullOrEmpty(FullPath) or String.IsNullOrEmpty(ActorName) Then Return ""
-        Dim Path As String = FullPath.Replace(IO.Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
+        Dim Path1 As String = FullPath.Replace(Path.GetFileName(FullPath), "") & ".actors\" & ActorName.Replace(" ", "_")
         Dim Path2 As String = ""
         If Pref.actorsave AndAlso actorid <> "" Then
             If Pref.actorsavealpha Then
@@ -1927,13 +1928,13 @@ Public Class Pref
             Else
                 Path2 = Pref.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid
             End If
-            If IO.File.Exists(Path2 & ".jpg") Then Return Path2 & ".jpg"
-            If IO.File.Exists(Path2 & ".tbn") Then Return Path2 & ".tbn"
+            If File.Exists(Path2 & ".jpg") Then Return Path2 & ".jpg"
+            If File.Exists(Path2 & ".tbn") Then Return Path2 & ".tbn"
         End If
-        If Pref.FrodoEnabled And IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"  
-        If Pref.EdenEnabled  And IO.File.Exists(Path & ".tbn") Then Return Path & ".tbn"
-        If IO.File.Exists(Path & ".jpg") Then Return Path & ".jpg"
-        Return Path & ".tbn"  
+        If Pref.FrodoEnabled And File.Exists(Path1 & ".jpg") Then Return Path1 & ".jpg"  
+        If Pref.EdenEnabled  And File.Exists(Path1 & ".tbn") Then Return Path1 & ".tbn"
+        If File.Exists(Path1 & ".jpg") Then Return Path1 & ".jpg"
+        Return Path1 & ".tbn"  
     End Function
 
 
@@ -1941,26 +1942,26 @@ Public Class Pref
         Dim posterpath As String = FullPath
         If Not String.IsNullOrEmpty(MovFilePath) AndAlso (Pref.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo")) Then
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
-            If IO.File.Exists(dvdbdpath & "poster.jpg") Then Return dvdbdpath & "poster.jpg"
+            If File.Exists(dvdbdpath & "poster.jpg") Then Return dvdbdpath & "poster.jpg"
         End If
         If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Pref.basicsavemode) Then
             'Check Frodo naming convention
             If Not Utilities.findFileOfType(posterpath, ".tbn", Pref.basicsavemode) Then
-                If IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
-                    posterpath = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                ElseIf IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg") Then
-                    posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
+                If File.Exists(Path.GetDirectoryName(FullPath) & "\folder.jpg") Then
+                    posterpath = Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                ElseIf File.Exists(Path.GetDirectoryName(FullPath) & "\poster.jpg") Then
+                    posterpath = Path.GetDirectoryName(FullPath) & "\poster.jpg"
                 Else
                     Dim postertype As String = ".tbn"
                     If Pref.FrodoEnabled Then postertype = "-poster.jpg"
-                    posterpath = FullPath.Replace(IO.Path.GetExtension(FullPath), postertype)
+                    posterpath = FullPath.Replace(Path.GetExtension(FullPath), postertype)
                 End If
             End If
         End If
         Try
             If Pref.posterjpg AndAlso Not IsNothing(MovFilePath) AndAlso Not GetRootFolderCheck(FullPath) AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
-                Dim ispath As Boolean = IO.File.Exists(IO.Path.GetDirectoryName(FullPath) & "\poster.jpg")
-                If ispath Then posterpath = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
+                Dim ispath As Boolean = File.Exists(Path.GetDirectoryName(FullPath) & "\poster.jpg")
+                If ispath Then posterpath = Path.GetDirectoryName(FullPath) & "\poster.jpg"
             End If
         Catch
         End Try
@@ -1970,114 +1971,114 @@ Public Class Pref
 
     Public Shared Function FrodoPosterExists(ByVal nfoFile As String) As Boolean
 
-        If IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg")) Then Return True
+        If File.Exists(nfoFile.Replace(Path.GetExtension(nfoFile), "-poster.jpg")) Then Return True
 
-        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+        Dim dir As String = Path.GetDirectoryName(nfoFile)
 
-        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+        If Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
             dir = Utilities.RootVideoTsFolder(nfoFile)
             dir = dir.Substring(0,dir.Length-1)
         End If
-        If IO.File.Exists(dir & "\poster.jpg") Then Return True
-        If IO.File.Exists(dir & "\folder.jpg") Then Return True
+        If File.Exists(dir & "\poster.jpg") Then Return True
+        If File.Exists(dir & "\folder.jpg") Then Return True
         Return False
     End Function
 
     Public Shared Function FrodoPosterPath(ByVal nfoFile As String) As String
-        If IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg")) Then Return nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg")
+        If File.Exists(nfoFile.Replace(Path.GetExtension(nfoFile), "-poster.jpg")) Then Return nfoFile.Replace(Path.GetExtension(nfoFile), "-poster.jpg")
 
-        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+        Dim dir As String = Path.GetDirectoryName(nfoFile)
 
-        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+        If Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
             dir = Utilities.RootVideoTsFolder(nfoFile)
             dir = dir.Substring(0,dir.Length-1)
         End If
-        If IO.File.Exists(dir & "\poster.jpg") Then Return dir & "\poster.jpg"
-        If IO.File.Exists(dir & "\folder.jpg") Then Return dir & "\folder.jpg"
+        If File.Exists(dir & "\poster.jpg") Then Return dir & "\poster.jpg"
+        If File.Exists(dir & "\folder.jpg") Then Return dir & "\folder.jpg"
         Return ""
     End Function
 
     Public Shared Function FrodoFanartPath(ByVal nfoFile As String) As String
-        If IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-fanart.jpg")) Then Return nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-fanart.jpg")
+        If File.Exists(nfoFile.Replace(Path.GetExtension(nfoFile), "-fanart.jpg")) Then Return nfoFile.Replace(Path.GetExtension(nfoFile), "-fanart.jpg")
 
-        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+        Dim dir As String = Path.GetDirectoryName(nfoFile)
 
-        If IO.Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
+        If Path.GetFileName(nfoFile).ToLower = "video_ts.nfo" Or Path.GetFileName(nfoFile).ToLower = "index.nfo" Then
             dir = Utilities.RootVideoTsFolder(nfoFile)
             dir = dir.Substring(0,dir.Length-1)
         End If
-        If IO.File.Exists(dir & "\fanart.jpg") Then Return dir & "\fanart.jpg"
+        If File.Exists(dir & "\fanart.jpg") Then Return dir & "\fanart.jpg"
         Return ""
     End Function
 
 
     Public Shared Function PreFrodoPosterExists(ByVal nfoFile As String) As Boolean
-        Return IO.File.Exists(nfoFile.Replace(IO.Path.GetExtension(nfoFile), ".tbn"))
+        Return File.Exists(nfoFile.Replace(Path.GetExtension(nfoFile), ".tbn"))
     End Function
 
 
     Public Shared Function GetAllPosters(ByVal nfoFile As String) As List(Of String)
         Dim Results As List(Of String) = New List(Of String)
-        Dim dir As String = IO.Path.GetDirectoryName(nfoFile)
+        Dim dir As String = Path.GetDirectoryName(nfoFile)
         AddIfExistsAndNew( Results, dir & "\folder.jpg")
         AddIfExistsAndNew( Results, dir & "\poster.jpg")
-        AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), "-poster.jpg") )
-        AddIfExistsAndNew( Results, nfoFile.Replace(IO.Path.GetExtension(nfoFile), ".tbn"       ) )
+        AddIfExistsAndNew( Results, nfoFile.Replace(Path.GetExtension(nfoFile), "-poster.jpg") )
+        AddIfExistsAndNew( Results, nfoFile.Replace(Path.GetExtension(nfoFile), ".tbn"       ) )
         Return Results
     End Function
 
     Public Shared Sub AddIfExistsAndNew( lst As List(Of String), fName As String)
         If lst.Contains(fName) Then Return
-        If Not IO.File.Exists(fName) Then Return
+        If Not File.Exists(fName) Then Return
         lst.Add(fName)
     End Sub
 
     Public Shared Function GetPosterPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst = New List(Of String)
-        Dim path As String = FullPath
+        Dim Path1 As String = FullPath
         Dim isroot As Boolean = Pref.GetRootFolderCheck(FullPath)
 
         If (Pref.posterjpg Or Pref.basicsavemode) AndAlso Not isroot Then
             If videots <> "" Then
                 If Pref.EdenEnabled Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                    lst.Add(path)
+                    Path1 = FullPath.Replace(Path.GetExtension(FullPath), ".tbn")
+                    lst.Add(Path1)
                 End If
                 If Pref.FrodoEnabled Then
-                    path = videots + "poster.jpg"
-                    lst.Add(path)
+                    Path1 = videots + "poster.jpg"
+                    lst.Add(Path1)
                 End If
             Else
                 If (Pref.posterjpg Or Pref.basicsavemode) AndAlso Pref.FrodoEnabled Then
-                    path = IO.Path.GetDirectoryName(FullPath) & "\poster.jpg"
-                    lst.Add(path)
+                    Path1 = Path.GetDirectoryName(FullPath) & "\poster.jpg"
+                    lst.Add(Path1)
                 End If
                 If Pref.createfolderjpg Then
-                    path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                    lst.Add(path)
+                    Path1 = Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                    lst.Add(Path1)
                 End If
                 If (Pref.EdenEnabled AndAlso Not Pref.basicsavemode) OrElse (Pref.basicsavemode AndAlso Not Pref.FrodoEnabled) Then
                 'If Pref.EdenEnabled Or (Pref.basicsavemode AndAlso Not Pref.FrodoEnabled) Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                    lst.Add(path)
+                    Path1 = FullPath.Replace(Path.GetExtension(FullPath), ".tbn")
+                    lst.Add(Path1)
                 End If
             End If
         Else
             If Pref.EdenEnabled Then
-                path = FullPath.Replace(IO.Path.GetExtension(FullPath), ".tbn")
-                lst.Add(path)
+                Path1 = FullPath.Replace(Path.GetExtension(FullPath), ".tbn")
+                lst.Add(Path1)
             End If
             If Pref.basicsavemode Or Pref.createfolderjpg And Not isroot Then
-                path = IO.Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
-                lst.Add(path)
+                Path1 = Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                lst.Add(Path1)
             End If
             If Pref.FrodoEnabled Then
                 If videots = "" Then
-                    path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-poster.jpg")
-                    lst.Add(path)
+                    Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-poster.jpg")
+                    lst.Add(Path1)
                 Else
-                    path = videots + "poster.jpg"
-                    lst.Add(path)
+                    Path1 = videots + "poster.jpg"
+                    lst.Add(Path1)
                 End If
             End If
         End If
@@ -2086,67 +2087,67 @@ Public Class Pref
 
     Public Shared Function CheckmissingPoster(ByVal FullPath As String) As Boolean  'Return True if any missing Posters
         Dim videotsrootpath As String = ""
-        If IO.Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(FullPath).ToLower = "index.nfo" Then
+        If Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or Path.GetFileName(FullPath).ToLower = "index.nfo" Then
             videotsrootpath = Utilities.RootVideoTsFolder(FullPath)
         End If
         Dim posterlist As New List(Of String)
         posterlist = GetPosterPaths(FullPath, videotsrootpath)
         For Each item In posterlist
-            If Not IO.File.Exists(item) Then CheckmissingPoster = True
+            If Not File.Exists(item) Then CheckmissingPoster = True
         Next
         Return CheckmissingPoster 
     End Function
 
     Public Shared Function GetFanartPaths(ByVal FullPath As String, Optional ByVal videots As String = "") As List(Of String)
         Dim lst = New List(Of String)
-        Dim path As String = FullPath
+        Dim Path1 As String = FullPath
         Dim isroot As Boolean = Pref.GetRootFolderCheck(FullPath)
         Dim fanartjpg As Boolean = Pref.fanartjpg
 
         If (fanartjpg Or Pref.basicsavemode) AndAlso Not isroot Then
             If videots <> "" Then
                 If Pref.EdenEnabled Then
-                    path = FullPath.Replace(".nfo", "-fanart.jpg")
-                    lst.Add(path)
+                    Path1 = FullPath.Replace(".nfo", "-fanart.jpg")
+                    lst.Add(Path1)
                 End If
                 If Pref.FrodoEnabled Then
-                    path = videots + "fanart.jpg"
-                    lst.Add(path)
+                    Path1 = videots + "fanart.jpg"
+                    lst.Add(Path1)
                 End If
             Else
                 If (fanartjpg And Pref.FrodoEnabled) Or Pref.basicsavemode Or Pref.createfanartjpg Then
-                    path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
-                    lst.Add(path)
+                    Path1 = Path.GetDirectoryName(FullPath) & "\fanart.jpg"
+                    lst.Add(Path1)
                 End If
                 If Not Pref.basicsavemode AndAlso Pref.EdenEnabled Then
-                    path = FullPath.Replace(".nfo", "-fanart.jpg")
-                    lst.Add(path)
+                    Path1 = FullPath.Replace(".nfo", "-fanart.jpg")
+                    lst.Add(Path1)
                 End If
             End If
         Else
             If Pref.EdenEnabled Then
-                path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
-                lst.Add(path)
+                Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
+                lst.Add(Path1)
             End If
             If Pref.FrodoEnabled Then
                 If Not Pref.EdenEnabled Then
                     If Not videots = "" Then
-                        path = videots + "fanart.jpg"
-                        lst.Add(path)
+                        Path1 = videots + "fanart.jpg"
+                        lst.Add(Path1)
                     Else
-                        path = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
-                        lst.Add(path)
+                        Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
+                        lst.Add(Path1)
                     End If
                  Else
                     If Not videots = "" Then
-                        path = videots + "fanart.jpg"
-                        lst.Add(path)
+                        Path1 = videots + "fanart.jpg"
+                        lst.Add(Path1)
                     End If
                 End If
             End If
             If Pref.basicsavemode OrElse Pref.createfanartjpg Then
-                path = IO.Path.GetDirectoryName(FullPath) & "\fanart.jpg"
-                lst.Add(path)
+                Path1 = Path.GetDirectoryName(FullPath) & "\fanart.jpg"
+                lst.Add(Path1)
             End If
             End If
 
@@ -2155,13 +2156,13 @@ Public Class Pref
 
     Public Shared Function CheckmissingFanart(ByVal FullPath As String) As Boolean  'Return True if any missing Fanart
         Dim videotsrootpath As String = ""
-        If IO.Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(FullPath).ToLower = "index.nfo" Then
+        If Path.GetFileName(FullPath).ToLower = "video_ts.nfo" Or Path.GetFileName(FullPath).ToLower = "index.nfo" Then
             videotsrootpath = Utilities.RootVideoTsFolder(FullPath)
         End If
         Dim fanartlist As New List(Of String)
         fanartlist = GetFanartPaths(FullPath, videotsrootpath)
         For Each item In fanartlist
-            If Not IO.File.Exists(item) Then CheckmissingFanart = True
+            If Not File.Exists(item) Then CheckmissingFanart = True
         Next
         Return CheckmissingFanart 
     End Function
@@ -2170,19 +2171,19 @@ Public Class Pref
         Dim fanartPath As String = FullPath
         If Pref.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo") Then
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
-            If IO.File.Exists(dvdbdpath & "fanart.jpg") Then Return dvdbdpath & "fanart.jpg"
+            If File.Exists(dvdbdpath & "fanart.jpg") Then Return dvdbdpath & "fanart.jpg"
         End If
         If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Pref.basicsavemode, Pref.fanartjpg, False) Then
             If Not GetRootFolderCheck(FullPath) AndAlso Pref.fanartjpg AndAlso MovFilePath <> "" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath, "") & "fanart.jpg"
                 Return MovPath
             Else
-                fanartPath = FullPath.Replace(IO.Path.GetExtension(FullPath), "-fanart.jpg")
+                fanartPath = FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
             End If
         Else
             If Not GetRootFolderCheck(FullPath) AndAlso Pref.fanartjpg AndAlso MovFilePath <> "" AndAlso MovFilePath.ToLower <> "video_ts.nfo" Then
                 Dim MovPath As String = FullPath.Replace(MovFilePath, "") & "fanart.jpg"
-                If IO.File.Exists(MovPath) Then Return MovPath
+                If File.Exists(MovPath) Then Return MovPath
             End If
         End If
         Return fanartPath
@@ -2214,7 +2215,7 @@ Public Class Pref
         If MovSetName = "" Then Return ""
         MovSetName = Utilities.cleanFoldernameIllegalChars(MovSetName)
         Dim foldername As String = Utilities.GetLastFolder(MovPath)
-        Dim filename As String = IO.Path.GetFileName(MovPath)
+        Dim filename As String = Path.GetFileName(MovPath)
         If Pref.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
             movsetfanartpath = Pref.MovSetArtCentralFolder & "\" & MovSetName & "-fanart.jpg"
         Else                                                'or Save to movieset folder if exists.
@@ -2239,7 +2240,7 @@ Public Class Pref
         If MovSetName = "" Then Return ""
         MovSetName = Utilities.cleanFoldernameIllegalChars(MovSetName)
         Dim foldername As String = Utilities.GetLastFolder(MovPath)
-        Dim filename As String = IO.Path.GetFileName(MovPath)
+        Dim filename As String = Path.GetFileName(MovPath)
         If Pref.MovSetArtSetFolder Then              'Central folder for all Movie Set Artwork
             movsetposterpath = Pref.MovSetArtCentralFolder & "\" & MovSetName & "-poster.jpg"
         Else                                                'or Save to movieset folder if exists.
@@ -2268,11 +2269,11 @@ Public Class Pref
 
             If location.IndexOf(actornetworkpath) <> -1 Then
                 If Not String.IsNullOrEmpty(actornetworkpath) Or Not String.IsNullOrEmpty(actorsavepath) Then
-                    Dim filename As String = IO.Path.GetFileName(location)
-                    actualpath = IO.Path.Combine(actorsavepath, filename)
-                    If Not IO.File.Exists(actualpath) Then
-                        Dim extension As String = IO.Path.GetExtension(location)
-                        Dim purename As String = IO.Path.GetFileName(location)
+                    Dim filename As String = Path.GetFileName(location)
+                    actualpath = Path.Combine(actorsavepath, filename)
+                    If Not File.Exists(actualpath) Then
+                        Dim extension As String = Path.GetExtension(location)
+                        Dim purename As String = Path.GetFileName(location)
                         purename = purename.Replace(extension, "")
                         If actorsavealpha Then
                             actualpath = actorsavepath & "\" & purename.Substring(0,1) & "\" & filename
@@ -2280,7 +2281,7 @@ Public Class Pref
                             actualpath = actorsavepath & "\" & purename.Substring(purename.Length - 2, 2) & "\" & filename
                         End If
                     End If
-                    If Not IO.File.Exists(actualpath) Then
+                    If Not File.Exists(actualpath) Then
                         actualpath = "none"
                     End If
                 Else
@@ -2323,10 +2324,10 @@ Public Class Pref
 
     Public Shared Function Get_HdTags(ByVal filename As String) As FullFileDetails
         Try
-            If IO.Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
+            If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
                 Dim temppath As String = Utilities.GetDvdLargestVobSet(filename)
-                'Dim temppath As String = filename.Replace(IO.Path.GetFileName(filename), "VTS_01_0.IFO")
-                If IO.File.Exists(temppath) Then
+                'Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
+                If File.Exists(temppath) Then
                     filename = temppath
                 End If
             End If
@@ -2335,7 +2336,7 @@ Public Class Pref
             Dim workingfiledetails As New FullFileDetails
 
             ' If Iso file
-            If IO.Path.GetExtension(filename).ToLower = ".iso" Then
+            If Path.GetExtension(filename).ToLower = ".iso" Then
                 Return Get_HDIsoTags(filename)
             End If
 
@@ -2347,7 +2348,7 @@ Public Class Pref
                 filename = tempstring 
             End If
 
-            If Not IO.File.Exists(filename) Then
+            If Not File.Exists(filename) Then
                 Return Nothing
             End If
 
@@ -2452,7 +2453,7 @@ Public Class Pref
             If filename.ToLower.Contains("\bdmv\stream\") Then
                 workingfiledetails.filedetails_video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"
             Else
-                workingfiledetails.filedetails_video.Container.Value = IO.Path.GetExtension(filename) '"else this is the extension of the file"
+                workingfiledetails.filedetails_video.Container.Value = Path.GetExtension(filename) '"else this is the extension of the file"
             End If
             
             workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")
@@ -2610,7 +2611,7 @@ Public Class Pref
                                 If workingfile.filedetails_video.Codec.Value.ToLower = "avc" Then workingfile.filedetails_video.Codec.Value = "avc1"
                                 workingfile.filedetails_video.Width.Value = workingfile.filedetails_video.Width.Value.Replace(" pixels", "").Replace(" ", "")
                                 workingfile.filedetails_video.Height.Value = workingfile.filedetails_video.Height.Value.Replace(" pixels", "").Replace(" ", "")
-                                workingfile.filedetails_video.Container.Value = IO.Path.GetExtension(filename).ToLower
+                                workingfile.filedetails_video.Container.Value = Path.GetExtension(filename).ToLower
                                 workingfile.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
                             End If
 
@@ -2682,7 +2683,7 @@ Public Class Pref
         Dim tempstring As String = String.Empty 
         If applicationPath.IndexOf("/") <> -1 Then tempstring = applicationPath & "/" & "mediainfo-rar.exe"
         If applicationPath.IndexOf("\") <> -1 Then tempstring = applicationPath & "\" & "mediainfo-rar.exe"
-        If Not IO.File.Exists(tempstring) Then Return ""
+        If Not File.Exists(tempstring) Then Return ""
         Try
         Dim NewProcess As New System.Diagnostics.Process()
 

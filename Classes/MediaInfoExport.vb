@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Media_Companion.WorkingWithNfoFiles
@@ -45,7 +46,7 @@ Public Class MediaInfoExport
 
     Public Sub addTemplates(Optional ByRef mediaDropdown As SortedList(Of String, String) = Nothing)
         Dim dir_info As New DirectoryInfo(templateFolder)
-        Dim fs_infos() As IO.FileInfo = dir_info.GetFiles("*.txt", SearchOption.TopDirectoryOnly)
+        Dim fs_infos() As FileInfo = dir_info.GetFiles("*.txt", IO.SearchOption.TopDirectoryOnly)
         templateList.Clear()
         For Each info In fs_infos
             Try
@@ -136,9 +137,9 @@ Public Class MediaInfoExport
         'Check to see if any images are to be created, and provide reference to image save directory - non-destructive
         If Regex.IsMatch(templateBody, "<<(smallimage|createimage(:\w*?)*)>>") Then
             pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
-            Dim fso As New IO.DirectoryInfo(pathstring)
+            Dim fso As New DirectoryInfo(pathstring)
             If fso.Exists = False Then
-                IO.Directory.CreateDirectory(pathstring)
+                Directory.CreateDirectory(pathstring)
             End If
         End If
 
@@ -213,11 +214,11 @@ Public Class MediaInfoExport
 
             Try
                 If workingTemplate.css IsNot String.Empty Then
-                    Dim cssWriter As New System.IO.StreamWriter(IO.Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, workingTemplate.TextEncoding)
+                    Dim cssWriter As New IO.StreamWriter(Path.GetDirectoryName(savePath) & Path.DirectorySeparatorChar & workingTemplate.cssfile, False, workingTemplate.TextEncoding)
                     cssWriter.Write(workingTemplate.css)
                     cssWriter.Dispose()
                 End If
-                Dim docWriter As New System.IO.StreamWriter(savePath, False, workingTemplate.TextEncoding)
+                Dim docWriter As New IO.StreamWriter(savePath, False, workingTemplate.TextEncoding)
                 docWriter.Write(populatedDoc)
                 docWriter.Close()
             Catch ex As Exception
@@ -246,7 +247,7 @@ Public Class MediaInfoExport
             Dim tokenRegExp As New Regex("<<[\w_:]+>>")
             Dim tokenCollection As MatchCollection = tokenRegExp.Matches(templPart)
             Dim token As Match
-            Dim fi As IO.FileInfo
+            Dim fi As FileInfo
 
             For Each token In tokenCollection
                 Dim strNFOprop As String = ""
@@ -286,18 +287,18 @@ Public Class MediaInfoExport
 
                     Case "folder_size"
                         Try
-                            fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                            fi = New FileInfo(movie.fullpathandfilename)
                             strNFOprop = Utilities.GetFolderSize(fi.DirectoryName).ToString
                         Catch
                             strNFOprop = "0"
                         End Try
 
                     Case "folder"
-                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                        fi = New FileInfo(movie.fullpathandfilename)
                         strNFOprop = fi.DirectoryName
 
                     Case "folder_no_drive"
-                        fi = New System.IO.FileInfo(movie.fullpathandfilename)
+                        fi = New FileInfo(movie.fullpathandfilename)
                         strNFOprop = Right(fi.DirectoryName, Len(fi.DirectoryName) - 2)
 
                     Case "imdb_url"
@@ -347,8 +348,8 @@ Public Class MediaInfoExport
                         If idxEndParam > 0 Then
                             Dim arrlstFormat As New ArrayList
                             Dim separator As String = ""
-                            Dim tempFilePathOnly As String = String.Concat(IO.Path.GetDirectoryName(tempFileAndPath), IO.Path.DirectorySeparatorChar)
-                            Dim tempRoot As String = IO.Path.GetPathRoot(tempFileAndPath)
+                            Dim tempFilePathOnly As String = String.Concat(Path.GetDirectoryName(tempFileAndPath), Path.DirectorySeparatorChar)
+                            Dim tempRoot As String = Path.GetPathRoot(tempFileAndPath)
                             For i = 0 To idxEndParam - 1
                                 Select Case tokenInstr(i + 1).ToLower
                                     Case "root"
@@ -356,9 +357,9 @@ Public Class MediaInfoExport
                                     Case "path"
                                         arrlstFormat.Add(tempFilePathOnly.Replace(tempRoot, ""))
                                     Case "file"
-                                        arrlstFormat.Add(IO.Path.GetFileNameWithoutExtension(tempFileAndPath))
+                                        arrlstFormat.Add(Path.GetFileNameWithoutExtension(tempFileAndPath))
                                     Case "ext"
-                                        arrlstFormat.Add(IO.Path.GetExtension(tempFileAndPath))
+                                        arrlstFormat.Add(Path.GetExtension(tempFileAndPath))
                                 End Select
                             Next
                             Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())

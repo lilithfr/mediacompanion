@@ -1,4 +1,4 @@
-﻿Imports System.IO
+﻿'Imports System.IO
 Imports System.Net
 Imports System.Threading
 Imports System.Xml 
@@ -23,9 +23,9 @@ Public Class Fanarttv
             wrGETURL2.Proxy = MCProxy 
             'Dim myProxy2 As New WebProxy("myproxy", 80)
             'myProxy2.BypassProxyOnLocal = True
-            Dim objStream2 As Stream
+            Dim objStream2 As IO.Stream
             objStream2 = wrGETURL2.GetResponse.GetResponseStream()
-            Dim objReader2 As New StreamReader(objStream2)
+            Dim objReader2 As New IO.StreamReader(objStream2)
             fanarttvxml = objReader2.ReadToEnd
             objReader2.Close()
             Return JsonToXml(fanarttvxml) 

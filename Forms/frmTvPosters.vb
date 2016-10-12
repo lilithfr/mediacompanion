@@ -1,6 +1,7 @@
 ﻿
 Imports System.Net
-Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
+'Imports System.IO
 
 
 
@@ -391,9 +392,9 @@ Public Class frmTvPosters
             wrGETURL.Proxy = Utilities.MyProxy
             'Dim myProxy As New WebProxy("myproxy", 80)
             'myProxy.BypassProxyOnLocal = True
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             urllinecount = 0
 
@@ -654,13 +655,18 @@ Public Class frmTvPosters
             If ComboBox2.Text.IndexOf("Main") <> -1 Then
                 savepath = savethumbpath & "folder.jpg"
 
-                If IO.File.Exists(savepath) Then
-                    Dim b1 As New Bitmap(savepath)
+                If File.Exists(savepath) Then
+                    Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                    Using r As IO.Filestream = File.Open(savepath, IO.FileMode.Open)
+                        r.CopyTo(ms)
+                    End Using
+                    Dim b1 As New Bitmap(ms)
                     Dim Image2 As New Bitmap(b1)
                     mainposter.Image = Image2
                     Label6.Visible = True
                     tempstring = Image2.Width.ToString & " x " & Image2.Height.ToString
                     Label6.Text = tempstring
+                    ms.Dispose()
                     b1.Dispose()
                     mainposter.Visible = True
                 Else
@@ -676,14 +682,18 @@ Public Class frmTvPosters
                     savepath = savethumbpath & "season0" & series.ToString & ".tbn"
                 End If
 
-                If IO.File.Exists(savepath) Then
-
-                    Dim b1 As New Bitmap(savepath)
+                If File.Exists(savepath) Then
+                    Dim ms As IO.MemoryStream = New IO.MemoryStream()
+                    Using r As IO.Filestream = File.Open(savepath, IO.FileMode.Open)
+                        r.CopyTo(ms)
+                    End Using
+                    Dim b1 As New Bitmap(ms)
                     Dim Image2 As New Bitmap(b1)
                     mainposter.Image = Image2
                     Label6.Visible = True
                     tempstring = Image2.Width.ToString & " x " & Image2.Height.ToString
                     Label6.Text = tempstring
+                    ms.Dispose()
                     b1.Dispose()
                     mainposter.Visible = True
 

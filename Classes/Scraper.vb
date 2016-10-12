@@ -1,7 +1,8 @@
 ﻿Imports System
 Imports System.Threading
 Imports System.Net
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Web
 Imports System.Data
 Imports System.Text.RegularExpressions
@@ -368,9 +369,9 @@ Public Class Classimdb
                     wrGETURL.Proxy = Utilities.MyProxy
                     'Dim myProxy As New WebProxy("myproxy", 80)
                     'myProxy.BypassProxyOnLocal = True
-                    Dim objStream As Stream
+                    Dim objStream As IO.Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
-                    Dim objReader As New StreamReader(objStream)
+                    Dim objReader As New IO.StreamReader(objStream)
                     Dim sLine As String = ""
                     urllinecount = 0
                     Do While Not sLine Is Nothing
@@ -625,9 +626,9 @@ Public Class Classimdb
                     'Dim myProxy As New WebProxy("myproxy", 80)
                     'myProxy.BypassProxyOnLocal = True
                     wrGETURL.Proxy = Utilities.MyProxy
-                    Dim objStream As Stream
+                    Dim objStream As IO.Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
-                    Dim objReader As New StreamReader(objStream)
+                    Dim objReader As New IO.StreamReader(objStream)
                     Dim sLine As String = ""
                     urllinecount = 0
                     Do While Not sLine Is Nothing
@@ -1475,7 +1476,7 @@ Public Class Classimdb
                     Dim responseContent As String = ""
                     Try
                     Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
-                      Using reader = New System.IO.StreamReader(response.GetResponseStream())
+                      Using reader = New IO.StreamReader(response.GetResponseStream())
                         responseContent = reader.ReadToEnd()
                       End Using
                     End Using
@@ -1786,9 +1787,9 @@ Public Class Classimdb
             wrGETURL.Proxy = Utilities.MyProxy
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
-            Dim objStream As Stream
+            Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
-            Dim objReader As New StreamReader(objStream)
+            Dim objReader As New IO.StreamReader(objStream)
             Dim sLine As String = ""
             If Not IntoSingleString Then
                 Do While Not sLine Is Nothing
@@ -1883,7 +1884,7 @@ Public Class Classimdb
             request.Proxy = Utilities.MyProxy
             Dim responseContent As String
             Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
-              Using reader = New System.IO.StreamReader(response.GetResponseStream())
+              Using reader = New IO.StreamReader(response.GetResponseStream())
                 responseContent = reader.ReadToEnd()
               End Using
             End Using

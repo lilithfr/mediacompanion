@@ -1,4 +1,5 @@
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Linq
 Imports System.Text
 Imports System.Text.RegularExpressions
@@ -252,11 +253,11 @@ Public Class Movie
             Dim FileName As String = ""
             For each tra In Utilities.acceptedtrailernaming
                 For Each item In Utilities.TrailerExtensions '"mp4,flv,webm,mov,m4v".Split(",")
-                    FileName = IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & item)
+                    FileName = Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & tra & item)
                     If File.Exists(FileName) Then Return FileName
                 Next
             Next
-            Return IO.Path.Combine(s.Replace(IO.Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
+            Return Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
         End Get
     End Property
 
@@ -333,7 +334,7 @@ Public Class Movie
     ReadOnly Property NfoPath As String
         Get
             Dim result As String = NfoPath_NoDirectorySeparatorChar
-            Dim dirsepchar As String = IO.Path.DirectorySeparatorChar
+            Dim dirsepchar As String = Path.DirectorySeparatorChar
             If result.LastIndexOf(dirsepchar) <> result.Length-1 Then result = result & dirsepchar
             Return result
         End Get
@@ -347,7 +348,7 @@ Public Class Movie
 
     ReadOnly Property ActorPath As String
         Get
-            Return nfopathandfilename.Replace(IO.Path.GetFileName(nfopathandfilename), "") & ".actors\"
+            Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "") & ".actors\"
         End Get
     End Property
 
@@ -644,12 +645,12 @@ Public Class Movie
 
     #Region "Shared functions"
 
-    Public Shared Function IsValidMovieFile(fileInfo As IO.FileInfo, Optional ByRef log As String = "") As Boolean
+    Public Shared Function IsValidMovieFile(fileInfo As FileInfo, Optional ByRef log As String = "") As Boolean
 
-        Dim titleDir As String = fileInfo.Directory.ToString & IO.Path.DirectorySeparatorChar
+        Dim titleDir As String = fileInfo.Directory.ToString & Path.DirectorySeparatorChar
 
         If fileInfo.Extension.ToLower = ".vob" Then  'Check if DVD Structure
-            If IO.File.Exists(titleDir & "video_ts.ifo") Then
+            If File.Exists(titleDir & "video_ts.ifo") Then
                 Return False
             End If
 
@@ -673,7 +674,7 @@ Public Class Movie
                 Dim movieNfoFilevob As String = fileInfo.FullName
                 If Utilities.findFileOfType(movieNfoFilevob, ".nfo",Pref.basicsavemode) Then
                     Try
-                        Dim filechck As StreamReader = File.OpenText(movieNfoFilevob)
+                        Dim filechck As IO.StreamReader = File.OpenText(movieNfoFilevob)
                         Dim tempstring As String
                         Do
                             tempstring = filechck.ReadLine
@@ -711,7 +712,7 @@ Public Class Movie
         Dim movieNfoFile As String = fileInfo.FullName
         If Utilities.findFileOfType(movieNfoFile, ".nfo",Pref.basicsavemode) Then
             Try
-                Dim filechck As StreamReader = File.OpenText(movieNfoFile)
+                Dim filechck As IO.StreamReader = File.OpenText(movieNfoFile)
                 Dim Searchstring As String = "<movie"
                 If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Searchstring = "<musicvideo>"
                 Dim tempstring As String
@@ -1231,7 +1232,7 @@ Public Class Movie
         _movieCache.Premiered           = _scrapedMovie.fullmoviebody.premiered
         _movieCache.movietag            = _scrapedMovie.fullmoviebody.tag
         _movieCache.stars               = _scrapedMovie.fullmoviebody.stars 
-        Dim filecreation As New IO.FileInfo(nfopathandfilename)
+        Dim filecreation As New FileInfo(nfopathandfilename)
 
         Try
             _movieCache.filedate = Format(filecreation.LastWriteTime, Pref.datePattern).ToString
@@ -1323,7 +1324,7 @@ Public Class Movie
         _mvcache.thumb               = _scrapedMovie.fullmoviebody.thumb
         _mvcache.track               = _scrapedMovie.fullmoviebody.track 
         _mvcache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
-        Dim filecreation As New IO.FileInfo(nfopathandfilename)
+        Dim filecreation As New FileInfo(nfopathandfilename)
         Try
             _mvcache.filedate = Format(filecreation.LastWriteTime, Pref.datePattern).ToString
         Catch ex As Exception
@@ -1989,7 +1990,7 @@ Public Class Movie
         If Cancelled then Exit Sub
 
         If TrailerDownloaded Then
-            If IO.File.Exists(ActualTrailerPath) Then
+            If File.Exists(ActualTrailerPath) Then
                 ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
             Else
                 ReportProgress("Aborted by User" & vbCrLf, vbCrLf & "!!! Aborted By User - Trailer not saved" & vbCrLf)
@@ -2014,7 +2015,7 @@ Public Class Movie
  
     Sub DoDownloadPoster(Optional ByVal batch As Boolean = False)
         Dim imageexistspath As String = ""
-        If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
+        If Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
         End If
         Dim paths As List(Of String) = Pref.GetPosterPaths(NfoPathPrefName, If(_videotsrootpath <> "", _videotsrootpath, ""))
@@ -2109,7 +2110,7 @@ Public Class Movie
         Dim FanartUrl As String = ""
         Dim MoviePath As String = NfoPathPrefName
         Dim isMovieFanart As String = MoviePath.Replace(".nfo", "-fanart.jpg")
-        If IO.Path.GetFileName(MoviePath).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(MoviePath).ToLower = "index.nfo" Then
+        If Path.GetFileName(MoviePath).ToLower = "video_ts.nfo" Or Path.GetFileName(MoviePath).ToLower = "index.nfo" Then
             _videotsrootpath = Utilities.RootVideoTsFolder(MoviePath)
         End If
 
@@ -2177,7 +2178,7 @@ Public Class Movie
                 End Try
                 lang.Add("en")
                 Dim Overwrite As Boolean = If(isRescrapelist, Pref.overwritethumbs, True)
-                If IO.Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or IO.Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
+                If Path.GetFileName(NfoPathPrefName).ToLower = "video_ts.nfo" Or Path.GetFileName(NfoPathPrefName).ToLower = "index.nfo" Then
                     _videotsrootpath = Utilities.RootVideoTsFolder(NfoPathPrefName)
                 End If
                 Dim DestPath As String = ""
@@ -2337,10 +2338,10 @@ Public Class Movie
                         If Utilities.UrlIsValid(tmpUrl) Then
                             If xf Then
                                 Dim fanartfilename As String = tmpUrl.Substring(tmpUrl.LastIndexOf("/")+1, (tmpUrl.Length - tmpUrl.LastIndexOf("/")-1))
-                                If Not (IO.File.Exists(xfanart & fanartfilename) AndAlso Not owrite) Then xtraart.Add(xfanart & fanartfilename)
+                                If Not (File.Exists(xfanart & fanartfilename) AndAlso Not owrite) Then xtraart.Add(xfanart & fanartfilename)
                             End If
                             If xt AndAlso i < 6 Then
-                                If Not (IO.File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then xtraart.Add((xthumb & i.ToString & ".jpg"))
+                                If Not (File.Exists((xthumb & i.ToString & ".jpg")) AndAlso Not owrite) Then xtraart.Add((xthumb & i.ToString & ".jpg"))
                             End If
                             If xtraart.Count > 0 Then SaveFanartImageToCacheAndPaths(tmpUrl, xtraart)
                         End If
@@ -2439,11 +2440,11 @@ Public Class Movie
         Try
             'Only delete actors if movies are in separate folders
             If Not Pref.GetRootFolderCheck(NfoPathPrefName) Then
-                Dim thispath As String = IO.Path.GetDirectoryName(NfoPathAndFilename)
+                Dim thispath As String = Path.GetDirectoryName(NfoPathAndFilename)
                 thispath &= "\.actors"
-                If IO.Directory.Exists(thispath) Then
+                If Directory.Exists(thispath) Then
                     Try
-                        IO.Directory.Delete(thispath, True)
+                        Directory.Delete(thispath, True)
                         Exit Sub
                     Catch
                     End Try
@@ -2504,7 +2505,7 @@ Public Class Movie
     End Sub
 
     Sub DeleteFile(fileName As String)
-        If Not IO.File.Exists(fileName) then Exit Sub
+        If Not File.Exists(fileName) then Exit Sub
         Try
             File.Delete(fileName)
         Catch ex As Exception
@@ -2516,9 +2517,9 @@ Public Class Movie
     End Sub
 
     Sub DeleteFolder(foldername As String)
-        If Not IO.Directory.Exists(foldername) Then Exit Sub
+        If Not Directory.Exists(foldername) Then Exit Sub
         Try
-            IO.Directory.Delete(foldername, True)
+            Directory.Delete(foldername, True)
         Catch ex As Exception
             Dim answer = MsgBox("It appears you don't have ownership of all your movie files (it's a Windows thing from Vista onwards, even if you're an Administrator)." & vbCrLf & vbCrLf & "Would you like help on resolving this problem?", MsgBoxStyle.YesNo)
             If answer=MsgBoxResult.Yes then
@@ -2529,7 +2530,7 @@ Public Class Movie
 
     Private Sub DeleteZeroLengthFile(fileName As String)
         If File.Exists(fileName) Then
-            If (New IO.FileInfo(fileName)).Length = 0 Then
+            If (New FileInfo(fileName)).Length = 0 Then
                 File.Delete(fileName)
                 ReportProgress("-Zero length trailer deleted ", "Zero length trailer deleted : [" & fileName & "]")
             End If
@@ -2692,7 +2693,7 @@ Public Class Movie
                     tempstring4 = Pref.applicationPath & "\Settings\0" & f.ToString & ".jpg"
                 End If
                 Try
-                    IO.File.Delete(tempstring4)
+                    File.Delete(tempstring4)
                 Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -2733,7 +2734,7 @@ Public Class Movie
         Dim extrapossibleID As String = String.Empty
         Dim fileNFO As String = fullPath
         If Utilities.findFileOfType(fileNFO, ".nfo") Then
-            Dim objReader As New StreamReader(fileNFO)
+            Dim objReader As IO.Streamreader = File.OpenText(fileNFO)
             Dim tempInfo As String = objReader.ReadToEnd
             objReader.Close()
             objReader = Nothing
@@ -2774,7 +2775,7 @@ Public Class Movie
         Dim isFirstPart As Boolean = True
         Dim nextStackPart As String = ""
         Dim stackdesignator As String = ""
-        Dim newextension As String = IO.Path.GetExtension(mediaFile)
+        Dim newextension As String = Path.GetExtension(mediaFile)
         Dim subName1 As String = mediaFile.Substring(0, mediaFile.LastIndexOf(newextension))         'Replace(newextension,"")
         Dim subName As String = subName1
         Dim newfilename As String = UserDefinedBaseFileName
@@ -2855,7 +2856,7 @@ Public Class Movie
                 'rename subtitle files if any
                 For i = 0 To subStackList.Count - 1
                     Dim oldname = subStackList(i)
-                    Dim newsubextn As String = IO.Path.GetExtension(oldname)
+                    Dim newsubextn As String = Path.GetExtension(oldname)
                     'Utilities.isMultiPartMedia(oldname, True) ', isFirstPart, stackdesignator, nextStackPart)
                     Dim changename As String = String.Format("{0}{1}{2}{3}", newfilename, stackdesignator, If(isStack, i + 1, ""), newsubextn)
                     'Dim changename As String = subStackList(i).Replace(oldname,newfilename)
@@ -2908,7 +2909,7 @@ Public Class Movie
         Dim Filename As String = Path.GetFileNameWithoutExtension(movieFileInfo.NfoPathAndFilename)
         Dim currentroot As String = ""
         Dim stackname As String = mediapathandfilename
-        Dim newextension As String = IO.Path.GetExtension(mediapathandfilename)
+        Dim newextension As String = Path.GetExtension(mediapathandfilename)
         Dim isStack         = False
         Dim isSubStack      = False
         Dim isFirstPart     = True
@@ -2982,19 +2983,19 @@ Public Class Movie
                 Moviename = stackname   
             End If
 
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles((Moviename & "*"))    'Move Matching Files to Moviename.
+            For Each filet As FileInfo In fromPathInfo.GetFiles((Moviename & "*"))    'Move Matching Files to Moviename.
 
-					Dim newName = Path.Combine(checkfolder, file.Name)
+					Dim newName = Path.Combine(checkfolder, filet.Name)
 
-					If IO.File.Exists(newName) Then
-						IO.File.Delete(newName)
+					If File.Exists(newName) Then
+						File.Delete(newName)
 					End If
 
-               file.MoveTo(newName)
+               filet.MoveTo(newName)
             Next
 
             Dim OtherMoviesInFolder As Boolean = False
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles()
+            For Each file As FileInfo In fromPathInfo.GetFiles()
                 For each extn in Utilities.VideoExtensions
                     If file.Extension = extn Then
                         OtherMoviesInFolder = True
@@ -3003,7 +3004,7 @@ Public Class Movie
                 Next
                 If OtherMoviesInFolder Then Exit For
             Next
-            'For Each file As IO.FileInfo In fromPathInfo.GetFiles()
+            'For Each file As FileInfo In fromPathInfo.GetFiles()
             '    file.MoveTo(Path.Combine(checkfolder, file.Name))
             'Next
             ''move any sub directories
@@ -3013,8 +3014,8 @@ Public Class Movie
                 Next
                 If Utilities.IsDirectoryEmpty(FilePath) Then
                     Try
-                        IO.Directory.Delete(FilePath)
-                    Catch ex As IOException 
+                        Directory.Delete(FilePath)
+                    Catch ex As IO.IOException 
                         log &= "!!! Could not delete original folder:- " & FilePath & vbCrLf 
                         NoDel = True
                     End Try
@@ -3030,7 +3031,7 @@ Public Class Movie
                 Moviename = stackname  '_movieCache.filename.Replace(".nfo","")
             End If
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot))
-            For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*.*"))
+            For Each fi As FileInfo In di.GetFiles((Moviename & "*.*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
             Next
             log &= "Movie moved from Root folder into new path" & vbCrLf  
@@ -3607,9 +3608,12 @@ Public Class Movie
     Sub SavePosterToPosterWallCache
         If File.Exists(PosterPath) Then
             Try
-                Dim bm As New MemoryStream(My.Computer.FileSystem.ReadAllBytes(PosterPath)) 'New Bitmap(PosterPath)
-                Dim bm2 As New Bitmap(bm)
-                bm.Dispose()
+                Dim ms As New IO.MemoryStream
+                Using r As IO.FileStream = File.Open(PosterPath, IO.FileMode.Open)
+                    r.CopyTo(ms)
+                End Using
+                Dim bm2 As New Bitmap(ms)
+                ms.Dispose()
                 bm2 = Utilities.ResizeImage(bm2, Form1.WallPicWidth, Form1.WallPicHeight)
                 Utilities.SaveImage(bm2, PosterCachePath)
                 bm2.Dispose()
@@ -3621,7 +3625,7 @@ Public Class Movie
     End Sub
     
     Function GetActorFileName( actorName As String) As String
-        Return IO.Path.Combine(ActorPath, actorName.Replace(" ", "_") & ".tbn")
+        Return Path.Combine(ActorPath, actorName.Replace(" ", "_") & ".tbn")
     End Function
     
     Public Function RenameExistingMetaFiles As String
@@ -3647,7 +3651,7 @@ Public Class Movie
         Dim isSubStack          = False
         Dim isFirstPart         = True
         Dim isSubFirstPart      = True
-        Dim newextension        = IO.Path.GetExtension(mediaFile)
+        Dim newextension        = Path.GetExtension(mediaFile)
         Dim newfilename         = UserDefinedBaseFileName
         Dim subName1 As String  = mediaFile.Substring(0, mediaFile.LastIndexOf(newextension))  'Replace(newextension,"")
         Dim subName As String   = subName1
@@ -3809,7 +3813,7 @@ Public Class Movie
         Dim FilePath As String = nfopath   'current path
         Dim currentroot As String = ""
         Dim stackname As String = mediapathandfilename
-        Dim newextension    = IO.Path.GetExtension(mediapathandfilename)
+        Dim newextension    = Path.GetExtension(mediapathandfilename)
         Dim isStack         = False
         Dim isSubStack      = False
         Dim isFirstPart     = True
@@ -3894,7 +3898,7 @@ Public Class Movie
                 Dim filename As String = stackname 
                 Utilities.isMultiPartMedia(filename, False, isFirstPart, stackdesignator, nextStackPart)
                 Dim thismoviename = chkfldr & filename & newextension 
-                If IO.File.Exists(thismoviename) Then
+                If File.Exists(thismoviename) Then
                     log &= "!!! Movie of same filename already exists in: " & checkfolder & vbCrLf 
                     log &= "!!! Aborting Movie move into existing folder!" & vbCrLf & vbcrlf
                     Return log
@@ -3914,17 +3918,17 @@ Public Class Movie
             Else
                 Moviename = stackname   
             End If
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles()   '((Moviename & "*"))    'Move Matching Files to Moviename.
-                If file.Name.Contains(Moviename) OrElse Utilities.fanarttvfiles.Contains(file.Name) Then
-						  Dim x = Path.Combine(checkfolder, file.Name)
-						  If IO.File.Exists(x) Then
-								IO.File.Delete(x)
+            For Each filet As FileInfo In fromPathInfo.GetFiles()   '((Moviename & "*"))    'Move Matching Files to Moviename.
+                If filet.Name.Contains(Moviename) OrElse Utilities.fanarttvfiles.Contains(filet.Name) Then
+						  Dim x = Path.Combine(checkfolder, filet.Name)
+						  If File.Exists(x) Then
+								File.Delete(x)
 						  End If
-                    file.MoveTo(x)
+                    filet.MoveTo(x)
                 End If
             Next
             Dim OtherMoviesInFolder As Boolean = False
-            For Each file As IO.FileInfo In fromPathInfo.GetFiles()
+            For Each file As FileInfo In fromPathInfo.GetFiles()
                 If Utilities.VideoExtensions.Contains(file.Extension.ToLower) Then
                     OtherMoviesInFolder = True
                     Exit For
@@ -3938,7 +3942,7 @@ Public Class Movie
                 For Each dir As DirectoryInfo In fromPathInfo.GetDirectories()
                     If dir.Name = ".actors" Then
                         Dim actorsource As String= FilePath & ".actors\"
-                        If IO.Directory.Exists(actorsource) Then
+                        If Directory.Exists(actorsource) Then
                             Dim NewActorFolder As String = checkfolder & "\.actors"
                             If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
                             NewActorFolder &= "\"
@@ -3955,8 +3959,8 @@ Public Class Movie
             End If
             If Not checkfolder.Contains(FilePath) AndAlso Utilities.IsDirectoryEmpty(FilePath) Then
                 Try
-                    IO.Directory.Delete(FilePath)
-                Catch ex As IOException
+                    Directory.Delete(FilePath)
+                Catch ex As IO.IOException
                     log &= "!!! Could not delete original folder:- " & FilePath & vbCrLf
                     NoDel = True
                 End Try
@@ -3971,14 +3975,14 @@ Public Class Movie
                 Moviename = stackname   
             End If
             Dim di As DirectoryInfo = New DirectoryInfo((currentroot & "\"))
-            For Each fi As IO.FileInfo In di.GetFiles((Moviename & "*"))
+            For Each fi As FileInfo In di.GetFiles((Moviename & "*"))
                 fi.MoveTo(Path.Combine(checkfolder, fi.Name))
             Next
             log &= "Movie moved from Root folder into new path" & vbCrLf 
             
             'Copy actor images from root .actor folder to new folder's .actor folder
             Dim actorsource As String= currentroot & "\.actors\"
-            If IO.Directory.Exists(actorsource) Then
+            If Directory.Exists(actorsource) Then
                 Dim NewActorFolder As String = checkfolder & "\.actors"
                 If Not Directory.Exists(NewActorFolder) Then Directory.CreateDirectory(NewActorFolder)
                 NewActorFolder &= "\"
@@ -4003,10 +4007,10 @@ Public Class Movie
         For num = opcount to 0 Step -1
             testpath = testpath.Replace((oldpath(num).ToString & "\"),"")
             If testpath = (currentroot & "\") Then Exit For
-            If IO.Directory.Exists(testpath) Then
+            If Directory.Exists(testpath) Then
                 Dim isitempty as DirectoryInfo = New DirectoryInfo(testpath)
                 If Not (isitempty.EnumerateFiles().Any()) And Not (isitempty.EnumerateDirectories().Any()) Then
-                    IO.Directory.Delete(testpath)
+                    Directory.Delete(testpath)
                 End If
             End If
         Next
@@ -4021,7 +4025,7 @@ Public Class Movie
 
         Try
             If NoDel Then
-                IO.Directory.Delete(FilePath)
+                Directory.Delete(FilePath)
             End If
         Catch ex As Exception
             log &= "!!! Could not Repeat delete original folder:- " & FilePath & vbCrLf
@@ -4039,7 +4043,7 @@ Public Class Movie
         'Get stack name
         Utilities.isMultiPartMedia(stackName, False, , stackDesignator)
 
-        testName = mediapathandfilename.Substring(0, mediapathandfilename.LastIndexOf(Extension)) & anciliaryFile  'Replace(IO.Path.GetExtension(mediapathandfilename), anciliaryFile)
+        testName = mediapathandfilename.Substring(0, mediapathandfilename.LastIndexOf(Extension)) & anciliaryFile  'Replace(Path.GetExtension(mediapathandfilename), anciliaryFile)
         If File.Exists(testName) Then Return testName
  
         testName = NfoPathAndFilename.Replace(".nfo", anciliaryFile)
@@ -4062,7 +4066,7 @@ Public Class Movie
 
     Public Function GetFolderSize(path As String,format As String) As String
 
-            Dim fi As System.IO.FileInfo = New System.IO.FileInfo(path)
+            Dim fi As FileInfo = New FileInfo(path)
             Dim folderSize = Utilities.GetFolderSize(fi.DirectoryName)
 
             '.ToString("00.00")
@@ -4265,7 +4269,7 @@ Public Class Movie
 
     Shared Function IsMCNfoFile( movieNfoFile As String )
         Try
-            Dim filechck As StreamReader = File.OpenText(movieNfoFile)
+            Dim filechck As IO.StreamReader = File.OpenText(movieNfoFile)
             Dim s As String
             Do
                 s = filechck.ReadLine
@@ -4335,9 +4339,9 @@ Public Class Movie
             If FrodoPosterExists
                 Dim s = ActualPosterPath
 
-                If IO.Path.GetExtension(s).ToUpper=".TBN" Then Utilities.SafeDeleteFile(s)
+                If Path.GetExtension(s).ToUpper=".TBN" Then Utilities.SafeDeleteFile(s)
             Else 
-                IO.File.Move(ActualPosterPath,NfoPathPrefName.Substring(0, NfoPathPrefName.LastIndexOf(IO.Path.GetExtension(NfoPathPrefName))) & "-poster.jpg")
+                File.Move(ActualPosterPath,NfoPathPrefName.Substring(0, NfoPathPrefName.LastIndexOf(Path.GetExtension(NfoPathPrefName))) & "-poster.jpg")
             End If 
         Catch ex As Exception
             Dim x = ex

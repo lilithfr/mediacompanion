@@ -2,7 +2,8 @@
 
 Imports System
 Imports Sanford.StateMachineToolkit
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports Newtonsoft.Json.Linq
 Imports Newtonsoft.Json
 Imports System.ComponentModel
@@ -201,7 +202,7 @@ Public Class XbmcController : Inherits PassiveStateMachine(Of S, E, EventArgs)
         Get
             Dim count As Integer=0
 
-            For Each fs_info As IO.FileInfo In diMovieFolder.GetFiles("*.NFO")
+            For Each fs_info As FileInfo In diMovieFolder.GetFiles("*.NFO")
 
                 If Movie.IsMCNfoFile( fs_info.FullName ) then
                     count +=1

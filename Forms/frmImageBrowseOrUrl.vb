@@ -19,7 +19,7 @@
         Try
             'Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently()
             'browse
-            'Form1.openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(IO.Path.GetFileName(WorkingTvShow.NfoFilePath), "")
+            'Form1.openFD.InitialDirectory = WorkingTvShow.NfoFilePath.Replace(Path.GetFileName(WorkingTvShow.NfoFilePath), "")
             Dim newFD As New OpenFileDialog ()
             newFD.Title = "Select a jpeg image File"
             newFD.FileName = ""

@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 Imports System.Text
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class ProtoFile
     Implements IProtoXFile
@@ -131,7 +132,7 @@ Public Class ProtoFile
         Set(value As String)
             _FolderPath = value
             If _NfoFilePath IsNot Nothing Then
-                _NfoFilePath = IO.Path.Combine(value, IO.Path.GetFileName(_NfoFilePath))
+                _NfoFilePath = Path.Combine(value, Path.GetFileName(_NfoFilePath))
             End If
 
         End Set
@@ -148,9 +149,12 @@ Public Class ProtoFile
     Public Overridable Sub Load(ByVal Path As String) Implements IProtoXFile.Load
         Me.IsAltered = True
         Me.CleanDoc()
-        If IO.File.Exists(Path) Then
+        If File.Exists(Path) Then
             Try
-                Me.Doc = XDocument.Load(Path)
+                Using tmpstrm As IO.StreamReader = File.OpenText(Path)
+                    Me.Doc = XDocument.Load(tmpstrm)
+                End Using
+                
                 Me.Doc.DescendantNodes.OfType(Of XComment)().Remove()
             Catch
                 FailedLoad = True
@@ -305,7 +309,7 @@ Public Class ProtoFile
 
     Public ReadOnly Property FileExists As Boolean Implements IProtoXFile.FileExists
         Get
-            Return IO.File.Exists(Me.NfoFilePath)
+            Return File.Exists(Me.NfoFilePath)
         End Get
     End Property
 

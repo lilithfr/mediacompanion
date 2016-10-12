@@ -1,4 +1,5 @@
 Imports System.Text.RegularExpressions
+Imports Alphaleonis.Win32.Filesystem
 
 Public Structure str_MovieActors
 
@@ -37,7 +38,7 @@ Public Structure str_MovieActors
     End Operator
     
     Function GetActorFileName(ActorPath As String) As String
-        Return IO.Path.Combine(ActorPath, actorname.Replace(" ", "_") & ".jpg")
+        Return Path.Combine(ActorPath, actorname.Replace(" ", "_") & ".jpg")
     End Function
 
     Public Function SaveActor(ActorPath As String) As Boolean
@@ -47,8 +48,8 @@ Public Structure str_MovieActors
 
             'Allow to save to .actors folder
             If Pref.actorseasy Then
-                Dim hg As New IO.DirectoryInfo(ActorPath)
-                If Not hg.Exists Then IO.Directory.CreateDirectory(ActorPath)
+                Dim hg As New DirectoryInfo(ActorPath)
+                If Not hg.Exists Then Directory.CreateDirectory(ActorPath)
                 If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then
                     ActorSave(filename)
                 Else

@@ -1,4 +1,5 @@
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports XBMC.JsonRpc
 Imports System.Text.RegularExpressions
 
@@ -253,7 +254,7 @@ Public Class MVComboList
         Title                   = From.fullmoviebody.title
         Artist                  = From.fullmoviebody.artist
         year                    = From.fullmoviebody.year.ToInt
-        Dim filecreation As New IO.FileInfo(From.fileinfo.fullpathandfilename)
+        Dim filecreation As New FileInfo(From.fileinfo.fullpathandfilename)
         Try
             filedate = Format(filecreation.LastWriteTime, Pref.datePattern).ToString
         Catch ex As Exception

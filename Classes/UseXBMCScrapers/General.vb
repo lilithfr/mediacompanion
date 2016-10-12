@@ -1,7 +1,8 @@
 ﻿Imports System.Net
 Imports System.Threading
 Imports System.Text.RegularExpressions
-Imports System.IO
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
 Imports Media_Companion
 
@@ -33,8 +34,8 @@ Module General
             TMDBRequest.ContentType = "application/json"
             TMDBRequest.Credentials = CredentialCache.DefaultCredentials
             TMDBResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
-            Dim dataStream As Stream = TMDBResponse.GetResponseStream()
-            Dim reader As New StreamReader(dataStream)
+            Dim dataStream As IO.Stream = TMDBResponse.GetResponseStream()
+            Dim reader As New IO.StreamReader(dataStream)
             responseFromServer = reader.ReadToEnd()
             reader.Close()
             dataStream.Close()
@@ -548,7 +549,7 @@ Module General
     '    Dim m_node As XmlNode
 
     '    m_xmld = New XmlDocument()
-    '    m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '    m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
     '    m_nodelist = m_xmld.SelectNodes("/settings")
     '    Dim NodeChild As XmlNode
     '    Dim MoviePosterURL As String = ""
@@ -654,7 +655,7 @@ Module General
     '    Dim m_node As XmlNode
 
     '    m_xmld = New XmlDocument()
-    '    m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '    m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
     '    m_nodelist = m_xmld.SelectNodes("/settings")
     '    Dim NodeChild As XmlNode
     '    Dim MoviePosterURL As String = ""
@@ -702,7 +703,7 @@ Module General
 
     '    For i=0 to 10
     '        Try
-    '            m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
+    '            m_xmld.Save(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.imdb.com\resources\settings.xml"))
     '            Return
     '        Catch
     '            Thread.Sleep(200)
@@ -716,7 +717,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
+        m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -782,7 +783,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
+        m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -819,7 +820,7 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
+        m_xmld.Save(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.themoviedb.org\resources\settings.xml"))
     End Sub
 
 #End Region
@@ -1268,7 +1269,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
+        m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1351,7 +1352,7 @@ Module General
         Dim m_node As XmlNode
 
         m_xmld = New XmlDocument()
-        m_xmld.Load(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
+        m_xmld.Load(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
         m_nodelist = m_xmld.SelectNodes("/settings")
         Dim NodeChild As XmlNode
         Dim MoviePosterURL As String = ""
@@ -1394,7 +1395,7 @@ Module General
             Next
         Catch
         End Try
-        m_xmld.Save(IO.Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
+        m_xmld.Save(Path.Combine(Utilities.applicationPath, "assets\scrapers\metadata.tvdb.com\resources\settings.xml"))
     End Sub
 
     Public Function XBMCScrape_TVShow_EpisodeDetails(ByVal TVDBId As String, ByVal SortOrder As String, ByVal EpisodeArray As List(Of TvEpisode), ByVal Language As String) As List(Of TvEpisode)
@@ -1521,10 +1522,11 @@ Module General
             xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
             Dim root As XmlElement = doc.DocumentElement
             doc.InsertBefore(xmlproc, root)
-            Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
+            WorkingWithNfoFiles.SaveXMLDoc(doc, nfoFileandPath)
+            'Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
+            'output.Formatting = Formatting.Indented
+            'doc.WriteTo(output)
+            'output.Close()
             If Filename.ToLower.Contains("tvshow.nfo") Then Return True
 
             ' load nfo file to clean
