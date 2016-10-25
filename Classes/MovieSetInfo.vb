@@ -6,6 +6,7 @@ Public Class MovieSetInfo
     Private  _movieSetName          As String = ""
     Private  _userMovieSetName      As String = ""
     Private  _movieSetDisplayName   As String = ""
+    Private  _moviesetplot          As String = ""
     Private _dirty                  As Boolean = False
 
 
@@ -65,7 +66,16 @@ Public Class MovieSetInfo
         Get
             Return TmdbSetId="" OrElse TmdbSetId="0" OrElse IsNothing(Collection) OrElse Collection.Count=0
         End Get
-    End Property   
+    End Property 
+    
+    Property MovieSetPlot As String
+        Get
+            Return _moviesetplot
+        End Get
+        Set
+            If _moviesetplot <> Value Then _moviesetplot = Value
+        End Set
+    End Property  
 
     Property Dirty As Boolean
         Get
@@ -80,10 +90,11 @@ Public Class MovieSetInfo
     Sub New
     End Sub
 
-    Sub New( _moviesetname As String, _moviesetid As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="", Optional _dirty As Boolean = False)
+    Sub New( _moviesetname As String, _moviesetid As String, _moviesetplot As String, _collection As List(Of CollectionMovie), _lastUpdatedTs As Date, Optional _userMovieSetName As String="", Optional _mergeWithMovieSetId As String="", Optional _dirty As Boolean = False)
         MovieSetName        = _moviesetname
         TmdbSetId           = _moviesetid
         Collection          = _collection
+        MovieSetPlot        = _moviesetplot
         LastUpdatedTs       = _lastUpdatedTs
         Dirty               = _dirty
         UserMovieSetName    = _userMovieSetName
@@ -95,6 +106,7 @@ Public Class MovieSetInfo
         MovieSetName    = from.MovieSetName
         TmdbSetId       = from.TmdbSetId
         Collection      = from.Collection
+        MovieSetPlot    = from.MovieSetPlot
         LastUpdatedTs   = from.LastUpdatedTs
         Dirty           = from.dirty
 

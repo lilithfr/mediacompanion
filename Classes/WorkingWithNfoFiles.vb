@@ -85,6 +85,7 @@ Public Class WorkingWithNfoFiles
 
             aok = True
             If aok Then
+                If File.Exists(Filename) Then File.Delete(Filename)
                 File.Move(tmpxml, Filename)
             End If
         Catch

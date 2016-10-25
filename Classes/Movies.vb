@@ -2551,6 +2551,7 @@ Public Class Movies
                 Case typeName
                     Dim movieset = ""
                     Dim moviesetId = ""
+                    Dim moviesetplot = ""
                     Dim LastUpdatedTs As Date = Date.MinValue
                     Dim UserMovieSetName = ""
                     Dim Dirty As Boolean = False
@@ -2565,6 +2566,9 @@ Public Class Movies
 
                             Case "id"
                                 moviesetId = setMovieSetID(detail.InnerText, setDb)
+
+                            Case "plot"
+                                moviesetplot = detail.InnerText
 
                             Case "LastUpdatedTs"
                                 LastUpdatedTs = detail.InnerText
@@ -2600,7 +2604,7 @@ Public Class Movies
                                 movac.Add(ac)
                         End Select
                     Next
-                    setDb.Add(New MovieSetInfo(movieset, moviesetId, movac, LastUpdatedTs, UserMovieSetName, _dirty:= Dirty))
+                    setDb.Add(New MovieSetInfo(movieset, moviesetId, moviesetplot, movac, LastUpdatedTs, UserMovieSetName, _dirty:= Dirty))
             End Select
         Next
     End Sub
@@ -2771,6 +2775,10 @@ Public Class Movies
             childchild.InnerText = movieset.TmdbSetId 
             child.AppendChild(childchild)
 
+            childchild = doc.CreateElement("plot")
+            childchild.InnerText = movieset.MovieSetPlot 
+            child.AppendChild(childchild)
+
             childchild = doc.CreateElement("LastUpdatedTs")
             childchild.InnerText = movieset.LastUpdatedTs
             child.AppendChild(childchild)
@@ -2914,7 +2922,7 @@ Public Class Movies
                 Catch
                 End Try
                 If IsNothing(c) Then
-                    Dim d As MovieSetInfo = New MovieSetInfo(movie.SetName, movie.TmdbSetId, New List(Of CollectionMovie), Date.Now(), _dirty:= True)
+                    Dim d As MovieSetInfo = New MovieSetInfo(movie.SetName, movie.TmdbSetId, "", New List(Of CollectionMovie), Date.Now(), _dirty:= True)
                     Dim e As CollectionMovie = New CollectionMovie(movie.title, movie.tmdbid, _release_date:=movie.Premiered)
                     d.Collection.Add(e)
                     AddUpdateMovieSetInCache(d)

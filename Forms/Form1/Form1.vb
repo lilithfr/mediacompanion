@@ -3258,7 +3258,8 @@ Public Class Form1
 							g.genre = i
 							g.count = 1
 							For each item In listof
-								If item.genre.ToLower = g.genre.ToLower Then
+                                If (item.genre.Equals(g.genre, StringComparison.InvariantCultureIgnoreCase)) Then
+								'If item.genre.ToLower = g.genre.ToLower Then
 									g.count = item.count
 									Exit For
 								End If
@@ -13235,7 +13236,8 @@ Public Class Form1
 			If txtbxMovTagEntry.Text <> "" Then
 				Dim ex As Boolean = False
 				For Each mtag In Pref.movietags
-					If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
+					'If mtag.ToLower = txtbxMovTagEntry.Text.ToLower Then
+                    If (mtag.Equals(txtbxMovTagEntry.Text,  StringComparison.InvariantCultureIgnoreCase)) Then
 						ex = True
 						Exit For
 					End If
@@ -13582,7 +13584,8 @@ Public Class Form1
 			Loop
 			Dim exists As Boolean = False
 			For Each item In clbx_MovieRoots.items
-				If item.ToString.ToLower = tempstring.ToLower Then
+				'If item.ToString.ToLower = tempstring.ToLower Then
+                If (item.ToString.Equals(tempstring,  StringComparison.InvariantCultureIgnoreCase)) Then
 					exists = True
 					Exit For
 				End If
@@ -15765,7 +15768,8 @@ Public Class Form1
 			Loop
 			Dim exists As Boolean = False
 			For Each item In clbx_TvRootFolders.items
-				If item.ToString.ToLower = tempstring.ToLower Then
+				'If item.ToString.ToLower = tempstring.ToLower Then
+                If (item.ToString.Equals(tempstring,  StringComparison.InvariantCultureIgnoreCase)) Then
 					exists = True
 					Exit For
 				End If
@@ -15963,7 +15967,8 @@ Public Class Form1
 			Loop
 			Dim exists As Boolean = False
 			For each fol In Pref.tvRootFolders
-				If fol.rpath.ToLower = tempstring.ToLower Then Continue For
+				'If fol.rpath.ToLower = tempstring.ToLower Then Continue For
+                If (fol.rpath.Equals(tempstring,  StringComparison.InvariantCultureIgnoreCase)) Then Continue For
 				If tempstring.ToLower.Contains(fol.rpath.ToLower) AndAlso Not fol.selected Then
 					Dim msg As String = "The series dropped is in a root folder that has been unselected"
 					msg &= "To avoid catastrophic failure, please re-select"
@@ -15977,7 +15982,8 @@ Public Class Form1
 			If exists Then Exit Sub
 			exists = False
 			For Each item In ListBox6.Items
-				If item.ToString.ToLower = tempstring.ToLower Then
+				'If item.ToString.ToLower = tempstring.ToLower Then
+                If (item.ToString.Equals(tempstring,  StringComparison.InvariantCultureIgnoreCase)) Then
 					exists = True
 					Exit For
 				End If
@@ -16741,7 +16747,8 @@ Public Class Form1
 			Loop
 			Dim exists As Boolean = False
 			For Each item In clbx_HMMovieFolders.Items
-				If item.ToString.ToLower = tempstring.ToLower Then
+				'If item.ToString.ToLower = tempstring.ToLower Then
+                If (item.ToString.Equals(tempstring,  StringComparison.InvariantCultureIgnoreCase)) Then
 					exists = True
 					Exit For
 				End If

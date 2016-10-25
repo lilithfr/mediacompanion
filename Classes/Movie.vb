@@ -3890,7 +3890,8 @@ Public Class Movie
                 log &= "!!! New path created:- " & checkfolder & vbCrLf 
         Else
             Dim chkfldr As String = checkfolder & "\"
-            If chkfldr.ToLower = FilePath.ToLower Then
+            If (chkfldr.Equals(FilePath, StringComparison.InvariantCultureIgnoreCase)) Then
+            'If chkfldr.ToLower = FilePath.ToLower Then
                 log &= "!!! Movie already exists in : " & checkfolder & vbCrLf & "!!! Rename of this Movie folder skipped" & vbCrLf & vbcrlf
                 Return log
             Else
@@ -4365,7 +4366,8 @@ Public Class Movie
                 Dim Blacklist() As String = Pref.MovTagBlacklist.Split(";")
                 For each listitem In Blacklist
                     For each kword In keywords
-                        If kword.ToLower = listitem.ToLower Then
+                        If (kword.Equals(listitem, StringComparison.InvariantCultureIgnoreCase)) Then
+                        'If kword.ToLower = listitem.ToLower Then
                             keywords.Remove(kword)
                             Exit For
                         End If
