@@ -134,7 +134,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAAXwBawF8AWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAawBawGsAWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -4930,6 +4930,12 @@ If you do not wish to edit a field then leave it blank, only fields that contain
   <metadata name="DataGridViewTextBoxColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="Year.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="tb_MovieSetOverview.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <data name="Label68.Text" xml:space="preserve">
     <value>These sets can be used to group collections of movies together within XBMC,
 eg. Add the movie set "Star Wars Collection", and make all
@@ -4994,7 +5000,7 @@ scrape any located media</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
-        IQAAAk1TRnQBSQFMAgEBAgEAAWABAgFgAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
+        IQAAAk1TRnQBSQFMAgEBAgEAAZABAgGQAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
         AwABEgMAAQEBAAEYBQABwAEhGAAB1wHnAeoBlAHRAdwBeAHNAdwBegHMAdkBfAHLAdkBeQHKAdkBeAHK
         AdkBeAHKAdkBeQHKAdkBegHJAdkBewHKAdkBewHKAdkBegHJAdkBeQHJAdgBegHJAdYBeQHIAdUBeAHI
         AdUBeQHIAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHEAdUBdwHDAdQBdwHD
@@ -5214,7 +5220,7 @@ Adding shows using this method means that all shows must be added manually.</val
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
-        JQAAAk1TRnQBSQFMAgEBAgEAAWgBAgFoAQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        JQAAAk1TRnQBSQFMAgEBAgEAAZgBAgGYAQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABEgMAAQEBAAEYBQABMAEqEgADJAMjAyQGKAMiBiMDHgYdAxkBGwEWARUBJwIYASABGAEVARkBHQEZ
         ARYBJAEdARUBIgEcARcBGwEWASMBGgEXASoBFwEWAS0CFgEmARYBFAEcARYBEwESARgBEwEOARkBDwEN
         ARsCDQEbAQ0BDAEaAQwBDgEZAQ0BDwEYAQ8BEQEXAREBEAEVARABEQEUARIDEwEUARMCFAETARQBFgES

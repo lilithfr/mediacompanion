@@ -12820,10 +12820,10 @@ Public Class Form1
                     For Each Mov As ComboList In oMovies.MovieCache
                         If Mov.SetName = Msetname Then
                             Dim ac As New MovieSetDatabase
-                            ac.title = Mov.title
-                            ac.tmdbid = Mov.tmdbid
-                            ac.present = True
-                            found = True
+                            ac.title    = Mov.title
+                            ac.tmdbid   = Mov.tmdbid
+                            ac.present  = True
+                            found       = True
                             MovCollectionList.Add(ac)
                         End If
                     Next
@@ -12842,8 +12842,9 @@ Public Class Form1
                             If mset.Collection.Count > 0 Then
                                 For Each collect In mset.Collection
                                     Dim ac As New MovieSetDatabase
-                                    ac.title = collect.MovieTitle
-                                    ac.tmdbid = collect.TmdbMovieId
+                                    ac.title    = collect.MovieTitle
+                                    ac.tmdbid   = collect.TmdbMovieId
+                                    ac.year     = collect.ReleaseYear
                                     MovCollectionList.Add(ac)
                                 Next
                                 Exit For
@@ -12870,14 +12871,16 @@ Public Class Form1
                 End If
             
                 tbMovieSetTitle.Text = If(CustomCollection, MsetName, MovSet.MovieSetName)
+                tb_MovieSetOverview.Text = Pref.decxmlchars(MovSet.MovieSetPlot)
                 DataGridViewSelectedMovieSet.Rows.Clear()
                 Dim count As Integer = 0
                 For Each item In MovCollectionList
                     Dim row As DataGridViewRow = DirectCast(DataGridViewSelectedMovieSet.RowTemplate.Clone(), DataGridViewRow)
-                    row.CreateCells(DataGridViewSelectedMovieSet, If(item.present, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.missing24), item.title)
+                    row.CreateCells(DataGridViewSelectedMovieSet, If(item.present, Global.Media_Companion.My.Resources.Resources.correct, Global.Media_Companion.My.Resources.Resources.missing24), item.title, If(item.year <> "", "("& item.year & ")", "???"))
                     DataGridViewSelectedMovieSet.Rows.Add(row)
                     If Not item.present Then count += 1
                 Next
+                DataGridViewSelectedMovieSet.Sort(DataGridViewSelectedMovieSet.Columns(2), System.ComponentModel.ListSortDirection.Ascending)
                 If Not dirtycollection Then
                     Dim label As String = "Movies in collection:  " & MovCollectionList.Count
                     If Not count = 0 Then

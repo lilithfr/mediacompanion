@@ -849,11 +849,25 @@ Public Class TMDb
         If IsNothing(_collection.parts) Then Exit Sub
         For each item In _collection.parts
             Dim tmpitem As New MovieSetDatabase
-            tmpitem.title = item.title
-            tmpitem.tmdbid = item.id
+            tmpitem.title   = item.title
+            tmpitem.tmdbid  = item.id
+            tmpitem.year    = getyear(item.release_date)
             _mc_collection.Add(tmpitem)
         Next
     End Sub
+
+    Function getyear(ifdate As String) As String
+        Dim isyear As String = ""
+        Try
+            If IsDate(ifdate) Then
+				Dim x = Convert.ToDateTime(ifdate)
+
+				isyear = x.Year.ToString
+			End If
+        Catch
+        End Try
+        Return isyear
+    End Function
 
     Function SelectBackDrop( width As Integer ) As WatTmdb.V3.Backdrop
         Fetch

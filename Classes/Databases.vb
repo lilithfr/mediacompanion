@@ -35,6 +35,7 @@ Public Class MovieSetDatabase
 
     Public tmdbid As String
     Public title As String
+    Public year As String
     Public present As Boolean
 
     'Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
@@ -47,9 +48,10 @@ Public Class MovieSetDatabase
 
     End Sub
 
-    Sub New(Optional _tmdbid As String = "", Optional _title As String = "", Optional _present As Boolean = False)
+    Sub New(Optional _tmdbid As String = "", Optional _title As String = "", Optional _year As String = "", Optional _present As Boolean = False)
         tmdbid      = _tmdbid
         title       = _title
+        year        = _year
         present     = _present
     End Sub
 End Class
