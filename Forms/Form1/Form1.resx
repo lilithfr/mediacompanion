@@ -134,7 +134,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAAbQBawG0AWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAbwBawG8AWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -525,9 +525,6 @@
         SUVORK5CYII=
 </value>
   </data>
-  <metadata name="TVContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>429, 17</value>
-  </metadata>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>713, 128</value>
   </metadata>
@@ -547,6 +544,9 @@ Removed tags are prefix with '-'</value>
   </data>
   <metadata name="MovieArtworkContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>831, 17</value>
+  </metadata>
+  <metadata name="TVContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>429, 17</value>
   </metadata>
   <metadata name="rcmenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>742, 17</value>
@@ -5000,7 +5000,7 @@ scrape any located media</value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
-        IQAAAk1TRnQBSQFMAgEBAgEAAZgBAgGYAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
+        IQAAAk1TRnQBSQFMAgEBAgEAAaABAgGgAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
         AwABEgMAAQEBAAEYBQABwAEhGAAB1wHnAeoBlAHRAdwBeAHNAdwBegHMAdkBfAHLAdkBeQHKAdkBeAHK
         AdkBeAHKAdkBeQHKAdkBegHJAdkBewHKAdkBewHKAdkBegHJAdkBeQHJAdgBegHJAdYBeQHIAdUBeAHI
         AdUBeQHIAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHEAdUBdwHDAdQBdwHD
@@ -5220,7 +5220,7 @@ Adding shows using this method means that all shows must be added manually.</val
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
-        JQAAAk1TRnQBSQFMAgEBAgEAAaABAgGgAQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        JQAAAk1TRnQBSQFMAgEBAgEAAagBAgGoAQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABEgMAAQEBAAEYBQABMAEqEgADJAMjAyQGKAMiBiMDHgYdAxkBGwEWARUBJwIYASABGAEVARkBHQEZ
         ARYBJAEdARUBIgEcARcBGwEWASMBGgEXASoBFwEWAS0CFgEmARYBFAEcARYBEwESARgBEwEOARkBDwEN
         ARsCDQEbAQ0BDAEaAQwBDgEZAQ0BDwEYAQ8BEQEXAREBEAEVARABEQEUARIDEwEUARMCFAETARQBFgES

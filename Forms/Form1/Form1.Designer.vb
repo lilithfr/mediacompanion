@@ -47,44 +47,6 @@ Partial Class Form1
         Me.ButtonSaveAndQuickRefresh = New System.Windows.Forms.Button()
         Me.panelAvailableMoviePosters = New System.Windows.Forms.Panel()
         Me.tb_Sh_Ep_Title = New System.Windows.Forms.TextBox()
-        Me.TvTreeview = New System.Windows.Forms.TreeView()
-        Me.TVContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.Tv_TreeViewContext_ShowTitle = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_Play_Episode = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTvDeletenfoart = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTvDelShowNfoArt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTvDelShowEpNfoArt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiTvDelEpNfoArt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_SearchNewEp = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_RefreshShow = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_ReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_RenameEp = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_RescrapeShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_RescrapeMediaTags = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_MissingEpThumbs = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_RescrapeWizard = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_WatchedShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_ShowMissEps = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Tv_TreeViewContext_DispByAiredDate = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator22 = New System.Windows.Forms.ToolStripSeparator()
-        Me.Tv_TreeViewContext_FindMissArt = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.btnMovieSetsRepopulateFromUsed = New System.Windows.Forms.Button()
         Me.btnPrevMissingFanart = New System.Windows.Forms.Button()
         Me.btnNextMissingFanart = New System.Windows.Forms.Button()
@@ -132,6 +94,44 @@ Partial Class Form1
         Me.rbTvListUnKnown = New System.Windows.Forms.RadioButton()
         Me.btn_MovFanartScrnSht = New System.Windows.Forms.Button()
         Me.CTvTreeView = New System.Windows.Forms.TreeView()
+        Me.TVContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.Tv_TreeViewContext_ShowTitle = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_Play_Episode = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_OpenFolder = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvDeletenfoart = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvDelShowNfoArt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvDelShowEpNfoArt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiTvDelEpNfoArt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_SearchNewEp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_RefreshShow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_ReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_RenameEp = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_RescrapeMediaTags = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_MissingEpThumbs = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_RescrapeWizard = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_WatchedShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_ShowMissEps = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Tv_TreeViewContext_DispByAiredDate = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator22 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Tv_TreeViewContext_FindMissArt = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnlockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LockAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ExpandSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CollapseSelectedShowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CollapseAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExpandAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
+        Me.TvTreeview = New System.Windows.Forms.TreeView()
         Me.tagtxt = New System.Windows.Forms.TextBox()
         Me.MovieContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.tsmiMov_MovieName = New System.Windows.Forms.ToolStripMenuItem()
@@ -1089,10 +1089,11 @@ Partial Class Form1
         Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TVContextMenu.SuspendLayout
+        Me.rbTvMissingNextToAir = New System.Windows.Forms.RadioButton()
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
         CType(Me.PbMoviePoster,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.TVContextMenu.SuspendLayout
         Me.MovieContextMenu.SuspendLayout
         Me.tpMovMain.SuspendLayout
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1555,252 +1556,6 @@ Partial Class Form1
         Me.tb_Sh_Ep_Title.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.ToolTip1.SetToolTip(Me.tb_Sh_Ep_Title, "tt")
         '
-        'TvTreeview
-        '
-        Me.TvTreeview.AllowDrop = true
-        Me.TvTreeview.BackColor = System.Drawing.SystemColors.Window
-        Me.TableLayoutPanel7.SetColumnSpan(Me.TvTreeview, 9)
-        Me.TvTreeview.ContextMenuStrip = Me.TVContextMenu
-        Me.TvTreeview.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TvTreeview.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.TvTreeview.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TvTreeview.HideSelection = false
-        Me.TvTreeview.ImageIndex = 4
-        Me.TvTreeview.ImageList = Me.ImageList2
-        Me.TvTreeview.Location = New System.Drawing.Point(2, 70)
-        Me.TvTreeview.Margin = New System.Windows.Forms.Padding(2, 2, 2, 0)
-        Me.TvTreeview.MinimumSize = New System.Drawing.Size(290, 4)
-        Me.TvTreeview.Name = "TvTreeview"
-        Me.TvTreeview.SelectedImageIndex = 4
-        Me.TvTreeview.ShowLines = false
-        Me.TvTreeview.Size = New System.Drawing.Size(307, 438)
-        Me.TvTreeview.StateImageList = Me.ImageList2
-        Me.TvTreeview.TabIndex = 0
-        '
-        'TVContextMenu
-        '
-        Me.TVContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tv_TreeViewContext_ShowTitle, Me.Tv_TreeViewContext_Play_Episode, Me.ToolStripSeparator18, Me.Tv_TreeViewContext_OpenFolder, Me.Tv_TreeViewContext_ViewNfo, Me.tsmiTvDeletenfoart, Me.ToolStripSeparator1, Me.Tv_TreeViewContext_SearchNewEp, Me.Tv_TreeViewContext_RefreshShow, Me.Tv_TreeViewContext_ReloadFromCache, Me.ToolStripSeparator29, Me.Tv_TreeViewContext_RenameEp, Me.Tv_TreeViewContext_RescrapeShowOrEpisode, Me.Tv_TreeViewContext_RescrapeMediaTags, Me.Tv_TreeViewContext_MissingEpThumbs, Me.Tv_TreeViewContext_RescrapeWizard, Me.ToolStripSeparator30, Me.Tv_TreeViewContext_WatchedShowOrEpisode, Me.Tv_TreeViewContext_UnWatchedShowOrEpisode, Me.ToolStripSeparator21, Me.Tv_TreeViewContext_ShowMissEps, Me.Tv_TreeViewContext_DispByAiredDate, Me.ToolStripSeparator22, Me.Tv_TreeViewContext_FindMissArt, Me.ToolStripSeparator2, Me.UnlockAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.ToolStripSeparator19, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem})
-        Me.TVContextMenu.Name = "ContextMenuStrip2"
-        Me.TVContextMenu.Size = New System.Drawing.Size(245, 580)
-        Me.TVContextMenu.Text = "Open Folder at file"
-        '
-        'Tv_TreeViewContext_ShowTitle
-        '
-        Me.Tv_TreeViewContext_ShowTitle.Name = "Tv_TreeViewContext_ShowTitle"
-        Me.Tv_TreeViewContext_ShowTitle.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_ShowTitle.Text = "For Tv Show 'TvShowTitle'..."
-        '
-        'Tv_TreeViewContext_Play_Episode
-        '
-        Me.Tv_TreeViewContext_Play_Episode.Name = "Tv_TreeViewContext_Play_Episode"
-        Me.Tv_TreeViewContext_Play_Episode.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_Play_Episode.Text = "Play Episode"
-        '
-        'ToolStripSeparator18
-        '
-        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_OpenFolder
-        '
-        Me.Tv_TreeViewContext_OpenFolder.Name = "Tv_TreeViewContext_OpenFolder"
-        Me.Tv_TreeViewContext_OpenFolder.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_OpenFolder.Text = "Open Folder"
-        '
-        'Tv_TreeViewContext_ViewNfo
-        '
-        Me.Tv_TreeViewContext_ViewNfo.Name = "Tv_TreeViewContext_ViewNfo"
-        Me.Tv_TreeViewContext_ViewNfo.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_ViewNfo.Text = "View .nfo File"
-        '
-        'tsmiTvDeletenfoart
-        '
-        Me.tsmiTvDeletenfoart.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiTvDelShowNfoArt, Me.tsmiTvDelShowEpNfoArt, Me.tsmiTvDelEpNfoArt})
-        Me.tsmiTvDeletenfoart.Name = "tsmiTvDeletenfoart"
-        Me.tsmiTvDeletenfoart.Size = New System.Drawing.Size(244, 22)
-        Me.tsmiTvDeletenfoart.Text = "Delete nfo && Artwork"
-        '
-        'tsmiTvDelShowNfoArt
-        '
-        Me.tsmiTvDelShowNfoArt.Name = "tsmiTvDelShowNfoArt"
-        Me.tsmiTvDelShowNfoArt.Size = New System.Drawing.Size(170, 22)
-        Me.tsmiTvDelShowNfoArt.Text = "Tv Show Only"
-        '
-        'tsmiTvDelShowEpNfoArt
-        '
-        Me.tsmiTvDelShowEpNfoArt.Name = "tsmiTvDelShowEpNfoArt"
-        Me.tsmiTvDelShowEpNfoArt.Size = New System.Drawing.Size(170, 22)
-        Me.tsmiTvDelShowEpNfoArt.Text = "Tv Show && Episodes"
-        '
-        'tsmiTvDelEpNfoArt
-        '
-        Me.tsmiTvDelEpNfoArt.Name = "tsmiTvDelEpNfoArt"
-        Me.tsmiTvDelEpNfoArt.Size = New System.Drawing.Size(170, 22)
-        Me.tsmiTvDelEpNfoArt.Text = "Episodes Only"
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_SearchNewEp
-        '
-        Me.Tv_TreeViewContext_SearchNewEp.Name = "Tv_TreeViewContext_SearchNewEp"
-        Me.Tv_TreeViewContext_SearchNewEp.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_SearchNewEp.Text = "Search this Show for new episodes"
-        '
-        'Tv_TreeViewContext_RefreshShow
-        '
-        Me.Tv_TreeViewContext_RefreshShow.Name = "Tv_TreeViewContext_RefreshShow"
-        Me.Tv_TreeViewContext_RefreshShow.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_RefreshShow.Text = "Refresh this Show From .nfo"
-        '
-        'Tv_TreeViewContext_ReloadFromCache
-        '
-        Me.Tv_TreeViewContext_ReloadFromCache.Name = "Tv_TreeViewContext_ReloadFromCache"
-        Me.Tv_TreeViewContext_ReloadFromCache.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_ReloadFromCache.Text = "Reload Item From Cache"
-        '
-        'ToolStripSeparator29
-        '
-        Me.ToolStripSeparator29.Name = "ToolStripSeparator29"
-        Me.ToolStripSeparator29.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_RenameEp
-        '
-        Me.Tv_TreeViewContext_RenameEp.Name = "Tv_TreeViewContext_RenameEp"
-        Me.Tv_TreeViewContext_RenameEp.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_RenameEp.Text = "Rename Episode(s)"
-        '
-        'Tv_TreeViewContext_RescrapeShowOrEpisode
-        '
-        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Name = "Tv_TreeViewContext_RescrapeShowOrEpisode"
-        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape This Show"
-        '
-        'Tv_TreeViewContext_RescrapeMediaTags
-        '
-        Me.Tv_TreeViewContext_RescrapeMediaTags.Name = "Tv_TreeViewContext_RescrapeMediaTags"
-        Me.Tv_TreeViewContext_RescrapeMediaTags.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_RescrapeMediaTags.Text = "Rescrape Media Tags"
-        '
-        'Tv_TreeViewContext_MissingEpThumbs
-        '
-        Me.Tv_TreeViewContext_MissingEpThumbs.Name = "Tv_TreeViewContext_MissingEpThumbs"
-        Me.Tv_TreeViewContext_MissingEpThumbs.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_MissingEpThumbs.Text = "Rescrape Missing Episode Thumbs"
-        '
-        'Tv_TreeViewContext_RescrapeWizard
-        '
-        Me.Tv_TreeViewContext_RescrapeWizard.Name = "Tv_TreeViewContext_RescrapeWizard"
-        Me.Tv_TreeViewContext_RescrapeWizard.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_RescrapeWizard.Text = "Use Rescraper Wizard on this Show"
-        '
-        'ToolStripSeparator30
-        '
-        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
-        Me.ToolStripSeparator30.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_WatchedShowOrEpisode
-        '
-        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Name = "Tv_TreeViewContext_WatchedShowOrEpisode"
-        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark This Show as Watched"
-        '
-        'Tv_TreeViewContext_UnWatchedShowOrEpisode
-        '
-        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Name = "Tv_TreeViewContext_UnWatchedShowOrEpisode"
-        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Text = "Mark This Show as Un-Watched"
-        '
-        'ToolStripSeparator21
-        '
-        Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
-        Me.ToolStripSeparator21.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_ShowMissEps
-        '
-        Me.Tv_TreeViewContext_ShowMissEps.Name = "Tv_TreeViewContext_ShowMissEps"
-        Me.Tv_TreeViewContext_ShowMissEps.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_ShowMissEps.Text = "Display Missing Episodes"
-        '
-        'Tv_TreeViewContext_DispByAiredDate
-        '
-        Me.Tv_TreeViewContext_DispByAiredDate.Name = "Tv_TreeViewContext_DispByAiredDate"
-        Me.Tv_TreeViewContext_DispByAiredDate.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_DispByAiredDate.Text = "Display Episodes by Aired Date"
-        '
-        'ToolStripSeparator22
-        '
-        Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
-        Me.ToolStripSeparator22.Size = New System.Drawing.Size(241, 6)
-        '
-        'Tv_TreeViewContext_FindMissArt
-        '
-        Me.Tv_TreeViewContext_FindMissArt.Name = "Tv_TreeViewContext_FindMissArt"
-        Me.Tv_TreeViewContext_FindMissArt.Size = New System.Drawing.Size(244, 22)
-        Me.Tv_TreeViewContext_FindMissArt.Text = "Find Missing Art For This Show"
-        '
-        'ToolStripSeparator2
-        '
-        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(241, 6)
-        '
-        'UnlockAllToolStripMenuItem
-        '
-        Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
-        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
-        '
-        'LockAllToolStripMenuItem
-        '
-        Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
-        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
-        '
-        'ToolStripSeparator19
-        '
-        Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
-        Me.ToolStripSeparator19.Size = New System.Drawing.Size(241, 6)
-        '
-        'ExpandSelectedShowToolStripMenuItem
-        '
-        Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
-        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
-        '
-        'CollapseSelectedShowToolStripMenuItem
-        '
-        Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
-        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
-        '
-        'CollapseAllToolStripMenuItem
-        '
-        Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
-        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
-        '
-        'ExpandAllToolStripMenuItem
-        '
-        Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
-        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
-        Me.ExpandAllToolStripMenuItem.Text = "Expand All"
-        '
-        'ImageList2
-        '
-        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"),System.Windows.Forms.ImageListStreamer)
-        Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList2.Images.SetKeyName(0, "padlock")
-        Me.ImageList2.Images.SetKeyName(1, "imdb-logo")
-        Me.ImageList2.Images.SetKeyName(2, "error")
-        Me.ImageList2.Images.SetKeyName(3, "qmark")
-        Me.ImageList2.Images.SetKeyName(4, "blank")
-        Me.ImageList2.Images.SetKeyName(5, "edit")
-        Me.ImageList2.Images.SetKeyName(6, "missing.png")
-        Me.ImageList2.Images.SetKeyName(7, "watched")
-        Me.ImageList2.Images.SetKeyName(8, "lockwatched")
-        '
         'btnMovieSetsRepopulateFromUsed
         '
         Me.btnMovieSetsRepopulateFromUsed.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
@@ -2251,7 +2006,7 @@ Partial Class Form1
         Me.rbTvMissingPoster.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.rbTvMissingPoster.AutoSize = true
         Me.rbTvMissingPoster.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbTvMissingPoster.Location = New System.Drawing.Point(179, 65)
+        Me.rbTvMissingPoster.Location = New System.Drawing.Point(179, 68)
         Me.rbTvMissingPoster.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvMissingPoster.Name = "rbTvMissingPoster"
         Me.rbTvMissingPoster.Size = New System.Drawing.Size(112, 19)
@@ -2369,11 +2124,257 @@ Partial Class Form1
         Me.CTvTreeView.Name = "CTvTreeView"
         Me.CTvTreeView.SelectedImageIndex = 4
         Me.CTvTreeView.ShowLines = false
-        Me.CTvTreeView.Size = New System.Drawing.Size(296, 230)
+        Me.CTvTreeView.Size = New System.Drawing.Size(296, 234)
         Me.CTvTreeView.StateImageList = Me.ImageList2
         Me.CTvTreeView.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.CTvTreeView, "Double click an episode to playback,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Use context menu (Right Mouse Click)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for a"& _ 
         "dditional options")
+        '
+        'TVContextMenu
+        '
+        Me.TVContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Tv_TreeViewContext_ShowTitle, Me.Tv_TreeViewContext_Play_Episode, Me.ToolStripSeparator18, Me.Tv_TreeViewContext_OpenFolder, Me.Tv_TreeViewContext_ViewNfo, Me.tsmiTvDeletenfoart, Me.ToolStripSeparator1, Me.Tv_TreeViewContext_SearchNewEp, Me.Tv_TreeViewContext_RefreshShow, Me.Tv_TreeViewContext_ReloadFromCache, Me.ToolStripSeparator29, Me.Tv_TreeViewContext_RenameEp, Me.Tv_TreeViewContext_RescrapeShowOrEpisode, Me.Tv_TreeViewContext_RescrapeMediaTags, Me.Tv_TreeViewContext_MissingEpThumbs, Me.Tv_TreeViewContext_RescrapeWizard, Me.ToolStripSeparator30, Me.Tv_TreeViewContext_WatchedShowOrEpisode, Me.Tv_TreeViewContext_UnWatchedShowOrEpisode, Me.ToolStripSeparator21, Me.Tv_TreeViewContext_ShowMissEps, Me.Tv_TreeViewContext_DispByAiredDate, Me.ToolStripSeparator22, Me.Tv_TreeViewContext_FindMissArt, Me.ToolStripSeparator2, Me.UnlockAllToolStripMenuItem, Me.LockAllToolStripMenuItem, Me.ToolStripSeparator19, Me.ExpandSelectedShowToolStripMenuItem, Me.CollapseSelectedShowToolStripMenuItem, Me.CollapseAllToolStripMenuItem, Me.ExpandAllToolStripMenuItem})
+        Me.TVContextMenu.Name = "ContextMenuStrip2"
+        Me.TVContextMenu.Size = New System.Drawing.Size(245, 580)
+        Me.TVContextMenu.Text = "Open Folder at file"
+        '
+        'Tv_TreeViewContext_ShowTitle
+        '
+        Me.Tv_TreeViewContext_ShowTitle.Name = "Tv_TreeViewContext_ShowTitle"
+        Me.Tv_TreeViewContext_ShowTitle.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_ShowTitle.Text = "For Tv Show 'TvShowTitle'..."
+        '
+        'Tv_TreeViewContext_Play_Episode
+        '
+        Me.Tv_TreeViewContext_Play_Episode.Name = "Tv_TreeViewContext_Play_Episode"
+        Me.Tv_TreeViewContext_Play_Episode.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_Play_Episode.Text = "Play Episode"
+        '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_OpenFolder
+        '
+        Me.Tv_TreeViewContext_OpenFolder.Name = "Tv_TreeViewContext_OpenFolder"
+        Me.Tv_TreeViewContext_OpenFolder.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_OpenFolder.Text = "Open Folder"
+        '
+        'Tv_TreeViewContext_ViewNfo
+        '
+        Me.Tv_TreeViewContext_ViewNfo.Name = "Tv_TreeViewContext_ViewNfo"
+        Me.Tv_TreeViewContext_ViewNfo.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_ViewNfo.Text = "View .nfo File"
+        '
+        'tsmiTvDeletenfoart
+        '
+        Me.tsmiTvDeletenfoart.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiTvDelShowNfoArt, Me.tsmiTvDelShowEpNfoArt, Me.tsmiTvDelEpNfoArt})
+        Me.tsmiTvDeletenfoart.Name = "tsmiTvDeletenfoart"
+        Me.tsmiTvDeletenfoart.Size = New System.Drawing.Size(244, 22)
+        Me.tsmiTvDeletenfoart.Text = "Delete nfo && Artwork"
+        '
+        'tsmiTvDelShowNfoArt
+        '
+        Me.tsmiTvDelShowNfoArt.Name = "tsmiTvDelShowNfoArt"
+        Me.tsmiTvDelShowNfoArt.Size = New System.Drawing.Size(170, 22)
+        Me.tsmiTvDelShowNfoArt.Text = "Tv Show Only"
+        '
+        'tsmiTvDelShowEpNfoArt
+        '
+        Me.tsmiTvDelShowEpNfoArt.Name = "tsmiTvDelShowEpNfoArt"
+        Me.tsmiTvDelShowEpNfoArt.Size = New System.Drawing.Size(170, 22)
+        Me.tsmiTvDelShowEpNfoArt.Text = "Tv Show && Episodes"
+        '
+        'tsmiTvDelEpNfoArt
+        '
+        Me.tsmiTvDelEpNfoArt.Name = "tsmiTvDelEpNfoArt"
+        Me.tsmiTvDelEpNfoArt.Size = New System.Drawing.Size(170, 22)
+        Me.tsmiTvDelEpNfoArt.Text = "Episodes Only"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_SearchNewEp
+        '
+        Me.Tv_TreeViewContext_SearchNewEp.Name = "Tv_TreeViewContext_SearchNewEp"
+        Me.Tv_TreeViewContext_SearchNewEp.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_SearchNewEp.Text = "Search this Show for new episodes"
+        '
+        'Tv_TreeViewContext_RefreshShow
+        '
+        Me.Tv_TreeViewContext_RefreshShow.Name = "Tv_TreeViewContext_RefreshShow"
+        Me.Tv_TreeViewContext_RefreshShow.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_RefreshShow.Text = "Refresh this Show From .nfo"
+        '
+        'Tv_TreeViewContext_ReloadFromCache
+        '
+        Me.Tv_TreeViewContext_ReloadFromCache.Name = "Tv_TreeViewContext_ReloadFromCache"
+        Me.Tv_TreeViewContext_ReloadFromCache.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_ReloadFromCache.Text = "Reload Item From Cache"
+        '
+        'ToolStripSeparator29
+        '
+        Me.ToolStripSeparator29.Name = "ToolStripSeparator29"
+        Me.ToolStripSeparator29.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_RenameEp
+        '
+        Me.Tv_TreeViewContext_RenameEp.Name = "Tv_TreeViewContext_RenameEp"
+        Me.Tv_TreeViewContext_RenameEp.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_RenameEp.Text = "Rename Episode(s)"
+        '
+        'Tv_TreeViewContext_RescrapeShowOrEpisode
+        '
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Name = "Tv_TreeViewContext_RescrapeShowOrEpisode"
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_RescrapeShowOrEpisode.Text = "Rescrape This Show"
+        '
+        'Tv_TreeViewContext_RescrapeMediaTags
+        '
+        Me.Tv_TreeViewContext_RescrapeMediaTags.Name = "Tv_TreeViewContext_RescrapeMediaTags"
+        Me.Tv_TreeViewContext_RescrapeMediaTags.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_RescrapeMediaTags.Text = "Rescrape Media Tags"
+        '
+        'Tv_TreeViewContext_MissingEpThumbs
+        '
+        Me.Tv_TreeViewContext_MissingEpThumbs.Name = "Tv_TreeViewContext_MissingEpThumbs"
+        Me.Tv_TreeViewContext_MissingEpThumbs.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_MissingEpThumbs.Text = "Rescrape Missing Episode Thumbs"
+        '
+        'Tv_TreeViewContext_RescrapeWizard
+        '
+        Me.Tv_TreeViewContext_RescrapeWizard.Name = "Tv_TreeViewContext_RescrapeWizard"
+        Me.Tv_TreeViewContext_RescrapeWizard.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_RescrapeWizard.Text = "Use Rescraper Wizard on this Show"
+        '
+        'ToolStripSeparator30
+        '
+        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
+        Me.ToolStripSeparator30.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_WatchedShowOrEpisode
+        '
+        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Name = "Tv_TreeViewContext_WatchedShowOrEpisode"
+        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_WatchedShowOrEpisode.Text = "Mark This Show as Watched"
+        '
+        'Tv_TreeViewContext_UnWatchedShowOrEpisode
+        '
+        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Name = "Tv_TreeViewContext_UnWatchedShowOrEpisode"
+        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_UnWatchedShowOrEpisode.Text = "Mark This Show as Un-Watched"
+        '
+        'ToolStripSeparator21
+        '
+        Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
+        Me.ToolStripSeparator21.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_ShowMissEps
+        '
+        Me.Tv_TreeViewContext_ShowMissEps.Name = "Tv_TreeViewContext_ShowMissEps"
+        Me.Tv_TreeViewContext_ShowMissEps.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_ShowMissEps.Text = "Display Missing Episodes"
+        '
+        'Tv_TreeViewContext_DispByAiredDate
+        '
+        Me.Tv_TreeViewContext_DispByAiredDate.Name = "Tv_TreeViewContext_DispByAiredDate"
+        Me.Tv_TreeViewContext_DispByAiredDate.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_DispByAiredDate.Text = "Display Episodes by Aired Date"
+        '
+        'ToolStripSeparator22
+        '
+        Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
+        Me.ToolStripSeparator22.Size = New System.Drawing.Size(241, 6)
+        '
+        'Tv_TreeViewContext_FindMissArt
+        '
+        Me.Tv_TreeViewContext_FindMissArt.Name = "Tv_TreeViewContext_FindMissArt"
+        Me.Tv_TreeViewContext_FindMissArt.Size = New System.Drawing.Size(244, 22)
+        Me.Tv_TreeViewContext_FindMissArt.Text = "Find Missing Art For This Show"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(241, 6)
+        '
+        'UnlockAllToolStripMenuItem
+        '
+        Me.UnlockAllToolStripMenuItem.Name = "UnlockAllToolStripMenuItem"
+        Me.UnlockAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.UnlockAllToolStripMenuItem.Text = "Unlock All Shows"
+        '
+        'LockAllToolStripMenuItem
+        '
+        Me.LockAllToolStripMenuItem.Name = "LockAllToolStripMenuItem"
+        Me.LockAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.LockAllToolStripMenuItem.Text = "Lock All Shows"
+        '
+        'ToolStripSeparator19
+        '
+        Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(241, 6)
+        '
+        'ExpandSelectedShowToolStripMenuItem
+        '
+        Me.ExpandSelectedShowToolStripMenuItem.Name = "ExpandSelectedShowToolStripMenuItem"
+        Me.ExpandSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.ExpandSelectedShowToolStripMenuItem.Text = "Expand Selected Show"
+        '
+        'CollapseSelectedShowToolStripMenuItem
+        '
+        Me.CollapseSelectedShowToolStripMenuItem.Name = "CollapseSelectedShowToolStripMenuItem"
+        Me.CollapseSelectedShowToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.CollapseSelectedShowToolStripMenuItem.Text = "Collapse Selected Show"
+        '
+        'CollapseAllToolStripMenuItem
+        '
+        Me.CollapseAllToolStripMenuItem.Name = "CollapseAllToolStripMenuItem"
+        Me.CollapseAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.CollapseAllToolStripMenuItem.Text = "Collapse All"
+        '
+        'ExpandAllToolStripMenuItem
+        '
+        Me.ExpandAllToolStripMenuItem.Name = "ExpandAllToolStripMenuItem"
+        Me.ExpandAllToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
+        Me.ExpandAllToolStripMenuItem.Text = "Expand All"
+        '
+        'ImageList2
+        '
+        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList2.Images.SetKeyName(0, "padlock")
+        Me.ImageList2.Images.SetKeyName(1, "imdb-logo")
+        Me.ImageList2.Images.SetKeyName(2, "error")
+        Me.ImageList2.Images.SetKeyName(3, "qmark")
+        Me.ImageList2.Images.SetKeyName(4, "blank")
+        Me.ImageList2.Images.SetKeyName(5, "edit")
+        Me.ImageList2.Images.SetKeyName(6, "missing.png")
+        Me.ImageList2.Images.SetKeyName(7, "watched")
+        Me.ImageList2.Images.SetKeyName(8, "lockwatched")
+        '
+        'TvTreeview
+        '
+        Me.TvTreeview.AllowDrop = true
+        Me.TvTreeview.BackColor = System.Drawing.SystemColors.Window
+        Me.TableLayoutPanel7.SetColumnSpan(Me.TvTreeview, 9)
+        Me.TvTreeview.ContextMenuStrip = Me.TVContextMenu
+        Me.TvTreeview.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TvTreeview.Font = New System.Drawing.Font("Times New Roman", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.TvTreeview.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TvTreeview.HideSelection = false
+        Me.TvTreeview.ImageIndex = 4
+        Me.TvTreeview.ImageList = Me.ImageList2
+        Me.TvTreeview.Location = New System.Drawing.Point(2, 70)
+        Me.TvTreeview.Margin = New System.Windows.Forms.Padding(2, 2, 2, 0)
+        Me.TvTreeview.MinimumSize = New System.Drawing.Size(290, 4)
+        Me.TvTreeview.Name = "TvTreeview"
+        Me.TvTreeview.SelectedImageIndex = 4
+        Me.TvTreeview.ShowLines = false
+        Me.TvTreeview.Size = New System.Drawing.Size(307, 428)
+        Me.TvTreeview.StateImageList = Me.ImageList2
+        Me.TvTreeview.TabIndex = 0
         '
         'tagtxt
         '
@@ -3007,7 +3008,7 @@ Partial Class Form1
         Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.SplitContainer5.Panel2MinSize = 1
         Me.SplitContainer5.Size = New System.Drawing.Size(329, 607)
-        Me.SplitContainer5.SplitterDistance = 282
+        Me.SplitContainer5.SplitterDistance = 281
         Me.SplitContainer5.SplitterWidth = 5
         Me.SplitContainer5.TabIndex = 68
         '
@@ -3082,7 +3083,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 184)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 183)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -3117,7 +3118,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 262)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 261)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -3270,7 +3271,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 6927)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 7010)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3320,7 +3321,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 10810)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 10893)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4430,7 +4431,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(273, 207)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(272, 207)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4440,7 +4441,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(85, 71)
+        Me.Label128.Location = New System.Drawing.Point(84, 71)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -8104,7 +8105,7 @@ Partial Class Form1
         '
         Me.SplitContainer10.Panel2.Controls.Add(Me.Panel11)
         Me.SplitContainer10.Size = New System.Drawing.Size(311, 603)
-        Me.SplitContainer10.SplitterDistance = 508
+        Me.SplitContainer10.SplitterDistance = 498
         Me.SplitContainer10.TabIndex = 0
         '
         'TableLayoutPanel7
@@ -8134,7 +8135,7 @@ Partial Class Form1
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel7.Size = New System.Drawing.Size(311, 508)
+        Me.TableLayoutPanel7.Size = New System.Drawing.Size(311, 498)
         Me.TableLayoutPanel7.TabIndex = 187
         '
         'TextBox_TotEpisodeCount
@@ -8186,6 +8187,7 @@ Partial Class Form1
         '
         'Panel11
         '
+        Me.Panel11.Controls.Add(Me.rbTvMissingNextToAir)
         Me.Panel11.Controls.Add(Me.rbTvListUnKnown)
         Me.Panel11.Controls.Add(Me.rbTvListContinuing)
         Me.Panel11.Controls.Add(Me.rbTvListEnded)
@@ -8199,7 +8201,7 @@ Partial Class Form1
         Me.Panel11.Controls.Add(Me.rbTvMissingEpisodes)
         Me.Panel11.Location = New System.Drawing.Point(0, 1)
         Me.Panel11.Name = "Panel11"
-        Me.Panel11.Size = New System.Drawing.Size(311, 91)
+        Me.Panel11.Size = New System.Drawing.Size(311, 101)
         Me.Panel11.TabIndex = 182
         '
         'rbTvListContinuing
@@ -8258,7 +8260,7 @@ Partial Class Form1
         Me.rbTvMissingAiredEp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.rbTvMissingAiredEp.AutoSize = true
         Me.rbTvMissingAiredEp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbTvMissingAiredEp.Location = New System.Drawing.Point(9, 65)
+        Me.rbTvMissingAiredEp.Location = New System.Drawing.Point(9, 62)
         Me.rbTvMissingAiredEp.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvMissingAiredEp.Name = "rbTvMissingAiredEp"
         Me.rbTvMissingAiredEp.Size = New System.Drawing.Size(153, 19)
@@ -8294,7 +8296,7 @@ Partial Class Form1
         Me.rbTvMissingThumb.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
         Me.rbTvMissingThumb.AutoSize = true
         Me.rbTvMissingThumb.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbTvMissingThumb.Location = New System.Drawing.Point(179, 46)
+        Me.rbTvMissingThumb.Location = New System.Drawing.Point(179, 47)
         Me.rbTvMissingThumb.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvMissingThumb.Name = "rbTvMissingThumb"
         Me.rbTvMissingThumb.Size = New System.Drawing.Size(128, 19)
@@ -8309,7 +8311,7 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.rbTvMissingEpisodes.AutoSize = true
         Me.rbTvMissingEpisodes.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.rbTvMissingEpisodes.Location = New System.Drawing.Point(9, 46)
+        Me.rbTvMissingEpisodes.Location = New System.Drawing.Point(9, 44)
         Me.rbTvMissingEpisodes.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvMissingEpisodes.Name = "rbTvMissingEpisodes"
         Me.rbTvMissingEpisodes.Size = New System.Drawing.Size(122, 19)
@@ -8321,7 +8323,7 @@ Partial Class Form1
         '
         Me.Panel_EpisodeActors.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel_EpisodeActors.Controls.Add(Me.TableLayoutPanel_EpisodeActors)
-        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(543, 337)
+        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(542, 337)
         Me.Panel_EpisodeActors.MaximumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.MinimumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.Name = "Panel_EpisodeActors"
@@ -8789,7 +8791,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 75)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(305, 240)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(304, 240)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -12275,7 +12277,7 @@ Partial Class Form1
         Me.TabCustTv.Controls.Add(Me.CustTvTabControl)
         Me.TabCustTv.Location = New System.Drawing.Point(4, 24)
         Me.TabCustTv.Name = "TabCustTv"
-        Me.TabCustTv.Size = New System.Drawing.Size(747, 72)
+        Me.TabCustTv.Size = New System.Drawing.Size(1061, 644)
         Me.TabCustTv.TabIndex = 14
         Me.TabCustTv.Text = "Custom Tv Shows"
         Me.TabCustTv.UseVisualStyleBackColor = true
@@ -12289,7 +12291,7 @@ Partial Class Form1
         Me.CustTvTabControl.Location = New System.Drawing.Point(0, 0)
         Me.CustTvTabControl.Name = "CustTvTabControl"
         Me.CustTvTabControl.SelectedIndex = 0
-        Me.CustTvTabControl.Size = New System.Drawing.Size(743, 68)
+        Me.CustTvTabControl.Size = New System.Drawing.Size(1057, 640)
         Me.CustTvTabControl.TabIndex = 1
         '
         'TpCustTvBrowser
@@ -12298,7 +12300,7 @@ Partial Class Form1
         Me.TpCustTvBrowser.Location = New System.Drawing.Point(4, 24)
         Me.TpCustTvBrowser.Name = "TpCustTvBrowser"
         Me.TpCustTvBrowser.Padding = New System.Windows.Forms.Padding(3)
-        Me.TpCustTvBrowser.Size = New System.Drawing.Size(735, 40)
+        Me.TpCustTvBrowser.Size = New System.Drawing.Size(1049, 612)
         Me.TpCustTvBrowser.TabIndex = 0
         Me.TpCustTvBrowser.Text = "Main Browser"
         Me.TpCustTvBrowser.UseVisualStyleBackColor = true
@@ -12322,7 +12324,7 @@ Partial Class Form1
         Me.SpCont1.Panel2.Controls.Add(Me.Panel_Show)
         Me.SpCont1.Panel2.Controls.Add(Me.Panel_Episode)
         Me.SpCont1.Panel2.Controls.Add(Me.TableLayoutPanel35)
-        Me.SpCont1.Size = New System.Drawing.Size(729, 34)
+        Me.SpCont1.Size = New System.Drawing.Size(1043, 606)
         Me.SpCont1.SplitterDistance = 300
         Me.SpCont1.TabIndex = 0
         '
@@ -12347,8 +12349,8 @@ Partial Class Form1
         'Spltctnr11.Panel2
         '
         Me.Spltctnr11.Panel2.Controls.Add(Me.SpltCtnr12)
-        Me.Spltctnr11.Size = New System.Drawing.Size(296, 30)
-        Me.Spltctnr11.SplitterDistance = 25
+        Me.Spltctnr11.Size = New System.Drawing.Size(296, 602)
+        Me.Spltctnr11.SplitterDistance = 92
         Me.Spltctnr11.TabIndex = 6
         '
         'btnCRefresh
@@ -12418,8 +12420,8 @@ Partial Class Form1
         'SpltCtnr12.Panel1
         '
         Me.SpltCtnr12.Panel1.Controls.Add(Me.CTvTreeView)
-        Me.SpltCtnr12.Size = New System.Drawing.Size(296, 25)
-        Me.SpltCtnr12.SplitterDistance = 230
+        Me.SpltCtnr12.Size = New System.Drawing.Size(296, 506)
+        Me.SpltCtnr12.SplitterDistance = 234
         Me.SpltCtnr12.TabIndex = 1
         '
         'Panel_Show
@@ -12428,9 +12430,9 @@ Partial Class Form1
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel_Show.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel_Show.Controls.Add(Me.TableLayoutPanel33)
-        Me.Panel_Show.Location = New System.Drawing.Point(23, -222)
+        Me.Panel_Show.Location = New System.Drawing.Point(23, 350)
         Me.Panel_Show.Name = "Panel_Show"
-        Me.Panel_Show.Size = New System.Drawing.Size(326, 241)
+        Me.Panel_Show.Size = New System.Drawing.Size(640, 241)
         Me.Panel_Show.TabIndex = 4
         '
         'TableLayoutPanel33
@@ -12472,7 +12474,7 @@ Partial Class Form1
         Me.TableLayoutPanel33.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13!))
         Me.TableLayoutPanel33.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
         Me.TableLayoutPanel33.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel33.Size = New System.Drawing.Size(324, 239)
+        Me.TableLayoutPanel33.Size = New System.Drawing.Size(638, 239)
         Me.TableLayoutPanel33.TabIndex = 0
         '
         'lbl_CustTvShRunTime
@@ -12508,7 +12510,7 @@ Partial Class Form1
         'lbl_CustTvShStudio
         '
         Me.lbl_CustTvShStudio.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_CustTvShStudio.Location = New System.Drawing.Point(168, 114)
+        Me.lbl_CustTvShStudio.Location = New System.Drawing.Point(325, 114)
         Me.lbl_CustTvShStudio.Name = "lbl_CustTvShStudio"
         Me.lbl_CustTvShStudio.Size = New System.Drawing.Size(92, 32)
         Me.lbl_CustTvShStudio.TabIndex = 4
@@ -12518,7 +12520,7 @@ Partial Class Form1
         'lbl_CustTvShGenre
         '
         Me.lbl_CustTvShGenre.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_CustTvShGenre.Location = New System.Drawing.Point(168, 156)
+        Me.lbl_CustTvShGenre.Location = New System.Drawing.Point(325, 156)
         Me.lbl_CustTvShGenre.Name = "lbl_CustTvShGenre"
         Me.lbl_CustTvShGenre.Size = New System.Drawing.Size(81, 32)
         Me.lbl_CustTvShGenre.TabIndex = 5
@@ -12528,7 +12530,7 @@ Partial Class Form1
         'lbl_CustTvShCert
         '
         Me.lbl_CustTvShCert.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_CustTvShCert.Location = New System.Drawing.Point(168, 201)
+        Me.lbl_CustTvShCert.Location = New System.Drawing.Point(325, 201)
         Me.lbl_CustTvShCert.Name = "lbl_CustTvShCert"
         Me.lbl_CustTvShCert.Size = New System.Drawing.Size(92, 32)
         Me.lbl_CustTvShCert.TabIndex = 6
@@ -12543,7 +12545,7 @@ Partial Class Form1
         Me.tbCShPlot.Multiline = true
         Me.tbCShPlot.Name = "tbCShPlot"
         Me.tbCShPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.tbCShPlot.Size = New System.Drawing.Size(188, 91)
+        Me.tbCShPlot.Size = New System.Drawing.Size(502, 91)
         Me.tbCShPlot.TabIndex = 7
         '
         'tbCShRuntime
@@ -12552,7 +12554,7 @@ Partial Class Form1
         Me.tbCShRuntime.Location = New System.Drawing.Point(117, 120)
         Me.tbCShRuntime.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShRuntime.Name = "tbCShRuntime"
-        Me.tbCShRuntime.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShRuntime.Size = New System.Drawing.Size(185, 21)
         Me.tbCShRuntime.TabIndex = 8
         '
         'tbCShId
@@ -12561,7 +12563,7 @@ Partial Class Form1
         Me.tbCShId.Location = New System.Drawing.Point(117, 162)
         Me.tbCShId.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShId.Name = "tbCShId"
-        Me.tbCShId.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShId.Size = New System.Drawing.Size(185, 21)
         Me.tbCShId.TabIndex = 9
         '
         'tbCShPremiered
@@ -12570,34 +12572,34 @@ Partial Class Form1
         Me.tbCShPremiered.Location = New System.Drawing.Point(117, 207)
         Me.tbCShPremiered.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShPremiered.Name = "tbCShPremiered"
-        Me.tbCShPremiered.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShPremiered.Size = New System.Drawing.Size(185, 21)
         Me.tbCShPremiered.TabIndex = 10
         '
         'tbCShStudio
         '
         Me.tbCShStudio.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbCShStudio.Location = New System.Drawing.Point(277, 120)
+        Me.tbCShStudio.Location = New System.Drawing.Point(434, 120)
         Me.tbCShStudio.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShStudio.Name = "tbCShStudio"
-        Me.tbCShStudio.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShStudio.Size = New System.Drawing.Size(185, 21)
         Me.tbCShStudio.TabIndex = 11
         '
         'tbCShGenre
         '
         Me.tbCShGenre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbCShGenre.Location = New System.Drawing.Point(277, 162)
+        Me.tbCShGenre.Location = New System.Drawing.Point(434, 162)
         Me.tbCShGenre.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShGenre.Name = "tbCShGenre"
-        Me.tbCShGenre.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShGenre.Size = New System.Drawing.Size(185, 21)
         Me.tbCShGenre.TabIndex = 12
         '
         'tbCShCert
         '
         Me.tbCShCert.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbCShCert.Location = New System.Drawing.Point(277, 207)
+        Me.tbCShCert.Location = New System.Drawing.Point(434, 207)
         Me.tbCShCert.Margin = New System.Windows.Forms.Padding(3, 6, 3, 3)
         Me.tbCShCert.Name = "tbCShCert"
-        Me.tbCShCert.Size = New System.Drawing.Size(28, 21)
+        Me.tbCShCert.Size = New System.Drawing.Size(185, 21)
         Me.tbCShCert.TabIndex = 13
         '
         'lbl_ShPlot
@@ -12615,9 +12617,9 @@ Partial Class Form1
         Me.Panel_Episode.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left)  _
             Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel_Episode.Controls.Add(Me.TableLayoutPanel34)
-        Me.Panel_Episode.Location = New System.Drawing.Point(20, -222)
+        Me.Panel_Episode.Location = New System.Drawing.Point(20, 350)
         Me.Panel_Episode.Name = "Panel_Episode"
-        Me.Panel_Episode.Size = New System.Drawing.Size(326, 241)
+        Me.Panel_Episode.Size = New System.Drawing.Size(640, 241)
         Me.Panel_Episode.TabIndex = 3
         '
         'TableLayoutPanel34
@@ -12663,7 +12665,7 @@ Partial Class Form1
         Me.TableLayoutPanel34.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
         Me.TableLayoutPanel34.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23!))
         Me.TableLayoutPanel34.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel34.Size = New System.Drawing.Size(326, 241)
+        Me.TableLayoutPanel34.Size = New System.Drawing.Size(640, 241)
         Me.TableLayoutPanel34.TabIndex = 0
         '
         'tbCEpPlot
@@ -12674,7 +12676,7 @@ Partial Class Form1
         Me.tbCEpPlot.Multiline = true
         Me.tbCEpPlot.Name = "tbCEpPlot"
         Me.tbCEpPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.tbCEpPlot.Size = New System.Drawing.Size(190, 57)
+        Me.tbCEpPlot.Size = New System.Drawing.Size(504, 57)
         Me.tbCEpPlot.TabIndex = 15
         '
         'tbCEpDetails
@@ -12684,7 +12686,7 @@ Partial Class Form1
         Me.tbCEpDetails.Location = New System.Drawing.Point(118, 206)
         Me.tbCEpDetails.Margin = New System.Windows.Forms.Padding(3, 2, 3, 3)
         Me.tbCEpDetails.Name = "tbCEpDetails"
-        Me.tbCEpDetails.Size = New System.Drawing.Size(190, 21)
+        Me.tbCEpDetails.Size = New System.Drawing.Size(504, 21)
         Me.tbCEpDetails.TabIndex = 14
         '
         'tbCEpFilename
@@ -12694,7 +12696,7 @@ Partial Class Form1
         Me.tbCEpFilename.Location = New System.Drawing.Point(118, 175)
         Me.tbCEpFilename.Margin = New System.Windows.Forms.Padding(3, 2, 3, 3)
         Me.tbCEpFilename.Name = "tbCEpFilename"
-        Me.tbCEpFilename.Size = New System.Drawing.Size(190, 21)
+        Me.tbCEpFilename.Size = New System.Drawing.Size(504, 21)
         Me.tbCEpFilename.TabIndex = 13
         '
         'tbCEpPath
@@ -12704,7 +12706,7 @@ Partial Class Form1
         Me.tbCEpPath.Location = New System.Drawing.Point(118, 144)
         Me.tbCEpPath.Margin = New System.Windows.Forms.Padding(3, 2, 3, 3)
         Me.tbCEpPath.Name = "tbCEpPath"
-        Me.tbCEpPath.Size = New System.Drawing.Size(190, 21)
+        Me.tbCEpPath.Size = New System.Drawing.Size(504, 21)
         Me.tbCEpPath.TabIndex = 12
         '
         'tbCEpAired
@@ -12713,13 +12715,13 @@ Partial Class Form1
         Me.tbCEpAired.Location = New System.Drawing.Point(118, 112)
         Me.tbCEpAired.Margin = New System.Windows.Forms.Padding(3, 2, 3, 3)
         Me.tbCEpAired.Name = "tbCEpAired"
-        Me.tbCEpAired.Size = New System.Drawing.Size(1, 21)
+        Me.tbCEpAired.Size = New System.Drawing.Size(217, 21)
         Me.tbCEpAired.TabIndex = 11
         '
         'tbCEpCredits
         '
         Me.tbCEpCredits.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tbCEpCredits.Location = New System.Drawing.Point(153, 11)
+        Me.tbCEpCredits.Location = New System.Drawing.Point(467, 11)
         Me.tbCEpCredits.Margin = New System.Windows.Forms.Padding(3, 3, 2, 3)
         Me.tbCEpCredits.Name = "tbCEpCredits"
         Me.tbCEpCredits.Size = New System.Drawing.Size(156, 21)
@@ -12731,7 +12733,7 @@ Partial Class Form1
         Me.tbCEpDirector.Location = New System.Drawing.Point(118, 10)
         Me.tbCEpDirector.Margin = New System.Windows.Forms.Padding(3, 2, 3, 3)
         Me.tbCEpDirector.Name = "tbCEpDirector"
-        Me.tbCEpDirector.Size = New System.Drawing.Size(1, 21)
+        Me.tbCEpDirector.Size = New System.Drawing.Size(217, 21)
         Me.tbCEpDirector.TabIndex = 9
         '
         'lbl_CustTvEpDirector
@@ -12757,7 +12759,7 @@ Partial Class Form1
         'lbl_CustTvEpCredits
         '
         Me.lbl_CustTvEpCredits.Font = New System.Drawing.Font("Microsoft Sans Serif", 10!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbl_CustTvEpCredits.Location = New System.Drawing.Point(44, 8)
+        Me.lbl_CustTvEpCredits.Location = New System.Drawing.Point(358, 8)
         Me.lbl_CustTvEpCredits.Name = "lbl_CustTvEpCredits"
         Me.lbl_CustTvEpCredits.Size = New System.Drawing.Size(90, 23)
         Me.lbl_CustTvEpCredits.TabIndex = 2
@@ -12833,7 +12835,7 @@ Partial Class Form1
         Me.TableLayoutPanel35.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9!))
         Me.TableLayoutPanel35.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 248!))
         Me.TableLayoutPanel35.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8!))
-        Me.TableLayoutPanel35.Size = New System.Drawing.Size(421, 30)
+        Me.TableLayoutPanel35.Size = New System.Drawing.Size(735, 602)
         Me.TableLayoutPanel35.TabIndex = 0
         '
         'tbCShEpTitle
@@ -12843,7 +12845,7 @@ Partial Class Form1
         Me.tbCShEpTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 12!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.tbCShEpTitle.Location = New System.Drawing.Point(23, 12)
         Me.tbCShEpTitle.Name = "tbCShEpTitle"
-        Me.tbCShEpTitle.Size = New System.Drawing.Size(322, 26)
+        Me.tbCShEpTitle.Size = New System.Drawing.Size(636, 26)
         Me.tbCShEpTitle.TabIndex = 0
         '
         'Show_SplCont1
@@ -12862,8 +12864,8 @@ Partial Class Form1
         'Show_SplCont1.Panel2
         '
         Me.Show_SplCont1.Panel2.Controls.Add(Me.pb_Cust_Banner)
-        Me.Show_SplCont1.Size = New System.Drawing.Size(322, 1)
-        Me.Show_SplCont1.SplitterDistance = 25
+        Me.Show_SplCont1.Size = New System.Drawing.Size(636, 271)
+        Me.Show_SplCont1.SplitterDistance = 125
         Me.Show_SplCont1.TabIndex = 1
         '
         'Show_SplCont2
@@ -12880,8 +12882,8 @@ Partial Class Form1
         'Show_SplCont2.Panel2
         '
         Me.Show_SplCont2.Panel2.Controls.Add(Me.pb_Cust_Poster)
-        Me.Show_SplCont2.Size = New System.Drawing.Size(322, 25)
-        Me.Show_SplCont2.SplitterDistance = 207
+        Me.Show_SplCont2.Size = New System.Drawing.Size(636, 125)
+        Me.Show_SplCont2.SplitterDistance = 408
         Me.Show_SplCont2.TabIndex = 0
         '
         'pb_Cust_Fanart
@@ -12889,7 +12891,7 @@ Partial Class Form1
         Me.pb_Cust_Fanart.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pb_Cust_Fanart.Location = New System.Drawing.Point(0, 0)
         Me.pb_Cust_Fanart.Name = "pb_Cust_Fanart"
-        Me.pb_Cust_Fanart.Size = New System.Drawing.Size(203, 21)
+        Me.pb_Cust_Fanart.Size = New System.Drawing.Size(404, 121)
         Me.pb_Cust_Fanart.TabIndex = 0
         Me.pb_Cust_Fanart.TabStop = false
         '
@@ -12898,7 +12900,7 @@ Partial Class Form1
         Me.pb_Cust_Poster.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pb_Cust_Poster.Location = New System.Drawing.Point(0, 0)
         Me.pb_Cust_Poster.Name = "pb_Cust_Poster"
-        Me.pb_Cust_Poster.Size = New System.Drawing.Size(107, 21)
+        Me.pb_Cust_Poster.Size = New System.Drawing.Size(220, 121)
         Me.pb_Cust_Poster.TabIndex = 0
         Me.pb_Cust_Poster.TabStop = false
         '
@@ -12907,14 +12909,14 @@ Partial Class Form1
         Me.pb_Cust_Banner.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pb_Cust_Banner.Location = New System.Drawing.Point(0, 0)
         Me.pb_Cust_Banner.Name = "pb_Cust_Banner"
-        Me.pb_Cust_Banner.Size = New System.Drawing.Size(318, 21)
+        Me.pb_Cust_Banner.Size = New System.Drawing.Size(632, 138)
         Me.pb_Cust_Banner.TabIndex = 0
         Me.pb_Cust_Banner.TabStop = false
         '
         'pbSave
         '
         Me.pbSave.Image = Global.Media_Companion.My.Resources.Resources.Save
-        Me.pbSave.Location = New System.Drawing.Point(351, 12)
+        Me.pbSave.Location = New System.Drawing.Point(665, 12)
         Me.pbSave.Name = "pbSave"
         Me.pbSave.Size = New System.Drawing.Size(30, 29)
         Me.pbSave.TabIndex = 2
@@ -14030,6 +14032,17 @@ Partial Class Form1
         Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
         Me.tsmiTvWallOpenFolder.Text = "Open Folder"
         '
+        'rbTvMissingNextToAir
+        '
+        Me.rbTvMissingNextToAir.AutoSize = true
+        Me.rbTvMissingNextToAir.Location = New System.Drawing.Point(9, 80)
+        Me.rbTvMissingNextToAir.Name = "rbTvMissingNextToAir"
+        Me.rbTvMissingNextToAir.Size = New System.Drawing.Size(132, 19)
+        Me.rbTvMissingNextToAir.TabIndex = 16
+        Me.rbTvMissingNextToAir.TabStop = true
+        Me.rbTvMissingNextToAir.Text = "Missing Next-To-Air"
+        Me.rbTvMissingNextToAir.UseVisualStyleBackColor = true
+        '
         'Form1
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -14054,10 +14067,10 @@ Partial Class Form1
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Media Companion"
-        Me.TVContextMenu.ResumeLayout(false)
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).EndInit
         Me.MovieArtworkContextMenu.ResumeLayout(false)
         CType(Me.PbMoviePoster,System.ComponentModel.ISupportInitialize).EndInit
+        Me.TVContextMenu.ResumeLayout(false)
         Me.MovieContextMenu.ResumeLayout(false)
         Me.tpMovMain.ResumeLayout(false)
         Me.SplitContainer1.Panel1.ResumeLayout(false)
@@ -15447,4 +15460,5 @@ End Sub
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
     Friend WithEvents Year As DataGridViewTextBoxColumn
     Friend WithEvents tb_MovieSetOverview As TextBox
+    Friend WithEvents rbTvMissingNextToAir As RadioButton
 End Class

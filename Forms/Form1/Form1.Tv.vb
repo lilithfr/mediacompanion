@@ -3308,17 +3308,18 @@ Partial Public Class Form1
         Dim frodo As Boolean = Pref.FrodoEnabled
         Dim overrideIsMissing As Boolean = overrideShowIsMissing IsNot Nothing
 
-        If rbTvListAll.Checked              Then butt = "all"
-        If rbTvMissingFanart.Checked        Then butt = "fanart"
-        If rbTvMissingPoster.Checked        Then butt = "posters"
-        If rbTvMissingThumb.Checked         Then butt = "screenshot"
-        If rbTvMissingEpisodes.Checked      Then butt = "missingeps"
-        If rbTvMissingAiredEp.Checked       Then butt = "airedmissingeps"
-        If rbTvDisplayWatched.Checked       Then butt = "watched"
-        If rbTvDisplayUnWatched.Checked     Then butt = "unwatched"
-        If rbTvListContinuing.Checked       Then butt = "continuing"
-        If rbTvListEnded.Checked            Then butt = "ended"
-        If rbTvListUnKnown.Checked          Then butt = "unknown"
+        If rbTvListAll          .Checked    Then butt = "all"
+        If rbTvMissingFanart    .Checked    Then butt = "fanart"
+        If rbTvMissingPoster    .Checked    Then butt = "posters"
+        If rbTvMissingThumb     .Checked    Then butt = "screenshot"
+        If rbTvMissingEpisodes  .Checked    Then butt = "missingeps"
+        If rbTvMissingAiredEp   .Checked    Then butt = "airedmissingeps"
+        If rbTvMissingNextToAir .Checked    Then butt = "nexttoair"
+        If rbTvDisplayWatched   .Checked    Then butt = "watched"
+        If rbTvDisplayUnWatched .Checked    Then butt = "unwatched"
+        If rbTvListContinuing   .Checked    Then butt = "continuing"
+        If rbTvListEnded        .Checked    Then butt = "ended"
+        If rbTvListUnKnown      .Checked    Then butt = "unknown"
         
         If startup = True Then butt = "all"
         If butt = "missingeps" Then
@@ -3399,6 +3400,35 @@ Partial Public Class Form1
                                     If Convert.ToDateTime(episode.Aired.Value) <= ThisDate Then
                                         episode.Visible = True
                                         episode.EpisodeNode.EnsureVisible()
+                                    Else
+                                        episode.Visible = False
+                                    End If
+                                Catch ex As Exception
+                                    episode.Visible = False     ' We failed to convert the aired date to a date, therefore don't show the episode
+                                End Try
+                            End If
+                        End If
+                    Next
+                    Season.Visible = Season.VisibleEpisodeCount > 0
+                Next
+                item.Visible = item.VisibleSeasonCount > 0 
+            Next
+        ElseIf butt = "nexttoair" Then
+            For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
+                Dim found As Boolean = False
+                For Each Season As Media_Companion.TvSeason In item.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If found OrElse Not episode.IsMissing Then
+                            episode.Visible = False
+                        Else
+                            If String.IsNullOrEmpty(episode.Aired.Value) Then
+                                episode.Visible = False
+                            Else
+                                Try     ' Has the episode been aired yet?
+                                    If Convert.ToDateTime(episode.Aired.Value) >= ThisDate Then
+                                        episode.Visible = True
+                                        episode.EpisodeNode.EnsureVisible()
+                                        found = True
                                     Else
                                         episode.Visible = False
                                     End If

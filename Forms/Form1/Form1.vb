@@ -7319,6 +7319,7 @@ Public Class Form1
 					item.checked = False
 				End If
 			Next
+            tv_Filter()
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -9117,16 +9118,18 @@ Public Class Form1
 				If Pref.displayMissingEpisodes = False
 					RefreshMissingEpisodesToolStripMenuItem.Enabled = False
 					rbTvListAll.Checked = True
-					rbTvMissingEpisodes.Enabled = False
-					rbTvMissingAiredEp.Enabled = False
+					rbTvMissingEpisodes     .Enabled = False
+					rbTvMissingAiredEp      .Enabled = False
+                    rbTvMissingNextToAir    .Enabled = False
 					RefreshMissingEpisodesToolStripMenuItem.ToolTipText = Nothing
 					tv_CacheRefresh
 					Return
 				End If
 				RefreshMissingEpisodesToolStripMenuItem.Enabled = True
 				RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
-				rbTvMissingEpisodes.Enabled = True
-				rbTvMissingAiredEp.Enabled = True
+				rbTvMissingEpisodes     .Enabled = True
+				rbTvMissingAiredEp      .Enabled = True
+                rbTvMissingNextToAir    .Enabled = True
 				Pref.DlMissingEpData = False
 				tv_EpisodesMissingLoad(False)
 			ElseIf Bckgrndfindmissingepisodes.IsBusy Then
@@ -9482,8 +9485,9 @@ Public Class Form1
 		If Pref.displayMissingEpisodes Then
 			Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
 		End If
-		Me.rbTvMissingEpisodes.Enabled = Pref.displayMissingEpisodes
-		Me.rbTvMissingAiredEp.Enabled = Pref.displayMissingEpisodes
+		Me.rbTvMissingEpisodes  .Enabled = Pref.displayMissingEpisodes
+		Me.rbTvMissingAiredEp   .Enabled = Pref.displayMissingEpisodes
+        Me.rbTvMissingNextToAir .Enabled = Pref.displayMissingEpisodes
 
 		Renamer.setRenamePref(Pref.tv_RegexRename.Item(Pref.tvrename), Pref.tv_RegexScraper)
 		XBMCTMDBConfigSave()
@@ -14067,6 +14071,7 @@ Public Class Form1
 																														rbTvDisplayWatched.CheckedChanged,
 																														rbTvMissingAiredEp.CheckedChanged,
 																														rbTvMissingEpisodes.CheckedChanged,
+                                                                                                                        rbTvMissingNextToAir.CheckedChanged,
 																														rbTvMissingPoster.CheckedChanged,
 																														rbTvListAll.CheckedChanged,
 																														rbTvMissingFanart.CheckedChanged,
