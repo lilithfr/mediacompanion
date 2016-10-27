@@ -629,8 +629,8 @@ Public Class frmPreferences
         'Options
         ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
         cbTvUse_XBMC_TVDB_Scraper       .Checked    = Pref.tvshow_useXBMC_Scraper
-        CheckBox20                      .Checked    = Pref.enabletvhdtags
-        CheckBox17                      .Checked    = Pref.disabletvlogs
+        cbTvEpEnableHDTags                      .Checked    = Pref.enabletvhdtags
+        cbTvDisableLogs                      .Checked    = Pref.disabletvlogs
         cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
         cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
         cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize
@@ -2620,6 +2620,7 @@ End Sub
         End Try
     End Sub
 
+
 'TvShow Auto Scrape Options
     Private Sub cbTvDlPosterArt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlPosterArt.CheckedChanged
         If prefsload Then Exit Sub
@@ -2729,9 +2730,9 @@ End Sub
         Changes = True
     End Sub
 
-    Private Sub CheckBox20_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox20.CheckedChanged
+    Private Sub cbTvEpEnableHDTags_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvEpEnableHDTags.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.enabletvhdtags =CheckBox20.Checked
+        Pref.enabletvhdtags =cbTvEpEnableHDTags.Checked
         Changes = True
     End Sub
 
@@ -2746,52 +2747,16 @@ End Sub
         Pref.tvscrnshtTVDBResize = cbTvScrShtTVDBResize.checked
         Changes = True
     End Sub
-
-    'Private Sub AutoScrnShtDelay_KeyPress(sender As Object, e As KeyPressEventArgs) Handles AutoScrnShtDelay.KeyPress
-    '        Try
-    '            If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-    '                If AutoScrnShtDelay.Text <> "" Then
-    '                    e.Handled = True
-    '                Else
-    '                    MsgBox("Please Enter at least 1")
-    '                    AutoScrnShtDelay.Text = "10"
-    '                End If
-    '            End If
-    '            If AutoScrnShtDelay.Text = "" Then
-    '                MsgBox("Please enter a numerical Value that is 1 or more")
-    '                AutoScrnShtDelay.Text = "10"
-    '                Exit Sub
-    '            End If
-    '            If Not IsNumeric(AutoScrnShtDelay.Text) Then
-    '                MsgBox("Please enter a numerical Value that is 1 or more")
-    '                AutoScrnShtDelay.Text = "10"
-    '                Exit Sub
-    '            End If
-    '            'Preferences.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
-    '        Catch ex As Exception
-    '            ExceptionHandler.LogError(ex)
-    '        End Try
-
-    'End Sub
-
-    'Private Sub AutoScrnShtDelay_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AutoScrnShtDelay.TextChanged
-    '    If prefsload Then Exit Sub
-    '    If IsNumeric(AutoScrnShtDelay.Text) AndAlso Convert.ToInt32(AutoScrnShtDelay.Text)>0 Then
-    '        Pref.ScrShtDelay = Convert.ToInt32(AutoScrnShtDelay.Text)
-    '    Else
-    '        Pref.ScrShtDelay = 10
-    '        AutoScrnShtDelay.Text = "10"
-    '        MsgBox("Please enter a numerical Value that is 1 or more")
-    '    End If
-    '    If Changes = False Then
-    '        Changes = True
-            
-    '    End If
-    'End Sub
-
-    Private Sub CheckBox17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox17.CheckedChanged
+    
+    Private Sub cbtvDisplayNextAiredToolTip_CheckedChanged(sender As Object, e As EventArgs) Handles cbtvDisplayNextAiredToolTip.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.disabletvlogs = CheckBox17.Checked
+        Pref.tvDisplayNextAiredToolTip = cbtvDisplayNextAiredToolTip.checked
+        Changes = True
+    End Sub
+
+    Private Sub cbTvDisableLogs_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDisableLogs.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.disabletvlogs = cbTvDisableLogs.Checked
         Changes = True
     End Sub
 
@@ -3725,5 +3690,5 @@ End Sub
         lstNameModeFiles.Sort()
         Return String.Join(vbCrLf, lstNameModeFiles)
     End Function
-    
+
 End Class

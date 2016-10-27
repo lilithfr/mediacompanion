@@ -103,6 +103,7 @@ Partial Class frmPreferences
         Me.cmbxTvMaxGenres = New System.Windows.Forms.ComboBox()
         Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
+        Me.cbtvDisplayNextAiredToolTip = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
@@ -110,6 +111,7 @@ Partial Class frmPreferences
         Me.TPGenCom = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
         Me.TPGeneral = New System.Windows.Forms.TabPage()
+        Me.lbExternalBrowserPath = New System.Windows.Forms.Label()
         Me.cbAutoHideStatusBar = New System.Windows.Forms.CheckBox()
         Me.cbMcCloseMCForDLNewVersion = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -414,8 +416,8 @@ Partial Class frmPreferences
         Me.CheckBox_tv_EpisodeRenameAuto = New System.Windows.Forms.CheckBox()
         Me.Label140 = New System.Windows.Forms.Label()
         Me.ComboBox_tv_EpisodeRename = New System.Windows.Forms.ComboBox()
-        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
+        Me.cbTvEpEnableHDTags = New System.Windows.Forms.CheckBox()
+        Me.cbTvDisableLogs = New System.Windows.Forms.CheckBox()
         Me.ListBox12 = New System.Windows.Forms.ListBox()
         Me.Label122 = New System.Windows.Forms.Label()
         Me.ComboBox8 = New System.Windows.Forms.ComboBox()
@@ -463,7 +465,9 @@ Partial Class frmPreferences
         Me.Label14 = New System.Windows.Forms.Label()
         Me.lbl_HmHeader = New System.Windows.Forms.Label()
         Me.TPProxy = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
         Me.TPXBMCLink = New System.Windows.Forms.TabPage()
+        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.TPPRofCmd = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.GroupBox42 = New System.Windows.Forms.GroupBox()
@@ -491,9 +495,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.lbExternalBrowserPath = New System.Windows.Forms.Label()
-        Me.UcGenPref_Proxy1 = New Media_Companion.ucGenPref_Proxy()
-        Me.UcGenPref_XbmcLink1 = New Media_Companion.ucGenPref_XbmcLink()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1464,6 +1465,18 @@ Partial Class frmPreferences
         Me.ToolTip1.SetToolTip(Me.cbSetIdAsCollectionnumber, "Compatibility for Emby manager.")
         Me.cbSetIdAsCollectionnumber.UseVisualStyleBackColor = true
         '
+        'cbtvDisplayNextAiredToolTip
+        '
+        Me.cbtvDisplayNextAiredToolTip.AutoSize = true
+        Me.cbtvDisplayNextAiredToolTip.Location = New System.Drawing.Point(128, 501)
+        Me.cbtvDisplayNextAiredToolTip.Name = "cbtvDisplayNextAiredToolTip"
+        Me.cbtvDisplayNextAiredToolTip.Size = New System.Drawing.Size(205, 19)
+        Me.cbtvDisplayNextAiredToolTip.TabIndex = 74
+        Me.cbtvDisplayNextAiredToolTip.Text = "Display next to air episode tooltip"
+        Me.ToolTip1.SetToolTip(Me.cbtvDisplayNextAiredToolTip, "Only over TV Show, and will only display if Display Missing"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Episodes option is e"& _ 
+        "nabled also.")
+        Me.cbtvDisplayNextAiredToolTip.UseVisualStyleBackColor = true
+        '
         'cbXbmcTmdbActorFromImdb
         '
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
@@ -1549,6 +1562,15 @@ Partial Class frmPreferences
         Me.TPGeneral.TabIndex = 2
         Me.TPGeneral.Text = "General"
         Me.TPGeneral.UseVisualStyleBackColor = true
+        '
+        'lbExternalBrowserPath
+        '
+        Me.lbExternalBrowserPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbExternalBrowserPath.Location = New System.Drawing.Point(17, 348)
+        Me.lbExternalBrowserPath.Name = "lbExternalBrowserPath"
+        Me.lbExternalBrowserPath.Size = New System.Drawing.Size(380, 23)
+        Me.lbExternalBrowserPath.TabIndex = 118
+        Me.lbExternalBrowserPath.Text = "-None-"
         '
         'cbAutoHideStatusBar
         '
@@ -3087,7 +3109,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3416,7 +3438,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4199,7 +4221,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4423,6 +4445,7 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
+        Me.GroupBox17.Controls.Add(Me.cbtvDisplayNextAiredToolTip)
         Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
         Me.GroupBox17.Controls.Add(Me.GroupBox43)
         Me.GroupBox17.Controls.Add(Me.Label111)
@@ -4434,8 +4457,8 @@ Partial Class frmPreferences
         Me.GroupBox17.Controls.Add(Me.GroupBox20)
         Me.GroupBox17.Controls.Add(Me.cbTvQuickAddShow)
         Me.GroupBox17.Controls.Add(Me.GroupBox1)
-        Me.GroupBox17.Controls.Add(Me.CheckBox20)
-        Me.GroupBox17.Controls.Add(Me.CheckBox17)
+        Me.GroupBox17.Controls.Add(Me.cbTvEpEnableHDTags)
+        Me.GroupBox17.Controls.Add(Me.cbTvDisableLogs)
         Me.GroupBox17.Controls.Add(Me.ListBox12)
         Me.GroupBox17.Controls.Add(Me.Label122)
         Me.GroupBox17.Controls.Add(Me.ComboBox8)
@@ -4632,7 +4655,7 @@ Partial Class frmPreferences
         '
         Me.cbTvUse_XBMC_TVDB_Scraper.AutoSize = true
         Me.cbTvUse_XBMC_TVDB_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvUse_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 431)
+        Me.cbTvUse_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 428)
         Me.cbTvUse_XBMC_TVDB_Scraper.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvUse_XBMC_TVDB_Scraper.Name = "cbTvUse_XBMC_TVDB_Scraper"
         Me.cbTvUse_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(195, 19)
@@ -4998,29 +5021,29 @@ Partial Class frmPreferences
         Me.ComboBox_tv_EpisodeRename.Size = New System.Drawing.Size(240, 23)
         Me.ComboBox_tv_EpisodeRename.TabIndex = 0
         '
-        'CheckBox20
+        'cbTvEpEnableHDTags
         '
-        Me.CheckBox20.AutoSize = true
-        Me.CheckBox20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox20.Location = New System.Drawing.Point(128, 458)
-        Me.CheckBox20.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox20.Name = "CheckBox20"
-        Me.CheckBox20.Size = New System.Drawing.Size(229, 19)
-        Me.CheckBox20.TabIndex = 14
-        Me.CheckBox20.Text = "Save Media Tags to episode.nfo files."
-        Me.CheckBox20.UseVisualStyleBackColor = true
+        Me.cbTvEpEnableHDTags.AutoSize = true
+        Me.cbTvEpEnableHDTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbTvEpEnableHDTags.Location = New System.Drawing.Point(128, 451)
+        Me.cbTvEpEnableHDTags.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbTvEpEnableHDTags.Name = "cbTvEpEnableHDTags"
+        Me.cbTvEpEnableHDTags.Size = New System.Drawing.Size(229, 19)
+        Me.cbTvEpEnableHDTags.TabIndex = 14
+        Me.cbTvEpEnableHDTags.Text = "Save Media Tags to episode.nfo files."
+        Me.cbTvEpEnableHDTags.UseVisualStyleBackColor = true
         '
-        'CheckBox17
+        'cbTvDisableLogs
         '
-        Me.CheckBox17.AutoSize = true
-        Me.CheckBox17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.CheckBox17.Location = New System.Drawing.Point(128, 485)
-        Me.CheckBox17.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox17.Name = "CheckBox17"
-        Me.CheckBox17.Size = New System.Drawing.Size(216, 19)
-        Me.CheckBox17.TabIndex = 13
-        Me.CheckBox17.Text = "Display log after scraping episodes"
-        Me.CheckBox17.UseVisualStyleBackColor = true
+        Me.cbTvDisableLogs.AutoSize = true
+        Me.cbTvDisableLogs.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbTvDisableLogs.Location = New System.Drawing.Point(128, 475)
+        Me.cbTvDisableLogs.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbTvDisableLogs.Name = "cbTvDisableLogs"
+        Me.cbTvDisableLogs.Size = New System.Drawing.Size(216, 19)
+        Me.cbTvDisableLogs.TabIndex = 13
+        Me.cbTvDisableLogs.Text = "Display log after scraping episodes"
+        Me.cbTvDisableLogs.UseVisualStyleBackColor = true
         '
         'ListBox12
         '
@@ -5179,7 +5202,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -5576,6 +5599,14 @@ Partial Class frmPreferences
         Me.TPProxy.Text = "Proxy"
         Me.TPProxy.UseVisualStyleBackColor = true
         '
+        'UcGenPref_Proxy1
+        '
+        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
+        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_Proxy1.TabIndex = 0
+        '
         'TPXBMCLink
         '
         Me.TPXBMCLink.Controls.Add(Me.UcGenPref_XbmcLink1)
@@ -5585,6 +5616,14 @@ Partial Class frmPreferences
         Me.TPXBMCLink.TabIndex = 9
         Me.TPXBMCLink.Text = "XBMC Link"
         Me.TPXBMCLink.UseVisualStyleBackColor = true
+        '
+        'UcGenPref_XbmcLink1
+        '
+        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
+        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
+        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
+        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'TPPRofCmd
         '
@@ -5891,31 +5930,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'lbExternalBrowserPath
-        '
-        Me.lbExternalBrowserPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.lbExternalBrowserPath.Location = New System.Drawing.Point(17, 348)
-        Me.lbExternalBrowserPath.Name = "lbExternalBrowserPath"
-        Me.lbExternalBrowserPath.Size = New System.Drawing.Size(380, 23)
-        Me.lbExternalBrowserPath.TabIndex = 118
-        Me.lbExternalBrowserPath.Text = "-None-"
-        '
-        'UcGenPref_Proxy1
-        '
-        Me.UcGenPref_Proxy1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_Proxy1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_Proxy1.Name = "UcGenPref_Proxy1"
-        Me.UcGenPref_Proxy1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_Proxy1.TabIndex = 0
-        '
-        'UcGenPref_XbmcLink1
-        '
-        Me.UcGenPref_XbmcLink1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.UcGenPref_XbmcLink1.Location = New System.Drawing.Point(0, 0)
-        Me.UcGenPref_XbmcLink1.Name = "UcGenPref_XbmcLink1"
-        Me.UcGenPref_XbmcLink1.Size = New System.Drawing.Size(1000, 595)
-        Me.UcGenPref_XbmcLink1.TabIndex = 0
         '
         'frmPreferences
         '
@@ -6433,8 +6447,8 @@ End Sub
     Friend WithEvents CheckBox_tv_EpisodeRenameAuto As CheckBox
     Friend WithEvents Label140 As Label
     Friend WithEvents ComboBox_tv_EpisodeRename As ComboBox
-    Friend WithEvents CheckBox20 As CheckBox
-    Friend WithEvents CheckBox17 As CheckBox
+    Friend WithEvents cbTvEpEnableHDTags As CheckBox
+    Friend WithEvents cbTvDisableLogs As CheckBox
     Friend WithEvents ListBox12 As ListBox
     Friend WithEvents Label122 As Label
     Friend WithEvents ComboBox8 As ComboBox
@@ -6563,4 +6577,5 @@ End Sub
     Friend WithEvents gpbxPrefOverlay As GroupBox
     Friend WithEvents cbSetIdAsCollectionnumber As CheckBox
     Friend WithEvents lbExternalBrowserPath As Label
+    Friend WithEvents cbtvDisplayNextAiredToolTip As CheckBox
 End Class

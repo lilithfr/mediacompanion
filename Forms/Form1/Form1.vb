@@ -180,6 +180,7 @@ Public Class Form1
 	Dim WithEvents resolutionLabels As Label
 	Dim newTvFolders As New List(Of String)
 	Dim tvprogresstxt As String = ""
+    Dim tooltiptv As New Tooltip
 	'Dim maximised As Boolean = False
 	'Dim tootip5 As New ToolTip
 	Dim MovpictureList As New List(Of PictureBox)
@@ -9767,19 +9768,6 @@ Public Class Form1
 			If ep.IsMissing Then Exit Sub
 			Dim tempstring As String = ep.VideoFilePath     'DirectCast(TvTreeview.SelectedNode.Tag, Media_Companion.TvEpisode).VideoFilePath
 			StartVideo(tempstring)
-			'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-			'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-			'If Pref.videomode = 3 Then
-			'    Pref.videomode = 2
-			'    Call util_VideoMode2(tempstring)
-			'End If
-			'If Pref.videomode >= 4 Then
-			'    If Pref.selectedvideoplayer <> Nothing Then
-			'        Call util_VideoMode4(tempstring)
-			'    Else
-			'        Call util_VideoMode1(tempstring)
-			'    End If
-			'End If
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -11320,19 +11308,6 @@ Public Class Form1
 			fi.Close()
 			ToolStripStatusLabel2.Text &= "............Launching Player."
 			StartVideo(tempstring)
-			'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-			'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-			'If Pref.videomode = 3 Then
-			'    Pref.videomode = 2
-			'    Call util_VideoMode2(tempstring)
-			'End If
-			'If Pref.videomode >= 4 Then
-			'    If Pref.selectedvideoplayer <> Nothing Then
-			'        Call util_VideoMode4(tempstring)
-			'    Else
-			'        Call util_VideoMode1(tempstring)
-			'    End If
-			'End If
 			statusstripclear.Start()
 		End If
 	End Sub
@@ -11816,15 +11791,6 @@ Public Class Form1
 					fi.Close()
 					ToolStripStatusLabel2.Text &= "............Launching Player."
 					StartVideo(trailerstring)
-					'If Pref.videomode = 1 Then Call util_VideoMode1(trailerstring)
-					'If Pref.videomode = 2 Or Pref.videomode = 3 Then Call util_VideoMode2(trailerstring)
-					'If Pref.videomode >= 4 Then
-					'    If Pref.selectedvideoplayer <> Nothing Then
-					'        Call util_VideoMode4(trailerstring)
-					'    Else
-					'        Call util_VideoMode1(trailerstring)
-					'    End If
-					'End If
 				Else
 					ToolStripStatusLabel2.Text = "No downloaded trailer present"
 				End If
@@ -14020,21 +13986,6 @@ Public Class Form1
 							fi.Close()
 							ToolStripStatusLabel2.Text &= "......Launching Player."
 							StartVideo(tempstring)
-							'If Pref.videomode = 1 Then Call util_VideoMode1(tempstring)
-							'If Pref.videomode = 2 Then Call util_VideoMode2(tempstring)
-
-							'If Pref.videomode = 3 Then
-							'    Pref.videomode = 2
-							'    Call util_VideoMode2(tempstring)
-							'End If
-
-							'If Pref.videomode >= 4 Then
-							'    If Pref.selectedvideoplayer <> Nothing Then
-							'        Call util_VideoMode4(tempstring)
-							'    Else
-							'        Call util_VideoMode1(tempstring)
-							'    End If
-							'End If
 							Exit For
 						End If
 					Next
@@ -14050,42 +14001,79 @@ Public Class Form1
 
 	End Sub
 
-	Private Sub TvTreeview_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles TvTreeview.MouseHover
+	Private Sub TvTreeview_MouseHover(ByVal sender As Object, ByVal e As EventArgs) Handles TvTreeview.MouseHover
 		TvTreeview.Focus()
 	End Sub
+
+    Private Sub TvTreeview_MouseMove(sender As Object, e As MouseEventArgs) Handles TvTreeview.MouseMove
+        ' check to display next aired tooltip andalso display missing episodes is enabled.
+        If Not (Pref.tvDisplayNextAiredToolTip AndAlso Pref.displayMissingEpisodes) Then
+            Me.toolTip1.SetToolTip(Me.TvTreeview, "")
+            Exit Sub
+        End If
+
+        ' Get the node at the current mouse pointer location.
+        Dim theNode As TreeNode = Me.TvTreeview.GetNodeAt(e.X, e.Y)
+        
+        ' Set a ToolTip only if the mouse pointer is actually paused on a node.
+        If (theNode IsNot Nothing) Then
+	        ' Verify that the tag property is not "null", and is a TVShow node.
+	        If theNode.Tag IsNot Nothing AndAlso Typeof theNode.Tag Is Media_Companion.TvShow Then
+                
+                Dim nexteptoair As String = ""
+                Dim found As Boolean = False
+                For Each Season As Media_Companion.TvSeason In theNode.Tag.Seasons.Values
+                    For Each episode As Media_Companion.TvEpisode In Season.Episodes
+                        If Not String.IsNullOrEmpty(episode.Aired.Value) Then
+                            Try
+                                If Convert.ToDateTime(episode.Aired.Value) > Date.Now() Then ' Is the episode in the future?
+                                    Dim epseason    As String   = episode.Season.value
+                                    If epseason.Length = 1 Then epseason = "0" & epseason
+                                    Dim epepisode   As String   = episode.Episode.value
+                                    If epepisode.Length = 1 Then epepisode = "0" & epepisode
+                                    nexteptoair = "Next Air Date: " & episode.Aired.Value & vbCrLf & "S" & epseason & "E" & epepisode & " - " & episode.Title.value
+                                    found = True
+                                    Exit For
+                                End If
+                            Catch
+                            End Try
+                        End If
+                    Next
+                    If found Then Exit For
+                Next
+		        ' Change the ToolTip only if the pointer moved to a new node.
+		        If nexteptoair <> tooltiptv.GetToolTip(Me.TvTreeview) Then
+			        tooltiptv.SetToolTip(Me.TvTreeview, nexteptoair)
+		        End If
+	        Else
+		        tooltiptv.SetToolTip(Me.TvTreeview, "")
+	        End If
+        Else
+	        ' Pointer is not over a node so clear the ToolTip.
+	        tooltiptv.SetToolTip(Me.TvTreeview, "")
+        End If
+    End Sub
 
 	Private Sub TvTreeview_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TvTreeview.MouseUp
 
 		If e.Button = MouseButtons.Right Then
-			'Dim pt As Point
-			'pt.X = e.X
-			'pt.Y = e.Y
-
-			'Dim objMousePosition As Point = DataGridViewMovies.PointToClient(Control.MousePosition)
-			'Dim objHitTestInfo As DataGridView.HitTestInfo
-			'objHitTestInfo = DataGridViewMovies.HitTest(pt.X, pt.Y)
-
 			TvTreeview.SelectedNode = TvTreeview.GetNodeAt(TvTreeview.PointToClient(Cursor.Position)) '***select actual the node 
-
-			'context menu will be shown soon so we modify it to suit...***after*** we make the selection of the node 
-
 			Tv_TreeViewContextMenuItemsEnable()
-
 		End If
 
 	End Sub
 
 	Private Sub rbTvDisplayFiltering_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvDisplayUnWatched.CheckedChanged,
-																																							  rbTvDisplayWatched.CheckedChanged,
-																																							  rbTvMissingAiredEp.CheckedChanged,
-																																							  rbTvMissingEpisodes.CheckedChanged,
-																																							  rbTvMissingPoster.CheckedChanged,
-																																							  rbTvListAll.CheckedChanged,
-																																							  rbTvMissingFanart.CheckedChanged,
-																																							  rbTvMissingThumb.CheckedChanged,
-																																							  rbTvListContinuing.CheckedChanged,
-																																							  rbTvListEnded.CheckedChanged,
-																																							  rbTvListUnKnown.CheckedChanged
+																														rbTvDisplayWatched.CheckedChanged,
+																														rbTvMissingAiredEp.CheckedChanged,
+																														rbTvMissingEpisodes.CheckedChanged,
+																														rbTvMissingPoster.CheckedChanged,
+																														rbTvListAll.CheckedChanged,
+																														rbTvMissingFanart.CheckedChanged,
+																														rbTvMissingThumb.CheckedChanged,
+																														rbTvListContinuing.CheckedChanged,
+																														rbTvListEnded.CheckedChanged,
+																														rbTvListUnKnown.CheckedChanged
 		Try
 			Call tv_Filter()
 		Catch ex As Exception
@@ -14096,30 +14084,6 @@ Public Class Form1
 	Private Sub btn_EpWatched_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_EpWatched.Click
 		Try
 			Tv_MarkAs_Watched_UnWatched("3")
-			'Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently()
-			'Dim multi As Boolean = TestForMultiepisode(ep_SelectedCurrently.NfoFilePath)
-			'If multi = False Then
-			'    util_EpisodeSetWatched(WorkingEpisode.PlayCount.Value, True)
-			'    WorkingEpisode.Save()
-			'    WorkingEpisode.UpdateTreenode()
-			'Else
-			'    Dim episodelist As New List(Of TvEpisode)
-			'    episodelist = WorkingWithNfoFiles.ep_NfoLoad(WorkingEpisode.NfoFilePath)
-			'    Dim First As Boolean = True
-			'    Dim done As String = ""
-			'    For Each ep In episodelist
-			'        If First Then done = ep.PlayCount.Value
-			'        Dim toggled As String = done
-			'        util_EpisodeSetWatched(toggled, True)
-			'        ep.PlayCount.Value = toggled
-			'        ep.UpdateTreenode()
-			'        First = False
-			'    Next
-			'    WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
-			'End If
-			'Dim ThisSeason As TvSeason = tv_SeasonSelectedCurrently()
-			'ThisSeason.UpdateTreenode()
-			'tv_ShowSelectedCurrently.UpdateTreenode()
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -14211,17 +14175,17 @@ Public Class Form1
 				End If
 				If changed > 0 Then
 					If changed = 1 Then
-						tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes and art" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+						tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes And art" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 						If tempint = DialogResult.No Then
 							Exit Sub
 						End If
 					ElseIf changed = 2 Then
-						tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+						tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 						If tempint = DialogResult.No Then
 							Exit Sub
 						End If
 					ElseIf changed = 3 Then
-						tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue and save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+						tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
 						If tempint = DialogResult.No Then
 							Exit Sub
 						End If

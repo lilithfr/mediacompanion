@@ -386,6 +386,7 @@ Public Class Pref
     End Property
 
     'Saved TV Prefs
+    Public Shared tvDisplayNextAiredToolTip As Boolean = True
     Public Shared tvshowautoquick As Boolean
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared tvdbIMDbRating As Boolean = False
@@ -1280,8 +1281,8 @@ Public Class Pref
         root.AppendChild(doc, "TvFanartTvFirst",                    TvFanartTvFirst)            'cbTvFanartTvFirst
         root.AppendChild(doc, "dlTVxtrafanart",                     dlTVxtrafanart)             'cbDlTVxtrafanart
         root.AppendChild(doc, "TvXtraFanartQty",                    TvXtraFanartQty)            'cmbxTvXtraFanartQty
-        root.AppendChild(doc, "hdtvtags",                           enabletvhdtags)             'CheckBox20
-        root.AppendChild(doc, "disabletvlogs",                      disabletvlogs)              'CheckBox17
+        root.AppendChild(doc, "hdtvtags",                           enabletvhdtags)             'cbTvEpEnableHDTags
+        root.AppendChild(doc, "disabletvlogs",                      disabletvlogs)              'cbTvDisableLogs
         root.AppendChild(doc, "postertype",                         postertype)                 'posterbtn
         root.AppendChild(doc, "seasonall",                          seasonall)                  'RadioButton39-41
         root.AppendChild(doc, "tvrename",                           tvrename)                   'ComboBox_tv_EpisodeRename
