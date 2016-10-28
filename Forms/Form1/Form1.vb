@@ -133,6 +133,7 @@ Public Class Form1
     Private lastTvNfo As String = ""
 	Public MainFormLoadedStatus As Boolean = False
 	'Public tvRefreshNeeded As Boolean = True
+    Private tvfiltertrip As Boolean = False
 	Public messbox As New frmMessageBox("blank", "", "")
 	Public startup As Boolean = True
 	Public SeriesXmlPath As String
@@ -14079,6 +14080,10 @@ Public Class Form1
 																														rbTvListContinuing.CheckedChanged,
 																														rbTvListEnded.CheckedChanged,
 																														rbTvListUnKnown.CheckedChanged
+        If tvfiltertrip Then
+            tvfiltertrip = False
+            Exit Sub
+        End If
 		Try
 			Call tv_Filter()
 		Catch ex As Exception

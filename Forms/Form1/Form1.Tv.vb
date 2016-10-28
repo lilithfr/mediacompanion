@@ -3321,6 +3321,7 @@ Partial Public Class Form1
         If rbTvListEnded        .Checked    Then butt = "ended"
         If rbTvListUnKnown      .Checked    Then butt = "unknown"
         
+        tvfiltertrip = True
         If startup = True Then butt = "all"
         If butt = "missingeps" Then
             If Pref.displayMissingEpisodes Then
@@ -3350,6 +3351,7 @@ Partial Public Class Form1
                         Season.Visible = Season.VisibleEpisodeCount > 0
                     Next
                     item.Visible = item.VisibleSeasonCount > 0
+                    item.Hidden.Value = Not item.Visible
                 Next
             Else
                 MsgBox("Enable Display Missing Episodes")
@@ -3411,7 +3413,8 @@ Partial Public Class Form1
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = item.VisibleSeasonCount > 0 
+                item.Visible = item.VisibleSeasonCount > 0
+                item.Hidden.Value = Not item.Visible
             Next
         ElseIf butt = "nexttoair" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -3440,7 +3443,8 @@ Partial Public Class Form1
                     Next
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
-                item.Visible = item.VisibleSeasonCount > 0 
+                item.Visible = item.VisibleSeasonCount > 0
+                item.Hidden.Value = Not item.Visible
             Next
         ElseIf butt = "screenshot" Then
             Dim edenart As String = ""
@@ -3466,6 +3470,7 @@ Partial Public Class Form1
                     Season.Visible = Season.VisibleEpisodeCount > 0
                 Next
                 item.Visible = item.VisibleSeasonCount > 0
+                item.Hidden.Value = Not item.Visible
             Next
         ElseIf butt = "all" Then
             For Each item As Media_Companion.TvShow In Cache.TvCache.Shows
@@ -3551,6 +3556,7 @@ Partial Public Class Form1
                 Else
                     item.Visible = True
                 End If
+                item.Hidden.Value = Not item.Visible
             Next
         ElseIf butt = "posters" Then
             Dim edenpost As String = ""
@@ -3576,10 +3582,11 @@ Partial Public Class Form1
                 ElseIf eden And Not frodo Then
                     item.Visible = Not item.ImagePoster.Exists
                 End If
-
+                item.Hidden.Value = Not item.Visible
             Next
         End If
-        If butt = "all" OrElse butt = "watched" OrElse butt = "unwatched" OrElse butt = "ended" OrElse butt = "continuing" OrElse butt = "unknown" Then TvTreeviewRebuild()
+        'If butt = "all" OrElse butt = "watched" OrElse butt = "nexttoair" OrElse butt = "unwatched" OrElse butt = "ended" OrElse butt = "continuing" OrElse butt = "unknown" Then TvTreeviewRebuild()
+        TvTreeviewRebuild()
     End Sub
 
 #Region "Tv MissingEpisode Routines"
