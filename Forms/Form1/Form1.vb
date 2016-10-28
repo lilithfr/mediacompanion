@@ -7954,9 +7954,16 @@ Public Class Form1
 		End With
 
 		Dim setscolumn As New DataGridViewComboBoxColumn
+        MovSetsRepopulate()
 		For Each sets In Pref.moviesets
 			setscolumn.Items.Add(sets)
 		Next
+        For each sets in oMovies.MovieSetDB
+            If Not setscolumn.Items.Contains(sets.MovieSetDisplayName) Then
+                setscolumn.Items.Add(sets.MovieSetDisplayName)
+            End If
+        Next
+
 		With setscolumn
 			.HeaderText = "Sets"
 			.Name = "set"
@@ -8321,16 +8328,16 @@ Public Class Form1
 					Else
 						Dim aok As Boolean = False
 						For Each m In oMovies.MovieSetDB
-							If m.MovieSetName = NewSetName Then
-								oCachedMovie.SetName = m.MovieSetName           ' ********* CHECK **********
-								'                       oCachedMovie.TmdbSetId = m.MovieSetId
+							If m.MovieSetDisplayName = NewSetName Then
+								oCachedMovie.SetName = m.MovieSetName
+								oCachedMovie.TmdbSetId = m.TmdbSetId
 								aok = True
 							End If
 						Next
 						If Not aok Then
 							For each m In Pref.moviesets
 								If m = NewSetName Then
-									oCachedMovie.SetName = m                    ' ********* CHECK **********
+									oCachedMovie.SetName = m
 									Exit For
 								End If
 							Next
@@ -8356,19 +8363,19 @@ Public Class Form1
 				If runTimeChanged Then
 					oMovie.ScrapedMovie.fullmoviebody.runtime = newRunTime
 				End If
-				oMovie.ScrapedMovie.fullmoviebody.title = oCachedMovie.title
-				oMovie.ScrapedMovie.fullmoviebody.year = oCachedMovie.year
+				oMovie.ScrapedMovie.fullmoviebody.title     = oCachedMovie.title
+				oMovie.ScrapedMovie.fullmoviebody.year      = oCachedMovie.year
 				oMovie.ScrapedMovie.fullmoviebody.playcount = oCachedMovie.playcount
-				oMovie.ScrapedMovie.fullmoviebody.genre = oCachedMovie.genre
-				oMovie.ScrapedMovie.fullmoviebody.rating = oCachedMovie.rating
-				oMovie.ScrapedMovie.fullmoviebody.source = oCachedMovie.source
-				oMovie.ScrapedMovie.fullmoviebody.SetName = oCachedMovie.SetName                '***** CHECK ****
-				'               oMovie.ScrapedMovie.fullmoviebody.TmdbSetId             = oCachedMovie.MovieSet.MovieSetId 
+				oMovie.ScrapedMovie.fullmoviebody.genre     = oCachedMovie.genre
+				oMovie.ScrapedMovie.fullmoviebody.rating    = oCachedMovie.rating
+				oMovie.ScrapedMovie.fullmoviebody.source    = oCachedMovie.source
+				oMovie.ScrapedMovie.fullmoviebody.SetName   = oCachedMovie.SetName
+				oMovie.ScrapedMovie.fullmoviebody.TmdbSetId = oCachedMovie.TmdbSetId 
 				oMovie.ScrapedMovie.fullmoviebody.sortorder = oCachedMovie.sortorder
-				oMovie.ScrapedMovie.fullmoviebody.top250 = oCachedMovie.top250
-				oMovie.ScrapedMovie.fullmoviebody.director = oCachedMovie.director
-				oMovie.ScrapedMovie.fullmoviebody.credits = oCachedMovie.credits
-				oMovie.ScrapedMovie.fullmoviebody.usrrated = oCachedMovie.usrrated.ToString
+				oMovie.ScrapedMovie.fullmoviebody.top250    = oCachedMovie.top250
+				oMovie.ScrapedMovie.fullmoviebody.director  = oCachedMovie.director
+				oMovie.ScrapedMovie.fullmoviebody.credits   = oCachedMovie.credits
+				oMovie.ScrapedMovie.fullmoviebody.usrrated  = oCachedMovie.usrrated.ToString
 
 				Dim checkmpaa = oCachedMovie.Certificate
 				oMovie.ScrapedMovie.fullmoviebody.mpaa = checkmpaa
