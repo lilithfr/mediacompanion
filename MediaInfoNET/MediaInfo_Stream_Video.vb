@@ -24,7 +24,7 @@ Imports System.Text.RegularExpressions
 
 Public Class MediaInfo_Stream_Video
     Inherits MediaInfo_Stream
-
+    
     Public Overrides ReadOnly Property StreamType() As String
         Get
             Return "Video"
@@ -196,7 +196,7 @@ Public Class MediaInfo_Stream_Video
                 If value IsNot Nothing AndAlso value.contains(":") Then
                     Dim s() As String = value.Split(":")
                     If s(0) <> "" Then 
-                        Double.TryParse(s(0), Globalization.NumberStyles.Any, Globalization.CultureInfo.CurrentCulture, i)
+                        Double.TryParse(s(0), Globalization.NumberStyles.Any, Globalization.CultureInfo.CreateSpecificCulture("en-US"), i)
                     End If
                     'Return i
                 End If
