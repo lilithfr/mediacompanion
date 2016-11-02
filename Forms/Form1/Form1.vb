@@ -11045,7 +11045,7 @@ Public Class Form1
 		Try
 			ProgState = ProgramState.ResettingFilters
 			ShowMovieFilter(cbFilterCountries)
-			cbFilterCountries.SelectItem(countrytxt.Text.Split(", ")(0))
+			cbFilterCountries.SelectItem(countrytxt.Text.Split(" / ")(0))
 			ProgState = ProgramState.Other
 			Mc.clsGridViewMovie.mov_FiltersAndSortApply(Me)
 		Catch ex As Exception

@@ -317,7 +317,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property countriesList As List(Of String)
         Get
-            Return countries.Split(", ").ToList
+            Return countries.Replace(" / ", "/").Split("/").ToList
         End Get
     End Property
 
@@ -325,7 +325,7 @@ Public Class Data_GridViewMovie
 
     Public ReadOnly Property studiosList As List(Of String)
         Get
-            Return studios.Split(", ").ToList
+            Return studios.Replace(" / ", "/").Split("/").ToList
         End Get
     End Property
     

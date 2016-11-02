@@ -1424,7 +1424,7 @@ Public Class Movie
                             If g = 0 Then
                                 _scrapedMovie.fullmoviebody.studio = strarr(g).Trim
                             Else
-                                _scrapedMovie.fullmoviebody.studio += ", " & strarr(g).Trim
+                                _scrapedMovie.fullmoviebody.studio += " / " & strarr(g).Trim
                             End If
                         Next
                     End If

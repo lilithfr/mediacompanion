@@ -54,7 +54,7 @@ Public Class ComboList
 
     Public ReadOnly Property countriesList As List(Of String)
         Get
-            Dim splist() As String = countries.Split(", ")
+            Dim splist() As String = countries.Split(" / ")
             Dim retlist As New List(Of String)
             For Each t In splist
                 retlist.Add(t.Trim)
@@ -68,7 +68,7 @@ Public Class ComboList
 
     Public ReadOnly Property studioslist As List(Of String)
         Get
-            Dim splist() As String = studios.Split(",")
+            Dim splist() As String = studios.Split("/")
             Dim retlist As New List(Of String)
             For Each t In splist
                 retlist.Add(t.Trim)

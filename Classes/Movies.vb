@@ -170,14 +170,20 @@ Public Class Movies
             '            Order By xx
             '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
 
-            Dim q = From x In MovieCache Select ms=x.countries.Split(",")
+            Dim q = From x In MovieCache Select ms=x.countries.Split("/")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
 
             lst.RemoveAll(Function(v) v="" )
             lst.RemoveAll(Function(v) v=",")
+            lst.RemoveAll(Function(v) v="/")
 
-            Dim q2 = From x In lst
+            Dim lst2 As New List(Of String)
+            For each t In lst
+                lst2.Add(t.Trim())
+            Next
+
+            Dim q2 = From x In lst2
                         Group By x Into Num=Count
                         Order By x
                         Select x & " (" & Num.ToString & ")"
@@ -197,14 +203,19 @@ Public Class Movies
             '            Order By xx
             '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
 
-            Dim q = From x In MovieCache Select ms=x.studios.Split(",")
+            Dim q = From x In MovieCache Select ms=x.studios.Split("/")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
 
             lst.RemoveAll(Function(v) v="" )
             lst.RemoveAll(Function(v) v=",")
+            lst.RemoveAll(Function(v) v="/")
 
-            Dim q2 = From x In lst
+            Dim lst2 As New List(Of String)
+            For each t In lst
+                lst2.Add(t.Trim())
+            Next
+            Dim q2 = From x In lst2
                         Group By x Into Num=Count
                         Order By x
                         Select x & " (" & Num.ToString & ")"
@@ -215,14 +226,19 @@ Public Class Movies
 
     Public ReadOnly Property GenresFilter As List(Of String)
         Get
-            Dim q = From x In MovieCache Select ms=x.genre.Split(" / ")
+            Dim q = From x In MovieCache Select ms=x.genre.Split("/")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
 
             lst.RemoveAll(Function(v) v="" )
             lst.RemoveAll(Function(v) v="/")
+            lst.RemoveAll(Function(v) v="/")
 
-            Dim q2 = From x In lst
+            Dim lst2 As New List(Of String)
+            For each t In lst
+                lst2.Add(t.Trim())
+            Next
+            Dim q2 = From x In lst2
                         Group By x Into Num=Count
                         Order By x
                         Select x & " (" & Num.ToString & ")" 
@@ -1878,10 +1894,10 @@ Public Class Movies
                                     End Try
                                 Case "countries"
                                     Dim TmpStr As String = detail.InnerText
-                                    newmovie.countries = TmpStr.Replace(", ", ",")
+                                    newmovie.countries = TmpStr.Replace(", ", " / ")
                                 Case "studios"
                                     Dim TmpStr As String = detail.InnerText
-                                    newmovie.studios = TmpStr.Replace(", ", ",")
+                                    newmovie.studios = TmpStr.Replace(", ", " / ")
                                 Case "Resolution"           : newmovie.Resolution = detail.InnerText
                                 Case "VideoCodec"           : newmovie.VideoCodec = detail.InnerText
                                 Case "Container"            : newmovie.Container = detail.InnerText
@@ -1947,81 +1963,51 @@ Public Class Movies
         Dim xmlproc  As XmlDeclaration
         Dim root  As XmlElement
         Dim child As XmlElement
-        Dim childchild As XmlElement
+        'Dim childchild As XmlElement
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
         
         root = doc.CreateElement("movie_cache")
         For Each movie In MovieCache
+            ''' fix couple of fields
+            'movie.credits = movie.credits.Replace(", ", " / ")
+            'movie.stars = movie.stars.Replace(", ", " / ")
             child = doc.CreateElement("movie")
-            childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
-            childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
-            childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
-            childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
-            childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
-            childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
-            childchild = doc.CreateElement("source") :  : childchild.InnerText = If(movie.source = Nothing, "", movie.source) : child.AppendChild(childchild)
-            childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
-            childchild = doc.CreateElement("credits") : childchild.InnerText = movie.credits  : child.AppendChild(childchild)
-
-            If Movie.InASet Then
-                childchild = doc.CreateElement("set")
-                childchild.InnerText = movie.SetName
-                child.AppendChild(childchild)
-
-                childchild = doc.CreateElement("setid")
-                childchild.InnerText = movie.TmdbSetId 
-                child.AppendChild(childchild)
-            Else
-                childchild = doc.CreateElement("set")
-                childchild.InnerText = ""
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("setid")
-                childchild.InnerText = ""
-                child.AppendChild(childchild)
-            End If
-
-            childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
-            childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
-            childchild = doc.CreateElement("studios"  ) : childchild.InnerText = movie.studios   : child.AppendChild(childchild)
-
-            For Each item In movie.movietag
-                childchild = doc.CreateElement("tag")
-                childchild.InnerText = item
-                child.AppendChild(childchild)
-            Next
-
-            childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
-            childchild = doc.CreateElement("tmdbid") : childchild.InnerText = movie.tmdbid : child.AppendChild(childchild)
-            childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
-            childchild = doc.CreateElement("rating") : childchild.InnerText = movie.rating : child.AppendChild(childchild)
-            childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
-            childchild = doc.CreateElement("originaltitle") : childchild.InnerText = movie.originaltitle : child.AppendChild(childchild)
-
-            'If Not String.IsNullOrEmpty(movie.sortorder) Then movie.sortorder = movie.title
-            childchild = doc.CreateElement("outline") : childchild.InnerText = If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline)
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100) : child.AppendChild(childchild)
-            child.AppendChild(doc, "tagline",       movie.tagline)
-            'If movie.plot.Length() > 100 Then
-            '    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
-            'Else
-            '    childchild.InnerText = movie.plot
-            'End If
-            'child.AppendChild(childchild)
-
-            child.AppendChild(doc, "sortorder",     movie.sortorder)
-            child.AppendChild(doc, "stars",         movie.stars)
-            child.AppendChild(doc, "runtime",       movie.runtime)
-            child.AppendChild(doc, "top250",        movie.top250)
-            child.AppendChild(doc, "year",          movie.year)
-            child.AppendChild(doc, "votes",         movie.Votes)
-            child.AppendChild(doc, "usrrated",      movie.usrrated)
-            child.AppendChild(doc, "metascore",     movie.metascore)
-            child.AppendChild(doc, "Resolution",    movie.Resolution)
-            child.AppendChild(doc, "VideoCodec",    movie.VideoCodec)
-            child.AppendChild(doc, "Container",     movie.Container)
+            child.AppendChild(doc,  "filedate",             movie.filedate)
+            child.AppendChild(doc,  "createdate",           movie.createdate)
+            child.AppendChild(doc,  "missingdata1",         movie.missingdata1.ToString)
+            child.AppendChild(doc,  "filename",             movie.filename)
+            child.AppendChild(doc,  "foldername",           movie.foldername)
+            child.AppendChild(doc,  "fullpathandfilename",  movie.fullpathandfilename)
+            child.AppendChild(doc,  "source",               If(movie.source = Nothing, "", movie.source))
+            child.AppendChild(doc,  "director",             movie.director)
+            child.AppendChild(doc,  "credits",              movie.credits)
+            child.AppendChild(doc,  "set",                  If(movie.InASet, movie.SetName, ""))
+            child.AppendChild(doc,  "setid",                If(movie.InASet, movie.TmdbSetId, ""))
+            child.AppendChild(doc,  "genre",                movie.genre)
+            child.AppendChild(doc,  "countries",            movie.countries)
+            child.AppendChild(doc,  "studios",              movie.studios)
+            child.AppendChildList(doc,  "tag",              movie.movietag)
+            child.AppendChild(doc,  "id",                   movie.id)
+            child.AppendChild(doc,  "tmdbid",               movie.tmdbid)
+            child.AppendChild(doc,  "playcount",            movie.playcount)
+            child.AppendChild(doc,  "rating",               movie.rating)
+            child.AppendChild(doc,  "title",                movie.title)
+            child.AppendChild(doc,  "originaltitle",        movie.originaltitle)
+            child.AppendChild(doc,  "outline",              If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline))
+            child.AppendChild(doc,  "plot",                 Left(movie.plot, 100))  'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+            child.AppendChild(doc,  "tagline",              movie.tagline)
+            child.AppendChild(doc,  "sortorder",            movie.sortorder)
+            child.AppendChild(doc,  "stars",                movie.stars)
+            child.AppendChild(doc,  "runtime",              movie.runtime)
+            child.AppendChild(doc,  "top250",               movie.top250)
+            child.AppendChild(doc,  "year",                 movie.year)
+            child.AppendChild(doc,  "votes",                movie.Votes)
+            child.AppendChild(doc,  "usrrated",             movie.usrrated)
+            child.AppendChild(doc,  "metascore",            movie.metascore)
+            child.AppendChild(doc,  "Resolution",           movie.Resolution)
+            child.AppendChild(doc,  "VideoCodec",           movie.VideoCodec)
+            child.AppendChild(doc,  "Container",            movie.Container)
 
             For Each item In movie.Audio
                 child.AppendChild(item.GetChild(doc))
@@ -2045,6 +2031,89 @@ Public Class Movies
             End If  
 
             root.AppendChild(child)
+
+            'childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("source") :  : childchild.InnerText = If(movie.source = Nothing, "", movie.source) : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("credits") : childchild.InnerText = movie.credits  : child.AppendChild(childchild)
+            
+            'childchild = doc.CreateElement("set")
+            'childchild.InnerText = If(movie.InASet, movie.SetName, "")
+            'child.AppendChild(childchild)
+
+            'childchild = doc.CreateElement("setid")
+            'childchild.InnerText = If(movie.InASet, movie.TmdbSetId, "")
+            'child.AppendChild(childchild)
+
+            'childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("studios"  ) : childchild.InnerText = movie.studios   : child.AppendChild(childchild)
+
+            'For Each item In movie.movietag
+            '    childchild = doc.CreateElement("tag")
+            '    childchild.InnerText = item
+            '    child.AppendChild(childchild)
+            'Next
+
+            'childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("tmdbid") : childchild.InnerText = movie.tmdbid : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("rating") : childchild.InnerText = movie.rating : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
+            'childchild = doc.CreateElement("originaltitle") : childchild.InnerText = movie.originaltitle : child.AppendChild(childchild)
+
+            ''If Not String.IsNullOrEmpty(movie.sortorder) Then movie.sortorder = movie.title
+            'childchild = doc.CreateElement("outline") : childchild.InnerText = If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline)
+            'child.AppendChild(childchild)
+
+            'childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100) : child.AppendChild(childchild)
+            'child.AppendChild(doc, "tagline",       movie.tagline)
+            ''If movie.plot.Length() > 100 Then
+            ''    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
+            ''Else
+            ''    childchild.InnerText = movie.plot
+            ''End If
+            ''child.AppendChild(childchild)
+
+            'child.AppendChild(doc, "sortorder",     movie.sortorder)
+            'child.AppendChild(doc, "stars",         movie.stars)
+            'child.AppendChild(doc, "runtime",       movie.runtime)
+            'child.AppendChild(doc, "top250",        movie.top250)
+            'child.AppendChild(doc, "year",          movie.year)
+            'child.AppendChild(doc, "votes",         movie.Votes)
+            'child.AppendChild(doc, "usrrated",      movie.usrrated)
+            'child.AppendChild(doc, "metascore",     movie.metascore)
+            'child.AppendChild(doc, "Resolution",    movie.Resolution)
+            'child.AppendChild(doc, "VideoCodec",    movie.VideoCodec)
+            'child.AppendChild(doc, "Container",     movie.Container)
+
+            'For Each item In movie.Audio
+            '    child.AppendChild(item.GetChild(doc))
+            'Next
+
+            'For Each item In movie.SubLang 
+            '    child.AppendChild(item.GetChild(doc))
+            'Next
+
+            'child.AppendChild(doc, "Premiered", movie.Premiered)
+            'child.AppendChild(doc, "Certificate", movie.Certificate)
+            'child.AppendChild(doc, "FrodoPosterExists", movie.FrodoPosterExists)
+            'child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
+            'child.AppendChild(doc, "FolderSize", movie.FolderSize)
+            'child.AppendChild(doc, "RootFolder", movie.rootfolder)
+            'child.AppendChild(doc, "UserTmdbSetAddition", movie.UserTmdbSetAddition)
+            'child.AppendChild(doc, "UnknownSetCount", movie.UnknownSetCount)
+
+            'If movie.LockedFields.Count>0 Then
+            '    child.AppendChild(doc, "LockedFields", String.Join(",", movie.LockedFields.ToArray()))
+            'End If  
+
+            'root.AppendChild(child)
         Next
 
         doc.AppendChild(root)

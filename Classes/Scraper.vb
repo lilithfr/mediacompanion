@@ -1194,7 +1194,7 @@ Public Class Classimdb
         Dim i As Integer=0
         For Each m As Match In Regex.Matches(context, MovieRegExs.REGEX_NAME, RegexOptions.Singleline)
             name=Net.WebUtility.HtmlDecode(m.Groups("name").Value)
-            s.AppendValue(name)
+            s.AppendValue(name, " / ")
             i += 1
             If i=Max Then Exit For
         Next
@@ -1517,9 +1517,9 @@ Public Class Classimdb
             End If
             FinalScrapResult = FinalScrapResult.Replace("details>","movie>")
             FinalScrapResult = FinalScrapResult.Replace("</genre>" & vbcrlf & "  <genre>", " / ")
-            FinalScrapResult = FinalScrapResult.Replace("</studio>" & vbcrlf & "  <studio>", ", ")
-            FinalScrapResult = FinalScrapResult.Replace("</country>" & vbcrlf & "  <country>", ", ")
-            FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", ", ")
+            FinalScrapResult = FinalScrapResult.Replace("</studio>" & vbcrlf & "  <studio>", " / ")
+            FinalScrapResult = FinalScrapResult.Replace("</country>" & vbcrlf & "  <country>", " / ")
+            FinalScrapResult = FinalScrapResult.Replace("</credits>" & vbcrlf & "  <credits>", " / ")
             FinalScrapResult = FinalScrapResult.Replace("</director>" & vbcrlf & "  <director>", " / ")
             If FinalScrapResult.IndexOf("&") <> -1 Then FinalScrapResult = FinalScrapResult.Replace("&", "&amp;") 'Added for issue#352 as XML values are not checked for illegal Chars - HueyHQ
             Return FinalScrapResult
