@@ -830,7 +830,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             If M.Success = True Then
                 movieyear = If(trimBrackets, M.Groups(1).Value, M.Value)
             End If
-            If IsNothing(movieyear) AndAlso Scraper.ToLower = "tmdb" Then
+            If String.IsNullOrEmpty(movieyear) AndAlso Scraper.ToLower = "tmdb" Then
                 M = Regex.Match(filename, "\d{4}")
                 If M.Success = True Then movieyear = M.Value
             End If
