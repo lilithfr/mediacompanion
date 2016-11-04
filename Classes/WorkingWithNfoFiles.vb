@@ -2927,16 +2927,16 @@ Public Class WorkingWithNfoFiles
                 filedetailschild = doc.CreateElement("video")
                 If Pref.enablehdtags = True Then
                     stage = 4
-                    filedetailschild.AppendChild(doc, "width", movietosave.filedetails.filedetails_video.Width.Value)
+                    If movietosave.filedetails.filedetails_video.Width.Value <> "" Then filedetailschild.AppendChild(doc, "width", movietosave.filedetails.filedetails_video.Width.Value)
 
                     stage = 5
-                    filedetailschild.AppendChild(doc, "height", movietosave.filedetails.filedetails_video.Height.Value)
+                    If movietosave.filedetails.filedetails_video.Height.Value <> "" Then filedetailschild.AppendChild(doc, "height", movietosave.filedetails.filedetails_video.Height.Value)
 
-                    filedetailschild.AppendChild(doc, "aspect", movietosave.filedetails.filedetails_video.Aspect.Value)
+                    If movietosave.filedetails.filedetails_video.Aspect.Value <> "" Then filedetailschild.AppendChild(doc, "aspect", movietosave.filedetails.filedetails_video.Aspect.Value)
                     stage = 6
-                    filedetailschild.AppendChild(doc, "codec", movietosave.filedetails.filedetails_video.Codec.Value)
+                    If movietosave.filedetails.filedetails_video.Codec.Value <> "" Then filedetailschild.AppendChild(doc, "codec", movietosave.filedetails.filedetails_video.Codec.Value)
                     stage = 7
-                    filedetailschild.AppendChild(doc, "formatinfo", movietosave.filedetails.filedetails_video.FormatInfo.Value)
+                    If movietosave.filedetails.filedetails_video.FormatInfo.Value <> "" Then filedetailschild.AppendChild(doc, "formatinfo", movietosave.filedetails.filedetails_video.FormatInfo.Value)
                     stage = 8
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.DurationInSeconds.Value) Then
                         Dim TempValue As String = movietosave.filedetails.filedetails_video.DurationInSeconds.Value
@@ -2951,27 +2951,36 @@ Public Class WorkingWithNfoFiles
                         Else
                             TempValue = If(TempValue = "-1", "", TempValue)
                         End If
-                        filedetailschild.AppendChild(doc, "durationinseconds", TempValue)
+                        If Not String.IsNullOrEmpty(TempValue) Then filedetailschild.AppendChild(doc, "durationinseconds", TempValue)
                     End If
                     stage = 9
                     If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Bitrate.Value) Then
-                        'filedetailschildchild = doc.CreateElement("bitrate")
-                        'filedetailschildchild.InnerText = movietosave.filedetails.filedetails_video.Bitrate.Value
-                        'filedetailschild.AppendChild(filedetailschildchild)
                         filedetailschild.AppendChild(doc, "bitrate", movietosave.filedetails.filedetails_video.Bitrate.Value)
                     End If
                     stage = 10
-                    filedetailschild.AppendChild(doc, "bitratemode", movietosave.filedetails.filedetails_video.BitrateMode.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.BitrateMode.Value) Then
+                        filedetailschild.AppendChild(doc, "bitratemode", movietosave.filedetails.filedetails_video.BitrateMode.Value)
+                    End If
                     stage = 11
-                    filedetailschild.AppendChild(doc, "bitratemax", movietosave.filedetails.filedetails_video.BitrateMax.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.BitrateMax.Value) Then
+                        filedetailschild.AppendChild(doc, "bitratemax", movietosave.filedetails.filedetails_video.BitrateMax.Value)
+                    End If
                     stage = 12
-                    filedetailschild.AppendChild(doc, "container", movietosave.filedetails.filedetails_video.Container.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.Container.Value) Then
+                        filedetailschild.AppendChild(doc, "container", movietosave.filedetails.filedetails_video.Container.Value)
+                    End If
                     stage = 13
-                    filedetailschild.AppendChild(doc, "codecid", movietosave.filedetails.filedetails_video.CodecId.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.CodecId.Value) Then
+                        filedetailschild.AppendChild(doc, "codecid", movietosave.filedetails.filedetails_video.CodecId.Value)
+                    End If
                     stage = 14
-                    filedetailschild.AppendChild(doc, "codecidinfo", movietosave.filedetails.filedetails_video.CodecInfo.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.CodecInfo.Value) Then
+                        filedetailschild.AppendChild(doc, "codecidinfo", movietosave.filedetails.filedetails_video.CodecInfo.Value)
+                    End If
                     stage = 15
-                    filedetailschild.AppendChild(doc, "scantype", movietosave.filedetails.filedetails_video.ScanType.Value)
+                    If Not String.IsNullOrEmpty(movietosave.filedetails.filedetails_video.ScanType.Value) Then
+                        filedetailschild.AppendChild(doc, "scantype", movietosave.filedetails.filedetails_video.ScanType.Value)
+                    End If
 
                     stage = 16
                     anotherchild.AppendChild(filedetailschild)
@@ -2980,20 +2989,20 @@ Public Class WorkingWithNfoFiles
                     'Try
                     For Each item In movietosave.filedetails.filedetails_audio
                         filedetailschild = doc.CreateElement("audio")
-                        filedetailschild.AppendChild(doc, "language", item.Language.Value)
-                        filedetailschild.AppendChild(doc, "DefaultTrack", item.DefaultTrack.Value)
-                        filedetailschild.AppendChild(doc, "codec", item.Codec.Value)
-                        filedetailschild.AppendChild(doc, "channels", item.Channels.Value)
-                        filedetailschild.AppendChild(doc, "bitrate", item.Bitrate.Value)
+                        If Not String.IsNullOrEmpty(item.Language.Value)        Then filedetailschild.AppendChild(doc, "language", item.Language.Value)
+                        If Not String.IsNullOrEmpty(item.DefaultTrack.Value)    Then filedetailschild.AppendChild(doc, "DefaultTrack", item.DefaultTrack.Value)
+                        If Not String.IsNullOrEmpty(item.Codec.Value)           Then filedetailschild.AppendChild(doc, "codec", item.Codec.Value)
+                        If Not String.IsNullOrEmpty(item.Channels.Value)        Then filedetailschild.AppendChild(doc, "channels", item.Channels.Value)
+                        If Not String.IsNullOrEmpty(item.Bitrate.Value)         Then filedetailschild.AppendChild(doc, "bitrate", item.Bitrate.Value)
                         anotherchild.AppendChild(filedetailschild)
                     Next
                     stage = 18
                     For Each entry In movietosave.filedetails.filedetails_subtitles
                         If Not String.IsNullOrEmpty(entry.Language.Value) Then
                             filedetailschild = doc.CreateElement("subtitle")
-                            filedetailschild.AppendChild(doc, "language", entry.Language.Value)
-                            filedetailschild.AppendChild(doc, "default", entry.Primary)
-                            filedetailschild.AppendChild(doc, "forced", entry.Forced)
+                            If Not String.IsNullOrEmpty(entry.Language.Value) Then filedetailschild.AppendChild(doc, "language", entry.Language.Value)
+                            If Not String.IsNullOrEmpty(entry.Primary) Then filedetailschild.AppendChild(doc, "default", entry.Primary)
+                            If Not String.IsNullOrEmpty(entry.Forced) Then filedetailschild.AppendChild(doc, "forced", entry.Forced)
                             anotherchild.AppendChild(filedetailschild)
                         End If
                     Next

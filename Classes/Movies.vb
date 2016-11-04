@@ -26,7 +26,7 @@ Module Ext
         End If
         Dim splt() As String = value.Split(splitter)
         For each sp In splt
-            root.AppendChild( doc, name, value.Trim)
+            root.AppendChild( doc, name, sp.Trim)
         Next
     End Sub
 
