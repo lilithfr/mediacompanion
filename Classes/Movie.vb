@@ -1416,7 +1416,7 @@ Public Class Movie
                     End If
                 Case "studio"
                     Dim strarr() As String
-                    strarr = thisresult.InnerText.Split(",")
+                    strarr = thisresult.InnerText.Split("/")
                     If strarr.Length <= Pref.MovieScraper_MaxStudios Then
                         _scrapedMovie.fullmoviebody.studio = thisresult.InnerText
                     Else

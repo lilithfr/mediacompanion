@@ -629,11 +629,12 @@ Public Class frmPreferences
         'Options
         ComboBox8.SelectedIndex                     = Pref.TvdbActorScrape
         cbTvUse_XBMC_TVDB_Scraper       .Checked    = Pref.tvshow_useXBMC_Scraper
-        cbTvEpEnableHDTags                      .Checked    = Pref.enabletvhdtags
-        cbTvDisableLogs                      .Checked    = Pref.disabletvlogs
+        cbTvEpEnableHDTags              .Checked    = Pref.enabletvhdtags
+        cbTvDisableLogs                 .Checked    = Pref.disabletvlogs
         cbTvQuickAddShow                .Checked    = Pref.tvshowautoquick
         cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
         cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize
+        cbtvDisplayNextAiredToolTip     .Checked    = Pref.tvDisplayNextAiredToolTip
         
     End Sub
 
