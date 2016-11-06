@@ -1584,8 +1584,8 @@ Public Class Movie
     End Sub
     
     Sub DoRenameFiles()
-        ReportProgress("Rename Files")
         If Pref.MovieRenameEnable AndAlso Not Pref.basicsavemode AndAlso Not nfopathandfilename.ToLower.Contains("video_ts") AndAlso Not nfopathandfilename.ToLower.Contains("bdmv") Then
+            ReportProgress("Rename Files")
             Dim renameresult As String = fileRename()
             If renameresult.Contains(" Error - ") Then
                 ReportProgress(MSG_ERROR, renameresult)
@@ -1596,8 +1596,8 @@ Public Class Movie
     End Sub
 
     Sub DoRenameFolders()
-        ReportProgress("Rename Folders")
         If Pref.MovFolderRename Then
+            ReportProgress("Rename Folders")
             Dim renameresult As String = folderRename()
             If renameresult.Contains(" Error - ") Then
                 ReportProgress(MSG_ERROR, renameresult)
@@ -3464,7 +3464,7 @@ Public Class Movie
         _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
 
         ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
-        _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
+        If Not ms Is Nothing Then _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
     End Sub
 
     Sub UpdateTagCache

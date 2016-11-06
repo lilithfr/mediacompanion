@@ -45,12 +45,13 @@ Public Structure str_MovieActors
         Dim aok As Boolean = True
         If Not String.IsNullOrEmpty(actorthumb) Then
             Dim filename As String = GetActorFileName(ActorPath)
-
+            Dim newlydownloaded As Boolean = False
             'Allow to save to .actors folder
             If Pref.actorseasy Then
                 Dim hg As New DirectoryInfo(ActorPath)
                 If Not hg.Exists Then Directory.CreateDirectory(ActorPath)
                 If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then
+                    newlydownloaded = True
                     ActorSave(filename)
                 Else
                     aok = False
@@ -71,7 +72,7 @@ Public Structure str_MovieActors
                         workingpath = tempstring & actorid & ".jpg"
                     End If
                     Utilities.EnsureFolderExists(tempstring)
-                    If DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, Pref.overwritethumbs, , Movie.GetHeightResolution(Pref.ActorResolutionSI)) Then
+                    If DownloadCache.SaveImageToCacheAndPath(actorthumb, workingpath, If(newlydownloaded, False, Pref.overwritethumbs), , Movie.GetHeightResolution(Pref.ActorResolutionSI)) Then
                         ActorSave(workingpath)
                     Else
                         aok = False
