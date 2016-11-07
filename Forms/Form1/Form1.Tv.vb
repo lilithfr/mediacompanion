@@ -4242,7 +4242,7 @@ Partial Public Class Form1
                     Dim tempstring As String = Pref.actorsavepath
                     Dim workingpath2 As String = ""
                     If Pref.actorsavealpha Then
-                        Dim actorfilename As String = thisresult.actorname.Replace(" ", "_") & "_" & thisresult.actorid ' & ".tbn"
+                        Dim actorfilename As String = thisresult.actorname.Replace(" ", "_") & "_" & If(Pref.LocalActorSaveNoId, "", thisresult.actorid) ' & ".tbn"
                         tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
                         workingpath2 = tempstring & actorfilename
                     Else
@@ -4286,7 +4286,7 @@ Partial Public Class Form1
                     Dim tempstring As String = Pref.actorsavepath
                     Dim workingpath As String = ""
                     If Pref.actorsavealpha Then
-                        Dim actorfilename As String = tvActor.actorname.Replace(" ", "_") & "_" & tvActor.actorid & ".jpg"
+                        Dim actorfilename As String = tvActor.actorname.Replace(" ", "_") & "_" & If(Pref.LocalActorSaveNoId, "", tvActor.actorid) & ".jpg"
                         tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
                         workingpath = tempstring & actorfilename 
                     Else

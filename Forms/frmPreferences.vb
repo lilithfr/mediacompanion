@@ -256,8 +256,9 @@ Public Class frmPreferences
             Case Else
                 cmbx_MovMaxActors.SelectedItem = Pref.maxactors.ToString
         End Select
-        saveactorchkbx                      .Checked        = Pref.actorsave
-        cb_LocalActorSaveAlpha              .Checked        = Pref.actorsavealpha
+        cbsaveactor                         .Checked        = Pref.actorsave
+        cbLocalActorSaveAlpha               .Checked        = Pref.actorsavealpha
+        cbLocalActorSaveNoId                .Checked        = Pref.LocalActorSaveNoId
         localactorpath                      .Text           = Pref.actorsavepath
         xbmcactorpath                       .Text           = Pref.actornetworkpath
         localactorpath                      .Enabled        = Pref.actorsave
@@ -1146,31 +1147,39 @@ Public Class frmPreferences
         End Try
     End Sub
 
-    Private Sub saveactorchkbx_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveactorchkbx.CheckedChanged
+    Private Sub cbsaveactor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbsaveactor.CheckedChanged
         'If prefsload Then Exit Sub
-        If saveactorchkbx.CheckState = CheckState.Checked Then
+        If cbsaveactor.CheckState = CheckState.Checked Then
             Pref.actorsave = True
-            localactorpath.Text = Pref.actorsavepath
-            xbmcactorpath.Text = Pref.actornetworkpath
-            localactorpath.Enabled = True
-            xbmcactorpath.Enabled = True
-            cb_LocalActorSaveAlpha.Enabled = True
+            localactorpath          .Text = Pref.actorsavepath
+            xbmcactorpath           .Text = Pref.actornetworkpath
+            localactorpath          .Enabled = True
+            xbmcactorpath           .Enabled = True
+            cbLocalActorSaveAlpha   .Enabled = True
+            cbLocalActorSaveNoId    .Enabled = True
             btn_localactorpathbrowse.Enabled = True
         Else
             Pref.actorsave = False
-            localactorpath.Text = ""
-            xbmcactorpath.Text = ""
-            localactorpath.Enabled = False
-            xbmcactorpath.Enabled = False
-            cb_LocalActorSaveAlpha.Enabled = False
+            localactorpath          .Text = ""
+            xbmcactorpath           .Text = ""
+            localactorpath          .Enabled = False
+            xbmcactorpath           .Enabled = False
+            cbLocalActorSaveAlpha   .Enabled = False
+            cbLocalActorSaveNoId    .Enabled = False
             btn_localactorpathbrowse.Enabled = False
         End If
         Changes = True
     End Sub
 
-    Private Sub cb_LocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_LocalActorSaveAlpha.CheckedChanged
+    Private Sub cbLocalActorSaveAlpha_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLocalActorSaveAlpha.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.actorsavealpha = cb_LocalActorSaveAlpha.CheckState
+        Pref.actorsavealpha = cbLocalActorSaveAlpha.CheckState
+        Changes = True
+    End Sub
+
+    Private Sub cbLocalActorSaveNoId_CheckedChanged(sender As Object, e As EventArgs) Handles cbLocalActorSaveNoId.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.LocalActorSaveNoId = cbLocalActorSaveNoId.CheckState
         Changes = True
     End Sub
 
@@ -3691,5 +3700,5 @@ End Sub
         lstNameModeFiles.Sort()
         Return String.Join(vbCrLf, lstNameModeFiles)
     End Function
-
+    
 End Class

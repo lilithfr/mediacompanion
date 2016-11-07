@@ -4479,7 +4479,7 @@ Public Class Movie
                     Dim tempstring As String = Pref.actorsavepath
                     Dim workingpath As String = ""
                     If Pref.actorsavealpha Then
-                        Dim actorfilename As String = movactor.actorname.Replace(" ", "_") & "_" & movactor.actorid & ".jpg"
+                        Dim actorfilename As String = movactor.actorname.Replace(" ", "_") & If(Pref.LocalActorSaveNoId, "", "_" & movactor.actorid) & ".jpg"
                         tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
                         workingpath = tempstring & actorfilename 
                     Else

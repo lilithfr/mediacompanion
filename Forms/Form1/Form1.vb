@@ -9497,6 +9497,7 @@ Public Class Form1
 		Me.rbTvMissingAiredEp   .Enabled = Pref.displayMissingEpisodes
         Me.rbTvMissingNextToAir .Enabled = Pref.displayMissingEpisodes
 
+        If Pref.tvrename >= Pref.tv_RegexRename.Count Then Pref.tvrename = 0
 		Renamer.setRenamePref(Pref.tv_RegexRename.Item(Pref.tvrename), Pref.tv_RegexScraper)
 		XBMCTMDBConfigSave()
 		XBMCTVDBConfigSave()
@@ -17805,7 +17806,7 @@ Public Class Form1
 		If ImgBwCancelled Then Exit Function
 		Try
 			'Dim image As Image
-			Using fs As IO.Filestream = File.Open(PathToUse, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
+			Using fs As IO.Filestream = IO.File.Open(PathToUse, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
 				fs.CopyTo(ms)
 				ms.Seek(0, IO.SeekOrigin.Begin)
 				'image = Image.FromStream(ms)
@@ -17821,7 +17822,7 @@ Public Class Form1
 			End Try
 			If ImgBwCancelled Then Exit Function
 			Try
-				Using fs As IO.FileStream = File.Open(DefaultPic, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
+				Using fs As IO.FileStream = IO.File.Open(DefaultPic, IO.FileMode.Open, IO.FileAccess.Read), ms As IO.MemoryStream = New IO.MemoryStream()
 					fs.CopyTo(ms)
 					ms.Seek(0, IO.SeekOrigin.Begin)
 					PicBox.Image = Image.FromStream(ms)

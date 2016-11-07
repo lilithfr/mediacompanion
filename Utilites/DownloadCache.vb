@@ -175,16 +175,17 @@ Public Class DownloadCache
                     webReq.Proxy = Utilities.MyProxy
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
+                    'webReq.Timeout = 5000       
 
                     Using webResp As HttpWebResponse = webReq.GetResponse()
                         Using responseStreamData As IO.Stream = webResp.GetResponseStream()
                             'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
                             If String.IsNullOrEmpty(SavePath) Then
-                                File.WriteAllText(CachePath, New IO.StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
+                                IO.File.WriteAllText(CachePath, New IO.StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                             Else
                                 Utilities.SafeDeleteFile(CachePath)
 
-                                Using fileStream As IO.FileStream = File.Open(CachePath, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
+                                Using fileStream As IO.FileStream = IO.File.Open(CachePath, IO.FileMode.OpenOrCreate, IO.FileAccess.Write)
                                     Dim buffer(webResp.ContentLength) As Byte
                                     Dim bytesRead = responseStreamData.Read(buffer, 0, buffer.Length)
                                     While bytesRead > 0

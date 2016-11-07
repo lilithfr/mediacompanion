@@ -64,7 +64,7 @@ Public Structure str_MovieActors
                     Dim tempstring As String = Pref.actorsavepath
                     Dim workingpath As String = ""
                     If Pref.actorsavealpha Then
-                        Dim actorfilename As String = actorname.Replace(" ", "_") & "_" & actorid & ".jpg"
+                        Dim actorfilename As String = actorname.Replace(" ", "_") & If(Pref.LocalActorSaveNoId, "", "_" & actorid) & ".jpg"
                         tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
                         workingpath = tempstring & actorfilename 
                     Else

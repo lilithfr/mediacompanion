@@ -30,7 +30,7 @@ Partial Class frmPreferences
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox12 = New System.Windows.Forms.GroupBox()
-        Me.cb_LocalActorSaveAlpha = New System.Windows.Forms.CheckBox()
+        Me.cbLocalActorSaveAlpha = New System.Windows.Forms.CheckBox()
         Me.xbmcactorpath = New System.Windows.Forms.TextBox()
         Me.btn_localactorpathbrowse = New System.Windows.Forms.Button()
         Me.Label161 = New System.Windows.Forms.Label()
@@ -40,7 +40,7 @@ Partial Class frmPreferences
         Me.Label96 = New System.Windows.Forms.Label()
         Me.Label97 = New System.Windows.Forms.Label()
         Me.localactorpath = New System.Windows.Forms.TextBox()
-        Me.saveactorchkbx = New System.Windows.Forms.CheckBox()
+        Me.cbsaveactor = New System.Windows.Forms.CheckBox()
         Me.cmbx_MovMaxActors = New System.Windows.Forms.ComboBox()
         Me.cbShowAllAudioTracks = New System.Windows.Forms.CheckBox()
         Me.cbDisplayMediaInfoOverlay = New System.Windows.Forms.CheckBox()
@@ -495,6 +495,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbLocalActorSaveNoId = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -593,7 +594,8 @@ Partial Class frmPreferences
         '
         'GroupBox12
         '
-        Me.GroupBox12.Controls.Add(Me.cb_LocalActorSaveAlpha)
+        Me.GroupBox12.Controls.Add(Me.cbLocalActorSaveNoId)
+        Me.GroupBox12.Controls.Add(Me.cbLocalActorSaveAlpha)
         Me.GroupBox12.Controls.Add(Me.xbmcactorpath)
         Me.GroupBox12.Controls.Add(Me.btn_localactorpathbrowse)
         Me.GroupBox12.Controls.Add(Me.Label161)
@@ -603,30 +605,30 @@ Partial Class frmPreferences
         Me.GroupBox12.Controls.Add(Me.Label96)
         Me.GroupBox12.Controls.Add(Me.Label97)
         Me.GroupBox12.Controls.Add(Me.localactorpath)
-        Me.GroupBox12.Controls.Add(Me.saveactorchkbx)
+        Me.GroupBox12.Controls.Add(Me.cbsaveactor)
         Me.GroupBox12.Location = New System.Drawing.Point(425, 33)
         Me.GroupBox12.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox12.Name = "GroupBox12"
         Me.GroupBox12.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox12.Size = New System.Drawing.Size(523, 479)
+        Me.GroupBox12.Size = New System.Drawing.Size(523, 497)
         Me.GroupBox12.TabIndex = 49
         Me.GroupBox12.TabStop = false
         Me.GroupBox12.Text = "Download Actor Thumbs"
         Me.ToolTip1.SetToolTip(Me.GroupBox12, "Downloads actor thumbnails to Local or Network Location")
         '
-        'cb_LocalActorSaveAlpha
+        'cbLocalActorSaveAlpha
         '
-        Me.cb_LocalActorSaveAlpha.AutoSize = true
-        Me.cb_LocalActorSaveAlpha.Location = New System.Drawing.Point(7, 120)
-        Me.cb_LocalActorSaveAlpha.Name = "cb_LocalActorSaveAlpha"
-        Me.cb_LocalActorSaveAlpha.Size = New System.Drawing.Size(196, 19)
-        Me.cb_LocalActorSaveAlpha.TabIndex = 11
-        Me.cb_LocalActorSaveAlpha.Text = "Save actor as Actor_Name.extn"
-        Me.cb_LocalActorSaveAlpha.UseVisualStyleBackColor = true
+        Me.cbLocalActorSaveAlpha.AutoSize = true
+        Me.cbLocalActorSaveAlpha.Location = New System.Drawing.Point(8, 128)
+        Me.cbLocalActorSaveAlpha.Name = "cbLocalActorSaveAlpha"
+        Me.cbLocalActorSaveAlpha.Size = New System.Drawing.Size(196, 19)
+        Me.cbLocalActorSaveAlpha.TabIndex = 11
+        Me.cbLocalActorSaveAlpha.Text = "Save actor as Actor_Name.extn"
+        Me.cbLocalActorSaveAlpha.UseVisualStyleBackColor = true
         '
         'xbmcactorpath
         '
-        Me.xbmcactorpath.Location = New System.Drawing.Point(87, 450)
+        Me.xbmcactorpath.Location = New System.Drawing.Point(87, 468)
         Me.xbmcactorpath.Margin = New System.Windows.Forms.Padding(4)
         Me.xbmcactorpath.Name = "xbmcactorpath"
         Me.xbmcactorpath.Size = New System.Drawing.Size(324, 21)
@@ -635,7 +637,7 @@ Partial Class frmPreferences
         '
         'btn_localactorpathbrowse
         '
-        Me.btn_localactorpathbrowse.Location = New System.Drawing.Point(419, 308)
+        Me.btn_localactorpathbrowse.Location = New System.Drawing.Point(419, 326)
         Me.btn_localactorpathbrowse.Margin = New System.Windows.Forms.Padding(4)
         Me.btn_localactorpathbrowse.Name = "btn_localactorpathbrowse"
         Me.btn_localactorpathbrowse.Size = New System.Drawing.Size(36, 23)
@@ -646,10 +648,10 @@ Partial Class frmPreferences
         'Label161
         '
         Me.Label161.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label161.Location = New System.Drawing.Point(8, 274)
+        Me.Label161.Location = New System.Drawing.Point(8, 291)
         Me.Label161.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label161.Name = "Label161"
-        Me.Label161.Size = New System.Drawing.Size(461, 30)
+        Me.Label161.Size = New System.Drawing.Size(461, 31)
         Me.Label161.TabIndex = 10
         Me.Label161.Text = "The ""Local Path"" below needs to be the path to where you want the actor thumbs sa"& _ 
     "ved, eg ""C:\MovieStuff\ActorThumbs"""
@@ -667,7 +669,7 @@ Partial Class frmPreferences
         'Label103
         '
         Me.Label103.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label103.Location = New System.Drawing.Point(8, 350)
+        Me.Label103.Location = New System.Drawing.Point(8, 368)
         Me.Label103.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label103.Name = "Label103"
         Me.Label103.Size = New System.Drawing.Size(507, 96)
@@ -677,7 +679,7 @@ Partial Class frmPreferences
         'Label101
         '
         Me.Label101.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label101.Location = New System.Drawing.Point(8, 146)
+        Me.Label101.Location = New System.Drawing.Point(8, 176)
         Me.Label101.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label101.Name = "Label101"
         Me.Label101.Size = New System.Drawing.Size(507, 114)
@@ -688,7 +690,7 @@ Partial Class frmPreferences
         '
         Me.Label96.AutoSize = true
         Me.Label96.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label96.Location = New System.Drawing.Point(8, 453)
+        Me.Label96.Location = New System.Drawing.Point(8, 471)
         Me.Label96.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label96.Name = "Label96"
         Me.Label96.Size = New System.Drawing.Size(80, 15)
@@ -699,7 +701,7 @@ Partial Class frmPreferences
         '
         Me.Label97.AutoSize = true
         Me.Label97.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label97.Location = New System.Drawing.Point(8, 310)
+        Me.Label97.Location = New System.Drawing.Point(8, 330)
         Me.Label97.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label97.Name = "Label97"
         Me.Label97.Size = New System.Drawing.Size(75, 15)
@@ -708,24 +710,24 @@ Partial Class frmPreferences
         '
         'localactorpath
         '
-        Me.localactorpath.Location = New System.Drawing.Point(87, 310)
+        Me.localactorpath.Location = New System.Drawing.Point(87, 328)
         Me.localactorpath.Margin = New System.Windows.Forms.Padding(4)
         Me.localactorpath.Name = "localactorpath"
         Me.localactorpath.Size = New System.Drawing.Size(324, 21)
         Me.localactorpath.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.localactorpath, "The path for Media Companion to save the file")
         '
-        'saveactorchkbx
+        'cbsaveactor
         '
-        Me.saveactorchkbx.AutoSize = true
-        Me.saveactorchkbx.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.saveactorchkbx.Location = New System.Drawing.Point(8, 102)
-        Me.saveactorchkbx.Margin = New System.Windows.Forms.Padding(4)
-        Me.saveactorchkbx.Name = "saveactorchkbx"
-        Me.saveactorchkbx.Size = New System.Drawing.Size(173, 19)
-        Me.saveactorchkbx.TabIndex = 0
-        Me.saveactorchkbx.Text = "Enable Save Actor Thumbs"
-        Me.saveactorchkbx.UseVisualStyleBackColor = true
+        Me.cbsaveactor.AutoSize = true
+        Me.cbsaveactor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbsaveactor.Location = New System.Drawing.Point(8, 102)
+        Me.cbsaveactor.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbsaveactor.Name = "cbsaveactor"
+        Me.cbsaveactor.Size = New System.Drawing.Size(173, 19)
+        Me.cbsaveactor.TabIndex = 0
+        Me.cbsaveactor.Text = "Enable Save Actor Thumbs"
+        Me.cbsaveactor.UseVisualStyleBackColor = true
         '
         'cmbx_MovMaxActors
         '
@@ -5931,6 +5933,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbLocalActorSaveNoId
+        '
+        Me.cbLocalActorSaveNoId.AutoSize = true
+        Me.cbLocalActorSaveNoId.Location = New System.Drawing.Point(22, 149)
+        Me.cbLocalActorSaveNoId.Name = "cbLocalActorSaveNoId"
+        Me.cbLocalActorSaveNoId.Size = New System.Drawing.Size(216, 19)
+        Me.cbLocalActorSaveNoId.TabIndex = 12
+        Me.cbLocalActorSaveNoId.Text = "Exclude actor ID as filename suffix."
+        Me.cbLocalActorSaveNoId.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6155,7 +6167,7 @@ End Sub
     Friend WithEvents Label137 As Label
     Friend WithEvents cb_actorseasy As CheckBox
     Friend WithEvents GroupBox12 As GroupBox
-    Friend WithEvents cb_LocalActorSaveAlpha As CheckBox
+    Friend WithEvents cbLocalActorSaveAlpha As CheckBox
     Friend WithEvents xbmcactorpath As TextBox
     Friend WithEvents btn_localactorpathbrowse As Button
     Friend WithEvents Label161 As Label
@@ -6165,7 +6177,7 @@ End Sub
     Friend WithEvents Label96 As Label
     Friend WithEvents Label97 As Label
     Friend WithEvents localactorpath As TextBox
-    Friend WithEvents saveactorchkbx As CheckBox
+    Friend WithEvents cbsaveactor As CheckBox
     Friend WithEvents Label98 As Label
     Friend WithEvents cmbx_MovMaxActors As ComboBox
     Friend WithEvents cbShowAllAudioTracks As CheckBox
@@ -6578,4 +6590,5 @@ End Sub
     Friend WithEvents cbSetIdAsCollectionnumber As CheckBox
     Friend WithEvents lbExternalBrowserPath As Label
     Friend WithEvents cbtvDisplayNextAiredToolTip As CheckBox
+    Friend WithEvents cbLocalActorSaveNoId As CheckBox
 End Class

@@ -228,6 +228,7 @@ Public Class Pref
     Public Shared actorsave As Boolean
     Public Shared actorsavepath As String
     Public Shared actorsavealpha As Boolean
+    Public Shared LocalActorSaveNoId As Boolean
     Public Shared actornetworkpath As String
     Public Shared imdbmirror As String
     Public Shared createfolderjpg As Boolean
@@ -791,6 +792,7 @@ Public Class Pref
         actorsave = False
         actorsavepath = ""
         actorsavealpha = False
+        LocalActorSaveNoId = False
         actornetworkpath = ""
         usefanart = True
         ignoretrailers = False
@@ -1145,6 +1147,7 @@ Public Class Pref
         root.AppendChild(doc, "actorsave",                          actorsave)                          'saveactorchkbx
         root.AppendChild(doc, "actorsavepath",                      actorsavepath)                      'localactorpath
         root.AppendChild(doc, "actorsavealpha",                     actorsavealpha)                     'actorsavealpha
+        root.AppendChild(doc, "LocalActorSaveNoId",                 LocalActorSaveNoId)                 'cbLocalActorSaveNoId
         root.AppendChild(doc, "actornetworkpath",                   actornetworkpath)                   'xbmcactorpath
         root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'ListBox9
         root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'cbMovCreateFolderjpg
@@ -1584,6 +1587,7 @@ Public Class Pref
                     Case "TvMissingEpOffset"                    : TvMissingEpOffset = thisresult.InnerXml
                     Case "actorsavepath"                        : actorsavepath = decxmlchars(thisresult.InnerText)
                     Case "actorsavealpha"                       : actorsavealpha = thisresult.InnerXml
+                    Case "LocalActorSaveNoId"                   : LocalActorSaveNoId = thisresult.InnerXml
                     Case "actornetworkpath"                     : actornetworkpath = decxmlchars(thisresult.InnerText)
                     Case "overwritethumbs"                      : overwritethumbs = thisresult.InnerXml
                     Case "LocalActorImage"                      : LocalActorImage = thisresult.InnerText 
@@ -1925,7 +1929,7 @@ Public Class Pref
         Dim Path2 As String = ""
         If Pref.actorsave AndAlso actorid <> "" Then
             If Pref.actorsavealpha Then
-                Path2 = Pref.actorsavepath & "\" & ActorName.Substring(0,1) & "\" & ActorName.Replace(" ", "_") & "_" & actorid
+                Path2 = Pref.actorsavepath & "\" & ActorName.Substring(0,1) & "\" & ActorName.Replace(" ", "_") & If(Pref.LocalActorSaveNoId, "", "_" & actorid)
             Else
                 Path2 = Pref.actorsavepath & "\" & actorid.Substring(actorid.Length - 2, 2) & "\" & actorid
             End If
