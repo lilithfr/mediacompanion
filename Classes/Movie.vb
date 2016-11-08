@@ -1611,10 +1611,10 @@ Public Class Movie
         _scrapedMovie.listactors.Clear
         If Pref.movies_useXBMC_Scraper Then
             If Pref.XbmcTmdbActorFromImdb OrElse MovieSearchEngine = "imdb" Then _scrapedMovie.listactors = GetImdbActors
-            If _scrapedMovie.listactors.Count = 0 Then _scrapedMovie.listactors = GetTmdbActors
+            If _scrapedMovie.listactors.Count = 0 AndAlso (Not Pref.XbmcTmdbActorFromImdb OrElse MovActorFallbackIMDbtoTMDb) Then _scrapedMovie.listactors = GetTmdbActors
         Else
             If Pref.TmdbActorsImdbScrape OrElse MovieSearchEngine = "tmdb" Then _scrapedMovie.listactors = GetTmdbActors
-            If _scrapedMovie.listactors.Count = 0 Then _scrapedMovie.listactors = GetImdbActors
+            If _scrapedMovie.listactors.Count = 0 AndAlso (Not Pref.TmdbActorsImdbScrape OrElse MovActorFallbackIMDbtoTMDb) Then _scrapedMovie.listactors = GetImdbActors
         End If
     End Sub
 
@@ -3337,10 +3337,10 @@ Public Class Movie
                 _rescrapedMovie.listactors.Clear()
                 If Pref.movies_useXBMC_Scraper Then
                     If Pref.XbmcTmdbActorFromImdb Then _rescrapedMovie.listactors = GetImdbActors
-                    If _rescrapedMovie.listactors.Count = 0 Then _rescrapedMovie.listactors = GetTmdbActors
+                    If _rescrapedMovie.listactors.Count = 0 AndAlso MovActorFallbackIMDbtoTMDb Then _rescrapedMovie.listactors = GetTmdbActors
                 Else
                     If Pref.TmdbActorsImdbScrape Then _rescrapedMovie.listactors = GetTmdbActors
-                    If _rescrapedMovie.listactors.Count = 0 Then _rescrapedMovie.listactors = GetImdbActors
+                    If _rescrapedMovie.listactors.Count = 0 AndAlso MovActorFallbackTMDbtoIMDb Then _rescrapedMovie.listactors = GetImdbActors
                 End If
                 If _rescrapedMovie.listactors.Count > 0 Then
                     _scrapedMovie.listactors.Clear()

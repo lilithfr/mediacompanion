@@ -252,6 +252,7 @@ Public Class Pref
     Public Shared moviedefaultlist As Byte
     Public Shared movies_useXBMC_Scraper As Boolean
     Public Shared TmdbActorsImdbScrape As Boolean
+    Public Shared MovActorFallbackTMDbtoIMDb As Boolean
     Public Shared ImdbPrimaryPlot As Boolean
     Public Shared MovImdbFirstRunTime As Boolean
     Public Shared MovImdbAspectRatio As Boolean
@@ -265,8 +266,8 @@ Public Class Pref
     Public Shared XbmcTmdbAkasFromImdb As Boolean
     Public Shared XbmcTmdbAspectFromImdb As Boolean
     Public Shared XbmcTmdbMetascoreFromImdb As Boolean
-    Public Shared XbmcTmdbActorDL As Boolean
     Public Shared XbmcTmdbActorFromImdb As Boolean
+    Public Shared MovActorFallbackIMDbtoTMDb As Boolean
     Public Shared XbmcTmdbGenreFromImdb As Boolean
     Public Shared scrapefullcert As Boolean
     Public Shared MovCertRemovePhrase As Boolean
@@ -652,6 +653,7 @@ Public Class Pref
         'Movies
         movies_useXBMC_Scraper = False
         TmdbActorsImdbScrape = False
+        MovActorFallbackTMDbtoIMDb = True
         ImdbPrimaryPlot = False
         MovImdbFirstRunTime = False
         MovImdbAspectRatio = False
@@ -665,8 +667,8 @@ Public Class Pref
         XbmcTmdbAkasFromImdb = False
         XbmcTmdbAspectFromImdb = False
         XbmcTmdbMetascoreFromImdb = False
-        XbmcTmdbActorDL = False
         XbmcTmdbActorFromImdb = False
+        MovActorFallbackIMDbtoTMDb = True
         XbmcTmdbGenreFromImdb = False
         scrapefullcert = False
         MovCertRemovePhrase = False
@@ -1181,6 +1183,7 @@ Public Class Pref
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
         root.AppendChild(doc, "TmdbActorsImdbScrape",               TmdbActorsImdbScrape)               'cbImdbgetTMDBActor 
+        root.AppendChild(doc, "MovActorFallbackTMDbtoIMDb",         MovActorFallbackTMDbtoIMDb)         'cbMovActorFallbackTMDbtoIMDb
         root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot 
         root.AppendChild(doc, "MovImdbFirstRunTime",                MovImdbFirstRunTime)                'cbMovImdbFirstRunTime 
         root.AppendChild(doc, "MovImdbAspectRatio",                 MovImdbAspectRatio)                 'cbMovImdbAspectRatio
@@ -1194,8 +1197,8 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbAkasFromImdb",               XbmcTmdbAkasFromImdb)               'cbXbmcTmdbAkasFromImdb
         root.AppendChild(doc, "XbmcTmdbAspectFromImdb",             XbmcTmdbAspectFromImdb)             'cbXbmcTmdbAspectFromImdb
         root.AppendChild(doc, "XbmcTmdbMetascoreFromImdb",          XbmcTmdbMetascoreFromImdb)          'cbXbmcTmdbMetascoreFromImdb
-        root.AppendChild(doc, "XbmcTmdbActorDL",                    XbmcTmdbActorDL)                    'cbXbmcTmdbActorDL - To Delete after 01-03-2016
         root.AppendChild(doc, "XbmcTmdbActorFromImdb",              XbmcTmdbActorFromImdb)              'cbXbmcTmdbActorFromImdb
+        root.AppendChild(doc, "MovActorFallbackIMDbtoTMDb",         MovActorFallbackIMDbtoTMDb)         'cbMovActorFallbackIMDbtoTMDb
         root.AppendChild(doc, "XbmcTmdbGenreFromImdb",              XbmcTmdbGenreFromImdb)              'cbXbmcTmdbGenreFromImdb
         root.AppendChild(doc, "scrapefullcert",                     scrapefullcert)                     'ScrapeFullCertCheckBox
         root.AppendChild(doc, "MovCertRemovePhrase",                MovCertRemovePhrase)                'cb_MovCertRemovePhrase
@@ -1520,6 +1523,7 @@ Public Class Pref
                         Next
 
                     Case "TmdbActorsImdbScrape"                 : TmdbActorsImdbScrape = thisresult.InnerXml
+                    Case "MovActorFallbackTMDbtoIMDb"           : MovActorFallbackTMDbtoIMDb = thisresult.InnerXml
                     Case "ImdbPrimaryPlot"                      : ImdbPrimaryPlot = thisresult.InnerXml 
                     Case "MovImdbFirstRunTime"                  : MovImdbFirstRunTime = thisresult.InnerXml
                     Case "MovImdbAspectRatio"                   : MovImdbAspectRatio = thisresult.InnerXml
@@ -1533,8 +1537,8 @@ Public Class Pref
                     Case "XbmcTmdbAkasFromImdb"                 : XbmcTmdbAkasFromImdb = thisresult.InnerText
                     Case "XbmcTmdbAspectFromImdb"               : XbmcTmdbAspectFromImdb = thisresult.InnerXml
                     Case "XbmcTmdbMetascoreFromImdb"            : XbmcTmdbMetascoreFromImdb = thisresult.InnerXml
-                    Case "XbmcTmdbActorDL"                      : XbmcTmdbActorDL = thisresult.InnerText
-                    Case "XbmcTmdbActorFromImdb"                : XbmcTmdbActorFromImdb = thisresult.InnerText
+                    Case "XbmcTmdbActorFromImdb"                : XbmcTmdbActorFromImdb = thisresult.InnerXml
+                    Case "MovActorFallbackIMDbtoTMDb"           : MovActorFallbackIMDbtoTMDb = thisresult.InnerXml
                     Case "XbmcTmdbGenreFromImdb"                : XbmcTmdbGenreFromImdb = thisresult.InnerXml
                     Case "seasonall"                            : seasonall = thisresult.InnerText
                     Case "splitcontainer1"                      : splt1 = Convert.ToInt32(thisresult.InnerText)

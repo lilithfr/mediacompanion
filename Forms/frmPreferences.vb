@@ -318,12 +318,15 @@ Public Class frmPreferences
         Next
         cmbxTMDBPreferredCertCountry.Text = Pref.XbmcTmdbScraperCertCountry
         cbXbmcTmdbRename                    .Checked        = Pref.XbmcTmdbRenameMovie
-        'cbXbmcTmdbActorDL                   .Checked        = Pref.XbmcTmdbActorDL
         cbXbmcTmdbActorFromImdb             .Checked        = Pref.XbmcTmdbActorFromImdb
+        cbMovActorFallbackIMDbtoTMDb        .Checked        = Pref.MovActorFallbackIMDbtoTMDb
+        cbMovActorFallbackIMDbtoTMDb        .Enabled        = Pref.XbmcTmdbActorFromImdb
         
         ''IMDB
         lb_IMDBMirrors                      .SelectedItem   = Pref.imdbmirror
         cbImdbgetTMDBActor                  .Checked        = Pref.TmdbActorsImdbScrape
+        cbMovActorFallbackTMDbtoIMDb        .Checked        = Pref.MovActorFallbackTMDbtoIMDb
+        cbMovActorFallbackTMDbtoIMDb        .Enabled        = Pref.TmdbActorsImdbScrape
         cbImdbPrimaryPlot                   .Checked        = Pref.ImdbPrimaryPlot
         cbMovImdbFirstRunTime               .Checked        = Pref.MovImdbFirstRunTime
         cbMovImdbAspectRatio                .Checked        = Pref.MovImdbAspectRatio
@@ -1362,15 +1365,16 @@ Public Class frmPreferences
         Changes = True
     End Sub
 
-    'Private Sub cbXbmcTmdbActorDL_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbXbmcTmdbActorDL.CheckedChanged
-    '    If prefsload Then Exit Sub
-    '    Pref.XbmcTmdbActorDL = cbXbmcTmdbActorDL.checked
-    '    Changes = True
-    'End Sub
-
     Private Sub cbXbmcTmdbActorFromImdb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbXbmcTmdbActorFromImdb.CheckedChanged
         If prefsload Then Exit Sub
         Pref.XbmcTmdbActorFromImdb = cbXbmcTmdbActorFromImdb.checked
+        cbMovActorFallbackIMDbtoTMDb.Enabled = Pref.XbmcTmdbActorFromImdb
+        Changes = True
+    End Sub
+
+    Private Sub cbMovActorFallbackIMDbtoTMDb_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovActorFallbackIMDbtoTMDb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovActorFallbackIMDbtoTMDb = cbMovActorFallbackIMDbtoTMDb.checked
         Changes = True
     End Sub
 
@@ -1379,7 +1383,14 @@ Public Class frmPreferences
         If prefsload Then Exit Sub
         Pref.TmdbActorsImdbScrape = cbImdbgetTMDBActor.Checked
         Changes = True
-    End Sub 
+    End Sub
+
+    Private Sub cbMovActorFallbackTMDbtoIMDb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMovActorFallbackTMDbtoIMDb.CheckedChanged
+        If prefsload Then Exit Sub
+        cbMovActorFallbackTMDbtoIMDb.Enabled = Pref.TmdbActorsImdbScrape
+        Pref.MovActorFallbackTMDbtoIMDb = cbMovActorFallbackTMDbtoIMDb.Checked
+        Changes = True
+    End Sub
 
     Private Sub cbImdbPrimaryPlot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)  Handles cbImdbPrimaryPlot.CheckedChanged 
         If prefsload Then Exit Sub

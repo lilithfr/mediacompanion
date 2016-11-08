@@ -25,11 +25,11 @@ Partial Class frmPreferences
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmPreferences))
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.ColorDialog = New System.Windows.Forms.ColorDialog()
         Me.FontDialog = New System.Windows.Forms.FontDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.GroupBox12 = New System.Windows.Forms.GroupBox()
+        Me.cbLocalActorSaveNoId = New System.Windows.Forms.CheckBox()
         Me.cbLocalActorSaveAlpha = New System.Windows.Forms.CheckBox()
         Me.xbmcactorpath = New System.Windows.Forms.TextBox()
         Me.btn_localactorpathbrowse = New System.Windows.Forms.Button()
@@ -106,7 +106,6 @@ Partial Class frmPreferences
         Me.cbtvDisplayNextAiredToolTip = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TPGenCom = New System.Windows.Forms.TabPage()
         Me.TabControl4 = New System.Windows.Forms.TabControl()
@@ -193,6 +192,7 @@ Partial Class frmPreferences
         Me.tbTMDbAPI = New System.Windows.Forms.TextBox()
         Me.grpbxMovieScraperSettings = New System.Windows.Forms.GroupBox()
         Me.grpbxTMDBScraperPreferences = New System.Windows.Forms.GroupBox()
+        Me.cbMovActorFallbackIMDbtoTMDb = New System.Windows.Forms.CheckBox()
         Me.cmbxTMDBPreferredCertCountry = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.grpbxTmdbfromImdbOptions = New System.Windows.Forms.GroupBox()
@@ -214,10 +214,10 @@ Partial Class frmPreferences
         Me.Label153 = New System.Windows.Forms.Label()
         Me.cbMovieUseXBMCScraper = New System.Windows.Forms.CheckBox()
         Me.GpBx_McIMDbScraperSettings = New System.Windows.Forms.GroupBox()
+        Me.cbMovActorFallbackTMDbtoIMDb = New System.Windows.Forms.CheckBox()
         Me.cbMovImdbAspectRatio = New System.Windows.Forms.CheckBox()
         Me.cbMovImdbFirstRunTime = New System.Windows.Forms.CheckBox()
         Me.cbImdbPrimaryPlot = New System.Windows.Forms.CheckBox()
-        Me.Label181 = New System.Windows.Forms.Label()
         Me.cbImdbgetTMDBActor = New System.Windows.Forms.CheckBox()
         Me.Label90 = New System.Windows.Forms.Label()
         Me.Label91 = New System.Windows.Forms.Label()
@@ -495,7 +495,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbLocalActorSaveNoId = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -615,6 +614,16 @@ Partial Class frmPreferences
         Me.GroupBox12.TabStop = false
         Me.GroupBox12.Text = "Download Actor Thumbs"
         Me.ToolTip1.SetToolTip(Me.GroupBox12, "Downloads actor thumbnails to Local or Network Location")
+        '
+        'cbLocalActorSaveNoId
+        '
+        Me.cbLocalActorSaveNoId.AutoSize = true
+        Me.cbLocalActorSaveNoId.Location = New System.Drawing.Point(22, 149)
+        Me.cbLocalActorSaveNoId.Name = "cbLocalActorSaveNoId"
+        Me.cbLocalActorSaveNoId.Size = New System.Drawing.Size(216, 19)
+        Me.cbLocalActorSaveNoId.TabIndex = 12
+        Me.cbLocalActorSaveNoId.Text = "Exclude actor ID as filename suffix."
+        Me.cbLocalActorSaveNoId.UseVisualStyleBackColor = true
         '
         'cbLocalActorSaveAlpha
         '
@@ -1484,9 +1493,9 @@ Partial Class frmPreferences
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
         Me.cbXbmcTmdbActorFromImdb.Location = New System.Drawing.Point(10, 270)
         Me.cbXbmcTmdbActorFromImdb.Name = "cbXbmcTmdbActorFromImdb"
-        Me.cbXbmcTmdbActorFromImdb.Size = New System.Drawing.Size(183, 34)
+        Me.cbXbmcTmdbActorFromImdb.Size = New System.Drawing.Size(183, 19)
         Me.cbXbmcTmdbActorFromImdb.TabIndex = 75
-        Me.cbXbmcTmdbActorFromImdb.Text = "Download Actors From IMDb"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&" (fallback to TMDb)"
+        Me.cbXbmcTmdbActorFromImdb.Text = "Download Actors From IMDb"
         Me.cbXbmcTmdbActorFromImdb.UseVisualStyleBackColor = true
         '
         'PictureBox1
@@ -2445,6 +2454,7 @@ Partial Class frmPreferences
         '
         'grpbxTMDBScraperPreferences
         '
+        Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cbMovActorFallbackIMDbtoTMDb)
         Me.grpbxTMDBScraperPreferences.Controls.Add(Me.cmbxTMDBPreferredCertCountry)
         Me.grpbxTMDBScraperPreferences.Controls.Add(Me.Label5)
         Me.grpbxTMDBScraperPreferences.Controls.Add(Me.grpbxTmdbfromImdbOptions)
@@ -2463,6 +2473,17 @@ Partial Class frmPreferences
         Me.grpbxTMDBScraperPreferences.TabIndex = 68
         Me.grpbxTMDBScraperPreferences.TabStop = false
         Me.grpbxTMDBScraperPreferences.Text = "XBMC Scraper Preferences - TMDB"
+        '
+        'cbMovActorFallbackIMDbtoTMDb
+        '
+        Me.cbMovActorFallbackIMDbtoTMDb.AutoSize = true
+        Me.cbMovActorFallbackIMDbtoTMDb.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbMovActorFallbackIMDbtoTMDb.Location = New System.Drawing.Point(21, 287)
+        Me.cbMovActorFallbackIMDbtoTMDb.Name = "cbMovActorFallbackIMDbtoTMDb"
+        Me.cbMovActorFallbackIMDbtoTMDb.Size = New System.Drawing.Size(110, 17)
+        Me.cbMovActorFallbackIMDbtoTMDb.TabIndex = 85
+        Me.cbMovActorFallbackIMDbtoTMDb.Text = "(fallback to TMDb)"
+        Me.cbMovActorFallbackIMDbtoTMDb.UseVisualStyleBackColor = true
         '
         'cmbxTMDBPreferredCertCountry
         '
@@ -2693,10 +2714,10 @@ Partial Class frmPreferences
         '
         'GpBx_McIMDbScraperSettings
         '
+        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbMovActorFallbackTMDbtoIMDb)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbMovImdbAspectRatio)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbMovImdbFirstRunTime)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbImdbPrimaryPlot)
-        Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label181)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.cbImdbgetTMDBActor)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label90)
         Me.GpBx_McIMDbScraperSettings.Controls.Add(Me.Label91)
@@ -2709,6 +2730,17 @@ Partial Class frmPreferences
         Me.GpBx_McIMDbScraperSettings.TabIndex = 40
         Me.GpBx_McIMDbScraperSettings.TabStop = false
         Me.GpBx_McIMDbScraperSettings.Text = "MC's IMDB Scraper"
+        '
+        'cbMovActorFallbackTMDbtoIMDb
+        '
+        Me.cbMovActorFallbackTMDbtoIMDb.AutoSize = true
+        Me.cbMovActorFallbackTMDbtoIMDb.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cbMovActorFallbackTMDbtoIMDb.Location = New System.Drawing.Point(20, 181)
+        Me.cbMovActorFallbackTMDbtoIMDb.Name = "cbMovActorFallbackTMDbtoIMDb"
+        Me.cbMovActorFallbackTMDbtoIMDb.Size = New System.Drawing.Size(216, 17)
+        Me.cbMovActorFallbackTMDbtoIMDb.TabIndex = 8
+        Me.cbMovActorFallbackTMDbtoIMDb.Text = "Fall-back to IMDB if no images available."
+        Me.cbMovActorFallbackTMDbtoIMDb.UseVisualStyleBackColor = true
         '
         'cbMovImdbAspectRatio
         '
@@ -2739,16 +2771,6 @@ Partial Class frmPreferences
         Me.cbImdbPrimaryPlot.TabIndex = 5
         Me.cbImdbPrimaryPlot.Text = "Select only Primary Plot"
         Me.cbImdbPrimaryPlot.UseVisualStyleBackColor = true
-        '
-        'Label181
-        '
-        Me.Label181.AutoSize = true
-        Me.Label181.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label181.Location = New System.Drawing.Point(21, 183)
-        Me.Label181.Name = "Label181"
-        Me.Label181.Size = New System.Drawing.Size(197, 13)
-        Me.Label181.TabIndex = 4
-        Me.Label181.Text = "Fall-back to IMDB if no images available."
         '
         'cbImdbgetTMDBActor
         '
@@ -5933,16 +5955,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbLocalActorSaveNoId
-        '
-        Me.cbLocalActorSaveNoId.AutoSize = true
-        Me.cbLocalActorSaveNoId.Location = New System.Drawing.Point(22, 149)
-        Me.cbLocalActorSaveNoId.Name = "cbLocalActorSaveNoId"
-        Me.cbLocalActorSaveNoId.Size = New System.Drawing.Size(216, 19)
-        Me.cbLocalActorSaveNoId.TabIndex = 12
-        Me.cbLocalActorSaveNoId.Text = "Exclude actor ID as filename suffix."
-        Me.cbLocalActorSaveNoId.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6120,12 +6132,10 @@ Partial Class frmPreferences
 
 End Sub
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents ColorDialog As System.Windows.Forms.ColorDialog
     Friend WithEvents FontDialog As System.Windows.Forms.FontDialog
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents FontDialog1 As System.Windows.Forms.FontDialog
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
@@ -6241,7 +6251,6 @@ End Sub
     Friend WithEvents Label153 As Label
     Friend WithEvents GpBx_McIMDbScraperSettings As GroupBox
     Friend WithEvents cbImdbPrimaryPlot As CheckBox
-    Friend WithEvents Label181 As Label
     Friend WithEvents cbImdbgetTMDBActor As CheckBox
     Friend WithEvents Label90 As Label
     Friend WithEvents Label91 As Label
@@ -6591,4 +6600,6 @@ End Sub
     Friend WithEvents lbExternalBrowserPath As Label
     Friend WithEvents cbtvDisplayNextAiredToolTip As CheckBox
     Friend WithEvents cbLocalActorSaveNoId As CheckBox
+    Friend WithEvents cbMovActorFallbackIMDbtoTMDb As CheckBox
+    Friend WithEvents cbMovActorFallbackTMDbtoIMDb As CheckBox
 End Class
