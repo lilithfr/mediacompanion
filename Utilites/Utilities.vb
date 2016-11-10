@@ -91,7 +91,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property ignoreParts As Boolean = False
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
     Public Shared Property RARsize As Integer
-    'Public Const TMDBAPI As String = "f7f51775877e0bb6703520952b3c7840" '"3f026194412846e530a208cf8a39e9cb"
     Private Shared _tmdbapi As String
     Private Shared _ApplicationPath As String
     Private Shared _LanguageLibrary As New List(Of langlib)
@@ -110,9 +109,19 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return installedFrameworks
     End Function
 
+
+    '''  Media Companions own TheMovieDb API Key.
+    '''  Signed for under account belonging to vbat99@gmail.com
+    '''  Note:  API Key (v3 auth)  ebe93edbc30735a0e702eb883fc855be
+    '''  API Read Access Token (v4 auth)   eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYmU5M2VkYmMzMDczNWEwZTcwMmViODgzZmM4NTViZSIsInN1YiI6IjRmMjlkODI4NzYwZWUzNTlhMTAwMzNiYyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wVGTD-EO8JDvcmh0tTC-CEMkQ4q1PwwgXTjSxjGPR_U
+    '''  
+    '''  API should be used for Read-Only access of TheMovieDB site.
+    '''  
+
     Public Shared Property TMDBAPI As String
+        
         Get
-            Return If(String.IsNullOrEmpty(_tmdbapi), "f7f51775877e0bb6703520952b3c7840", _tmdbapi)
+            Return If(String.IsNullOrEmpty(_tmdbapi), "ebe93edbc30735a0e702eb883fc855be", _tmdbapi)
         End Get
         Set(value As String)
             _tmdbapi = value

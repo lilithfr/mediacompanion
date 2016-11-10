@@ -3323,6 +3323,10 @@ Public Class Movie
                             UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
                             UpdateMovieSetCache(True)
+                            ''' Finally, check if old collection is still in custom collection list and remove if it is.
+                            If Pref.moviesets.Contains(_scrapedMovie.fullmoviebody.SetName) Then
+                                Pref.moviesets.Remove(_scrapedMovie.fullmoviebody.SetName)
+                            End If
                         End If
                     End If
                 Catch
