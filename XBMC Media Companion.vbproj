@@ -881,6 +881,7 @@
     <Content Include="Resources\moviesetadd64.png" />
     <Content Include="Resources\missing24.png" />
     <Content Include="Resources\TheMovieDB.png" />
+    <Content Include="Resources\TMDB_Icon2.png" />
     <Content Include="Resources\video_flags\media_audio_atmos.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
