@@ -14,10 +14,9 @@ Public Class WorkingWithNfoFiles
 
     Public Shared Function util_NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = File.OpenText(nfopath)
-        tempstring = filechck.ReadToEnd.ToLower
-        filechck.Close()
-        filechck = Nothing
+        Using filechck As IO.StreamReader = File.OpenText(nfopath)
+            tempstring = filechck.ReadToEnd.ToLower
+        End Using
         If tempstring = Nothing Then
             Return False
         End If
@@ -31,14 +30,11 @@ Public Class WorkingWithNfoFiles
     Public Shared Sub ConvertFileToUTF8IfNotAlready(FileName As String)
         If Not File.Exists(FileName) Then Exit Sub
         Dim _Detected As Encoding
-
-        Dim r As IO.StreamReader = File.Opentext(FileName)
-        Dim s = r.ReadToEnd
-
-        _Detected = r.CurrentEncoding
-
-        r.Close
-        r = Nothing
+        Dim s As String = ""
+        Using r As IO.StreamReader = File.Opentext(FileName)
+            s = r.ReadToEnd
+            _Detected = r.CurrentEncoding
+        End Using
 
         If _Detected.ToString <> "System.Text.UTF8Encoding" AndAlso _Detected.ToString <> "System.Text.SBCSCodePageEncoding" Then
             Try

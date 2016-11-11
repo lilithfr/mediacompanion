@@ -460,9 +460,9 @@ Public Class ucMusicVideo
 
     Private Function validateMusicVideoNfo(ByVal fullPathandFilename As String)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = File.OpenText(fullPathandFilename)
-        tempstring = filechck.ReadToEnd.ToLower
-        filechck.Close()
+        Using filechck As IO.StreamReader = File.OpenText(fullPathandFilename)
+            tempstring = filechck.ReadToEnd.ToLower
+        End Using
         If tempstring = Nothing Then
             Return False
         End If

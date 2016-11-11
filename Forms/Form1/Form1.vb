@@ -1409,22 +1409,21 @@ Public Class Form1
 		listof.Clear()
 		genrelist.Sort()
 		Try
-			Dim userConfig As IO.StreamReader = File.OpenText(workingProfile.Genres)
-			Do
-				Try
-					line = userConfig.ReadLine
-					If line = Nothing Then Continue Do
-					Dim regexMatch As Match
-					regexMatch = Regex.Match(line, "<([\d]{2,3})>")
-					If regexMatch.Success = False AndAlso (genrelist.FindIndex(Function(x) x.Equals(line.trim, StringComparison.OrdinalIgnoreCase)) = -1) Then
-						listof.Add(line.trim)
-					End If
-				Catch ex As Exception
-					MessageBox.Show(ex.Message)
-				End Try
-			Loop Until line = Nothing
-			userConfig.Close()
-			userConfig = Nothing
+			Using userConfig As IO.StreamReader = File.OpenText(workingProfile.Genres)
+			    Do
+				    Try
+					    line = userConfig.ReadLine
+					    If line = Nothing Then Continue Do
+					    Dim regexMatch As Match
+					    regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+					    If regexMatch.Success = False AndAlso (genrelist.FindIndex(Function(x) x.Equals(line.trim, StringComparison.OrdinalIgnoreCase)) = -1) Then
+						    listof.Add(line.trim)
+					    End If
+				    Catch ex As Exception
+					    MessageBox.Show(ex.Message)
+				    End Try
+			    Loop Until line = Nothing
+			End Using
 		Catch ex As Exception
 			MessageBox.Show(ex.Message)
 		End Try
@@ -2184,19 +2183,18 @@ Public Class Form1
 							If stackrarexists = True Then
 								Dim allok As Boolean = False
 								Try
-									Dim filechck As IO.StreamReader = File.OpenText(tempmovie)
-									Do
+									Using filechck As IO.StreamReader = File.OpenText(tempmovie)
+									    Do
 
-										tempstring = filechck.ReadLine
-										If tempstring = Nothing Then Exit Do
+										    tempstring = filechck.ReadLine
+										    If tempstring = Nothing Then Exit Do
 
-										If tempstring.IndexOf("<movie") <> -1 Then
-											allok = True
-											Exit Do
-										End If
-									Loop Until tempstring.IndexOf("</movie>") <> -1
-									filechck.Close()
-									filechck = Nothing
+										    If tempstring.IndexOf("<movie") <> -1 Then
+											    allok = True
+											    Exit Do
+										    End If
+									    Loop Until tempstring.IndexOf("</movie>") <> -1
+									End Using
 								Catch ex As Exception
 #If SilentErrorScream Then
                                     Throw ex
@@ -2229,9 +2227,9 @@ Public Class Form1
 			If File.Exists(nfopaths(f)) Then
 				'if it does check if it is a valid xbmc nfo, if it is not then move it or delete it according to prefs
 				Try
-					Dim filechck As IO.StreamReader = File.OpenText(nfopaths(f))
-					tempstring = filechck.ReadToEnd
-					filechck.Close()
+					Using filechck As IO.StreamReader = File.OpenText(nfopaths(f))
+					    tempstring = filechck.ReadToEnd
+					End Using
 					If tempstring.IndexOf("<movie") = -1 And tempstring.IndexOf("</movie>") = -1 Then
 						If Pref.renamenfofiles = True Then
 							Dim fi As New FileInfo(nfopaths(f))
@@ -2241,8 +2239,6 @@ Public Class Form1
 					Else
 						validfile = False
 					End If
-					filechck.Close()
-					filechck = Nothing
 				Catch ex As Exception
 #If SilentErrorScream Then
                     Throw ex
@@ -5369,10 +5365,9 @@ Public Class Form1
 			If validated = True Then
 				Try
 					Dim tempstring As String
-					Dim filechck As IO.StreamReader = File.OpenText(nfopath)
-					tempstring = filechck.ReadToEnd.ToLower
-					filechck.Close()
-					filechck = Nothing
+					Using filechck As IO.StreamReader = File.OpenText(nfopath)
+					    tempstring = filechck.ReadToEnd.ToLower
+					End Using
 					If tempstring = Nothing Then
 						validated = False
 					End If
@@ -7581,23 +7576,22 @@ Public Class Form1
 		Dim y As Integer
 		strfilename = applicationPath & "\Assets\" & "test.csv"
 		If File.Exists(strfilename) Then
-			Dim tmpstream As IO.StreamReader = File.OpenText(strfilename)
-			Dim strlines() As String
-			Dim strline() As String
-			strlines = tmpstream.ReadToEnd().Split(Environment.NewLine)
-			num_rows = UBound(strlines)
-			strline = strlines(0).Split(",")
-			num_cols = UBound(strline)
+			Using tmpstream As IO.StreamReader = File.OpenText(strfilename)
+			    Dim strlines() As String
+			    Dim strline() As String
+			    strlines = tmpstream.ReadToEnd().Split(Environment.NewLine)
+			    num_rows = UBound(strlines)
+			    strline = strlines(0).Split(",")
+			    num_cols = UBound(strline)
 
-			' Copy the data into the array.
-			For x = 0 To num_rows - 1
-				strline = strlines(x).Split(",")
-				For y = 0 To num_cols
-					langarray(x, y) = strline(y)
-				Next
-			Next
-			tmpstream.Close()
-			tmpstream = Nothing
+			    ' Copy the data into the array.
+			    For x = 0 To num_rows - 1
+				    strline = strlines(x).Split(",")
+				    For y = 0 To num_cols
+					    langarray(x, y) = strline(y)
+				    Next
+			    Next
+			End Using
 		End If
 	End Sub
 
@@ -13994,9 +13988,9 @@ Public Class Form1
 							exists = True
 							tempstring = applicationPath & "\Settings\temp.m3u"
 							ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & tempstring
-							Dim fi As IO.StreamWriter = File.CreateText(tempstring)
-							fi.WriteLine(tempstring2)
-							fi.Close()
+							Using fi As IO.StreamWriter = File.CreateText(tempstring)
+							    fi.WriteLine(tempstring2)
+							End Using
 							ToolStripStatusLabel2.Text &= "......Launching Player."
 							StartVideo(tempstring)
 							Exit For

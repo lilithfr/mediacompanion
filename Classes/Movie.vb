@@ -674,18 +674,17 @@ Public Class Movie
                 Dim movieNfoFilevob As String = fileInfo.FullName
                 If Utilities.findFileOfType(movieNfoFilevob, ".nfo",Pref.basicsavemode) Then
                     Try
-                        Dim filechck As IO.StreamReader = File.OpenText(movieNfoFilevob)
-                        Dim tempstring As String
-                        Do
-                            tempstring = filechck.ReadLine
-                            If tempstring = Nothing Then Exit Do
-                            If tempstring.IndexOf("<movie") <> -1 Then
-                                log &= " - valid MC .nfo found - scrape skipped!"
-                                Return False
-                            End If
-                        Loop Until filechck.EndOfStream
-                        filechck.Close()
-                        filechck = Nothing
+                        Using filechck As IO.StreamReader = File.OpenText(movieNfoFilevob)
+                            Dim tempstring As String
+                            Do
+                                tempstring = filechck.ReadLine
+                                If tempstring = Nothing Then Exit Do
+                                If tempstring.IndexOf("<movie") <> -1 Then
+                                    log &= " - valid MC .nfo found - scrape skipped!"
+                                    Return False
+                                End If
+                            Loop Until filechck.EndOfStream
+                        End Using
                     Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -712,7 +711,7 @@ Public Class Movie
         Dim movieNfoFile As String = fileInfo.FullName
         If Utilities.findFileOfType(movieNfoFile, ".nfo",Pref.basicsavemode) Then
             Try
-                Dim filechck As IO.StreamReader = File.OpenText(movieNfoFile)
+                Using filechck As IO.StreamReader = File.OpenText(movieNfoFile)
                 Dim Searchstring As String = "<movie"
                 If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then Searchstring = "<musicvideo>"
                 Dim tempstring As String
@@ -724,8 +723,7 @@ Public Class Movie
                         Return False
                     End If
                 Loop Until filechck.EndOfStream
-                filechck.Close()
-                filechck = Nothing
+                End Using
             Catch ex As Exception
 #If SilentErrorScream Then
                 Throw ex
@@ -2750,10 +2748,10 @@ Public Class Movie
         Dim extrapossibleID As String = String.Empty
         Dim fileNFO As String = fullPath
         If Utilities.findFileOfType(fileNFO, ".nfo") Then
-            Dim objReader As IO.Streamreader = File.OpenText(fileNFO)
-            Dim tempInfo As String = objReader.ReadToEnd
-            objReader.Close()
-            objReader = Nothing
+            Dim tempInfo As String = ""
+            Using objReader As IO.Streamreader = File.OpenText(fileNFO)
+                tempInfo = objReader.ReadToEnd
+            End Using
             Dim M As Match = Regex.Match(tempInfo, "(tt\d{7})")
             If M.Success = True Then
                 extrapossibleID = M.Value
@@ -4302,20 +4300,19 @@ Public Class Movie
 
     Shared Function IsMCNfoFile( movieNfoFile As String )
         Try
-            Dim filechck As IO.StreamReader = File.OpenText(movieNfoFile)
-            Dim s As String
-            Do
-                s = filechck.ReadLine
+            Using filechck As IO.StreamReader = File.OpenText(movieNfoFile)
+                Dim s As String
+                Do
+                    s = filechck.ReadLine
 
-                If s = Nothing Then Exit Do
+                    If s = Nothing Then Exit Do
 
-                If s.IndexOf("<movie") <> -1 Then
-                    Return True
-                End If
-            Loop Until filechck.EndOfStream
+                    If s.IndexOf("<movie") <> -1 Then
+                        Return True
+                    End If
+                Loop Until filechck.EndOfStream
 
-            filechck.Close
-            filechck = Nothing
+            End Using '
 
         Catch ex As Exception
 #If SilentErrorScream Then

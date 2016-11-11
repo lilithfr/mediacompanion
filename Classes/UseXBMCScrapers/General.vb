@@ -34,11 +34,11 @@ Module General
             TMDBRequest.ContentType = "application/json"
             TMDBRequest.Credentials = CredentialCache.DefaultCredentials
             TMDBResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
-            Dim dataStream As IO.Stream = TMDBResponse.GetResponseStream()
-            Dim reader As New IO.StreamReader(dataStream)
-            responseFromServer = reader.ReadToEnd()
-            reader.Close()
-            dataStream.Close()
+            Using dataStream As IO.Stream = TMDBResponse.GetResponseStream()
+                Using reader As New IO.StreamReader(dataStream)
+                    responseFromServer = reader.ReadToEnd()
+                End Using 'reader.Close()
+            End Using 'dataStream.Close()
             TMDBResponse.Close()
         Catch ex As Exception
             MessageBox.Show("ERROR:  " + ex.Message + vbCrLf + vbCrLf + "URL: " + URLAddress, "Error retrieving URL", MessageBoxButtons.OK, MessageBoxIcon.Error)

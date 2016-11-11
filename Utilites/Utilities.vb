@@ -724,10 +724,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Function NfoValidate(ByVal nfopath As String, Optional ByVal homemovie As Boolean = False)
         Dim tempstring As String
-        Dim filechck As IO.StreamReader = File.OpenText(nfopath)
-        tempstring = filechck.ReadToEnd.ToLower
-        filechck.Close()
-        filechck = Nothing
+        Using filechck As IO.StreamReader = File.OpenText(nfopath)
+            tempstring = filechck.ReadToEnd.ToLower
+        End Using
         If tempstring = Nothing Then
             Return False
         End If
@@ -2139,18 +2138,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 listoflines.Add("nofile")
                 Return listoflines
             Else
-                Dim lines As IO.StreamReader = File.OpenText(path)
-                Dim line As String
-                Do
-                    line = lines.ReadLine
-                    If Not line Is Nothing Then
-                        listoflines.Add(line)
-                    Else
-                        Exit Do
-                    End If
-                Loop Until line = Nothing
-                lines.Close()
-                lines = Nothing
+                Using lines As IO.StreamReader = File.OpenText(path)
+                    Dim line As String
+                    Do
+                        line = lines.ReadLine
+                        If Not line Is Nothing Then
+                            listoflines.Add(line)
+                        Else
+                            Exit Do
+                        End If
+                    Loop Until line = Nothing
+                End Using
                 Return listoflines
             End If
         Catch
@@ -2173,10 +2171,9 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 text = "nofile"
                 Return text
             Else
-                Dim lines As IO.StreamReader = File.OpenText(path)
-                text = lines.ReadToEnd
-                lines.Close()
-                lines = Nothing
+                Using lines As IO.StreamReader = File.OpenText(path)
+                    text = lines.ReadToEnd
+                End Using
                 Return text
             End If
         Catch
@@ -2716,22 +2713,21 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If File.Exists(genrepath) Then
             Dim line As String = String.Empty
             Try
-                Dim userConfig As IO.StreamReader = File.OpenText(genrepath)
-                Do
-                    Try
-                        line = userConfig.ReadLine
-                        If line <> Nothing Then
-                            Dim regexMatch As Match
-                            regexMatch = Regex.Match(line, "<([\d]{2,3})>")
-                            If regexMatch.Success = False Then
-                                Genrelist.Add(line.Trim)
+                Using userConfig As IO.StreamReader = File.OpenText(genrepath)
+                    Do
+                        Try
+                            line = userConfig.ReadLine
+                            If line <> Nothing Then
+                                Dim regexMatch As Match
+                                regexMatch = Regex.Match(line, "<([\d]{2,3})>")
+                                If regexMatch.Success = False Then
+                                    Genrelist.Add(line.Trim)
+                                End If
                             End If
-                        End If
-                    Catch ex As Exception
-                    End Try
-                Loop Until line = Nothing
-                userConfig.Close()
-                userConfig = Nothing
+                        Catch ex As Exception
+                        End Try
+                    Loop Until line = Nothing
+                End Using
             Catch ex As Exception
             End Try
         End If
