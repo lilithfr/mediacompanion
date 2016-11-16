@@ -2657,7 +2657,6 @@ Public Class Form1
 			Else
 				movie.ScrapedMovie.fullmoviebody.metascore = top250txt.Text
 			End If
-			'movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
 			movie.ScrapedMovie.fullmoviebody.rating = ratingtxt.Text
 			movie.ScrapedMovie.fullmoviebody.usrrated = If(cbUsrRated.Text = "None", "0", cbUsrRated.Text)
 			movie.ScrapedMovie.fullmoviebody.runtime = runtimetxt.Text
@@ -2715,56 +2714,12 @@ Public Class Form1
 					ConfigSave()
 				End If
 			End If
-			'If TabControl2.SelectedTab.Name = tpMovSets.Name Then
-			'    For Each t In NewTagList
-			'        Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
-			'        If t.Contains("- ") Then
-			'            If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-			'                movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-			'            End If
-			'        ElseIf t.Contains("+ ") Then
-			'            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-			'                movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-			'            End If
-			'        End If
-			'    Next
-			'    If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
-			'        Dim first As Boolean = True
-			'        For Each t In movie.ScrapedMovie.fullmoviebody.tag
-			'            If Not first Then tagtxt.Text &= ", "
-			'            tagtxt.Text &= t
-			'            first = False
-			'        Next
-			'    End If
-			'Else
-			'    If Pref.AllowUserTags Then
-			'        movie.ScrapedMovie.fullmoviebody.tag.Clear()
-			'        For Each wd In tagtxt.Text.Split(",")
-			'            wd = wd.Trim
-			'            If wd.Length = 0 Then Continue For
-			'            movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
-			'            If Not Pref.movietags.Contains(wd) Then
-			'                Pref.movietags.Add(wd)
-			'            End If
-			'            ConfigSave()
-			'            If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
-			'        Next
-			'    End If
-			'End If
-
-
 			movie.SaveNFO
 			movie.AssignMovieToCache
 			movie.UpdateMovieCache
 
 			DataGridViewMovies.ClearSelection
 			UpdateFilteredList
-
-			'DataGridViewMovies.ClearSelection
-			'Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = sel).FirstOrDefault
-			'selMovie.Selected = True
-			'DisplayMovie
-
 
 			If TabControl2.SelectedTab.Name = tpMovTags.Name Then TagsPopulate()
 		Else
@@ -2777,9 +2732,7 @@ Public Class Form1
 			Dim Startfullpathandfilename As String = ""
 			If Not ISNothing(DataGridViewMovies.CurrentRow) Then
 				Dim i As Integer = DataGridViewMovies.CurrentRow.Index
-
-
-				'Startfullpathandfilename = DataGridViewMovies.Item(5, i).Value.ToString
+                
 				Startfullpathandfilename = CType(DataGridViewMovies.SelectedRows(0).DataBoundItem, Data_GridViewMovie).fullpathandfilename.ToString
 
 				messbox.Cancelled = False
@@ -2811,7 +2764,6 @@ Public Class Form1
 						Else
 							movie.ScrapedMovie.fullmoviebody.metascore = top250txt.Text
 						End If
-						'movie.ScrapedMovie.fullmoviebody.top250 = top250txt.Text
 					End If
 					If Not cbMovieDisplay_MovieSet.SelectedIndex < 1 Then
 						movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
@@ -2834,7 +2786,6 @@ Public Class Form1
 						Next
 					Else
 						If tb_tagtxt_changed Then
-							'tb_tagtxt_changed = False
 							movie.ScrapedMovie.fullmoviebody.tag.Clear()
 							If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
 								Dim tags() As String = tagtxt.Text.Split(",")
@@ -2846,34 +2797,6 @@ Public Class Form1
 							End If
 						End If
 					End If
-					'If TabControl2.SelectedTab.Name = tpMovSets.Name Then
-					'    For Each t In NewTagList
-					'        Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
-					'        If t.Contains("- ") Then
-					'            If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-					'                movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-					'            End If
-					'        ElseIf t.Contains("+ ") Then
-					'            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-					'                movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-					'            End If
-					'        End If
-					'    Next
-					'Else
-					'    If tb_tagtxt_changed Then
-					'        tb_tagtxt_changed = False
-					'        movie.ScrapedMovie.fullmoviebody.tag.Clear()
-					'        If tagtxt.Text <> "" AndAlso tagtxt.Text.Contains(",") Then
-					'            Dim tags() As String = tagtxt.Text.Split(",")
-					'            For Each strtag In tags
-					'                If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(strtag.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(strtag.Trim())
-					'            Next
-					'        ElseIf tagtxt.Text <> "" Then
-					'            If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(tagtxt.Text.Trim()) Then movie.ScrapedMovie.fullmoviebody.tag.Add(tagtxt.Text.Trim())
-					'        End If
-					'    End If
-					'End If
-
 
 					movie.SaveNFO
 					movie.AssignMovieToCache
@@ -2889,22 +2812,13 @@ Public Class Form1
 				UpdateFilteredList
 
 				ProgState = ProgramState.Other
-
-				
-				'Dim selMovie = (From x As datagridviewrow In DataGridViewMovies.Rows Where x.Cells("fullpathandfilename").Value.ToString = Startfullpathandfilename).FirstOrDefault
-				'selMovie.Selected = True
-				'DisplayMovie
-
+                
 			Else
 				messbox.Close()
 				MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
 				Exit Sub
 			End If
-
-			'workingMovie.fullpathandfilename = Startfullpathandfilename
-			'workingMovie.oMovies = oMovies
-			'mov_FormPopulate()
-
+            
 			messbox.Close()
 
 			If TabControl2.SelectedTab.Name = tpMovTags.Name Then TabControl2.SelectedIndex = 0

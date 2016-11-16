@@ -3765,7 +3765,7 @@ Public Class Movie
                     log &= "!!! Movie Renamed as:- " & newfilename & vbCrLf 
 
                 'Part 2.2 - Rename Subtitle file name(s):
-                subStackList.Sort()
+                'subStackList.Sort()
                 For i = 0 To subStackList.Count - 1
                     Dim oldname1 = subStackList(i)
                     If Utilities.isMultiPartMedia(oldname1, False) Then
@@ -3811,7 +3811,7 @@ Public Class Movie
                  Next
 
                 mediapathandfilename = targetMovieFile & newextension
-                RenamedBaseName = targetNfoFile
+                RenamedBaseName = targetMovieFile 'targetNfoFile
             Else
                 log & = "!!! Error - " & _scrapedMovie.fullmoviebody.originaltitle & vbCrLf 
                 log &= "!!! Rename bypassed as either Use Foldernames, Basic Save" & vbCrLf 
@@ -4044,7 +4044,7 @@ Public Class Movie
         
         'update cache info
         mediapathandfilename = checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
-        RenamedBaseName = mediapathandfilename
+        RenamedBaseName = mediapathandfilename.Replace(".nfo", "")
         If Rescrape Then
             _movieCache.fullpathandfilename = mediapathandfilename 'checkfolder & "\" & NfoPathAndFilename.Replace(FilePath,"")
             _movieCache.foldername = Utilities.GetLastFolder(_movieCache.fullpathandfilename)
