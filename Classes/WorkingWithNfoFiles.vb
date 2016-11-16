@@ -2512,8 +2512,6 @@ Public Class WorkingWithNfoFiles
             Dim newmovie As New FullMovieDetails
             newmovie.fullmoviebody.genre = ""
             Dim newfilenfo As New FullFileDetails
-            'Dim audio As New AudioDetails
-            'newfilenfo.filedetails_audio.Add(audio)
             newmovie.filedetails = newfilenfo
             Dim thumbstring As String = String.Empty
             Dim watched As Boolean = False
@@ -2563,6 +2561,7 @@ Public Class WorkingWithNfoFiles
                     Return newmovie
                 End Try
                 Dim thisresult As XmlNode = Nothing
+                Dim Flag4resave As Boolean = False
 
                 For Each thisresult In movie("movie")
                     Select Case thisresult.Name
@@ -2586,7 +2585,7 @@ Public Class WorkingWithNfoFiles
                         Case "votes"
                             Dim vote As String = thisresult.InnerText
                             If Not String.IsNullOrEmpty(vote) Then vote = vote.Replace(",", "")
-                            newmovie.fullmoviebody.votes = vote  'thisresult.InnerText
+                            newmovie.fullmoviebody.votes = vote
                         Case "country"
                             If newmovie.fullmoviebody.country = "" Then
                                 newmovie.fullmoviebody.country = thisresult.InnerText
@@ -2659,20 +2658,16 @@ Public Class WorkingWithNfoFiles
                         Case "year"
                             Dim ayear As String = thisresult.InnerText 
                             If ayear.ToInt = 0 Then ayear = "1850"
-                            newmovie.fullmoviebody.year = ayear  'thisresult.InnerText
+                            newmovie.fullmoviebody.year = ayear
                         Case "genre"
                             If newmovie.fullmoviebody.genre = "" Then
                                 newmovie.fullmoviebody.genre = thisresult.InnerText
                             Else
                                 newmovie.fullmoviebody.genre = newmovie.fullmoviebody.genre & " / " & thisresult.InnerText
                             End If
-                        Case "tag"
+                        Case "tag", "tags"
+                            If thisresult.Name = "tags" Then Flag4resave = True
                             newmovie.fullmoviebody.tag.Add(thisresult.InnerText)
-                            'If newmovie.fullmoviebody.tag = "" Then
-                            '    newmovie.fullmoviebody.tag = thisresult.InnerText
-                            'Else
-                            '    newmovie.fullmoviebody.tag = newmovie.fullmoviebody.tag & ", " & thisresult.InnerText
-                            'End If
                         Case "id"
                             Dim myresult As String = thisresult.InnerText
                             Dim testAttribute as XmlAttribute = CType(thisresult.Attributes.GetNamedItem("moviedb"),  XmlAttribute)
@@ -2681,7 +2676,6 @@ Public Class WorkingWithNfoFiles
                                 If testAttribute.InnerText = "tmdb" Then newmovie.fullmoviebody.tmdbid = thisresult.InnerText
                                 If testAttribute.InnerText = "themoviedb" Then newmovie.fullmoviebody.tmdbid = thisresult.InnerText
                             Else
-                                'Dim myreslen As Integer = myresult.Length
                                 If myresult.StartsWith("tt") Then
                                     newmovie.fullmoviebody.imdbid = myresult
                                 Else
@@ -2693,7 +2687,6 @@ Public Class WorkingWithNfoFiles
                                     newmovie.fullmoviebody.tmdbid = testAttribute2.InnerText
                                 End If
                             End If
-                            'newmovie.fullmoviebody.imdbid = myresult    'thisresult.InnerText
                         Case "tmdbid"
                             newmovie.fullmoviebody.tmdbid = thisresult.InnerText 
                         Case "playcount"
@@ -2742,7 +2735,6 @@ Public Class WorkingWithNfoFiles
                             For Each res In thisresult.ChildNodes
                                 Select Case res.name
                                     Case "streamdetails"
-                                        'Dim newfilenfo As New FullFileDetails
                                         Dim detail As XmlNode = Nothing
                                         For Each detail In res.ChildNodes
                                             Select Case detail.Name
@@ -2866,21 +2858,14 @@ Public Class WorkingWithNfoFiles
                     Dim container As String = newmovie.filedetails.filedetails_video.Container.Value
                     newmovie.fileinfo.filenameandpath = loadpath.Replace(".nfo", container)
                 End If
-
-                'If newmovie.fileinfo.path.ToLower.Contains("video_ts") or newmovie.fileinfo.path.ToLower.Contains("bdmv") Then
-                '    If newmovie.fileinfo.path.ToLower.Contains("video_ts") Then
-                '        newmovie.fileinfo.basepath = newmovie.fileinfo.path.substring(0, newmovie.fileinfo.path.Length-9)
-                '    Else 
-                '        newmovie.fileinfo.basepath = newmovie.fileinfo.path.substring(0, newmovie.fileinfo.path.Length-5)
-                '    End If
-                'Else
-                '    newmovie.fileinfo.basepath = newmovie.fileinfo.path
-                'End If
+                
                 If newmovie.fullmoviebody.SetName = "" Then
                     newmovie.fullmoviebody.SetName = "-None-"
                 End If
                 If newmovie.fullmoviebody.usrrated = "" Then newmovie.fullmoviebody.usrrated = "0"
                 movie = Nothing
+
+                If Flag4resave Then mov_NfoSave(loadpath, newmovie, True)    ' Resave if field updated or to correct an nfo error.
 
                 Return newmovie
             End If
@@ -2912,7 +2897,6 @@ Public Class WorkingWithNfoFiles
                 Dim child As XmlElement = Nothing
                 Dim actorchild As XmlElement = Nothing
                 Dim filedetailschild As XmlElement = Nothing
-                'Dim filedetailschildchild As XmlElement = Nothing
                 Dim anotherchild As XmlElement = Nothing
 
                 root = doc.CreateElement("movie")
@@ -2982,7 +2966,6 @@ Public Class WorkingWithNfoFiles
                     anotherchild.AppendChild(filedetailschild)
 
                     stage = 17
-                    'Try
                     For Each item In movietosave.filedetails.filedetails_audio
                         filedetailschild = doc.CreateElement("audio")
                         If Not String.IsNullOrEmpty(item.Language.Value)        Then filedetailschild.AppendChild(doc, "language", item.Language.Value)
@@ -3106,14 +3089,6 @@ Public Class WorkingWithNfoFiles
 
                 stage = 33
                 root.AppendChildList(doc, "country", movietosave.fullmoviebody.country)
-                'Dim strArr() As String
-                'strArr = movietosave.fullmoviebody.country.Split(" / ")
-                'For count = 0 To strArr.Length - 1
-                '    child = doc.CreateElement("country")
-                '    strArr(count) = strArr(count).Trim
-                '    child.InnerText = strArr(count)
-                '    root.AppendChild(child)
-                'Next
 
                 stage = 34
                 Try
@@ -3202,49 +3177,18 @@ Public Class WorkingWithNfoFiles
                 End If
 
                 stage = 38
-                'Dim strArr3() As String
-                'strArr3 = movietosave.fullmoviebody.tag.Split(",")
-                'For count = 0 To strArr3.Length - 1
-                '    child = doc.CreateElement("tag")
-                '    strArr3(count) = strArr3(count).Trim
-                '    child.InnerText = strArr3(count)
-                '    root.AppendChild(child)
-                'Next
                 If movietosave.fullmoviebody.tag.Count <> 0 Then
-                    root.AppendChildList(doc, "tags", movietosave.fullmoviebody.tag)
-                    'For Each tags In movietosave.fullmoviebody.tag
-                    '    child = doc.CreateElement("tag")
-                    '    child.InnerText = tags
-                    '    root.AppendChild(child)
-                    'Next
+                    root.AppendChildList(doc, "tag", movietosave.fullmoviebody.tag)
                 End If
 
                 stage = 39
-                'child = doc.CreateElement("credits") : child.InnerText = movietosave.fullmoviebody.credits
                 root.AppendChildList(doc, "credits", movietosave.fullmoviebody.credits)
-                'root.AppendChild(child)
 
                 stage = 40
                 root.AppendChildList(doc, "director", movietosave.fullmoviebody.director)
-                    'Dim strArr9() As String
-                    'strArr9 = movietosave.fullmoviebody.director.Split("/")
-                    'For count = 0 To strArr9.Length - 1
-                    '    child = doc.CreateElement("director")
-                    '    strArr9(count) = strArr9(count).Trim
-                    '    child.InnerText = strArr9(count)
-                    '    root.AppendChild(child)
-                    'Next
 
                 stage = 41
                 root.AppendChildList(doc, "studio", movietosave.fullmoviebody.studio)
-                'Dim strArr4() As String
-                'strArr4 = movietosave.fullmoviebody.studio.Split(",")
-                'For count = 0 To strArr4.Length - 1
-                '    child = doc.CreateElement("studio")
-                '    strArr4(count) = strArr4(count).Trim
-                '    child.InnerText = strArr4(count)
-                '    root.AppendChild(child)
-                'Next
 
                 stage = 42
                 child = doc.CreateElement("trailer") : child.InnerText = movietosave.fullmoviebody.trailer

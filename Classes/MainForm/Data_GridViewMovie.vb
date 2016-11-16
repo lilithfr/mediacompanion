@@ -94,57 +94,57 @@ Public Class Data_GridViewMovie
     End Sub
 
     Public Sub Assign(movie As ComboList)
-        fullpathandfilename = movie.fullpathandfilename
-        SetName = movie.SetName
-        TmdbSetId = movie.TmdbSetId
-        filename = movie.filename
-        foldername = movie.foldername
-        title = movie.title
-        originaltitle = movie.originaltitle
-        year = movie.year
-        filedate = movie.filedate
-        id = movie.id
-        Rating = movie.rating
-        top250 = movie.top250
-        genre = movie.genre
-        countries = movie.countries
-        studios = movie.studios
-        playcount = movie.playcount
-        SortOrder = movie.sortorder
-        outline = movie.outline
-        tagline = movie.tagline
-        runtime = movie.runtime
-        createdate = movie.createdate
-        missingdata1 = movie.missingdata1
-        plot = movie.plot.Trim
-        source = movie.source
-        director = movie.director 
-        credits = movie.credits
-        Votes = movie.Votes
-        TitleUcase = movie.title.ToUpper
+        fullpathandfilename     = movie.fullpathandfilename
+        SetName                 = movie.SetName
+        TmdbSetId               = movie.TmdbSetId
+        filename                = movie.filename
+        foldername              = movie.foldername
+        title                   = movie.title
+        originaltitle           = movie.originaltitle
+        year                    = movie.year
+        filedate                = movie.filedate
+        id                      = movie.id
+        Rating                  = movie.rating
+        top250                  = movie.top250
+        genre                   = movie.genre
+        countries               = movie.countries
+        studios                 = movie.studios
+        playcount               = movie.playcount
+        SortOrder               = movie.sortorder
+        outline                 = movie.outline
+        tagline                 = movie.tagline
+        runtime                 = movie.runtime
+        createdate              = movie.createdate
+        missingdata1            = movie.missingdata1
+        plot                    = movie.plot.Trim
+        source                  = movie.source
+        director                = movie.director 
+        credits                 = movie.credits
+        Votes                   = movie.Votes
+        TitleUcase              = movie.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)
-        Resolution = movie.Resolution
-        VideoCodec = movie.VideoCodec
+        Resolution              = movie.Resolution
+        VideoCodec              = movie.VideoCodec
         AssignAudio(movie.Audio)
-        Premiered = movie.Premiered
-        Certificate = movie.Certificate
-        FrodoPosterExists = movie.FrodoPosterExists
-        PreFrodoPosterExists = movie.PreFrodoPosterExists
-        movietag = String.Join(", ", movie.movietag)
-        container = movie.container
-        videomissing = movie.VideoMissing
-        stars = movie.stars 
+        Premiered               = movie.Premiered
+        Certificate             = movie.Certificate
+        FrodoPosterExists       = movie.FrodoPosterExists
+        PreFrodoPosterExists    = movie.PreFrodoPosterExists
+        movietag                = String.Join(", ", movie.movietag)
+        container               = movie.container
+        videomissing            = movie.VideoMissing
+        stars                   = movie.stars 
         AssignSubtitleLang(movie.SubLang)
-        FolderSize = movie.FolderSize
-        DefaultAudioTrack = movie.DefaultAudioTrack
-        rootfolder          = movie.rootfolder
-        usrrated            = movie.usrrated
-        metascore           = movie.metascore
-        tmdbid = movie.tmdbid
-        UserSetAddition = movie.UserTmdbSetAddition
-        MissingTmdbSetInfo = movie.UnknownSetCount
-        oMovies = movie.oMovies
-        LockedFields = movie.LockedFields
+        FolderSize              = movie.FolderSize
+        DefaultAudioTrack       = movie.DefaultAudioTrack
+        rootfolder              = movie.rootfolder
+        usrrated                = movie.usrrated
+        metascore               = movie.metascore
+        tmdbid                  = movie.tmdbid
+        UserSetAddition         = movie.UserTmdbSetAddition
+        MissingTmdbSetInfo      = movie.UnknownSetCount
+        oMovies                 = movie.oMovies
+        LockedFields            = movie.LockedFields
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
