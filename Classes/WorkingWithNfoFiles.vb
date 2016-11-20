@@ -2695,6 +2695,27 @@ Public Class WorkingWithNfoFiles
                             watched = thisresult.InnerXml
                         Case "lastplayed"
                             newmovie.fullmoviebody.lastplayed = thisresult.InnerText
+                        ''' to compensate for Kodi 17 exported nfo's
+                        Case "ratings"
+                            Dim what As XmlNode = Nothing
+                            For Each what In thisresult.ChildNodes
+                                Select Case what.name
+                                    Case "rating"
+                                        If what.Attributes("name").Value = "default" Then
+                                            Dim what2 As XmlNode = Nothing
+                                            For each what2 In what.ChildNodes
+                                                Select Case what2.Name
+                                                    Case "value"
+                                                        newmovie.fullmoviebody.rating = what2.InnerText.ToRating.ToString
+                                                    Case "votes"
+                                                        Dim vote As String = what2.InnerText
+                                                        If Not String.IsNullOrEmpty(vote) Then vote = vote.Replace(",", "")
+                                                        newmovie.fullmoviebody.votes = vote
+                                                End Select
+                                            Next
+                                        End If
+                                End Select
+                            Next
                         Case "rating"
                             Dim y As String = thisresult.InnerText
                             newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString ' ("0.00", MyCulture)
