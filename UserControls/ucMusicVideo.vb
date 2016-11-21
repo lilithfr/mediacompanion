@@ -546,8 +546,8 @@ Public Class ucMusicVideo
                 txtPlot.Text = workingMusicVideo.fullmoviebody.plot
                 Dim runtimestr As String = workingMusicVideo.fullmoviebody.runtime
                 If runtimestr = "" OrElse runtimestr = "-1" Then
-                    If workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "" AndAlso workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value <> "-1" Then
-                        runtimestr = Math.Floor((workingMusicVideo.filedetails.filedetails_video.DurationInSeconds.Value.ToInt)/60).ToString & " min"
+                    If workingMusicVideo.filedetails.Video.DurationInSeconds.Value <> "" AndAlso workingMusicVideo.filedetails.Video.DurationInSeconds.Value <> "-1" Then
+                        runtimestr = Math.Floor((workingMusicVideo.filedetails.Video.DurationInSeconds.Value.ToInt)/60).ToString & " min"
                     End If
                 Else
                     runtimestr &= " min"

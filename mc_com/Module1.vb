@@ -555,7 +555,7 @@ Module Module1
                 eps.playcount = "0"
                 eps.uniqueid = ""
                 eps.genre = "Unknown Episode Season and/or Episode Number"
-                eps.filedetails = get_hdtags(eps.mediaextension)
+                eps.filedetails = Pref.Get_HdTags(eps.mediaextension)
                 episodearray.Add(eps)
                 savepath = episodearray(0).episodepath
             Else
@@ -744,10 +744,11 @@ Module Module1
 
                             If Pref.enablehdtags = True Then
                                 Try
-                                    singleepisode.filedetails = get_hdtags(getfilename(singleepisode.episodepath))
-                                    If Not singleepisode.filedetails.filedetails_video.duration Is Nothing Then
+                                    singleepisode.filedetails = Pref.Get_HdTags(getfilename(singleepisode.episodepath))
+                                    If Not singleepisode.filedetails.Video.DurationInSeconds.Value Is Nothing Then
                                         Dim minutes As Integer
-                                        tempstring = singleepisode.filedetails.filedetails_video.duration
+                                        tempstring = singleepisode.filedetails.Video.DurationInSeconds.Value
+
                                         If Not String.IsNullOrEmpty(tempstring) Then
                                             minutes =Math.Round(Convert.ToInt32(tempstring, Utilities.defaultculture)/60)
                                             singleepisode.runtime = minutes.ToString(Utilities.defaultculture) & " min"
@@ -775,38 +776,38 @@ Module Module1
         Next
     End Sub
 
-    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of episodeinfo), ByVal path As String, Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2")
+    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of episodeinfo), ByVal path As String) ', Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2")
         'Monitor.Enter(Me)
         'Try
-        If seasonno <> -2 And episodeno <> -2 Then
-            Dim timetoexit As Boolean = False
-            For Each show In basictvlist
-                If show.fullpath = path Then
-                    For Each episode In show.allepisodes
-                        If episode.episodeno = episodeno And episode.seasonno = seasonno Then
-                            For Each epis In listofepisodes
-                                If epis.seasonno = seasonno And epis.episodeno = episodeno Then
-                                    Dim newep As New episodeinfo
-                                    newep.episodepath = epis.episodepath
-                                    newep.title = epis.title
-                                    newep.seasonno = epis.seasonno
-                                    newep.episodeno = epis.episodeno
-                                    newep.playcount = epis.playcount
-                                    newep.rating = epis.rating
-                                    newep.votes = epis.votes
-                                    show.allepisodes.Remove(episode)
-                                    show.allepisodes.Add(newep)
-                                    timetoexit = True
-                                    Exit For
-                                End If
-                            Next
-                        End If
-                        If timetoexit = True Then Exit For
-                    Next
-                End If
-                If timetoexit = True Then Exit For
-            Next
-        End If
+        'If seasonno <> -2 And episodeno <> -2 Then
+        '    Dim timetoexit As Boolean = False
+        '    For Each show In basictvlist
+        '        If show.fullpath = path Then
+        '            For Each episode In show.allepisodes
+        '                If episode.episodeno = episodeno And episode.seasonno = seasonno Then
+        '                    For Each epis In listofepisodes
+        '                        If epis.seasonno = seasonno And epis.episodeno = episodeno Then
+        '                            Dim newep As New episodeinfo
+        '                            newep.episodepath = epis.episodepath
+        '                            newep.title = epis.title
+        '                            newep.seasonno = epis.seasonno
+        '                            newep.episodeno = epis.episodeno
+        '                            newep.playcount = epis.playcount
+        '                            newep.rating = epis.rating
+        '                            newep.votes = epis.votes
+        '                            show.allepisodes.Remove(episode)
+        '                            show.allepisodes.Add(newep)
+        '                            timetoexit = True
+        '                            Exit For
+        '                        End If
+        '                    Next
+        '                End If
+        '                If timetoexit = True Then Exit For
+        '            Next
+        '        End If
+        '        If timetoexit = True Then Exit For
+        '    Next
+        'End If
 
         Dim doc As New XmlDocument
         Dim root As XmlElement
@@ -827,35 +828,35 @@ Module Module1
                     xmlFileInfo = doc.CreateElement("fileinfo")
                     xmlStreamDetails = doc.CreateElement("streamdetails")
                     xmlStreamDetailsType = doc.CreateElement("video")
-                    xmlStreamDetailsType.AppendChild(doc, "width"               , ep.filedetails.filedetails_video.width)
-                    xmlStreamDetailsType.AppendChild(doc, "height"              , ep.filedetails.filedetails_video.height)
-                    xmlStreamDetailsType.AppendChild(doc, "aspect"              , ep.filedetails.filedetails_video.aspect)
-                    xmlStreamDetailsType.AppendChild(doc, "codec"               , ep.filedetails.filedetails_video.codec)
-                    xmlStreamDetailsType.AppendChild(doc, "format"              , ep.filedetails.filedetails_video.formatinfo)
-                    xmlStreamDetailsType.AppendChild(doc, "durationinseconds"   , ep.filedetails.filedetails_video.duration)
-                    xmlStreamDetailsType.AppendChild(doc, "bitrate"             , ep.filedetails.filedetails_video.bitrate)
-                    xmlStreamDetailsType.AppendChild(doc, "bitratemode"         , ep.filedetails.filedetails_video.bitratemode)
-                    xmlStreamDetailsType.AppendChild(doc, "bitratemax"          , ep.filedetails.filedetails_video.bitratemax)
-                    xmlStreamDetailsType.AppendChild(doc, "container"           , ep.filedetails.filedetails_video.container)
-                    xmlStreamDetailsType.AppendChild(doc, "codecid"             , ep.filedetails.filedetails_video.codecid)
-                    xmlStreamDetailsType.AppendChild(doc, "codecidinfo"         , ep.filedetails.filedetails_video.codecinfo)
-                    xmlStreamDetailsType.AppendChild(doc, "scantype"            , ep.filedetails.filedetails_video.scantype)
+                    xmlStreamDetailsType.AppendChild(doc, "width"               , ep.filedetails.Video.width.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "height"              , ep.filedetails.Video.height.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "aspect"              , ep.filedetails.Video.aspect.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "codec"               , ep.filedetails.Video.codec.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "format"              , ep.filedetails.Video.formatinfo.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "durationinseconds"   , ep.filedetails.Video.DurationInSeconds.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "bitrate"             , ep.filedetails.Video.bitrate.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "bitratemode"         , ep.filedetails.Video.bitratemode.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "bitratemax"          , ep.filedetails.Video.bitratemax.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "container"           , ep.filedetails.Video.container.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "codecid"             , ep.filedetails.Video.codecid.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "codecidinfo"         , ep.filedetails.Video.codecinfo.Value)
+                    xmlStreamDetailsType.AppendChild(doc, "scantype"            , ep.filedetails.Video.scantype.Value)
                     xmlStreamDetails.AppendChild(xmlStreamDetailsType)
 
-                    If ep.filedetails.filedetails_audio.Count > 0 Then
-                        For Each item In ep.filedetails.filedetails_audio
+                    If ep.filedetails.Audio.Count > 0 Then
+                        For Each item In ep.filedetails.Audio
                             xmlStreamDetailsType = doc.CreateElement("audio")
-                            xmlStreamDetailsType.AppendChild(doc, "language"    , item.language)
-                            xmlStreamDetailsType.AppendChild(doc, "codec"       , item.codec)
-                            xmlStreamDetailsType.AppendChild(doc, "channels"    , item.channels)
-                            xmlStreamDetailsType.AppendChild(doc, "bitrate"     , item.bitrate)
+                            xmlStreamDetailsType.AppendChild(doc, "language"    , item.language.Value)
+                            xmlStreamDetailsType.AppendChild(doc, "codec"       , item.codec.Value)
+                            xmlStreamDetailsType.AppendChild(doc, "channels"    , item.channels.Value)
+                            xmlStreamDetailsType.AppendChild(doc, "bitrate"     , item.bitrate.Value)
                             xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                         Next
                     End If
-                    If ep.filedetails.filedetails_subtitles.Count > 0 Then
+                    If ep.filedetails.Subtitles.Count > 0 Then
                         xmlStreamDetailsType = doc.CreateElement("subtitle")
-                        For Each entry In ep.filedetails.filedetails_subtitles
-                            xmlStreamDetailsType.AppendChild(doc, "language"    , entry.language)
+                        For Each entry In ep.filedetails.Subtitles
+                            xmlStreamDetailsType.AppendChild(doc, "language"    , entry.language.Value)
                             xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                         Next
                     End If
@@ -1564,72 +1565,72 @@ Module Module1
         Return "Error"
     End Function
 
-    Public Function get_hdtags(ByVal filename As String)
-        Try
-            If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
-                Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
-                If File.Exists(temppath) Then
-                    filename = temppath
-                End If
-            End If
-            Dim newfiledetails As New FullFileDetails 
-            newfiledetails = Pref.Get_HdTags(filename)
-            Dim workingfiledetails As New fullfiledetails2
-            workingfiledetails.filedetails_video.width = newfiledetails.filedetails_video.Width.Value 
-            workingfiledetails.filedetails_video.height = newfiledetails.filedetails_video.Height.Value
-            workingfiledetails.filedetails_video.aspect = newfiledetails.filedetails_video.Aspect.Value
-            workingfiledetails.filedetails_video.codec = newfiledetails.filedetails_video.Codec.Value
-            workingfiledetails.filedetails_video.formatinfo = newfiledetails.filedetails_video.FormatInfo.Value
-            workingfiledetails.filedetails_video.duration = newfiledetails.filedetails_video.DurationInSeconds.Value
-            workingfiledetails.filedetails_video.bitrate = newfiledetails.filedetails_video.Bitrate.Value
-            workingfiledetails.filedetails_video.bitratemode = newfiledetails.filedetails_video.BitrateMode.Value
-            workingfiledetails.filedetails_video.bitratemax = newfiledetails.filedetails_video.BitrateMax.Value
-            workingfiledetails.filedetails_video.container = newfiledetails.filedetails_video.Container.Value
-            workingfiledetails.filedetails_video.codecinfo = newfiledetails.filedetails_video.CodecInfo.Value
-            workingfiledetails.filedetails_video.scantype = newfiledetails.filedetails_video.ScanType.Value
+    'Public Function get_hdtags(ByVal filename As String)
+    '    Try
+    '        If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
+    '            Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
+    '            If File.Exists(temppath) Then
+    '                filename = temppath
+    '            End If
+    '        End If
+    '        Dim newfiledetails As New StreamDetails 
+    '        newfiledetails = Pref.Get_HdTags(filename)
+    '        Dim workingfiledetails As New StreamDetails
+    '        workingfiledetails.Video.width = newfiledetails.Video.Width 
+    '        workingfiledetails.Video.height = newfiledetails.Video.Height
+    '        workingfiledetails.Video.aspect = newfiledetails.Video.Aspect
+    '        workingfiledetails.Video.codec = newfiledetails.Video.Codec
+    '        workingfiledetails.Video.formatinfo = newfiledetails.Video.FormatInfo
+    '        workingfiledetails.Video.DurationInSeconds = newfiledetails.Video.DurationInSeconds
+    '        workingfiledetails.Video.bitrate = newfiledetails.Video.Bitrate
+    '        workingfiledetails.Video.bitratemode = newfiledetails.Video.BitrateMode
+    '        workingfiledetails.Video.bitratemax = newfiledetails.Video.BitrateMax
+    '        workingfiledetails.Video.container = newfiledetails.Video.Container
+    '        workingfiledetails.Video.codecinfo = newfiledetails.Video.CodecInfo
+    '        workingfiledetails.Video.scantype = newfiledetails.Video.ScanType
             
-            Dim NumAudStream As Integer = newfiledetails.filedetails_audio.Count
-            Dim CurAuStr As Integer = 0
-            If NumAudStream > 0 Then
-                While CurAuStr < NumAudStream 
-                    Dim audio As New medianfo_audio
-                    audio.language = newfiledetails.filedetails_audio(CurAuStr).Language.value
-                    audio.codec = newfiledetails.filedetails_audio(CurAuStr).Codec.value
-                    audio.bitrate = newfiledetails.filedetails_audio(CurAuStr).Bitrate.value
-                    audio.channels = newfiledetails.filedetails_audio(CurAuStr).Channels.value
-                    workingfiledetails.filedetails_audio.Add(audio)
-                    CurAuStr += 1
-                End While
-            Else
-                Dim audio As New medianfo_audio
-                workingfiledetails.filedetails_audio.Add(audio)
-            End If
+    '        Dim NumAudStream As Integer = newfiledetails.Audio.Count
+    '        Dim CurAuStr As Integer = 0
+    '        If NumAudStream > 0 Then
+    '            While CurAuStr < NumAudStream 
+    '                Dim audio As New AudioDetails
+    '                audio.language = newfiledetails.Audio(CurAuStr).Language
+    '                audio.codec = newfiledetails.Audio(CurAuStr).Codec
+    '                audio.bitrate = newfiledetails.Audio(CurAuStr).Bitrate
+    '                audio.channels = newfiledetails.Audio(CurAuStr).Channels
+    '                workingfiledetails.Audio.Add(audio)
+    '                CurAuStr += 1
+    '            End While
+    '        Else
+    '            Dim audio As New AudioDetails
+    '            workingfiledetails.Audio.Add(audio)
+    '        End If
             
-            Dim NumSubStream As Integer = newfiledetails.filedetails_subtitles.Count
-            Dim CurSbStr As Integer = 0
-            If NumSubStream > 0 Then
-                While CurSbStr < NumSubStream 
-                    Dim sublang As New medianfo_subtitles
-                    sublang.language = newfiledetails.filedetails_subtitles(CurSbStr).Language.value
-                    workingfiledetails.filedetails_subtitles.Add(sublang)
-                    CurSbStr += 1
-                End While
-            End If
+    '        Dim NumSubStream As Integer = newfiledetails.Subtitles.Count
+    '        Dim CurSbStr As Integer = 0
+    '        If NumSubStream > 0 Then
+    '            While CurSbStr < NumSubStream 
+    '                Dim sublang As New SubtitleDetails
+    '                sublang.language = newfiledetails.Subtitles(CurSbStr).Language
+    '                workingfiledetails.Subtitles.Add(sublang)
+    '                CurSbStr += 1
+    '            End While
+    '        End If
 
-            Return workingfiledetails
-        Catch ex As Exception
+    '        Return workingfiledetails
+    '    Catch ex As Exception
 
-        End Try
-        Return Nothing
-    End Function
+    '    End Try
+    '    Return Nothing
+    'End Function
 
     Private Function GetAspect(ep As episodeinfo)
         Dim thisarray(2) As Integer
         thisarray(0) = 400
         thisarray(1) = 225
         Try
-            Dim epw As Integer = ep.filedetails.filedetails_video.width.ToInt
-            Dim eph As Integer= ep.filedetails.filedetails_video.height.ToInt
+            Dim epw As Integer = ep.filedetails.Video.width.Value.ToInt
+            Dim eph As Integer= ep.filedetails.Video.height.Value.ToInt
             Dim ThisAsp As Double = epw/eph
             If ThisAsp < 1.37 Then  'aspect greater than Industry Standard of 1.37:1 is classed as WideScreen
                 thisarray(1) = 300
@@ -1784,7 +1785,7 @@ Public Class episodeinfo
     Public missing As String
     Public extension As String
     Public listactors As New List(Of str_MovieActors)
-    Public filedetails As New fullfiledetails2
+    Public filedetails As New StreamDetails
 
     Sub New()
         title           = ""
@@ -1813,65 +1814,65 @@ Public Class episodeinfo
     End Sub
 End Class
 
-Public Class fullfiledetails2
-    Public filedetails_video As New medianfo_video
-    Public filedetails_audio As New List(Of medianfo_audio)
-    Public filedetails_subtitles As New List(Of medianfo_subtitles)
-End Class
+'Public Class StreamDetails2
+'    Public Video As New medianfo_video
+'    Public Audio As New List(Of medianfo_audio)
+'    Public Subtitles As New List(Of medianfo_subtitles)
+'End Class
 
-Public Structure medianfo_audio
-    Dim language As String
-    Dim codec As String
-    Dim channels As String
-    Dim bitrate As String
+'Public Structure medianfo_audio
+'    Dim language As String
+'    Dim codec As String
+'    Dim channels As String
+'    Dim bitrate As String
 
-    Sub New(SetDefaults As Boolean)
-        language    = ""
-        codec       = ""
-        channels    = ""
-        bitrate     = ""
-    End Sub
-End Structure
+'    Sub New(SetDefaults As Boolean)
+'        language    = ""
+'        codec       = ""
+'        channels    = ""
+'        bitrate     = ""
+'    End Sub
+'End Structure
 
-Public Structure medianfo_subtitles
-    Dim language As String
+'Public Structure medianfo_subtitles
+'    Dim language As String
 
-    Sub New(SetDefaults As Boolean)
-        language    = ""
-    End Sub
-End Structure
+'    Sub New(SetDefaults As Boolean)
+'        language    = ""
+'    End Sub
+'End Structure
 
-Public Structure medianfo_video
-    Dim width As String
-    Dim height As String
-    Dim aspect As String
-    Dim codec As String
-    Dim formatinfo As String
-    Dim duration As String
-    Dim bitrate As String
-    Dim bitratemode As String
-    Dim bitratemax As String
-    Dim container As String
-    Dim codecid As String
-    Dim codecinfo As String
-    Dim scantype As String
+'Public Structure medianfo_video
+'    Dim width As String
+'    Dim height As String
+'    Dim aspect As String
+'    Dim codec As String
+'    Dim formatinfo As String
+'    Dim duration As String
+'    Dim bitrate As String
+'    Dim bitratemode As String
+'    Dim bitratemax As String
+'    Dim container As String
+'    Dim codecid As String
+'    Dim codecinfo As String
+'    Dim scantype As String
 
-    Sub New(SetDefaults As Boolean)
-        width = ""
-        height = ""
-        aspect = ""
-        codec = ""
-        formatinfo = ""
-        duration = ""
-        bitrate = ""
-        bitratemode = ""
-        bitratemax = ""
-        container = ""
-        codecid = ""
-        codecinfo = ""
-        scantype = ""
-    End Sub
-End Structure
+'    Sub New(SetDefaults As Boolean)
+'        width = ""
+'        height = ""
+'        aspect = ""
+'        codec = ""
+'        formatinfo = ""
+'        duration = ""
+'        bitrate = ""
+'        bitratemode = ""
+'        bitratemax = ""
+'        container = ""
+'        codecid = ""
+'        codecinfo = ""
+'        scantype = ""
+'    End Sub
+'End Structure
 
 'Public Enum StreamKind As UInteger
 '    General

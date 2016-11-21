@@ -922,18 +922,18 @@ Partial Public Class Form1
         util_EpisodeSetWatched(Episode.PlayCount.Value)
 
         Dim epdetails As String = ""
-        epdetails += "Video: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Height.Value, "?")
-        epdetails += ", (" & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Aspect.Value, "?") & ")"
+        epdetails += "Video: " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Height.Value, "?")
+        epdetails += ", (" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Aspect.Value, "?") & ")"
         lb_EpDetails.Items.Add(epdetails)
-        epdetails = " :- " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Codec.Value, "?")
-        epdetails += ", @ " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Video.Bitrate.Value, "?")
+        epdetails = " :- " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Codec.Value, "?")
+        epdetails += ", @ " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Bitrate.Value, "?")
         lb_EpDetails.Items.Add(epdetails)
             
-        If Episode.Details.StreamDetails.Audio.Count > 0 Then
-            epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Codec.Value, "?")
+        If Episode.StreamDetails.Audio.Count > 0 Then
+            epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Codec.Value, "?")
             lb_EpDetails.Items.Add(epdetails)
-            epdetails = Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Bitrate.Value, "?")
-            epdetails += ", " & Utilities.ReplaceNothing(Episode.Details.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+            epdetails = Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Bitrate.Value, "?")
+            epdetails += ", " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
             lb_EpDetails.Items.Add(epdetails)
         End If
 
@@ -2242,10 +2242,10 @@ Partial Public Class Form1
                                 listofnewepisodes = WorkingWithNfoFiles.ep_NfoLoad(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)   'Generic(Cache.TvCache.Shows(f).Episodes(g).NfoFilePath)
                                 For h = listofnewepisodes.Count - 1 To 0 Step -1
                                     listofnewepisodes(h).GetFileDetails()
-                                    If Not String.IsNullOrEmpty(listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value) Then
+                                    If Not String.IsNullOrEmpty(listofnewepisodes(h).StreamDetails.Video.DurationInSeconds.Value) Then
                                         Try
                                             Dim tempstring As String
-                                            tempstring = listofnewepisodes(h).Details.StreamDetails.Video.DurationInSeconds.Value
+                                            tempstring = listofnewepisodes(h).StreamDetails.Video.DurationInSeconds.Value
                                             If Pref.intruntime Then
                                                 listofnewepisodes(h).Runtime.Value = Math.Round(tempstring / 60).ToString
                                             Else
@@ -2858,20 +2858,20 @@ Partial Public Class Form1
                                         progresstext &= " : HD Tags..."
                                         bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                         stage = "12b5f1"
-                                        Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+                                        Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
                                         stage = "12b5f2"
                                         If Not IsNothing(fileStreamDetails) Then
-                                            singleepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
+                                            singleepisode.StreamDetails.Video = fileStreamDetails.Video
                                             stage = "12b5f3"
-                                            For Each audioStream In fileStreamDetails.filedetails_audio
-                                                singleepisode.Details.StreamDetails.Audio.Add(audioStream)
+                                            For Each audioStream In fileStreamDetails.Audio
+                                                singleepisode.StreamDetails.Audio.Add(audioStream)
                                             Next
-                                            For Each substrm In fileStreamDetails.filedetails_subtitles
-                                                singleepisode.Details.StreamDetails.Subtitles.Add(substrm)
+                                            For Each substrm In fileStreamDetails.Subtitles
+                                                singleepisode.StreamDetails.Subtitles.Add(substrm)
                                             Next
                                             stage = "12b5f4"
-                                            If Not String.IsNullOrEmpty(singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value) Then
-                                                tempstring = singleepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                                            If Not String.IsNullOrEmpty(singleepisode.StreamDetails.Video.DurationInSeconds.Value) Then
+                                                tempstring = singleepisode.StreamDetails.Video.DurationInSeconds.Value
                                                 If Pref.intruntime Then
                                                     singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
                                                 Else
@@ -3127,14 +3127,14 @@ Partial Public Class Form1
         End If
             
         If Pref.enablehdtags = True Then
-            Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
-            newepisode.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-            For Each audioStream In fileStreamDetails.filedetails_audio
-                newepisode.Details.StreamDetails.Audio.Add(audioStream)
+            Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
+            newepisode.StreamDetails.Video = fileStreamDetails.Video
+            For Each audioStream In fileStreamDetails.Audio
+                newepisode.StreamDetails.Audio.Add(audioStream)
             Next
-            If Not String.IsNullOrEmpty(newepisode.Details.StreamDetails.Video.DurationInSeconds.Value) Then
+            If Not String.IsNullOrEmpty(newepisode.StreamDetails.Video.DurationInSeconds.Value) Then
                 Try
-                    tempstring = newepisode.Details.StreamDetails.Video.DurationInSeconds.Value
+                    tempstring = newepisode.StreamDetails.Video.DurationInSeconds.Value
                     If Pref.intruntime Then
                         newepisode.Runtime.Value = Math.Round(tempstring/60).ToString
                     Else
@@ -5146,20 +5146,20 @@ Partial Public Class Form1
         Dim thisep As TvEpisode = ep_SelectedCurrently(TvTreeview)
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
-            If thisep.Details.StreamDetails.Audio.Count > 0 Then
+            If thisep.StreamDetails.Audio.Count > 0 Then
 
-                'Dim defaultAudioTrack = (From x In thisep.Details.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
+                'Dim defaultAudioTrack = (From x In thisep.StreamDetails.Audio Where x.DefaultTrack.Value="Yes").FirstOrDefault
 
                 'If IsNothing(defaultAudioTrack) Then
-                '    defaultAudioTrack = thisep.Details.StreamDetails.Audio(0)
+                '    defaultAudioTrack = thisep.StreamDetails.Audio(0)
                 'End If
 
-                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=thisep.Details.StreamDetails.defaultAudioTrack)
+                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.StreamDetails.Audio,From x In thisep.StreamDetails.Audio Where x=thisep.StreamDetails.defaultAudioTrack)
 
                 For Each track In tracks
-                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
-                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
-                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
+                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
+                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
+                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
                 Next
             Else
                 flags.Add(New KeyValuePair(Of String, string)("channels",   ""))
@@ -5167,11 +5167,11 @@ Partial Public Class Form1
                 flags.Add(New KeyValuePair(Of String, string)("lang" ,      ""))
             End If
 
-            flags.Add(New KeyValuePair(Of String, string)("aspect",     Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec",      Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))
-            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
+            flags.Add(New KeyValuePair(Of String, string)("aspect",     Utilities.GetStdAspectRatio(thisep.StreamDetails.Video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec",      Utilities.GetCodecCommonName(GetMasterCodec(thisep.StreamDetails.Video))))
+            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.StreamDetails.Video.VideoResolution < 0, "", thisep.StreamDetails.Video.VideoResolution.ToString)))
 
-            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack))
+            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.StreamDetails.Subtitles, From x In thisep.StreamDetails.Subtitles Where x = thisep.StreamDetails.DefaultSubTrack))
 
             If Not IsNothing(subtitles) Then
             For each subtitle In subtitles
@@ -5188,24 +5188,24 @@ Partial Public Class Form1
 
         Dim flags As New List(Of KeyValuePair(Of String, String))
         Try
-            If thisep.Details.StreamDetails.Audio.Count > 0 Then
-                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.Details.StreamDetails.Audio,From x In thisep.Details.StreamDetails.Audio Where x=thisep.Details.StreamDetails.defaultAudioTrack)
+            If thisep.StreamDetails.Audio.Count > 0 Then
+                Dim tracks = If(Pref.ShowAllAudioTracks,thisep.StreamDetails.Audio,From x In thisep.StreamDetails.Audio Where x=thisep.StreamDetails.defaultAudioTrack)
 
                 For Each track In tracks
-                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
-                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
-                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.Details.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
+                    flags.Add(New KeyValuePair(Of String, string)("channels" +  GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), GetNumAudioTracks(track.Channels.Value)  ))
+                    flags.Add(New KeyValuePair(Of String, string)("audio" +     GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), track.Codec.Value                        ))
+                    flags.Add(New KeyValuePair(Of String, string)("lang" +      GetNotDefaultStr(track=thisep.StreamDetails.defaultAudioTrack), track.Language.Value                     ))
                 Next
             Else
                 flags.Add(New KeyValuePair(Of String, string)("channels",   ""))
                 flags.Add(New KeyValuePair(Of String, string)("audio",      ""))
                 flags.Add(New KeyValuePair(Of String, string)("lang" ,      ""))
             End If
-            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.Details.StreamDetails.Video.Aspect.Value)))
-            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.Details.StreamDetails.Video))))  'thisep.Details.StreamDetails.Video.Codec.Value.RemoveWhitespace))
-            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.Details.StreamDetails.Video.VideoResolution < 0, "", thisep.Details.StreamDetails.Video.VideoResolution.ToString)))
+            flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.StreamDetails.Video.Aspect.Value)))
+            flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.StreamDetails.Video))))  'thisep.StreamDetails.Video.Codec.Value.RemoveWhitespace))
+            flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.StreamDetails.Video.VideoResolution < 0, "", thisep.StreamDetails.Video.VideoResolution.ToString)))
 
-            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.Details.StreamDetails.Subtitles, From x In thisep.Details.StreamDetails.Subtitles Where x = thisep.Details.StreamDetails.DefaultSubTrack))
+            Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.StreamDetails.Subtitles, From x In thisep.StreamDetails.Subtitles Where x = thisep.StreamDetails.DefaultSubTrack))
 
             If Not IsNothing(subtitles) Then
                 For each subtitle In subtitles
@@ -5222,11 +5222,11 @@ Partial Public Class Form1
         thisarray(0) = 400
         thisarray(1) = 225
         Try
-            If ep.Details.StreamDetails.Video.Width.Value is Nothing Then
+            If ep.StreamDetails.Video.Width.Value is Nothing Then
                 ep.GetFileDetails 
             End If
-            Dim epw As Integer = ep.Details.StreamDetails.Video.Width.Value.ToInt
-            Dim eph As Integer= ep.Details.StreamDetails.Video.Height.Value.ToInt
+            Dim epw As Integer = ep.StreamDetails.Video.Width.Value.ToInt
+            Dim eph As Integer= ep.StreamDetails.Video.Height.Value.ToInt
             Dim ThisAsp As Double = epw/eph
             If ThisAsp < 1.37 Then  'aspect greater than Industry Standard of 1.37:1 is classed as WideScreen
                 thisarray(1) = 300

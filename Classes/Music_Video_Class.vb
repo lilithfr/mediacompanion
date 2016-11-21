@@ -11,5 +11,5 @@
 '    Public director As String
 '    Public studio As String
 '    Public fullPathAndFilename
-'    Public streamdetails As New fullfiledetails
+'    Public streamdetails As New StreamDetails
 'End Class

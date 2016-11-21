@@ -392,16 +392,16 @@ Public Class frmXbmcExport
             child = thismovie.CreateElement("fileinfo")
             anotherchild = thismovie.CreateElement("streamdetails")
             filedetailschild = thismovie.CreateElement("video")
-            filedetailschild.AppendChild( thismovie, "codec"        , mov.filedetails.filedetails_video.Codec.Value         )
-            filedetailschild.AppendChild( thismovie, "aspect"       , mov.filedetails.filedetails_video.Aspect.Value.Pad    )
-            filedetailschild.AppendChild( thismovie, "width"        , mov.filedetails.filedetails_video.Width.Value         )
-            filedetailschild.AppendChild( thismovie, "height"       , mov.filedetails.filedetails_video.Height.Value        )
-            Dim durat As String = If(mov.filedetails.filedetails_video.DurationInSeconds.Value = "-1", "0", mov.filedetails.filedetails_video.DurationInSeconds.Value)
+            filedetailschild.AppendChild( thismovie, "codec"        , mov.filedetails.Video.Codec.Value         )
+            filedetailschild.AppendChild( thismovie, "aspect"       , mov.filedetails.Video.Aspect.Value.Pad    )
+            filedetailschild.AppendChild( thismovie, "width"        , mov.filedetails.Video.Width.Value         )
+            filedetailschild.AppendChild( thismovie, "height"       , mov.filedetails.Video.Height.Value        )
+            Dim durat As String = If(mov.filedetails.Video.DurationInSeconds.Value = "-1", "0", mov.filedetails.Video.DurationInSeconds.Value)
             filedetailschild.AppendChild( thismovie, "durationinseconds", durat                                             )
             filedetailschild.AppendChild( thismovie, "stereomode"   , ""                                                    )
             anotherchild.AppendChild(filedetailschild)
 
-            For Each item In mov.filedetails.filedetails_audio
+            For Each item In mov.filedetails.Audio
                 filedetailschild = thismovie.CreateElement("audio")
                 filedetailschild.AppendChild( thismovie, "codec"    , item.Codec.Value      )
                 filedetailschild.AppendChild( thismovie, "language" , item.Language.Value   )
@@ -409,7 +409,7 @@ Public Class frmXbmcExport
                 anotherchild.AppendChild(filedetailschild)
             Next
             
-            For Each entry In mov.filedetails.filedetails_subtitles
+            For Each entry In mov.filedetails.Subtitles
                 filedetailschild = thismovie.CreateElement("subtitle")
                 filedetailschild.AppendChild( thismovie, "language", entry.Language.Value   )
                 filedetailschild.AppendChild( thismovie, "primary" , entry.Primary          )
@@ -646,15 +646,15 @@ Public Class frmXbmcExport
             child = ThisTvEp.CreateElement("fileinfo")
             anotherchild = ThisTvEp.CreateElement("streamdetails")
             filedetailschild = ThisTvEp.CreateElement("video")
-            Dim durat As String = If(tvep.Details.StreamDetails.Video.DurationInSeconds.Value = "-1", "0", tvep.Details.StreamDetails.Video.DurationInSeconds.Value)
-            filedetailschild.AppendChild(ThisTvEp, "codec"              , tvep.Details.StreamDetails.Video.Codec.Value  )
-            filedetailschild.AppendChild(ThisTvEp, "aspect"             , tvep.Details.StreamDetails.Video.Aspect.Value )
-            filedetailschild.AppendChild(ThisTvEp, "width"              , tvep.Details.StreamDetails.Video.Width.Value  )
-            filedetailschild.AppendChild(ThisTvEp, "height"             , tvep.Details.StreamDetails.Video.Height.Value )
+            Dim durat As String = If(tvep.StreamDetails.Video.DurationInSeconds.Value = "-1", "0", tvep.StreamDetails.Video.DurationInSeconds.Value)
+            filedetailschild.AppendChild(ThisTvEp, "codec"              , tvep.StreamDetails.Video.Codec.Value  )
+            filedetailschild.AppendChild(ThisTvEp, "aspect"             , tvep.StreamDetails.Video.Aspect.Value )
+            filedetailschild.AppendChild(ThisTvEp, "width"              , tvep.StreamDetails.Video.Width.Value  )
+            filedetailschild.AppendChild(ThisTvEp, "height"             , tvep.StreamDetails.Video.Height.Value )
             filedetailschild.AppendChild(ThisTvEp, "durationinseconds"  , durat                                         )
             anotherchild.AppendChild(filedetailschild)
 
-            For Each item In tvep.Details.StreamDetails.Audio
+            For Each item In tvep.StreamDetails.Audio
                 filedetailschild = ThisTvEp.CreateElement("audio")
                 filedetailschild.AppendChild( ThisTvEp, "codec"    , item.Codec.Value      )
                 filedetailschild.AppendChild( ThisTvEp, "language" , item.Language.Value   )
@@ -662,7 +662,7 @@ Public Class frmXbmcExport
                 anotherchild.AppendChild(filedetailschild)
             Next
             
-            For Each entry In tvep.Details.StreamDetails.Subtitles
+            For Each entry In tvep.StreamDetails.Subtitles
                 filedetailschild = ThisTvEp.CreateElement("subtitle")
                 filedetailschild.AppendChild( ThisTvEp, "language", entry.Language.Value   )
                 filedetailschild.AppendChild( ThisTvEp, "primary" , entry.Primary          )

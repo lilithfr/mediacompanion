@@ -120,7 +120,8 @@ Public Class TvEpisode
     Public Property EpBookmark As New ProtoProperty(Me, "epbookmark")
 
 
-    Public Property Details As New FileStrmInfo(Me, "fileinfo")
+    'Public Property Details As New FileStrmInfo(Me, "fileinfo")
+    Public Property Streamdetails As New StreamDetails(Me, "streamdetails")
 
     Public Property ListActors As New ActorList(Me, "actor")
     Public Property Source As New ProtoProperty(Me, "videosource")
@@ -176,7 +177,7 @@ Public Class TvEpisode
         Me.Source.Value = TvEp.Source.Value
         Me.Aired.Value = TvEp.Aired.Value ' Phyonics - Fix for issue #208
         Me.ListActors = TvEp.ListActors
-        Me.Details.StreamDetails = TvEp.Details.StreamDetails 
+        Me.StreamDetails = TvEp.StreamDetails 
         Me.EpBookmark.Value = TvEp.EpBookmark.Value 
         Me.PlayCount.Value = TvEp.PlayCount.Value
         Me.Runtime.Value = TvEp.Runtime.Value
@@ -235,21 +236,21 @@ Public Class TvEpisode
     End Property
 
     Public Sub GetFileDetails()
-        Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Me.VideoFilePath)
+        Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Me.VideoFilePath)
         If Not IsNothing(fileStreamDetails) Then
-            Me.Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-            Me.Details.StreamDetails.Audio.Clear()
-            For Each audioStream In fileStreamDetails.filedetails_audio
-                Me.Details.StreamDetails.Audio.Add(audioStream)
+            Me.StreamDetails.Video = fileStreamDetails.Video
+            Me.StreamDetails.Audio.Clear()
+            For Each audioStream In fileStreamDetails.Audio
+                Me.StreamDetails.Audio.Add(audioStream)
             Next
-            Me.Details.StreamDetails.Subtitles.Clear()
-            For Each lan In fileStreamDetails.filedetails_subtitles
-                Me.Details.StreamDetails.Subtitles.Add(lan)
+            Me.StreamDetails.Subtitles.Clear()
+            For Each lan In fileStreamDetails.Subtitles
+                Me.StreamDetails.Subtitles.Add(lan)
             Next
 
-            If Not Me.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+            If Not Me.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
                 Dim tempstring As String = ""
-                tempstring = Me.Details.StreamDetails.Video.DurationInSeconds.Value
+                tempstring = Me.StreamDetails.Video.DurationInSeconds.Value
                 If tempstring <> "" Then
                     If Pref.intruntime Then
                         Me.Runtime.Value = Math.Round(tempstring / 60).ToString

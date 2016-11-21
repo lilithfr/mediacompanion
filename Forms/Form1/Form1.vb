@@ -6054,20 +6054,20 @@ Public Class Form1
 					ThisEp.Clear()
 					ThisEp = WorkingWithNfoFiles.ep_NfoLoad(nfo)
 					For h = ThisEp.Count - 1 To 0 Step -1
-						Dim fileStreamDetails As FullFileDetails = Pref.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
-						ThisEp(h).Details.StreamDetails.Video = fileStreamDetails.filedetails_video
-						ThisEp(h).Details.StreamDetails.Audio.Clear()
-						For Each audioStream In fileStreamDetails.filedetails_audio
-							ThisEp(h).Details.StreamDetails.Audio.Add(audioStream)
+						Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(ThisEp(h).VideoFilePath))
+						ThisEp(h).StreamDetails.Video = fileStreamDetails.Video
+						ThisEp(h).StreamDetails.Audio.Clear()
+						For Each audioStream In fileStreamDetails.Audio
+							ThisEp(h).StreamDetails.Audio.Add(audioStream)
 						Next
-						ThisEp(h).Details.StreamDetails.Subtitles.Clear()
-						For each langStream In fileStreamDetails.filedetails_subtitles
-							ThisEp(h).Details.StreamDetails.Subtitles.Add(langStream)
+						ThisEp(h).StreamDetails.Subtitles.Clear()
+						For each langStream In fileStreamDetails.Subtitles
+							ThisEp(h).StreamDetails.Subtitles.Add(langStream)
 						Next
-						If ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
+						If ThisEp(h).StreamDetails.Video.DurationInSeconds.Value <> Nothing Then
 							Try
 								Dim tempstring As String
-								tempstring = ThisEp(h).Details.StreamDetails.Video.DurationInSeconds.Value
+								tempstring = ThisEp(h).StreamDetails.Video.DurationInSeconds.Value
 								If Pref.intruntime Then
 									ThisEp(h).Runtime.Value = Math.Round(tempstring / 60).ToString
 								Else
@@ -7352,8 +7352,8 @@ Public Class Form1
 
 	Public Sub mov_SwitchRuntime()
 		If workingMovieDetails Is Nothing Then Exit Sub
-		If Pref.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
-			runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
+		If Pref.enablehdtags = True And workingMovieDetails.filedetails.Video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
+			runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.Video.DurationInSeconds.Value) & " min"
 			runtimetxt.Enabled = False
 		Else
 			runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
@@ -7370,8 +7370,8 @@ Public Class Form1
 			lbl_movTop250.Text = "Top 250"
 			top250txt.Text = workingMovieDetails.fullmoviebody.top250
 		End If
-		'If Pref.enablehdtags = True And workingMovieDetails.filedetails.filedetails_video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
-		'    runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.filedetails_video.DurationInSeconds.Value) & " min"
+		'If Pref.enablehdtags = True And workingMovieDetails.filedetails.Video.DurationInSeconds <> Nothing And Not displayRuntimeScraper Then
+		'    runtimetxt.Text = Utilities.cleanruntime(workingMovieDetails.filedetails.Video.DurationInSeconds.Value) & " min"
 		'    runtimetxt.Enabled = False
 		'Else
 		'    runtimetxt.Text = workingMovieDetails.fullmoviebody.runtime
@@ -16892,7 +16892,7 @@ Public Class Form1
 				fulldetails.fullmoviebody.movieset = "Home Movie"
 				fulldetails.fileinfo.fullpathandfilename = newhomemovie.FullPathAndFilename
 				fulldetails.filedetails = Pref.Get_HdTags(fulldetails.fileinfo.fullpathandfilename)
-				Dim rtime As Integer = (fulldetails.filedetails.filedetails_video.DurationInSeconds.Value / 60)
+				Dim rtime As Integer = (fulldetails.filedetails.Video.DurationInSeconds.Value / 60)
 				fulldetails.fullmoviebody.runtime = rtime.ToString
 				Dim pathOnly As String = Path.GetDirectoryName(fulldetails.fileinfo.fullpathandfilename) & "\"
 				Dim nfopath As String = pathOnly & Path.GetFileNameWithoutExtension(fulldetails.fileinfo.fullpathandfilename) & ".nfo"
@@ -17374,10 +17374,10 @@ Public Class Form1
 #End Region 'ToolStrip Menus misc
 
 
-	Public Shared Function VidMediaFlags(ByVal Vidfiledetails As FullFileDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
+	Public Shared Function VidMediaFlags(ByVal Vidfiledetails As StreamDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
 		Dim flags As New List(Of KeyValuePair(Of String, String))
 		Try
-			Dim tracks = If(Pref.ShowAllAudioTracks, Vidfiledetails.filedetails_audio, From x In Vidfiledetails.filedetails_audio Where x = Vidfiledetails.DefaultAudioTrack)
+			Dim tracks = If(Pref.ShowAllAudioTracks, Vidfiledetails.Audio, From x In Vidfiledetails.Audio Where x = Vidfiledetails.DefaultAudioTrack)
 
 			For Each track In tracks
 				flags.Add(New KeyValuePair(Of String, String)("channels" + GetNotDefaultStr(track = Vidfiledetails.DefaultAudioTrack), GetNumAudioTracks(track.Channels.Value)))
@@ -17386,12 +17386,12 @@ Public Class Form1
 			Next
 
 
-			flags.Add(New KeyValuePair(Of String, String)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.filedetails_video.Aspect.Value)))
-			flags.Add(New KeyValuePair(Of String, String)("codec", Utilities.GetCodecCommonName(GetMasterCodec(Vidfiledetails.filedetails_video))))  '.Codec.Value.RemoveWhitespace)))
-			flags.Add(New KeyValuePair(Of String, String)("resolution", If(Vidfiledetails.filedetails_video.VideoResolution < 0, "", Vidfiledetails.filedetails_video.VideoResolution.ToString)))
+			flags.Add(New KeyValuePair(Of String, String)("aspect", Utilities.GetStdAspectRatio(Vidfiledetails.Video.Aspect.Value)))
+			flags.Add(New KeyValuePair(Of String, String)("codec", Utilities.GetCodecCommonName(GetMasterCodec(Vidfiledetails.Video))))  '.Codec.Value.RemoveWhitespace)))
+			flags.Add(New KeyValuePair(Of String, String)("resolution", If(Vidfiledetails.Video.VideoResolution < 0, "", Vidfiledetails.Video.VideoResolution.ToString)))
 			flags.Add(New KeyValuePair(Of String, String)("special", If(Is3d, "3d", "")))
 
-			Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, Vidfiledetails.filedetails_subtitles, From x In Vidfiledetails.filedetails_subtitles Where x = Vidfiledetails.DefaultSubTrack))
+			Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, Vidfiledetails.Subtitles, From x In Vidfiledetails.Subtitles Where x = Vidfiledetails.DefaultSubTrack))
 
 			If Not IsNothing(subtitles) Then
 				For Each subtitle In subtitles  

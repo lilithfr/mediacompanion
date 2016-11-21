@@ -4,9 +4,9 @@ Public Class StreamDetails
     Inherits ProtoPropertyGroup
 
 
-    Public Property Video As New VideoDetails(Me, "video")
-    Public Property Audio As New AudioList(Me, "audio")
-    Public Property Subtitles As New SubtitleList(Me, "subtitle")
+    Public Property Video As New VideoDetails '(Me, "video")
+    Public Property Audio As New List(Of AudioDetails   ) 'As New AudioList(Me, "audio")
+    Public Property Subtitles As New List(Of SubtitleDetails) 'As New SubtitleList(Me, "subtitle")
 
     Private _assignedDefaultAudioTrack As Boolean = False
     Private _defaultAudioTrack As AudioDetails

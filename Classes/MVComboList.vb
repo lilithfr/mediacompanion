@@ -271,12 +271,12 @@ Public Class MVComboList
         plot                    = From.fullmoviebody.plot 
         TitleUcase              = From.fullmoviebody.title.ToUpper
         Integer.TryParse(runtime.Replace(" min",""),IntRuntime)          
-        Resolution              = From.filedetails.filedetails_video.VideoResolution
+        Resolution              = From.filedetails.Video.VideoResolution
         thumb                   = From.fullmoviebody.thumb
         track                   = From.fullmoviebody.track 
         VideoMissing            = Not File.Exists(From.fileinfo.filenameandpath)
         AssignMissingData(From)
-        AssignAudio(From.filedetails.filedetails_audio)
+        AssignAudio(From.filedetails.Audio)
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))

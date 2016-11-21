@@ -1089,7 +1089,7 @@ Public Class Movie
         End If
 
         If (Pref.MovImdbAspectRatio OrElse Pref.XbmcTmdbAspectFromImdb) AndAlso _scrapedMovie.fileinfo.aspectratioimdb <> "" Then
-            _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _scrapedMovie.fileinfo.aspectratioimdb
+            _scrapedMovie.filedetails.Video.Aspect.Value = _scrapedMovie.fileinfo.aspectratioimdb
         End If
 
         Try     'Set TMDB Id in _scrapedMovie if not already set.
@@ -1225,9 +1225,9 @@ Public Class Movie
         _movieCache.plot                = _scrapedMovie.fullmoviebody.plot
         _movieCache.tagline             = _scrapedMovie.fullmoviebody.tagline 
         _movieCache.year                = _scrapedMovie.fullmoviebody.year.ToInt
-        _movieCache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
-        _movieCache.VideoCodec          = _scrapedMovie.filedetails.filedetails_video.Codec.Value 
-        _movieCache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
+        _movieCache.Resolution          = _scrapedMovie.filedetails.Video.VideoResolution
+        _movieCache.VideoCodec          = _scrapedMovie.filedetails.Video.Codec.Value 
+        _movieCache.AssignAudio(_scrapedMovie.filedetails.Audio)
         _movieCache.Premiered           = _scrapedMovie.fullmoviebody.premiered
         '_movieCache.movietag            = _scrapedMovie.fullmoviebody.tag
         _movieCache.stars               = _scrapedMovie.fullmoviebody.stars 
@@ -1260,7 +1260,7 @@ Public Class Movie
         _movieCache.usrrated     = If(_scrapedMovie.fullmoviebody.usrrated = "", 0, _scrapedMovie.fullmoviebody.usrrated.ToInt)
         _movieCache.metascore    = If(_scrapedMovie.fullmoviebody.metascore = "", 0, _scrapedMovie.fullmoviebody.metascore.ToInt)
         _movieCache.LockedFields = _scrapedMovie.fullmoviebody.LockedFields
-        _movieCache.Container    = _scrapedMovie.filedetails.filedetails_video.Container.Value
+        _movieCache.Container    = _scrapedMovie.filedetails.Video.Container.Value
         _movieCache.Actorlist    = _scrapedMovie.listactors 
 
         If Pref.incmissingmovies Then
@@ -1268,7 +1268,7 @@ Public Class Movie
             _movieCache.VideoMissing = Not File.Exists(Fileandpath)
         End If
 
-        _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.filedetails_subtitles)
+        _movieCache.AssignSubtitleLang(_scrapedMovie.filedetails.Subtitles)
 
         AssignMovieToAddMissingData
         AssignUserTmdbSetAddition
@@ -1319,10 +1319,10 @@ Public Class Movie
         _mvcache.runtime             = _scrapedMovie.fullmoviebody.runtime
         _mvcache.plot                = _scrapedMovie.fullmoviebody.plot
         _mvcache.year                = _scrapedMovie.fullmoviebody.year.ToInt
-        _mvcache.Resolution          = _scrapedMovie.filedetails.filedetails_video.VideoResolution
+        _mvcache.Resolution          = _scrapedMovie.filedetails.Video.VideoResolution
         _mvcache.thumb               = _scrapedMovie.fullmoviebody.thumb
         _mvcache.track               = _scrapedMovie.fullmoviebody.track 
-        _mvcache.AssignAudio(_scrapedMovie.filedetails.filedetails_audio)
+        _mvcache.AssignAudio(_scrapedMovie.filedetails.Audio)
         Dim filecreation As New FileInfo(nfopathandfilename)
         Try
             _mvcache.filedate = Format(filecreation.LastWriteTime, Pref.datePattern).ToString
@@ -1331,8 +1331,8 @@ Public Class Movie
             Throw ex
 #End If
         End Try
-        If _scrapedMovie.fullmoviebody.runtime = "" AndAlso _scrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value <> "" Then
-            _scrapedMovie.fullmoviebody.runtime = Math.Floor((_scrapedMovie.filedetails.filedetails_video.DurationInSeconds.Value.ToInt)/60)
+        If _scrapedMovie.fullmoviebody.runtime = "" AndAlso _scrapedMovie.filedetails.Video.DurationInSeconds.Value <> "" Then
+            _scrapedMovie.fullmoviebody.runtime = Math.Floor((_scrapedMovie.filedetails.Video.DurationInSeconds.Value.ToInt)/60)
         End If
         If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
             _mvcache.createdate = Format(System.DateTime.Now, Pref.datePattern).ToString
@@ -1935,14 +1935,14 @@ Public Class Movie
             Return True
         Catch ex As Exception
             ReportProgress(MSG_ERROR,"!!! Error getting HD Tags:- " & ex.Message.ToString & vbCrLf)
-            sm.filedetails = New FullFileDetails
+            sm.filedetails = New StreamDetails
             Return False
         End Try
     End Function
     
     Sub AssignRuntime(sm As FullMovieDetails, Optional runtime_file As Boolean=False)
-        If sm.FileDetails.filedetails_video.DurationInSeconds.Value <> Nothing And (runtime_file or (Pref.movieRuntimeFallbackToFile and sm.fullmoviebody.runtime = "")) Then
-            sm.fullmoviebody.runtime = Math.Round(sm.FileDetails.filedetails_video.DurationInSeconds.Value/60).ToString & " min"
+        If sm.FileDetails.Video.DurationInSeconds.Value <> Nothing And (runtime_file or (Pref.movieRuntimeFallbackToFile and sm.fullmoviebody.runtime = "")) Then
+            sm.fullmoviebody.runtime = Math.Round(sm.FileDetails.Video.DurationInSeconds.Value/60).ToString & " min"
         End If
     End Sub
     
@@ -3183,12 +3183,12 @@ Public Class Movie
                 End If
 
                 If ((Pref.MovImdbAspectRatio And Not Pref.movies_useXBMC_Scraper) OrElse (Pref.XbmcTmdbAspectFromImdb AndAlso Pref.movies_useXBMC_Scraper)) AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
-                    _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
+                    _scrapedMovie.filedetails.Video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
                 End If
             End If
         End If
         If rl.imdbaspect AndAlso _rescrapedMovie.fileinfo.aspectratioimdb <> "" Then
-            _scrapedMovie.filedetails.filedetails_video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
+            _scrapedMovie.filedetails.Video.Aspect.Value = _rescrapedMovie.fileinfo.aspectratioimdb
         End If
         If Cancelled() Then Exit Sub
         If Not rl.TagsFromKeywords AndAlso Pref.TagRes Then GetKeyWords()
@@ -4223,8 +4223,8 @@ Public Class Movie
         Get
             Dim ac As String = ""
             Try
-                Dim ac1 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Codec.Value
-                Dim ac2 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/","-")
+                Dim ac1 As String = _scrapedMovie.filedetails.Audio.Item(0).Codec.Value
+                Dim ac2 As String = _scrapedMovie.filedetails.Audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/","-")
                 If ac1.Contains("dts") Then ac1 = "DTS"
                 
                 ac = ac1 & " " & ac2 & "CH"
@@ -4239,7 +4239,7 @@ Public Class Movie
         Get
             Dim ach As String = ""
             Try
-                Dim ach1 As String = _scrapedMovie.filedetails.filedetails_audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/", "-")
+                Dim ach1 As String = _scrapedMovie.filedetails.Audio.Item(0).Channels.Value.RemoveWhitespace.Replace("/", "-")
                 ach = ach1 & "CH"
             Catch ex As Exception
 
@@ -4252,7 +4252,7 @@ Public Class Movie
         Get
             Dim vc As String = ""
             Try
-                Dim vc1 = _scrapedMovie.filedetails.filedetails_video.Codec.value
+                Dim vc1 = _scrapedMovie.filedetails.Video.Codec.value
                 If Not String.IsNullOrEmpty(vc1) Then vc = vc1.ToUpper
             Catch ex As Exception
 
@@ -4265,8 +4265,8 @@ Public Class Movie
         Get
             Dim vr As String
             Try
-                Dim vr1 As String = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
-                Dim vr2 As String = If(_scrapedMovie.filedetails.filedetails_video.ScanType.Value is Nothing, "", _scrapedMovie.filedetails.filedetails_video.ScanType.Value)
+                Dim vr1 As String = If(_scrapedMovie.filedetails.Video.VideoResolution < 0, "", _scrapedMovie.filedetails.Video.VideoResolution.ToString)
+                Dim vr2 As String = If(_scrapedMovie.filedetails.Video.ScanType.Value is Nothing, "", _scrapedMovie.filedetails.Video.ScanType.Value)
                 If vr2.ToLower = "progressive" Then
                     vr2 = "P"
                 Else If vr2.ToLower = "interlaced" or vr2.ToLower = "mbaff" or vr2.ToLower = "paff" Then
@@ -4406,7 +4406,7 @@ Public Class Movie
 
             _scrapedMovie.fullmoviebody.tag.Clear()
             Dim res As String = ""
-            If Pref.TagRes Then res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+            If Pref.TagRes Then res = If(_scrapedMovie.filedetails.Video.VideoResolution < 0, "", _scrapedMovie.filedetails.Video.VideoResolution.ToString)
             If res <> "" Then _scrapedMovie.fullmoviebody.tag.Add(res)
 
             If keywords.Count > 0 Then
@@ -4425,14 +4425,14 @@ Public Class Movie
         End If
         'If Pref.TagRes Then
         '    Dim res As String = ""
-        '    res = If(_scrapedMovie.filedetails.filedetails_video.VideoResolution < 0, "", _scrapedMovie.filedetails.filedetails_video.VideoResolution.ToString)
+        '    res = If(_scrapedMovie.filedetails.Video.VideoResolution < 0, "", _scrapedMovie.filedetails.Video.VideoResolution.ToString)
         '    If res <> "" Then
         '        If _scrapedMovie.fullmoviebody.tag <> "" Then 'AndAlso Not _scrapedMovie.fullmoviebody.tag.Contains(res) Then
         '            Dim strarr() As String = _scrapedMovie.fullmoviebody.tag.Split(",")
         '            If strarr.Length > 0 Then
         '                If IsNumeric(strarr(0)) Then
         '                    Dim foundres As String = ""
-        '                    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
+        '                    For each resin In _scrapedMovie.filedetails.Video.possibleResolutions
         '                        If strarr(0) = resin Then
         '                            foundres = resin
         '                            Exit For
@@ -4455,7 +4455,7 @@ Public Class Movie
         '        End If
         '        'If _scrapedMovie.fullmoviebody.tag.Count > 0 AndAlso Isnumeric(_scrapedMovie.fullmoviebody.tag.Item(0)) Then
         '        '    Dim foundres As String = ""
-        '        '    For each resin In _scrapedMovie.filedetails.filedetails_video.possibleResolutions
+        '        '    For each resin In _scrapedMovie.filedetails.Video.possibleResolutions
         '        '        If _scrapedMovie.fullmoviebody.tag.Item(0) = resin Then
         '        '            foundres = resin
         '        '            Exit For

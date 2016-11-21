@@ -11,7 +11,7 @@ Public Class xbmcmovies
     Public frodoPosterThumbs As List(Of FrodoPosterThumb)
     Public frodoFanartThumbs As FrodoFanartThumbs
     Public listthumbs        As List(Of String)
-    Public filedetails       As FullFileDetails
+    Public filedetails       As StreamDetails
 
     Sub New
         Init
@@ -25,7 +25,7 @@ Public Class xbmcmovies
         frodoPosterThumbs = New List(Of FrodoPosterThumb)
         frodoFanartThumbs = New FrodoFanartThumbs
         listthumbs        = New List(Of String)
-        filedetails       = New FullFileDetails
+        filedetails       = New StreamDetails
     End Sub
 End Class
 
@@ -82,7 +82,7 @@ Public Class xbmctv
     Public ListActors As List(Of str_MovieActors)
     Public position As String
     Public total As String
-    Public fileinfo As FullFileDetails
+    Public fileinfo As StreamDetails
     Public art As List(Of xbmctvart)
     Sub new()
         init
@@ -127,7 +127,7 @@ Public Class xbmctv
         ListActors = New List(Of str_MovieActors)
         position = ""
         total = ""
-        fileinfo = New FullFileDetails
+        fileinfo = New StreamDetails
         art = New List(Of xbmctvart)
     End Sub
 End Class

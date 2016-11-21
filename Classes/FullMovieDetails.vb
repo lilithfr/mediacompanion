@@ -8,7 +8,7 @@ Public Class FullMovieDetails
     Public frodoPosterThumbs As List(Of FrodoPosterThumb) = New List(Of FrodoPosterThumb)
     Public frodoFanartThumbs As FrodoFanartThumbs         = New FrodoFanartThumbs
     Public listthumbs        As List(Of String)           = New List(Of String)
-    Public filedetails       As FullFileDetails           = New FullFileDetails
+    Public filedetails       As StreamDetails           = New StreamDetails
 
     Public Sub Init
         fileinfo          = New FileDetails()
@@ -18,6 +18,6 @@ Public Class FullMovieDetails
         frodoPosterThumbs = New List(Of FrodoPosterThumb)
         frodoFanartThumbs = New FrodoFanartThumbs
         listthumbs        = New List(Of String)
-        filedetails       = New FullFileDetails
+        filedetails       = New StreamDetails
     End Sub
 End Class

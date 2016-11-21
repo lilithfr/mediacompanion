@@ -2331,7 +2331,7 @@ Public Class Pref
         Return ""
     End Function
 
-    Public Shared Function Get_HdTags(ByVal filename As String) As FullFileDetails
+    Public Shared Function Get_HdTags(ByVal filename As String) As StreamDetails
         Try
             If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
                 Dim temppath As String = Utilities.GetDvdLargestVobSet(filename)
@@ -2342,7 +2342,7 @@ Public Class Pref
             End If
             Dim tmpaud As String = ""
             Dim possibleISO As String = String.Empty 
-            Dim workingfiledetails As New FullFileDetails
+            Dim workingfiledetails As New StreamDetails
 
             ' If Iso file
             If Path.GetExtension(filename).ToLower = ".iso" Then
@@ -2368,33 +2368,33 @@ Public Class Pref
             Dim aviFile As MediaFile = New MediaFile(filename)
             Dim tempmediainfo As String
 
-            workingfiledetails.filedetails_video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)
-            workingfiledetails.filedetails_video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)
+            workingfiledetails.Video.Width.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Width)
+            workingfiledetails.Video.Height.Value = If(aviFile.Video.Count = 0, "", aviFile.Video(0).Height)
 
             Try
                 Dim tmp As Double = If(aviFile.Video.Count = 0, 0, aviFile.Video(0).AspectRatio)
                 If tmp <> 0 AndAlso tmp < 4 Then
-                    workingfiledetails.filedetails_video.Aspect.Value = tmp.ToString("F2")  'Utilities.FixIntlAspectRatio(tmp.ToString("F2"))
+                    workingfiledetails.Video.Aspect.Value = tmp.ToString("F2")  'Utilities.FixIntlAspectRatio(tmp.ToString("F2"))
                 Else
                     Dim DisplayAspectRatio As String = MI.Get_(StreamKind.Visual, curVS, "AspectRatio")
                     If Not DisplayAspectRatio = "" Then
                         'DisplayAspectRatio = Utilities.CheckAspectRatio(DisplayAspectRatio)
-                        workingfiledetails.filedetails_video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio, Utilities.defaultculture).ToString("F2")
+                        workingfiledetails.Video.Aspect.Value = Convert.ToDouble(DisplayAspectRatio, Utilities.defaultculture).ToString("F2")
                     End If
                 End If
             Catch ex As Exception
                 Try
-                    If workingfiledetails.filedetails_video.Width.Value <> "" AndAlso workingfiledetails.filedetails_video.Height.Value <> "" Then
+                    If workingfiledetails.Video.Width.Value <> "" AndAlso workingfiledetails.Video.Height.Value <> "" Then
                         Dim Aspect As Double = 0
                         Dim wi As Double = Convert.ToDouble(aviFile.Video(0).Width)
                         Dim he As Double = Convert.ToDouble(aviFile.Video(0).Height)
                         Aspect = wi/he
-                        workingfiledetails.filedetails_video.Aspect.Value = Aspect.ToString("F2")
+                        workingfiledetails.Video.Aspect.Value = Aspect.ToString("F2")
                     Else
-                        workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+                        workingfiledetails.Video.Aspect.Value = "Unknown"
                     End If
                 Catch exc As Exception
-                    workingfiledetails.filedetails_video.Aspect.Value = "Unknown"
+                    workingfiledetails.Video.Aspect.Value = "Unknown"
                 End Try
             End Try
             
@@ -2409,17 +2409,17 @@ Public Class Pref
             ElseIf tempmediainfo = "DX50" Then
                 tempmediainfo = "divx"
             End If
-            workingfiledetails.filedetails_video.Codec.Value = tempmediainfo
+            workingfiledetails.Video.Codec.Value = tempmediainfo
 
             tempmediainfo = If(aviFile.Video.Count = 0, "", aviFile.Video(0).CodecID)
                 If tempmediainfo.ToLower = "xvid" OrElse tempmediainfo.ToLower.Contains("div") OrElse tempmediainfo.ToLower = "dx50" Then
-                    workingfiledetails.filedetails_video.FormatInfo.Value = workingfiledetails.filedetails_video.Codec.Value
-                    workingfiledetails.filedetails_video.Codec.Value = tempmediainfo.ToLower
+                    workingfiledetails.Video.FormatInfo.Value = workingfiledetails.Video.Codec.Value
+                    workingfiledetails.Video.Codec.Value = tempmediainfo.ToLower
                 Else 
                     If tempmediainfo.ToLower.Contains("mp4v") OrElse tempmediainfo.ToLower.Contains("20") Then
-                        workingfiledetails.filedetails_video.FormatInfo.Value = "mp4v" 
+                        workingfiledetails.Video.FormatInfo.Value = "mp4v" 
                     Else
-                        workingfiledetails.filedetails_video.FormatInfo.Value = tempmediainfo 
+                        workingfiledetails.Video.FormatInfo.Value = tempmediainfo 
                     End If
                 End If
             
@@ -2432,12 +2432,12 @@ Public Class Pref
                     If Not String.IsNullOrEmpty(duration) Then
                         Dim Tempvar As Double = Nothing
                         If Double.TryParse(duration, Tempvar) Then
-                            workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(Tempvar) / 1000)
+                            workingfiledetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(Tempvar) / 1000)
                         Else
-                            workingfiledetails.filedetails_video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
+                            workingfiledetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)
                         End If
                     Else
-                        workingfiledetails.filedetails_video.DurationInSeconds.Value = -1
+                        workingfiledetails.Video.DurationInSeconds.Value = -1
                     End If
                 ElseIf playlist.Count > 1 Then
                     Dim total As Integer = 0
@@ -2450,22 +2450,22 @@ Public Class Pref
                         End If
                     Next
                     If total = 0 Then total = -1
-                    workingfiledetails.filedetails_video.DurationInSeconds.Value = total
+                    workingfiledetails.Video.DurationInSeconds.Value = total
                 End If
             Catch
-                workingfiledetails.filedetails_video.DurationInSeconds.Value = -1
+                workingfiledetails.Video.DurationInSeconds.Value = -1
             End Try
-            workingfiledetails.filedetails_video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
-            workingfiledetails.filedetails_video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
-            workingfiledetails.filedetails_video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
+            workingfiledetails.Video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
+            workingfiledetails.Video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
+            workingfiledetails.Video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
 
             If filename.ToLower.Contains("\bdmv\stream\") Then
-                workingfiledetails.filedetails_video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"
+                workingfiledetails.Video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"
             Else
-                workingfiledetails.filedetails_video.Container.Value = Path.GetExtension(filename) '"else this is the extension of the file"
+                workingfiledetails.Video.Container.Value = Path.GetExtension(filename) '"else this is the extension of the file"
             End If
             
-            workingfiledetails.filedetails_video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")
+            workingfiledetails.Video.ScanType.Value = MI.Get_(StreamKind.Visual, curVS, "ScanType")
             'Video()
             'Format                     : MPEG-4 Visual
             'Format profile             : Streaming Video@L1
@@ -2544,12 +2544,12 @@ Public Class Pref
                         If tmpaud1 <> "" Then audio.Bitrate.Value = tmpaud1
                     End If
                     audio.DefaultTrack.Value = MI.Get_(StreamKind.Audio, curAS, "Default")
-                    workingfiledetails.filedetails_audio.Add(audio)
+                    workingfiledetails.Audio.Add(audio)
                     curAS += 1
                 End While
             Else
                 Dim audio As New AudioDetails
-                workingfiledetails.filedetails_audio.Add(audio)
+                workingfiledetails.Audio.Add(audio)
             End If
             
             Dim numOfSubtitleStreams As Integer = MI.Count_Get(StreamKind.Text)
@@ -2563,7 +2563,7 @@ Public Class Pref
                     Dim Forced As String = MI.Get_(StreamKind.Text, curSS, "Forced")
                     sublanguage.Forced = If(Forced.ToLower = "yes", True, False)
                     Dim Something As String = Nothing
-                    workingfiledetails.filedetails_subtitles.Add(sublanguage)
+                    workingfiledetails.Subtitles.Add(sublanguage)
                     curSS += 1
                 End While
             End If
@@ -2576,8 +2576,8 @@ Public Class Pref
         Return Nothing
     End Function
 
-    Public Shared Function Get_HDIsoTags(BYVal filename As String) As FullFileDetails
-        Dim workingfile As New FullFileDetails
+    Public Shared Function Get_HDIsoTags(BYVal filename As String) As StreamDetails
+        Dim workingfile As New StreamDetails
         Dim possibleISO As String = String.Empty
         Try
             possibleISO = Get_ISO_HDTags(filename)
@@ -2593,35 +2593,35 @@ Public Class Pref
                                 For Each result In thisresult
                                     Select Case result.name
                                         Case "Format"
-                                            workingfile.filedetails_video.Codec.Value = result.InnerText
+                                            workingfile.Video.Codec.Value = result.InnerText
                                         Case "Format_version"
-                                            workingfile.filedetails_video.FormatInfo.Value = result.InnerText
+                                            workingfile.Video.FormatInfo.Value = result.InnerText
                                         Case "Width"
-                                            workingfile.filedetails_video.Width.Value = result.InnerText
+                                            workingfile.Video.Width.Value = result.InnerText
                                         Case "Height"
-                                            workingfile.filedetails_video.Height.Value = result.InnerText
+                                            workingfile.Video.Height.Value = result.InnerText
                                         Case "Bit_rate_mode"
-                                            workingfile.filedetails_video.BitrateMode.Value = result.InnerText
+                                            workingfile.Video.BitrateMode.Value = result.InnerText
                                         Case "Maximum_bit_rate"
-                                            workingfile.filedetails_video.BitrateMax.Value = result.InnerText
+                                            workingfile.Video.BitrateMax.Value = result.InnerText
                                         Case "Display_aspect_ratio"
                                             Dim Asp As String = result.InnerText
                                             If Not Asp = "" Then
                                                 If Asp = "16:9" Then Asp = "1.56:1"
-                                                workingfile.filedetails_video.Aspect.Value = Asp.Substring(0, Asp.IndexOf(":"))
+                                                workingfile.Video.Aspect.Value = Asp.Substring(0, Asp.IndexOf(":"))
                                             End If
                                         Case "Scan_type"
-                                            workingfile.filedetails_video.ScanType.Value = result.InnerText
+                                            workingfile.Video.ScanType.Value = result.InnerText
                                     End Select
                                 Next
-                                If workingfile.filedetails_video.Codec.Value.ToLower = "mpeg video" AndAlso workingfile.filedetails_video.FormatInfo.Value.Contains("2") Then
-                                    workingfile.filedetails_video.Codec.Value = "MPEG2VIDEO"
+                                If workingfile.Video.Codec.Value.ToLower = "mpeg video" AndAlso workingfile.Video.FormatInfo.Value.Contains("2") Then
+                                    workingfile.Video.Codec.Value = "MPEG2VIDEO"
                                 End If
-                                If workingfile.filedetails_video.Codec.Value.ToLower = "avc" Then workingfile.filedetails_video.Codec.Value = "avc1"
-                                workingfile.filedetails_video.Width.Value = workingfile.filedetails_video.Width.Value.Replace(" pixels", "").Replace(" ", "")
-                                workingfile.filedetails_video.Height.Value = workingfile.filedetails_video.Height.Value.Replace(" pixels", "").Replace(" ", "")
-                                workingfile.filedetails_video.Container.Value = Path.GetExtension(filename).ToLower
-                                workingfile.filedetails_video.DurationInSeconds.Value = -1  'unable to get duration from ISO
+                                If workingfile.Video.Codec.Value.ToLower = "avc" Then workingfile.Video.Codec.Value = "avc1"
+                                workingfile.Video.Width.Value = workingfile.Video.Width.Value.Replace(" pixels", "").Replace(" ", "")
+                                workingfile.Video.Height.Value = workingfile.Video.Height.Value.Replace(" pixels", "").Replace(" ", "")
+                                workingfile.Video.Container.Value = Path.GetExtension(filename).ToLower
+                                workingfile.Video.DurationInSeconds.Value = -1  'unable to get duration from ISO
                             End If
 
                             If check.Contains("""Audio""") Then
@@ -2657,7 +2657,7 @@ Public Class Pref
                                     End If
                                 End If
                                 If audio.Codec.Value = "AC-3" Then audio.Codec.Value = "AC3"
-                                workingfile.filedetails_audio.Add(audio)
+                                workingfile.Audio.Add(audio)
                             End If
                                 
                             If check.Contains("""Text""") Then
@@ -2668,13 +2668,13 @@ Public Class Pref
                                             SubTitle.Language.Value = Utilities.GetLangCode(result.InnerText)
                                     End Select
                                 Next
-                                workingfile.filedetails_subtitles.Add(SubTitle)
+                                workingfile.Subtitles.Add(SubTitle)
                             End If
                     End Select
                 Next
-                If workingfile.filedetails_audio.Count = 0 Then
+                If workingfile.Audio.Count = 0 Then
                     Dim audio As New AudioDetails
-                    workingfile.filedetails_audio.Add(audio)    'Must have at least one audio track, even if it's blank
+                    workingfile.Audio.Add(audio)    'Must have at least one audio track, even if it's blank
                 End If
                 Return workingfile
             Else

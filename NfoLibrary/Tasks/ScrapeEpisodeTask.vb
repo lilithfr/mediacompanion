@@ -543,13 +543,13 @@ Namespace Tasks
                         'progresstext &= " HD Tags..."
                         'bckgroundscanepisodes.ReportProgress(progress, progresstext)
 
-                        If Not Me.Episode.Details.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
+                        If Not Me.Episode.StreamDetails.Video.DurationInSeconds.Value Is Nothing Then
 
                             '1h 24mn 48s 546ms
                             Dim tempint As Long
                             Dim hours As Integer
                             Dim minutes As Integer
-                            tempstring = Me.Episode.Details.StreamDetails.Video.DurationInSeconds.Value
+                            tempstring = Me.Episode.StreamDetails.Video.DurationInSeconds.Value
                             tempint = tempstring.IndexOf("h")
                             If tempint <> -1 Then
                                 hours = Convert.ToInt32(tempstring.Substring(0, tempint))

@@ -583,12 +583,12 @@ Public Class Form2
             Createdatepicker.Value = Date.now
             filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
             Dim newmovie As New Media_Companion.FullMovieDetails
-            Dim currentfiledetails As FullFileDetails = workingmovieedit.filedetails
+            Dim currentfiledetails As StreamDetails = workingmovieedit.filedetails
             workingmovieedit = newmovie
             PictureBox1.Image = Nothing
             workingmovieedit.filedetails = currentfiledetails
-            If Not String.IsNullOrEmpty(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value) Then
-                runtimetxt.Text = Math.Round(workingmovieedit.filedetails.filedetails_video.DurationInSeconds.Value/60).ToString & "min" 
+            If Not String.IsNullOrEmpty(workingmovieedit.filedetails.Video.DurationInSeconds.Value) Then
+                runtimetxt.Text = Math.Round(workingmovieedit.filedetails.Video.DurationInSeconds.Value/60).ToString & "min" 
             Else
                 runtimetxt.Text = ""
             End If

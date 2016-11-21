@@ -427,7 +427,7 @@ Public Class MediaInfoExport
                                     For i = 0 To idxEndParam - 1
                                         Select Case tokenInstr(i + 1).ToLower
                                             Case "container"
-                                                Dim container As String = newplotdetails.filedetails.filedetails_video.Container.Value
+                                                Dim container As String = newplotdetails.filedetails.Video.Container.Value
                                                 If container <> Nothing And container <> "" Then
                                                     If tokenInstr(i + 1).ToLower <> tokenInstr(i + 1) Then container = container.ToUpper
                                                     arrlstFormat.Add(container.TrimStart("."))
@@ -439,8 +439,8 @@ Public Class MediaInfoExport
                                                 End If
                                             Case "resolution"
                                                 Dim width, height As Integer
-                                                width = newplotdetails.filedetails.filedetails_video.Width.Value
-                                                height = newplotdetails.filedetails.filedetails_video.Height.Value
+                                                width = newplotdetails.filedetails.Video.Width.Value
+                                                height = newplotdetails.filedetails.Video.Height.Value
                                                 If width AndAlso height Then
                                                     If (width <= 720 And height <= 480) Then
                                                         arrlstFormat.Add("480")
@@ -461,7 +461,7 @@ Public Class MediaInfoExport
                                     Dim arrFormat As String() = CType(arrlstFormat.ToArray(GetType(String)), String())
                                     strNFOprop = String.Join(separator, arrFormat)
                                 Else
-                                    strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                                    strNFOprop = newplotdetails.filedetails.Video.Container.Value
                                 End If
                             End If
                             If tokenInstr(0) = "nfo" Then
@@ -473,24 +473,24 @@ Public Class MediaInfoExport
                                                 Case "video"
                                                     Select Case tokenInstr(3)
                                                         Case "width"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Width.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.Width.Value
                                                         Case "height"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Height.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.Height.Value
                                                         Case "aspect"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Aspect.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.Aspect.Value
                                                         Case "codec"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Codec.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.Codec.Value
                                                         Case "duration"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.DurationInSeconds.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.DurationInSeconds.Value
                                                         Case "container"
-                                                            strNFOprop = newplotdetails.filedetails.filedetails_video.Container.Value
+                                                            strNFOprop = newplotdetails.filedetails.Video.Container.Value
                                                         Case Else
                                                             strNFOprop = tokenInstr(3) & "not supported"
                                                     End Select
-                                                'strNFOprop = CallByName(newplotdetails.filedetails.filedetails_video, tokenInstr(3), vbGet)
+                                                'strNFOprop = CallByName(newplotdetails.filedetails.Video, tokenInstr(3), vbGet)
                                                 Case "audio"
                                                     Dim i As Integer = 1
-                                                    For Each audioStream In newplotdetails.filedetails.filedetails_audio
+                                                    For Each audioStream In newplotdetails.filedetails.Audio
                                                         Select Case tokenInstr(3)
                                                             Case "language"
                                                                 strNFOprop &= audioStream.Language.Value
@@ -502,20 +502,20 @@ Public Class MediaInfoExport
                                                                 strNFOprop &= audioStream.Codec.Value
                                                         End Select
                                                         'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
-                                                        If (newplotdetails.filedetails.filedetails_audio.Count > 1 And i <> newplotdetails.filedetails.filedetails_audio.Count) Then
+                                                        If (newplotdetails.filedetails.Audio.Count > 1 And i <> newplotdetails.filedetails.Audio.Count) Then
                                                             strNFOprop = strNFOprop & " / "
                                                         End If
                                                         i += 1
                                                     Next
                                                 Case "subtitles"
                                                     Dim i As Integer = 1
-                                                    For Each subLang In newplotdetails.filedetails.filedetails_subtitles
+                                                    For Each subLang In newplotdetails.filedetails.Subtitles
                                                         Select Case tokenInstr(3)
                                                             Case "language"
                                                                 strNFOprop &= subLang.Language.Value
                                                         End Select
                                                         'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
-                                                        If (newplotdetails.filedetails.filedetails_subtitles.Count > 1 And i <> newplotdetails.filedetails.filedetails_subtitles.Count) Then
+                                                        If (newplotdetails.filedetails.Subtitles.Count > 1 And i <> newplotdetails.filedetails.Subtitles.Count) Then
                                                             strNFOprop = strNFOprop & " / "
                                                         End If
                                                         i += 1
@@ -1123,24 +1123,24 @@ Public Class MediaInfoExport
                                     Case "video"
                                         Select Case tokenInstr(3)
                                             Case "width"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Width.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.Width.Value
                                             Case "height"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Height.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.Height.Value
                                             Case "aspect"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Aspect.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.Aspect.Value
                                             Case "codec"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Codec.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.Codec.Value
                                             Case "duration"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.DurationInSeconds.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.DurationInSeconds.Value
                                             Case "container"
-                                                strNFOprop = fullTVEpisodeDetails.Details.StreamDetails.Video.Container.Value
+                                                strNFOprop = fullTVEpisodeDetails.StreamDetails.Video.Container.Value
                                             Case Else
                                                 strNFOprop = tokenInstr(3) & "not supported"
                                         End Select
-                                        'strNFOprop = CallByName(fullTVEpisodeDetails.Details.StreamDetails.Video, tokenInstr(3), vbGet)
+                                        'strNFOprop = CallByName(fullTVEpisodeDetails.StreamDetails.Video, tokenInstr(3), vbGet)
                                     Case "audio"
                                         Dim i As Integer = 1
-                                        For Each audioStream In fullTVEpisodeDetails.Details.StreamDetails.Audio
+                                        For Each audioStream In fullTVEpisodeDetails.StreamDetails.Audio
                                             Select Case tokenInstr(3)
                                                 Case "language"
                                                     strNFOprop &= audioStream.Language.Value
@@ -1152,20 +1152,20 @@ Public Class MediaInfoExport
                                                     strNFOprop &= audioStream.Codec.Value
                                             End Select
                                             'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
-                                            If (fullTVEpisodeDetails.Details.StreamDetails.Audio.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Audio.Count) Then
+                                            If (fullTVEpisodeDetails.StreamDetails.Audio.Count > 1 And i <> fullTVEpisodeDetails.StreamDetails.Audio.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
                                             i += 1
                                         Next
                                     Case "subtitles"
                                         Dim i As Integer = 1
-                                        For Each subLang In fullTVEpisodeDetails.Details.StreamDetails.Subtitles
+                                        For Each subLang In fullTVEpisodeDetails.StreamDetails.Subtitles
                                             Select Case tokenInstr(3)
                                                 Case "language"
                                                     strNFOprop &= subLang.Language.Value
                                             End Select
                                             'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
-                                            If (fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count > 1 And i <> fullTVEpisodeDetails.Details.StreamDetails.Subtitles.Count) Then
+                                            If (fullTVEpisodeDetails.StreamDetails.Subtitles.Count > 1 And i <> fullTVEpisodeDetails.StreamDetails.Subtitles.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
                                             i += 1
