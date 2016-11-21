@@ -208,6 +208,8 @@ Module Module1
         End If
         
         Pref.ConfigLoad()
+        XBMCTMDBConfigSave
+        XBMCTVDBConfigSave
 
         If domovies Or domediaexport Then
             If File.Exists(Pref.workingProfile.moviecache) Then
@@ -239,6 +241,26 @@ Module Module1
         Writelogfile(logstr)
         If Not visible Then exitsound
         System.Environment.Exit(EnvExit)
+    End Sub
+
+    Private Sub XBMCTMDBConfigSave()
+		If Not Pref.XbmcTmdbScraperRatings = Nothing Then
+			XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
+			XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
+			XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
+			XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
+			XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
+		End If
+	End Sub
+
+    Private Sub XBMCTVDBConfigSave()
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("language", Pref.XBMCTVDbLanguage)  'ComboBox_TVDB_Language.Text)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
+        XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback)
     End Sub
 
     Public Sub LogStart

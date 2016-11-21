@@ -125,11 +125,22 @@ Public Class WorkingWithNfoFiles
         Return SubElement
     End Function
 
+    Public Shared Function SetCreateDate(ByVal videodate As String) As String
+        If String.IsNullOrEmpty(videodate) Then
+            Try
+                Dim myDate2 As Date = System.DateTime.Now
+                Return Format(myDate2, Pref.datePattern).ToString
+            Catch
+            End Try
+        End If
+        Return videodate
+    End Function
+
+
     '  All Tv Load/Save Routines
 #Region " Tv Routines "
     
     Public Shared Function ep_NfoLoad(ByVal loadpath As String)
-        'Try
         Dim episodelist As New List(Of TvEpisode)
         Dim fixmulti As Boolean = False
         Dim newtvshow As New TvEpisode
@@ -141,17 +152,12 @@ Public Class WorkingWithNfoFiles
                 Using tmpstrm As IO.StreamReader = File.OpenText(loadpath)
                     tvshow.Load(tmpstrm)
                 End Using
-                
             Catch ex As Exception
-                'If Not validate_nfo(path) Then
-                '    Exit Function
-                'End If
                 Try
                 newtvshow.Title.Value = Path.GetFileName(loadpath)
                 Catch
                     newtvshow.Title.Value = loadpath
                 End Try
-                'newtvshow.title = newtvshow.title.Replace(Path.GetExtension(newtvshow.title), "")
                 newtvshow.ImdbId.Value = "xml error"
                 newtvshow.NfoFilePath = loadpath
                 newtvshow.TvdbId.Value = ""
@@ -409,15 +415,13 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.TvdbId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "rating"
                                             Dim rating As String = ""
-                                            rating = thisresult.ChildNodes(f).InnerText  'anotherepisode.Rating.Value = thisresult.ChildNodes(f).InnerText
+                                            rating = thisresult.ChildNodes(f).InnerText
                                             If rating.IndexOf("/10") <> -1  Then rating.Replace("/10", "")
                                             If rating.IndexOf(" ") <> -1    Then rating.Replace(" ", "")
                                             If rating.IndexOf(".") <> -1 OrElse rating.IndexOf(",") <> -1 Then
                                                 rating = rating.Substring(0,3)
                                             End If
                                             anotherepisode.Rating.Value = rating
-                                            'If anotherepisode.Rating.IndexOf("/10") <> -1 Then anotherepisode.Rating.Value.Replace("/10", "")
-                                            'If anotherepisode.Rating.IndexOf(" ") <> -1 Then anotherepisode.Rating.Value.Replace(" ", "")
                                         Case "votes"
                                             anotherepisode.Votes.Value = thisresult.ChildNodes(f).InnerText
                                         Case "playcount"
@@ -463,7 +467,6 @@ Public Class WorkingWithNfoFiles
                                             For Each detail2 In thisresult.ChildNodes(f)
                                                 Select Case detail2.Name
                                                     Case "streamdetails"
-
                                                         Dim detail As XmlNode = Nothing
                                                         For Each detail In detail2.ChildNodes
                                                             Select Case detail.Name
@@ -527,7 +530,6 @@ Public Class WorkingWithNfoFiles
                                                                     anotherepisode.StreamDetails.Audio.Add(audio2)
                                                                 Case "subtitle"
                                                                     Dim subsdetails As XmlNode = Nothing
-                                                                    'Dim subs2 As New subtitle
                                                                     For Each subsdetails In detail.ChildNodes
                                                                         Select Case subsdetails.Name
                                                                             Case "language"
@@ -589,9 +591,6 @@ Public Class WorkingWithNfoFiles
 
             Return episodelist
         End If
-
-        'Catch
-        'End Try
     End Function
 
     Public Shared Sub ep_NfoSave(ByVal listofepisodes As List(Of TvEpisode), ByVal path As String)
@@ -601,7 +600,6 @@ Public Class WorkingWithNfoFiles
         Dim xmlStreamDetails As XmlElement
         Dim xmlFileInfo As XmlElement
         Dim xmlActor As XmlElement
-        Dim xmlActorchild As XmlElement
 
         Dim xmlproc As XmlDeclaration
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
@@ -657,18 +655,10 @@ Public Class WorkingWithNfoFiles
             If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
             For f = 0 To actorstosave - 1
                 xmlActor = doc.CreateElement("actor")
-                xmlActorchild = doc.CreateElement("name")
-                xmlActorchild.InnerText = ep.ListActors(f).actorname
-                xmlActor.AppendChild(xmlActorchild)
-                xmlActorchild = doc.CreateElement("role")
-                xmlActorchild.InnerText = ep.ListActors(f).actorrole
-                xmlActor.AppendChild(xmlActorchild)
-                If ep.ListActors(f).actorthumb <> Nothing Then
-                    If ep.ListActors(f).actorthumb <> "" Then
-                        xmlActorchild = doc.CreateElement("thumb")
-                        xmlActorchild.InnerText = ep.ListActors(f).actorthumb
-                        xmlActor.AppendChild(xmlActorchild)
-                    End If
+                xmlActor.AppendChild(doc, "name", ep.ListActors(f).actorname)
+                xmlActor.AppendChild(doc, "role", ep.ListActors(f).actorrole)
+                If Not String.IsNullOrEmpty(ep.ListActors(f).actorthumb) Then
+                    xmlActor.AppendChild(doc, "thumb", ep.ListActors(f).actorthumb)
                 End If
                 xmlEpisode.AppendChild(xmlActor)
             Next
@@ -682,11 +672,6 @@ Public Class WorkingWithNfoFiles
         doc.AppendChild(root)
         Try
             SaveXMLDoc(doc, path)
-            'Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-            'output.Formatting = Formatting.Indented
-            'output.Indentation = 4
-            'doc.WriteTo(output)
-            'output.Close()
         Catch
         End Try
 
@@ -794,8 +779,7 @@ Public Class WorkingWithNfoFiles
         End Try
         Return aok
     End Function
-
-
+    
     Public Sub tvshow_NfoSave(ByVal tvshowtosave As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal lock As String = "")
 
         Monitor.Enter(Me)
@@ -2083,27 +2067,19 @@ Public Class WorkingWithNfoFiles
     '  All Movie Load/Save Routines
 #Region " Movie Routines "    
     Public Function mov_NfoLoadBasic(ByVal loadpath As String, ByVal mode As String,_oMovies As Movies) As ComboList
-
         Dim newmovie As New ComboList
-
         Try
             If Not File.Exists(loadpath) Then
                 newmovie.title = "Error"
                 Return newmovie
             End If
-
             newmovie.oMovies = _oMovies
-
             If mode = "movielist" Then
                 Dim movie As New XmlDocument
                 Try
                     Using tmpstrm As IO.StreamReader = File.OpenText(loadpath)
                         movie.Load(tmpstrm)
                     End Using
-                'Catch
-                '    newmovie.title = "Error"
-                '    Return newmovie
-                'End Try
                 Catch ex As Exception
                     If Not util_NfoValidate(loadpath) Then
                         newmovie.title = "Error"
@@ -2140,34 +2116,19 @@ Public Class WorkingWithNfoFiles
                     newmovie.runtime = "0"
                     newmovie.sortorder = ""
                     newmovie.title = Path.GetFileName(loadpath)
-            '           newmovie.titleandyear = newmovie.title & " (0000)"
                     newmovie.top250 = "0"
                     newmovie.year = "1850"
                     newmovie.stars = ""
                     newmovie.usrrated = 0
-
                     Return newmovie
                 End Try
 
                 Dim thisresult As XmlNode = Nothing
-
                 For Each thisresult In movie("movie")
                     Try
                         Select Case thisresult.Name
-                            Case "title" : newmovie.title = thisresult.InnerText
-
-
-                                'Dim tempstring As String = ""
-                                'tempstring = thisresult.InnerText
-                                ''-------------- Aqui
-                                'If Pref.ignorearticle = True Then
-                                '    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                '        tempstring = tempstring & ", The"
-                                '    End If
-                                'End If
-                                'newmovie.title = tempstring
-
+                            Case "title"
+                                newmovie.title = thisresult.InnerText
                             Case "originaltitle"
                                 newmovie.originaltitle = thisresult.InnerText
                             Case "set"
@@ -2191,7 +2152,7 @@ Public Class WorkingWithNfoFiles
                             Case "year"
                                 Dim ayear As Integer = thisresult.InnerText.ToInt
                                 If ayear = 0 Then ayear = 1850
-                                newmovie.year = ayear   'thisresult.InnerText.ToInt
+                                newmovie.year = ayear
                             Case "outline"
                                 newmovie.outline = thisresult.InnerText
                             Case "plot"
@@ -2218,11 +2179,6 @@ Public Class WorkingWithNfoFiles
                                 End If
                             Case "tag"
                                 newmovie.movietag.Add(thisresult.InnerText)
-                                'If newmovie.tag.add = "" Then                       'tag in nfo's are individual elements - in MC cache they are one string seperated by " / "
-                                '    newmovie.tag = thisresult.InnerText
-                                'Else
-                                '    newmovie.genre = newmovie.tag & " / " & thisresult.InnerText
-                                'End If
                             Case "id"
                                 If thisresult.Attributes.Count = 0 Then newmovie.id = thisresult.InnerText 'ignore any id nodes with attributes
                             Case "stars"
@@ -2234,10 +2190,6 @@ Public Class WorkingWithNfoFiles
                             Case "lastplayed"
                                 newmovie.lastplayed = thisresult.InnerText
                             Case "rating"
-                                'Dim tempStr As String = thisresult.InnerText
-                                'If tempStr.IndexOf("/10") <> -1 Then tempStr.Replace("/10", "")
-                                'If tempStr.IndexOf(" "  ) <> -1 Then tempStr.Replace(" "  , "")
-                                'newmovie.rating = tempStr.ToRating
                                 newmovie.rating = thisresult.InnerText.ToRating
                             Case "userrating"
                                 newmovie.usrrated = thisresult.InnerText.ToInt 
@@ -2262,24 +2214,16 @@ Public Class WorkingWithNfoFiles
                                     vote = vote.Replace(",", "")
                                     newmovie.Votes = vote.toint
                                 End If
-                                'newmovie.Votes = thisresult.InnerText.ToInt
-
                             Case "mpaa"    'aka Certificate
                                 newmovie.Certificate = thisresult.InnerText
-
                             Case "fileinfo"
-
                                 Dim gotWidth As Boolean
                                 Dim gotHeight As Boolean
-
                                 For Each res In thisresult.ChildNodes
                                     If res.name = "streamdetails" Then
-
                                         Dim newfilenfo As New StreamDetails
-
                                         For Each detail In res.ChildNodes
                                             Select Case detail.Name
-
                                                 Case "video"
                                                     For Each videodetails As XmlNode In detail.ChildNodes
                                                         Select Case videodetails.Name
@@ -2292,13 +2236,11 @@ Public Class WorkingWithNfoFiles
                                                             Case "codec"
                                                                 newmovie.VideoCodec = videodetails.InnerText
                                                         End Select
-
                                                         If gotWidth And gotHeight Then
                                                             newmovie.Resolution = newfilenfo.Video.VideoResolution
                                                             Exit For
                                                         End If
                                                     Next
-
                                                 Case "audio"
                                                         Dim audio As New AudioDetails
                                                         For Each audiodetails As XmlNode In detail.ChildNodes
@@ -2317,13 +2259,11 @@ Public Class WorkingWithNfoFiles
                                                         newmovie.Audio.Add(audio)
                                             End Select
                                         Next
-
                                         If gotWidth And gotHeight Then
                                             Exit For
                                         End If
                                     End If
                                 Next
-
     '                       Case "Resolution" : newmovie.Resolution = thisresult.InnerText          'Add later?...to replace above...
                         End Select
                     Catch ex As Exception
@@ -2343,39 +2283,29 @@ Public Class WorkingWithNfoFiles
                 Catch ex As Exception
                     MsgBox(ex.ToString)
                 End Try
-                newmovie.filename = Path.GetFileName(loadpath)
-                newmovie.foldername = Utilities.GetLastFolder(loadpath)
-                newmovie.fullpathandfilename = loadpath
-                newmovie.rootfolder = Pref.GetRootFolder(loadpath) & "\"
-                If newmovie.genre = Nothing Then newmovie.genre = ""
-                If newmovie.id = Nothing Then newmovie.id = ""
-                If newmovie.tmdbid = Nothing Then newmovie.tmdbid = ""
-                If newmovie.missingdata1 = Nothing Then newmovie.missingdata1 = 0
-                If newmovie.source = Nothing Then newmovie.source = ""
-                If newmovie.director = Nothing Then newmovie.director = ""
-                If newmovie.credits = Nothing Then newmovie.credits = ""
-                If newmovie.SetName = "" Then newmovie.SetName = "-None-"
-                'If newmovie.tag = Nothing Then newmovie.tag = ""
-                'if there is no entry for originaltitle, then use the current title. this should only come into use
-                'for old movies since new ones will have the originaltitle created when scraped
-                If newmovie.originaltitle = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
-                If newmovie.playcount = Nothing Then newmovie.playcount = "0"
-                If newmovie.lastplayed = Nothing Then newmovie.lastplayed = ""
-                If newmovie.plot = Nothing Then newmovie.plot = ""
-                If newmovie.rating = Nothing Then newmovie.rating = 0
-                If newmovie.runtime = Nothing Then newmovie.runtime = ""
-                If newmovie.usrrated = Nothing Then newmovie.usrrated = 0
-                If newmovie.sortorder = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
-                'If newmovie.title <> Nothing And newmovie.year <> Nothing Then
-                '    newmovie.titleandyear = newmovie.title & " (" & newmovie.year & ")"
-                'Else
-                '    newmovie.titleandyear = newmovie.title & "(0000)"
-                'End If
-                If newmovie.top250 = Nothing Then newmovie.top250 = "0"
-                If newmovie.year = Nothing Then newmovie.year = "0001"
-
-                'MsgBox(Format(myDate, "MMddyy"))
-                'MsgBox(myDate.ToString("MMddyy"))
+                newmovie.filename               = Path.GetFileName(loadpath)
+                newmovie.foldername             = Utilities.GetLastFolder(loadpath)
+                newmovie.fullpathandfilename    = loadpath
+                newmovie.rootfolder             = Pref.GetRootFolder(loadpath) & "\"
+                If newmovie.genre               = Nothing Then newmovie.genre = ""
+                If newmovie.id                  = Nothing Then newmovie.id = ""
+                If newmovie.tmdbid              = Nothing Then newmovie.tmdbid = ""
+                If newmovie.missingdata1        = Nothing Then newmovie.missingdata1 = 0
+                If newmovie.source              = Nothing Then newmovie.source = ""
+                If newmovie.director            = Nothing Then newmovie.director = ""
+                If newmovie.credits             = Nothing Then newmovie.credits = ""
+                If newmovie.SetName             = "" Then newmovie.SetName = "-None-"
+                If newmovie.originaltitle       = "" Or newmovie.originaltitle = Nothing Then newmovie.originaltitle = newmovie.title
+                If newmovie.playcount           = Nothing Then newmovie.playcount = "0"
+                If newmovie.lastplayed          = Nothing Then newmovie.lastplayed = ""
+                If newmovie.plot                = Nothing Then newmovie.plot = ""
+                If newmovie.rating              = Nothing Then newmovie.rating = 0
+                If newmovie.runtime             = Nothing Then newmovie.runtime = ""
+                If newmovie.usrrated            = Nothing Then newmovie.usrrated = 0
+                If newmovie.sortorder           = Nothing Or newmovie.sortorder = "" Then newmovie.sortorder = newmovie.title
+                If newmovie.top250              = Nothing Then newmovie.top250 = "0"
+                If newmovie.year                = Nothing Then newmovie.year = "0001"
+                
                 movie = Nothing
             End If
             Return newmovie
@@ -2603,9 +2533,7 @@ Public Class WorkingWithNfoFiles
                             Next
                         Case "rating"
                             Dim y As String = thisresult.InnerText
-                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString ' ("0.00", MyCulture)
-                            'If newmovie.fullmoviebody.rating.IndexOf("/10") <> -1 Then newmovie.fullmoviebody.rating.Replace("/10", "")
-                            'If newmovie.fullmoviebody.rating.IndexOf(" ") <> -1 Then newmovie.fullmoviebody.rating.Replace(" ", "")
+                            newmovie.fullmoviebody.rating = thisresult.InnerText.ToRating.ToString
                         Case "userrating"
                             newmovie.fullmoviebody.usrrated = thisresult.InnerText
                         Case "metascore"
@@ -2743,32 +2671,32 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.imdbid = "0"
                 End If
                 If watched Then newmovie.fullmoviebody.playcount = "1"
-                newmovie.fileinfo.fullpathandfilename = loadpath
-                newmovie.fileinfo.filename = Path.GetFileName(loadpath)
-                newmovie.fileinfo.foldername = Utilities.GetLastFolder(loadpath)
-                If Path.GetFileName(loadpath).ToLower = "video_ts.nfo" Or Path.GetFileName(loadpath).ToLower = "index.nfo" Then
-                    newmovie.fileinfo.videotspath = Utilities.RootVideoTsFolder(loadpath)
+                newmovie.fileinfo.fullpathandfilename   = loadpath
+                newmovie.fileinfo.filename              = Path.GetFileName(loadpath)
+                newmovie.fileinfo.foldername            = Utilities.GetLastFolder(loadpath)
+                If Path.GetFileName(loadpath).ToLower   = "video_ts.nfo" Or Path.GetFileName(loadpath).ToLower = "index.nfo" Then
+                    newmovie.fileinfo.videotspath       = Utilities.RootVideoTsFolder(loadpath)
                 Else
                     newmovie.fileinfo.videotspath = ""
                 End If
-                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(loadpath) & "\"
-                newmovie.fileinfo.posterpath = Pref.GetPosterPath(loadpath, newmovie.fileinfo.filename)
-                newmovie.fileinfo.trailerpath = ""
-                newmovie.fileinfo.path = Path.GetDirectoryName(loadpath) & "\"
-                newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
-                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(loadpath, newmovie.fileinfo.filename)
-                newmovie.fileinfo.movsetfanartpath = Pref.GetMovSetFanartPath(loadpath, newmovie.fullmoviebody.SetName)
-                newmovie.fileinfo.movsetposterpath = Pref.GetMovSetPosterPath(loadpath, newmovie.fullmoviebody.SetName)
+                newmovie.fileinfo.rootfolder            = Pref.GetRootFolder(loadpath) & "\"
+                newmovie.fileinfo.posterpath            = Pref.GetPosterPath(loadpath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.trailerpath           = ""
+                newmovie.fileinfo.path                  = Path.GetDirectoryName(loadpath) & "\"
+                newmovie.fileinfo.basepath              = Pref.GetMovBasePath(newmovie.fileinfo.path)
+                newmovie.fileinfo.fanartpath            = Pref.GetFanartPath(loadpath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.movsetfanartpath      = Pref.GetMovSetFanartPath(loadpath, newmovie.fullmoviebody.SetName)
+                newmovie.fileinfo.movsetposterpath      = Pref.GetMovSetPosterPath(loadpath, newmovie.fullmoviebody.SetName)
 
                 If Not String.IsNullOrEmpty(newmovie.filedetails.Video.Container.Value) Then
-                    Dim container As String = newmovie.filedetails.Video.Container.Value
-                    newmovie.fileinfo.filenameandpath = loadpath.Replace(".nfo", container)
+                    Dim container As String             = newmovie.filedetails.Video.Container.Value
+                    newmovie.fileinfo.filenameandpath   = loadpath.Replace(".nfo", container)
                 End If
                 
-                If newmovie.fullmoviebody.SetName = "" Then
-                    newmovie.fullmoviebody.SetName = "-None-"
+                If newmovie.fullmoviebody.SetName       = "" Then
+                    newmovie.fullmoviebody.SetName      = "-None-"
                 End If
-                If newmovie.fullmoviebody.usrrated = "" Then newmovie.fullmoviebody.usrrated = "0"
+                If newmovie.fullmoviebody.usrrated      = "" Then newmovie.fullmoviebody.usrrated = "0"
                 movie = Nothing
 
                 If Flag4resave Then mov_NfoSave(loadpath, newmovie, True)    ' Resave if field updated or to correct an nfo error.
@@ -2813,82 +2741,16 @@ Public Class WorkingWithNfoFiles
                 filedetailschild = doc.CreateElement("video")
                 If Pref.enablehdtags = True Then
                     stage = 4
-                    'If movietosave.filedetails.Video.Width.Value <> "" Then filedetailschild.AppendChild(doc, "width", movietosave.filedetails.Video.Width.Value)
-
-                    'stage = 5
-                    'If movietosave.filedetails.Video.Height.Value <> "" Then filedetailschild.AppendChild(doc, "height", movietosave.filedetails.Video.Height.Value)
-
-                    'If movietosave.filedetails.Video.Aspect.Value <> "" Then filedetailschild.AppendChild(doc, "aspect", movietosave.filedetails.Video.Aspect.Value)
-                    'stage = 6
-                    'If movietosave.filedetails.Video.Codec.Value <> "" Then filedetailschild.AppendChild(doc, "codec", movietosave.filedetails.Video.Codec.Value)
-                    'stage = 7
-                    'If movietosave.filedetails.Video.FormatInfo.Value <> "" Then filedetailschild.AppendChild(doc, "formatinfo", movietosave.filedetails.Video.FormatInfo.Value)
-                    'stage = 8
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.DurationInSeconds.Value) Then
-                    '    Dim TempValue As String = movietosave.filedetails.Video.DurationInSeconds.Value
-                    '    If Pref.MovRuntimeAsDuration Then
-                    '        Dim domath As Integer
-                    '        Dim aok As Boolean = Int32.TryParse(movietosave.fullmoviebody.runtime.ToMin, domath)
-                    '        If aok AndAlso domath > 0 Then
-                    '            TempValue = (domath*60).ToString
-                    '        Else
-                    '            TempValue = If(TempValue = "-1", "", TempValue)
-                    '        End If
-                    '    Else
-                    '        TempValue = If(TempValue = "-1", "", TempValue)
-                    '    End If
-                    '    If Not String.IsNullOrEmpty(TempValue) Then filedetailschild.AppendChild(doc, "durationinseconds", TempValue)
-                    'End If
-                    'stage = 9
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.Bitrate.Value) Then
-                    '    filedetailschild.AppendChild(doc, "bitrate", movietosave.filedetails.Video.Bitrate.Value)
-                    'End If
-                    'stage = 10
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.BitrateMode.Value) Then
-                    '    filedetailschild.AppendChild(doc, "bitratemode", movietosave.filedetails.Video.BitrateMode.Value)
-                    'End If
-                    'stage = 11
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.BitrateMax.Value) Then
-                    '    filedetailschild.AppendChild(doc, "bitratemax", movietosave.filedetails.Video.BitrateMax.Value)
-                    'End If
-                    'stage = 12
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.Container.Value) Then
-                    '    filedetailschild.AppendChild(doc, "container", movietosave.filedetails.Video.Container.Value)
-                    'End If
-                    'stage = 13
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.CodecId.Value) Then
-                    '    filedetailschild.AppendChild(doc, "codecid", movietosave.filedetails.Video.CodecId.Value)
-                    'End If
-                    'stage = 14
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.CodecInfo.Value) Then
-                    '    filedetailschild.AppendChild(doc, "codecidinfo", movietosave.filedetails.Video.CodecInfo.Value)
-                    'End If
-                    'stage = 15
-                    'If Not String.IsNullOrEmpty(movietosave.filedetails.Video.ScanType.Value) Then
-                    '    filedetailschild.AppendChild(doc, "scantype", movietosave.filedetails.Video.ScanType.Value)
-                    'End If
-
                     stage = 16
                     anotherchild.AppendChild(AppendVideo(doc, movietosave.filedetails.Video))
-                    'anotherchild.AppendChild(filedetailschild)
 
                     stage = 17
                     For Each item In movietosave.filedetails.Audio
-                        'filedetailschild = doc.CreateElement("audio")
-                        'If Not String.IsNullOrEmpty(item.Language.Value)        Then filedetailschild.AppendChild(doc, "language", item.Language.Value)
-                        'If Not String.IsNullOrEmpty(item.DefaultTrack.Value)    Then filedetailschild.AppendChild(doc, "DefaultTrack", item.DefaultTrack.Value)
-                        'If Not String.IsNullOrEmpty(item.Codec.Value)           Then filedetailschild.AppendChild(doc, "codec", item.Codec.Value)
-                        'If Not String.IsNullOrEmpty(item.Channels.Value)        Then filedetailschild.AppendChild(doc, "channels", item.Channels.Value)
-                        'If Not String.IsNullOrEmpty(item.Bitrate.Value)         Then filedetailschild.AppendChild(doc, "bitrate", item.Bitrate.Value)
                         anotherchild.AppendChild(AppendAudio(doc, item))
                     Next
                     stage = 18
                     For Each entry In movietosave.filedetails.Subtitles
                         If Not String.IsNullOrEmpty(entry.Language.Value) Then
-                            'filedetailschild = doc.CreateElement("subtitle")
-                            'If Not String.IsNullOrEmpty(entry.Language.Value) Then filedetailschild.AppendChild(doc, "language", entry.Language.Value)
-                            'If Not String.IsNullOrEmpty(entry.Primary) Then filedetailschild.AppendChild(doc, "default", entry.Primary)
-                            'If Not String.IsNullOrEmpty(entry.Forced) Then filedetailschild.AppendChild(doc, "forced", entry.Forced)
                             anotherchild.AppendChild(AppendSub(doc, entry))
                         End If
                     Next
@@ -2904,58 +2766,40 @@ Public Class WorkingWithNfoFiles
                 child.AppendChild(anotherchild)
                 root.AppendChild(child)
                 stage = 22
-                child = doc.CreateElement("title")
-                child.InnerText = movietosave.fullmoviebody.title
-                root.AppendChild(child)
+                root.AppendChild(doc, "title", movietosave.fullmoviebody.title)
                 stage = 23
-                child = doc.CreateElement("originaltitle")
-                If String.IsNullOrEmpty(movietosave.fullmoviebody.originaltitle) Then
-                    child.InnerText = movietosave.fullmoviebody.title
-                Else
-                    child.InnerText = movietosave.fullmoviebody.originaltitle
-                End If
+                root.AppendChild(doc, "originaltitle", If(String.IsNullOrEmpty(movietosave.fullmoviebody.originaltitle), movietosave.fullmoviebody.title, movietosave.fullmoviebody.originaltitle))
 
-                root.AppendChild(child)
                 stage = 24
                 If Not Pref.NoAltTitle AndAlso movietosave.alternativetitles.Count > 0 Then
                     For Each title In movietosave.alternativetitles
                         If title <> movietosave.fullmoviebody.title Then
-                            child = doc.CreateElement("alternativetitle")
-                            child.InnerText = title
-                            root.AppendChild(child)
+                            root.AppendChild(doc, "alternativetitle", title)
                         End If
                     Next
                 End If
                 stage = 25
                 If movietosave.fullmoviebody.SetName <> "-None-" Then
-                    child = doc.CreateElement("set")
-                    child.InnerText = movietosave.fullmoviebody.SetName
-                    root.AppendChild(child)
+                    root.AppendChild(doc, "set", movietosave.fullmoviebody.SetName)
 				End If
 
 				If movietosave.fullmoviebody.TmdbSetId <> "" Then
-                    child = doc.CreateElement("setid")
-                    child.InnerText = movietosave.fullmoviebody.TmdbSetId
-                    root.AppendChild(child)
-                    If Pref.SetIdAsCollectionnumber Then
-                        child = doc.CreateElement("collectionnumber")
-                        child.InnerText = movietosave.fullmoviebody.TmdbSetId
-                        root.AppendChild(child)
-                    End If
+                    root.AppendChild(doc, "setid", movietosave.fullmoviebody.TmdbSetId)
+                    If Pref.SetIdAsCollectionnumber Then root.AppendChild(doc, "collectionnumber", movietosave.fullmoviebody.TmdbSetId)
                 End If
 
                 stage = 26
                 If String.IsNullOrEmpty(movietosave.fullmoviebody.sortorder) Then
                     movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title
                 End If
-                root.AppendChild(doc, "sorttitle", movietosave.fullmoviebody.sortorder)
+                root.AppendChild(doc, "sorttitle"   , movietosave.fullmoviebody.sortorder)
                 stage = 27
-                root.AppendChild(doc, "year", movietosave.fullmoviebody.year)
+                root.AppendChild(doc, "year"        , movietosave.fullmoviebody.year)
                 stage = 28
-                root.AppendChild(doc, "premiered", movietosave.fullmoviebody.premiered)
-                root.AppendChild(doc, "rating", movietosave.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture))
-                root.AppendChild(doc, "userrating", If(movietosave.fullmoviebody.usrrated = "", "0", movietosave.fullmoviebody.usrrated))
-                root.AppendChild(doc, "metascore", If(movietosave.fullmoviebody.metascore = "", "0", movietosave.fullmoviebody.metascore))
+                root.AppendChild(doc, "premiered"   , movietosave.fullmoviebody.premiered)
+                root.AppendChild(doc, "rating"      , movietosave.fullmoviebody.rating.ToRating.ToString("0.0", Form1.MyCulture))
+                root.AppendChild(doc, "userrating"  , If(movietosave.fullmoviebody.usrrated = "", "0", movietosave.fullmoviebody.usrrated))
+                root.AppendChild(doc, "metascore"   , If(movietosave.fullmoviebody.metascore = "", "0", movietosave.fullmoviebody.metascore))
                 stage = 29
 
                 If movietosave.fullmoviebody.LockedFields.Count>0 Then
@@ -2964,7 +2808,6 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 End If
                 
-                child = doc.CreateElement("votes")
                 Dim votes As String = movietosave.fullmoviebody.votes
                 If Not String.IsNullOrEmpty(votes) then
                     If Not Pref.MovThousSeparator Then
@@ -2980,20 +2823,14 @@ Public Class WorkingWithNfoFiles
                         End If
                     End If
                 End If
-                child.InnerText = votes
-                root.AppendChild(child)
+                root.AppendChild(doc, "votes", votes)
                 stage = 30
-                child = doc.CreateElement("top250") : child.InnerText = movietosave.fullmoviebody.top250
-                root.AppendChild(child)
-                child = doc.CreateElement("outline") : child.InnerText = movietosave.fullmoviebody.outline
-                root.AppendChild(child)
+                root.AppendChild(doc, "top250", movietosave.fullmoviebody.top250)
+                root.AppendChild(doc, "outline", movietosave.fullmoviebody.outline)
                 stage = 31
-                child = doc.CreateElement("plot") : child.InnerText = movietosave.fullmoviebody.plot
-                root.AppendChild(child)
+                root.AppendChild(doc, "plot", movietosave.fullmoviebody.plot)
                 stage = 32
-                child = doc.CreateElement("tagline") : child.InnerText = movietosave.fullmoviebody.tagline
-                root.AppendChild(child)
-
+                root.AppendChild(doc, "tagline", movietosave.fullmoviebody.tagline)
                 stage = 33
                 root.AppendChildList(doc, "country", movietosave.fullmoviebody.country)
 
@@ -3035,10 +2872,6 @@ Public Class WorkingWithNfoFiles
                     End If
                     If movietosave.fullmoviebody.runtime <> Nothing Then
                         Dim minutes As String = movietosave.fullmoviebody.runtime.ToMin
-                        'minutes = minutes.Replace("minutes", "")
-                        'minutes = minutes.Replace("mins", "")
-                        'minutes = minutes.Replace("min", "")
-                        'minutes = minutes.Replace(" ", "")
                         Try
                             If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
                                 Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
@@ -3068,8 +2901,7 @@ Public Class WorkingWithNfoFiles
                 Catch
                 End Try
                 stage = 36
-                child = doc.CreateElement("mpaa") : child.InnerText = movietosave.fullmoviebody.mpaa
-                root.AppendChild(child)
+                root.AppendChild(doc, "mpaa", movietosave.fullmoviebody.mpaa)
 
                 stage = 37
                 If movietosave.fullmoviebody.genre <> "" Then
@@ -3096,101 +2928,59 @@ Public Class WorkingWithNfoFiles
 
                 stage = 41
                 root.AppendChildList(doc, "studio", movietosave.fullmoviebody.studio)
-
+                
                 stage = 42
-                child = doc.CreateElement("trailer") : child.InnerText = movietosave.fullmoviebody.trailer
-                root.AppendChild(child)
+                root.AppendChild(doc, "trailer", movietosave.fullmoviebody.trailer)
 
                 stage = 43
-                child = doc.CreateElement("playcount")  : child.InnerText = movietosave.fullmoviebody.playcount
-                root.AppendChild(child)
+                root.AppendChild(doc, "playcount", movietosave.fullmoviebody.playcount)
                 If Pref.MovNfoWatchTag Then
-                    child = doc.CreateElement("watched")    : child.InnerXml = If(movietosave.fullmoviebody.playcount = "0", False, True)
-                    root.AppendChild(child)
+                    'child = doc.CreateElement("watched")    : child.InnerXml = If(movietosave.fullmoviebody.playcount = "0", False, True)
+                    'root.AppendChild(child)
+                    root.AppendChild(doc, "watched", If(movietosave.fullmoviebody.playcount = "0", False, True))
                 End If
 
                 stage = 44
-                child = doc.CreateElement("lastplayed") : child.InnerText = movietosave.fullmoviebody.lastplayed
-                root.AppendChild(child)
+                root.AppendChild(doc, "lastplayed", movietosave.fullmoviebody.lastplayed)
 
                 stage = 45
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.imdbid) Then
-                    child = doc.CreateElement("id")
-                    child.InnerText = movietosave.fullmoviebody.imdbid
-                    root.AppendChild(child)
+                    root.AppendChild(doc, "id", movietosave.fullmoviebody.imdbid)
                 End If
                 stage = 46
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.tmdbid) Then
-                    child = doc.CreateElement("tmdbid")
-                    child.InnerText = movietosave.fullmoviebody.tmdbid
-                    root.AppendChild(child)
+                    root.AppendChild(doc, "tmdbid", movietosave.fullmoviebody.tmdbid)
                 End If
                 stage = 47
                 If Not String.IsNullOrEmpty(movietosave.fullmoviebody.source) Then
-                    child = doc.CreateElement("videosource")
-                    child.InnerText = movietosave.fullmoviebody.source
-                    root.AppendChild(child)
+                    root.AppendChild(doc, "videosource", movietosave.fullmoviebody.source)
                 End If
                 stage = 48
-                child = doc.CreateElement("showlink") : child.InnerText = movietosave.fullmoviebody.showlink
-                root.AppendChild(child)
+                root.AppendChild(doc, "showlink", movietosave.fullmoviebody.showlink)
+
                 stage = 49
-                child = doc.CreateElement("createdate")
-                If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
-                    Dim myDate2 As Date = System.DateTime.Now
-                    Try
-                        child.InnerText = Format(myDate2, Pref.datePattern).ToString
-                    Catch ex2 As Exception
-                    End Try
-                Else
-                    child.InnerText = movietosave.fileinfo.createdate
-                End If
-                root.AppendChild(child)
+                root.AppendChild(doc, "createdate", SetCreateDate(movietosave.fileinfo.createdate))
 
                 stage = 50
-                child = doc.CreateElement("stars") : child.InnerText = movietosave.fullmoviebody.stars
-                root.AppendChild(child)
+                root.AppendChild(doc, "stars", movietosave.fullmoviebody.stars)
                 stage = 51
                 Dim actorstosave As Integer = movietosave.listactors.Count
                 If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
                 For f = 0 To actorstosave - 1
                     child = doc.CreateElement("actor")
-                    actorchild = doc.CreateElement("id")
-                    actorchild.InnerText = movietosave.listactors(f).actorid
-                    child.AppendChild(actorchild)
-                    actorchild = doc.CreateElement("name")
-                    actorchild.InnerText = movietosave.listactors(f).actorname
-                    child.AppendChild(actorchild)
-                    actorchild = doc.CreateElement("role")
-                    actorchild.InnerText = movietosave.listactors(f).actorrole
-                    child.AppendChild(actorchild)
-                    actorchild = doc.CreateElement("thumb")
-                    actorchild.InnerText = movietosave.listactors(f).actorthumb
-                    child.AppendChild(actorchild)
-                    actorchild = doc.CreateElement("order")
-                    actorchild.InnerText = movietosave.listactors(f).order
-                    child.AppendChild(actorchild)
+                    child.AppendChild(doc, "id"     , actorchild.InnerText = movietosave.listactors(f).actorid      )
+                    child.AppendChild(doc, "name"   , actorchild.InnerText = movietosave.listactors(f).actorname    )
+                    child.AppendChild(doc, "role"   , actorchild.InnerText = movietosave.listactors(f).actorrole    )
+                    child.AppendChild(doc, "thumb"  , actorchild.InnerText = movietosave.listactors(f).actorthumb   )
+                    child.AppendChild(doc, "order"  , actorchild.InnerText = movietosave.listactors(f).order        )
                     root.AppendChild(child)
                 Next
 
                 doc.AppendChild(root)
                 stage = 52
                 Try
-                    'Dim settings As New XmlWriterSettings()
-                    'settings.Encoding = New UTF8Encoding(False)
-                    'settings.Indent = True
-                    'settings.IndentChars = (ControlChars.Tab)
-                    'settings.NewLineHandling = NewLineHandling.None
-                    'Dim writer As XmlWriter = XmlWriter.Create(filenameandpath, settings)
-                    'Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
-                    'output.Formatting = Formatting.Indented
-                    'output.Indentation = 4
                     stage = 53
                     SaveXMLDoc(doc, filenameandpath)
-                    'doc.Save(writer)
-                    'writer.Close()
-                    'doc.WriteTo(output)
-                    'output.Close()
                     stage = 54
                 Catch
                 End Try
@@ -3215,11 +3005,8 @@ Public Class WorkingWithNfoFiles
             newmovie.fileinfo.fullpathandfilename = filepath
             If Not File.Exists(filepath) Then
                 Return "Error"
-                Exit Function
             Else
-
                 Dim movie As New XmlDocument
-
                 Try
                     Using tmpstrm As IO.StreamReader = File.OpenText(filepath)
                         movie.Load(tmpstrm)
@@ -3228,55 +3015,25 @@ Public Class WorkingWithNfoFiles
                     If Not util_NfoValidate(filepath, True) Then
                         newmovie.fullmoviebody.title = "ERROR"
                         Return "ERROR"
-                        Exit Function
                     End If
-
-
-
                     Return (newmovie)
-                    Exit Function
                 End Try
 
                 Dim thisresult As XmlNode = Nothing
-
                 For Each thisresult In movie("movie")
                     Try
                         Select Case thisresult.Name
                             Case "title"
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
-                                '-------------- Aqui
-                                'If Pref.ignorearticle = True Then
-                                '    If tempstring.ToLower.IndexOf("the ") = 0 Then
-                                '        tempstring = tempstring.Substring(4, tempstring.Length - 4)
-                                '        tempstring = tempstring & ", The"
-                                '    End If
-                                'End If
-                                'If Pref.ignoreAarticle Then
-                                '    If tempstring.ToLower.IndexOf("a ") = 0 Then
-                                '        tempstring = tempstring.Substring(2, tempstring.Length - 2) & ", A"
-                                '    End If
-                                'End If
-                                'If Pref.ignoreAn Then
-                                '    If tempstring.ToLower.IndexOf("an ") = 0 Then
-                                '        tempstring = tempstring.Substring(3, tempstring.Length - 3) & ", An"
-                                '    End If
-                                'End If
                                 newmovie.fullmoviebody.title = Pref.RemoveIgnoredArticles(tempstring)
-                            Case "set"
-                                newmovie.fullmoviebody.movieset = thisresult.InnerText
-                            Case "stars"
-                                newmovie.fullmoviebody.stars = thisresult.InnerText
-                            Case "year"
-                                newmovie.fullmoviebody.year = thisresult.InnerText
-                            Case "plot"
-                                newmovie.fullmoviebody.plot = thisresult.InnerText
-                            Case "playcount"
-                                newmovie.fullmoviebody.playcount = thisresult.InnerText
-                            Case "sorttitle"
-                                newmovie.fullmoviebody.sortorder = thisresult.InnerText
-                            Case "runtime"
-                                newmovie.fullmoviebody.runtime = thisresult.InnerText
+                            Case "set"          : newmovie.fullmoviebody.movieset = thisresult.InnerText
+                            Case "stars"        : newmovie.fullmoviebody.stars = thisresult.InnerText
+                            Case "year"         : newmovie.fullmoviebody.year = thisresult.InnerText
+                            Case "plot"         : newmovie.fullmoviebody.plot = thisresult.InnerText
+                            Case "playcount"    : newmovie.fullmoviebody.playcount = thisresult.InnerText
+                            Case "sorttitle"    : newmovie.fullmoviebody.sortorder = thisresult.InnerText
+                            Case "runtime"      : newmovie.fullmoviebody.runtime = thisresult.InnerText
                                 If IsNumeric(newmovie.fullmoviebody.runtime) Then
                                     newmovie.fullmoviebody.runtime = newmovie.fullmoviebody.runtime & " min"
                                 End If
@@ -3365,31 +3122,28 @@ Public Class WorkingWithNfoFiles
 
                 'Now we need to make sure no varibles are still set to NOTHING before returning....
 
-                If newmovie.fullmoviebody.title = Nothing Then newmovie.fullmoviebody.title = "ERR - This Movie Has No TITLE!"
-                newmovie.fullmoviebody.filename = Path.GetFileName(filepath)
-                If newmovie.fullmoviebody.playcount = Nothing Then newmovie.fullmoviebody.playcount = "0"
-                If newmovie.fullmoviebody.plot = Nothing Then newmovie.fullmoviebody.plot = ""
-                If newmovie.fullmoviebody.runtime = Nothing Then newmovie.fullmoviebody.runtime = ""
-                If newmovie.fullmoviebody.sortorder = Nothing Or newmovie.fullmoviebody.sortorder = "" Then newmovie.fullmoviebody.sortorder = newmovie.fullmoviebody.title
+                If newmovie.fullmoviebody.title         = Nothing Then newmovie.fullmoviebody.title = "ERR - This Movie Has No TITLE!"
+                newmovie.fullmoviebody.filename         = Path.GetFileName(filepath)
+                If newmovie.fullmoviebody.playcount     = Nothing Then newmovie.fullmoviebody.playcount = "0"
+                If newmovie.fullmoviebody.plot          = Nothing Then newmovie.fullmoviebody.plot = ""
+                If newmovie.fullmoviebody.runtime       = Nothing Then newmovie.fullmoviebody.runtime = ""
+                If newmovie.fullmoviebody.sortorder     = Nothing Or newmovie.fullmoviebody.sortorder = "" Then newmovie.fullmoviebody.sortorder = newmovie.fullmoviebody.title
 
-                If newmovie.fullmoviebody.year = Nothing Then newmovie.fullmoviebody.year = "1901"
-                newmovie.fileinfo.fullpathandfilename = filepath
-                newmovie.fileinfo.filename = Path.GetFileName(filepath)
-                newmovie.fileinfo.foldername = Utilities.GetLastFolder(filepath)
-                newmovie.fileinfo.posterpath = Pref.GetPosterPath(filepath, newmovie.fileinfo.filename)
-                newmovie.fileinfo.trailerpath = ""
-                newmovie.fileinfo.rootfolder = Pref.GetRootFolder(filepath) & "\"
-                newmovie.fileinfo.path = Path.GetDirectoryName(filepath) & "\"
-                newmovie.fileinfo.basepath = Pref.GetMovBasePath(newmovie.fileinfo.path)
-                newmovie.fileinfo.fanartpath = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
+                If newmovie.fullmoviebody.year          = Nothing Then newmovie.fullmoviebody.year = "1901"
+                newmovie.fileinfo.fullpathandfilename   = filepath
+                newmovie.fileinfo.filename              = Path.GetFileName(filepath)
+                newmovie.fileinfo.foldername            = Utilities.GetLastFolder(filepath)
+                newmovie.fileinfo.posterpath            = Pref.GetPosterPath(filepath, newmovie.fileinfo.filename)
+                newmovie.fileinfo.trailerpath           = ""
+                newmovie.fileinfo.rootfolder            = Pref.GetRootFolder(filepath) & "\"
+                newmovie.fileinfo.path                  = Path.GetDirectoryName(filepath) & "\"
+                newmovie.fileinfo.basepath              = Pref.GetMovBasePath(newmovie.fileinfo.path)
+                newmovie.fileinfo.fanartpath            = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
                 If Not String.IsNullOrEmpty(newmovie.filedetails.Video.Container.Value) Then
-                    Dim container As String = newmovie.filedetails.Video.Container.Value
-                    newmovie.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
+                    Dim container As String             = newmovie.filedetails.Video.Container.Value
+                    newmovie.fileinfo.filenameandpath   = filepath.Replace(".nfo", container)
                 End If
-
-                'MsgBox(Format(myDate, "yyyy"))
-                'MsgBox(myDate.ToString("MMddyy"))
-
+                
                 movie = Nothing
                 Return newmovie
             End If
@@ -3404,7 +3158,6 @@ Public Class WorkingWithNfoFiles
 
         If homemovietosave Is Nothing Then Exit Sub
         If Not File.Exists(filenameandpath) Or overwrite = True Then
-            'Try
             Dim doc As New XmlDocument
             Dim thispref As XmlNode = Nothing
             Dim xmlproc As XmlDeclaration
@@ -3422,183 +3175,34 @@ Public Class WorkingWithNfoFiles
             If Pref.enablehdtags = True Then
                 child = doc.CreateElement("fileinfo")
                 anotherchild = doc.CreateElement("streamdetails")
-                'filedetailschild = doc.CreateElement("video")
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Width.Value) Then
-                '    filedetailschildchild = doc.CreateElement("width")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Width.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Height.Value) Then
-                '    filedetailschildchild = doc.CreateElement("height")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Height.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Aspect.Value) Then
-                '    filedetailschildchild = doc.CreateElement("aspect")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Aspect.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Codec.Value) Then
-                '    filedetailschildchild = doc.CreateElement("codec")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Codec.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.FormatInfo.Value) Then
-                '    filedetailschildchild = doc.CreateElement("formatinfo")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.FormatInfo.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.DurationInSeconds.Value) Then
-                '    filedetailschildchild = doc.CreateElement("durationinseconds")
-                '    Dim temptemp As String = homemovietosave.filedetails.Video.DurationInSeconds.Value
-                '    If Pref.intruntime Then
-                '        temptemp = Utilities.cleanruntime(homemovietosave.filedetails.Video.DurationInSeconds.Value)
-                '        If IsNumeric(temptemp) Then
-                '            filedetailschildchild.InnerText = temptemp
-                '            filedetailschild.AppendChild(filedetailschildchild)
-                '        Else
-                '            filedetailschildchild.InnerText = homemovietosave.filedetails.Video.DurationInSeconds.Value
-                '            filedetailschild.AppendChild(filedetailschildchild)
-                '        End If
-                '    Else
-                '        filedetailschildchild.InnerText = homemovietosave.filedetails.Video.DurationInSeconds.Value
-                '        filedetailschild.AppendChild(filedetailschildchild)
-                '    End If
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Bitrate.Value) Then
-                '    filedetailschildchild = doc.CreateElement("bitrate")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Bitrate.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.BitrateMode.Value) Then
-                '    filedetailschildchild = doc.CreateElement("bitratemode")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.BitrateMode.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.BitrateMax.Value) Then
-                '    filedetailschildchild = doc.CreateElement("bitratemax")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.BitrateMax.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.Container.Value) Then
-                '    filedetailschildchild = doc.CreateElement("container")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.Container.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.CodecId.Value) Then
-                '    filedetailschildchild = doc.CreateElement("codecid")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.CodecId.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.CodecInfo.Value) Then
-                '    filedetailschildchild = doc.CreateElement("codecidinfo")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.CodecInfo.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
-
-                'If Not String.IsNullOrEmpty(homemovietosave.filedetails.Video.ScanType.Value) Then
-                '    filedetailschildchild = doc.CreateElement("scantype")
-                '    filedetailschildchild.InnerText = homemovietosave.filedetails.Video.ScanType.Value
-                '    filedetailschild.AppendChild(filedetailschildchild)
-                'End If
                 anotherchild.AppendChild(AppendVideo(doc, homemovietosave.filedetails.Video))
                 
                 For Each item In homemovietosave.filedetails.Audio
-                    'filedetailschild = doc.CreateElement("audio")
-                    'If Not String.IsNullOrEmpty(item.Language.Value) Then
-                    '    filedetailschildchild = doc.CreateElement("language")
-                    '    filedetailschildchild.InnerText = item.Language.Value
-                    '    filedetailschild.AppendChild(filedetailschildchild)
-                    'End If
-
-                    'If Not String.IsNullOrEmpty(item.Codec.Value) Then
-                    '    filedetailschildchild = doc.CreateElement("codec")
-                    '    filedetailschildchild.InnerText = item.Codec.Value
-                    '    filedetailschild.AppendChild(filedetailschildchild)
-                    'End If
-
-                    'If Not String.IsNullOrEmpty(item.Channels.Value) Then
-                    '    filedetailschildchild = doc.CreateElement("channels")
-                    '    filedetailschildchild.InnerText = item.Channels.Value
-                    '    filedetailschild.AppendChild(filedetailschildchild)
-                    'End If
-
-                    'If Not String.IsNullOrEmpty(item.Bitrate.Value) Then
-                    '    filedetailschildchild = doc.CreateElement("bitrate")
-                    '    filedetailschildchild.InnerText = item.Bitrate.Value
-                    '    filedetailschild.AppendChild(filedetailschildchild)
-                    'End If
                     anotherchild.AppendChild(AppendAudio(doc, item))
                 Next
                 
-                'filedetailschild = doc.CreateElement("subtitle")
-                'Dim tempint As Integer = 0
                 For Each entry In homemovietosave.filedetails.Subtitles
                     If Not String.IsNullOrEmpty(entry.Language.Value) Then
-                        'tempint += 1
-                        'filedetailschildchild = doc.CreateElement("language")
-                        'filedetailschildchild.InnerText = entry.Language.Value
-                        'filedetailschild.AppendChild(filedetailschildchild)
                         anotherchild.AppendChild(AppendSub(doc, entry))
                     End If
                 Next
-                'If tempint > 0 Then
-                '    anotherchild.AppendChild(filedetailschild)
-                'End If
                 child.AppendChild(anotherchild)
                 root.AppendChild(child)
             End If
             
             child = doc.CreateElement("title") : child.InnerText = homemovietosave.fullmoviebody.title
             root.AppendChild(child)
-            
-            If homemovietosave.fullmoviebody.movieset <> "-None-" Then
-                Dim strArr() As String
-                strArr = homemovietosave.fullmoviebody.movieset.Split("/")
-                For count = 0 To strArr.Length - 1
-                    child = doc.CreateElement("set")
-                    strArr(count) = strArr(count).Trim
-                    child.InnerText = strArr(count)
-                    root.AppendChild(child)
-                Next
-            End If
-            
+            root.AppendChild(doc, "set", homemovietosave.fullmoviebody.movieset)
+
             If String.IsNullOrEmpty(homemovietosave.fullmoviebody.sortorder) Then
                 homemovietosave.fullmoviebody.sortorder = homemovietosave.fullmoviebody.title
             End If
-            child = doc.CreateElement("sorttitle") : child.InnerText = homemovietosave.fullmoviebody.sortorder
-            root.AppendChild(child)
+            root.AppendChild(doc, "sorttitle", homemovietosave.fullmoviebody.sortorder)
+            root.AppendChild(doc, "year", homemovietosave.fullmoviebody.year)
+            root.AppendChild(doc, "plot", homemovietosave.fullmoviebody.plot)
             
-            child = doc.CreateElement("year") : child.InnerText = homemovietosave.fullmoviebody.year
-            root.AppendChild(child)
-            
-            child = doc.CreateElement("plot") : child.InnerText = homemovietosave.fullmoviebody.plot
-            root.AppendChild(child)
-
-            child = doc.CreateElement("runtime")
+            Dim minutes As String = homemovietosave.fullmoviebody.runtime.ToMin
             If homemovietosave.fullmoviebody.runtime <> Nothing AndAlso homemovietosave.fullmoviebody.runtime <> "0" Then
-                Dim minutes As String = homemovietosave.fullmoviebody.runtime.ToMin
-                'minutes = minutes.Replace("minutes", "")
-                'minutes = minutes.Replace("mins", "")
-                'minutes = minutes.Replace("min", "")
-                'minutes = minutes.Replace(" ", "")
-                'If Pref.intruntime = True And Not IsNumeric(minutes) Then
-                '    Dim tempstring As String = Form1.filefunction.cleanruntime(minutes)
-                '    If IsNumeric(tempstring) Then
-                '        minutes = tempstring
-                '    End If
-                'End If
                 Try
                     Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                         minutes = minutes.Substring(1, minutes.Length - 1)
@@ -3614,47 +3218,13 @@ Public Class WorkingWithNfoFiles
                 Catch
                     minutes = homemovietosave.fullmoviebody.runtime
                 End Try
-                child.InnerText = minutes
-            Else
-                child.InnerText = homemovietosave.fullmoviebody.runtime
             End If
-            root.AppendChild(child)
-            
-            child = doc.CreateElement("playcount")
-            child.InnerText = homemovietosave.fullmoviebody.playcount
-            root.AppendChild(child)
-
-            child = doc.CreateElement("createdate")
-            If String.IsNullOrEmpty(homemovietosave.fileinfo.createdate) Then
-                Dim myDate2 As Date = System.DateTime.Now
-                Try
-                    child.InnerText = Format(myDate2, Pref.datePattern).ToString
-                Catch ex2 As Exception
-                End Try
-            Else
-                child.InnerText = homemovietosave.fileinfo.createdate
-            End If
-            root.AppendChild(child)
-            
-            child = doc.CreateElement("stars")
-            child.InnerText = homemovietosave.fullmoviebody.stars
-            root.AppendChild(child)
-
+            root.AppendChild(doc, "runtime"     , minutes)
+            root.AppendChild(doc, "playcount"   , homemovietosave.fullmoviebody.playcount)
+            root.AppendChild(doc, "createdate"  , SetCreateDate(homemovietosave.fileinfo.createdate))
+            root.AppendChild(doc, "stars"       , homemovietosave.fullmoviebody.stars)
             doc.AppendChild(root)
             SaveXMLDoc(doc, filenameandpath)
-            'Dim settings As New XmlWriterSettings()
-            'settings.Encoding = New UTF8Encoding(False) 
-            'settings.Indent = True
-            'settings.IndentChars = (ControlChars.Tab)
-            'settings.NewLineHandling = NewLineHandling.None
-            'Dim writer As XmlWriter = XmlWriter.Create(filenameandpath, settings)
-            'Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
-            'output.Formatting = Formatting.Indented
-            'output.Indentation = 4
-            'doc.WriteTo(output)
-            'output.Close()
-            'doc.Save(writer)
-            'writer.Close()
         Else
             MsgBox("File already exists")
         End If
@@ -3663,129 +3233,66 @@ Public Class WorkingWithNfoFiles
 
     '  All Music Video Load/Save Routines
 #Region " Music Video Routines "
-    Public Shared Sub MVsaveNfo(ByVal filenameandpath As String, ByVal movietosave As FullMovieDetails)
+    Public Shared Sub MVsaveNfo(ByVal filenameandpath As String, ByVal musicvidtosave As FullMovieDetails)
         Dim doc As New XmlDocument
         Dim thumbnailstring As String = ""
-        Dim thispref As XmlNode = Nothing
         Dim xmlproc As XmlDeclaration
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
         Dim root As XmlElement = Nothing
         Dim child As XmlElement = Nothing
-        Dim filedetailschild As XmlElement = Nothing
-        Dim filedetailschildchild As XmlElement = Nothing
         Dim anotherchild As XmlElement = Nothing
 
         root = doc.CreateElement("musicvideo")
         child = doc.CreateElement("fileinfo")
         anotherchild = doc.CreateElement("streamdetails")
-        anotherchild.AppendChild(AppendVideo(doc, movietosave.filedetails.Video))
+        anotherchild.AppendChild(AppendVideo(doc, musicvidtosave.filedetails.Video))
 
-        For Each item In movietosave.filedetails.Audio
+        For Each item In musicvidtosave.filedetails.Audio
             anotherchild.AppendChild(AppendAudio(doc, item))
         Next
 
-        For each item In movietosave.filedetails.Subtitles
+        For each item In musicvidtosave.filedetails.Subtitles
             anotherchild.AppendChild(AppendSub(doc, item))
         Next
 
         child.AppendChild(anotherchild)
         root.AppendChild(child)
+        
+        root.AppendChild(doc, "tmdbid", musicvidtosave.fullmoviebody.tmdbid)
+        root.AppendChild(doc, "title", musicvidtosave.fullmoviebody.title)
+        root.AppendChild(doc, "year", musicvidtosave.fullmoviebody.year)
+        root.AppendChild(doc, "artist", musicvidtosave.fullmoviebody.artist)
+        root.AppendChild(doc, "director", musicvidtosave.fullmoviebody.director)
+        root.AppendChild(doc, "album", musicvidtosave.fullmoviebody.album)
+        root.AppendChild(doc, "genre", musicvidtosave.fullmoviebody.genre)
+        root.AppendChild(doc, "thumb", musicvidtosave.fullmoviebody.thumb)
+        root.AppendChild(doc, "track", musicvidtosave.fullmoviebody.track)
 
-        child = doc.CreateElement("tmdbid")
-        child.InnerText = movietosave.fullmoviebody.tmdbid
-        root.AppendChild(child)
-
-        child = doc.CreateElement("title")
-        child.InnerText = movietosave.fullmoviebody.title
-        root.AppendChild(child)
-
-        child = doc.CreateElement("year")
-        child.InnerText = movietosave.fullmoviebody.year
-        root.AppendChild(child)
-
-        child = doc.CreateElement("artist")
-        child.InnerText = movietosave.fullmoviebody.artist
-        root.AppendChild(child)
-
-        child = doc.CreateElement("director")
-        child.InnerText = movietosave.fullmoviebody.director
-        root.AppendChild(child)
-
-        child = doc.CreateElement("album")
-        child.InnerText = movietosave.fullmoviebody.album
-        root.AppendChild(child)
-
-        child = doc.CreateElement("genre")
-        child.InnerText = movietosave.fullmoviebody.genre
-        root.AppendChild(child)
-
-        child = doc.CreateElement("thumb")
-        child.InnerText = movietosave.fullmoviebody.thumb
-        root.AppendChild(child)
-
-        child = doc.CreateElement("track")
-        child.InnerText = movietosave.fullmoviebody.track
-        root.AppendChild(child)
-
-        If movietosave.fullmoviebody.runtime = "Unknown" Then
+        If musicvidtosave.fullmoviebody.runtime = "Unknown" Then
             Try
-                Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.Video.DurationInSeconds.Value)
+                Dim seconds As Integer = Convert.ToInt32(musicvidtosave.filedetails.Video.DurationInSeconds.Value)
                 Dim hms = TimeSpan.FromSeconds(seconds)
                 Dim h = hms.Hours.ToString
                 Dim m = hms.Minutes.ToString
                 Dim s = hms.Seconds.ToString
-
                 If s.Length = 1 Then s = "0" & s
-
                 Dim runtime As String
                 runtime = h & ":" & m & ":" & s
-                If h = "0" Then
-                    runtime = m & ":" & s
-                End If
-                If h = "0" And m = "0" Then
-                    runtime = s
-                End If
-                movietosave.fullmoviebody.runtime = runtime
+                If h = "0" Then runtime = m & ":" & s
+                If h = "0" And m = "0" Then runtime = s
+                musicvidtosave.fullmoviebody.runtime = runtime
             Catch
             End Try
         End If
-
-        child = doc.CreateElement("runtime")
-        child.InnerText = movietosave.fullmoviebody.runtime
-        root.AppendChild(child)
-
-        child = doc.CreateElement("plot")
-        child.InnerText = movietosave.fullmoviebody.plot
-        root.AppendChild(child)
-
-        child = doc.CreateElement("studio")
-        child.InnerText = movietosave.fullmoviebody.studio
-        root.AppendChild(child)
-
-        child = doc.CreateElement("createdate")
-        If String.IsNullOrEmpty(movietosave.fileinfo.createdate) Then
-            Dim myDate2 As Date = System.DateTime.Now
-            Try
-                child.InnerText = Format(myDate2, Pref.datePattern).ToString
-            Catch ex2 As Exception
-            End Try
-        Else
-            child.InnerText = movietosave.fileinfo.createdate
-        End If
-        root.AppendChild(child)
+        root.AppendChild(doc, "runtime", musicvidtosave.fullmoviebody.runtime)
+        root.AppendChild(doc, "plot", musicvidtosave.fullmoviebody.plot)
+        root.AppendChild(doc, "studio", musicvidtosave.fullmoviebody.studio)
+        root.AppendChild(doc, "createdate", SetCreateDate(musicvidtosave.fileinfo.createdate))
         doc.AppendChild(root)
-
-        'Dim nfopath As String = filenameandpath
-        'nfopath = nfopath.Replace(Path.GetExtension(nfopath), ".nfo")
-
+        
         Try
             SaveXMLDoc(doc, filenameandpath)
-            'Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
-            'output.Formatting = Formatting.Indented
-            'output.Indentation = 4
-            'doc.WriteTo(output)
-            'output.Close()
         Catch
         End Try
     End Sub
@@ -3801,19 +3308,19 @@ Public Class WorkingWithNfoFiles
         Dim newfilenfo As New StreamDetails
         For Each thisresult In document("musicvideo")
             Select Case thisresult.Name
-                Case "album"    : NewMusicVideo.fullmoviebody.album     = thisresult.InnerText
-                Case "tmdbid"   : NewMusicVideo.fullmoviebody.tmdbid    = thisresult.InnerText
-                Case "title"    : NewMusicVideo.fullmoviebody.title     = thisresult.InnerText
-                Case "year"     : NewMusicVideo.fullmoviebody.year      = thisresult.InnerText
-                Case "artist"   : NewMusicVideo.fullmoviebody.artist    = thisresult.InnerText
-                Case "director" : NewMusicVideo.fullmoviebody.director  = thisresult.InnerText
-                Case "genre"    : NewMusicVideo.fullmoviebody.genre     = thisresult.InnerText
-                Case "thumb"    : NewMusicVideo.fullmoviebody.thumb     = thisresult.InnerText
-                Case "track"    : NewMusicVideo.fullmoviebody.track     = thisresult.InnerText
-                Case "runtime"  : NewMusicVideo.fullmoviebody.runtime   = thisresult.InnerText
-                Case "plot"     : NewMusicVideo.fullmoviebody.plot      = thisresult.InnerText
-                Case "studio"   : NewMusicVideo.fullmoviebody.studio    = thisresult.InnerText
-                Case "createdate" : NewMusicVideo.fileinfo.createdate   = thisresult.InnerText
+                Case "album"        : NewMusicVideo.fullmoviebody.album     = thisresult.InnerText
+                Case "tmdbid"       : NewMusicVideo.fullmoviebody.tmdbid    = thisresult.InnerText
+                Case "title"        : NewMusicVideo.fullmoviebody.title     = thisresult.InnerText
+                Case "year"         : NewMusicVideo.fullmoviebody.year      = thisresult.InnerText
+                Case "artist"       : NewMusicVideo.fullmoviebody.artist    = thisresult.InnerText
+                Case "director"     : NewMusicVideo.fullmoviebody.director  = thisresult.InnerText
+                Case "genre"        : NewMusicVideo.fullmoviebody.genre     = thisresult.InnerText
+                Case "thumb"        : NewMusicVideo.fullmoviebody.thumb     = thisresult.InnerText
+                Case "track"        : NewMusicVideo.fullmoviebody.track     = thisresult.InnerText
+                Case "runtime"      : NewMusicVideo.fullmoviebody.runtime   = thisresult.InnerText
+                Case "plot"         : NewMusicVideo.fullmoviebody.plot      = thisresult.InnerText
+                Case "studio"       : NewMusicVideo.fullmoviebody.studio    = thisresult.InnerText
+                Case "createdate"   : NewMusicVideo.fileinfo.createdate     = thisresult.InnerText
                 Case "fileinfo"
                     Dim what As XmlNode = Nothing
                     For Each res In thisresult.ChildNodes
@@ -3896,18 +3403,18 @@ Public Class WorkingWithNfoFiles
                     Next
             End Select
         Next
-        NewMusicVideo.fileinfo.fullpathandfilename = filepath
-        NewMusicVideo.fileinfo.filename     = Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.Video.Container.Value)
-        NewMusicVideo.fileinfo.foldername   = Utilities.GetLastFolder(filepath)
-        NewMusicVideo.fileinfo.posterpath   = Pref.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
-        NewMusicVideo.fileinfo.trailerpath  = ""
-        NewMusicVideo.fileinfo.rootfolder   = Pref.GetRootFolder(filePath) & "\"
-        NewMusicVideo.fileinfo.path         = Path.GetDirectoryName(filepath) & "\"
-        NewMusicVideo.fileinfo.basepath     = Pref.GetMovBasePath(NewMusicVideo.fileinfo.path)
-        NewMusicVideo.fileinfo.fanartpath   = Pref.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.fullpathandfilename  = filepath
+        NewMusicVideo.fileinfo.filename             = Path.GetFileName(filepath).Replace(".nfo", NewMusicVideo.filedetails.Video.Container.Value)
+        NewMusicVideo.fileinfo.foldername           = Utilities.GetLastFolder(filepath)
+        NewMusicVideo.fileinfo.posterpath           = Pref.GetPosterPath(filepath, NewMusicVideo.fileinfo.filename)
+        NewMusicVideo.fileinfo.trailerpath          = ""
+        NewMusicVideo.fileinfo.rootfolder           = Pref.GetRootFolder(filePath) & "\"
+        NewMusicVideo.fileinfo.path                 = Path.GetDirectoryName(filepath) & "\"
+        NewMusicVideo.fileinfo.basepath             = Pref.GetMovBasePath(NewMusicVideo.fileinfo.path)
+        NewMusicVideo.fileinfo.fanartpath           = Pref.GetFanartPath(filepath, NewMusicVideo.fileinfo.filename)
         If Not String.IsNullOrEmpty(NewMusicVideo.filedetails.Video.Container.Value) Then
             Dim container As String = NewMusicVideo.filedetails.Video.Container.Value
-            NewMusicVideo.fileinfo.filenameandpath = filepath.Replace(".nfo", container)
+            NewMusicVideo.fileinfo.filenameandpath  = filepath.Replace(".nfo", container)
         Else
             NewMusicVideo.fileinfo.filenameandpath = Utilities.GetFileName(filepath,True)
         End If

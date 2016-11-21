@@ -278,7 +278,7 @@ Public Class frmPreferences
     
     Private Sub MovScraperInit()
         'scraper
-        Read_XBMC_TMDB_Scraper_Config
+        XBMCScraperSettings.Read_XBMC_TMDB_Scraper_Config
         If Pref.movies_useXBMC_Scraper = True Then
             cbMovieUseXBMCScraper.CheckState = CheckState.Checked
         Else
@@ -553,6 +553,7 @@ Public Class frmPreferences
         End If
 
         'XBMC TVBD Scraper
+        XBMCScraperSettings.Read_XBMC_TVDB_Scraper_Config()
         rbXBMCTvdbDVDOrder              .Checked    = Pref.XBMCTVDbDvdOrder
         rbXBMCTvdbAbsoluteNumber        .Checked    = Pref.XBMCTVDbAbsoluteNumber
         cbXBMCTvdbFanart                .Checked    = Pref.XBMCTVDbFanart
@@ -3640,23 +3641,23 @@ End Sub
     
     Private Sub XBMCTMDBConfigSave()
         If Not Pref.XbmcTmdbScraperRatings = Nothing Then
-            Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
-            Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
-            Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
-            Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
-            Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
+            XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("fanart", Pref.XbmcTmdbScraperFanart)
+            XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("trailerq", Pref.XbmcTmdbScraperTrailerQ)
+            XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("language", Pref.XbmcTmdbScraperLanguage)
+            XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("ratings", Pref.XbmcTmdbScraperRatings)
+            XBMCScraperSettings.Save_XBMC_TMDB_Scraper_Config("tmdbcertcountry", Pref.XbmcTmdbScraperCertCountry)
         End If
     End Sub
 
     Private Sub XBMCTVDBConfigSave()
         If Not String.IsNullOrEmpty(Pref.XBMCTVDbLanguage) Then
-            Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder.ToString.ToLower)
-            Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber.ToString.ToLower)
-            Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart.ToString.ToLower)
-            Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster.ToString.ToLower)
-            Save_XBMC_TVDB_Scraper_Config("language", Pref.XBMCTVDbLanguage)  'ComboBox_TVDB_Language.Text)
-            Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
-            Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback.ToString.ToLower)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("dvdorder", Pref.XBMCTVDbDvdOrder.ToString.ToLower)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("absolutenumber", Pref.XBMCTVDbAbsoluteNumber.ToString.ToLower)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("fanart", Pref.XBMCTVDbFanart.ToString.ToLower)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("posters", Pref.XBMCTVDbPoster.ToString.ToLower)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("language", Pref.XBMCTVDbLanguage)  'ComboBox_TVDB_Language.Text)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("ratings", Pref.XBMCTVDbRatings)
+            XBMCScraperSettings.Save_XBMC_TVDB_Scraper_Config("fallback", Pref.XBMCTVDbfallback.ToString.ToLower)
         End If
     End Sub
 

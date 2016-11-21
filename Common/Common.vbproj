@@ -138,6 +138,7 @@
     <Compile Include="Settings\Profiles.vb" />
     <Compile Include="Shared\AudioDetails.vb" />
     <Compile Include="Shared\AudioList.vb" />
+    <Compile Include="Shared\XBMCScraperSettings.vb" />
     <Compile Include="Shared\FileDetails.vb" />
     <Compile Include="Shared\ModuleExtensions.vb" />
     <Compile Include="Shared\ObjectShredder.vb" />
