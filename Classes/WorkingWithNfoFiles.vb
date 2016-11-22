@@ -2968,11 +2968,11 @@ Public Class WorkingWithNfoFiles
                 If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors
                 For f = 0 To actorstosave - 1
                     child = doc.CreateElement("actor")
-                    child.AppendChild(doc, "id"     , actorchild.InnerText = movietosave.listactors(f).actorid      )
-                    child.AppendChild(doc, "name"   , actorchild.InnerText = movietosave.listactors(f).actorname    )
-                    child.AppendChild(doc, "role"   , actorchild.InnerText = movietosave.listactors(f).actorrole    )
-                    child.AppendChild(doc, "thumb"  , actorchild.InnerText = movietosave.listactors(f).actorthumb   )
-                    child.AppendChild(doc, "order"  , actorchild.InnerText = movietosave.listactors(f).order        )
+                    child.AppendChild(doc, "id"     , movietosave.listactors(f).actorid      )
+                    child.AppendChild(doc, "name"   , movietosave.listactors(f).actorname    )
+                    child.AppendChild(doc, "role"   , movietosave.listactors(f).actorrole    )
+                    child.AppendChild(doc, "thumb"  , movietosave.listactors(f).actorthumb   )
+                    child.AppendChild(doc, "order"  , movietosave.listactors(f).order        )
                     root.AppendChild(child)
                 Next
 
