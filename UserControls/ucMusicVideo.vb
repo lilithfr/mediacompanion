@@ -86,13 +86,6 @@ Public Class ucMusicVideo
             Case 1  : rbMVTitleandYear.Checked = True
             Case 2  : rbMVFilename.Checked = True
         End Select
-        'If Pref.MVdefaultlist = 0 Then
-        '    rbMVArtistAndTitle.Checked = True
-        'ElseIf Pref.MVdefaultlist = 1 Then
-        '    rbMVTitleandYear.Checked = True
-        'ElseIf Pref.MVdefaultlist = 2 Then
-        '    rbMVFilename.Checked = True
-        'End If
         clbxMvFolders.Items.Clear()
         clbxMVConcertFolder.ClearSelected()
         AuthorizeCheck = True

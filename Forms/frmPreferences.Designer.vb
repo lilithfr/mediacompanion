@@ -170,7 +170,7 @@ Partial Class frmPreferences
         Me.btnVideoSourceAdd = New System.Windows.Forms.Button()
         Me.lbVideoSource = New System.Windows.Forms.ListBox()
         Me.cbOverwriteArtwork = New System.Windows.Forms.CheckBox()
-        Me.CheckBox38 = New System.Windows.Forms.CheckBox()
+        Me.cbRuntimeAsNumericOnly = New System.Windows.Forms.CheckBox()
         Me.gbxXBMCversion = New System.Windows.Forms.GroupBox()
         Me.Label129 = New System.Windows.Forms.Label()
         Me.rbXBMCv_both = New System.Windows.Forms.RadioButton()
@@ -1884,7 +1884,7 @@ Partial Class frmPreferences
         Me.TPCommonSettings.Controls.Add(Me.grpVideoSource)
         Me.TPCommonSettings.Controls.Add(Me.gbExcludeFolders)
         Me.TPCommonSettings.Controls.Add(Me.cbOverwriteArtwork)
-        Me.TPCommonSettings.Controls.Add(Me.CheckBox38)
+        Me.TPCommonSettings.Controls.Add(Me.cbRuntimeAsNumericOnly)
         Me.TPCommonSettings.Controls.Add(Me.gbxXBMCversion)
         Me.TPCommonSettings.Location = New System.Drawing.Point(4, 24)
         Me.TPCommonSettings.Name = "TPCommonSettings"
@@ -2214,16 +2214,16 @@ Partial Class frmPreferences
         Me.cbOverwriteArtwork.Text = "Don’t overwrite existing artwork"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
         Me.cbOverwriteArtwork.UseVisualStyleBackColor = true
         '
-        'CheckBox38
+        'cbRuntimeAsNumericOnly
         '
-        Me.CheckBox38.AutoSize = true
-        Me.CheckBox38.Location = New System.Drawing.Point(12, 393)
-        Me.CheckBox38.Margin = New System.Windows.Forms.Padding(4)
-        Me.CheckBox38.Name = "CheckBox38"
-        Me.CheckBox38.Size = New System.Drawing.Size(235, 19)
-        Me.CheckBox38.TabIndex = 88
-        Me.CheckBox38.Text = "Save media runtime as numerical only"
-        Me.CheckBox38.UseVisualStyleBackColor = true
+        Me.cbRuntimeAsNumericOnly.AutoSize = true
+        Me.cbRuntimeAsNumericOnly.Location = New System.Drawing.Point(12, 393)
+        Me.cbRuntimeAsNumericOnly.Margin = New System.Windows.Forms.Padding(4)
+        Me.cbRuntimeAsNumericOnly.Name = "cbRuntimeAsNumericOnly"
+        Me.cbRuntimeAsNumericOnly.Size = New System.Drawing.Size(235, 19)
+        Me.cbRuntimeAsNumericOnly.TabIndex = 88
+        Me.cbRuntimeAsNumericOnly.Text = "Save media runtime as numerical only"
+        Me.cbRuntimeAsNumericOnly.UseVisualStyleBackColor = true
         '
         'gbxXBMCversion
         '
@@ -6200,7 +6200,7 @@ End Sub
     Friend WithEvents cb_IgnoreA As CheckBox
     Friend WithEvents cbOverwriteArtwork As CheckBox
     Friend WithEvents cb_IgnoreThe As CheckBox
-    Friend WithEvents CheckBox38 As CheckBox
+    Friend WithEvents cbRuntimeAsNumericOnly As CheckBox
     Friend WithEvents gbxXBMCversion As GroupBox
     Friend WithEvents Label129 As Label
     Friend WithEvents rbXBMCv_both As RadioButton

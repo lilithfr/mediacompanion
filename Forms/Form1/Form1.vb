@@ -2368,34 +2368,34 @@ Public Class Form1
 
 	End Sub
 
-	Public Sub tv_RefreshLog(ByVal action As String, Optional ByVal errors As String = "", Optional ByVal clear As Boolean = False)
-		If Pref.tvshowrefreshlog = False Then
-			Exit Sub
-		End If
+	'Public Sub tv_RefreshLog(ByVal action As String, Optional ByVal errors As String = "", Optional ByVal clear As Boolean = False)
+	'	If Pref.tvshowrefreshlog = False Then
+	'		Exit Sub
+	'	End If
 
-		Dim errpath As String = Path.Combine(applicationPath, "tvrefresh.log")
-		If clear = True Then
-			If File.Exists(errpath) Then
-				Try
-					File.Delete(errpath)
-				Catch ex As Exception
-					MsgBox("Error deleting: " & errpath & vbCrLf & vbCrLf & ex.ToString)
-				End Try
-			End If
-		End If
-		Try
+	'	Dim errpath As String = Path.Combine(applicationPath, "tvrefresh.log")
+	'	If clear = True Then
+	'		If File.Exists(errpath) Then
+	'			Try
+	'				File.Delete(errpath)
+	'			Catch ex As Exception
+	'				MsgBox("Error deleting: " & errpath & vbCrLf & vbCrLf & ex.ToString)
+	'			End Try
+	'		End If
+	'	End If
+	'	Try
 
-			Dim objWriter As New IO.StreamWriter(errpath, True)
-			objWriter.WriteLine(action)
-			If errors <> "" Then
-				objWriter.WriteLine(errors)
-			End If
-			objWriter.Close()
-		Catch ex As Exception
-			MsgBox("Error, cant write to " & errpath & vbCrLf & vbCrLf & ex.ToString)
-		End Try
+	'		Dim objWriter As New IO.StreamWriter(errpath, True)
+	'		objWriter.WriteLine(action)
+	'		If errors <> "" Then
+	'			objWriter.WriteLine(errors)
+	'		End If
+	'		objWriter.Close()
+	'	Catch ex As Exception
+	'		MsgBox("Error, cant write to " & errpath & vbCrLf & vbCrLf & ex.ToString)
+	'	End Try
 
-	End Sub
+	'End Sub
 
 	Private Sub util_ThreadsRunningCheck()
 		'If globalthreadcounter = 0 Then

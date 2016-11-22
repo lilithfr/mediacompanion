@@ -378,7 +378,7 @@ Partial Public Class Form1
         Dim fulltvshowlist As New List(Of TvShow)
         Dim fullepisodelist As New List(Of TvEpisode)
 
-        tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
+        'tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
         tbCShowCount.Text = ""
         tbCEpCount  .Text = ""
         Me.Enabled = False

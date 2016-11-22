@@ -217,7 +217,7 @@ Public Class frmPreferences
         ElseIf Pref.XBMC_version = 2 Then
             rbXBMCv_post.Checked = True
         End If
-        CheckBox38                  .Checked    = Pref.intruntime
+        cbRuntimeAsNumericOnly      .Checked    = Pref.intruntime
         cb_IgnoreThe                .Checked    = Pref.ignorearticle
         cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
         cb_IgnoreAn                 .Checked    = Pref.ignoreAn
@@ -959,9 +959,9 @@ Public Class frmPreferences
         Changes = True
     End Sub
     
-    Private Sub CheckBox38_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox38.CheckedChanged
+    Private Sub cbRuntimeAsNumericOnly_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRuntimeAsNumericOnly.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.intruntime = CheckBox38.Checked
+        Pref.intruntime = cbRuntimeAsNumericOnly.Checked
         Changes = True
     End Sub
 

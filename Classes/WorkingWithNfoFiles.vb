@@ -852,9 +852,9 @@ Public Class WorkingWithNfoFiles
                         minutes = minutes.Substring(1, minutes.Length - 1)
                     Loop
                     If minutes = "" Then minutes = "00"
-                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
                         minutes = "0" & minutes & " min"
-                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
                         minutes = "00" & minutes & " min"
                     Else
                         minutes = tvshowtosave.runtime.Value
@@ -2877,9 +2877,9 @@ Public Class WorkingWithNfoFiles
                                 Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                                     minutes = minutes.Substring(1, minutes.Length - 1)
                                 Loop
-                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
+                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
                                     minutes = "0" & minutes
-                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
+                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
                                     minutes = "00" & minutes
                                 End If
                             End If
@@ -2934,11 +2934,7 @@ Public Class WorkingWithNfoFiles
 
                 stage = 43
                 root.AppendChild(doc, "playcount", movietosave.fullmoviebody.playcount)
-                If Pref.MovNfoWatchTag Then
-                    'child = doc.CreateElement("watched")    : child.InnerXml = If(movietosave.fullmoviebody.playcount = "0", False, True)
-                    'root.AppendChild(child)
-                    root.AppendChild(doc, "watched", If(movietosave.fullmoviebody.playcount = "0", False, True))
-                End If
+                If Pref.MovNfoWatchTag Then root.AppendChild(doc, "watched", If(movietosave.fullmoviebody.playcount = "0", False, True))
 
                 stage = 44
                 root.AppendChild(doc, "lastplayed", movietosave.fullmoviebody.lastplayed)
@@ -3207,9 +3203,9 @@ Public Class WorkingWithNfoFiles
                     Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
                         minutes = minutes.Substring(1, minutes.Length - 1)
                     Loop
-                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 And Pref.roundminutes = True Then
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
                         minutes = "0" & minutes
-                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 And Pref.roundminutes = True Then
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
                         minutes = "00" & minutes
                     End If
                     If Pref.intruntime = False And IsNumeric(minutes) Then

@@ -111,9 +111,6 @@ Public Class Pref
     Public Shared MVConcertFolders  As New List(Of str_RootPaths)
 
     'Saved Form Prefs
-    Public Shared backgroundcolour As String
-    Public Shared forgroundcolour As String
-    Public Shared remembersize As Boolean
     Public Shared locx As Integer
     Public Shared locy As Integer
     Public Shared formheight As Integer
@@ -192,11 +189,8 @@ Public Class Pref
     Public Shared NoAltTitle As Boolean
     Public Shared XtraFrodoUrls As Boolean
     Public Shared gettrailer As Boolean
-    Public Shared ignoretrailers As Boolean
     Public Shared moviePreferredTrailerResolution As String
-    Public Shared moviescraper As Integer
     Public Shared nfoposterscraper As Integer
-    Public Shared ignoreactorthumbs As Boolean
     Public Shared maxactors As Integer
     Public Shared MovTagBlacklist As String
     Public Shared maxmoviegenre As Integer
@@ -207,13 +201,9 @@ Public Class Pref
     Public Shared movieRuntimeFallbackToFile As Boolean = False
     Public Shared disablelogfiles As Boolean
     Public Shared incmissingmovies As Boolean
-    Public Shared fanartnotstacked As Boolean
-    Public Shared posternotstacked As Boolean
     Public Shared scrapemovieposters As Boolean
     Public Shared movrootfoldercheck As Boolean
     Public Shared posterjpg As Boolean
-    Public Shared usefanart As Boolean
-    Public Shared dontdisplayposter As Boolean
     Public Shared usefoldernames As Boolean
     Public Shared movxtrathumb As Boolean
     Public Shared movxtrafanart As Boolean
@@ -235,8 +225,6 @@ Public Class Pref
     Public Shared createfanartjpg As Boolean    'Use to create fanart.jpg if in a folder
     Public Shared basicsavemode As Boolean
     Public Shared namemode As String
-    Public Shared usetransparency As Boolean
-    Public Shared transparencyvalue As Integer
     Public Shared savefanart As Boolean
     Public Shared MovFanartTvscrape As Boolean   'cbMovFanartTvScrape
     Public Shared MovFanartNaming As Boolean     'cbMovFanartNaming
@@ -248,7 +236,6 @@ Public Class Pref
     Public Shared MovFanartTvDlBanner As Boolean
     Public Shared MovFanartTvDlLandscape As Boolean
     Public Shared fanartjpg As Boolean      'Used to create fanart.jpg instead of movie-fanart.jpg
-    Public Shared roundminutes As Boolean
     Public Shared moviedefaultlist As Byte
     Public Shared movies_useXBMC_Scraper As Boolean
     Public Shared TmdbActorsImdbScrape As Boolean
@@ -256,7 +243,6 @@ Public Class Pref
     Public Shared ImdbPrimaryPlot As Boolean
     Public Shared MovImdbFirstRunTime As Boolean
     Public Shared MovImdbAspectRatio As Boolean
-    Public Shared XBMC_Scraper As String = "tmdb"   'Locked TMDb as XBMC Scraper.
     Public Shared XbmcTmdbRenameMovie As Boolean
     Public Shared XbmcTmdbMissingFromImdb As Boolean
     Public Shared XbmcTmdbTop250FromImdb As Boolean
@@ -412,7 +398,6 @@ Public Class Pref
     Public Shared seasonall As String
     Public Shared tvrename As Integer
     Public Shared ScrShtDelay As Integer
-    Public Shared tvshowrefreshlog As Boolean
     Public Shared autoepisodescreenshot As Boolean
     Public Shared tvscrnshtTVDBResize As Boolean
     Public Shared tvshow_useXBMC_Scraper As Boolean
@@ -450,7 +435,6 @@ Public Class Pref
     '(Unsure)
     Public Shared maximagecount As Integer
     Public Shared episodeacrorsource As String
-    Public Shared alwaysuseimdbid As Boolean
     
     'XBMC Sync
     Public Shared XBMC_Active As Boolean = False
@@ -608,8 +592,6 @@ Public Class Pref
         externalbrowser = False
         selectedBrowser = ""
         altnfoeditor = ""
-        backgroundcolour = "Silver"
-        forgroundcolour = "#D3D9DC"
         formheight = "600"
         formwidth = "800"
         disablelogfiles = False
@@ -628,9 +610,6 @@ Public Class Pref
         scrapemovieposters = True
         movrootfoldercheck = True
         posterjpg = False
-        dontdisplayposter = False
-        usetransparency = False 'not used in gen2
-        transparencyvalue = 255 'not used in gen2
         lastpath = applicationPath ' Application.StartupPath
         videomode = 1
         locx = 0
@@ -657,7 +636,6 @@ Public Class Pref
         ImdbPrimaryPlot = False
         MovImdbFirstRunTime = False
         MovImdbAspectRatio = False
-        XBMC_Scraper = "tmdb"
         XbmcTmdbRenameMovie = False
         XbmcTmdbMissingFromImdb = False
         XbmcTmdbTop250FromImdb = False
@@ -739,7 +717,6 @@ Public Class Pref
         copytvactorthumbs = True
         tvdbIMDbRating = False
         enabletvhdtags = True
-        tvshowrefreshlog = False
         seasonall = "none"
         tvrename = 0
         
@@ -788,16 +765,11 @@ Public Class Pref
         actorseasy = True
         startuptab = 0
         font = "Microsoft Sans Serif, 9pt"
-        fanartnotstacked = False
-        posternotstacked = False
-        ignoreactorthumbs = False
         actorsave = False
         actorsavepath = ""
         actorsavealpha = False
         LocalActorSaveNoId = False
         actornetworkpath = ""
-        usefanart = True
-        ignoretrailers = False
         enablehdtags = True
         MovDurationAsRuntine = False
         MovRuntimeAsDuration = False
@@ -992,9 +964,6 @@ Public Class Pref
         root.AppendChild(ExcludeFolders.GetChild(doc))
         
         'Form Settings ------------------------------------------------------------
-        root.AppendChild(doc, "backgroundcolour",           backgroundcolour)
-        root.AppendChild(doc, "forgroundcolour",            forgroundcolour)
-        root.AppendChild(doc, "remembersize",               remembersize)
         root.AppendChild(doc, "locx",                       locx)
         root.AppendChild(doc, "locy",                       locy)
         root.AppendChild(doc, "formheight",                 formheight)
@@ -1060,13 +1029,13 @@ Public Class Pref
         'General Prefs ------------------------------------------------------------
         root.AppendChild(doc, "startupcache"                , startupCache              ) 'chkbx_disablecache
         root.AppendChild(doc, "renamenfofiles"              , renamenfofiles            ) 'CheckBoxRenameNFOtoINFO
-        root.AppendChild(doc, "actorseasy"                  , actorseasy                ) 'CheckBox33
+        root.AppendChild(doc, "actorseasy"                  , actorseasy                ) 'cb_actorseasy
         root.AppendChild(doc, "rarsize"                     , rarsize                   ) 'txtbx_minrarsize
-        root.AppendChild(doc, "overwritethumbs"             , overwritethumbs           )'cbOverwriteArtwork - does not appear to be used?
+        root.AppendChild(doc, "overwritethumbs"             , overwritethumbs           ) 'cbOverwriteArtwork
         root.AppendChild(doc, "LocalActorImage"             , LocalActorImage           ) 'cbDisplayLocalActor
         root.AppendChild(doc, "videomode"                   , videomode                 ) 'RadioButton36-38
-        root.AppendChild(doc, "selectedvideoplayer"         , selectedvideoplayer       )'btn_custommediaplayer
-        root.AppendChild(doc, "externalbrowser"             , externalbrowser           ) 'CheckBox12
+        root.AppendChild(doc, "selectedvideoplayer"         , selectedvideoplayer       ) 'btn_custommediaplayer
+        root.AppendChild(doc, "externalbrowser"             , externalbrowser           ) 'cbExternalbrowser
         root.AppendChild(doc, "selectedBrowser"             , selectedBrowser           ) 'btnFindBrowser
         root.AppendChild(doc, "altnfoeditor"                , altnfoeditor              ) 'btnaltnfoeditor
         root.AppendChild(doc, "ignorearticle"               , ignorearticle             ) 'cb_IgnoreThe
@@ -1075,11 +1044,11 @@ Public Class Pref
         root.AppendChild(doc, "sorttitleignorearticle"      , sorttitleignorearticle    ) 'cb_SorttitleIgnoreArticles
         root.AppendChild(doc, "MovSetTitleIgnArticle"       , MovSetTitleIgnArticle     ) 'cb_MovSetTitleIgnArticle
         root.AppendChild(doc, "MovPosterTabTMDBSelect"      , MovPosterTabTMDBSelect    ) 'cb_MovPosterTabTMDBSelect
-        root.AppendChild(doc, "intruntime"                  , intruntime                ) 'CheckBox38
+        root.AppendChild(doc, "intruntime"                  , intruntime                ) 'cbRuntimeAsNumericOnly
         root.AppendChild(doc, "xbmcartwork"                 , XBMC_version              ) 'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
         root.AppendChild(doc, "ShowMovieGridToolTip"        , ShowMovieGridToolTip      ) 'cbShowMovieGridToolTip
         root.AppendChild(doc, "ShowLogOnError"              , ShowLogOnError            ) 'cbShowLogOnError
-        root.AppendChild(doc, "CheckForNewVersion"          , CheckForNewVersion        )
+        root.AppendChild(doc, "CheckForNewVersion"          , CheckForNewVersion        ) 'cbCheckForNewVersion
         root.AppendChild(doc, "CloseMCForDLNewVersion"      , CloseMCForDLNewVersion    ) 'cbMcCloseMCForDLNewVersion
         root.AppendChild(doc, "MkvMergeGuiPath"             , MkvMergeGuiPath           ) 'tbMkvMergeGuiPath
         root.AppendChild(doc, "prxyEnabled"                 , prxyEnabled               ) 'ucGenPref_Proxy.cb_prxyEnable
@@ -1114,27 +1083,19 @@ Public Class Pref
         
         'Movie Prefs ------------------------------------------------------------
         root.AppendChild(doc, "DownloadTrailerDuringScrape",        DownloadTrailerDuringScrape)        'cbDlTrailerDuringScrape
-        root.AppendChild(doc, "gettrailer",                         gettrailer)                         'CheckBox11
-        root.AppendChild(doc, "ignoretrailers",                     ignoretrailers)                     'set from frmOptions - obsolete
-        root.AppendChild(doc, "moviescraper",                       moviescraper)                       'set from frmOptions - obsolete
+        root.AppendChild(doc, "gettrailer",                         gettrailer)                         'cbMovieTrailerUrl
         root.AppendChild(doc, "nfoposterscraper",                   nfoposterscraper)                   'IMPA_chk,mpdb_chk,tmdb_chk,imdb_chk
-        root.AppendChild(doc, "alwaysuseimdbid",                    alwaysuseimdbid)                    'set from frmOptions - obsolete
-        root.AppendChild(doc, "ignoreactorthumbs",                  ignoreactorthumbs)                  'set from frmOptions - obsolete
-        root.AppendChild(doc, "maxactors",                          maxactors)                          'ComboBox7
+        root.AppendChild(doc, "maxactors",                          maxactors)                          'cmbx_MovMaxActors
         root.AppendChild(doc, "MovTagBlacklist",                    MovTagBlacklist)                    'tb_MovTagBlacklist
         root.AppendChild(doc, "maxmoviegenre",                      maxmoviegenre)                      'cmbxMovScraper_MaxGenres
-        root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'CheckBox19
+        root.AppendChild(doc, "enablehdtags",                       enablehdtags)                       'cb_EnableMediaTags
         root.AppendChild(doc, "MovDurationAsRuntine",               MovDurationAsRuntine)               'cb_MovDurationAsRuntine
         root.AppendChild(doc, "MovRuntimeAsDuration",               MovRuntimeAsDuration)               'cb_MovRuntimeAsDuration
         root.AppendChild(doc, "movieruntimedisplay",                movieRuntimeDisplay)                'rbRuntimeScraper
         root.AppendChild(doc, "movieRuntimeFallbackToFile",         movieRuntimeFallbackToFile)         'cbMovieRuntimeFallbackToFile
-        root.AppendChild(doc, "fanartnotstacked",                   fanartnotstacked)                   'set from frmOptions - obsolete
-        root.AppendChild(doc, "posternotstacked",                   posternotstacked)                   'set from frmOptions - obsolete
         root.AppendChild(doc, "scrapemovieposters",                 scrapemovieposters)                 'cbMoviePosterScrape
         root.AppendChild(doc, "movrootfoldercheck",                 movrootfoldercheck)                 'cbMovRootFolderCheck
         root.AppendChild(doc, "posterjpg",                          posterjpg)                          'cbMoviePosterInFolder
-        root.AppendChild(doc, "usefanart",                          usefanart)                          'set from frmOptions - obsolete
-        root.AppendChild(doc, "dontdisplayposter",                  dontdisplayposter)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "usefoldernames",                     usefoldernames)                     'chkbx_usefoldernames
         root.AppendChild(doc, "movxtrathumb",                       movxtrathumb)                       'cbMovXtraThumb
         root.AppendChild(doc, "movxtrafanart",                      movxtrafanart)                      'cbMovXtraFanart
@@ -1151,16 +1112,14 @@ Public Class Pref
         root.AppendChild(doc, "actorsavealpha",                     actorsavealpha)                     'actorsavealpha
         root.AppendChild(doc, "LocalActorSaveNoId",                 LocalActorSaveNoId)                 'cbLocalActorSaveNoId
         root.AppendChild(doc, "actornetworkpath",                   actornetworkpath)                   'xbmcactorpath
-        root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'ListBox9
+        root.AppendChild(doc, "imdbmirror",                         imdbmirror)                         'lb_IMDBMirrors
         root.AppendChild(doc, "createfolderjpg",                    createfolderjpg)                    'cbMovCreateFolderjpg
         root.AppendChild(doc, "createfanartjpg",                    createfanartjpg)                    'cbMovCreateFanartjpg
         root.AppendChild(doc, "basicsavemode",                      basicsavemode)                      'chkbx_basicsave
         root.AppendChild(doc, "namemode",                           namemode)                           'cbxNameMode
-        root.AppendChild(doc, "usetransparency",                    usetransparency)                    'set from frmOptions - obsolete
-        root.AppendChild(doc, "transparencyvalue",                  transparencyvalue)                  'set from frmOptions - obsolete
         root.AppendChild(doc, "NoAltTitle",                         NoAltTitle)                         'cbNoAltTitle
         root.AppendChild(doc, "XtraFrodoUrls",                      XtraFrodoUrls)                      'cbXtraFrodoUrls
-        root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'CheckBox16
+        root.AppendChild(doc, "disablelogs",                        disablelogfiles)                    'cb_MovDisplayLog
         root.AppendChild(doc, "AutoHideStatusBar",                  AutoHideStatusBar)                  'cbAutoHideStatusBar
         root.AppendChild(doc, "DisplayRatingOverlay",               DisplayRatingOverlay)               'cbDisplayRatingOverlay
         root.AppendChild(doc, "DisplayMediainfoOverlay",            DisplayMediainfoOverlay)            'cbDisplayMediainfoOverlay
@@ -1178,7 +1137,6 @@ Public Class Pref
         root.AppendChild(doc, "MovFanartTvDlBanner",                MovFanartTvDlBanner)
         root.AppendChild(doc, "MovFanartTvDlLandscape",             MovFanartTvDlLandscape)
         root.AppendChild(doc, "fanartjpg",                          fanartjpg)                          'cbMovieFanartInFolders
-        root.AppendChild(doc, "roundminutes",                       roundminutes)                       'set from frmOptions - obsolete
         root.AppendChild(doc, "ignoreparts",                        movieignorepart)                    'cbxCleanFilenameIgnorePart
         root.AppendChild(doc, "cleantags",                          moviecleanTags)                     'btnCleanFilenameAdd,btnCleanFilenameRemove
         root.AppendChild(doc, "moviesUseXBMCScraper",               movies_useXBMC_Scraper)             'CheckBox_Use_XBMC_Scraper
@@ -1186,8 +1144,7 @@ Public Class Pref
         root.AppendChild(doc, "MovActorFallbackTMDbtoIMDb",         MovActorFallbackTMDbtoIMDb)         'cbMovActorFallbackTMDbtoIMDb
         root.AppendChild(doc, "ImdbPrimaryPlot",                    ImdbPrimaryPlot)                    'cbImdbPrimaryPlot 
         root.AppendChild(doc, "MovImdbFirstRunTime",                MovImdbFirstRunTime)                'cbMovImdbFirstRunTime 
-        root.AppendChild(doc, "MovImdbAspectRatio",                 MovImdbAspectRatio)                 'cbMovImdbAspectRatio
-        root.AppendChild(doc, "xbmcscraper",                        XBMC_Scraper)                       
+        root.AppendChild(doc, "MovImdbAspectRatio",                 MovImdbAspectRatio)                 'cbMovImdbAspectRatio                     
         root.AppendChild(doc, "XbmcTmdbRenameMovie",                XbmcTmdbRenameMovie)                'cbXbmcTmdbRename
         root.AppendChild(doc, "XbmcTmdbMissingFromImdb",            XbmcTmdbMissingFromImdb)            'cbXbmcTmdbMissingFromImdb
         root.AppendChild(doc, "XbmcTmdbTop250FromImdb",             XbmcTmdbTop250FromImdb)             'cbXbmcTmdbMissingTop250FromImdb
@@ -1261,14 +1218,11 @@ Public Class Pref
         root.AppendChild(doc, "XbmcTmdbScraperTrailerQ",            XbmcTmdbScraperTrailerQ)            'cmbxXbmcTmdbHDTrailer
         root.AppendChild(doc, "XbmcTmdbScraperLanguage",            XbmcTmdbScraperLanguage)            'cmbxXbmcTmdbTitleLanguage
         root.AppendChild(doc, "XbmcTmdbScraperRatings",             XbmcTmdbScraperRatings)             'cbXbmcTmdbIMDBRatings
-        root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         '
+        root.AppendChild(doc, "XbmcTmdbScraperCertCountry",         XbmcTmdbScraperCertCountry)         'cmbxTMDBPreferredCertCountry
         root.AppendChild(doc, "AllowUserTags",                      AllowUserTags)                      'cbAllowUserTags
         root.AppendChild(doc, "keywordasTag",                       keywordasTag)                       'cb_keywordasTag
         root.AppendChild(doc, "keywordlimit",                       keywordlimit)                       'cb_keywordlimit
         root.AppendChild(doc, "TagRes",                             TagRes)                             'cbTagRes
-        
-        
-
         root.AppendChild(movie_filters.GetChild(doc))
 
 
@@ -1293,7 +1247,6 @@ Public Class Pref
         root.AppendChild(doc, "seasonall",                          seasonall)                  'RadioButton39-41
         root.AppendChild(doc, "tvrename",                           tvrename)                   'ComboBox_tv_EpisodeRename
         root.AppendChild(doc, "eprenamelowercase",                  eprenamelowercase)          'CheckBox_tv_EpisodeRenameCase
-        root.AppendChild(doc, "tvshowrefreshlog",                   tvshowrefreshlog)           'set from frmOptions - obsolete
         root.AppendChild(doc, "autoepisodescreenshot",              autoepisodescreenshot)      'cbTvAutoScreenShot
         root.AppendChild(doc, "tvscrnshtTVDBResize",                tvscrnshtTVDBResize)        'cbTvScrnShtTVDBResize
         root.AppendChild(doc, "TVShowUseXBMCScraper",               tvshow_useXBMC_Scraper)     'CheckBox_Use_XBMC_TVDB_Scraper
@@ -1316,37 +1269,35 @@ Public Class Pref
         root.AppendChild(doc, "HmFanartTime",                       HmFanartTime)                'cbHmFanartTime
         root.AppendChild(doc, "HmPosterTime",                       HmPosterTime)                'cbHmPosterTime
 
-        root.AppendChild(doc, "MVScraper",              MVScraper)              'ucMusicVideo.rbscraper
-        root.AppendChild(doc, "MVsortorder",            MVsortorder)  
-        root.AppendChild(doc, "MVdefaultlist",          MVdefaultlist)  
-        root.AppendChild(doc, "MVPrefScrnSht",          MVPrefScrnSht)          'tb_MVPrefScrnSht
-        root.AppendChild(doc, "MVPrefShowLog",          MVPrefShowLog)          'cb_MVPrefShowLog        
+        root.AppendChild(doc, "MVScraper",                          MVScraper)                  'ucMusicVideo.rbscraper
+        root.AppendChild(doc, "MVsortorder",                        MVsortorder)                'cmbxMVSort
+        root.AppendChild(doc, "MVdefaultlist",                      MVdefaultlist)              'rbMVArtistAndTitle, rbMVTitleandYear & rbMVFilename
+        root.AppendChild(doc, "MVPrefScrnSht",                      MVPrefScrnSht)              'tb_MVPrefScrnSht
+        root.AppendChild(doc, "MVPrefShowLog",                      MVPrefShowLog)              'cb_MVPrefShowLog        
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
         root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
 
         root.AppendChild(doc, "XBMC_Active", XBMC_Active)
-        root.AppendChild( doc, "XBMC_Link"                   , XBMC_Link                 )
-        root.AppendChild( doc, "XBMC_Address"                , XBMC_Address              )
-        root.AppendChild(   doc, "XBMC_Port"                 , XBMC_Port                 ) 'cbXBMC_Active
-        root.AppendChild( doc, "XBMC_Username"               , XBMC_Username             )
-        root.AppendChild( doc, "XBMC_Password"               , XBMC_Password             )
-        root.AppendChild( doc, "XBMC_UserdataFolder"         , XBMC_UserdataFolder       )
-        root.AppendChild( doc, "XBMC_TexturesDb"             , XBMC_TexturesDb           )
-        root.AppendChild( doc, "XBMC_ThumbnailFolders"       , XBMC_ThumbnailsFolder     )
-        root.AppendChild( doc, "XBMC_Delete_Cached_Images"   , XBMC_Delete_Cached_Images )
+        root.AppendChild(doc, "XBMC_Link",                          XBMC_Link                 )
+        root.AppendChild(doc, "XBMC_Address",                       XBMC_Address              )
+        root.AppendChild(doc, "XBMC_Port",                          XBMC_Port                 ) 'cbXBMC_Active
+        root.AppendChild(doc, "XBMC_Username",                      XBMC_Username             )
+        root.AppendChild(doc, "XBMC_Password",                      XBMC_Password             )
+        root.AppendChild(doc, "XBMC_UserdataFolder",                XBMC_UserdataFolder       )
+        root.AppendChild(doc, "XBMC_TexturesDb",                    XBMC_TexturesDb           )
+        root.AppendChild(doc, "XBMC_ThumbnailFolders",              XBMC_ThumbnailsFolder     )
+        root.AppendChild(doc, "XBMC_Delete_Cached_Images",          XBMC_Delete_Cached_Images )
         
-        root.AppendChild( doc, "ShowExtraMovieFilters"       , ShowExtraMovieFilters     )
-        root.AppendChild( doc, "ExportXBMCPath"              , ExportXBMCPath            )
+        root.AppendChild(doc, "ShowExtraMovieFilters",              ShowExtraMovieFilters     )
+        root.AppendChild(doc, "ExportXBMCPath",                     ExportXBMCPath            )
         
         root.AppendChild(XBMC_MC_MovieFolderMappings.GetChild(doc))
         root.AppendChild(XBMC_MC_CompareFields      .GetChild(doc))
         
         doc.AppendChild(root)
 
-        If String.IsNullOrEmpty(workingProfile.Config) Then
-            workingProfile.Config = Path.Combine(applicationPath, "settings\config.xml")
-        End If
+        If String.IsNullOrEmpty(workingProfile.Config) Then workingProfile.Config = Path.Combine(applicationPath, "settings\config.xml")
         Dim output As XmlTextWriter = Nothing
         Try
             output = New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
@@ -1560,8 +1511,6 @@ Public Class Pref
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
                     Case "SetIdAsCollectionnumber"              : SetIdAsCollectionnumber = thisresult.InnerXml
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
-                    Case "ignoretrailers"                       : ignoretrailers = thisresult.InnerXml
-                    Case "ignoreactorthumbs"                    : ignoreactorthumbs = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)
                     Case "MovTagBlacklist"                      : MovTagBlacklist = thisresult.InnerText
@@ -1574,13 +1523,9 @@ Public Class Pref
                     Case "hdtvtags"                             : enabletvhdtags = thisresult.InnerXml
                     Case "renamenfofiles"                       : renamenfofiles = thisresult.InnerXml
                     Case "logview"                              : logview = thisresult.InnerXml
-                    Case "fanartnotstacked"                     : fanartnotstacked = thisresult.InnerXml
-                    Case "posternotstacked"                     : posternotstacked = thisresult.InnerXml
                     Case "scrapemovieposters"                   : scrapemovieposters = thisresult.InnerXml
                     Case "movrootfoldercheck"                   : movrootfoldercheck = thisresult.InnerXml 
-                    Case "posterjpg"                            : posterjpg = thisresult.InnerXml 
-                    Case "usefanart"                            : usefanart = thisresult.InnerXml
-                    Case "dontdisplayposter"                    : dontdisplayposter = thisresult.InnerXml
+                    Case "posterjpg"                            : posterjpg = thisresult.InnerXml
                     Case "rarsize"                              : rarsize = Convert.ToInt32(thisresult.InnerXml)
                     Case "actorsave"                            : actorsave = thisresult.InnerXml
                     Case "actorseasy"                           : actorseasy = thisresult.InnerXml
@@ -1598,9 +1543,6 @@ Public Class Pref
                     Case "imdbmirror"                           : imdbmirror = thisresult.InnerXml
                     Case "cleantags"                            : moviecleanTags = thisresult.InnerXml
                     Case "ignoreparts"                          : movieignorepart = thisresult.InnerXml
-                    Case "backgroundcolour"                     : backgroundcolour = thisresult.InnerXml
-                    Case "forgroundcolour"                      : forgroundcolour = thisresult.InnerXml
-                    Case "remembersize"                         : remembersize = thisresult.InnerXml
                     Case "formheight"                           : formheight = Convert.ToInt32(thisresult.InnerXml)
                     Case "formwidth"                            : formwidth = Convert.ToInt32(thisresult.InnerXml)
                     Case "usefoldernames"                       : usefoldernames = thisresult.InnerXml
@@ -1624,12 +1566,9 @@ Public Class Pref
                     Case "namemode"                             : namemode = thisresult.InnerXml
                     Case "tvdbmode"                             : sortorder = thisresult.InnerXml
                     Case "tvdbactorscrape"                      : TvdbActorScrape = Convert.ToInt32(thisresult.InnerXml)
-                    Case "usetransparency"                      : usetransparency = thisresult.InnerXml
-                    Case "transparencyvalue"                    : transparencyvalue = Convert.ToInt32(thisresult.InnerXml)
                     Case "downloadtvfanart"                     : tvdlfanart = thisresult.InnerXml
                     Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml
-                    Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml 
-                    Case "roundminutes"                         : roundminutes = thisresult.InnerXml
+                    Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "tvscrnshtTVDBResize"                  : tvscrnshtTVDBResize = thisresult.InnerXml 
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml
@@ -1693,14 +1632,11 @@ Public Class Pref
                     Case "selectedvideoplayer"                  : selectedvideoplayer = thisresult.InnerXml
                     Case "maximagecount"                        : maximagecount = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastpath"                             : lastpath = thisresult.InnerXml
-                    Case "moviescraper"                         : moviescraper = thisresult.InnerXml
                     Case "nfoposterscraper"                     : nfoposterscraper = thisresult.InnerXml
-                    Case "alwaysuseimdbid"                      : alwaysuseimdbid = thisresult.InnerXml
                     Case "externalbrowser"                      : externalbrowser = thisresult.InnerXml
                     Case "selectedBrowser"                      : selectedBrowser = thisresult.InnerXml
                     Case "altnfoeditor"                         : altnfoeditor = thisresult.InnerXml
                     Case "tvrename"                             : tvrename = Convert.ToInt32(thisresult.InnerText)
-                    Case "tvshowrefreshlog"                     : tvshowrefreshlog = thisresult.InnerXml
                     Case "autorenameepisodes"                   : autorenameepisodes = thisresult.InnerXml
                     Case "eprenamelowercase"                    : eprenamelowercase = thisresult.InnerXml
                     Case "TvRenameReplaceSpace"                 : TvRenameReplaceSpace = thisresult.InnerXml
