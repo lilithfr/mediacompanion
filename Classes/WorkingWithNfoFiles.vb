@@ -125,6 +125,85 @@ Public Class WorkingWithNfoFiles
         Return SubElement
     End Function
 
+    Public Shared Function Streamdetailsload(ByVal thisresult As XmlNode) As StreamDetails
+        Dim Streamdetails As New StreamDetails
+        Try
+            Dim detail As XmlNode = Nothing
+            For Each detail In thisresult.ChildNodes
+                Select Case detail.Name
+                    Case "video"
+                        Dim videodetails As XmlNode = Nothing
+                        For Each videodetails In detail.ChildNodes
+                            Select Case videodetails.Name
+                                Case "width"
+                                    StreamDetails.Video.Width.Value = videodetails.InnerText
+                                Case "height"
+                                    StreamDetails.Video.Height.Value = videodetails.InnerText
+                                Case "aspect"
+                                    StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                Case "codec"
+                                    StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                Case "format"
+                                    If StreamDetails.Video.FormatInfo.Value = "" Then
+                                        StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                    End If
+                                Case "formatinfo"
+                                    StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                Case "durationinseconds"
+                                    StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                Case "bitrate"
+                                    StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                Case "bitratemode"
+                                    StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                Case "bitratemax"
+                                    StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                Case "container"
+                                    StreamDetails.Video.Container.Value = videodetails.InnerText
+                                Case "codecid"
+                                    StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                Case "codecidinfo"
+                                    StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                Case "scantype"
+                                    StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                            End Select
+                        Next
+                    Case "audio"
+                        Dim audiodetails As XmlNode = Nothing
+                        Dim audio As New AudioDetails
+                        For Each audiodetails In detail.ChildNodes
+                            Select Case audiodetails.Name
+                                Case "language"
+                                    audio.Language.Value = audiodetails.InnerText
+                                Case "DefaultTrack"
+                                    audio.DefaultTrack.Value = audiodetails.InnerText
+                                Case "codec"
+                                    audio.Codec.Value = audiodetails.InnerText
+                                Case "channels"
+                                    audio.Channels.Value = audiodetails.InnerText
+                                Case "bitrate"
+                                    audio.Bitrate.Value = audiodetails.InnerText
+                            End Select
+                        Next
+                        StreamDetails.Audio.Add(audio)
+                    Case "subtitle"
+                        Dim subsdetails As XmlNode = Nothing
+                        Dim sublang As New SubtitleDetails
+                        For Each subsdetails In detail.ChildNodes
+                            Select Case subsdetails.Name
+                                Case "language"
+                                    sublang.Language.Value = subsdetails.InnerText
+                                Case "default"
+                                    sublang.Primary = subsdetails.InnerXml 
+                            End Select
+                        Next
+                        StreamDetails.Subtitles.Add(sublang)
+                End Select
+            Next
+        Catch
+        End Try
+        Return Streamdetails
+    End Function
+
     Public Shared Function SetCreateDate(ByVal videodate As String) As String
         If String.IsNullOrEmpty(videodate) Then
             Try
@@ -134,6 +213,46 @@ Public Class WorkingWithNfoFiles
             End Try
         End If
         Return videodate
+    End Function
+
+    Public Shared Function FormatRunTime(ByVal runtime As String, ByVal Duration As String, Optional ByVal ismovie As Boolean = False) As String
+        Dim output As String = ""
+        If ismovie AndAlso Pref.MovDurationAsRuntine Then
+            'Dim duration As String = movietosave.filedetails.Video.DurationInSeconds.Value
+            Dim durationInt As Integer = If(String.IsNullOrEmpty(duration), 0, duration.ToInt)
+            If durationInt > 60 Then
+                runtime = Math.Floor(durationInt/60).ToString
+            End If
+        End If
+        
+        If Not String.IsNullOrEmpty(runtime) Then
+            Dim minutes As String = runtime.ToMin
+            Try
+                If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
+                    Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                        minutes = minutes.Substring(1, minutes.Length - 1)
+                    Loop
+                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
+                        minutes = "0" & minutes
+                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
+                        minutes = "00" & minutes
+                    End If
+                End If
+                If Pref.intruntime = False And IsNumeric(minutes) Then
+                    If minutes = "0" AndAlso Not String.IsNullOrEmpty(Duration) Then
+                        Dim seconds As Integer = Convert.ToInt32(Duration)
+                        If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
+                    End If
+                    minutes = minutes & " min"
+                End If
+            Catch ex As Exception
+                minutes = runtime
+            End Try
+            output = minutes
+        Else
+            output = runtime
+        End If
+        Return output
     End Function
 
 
@@ -271,77 +390,78 @@ Public Class WorkingWithNfoFiles
                                 For Each detail2 In thisresult.ChildNodes
                                     Select Case detail2.Name
                                         Case "streamdetails"
-                                            Dim detail As XmlNode = Nothing
-                                            For Each detail In detail2.ChildNodes
-                                                Select Case detail.Name
-                                                    Case "video"
-                                                        Dim videodetails As XmlNode = Nothing
-                                                        For Each videodetails In detail.ChildNodes
-                                                            Select Case videodetails.Name
-                                                                Case "width"
-                                                                    newtvepisode.StreamDetails.Video.Width.Value = videodetails.InnerText
-                                                                Case "height"
-                                                                    newtvepisode.StreamDetails.Video.Height.Value = videodetails.InnerText
-                                                                Case "aspect"
-                                                                    newtvepisode.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
-                                                                Case "codec"
-                                                                    newtvepisode.StreamDetails.Video.Codec.Value = videodetails.InnerText
-                                                                Case "format"
-                                                                    If newtvepisode.StreamDetails.Video.FormatInfo.Value = "" Then
-                                                                        newtvepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                    End If
-                                                                Case "formatinfo"
-                                                                    newtvepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                Case "durationinseconds"
-                                                                    newtvepisode.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                                Case "bitrate"
-                                                                    newtvepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
-                                                                Case "bitratemode"
-                                                                    newtvepisode.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
-                                                                Case "bitratemax"
-                                                                    newtvepisode.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
-                                                                Case "container"
-                                                                    newtvepisode.StreamDetails.Video.Container.Value = videodetails.InnerText
-                                                                Case "codecid"
-                                                                    newtvepisode.StreamDetails.Video.CodecId.Value = videodetails.InnerText
-                                                                Case "codecidinfo"
-                                                                    newtvepisode.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
-                                                                Case "scantype"
-                                                                    newtvepisode.StreamDetails.Video.ScanType.Value = videodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                    Case "audio"
-                                                        Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New AudioDetails
-                                                        For Each audiodetails In detail.ChildNodes
-                                                            Select Case audiodetails.Name
-                                                                Case "language"
-                                                                    audio.Language.Value = audiodetails.InnerText
-                                                                Case "DefaultTrack"
-                                                                    audio.DefaultTrack.Value = audiodetails.InnerText
-                                                                Case "codec"
-                                                                    audio.Codec.Value = audiodetails.InnerText
-                                                                Case "channels"
-                                                                    audio.Channels.Value = audiodetails.InnerText
-                                                                Case "bitrate"
-                                                                    audio.Bitrate.Value = audiodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                        newtvepisode.StreamDetails.Audio.Add(audio)
-                                                    Case "subtitle"
-                                                        Dim subsdetails As XmlNode = Nothing
-                                                        Dim sublang As New SubtitleDetails
-                                                        For Each subsdetails In detail.ChildNodes
-                                                            Select Case subsdetails.Name
-                                                                Case "language"
-                                                                    sublang.Language.Value = subsdetails.InnerText
-                                                                Case "default"
-                                                                    sublang.Primary = subsdetails.InnerXml 
-                                                            End Select
-                                                        Next
-                                                        newtvepisode.StreamDetails.Subtitles.Add(sublang)
-                                                End Select
-                                            Next
+                                            newtvepisode.Streamdetails = Streamdetailsload(detail2)
+                                            'Dim detail As XmlNode = Nothing
+                                            'For Each detail In detail2.ChildNodes
+                                            '    Select Case detail.Name
+                                            '        Case "video"
+                                            '            Dim videodetails As XmlNode = Nothing
+                                            '            For Each videodetails In detail.ChildNodes
+                                            '                Select Case videodetails.Name
+                                            '                    Case "width"
+                                            '                        newtvepisode.StreamDetails.Video.Width.Value = videodetails.InnerText
+                                            '                    Case "height"
+                                            '                        newtvepisode.StreamDetails.Video.Height.Value = videodetails.InnerText
+                                            '                    Case "aspect"
+                                            '                        newtvepisode.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                            '                    Case "codec"
+                                            '                        newtvepisode.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                            '                    Case "format"
+                                            '                        If newtvepisode.StreamDetails.Video.FormatInfo.Value = "" Then
+                                            '                            newtvepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                            '                        End If
+                                            '                    Case "formatinfo"
+                                            '                        newtvepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                            '                    Case "durationinseconds"
+                                            '                        newtvepisode.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                            '                    Case "bitrate"
+                                            '                        newtvepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                            '                    Case "bitratemode"
+                                            '                        newtvepisode.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                            '                    Case "bitratemax"
+                                            '                        newtvepisode.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                            '                    Case "container"
+                                            '                        newtvepisode.StreamDetails.Video.Container.Value = videodetails.InnerText
+                                            '                    Case "codecid"
+                                            '                        newtvepisode.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                            '                    Case "codecidinfo"
+                                            '                        newtvepisode.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                            '                    Case "scantype"
+                                            '                        newtvepisode.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                            '                End Select
+                                            '            Next
+                                            '        Case "audio"
+                                            '            Dim audiodetails As XmlNode = Nothing
+                                            '            Dim audio As New AudioDetails
+                                            '            For Each audiodetails In detail.ChildNodes
+                                            '                Select Case audiodetails.Name
+                                            '                    Case "language"
+                                            '                        audio.Language.Value = audiodetails.InnerText
+                                            '                    Case "DefaultTrack"
+                                            '                        audio.DefaultTrack.Value = audiodetails.InnerText
+                                            '                    Case "codec"
+                                            '                        audio.Codec.Value = audiodetails.InnerText
+                                            '                    Case "channels"
+                                            '                        audio.Channels.Value = audiodetails.InnerText
+                                            '                    Case "bitrate"
+                                            '                        audio.Bitrate.Value = audiodetails.InnerText
+                                            '                End Select
+                                            '            Next
+                                            '            newtvepisode.StreamDetails.Audio.Add(audio)
+                                            '        Case "subtitle"
+                                            '            Dim subsdetails As XmlNode = Nothing
+                                            '            Dim sublang As New SubtitleDetails
+                                            '            For Each subsdetails In detail.ChildNodes
+                                            '                Select Case subsdetails.Name
+                                            '                    Case "language"
+                                            '                        sublang.Language.Value = subsdetails.InnerText
+                                            '                    Case "default"
+                                            '                        sublang.Primary = subsdetails.InnerXml 
+                                            '                End Select
+                                            '            Next
+                                            '            newtvepisode.StreamDetails.Subtitles.Add(sublang)
+                                            '    End Select
+                                            'Next
                                             'newtvepisode.Details = newfilenfo
                                     End Select
                                 Next
@@ -467,79 +587,80 @@ Public Class WorkingWithNfoFiles
                                             For Each detail2 In thisresult.ChildNodes(f)
                                                 Select Case detail2.Name
                                                     Case "streamdetails"
-                                                        Dim detail As XmlNode = Nothing
-                                                        For Each detail In detail2.ChildNodes
-                                                            Select Case detail.Name
-                                                                Case "video"
-                                                                    Dim videodetails As XmlNode = Nothing
-                                                                    For Each videodetails In detail.ChildNodes
-                                                                        Select Case videodetails.Name
-                                                                            Case "width"
-                                                                                If videodetails.InnerText.ToLower.Contains("kbps") Then   'in place as multieps mediainfo was stored incorrectly.
-                                                                                    anotherepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
-                                                                                Else
-                                                                                    anotherepisode.StreamDetails.Video.Width.Value = videodetails.InnerText
-                                                                                End If
-                                                                            Case "height"
-                                                                                anotherepisode.StreamDetails.Video.Height.Value = videodetails.InnerText
-                                                                            Case "aspect"
-                                                                                anotherepisode.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
-                                                                            Case "codec"
-                                                                                anotherepisode.StreamDetails.Video.Codec.Value = videodetails.InnerText
-                                                                            Case "format"
-                                                                                If anotherepisode.StreamDetails.Video.FormatInfo.Value = "" Then
-                                                                                    anotherepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                                End If
-                                                                            Case "formatinfo"
-                                                                                anotherepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
-                                                                            Case "durationinseconds"
-                                                                                anotherepisode.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                anotherepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
-                                                                            Case "bitratemode"
-                                                                                anotherepisode.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
-                                                                            Case "bitratemax"
-                                                                                anotherepisode.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
-                                                                            Case "container"
-                                                                                anotherepisode.StreamDetails.Video.Container.Value = videodetails.InnerText
-                                                                            Case "codecid"
-                                                                                anotherepisode.StreamDetails.Video.CodecId.Value = videodetails.InnerText
-                                                                            Case "codecidinfo"
-                                                                                anotherepisode.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
-                                                                            Case "scantype"
-                                                                                anotherepisode.StreamDetails.Video.ScanType.Value = videodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                Case "audio"
-                                                                    Dim audiodetails As XmlNode = Nothing
-                                                                    Dim audio2 As New AudioDetails
-                                                                    For Each audiodetails In detail.ChildNodes
-                                                                        Select Case audiodetails.Name
-                                                                            Case "language"
-                                                                                audio2.Language.Value = audiodetails.InnerText
-                                                                            Case "DefaultTrack"
-                                                                                audio2.DefaultTrack.Value = audiodetails.InnerText
-                                                                            Case "codec"
-                                                                                audio2.Codec.Value = audiodetails.InnerText
-                                                                            Case "channels"
-                                                                                audio2.Channels.Value = audiodetails.InnerText
-                                                                            Case "bitrate"
-                                                                                audio2.Bitrate.Value = audiodetails.InnerText
-                                                                        End Select
-                                                                    Next
-                                                                    anotherepisode.StreamDetails.Audio.Add(audio2)
-                                                                Case "subtitle"
-                                                                    Dim subsdetails As XmlNode = Nothing
-                                                                    For Each subsdetails In detail.ChildNodes
-                                                                        Select Case subsdetails.Name
-                                                                            Case "language"
-                                                                                Dim sublang As New SubtitleDetails
-                                                                                sublang.Language.Value = subsdetails.InnerText
-                                                                                anotherepisode.StreamDetails.Subtitles.Add(sublang)
-                                                                        End Select
-                                                                    Next
-                                                            End Select
-                                                        Next
+                                                        anotherepisode.StreamDetails = Streamdetailsload(detail2)
+                                                        'Dim detail As XmlNode = Nothing
+                                                        'For Each detail In detail2.ChildNodes
+                                                        '    Select Case detail.Name
+                                                        '        Case "video"
+                                                        '            Dim videodetails As XmlNode = Nothing
+                                                        '            For Each videodetails In detail.ChildNodes
+                                                        '                Select Case videodetails.Name
+                                                        '                    Case "width"
+                                                        '                        If videodetails.InnerText.ToLower.Contains("kbps") Then   'in place as multieps mediainfo was stored incorrectly.
+                                                        '                            anotherepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                                        '                        Else
+                                                        '                            anotherepisode.StreamDetails.Video.Width.Value = videodetails.InnerText
+                                                        '                        End If
+                                                        '                    Case "height"
+                                                        '                        anotherepisode.StreamDetails.Video.Height.Value = videodetails.InnerText
+                                                        '                    Case "aspect"
+                                                        '                        anotherepisode.StreamDetails.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                                        '                    Case "codec"
+                                                        '                        anotherepisode.StreamDetails.Video.Codec.Value = videodetails.InnerText
+                                                        '                    Case "format"
+                                                        '                        If anotherepisode.StreamDetails.Video.FormatInfo.Value = "" Then
+                                                        '                            anotherepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                        '                        End If
+                                                        '                    Case "formatinfo"
+                                                        '                        anotherepisode.StreamDetails.Video.FormatInfo.Value = videodetails.InnerText
+                                                        '                    Case "durationinseconds"
+                                                        '                        anotherepisode.StreamDetails.Video.DurationInSeconds.Value = videodetails.InnerText
+                                                        '                    Case "bitrate"
+                                                        '                        anotherepisode.StreamDetails.Video.Bitrate.Value = videodetails.InnerText
+                                                        '                    Case "bitratemode"
+                                                        '                        anotherepisode.StreamDetails.Video.BitrateMode.Value = videodetails.InnerText
+                                                        '                    Case "bitratemax"
+                                                        '                        anotherepisode.StreamDetails.Video.BitrateMax.Value = videodetails.InnerText
+                                                        '                    Case "container"
+                                                        '                        anotherepisode.StreamDetails.Video.Container.Value = videodetails.InnerText
+                                                        '                    Case "codecid"
+                                                        '                        anotherepisode.StreamDetails.Video.CodecId.Value = videodetails.InnerText
+                                                        '                    Case "codecidinfo"
+                                                        '                        anotherepisode.StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
+                                                        '                    Case "scantype"
+                                                        '                        anotherepisode.StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                                        '                End Select
+                                                        '            Next
+                                                        '        Case "audio"
+                                                        '            Dim audiodetails As XmlNode = Nothing
+                                                        '            Dim audio2 As New AudioDetails
+                                                        '            For Each audiodetails In detail.ChildNodes
+                                                        '                Select Case audiodetails.Name
+                                                        '                    Case "language"
+                                                        '                        audio2.Language.Value = audiodetails.InnerText
+                                                        '                    Case "DefaultTrack"
+                                                        '                        audio2.DefaultTrack.Value = audiodetails.InnerText
+                                                        '                    Case "codec"
+                                                        '                        audio2.Codec.Value = audiodetails.InnerText
+                                                        '                    Case "channels"
+                                                        '                        audio2.Channels.Value = audiodetails.InnerText
+                                                        '                    Case "bitrate"
+                                                        '                        audio2.Bitrate.Value = audiodetails.InnerText
+                                                        '                End Select
+                                                        '            Next
+                                                        '            anotherepisode.StreamDetails.Audio.Add(audio2)
+                                                        '        Case "subtitle"
+                                                        '            Dim subsdetails As XmlNode = Nothing
+                                                        '            For Each subsdetails In detail.ChildNodes
+                                                        '                Select Case subsdetails.Name
+                                                        '                    Case "language"
+                                                        '                        Dim sublang As New SubtitleDetails
+                                                        '                        sublang.Language.Value = subsdetails.InnerText
+                                                        '                        anotherepisode.StreamDetails.Subtitles.Add(sublang)
+                                                        '                End Select
+                                                        '            Next
+                                                        '    End Select
+                                                        'Next
                                                         'newtvepisode.Details = newfilenfo
                                                 End Select
                                             Next
@@ -801,52 +922,20 @@ Public Class WorkingWithNfoFiles
 
             xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
             doc.AppendChild(xmlproc)
-
             stage = 3
-            child = doc.CreateElement("id") : child.InnerText = tvshowtosave.tvdbid.Value
-            root.AppendChild(child)
-
-            stage = 4
-            child = doc.CreateElement("state")
-            If lock = "" Then
-                child.InnerText = tvshowtosave.State 
-            Else
-                child.InnerText = Media_Companion.ShowState.Open
-            End If
-            root.AppendChild(child)
-
-            stage = 5
-            root.AppendChild(doc, "title"           , tvshowtosave.Title.Value      )
-            'child = doc.CreateElement("title") : child.InnerText = tvshowtosave.title.Value
-            'root.AppendChild(child)
-                             
-            child = doc.CreateElement("showtitle") : child.InnerText = tvshowtosave.title.Value
-            root.AppendChild(child)
-
-            stage = 6
-            child = doc.CreateElement("mpaa") : child.InnerText = tvshowtosave.mpaa.Value
-            root.AppendChild(child)
-
-            stage = 7
-            child = doc.CreateElement("plot") : child.InnerText = tvshowtosave.plot.Value
-            root.AppendChild(child)
-
-            stage = 8
-            child = doc.CreateElement("imdbid") : child.InnerText = tvshowtosave.imdbid.Value
-            root.AppendChild(child)
-
-            stage = 9
-            child = doc.CreateElement("status") : child.InnerText = tvshowtosave.Status.Value
-            root.AppendChild(child)
+            root.AppendChild(doc, "id",             tvshowtosave.TvdbId.Value)
+            root.AppendChild(doc, "state",          If(lock = "", tvshowtosave.State, Media_Companion.ShowState.Open))
+            root.AppendChild(doc, "title",          tvshowtosave.Title.Value)
+            root.AppendChild(doc, "showtitle",      tvshowtosave.Title.Value)
+            root.AppendChild(doc, "mpaa",           tvshowtosave.Mpaa.Value)
+            root.AppendChild(doc, "plot",           tvshowtosave.Plot.Value)
+            root.AppendChild(doc, "imdbid",         tvshowtosave.ImdbId.Value)
+            root.AppendChild(doc, "status",         tvshowtosave.Status.Value)
 
             stage = 10
             child = doc.CreateElement("runtime")
             If tvshowtosave.runtime.Value <> Nothing Then
                 Dim minutes As String = tvshowtosave.runtime.Value.ToMin
-                'minutes = minutes.Replace("minutes", "")
-                'minutes = minutes.Replace("mins", "")
-                'minutes = minutes.Replace("min", "")
-                'minutes = minutes.Replace(" ", "")
                 Try
                     Do While minutes.IndexOf("0") = 0
                         minutes = minutes.Substring(1, minutes.Length - 1)
@@ -869,23 +958,10 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(child)
 
             stage = 11
-            child = doc.CreateElement("rating") : child.InnerText = tvshowtosave.rating.Value
-            root.AppendChild(child)
-            child = doc.CreateElement("votes") : child.InnerText = tvshowtosave.Votes.Value
-            root.AppendChild(child)
-
-            stage = 12
-            child = doc.CreateElement("year") : child.InnerText = tvshowtosave.year.Value
-            root.AppendChild(child)
-
-            stage = 13
-            child = doc.CreateElement("premiered") : child.InnerText = tvshowtosave.premiered.Value
-            root.AppendChild(child)
-
-            stage = 14
-            child = doc.CreateElement("studio") : child.InnerText = tvshowtosave.studio.Value
-            root.AppendChild(child)
-
+            root.AppendChild(doc, "votes",              tvshowtosave.Votes.Value)
+            root.AppendChild(doc, "year",               tvshowtosave.Year.Value)
+            root.AppendChild(doc, "premiered",          tvshowtosave.Premiered.Value)
+            root.AppendChild(doc, "studio",             tvshowtosave.Studio.Value)
             stage = 15
             If tvshowtosave.genre.Value <> "" Then
                 Dim strArr2() As String
@@ -931,21 +1007,16 @@ Public Class WorkingWithNfoFiles
             End If
 
             stage = 17
-            child = doc.CreateElement("language") : child.InnerText = tvshowtosave.language.Value
-            root.AppendChild(child)
+            root.AppendChild(doc, "language",           tvshowtosave.Language.Value)
 
             stage = 18
             For Each thumbnail In tvshowtosave.posters
-                child = doc.CreateElement("thumb")
-                child.InnerText = thumbnail
-                root.AppendChild(child)
+                root.AppendChild(doc, "thumb",          thumbnail)
             Next
 
             stage = 19
             For Each thumbnail In tvshowtosave.fanart
-                child = doc.CreateElement("fanart")
-                child.InnerText = thumbnail
-                root.AppendChild(child)
+                root.AppendChild(doc, "fanart",         thumbnail)
             Next
 
             stage = 20
@@ -974,40 +1045,19 @@ Public Class WorkingWithNfoFiles
             Next
             
             stage = 21
-            child = doc.CreateElement("episodeactorsource") : child.InnerText = tvshowtosave.episodeactorsource.Value
-            root.AppendChild(child)
-
-            child = doc.CreateElement("tvshowactorsource") : child.InnerText = tvshowtosave.tvshowactorsource.Value
-            root.AppendChild(child)
-
-            stage = 22
-            child = doc.CreateElement("sortorder") : child.InnerText = tvshowtosave.sortorder.Value
-            root.AppendChild(child)
+            root.AppendChild(doc, "episodeactorsource", tvshowtosave.episodeactorsource.Value)
+            root.AppendChild(doc, "tvshowactorsource",      tvshowtosave.tvshowactorsource.Value)
+            root.AppendChild(doc, "sortorder",          tvshowtosave.sortorder.Value)
 
             stage = 23
             If tvshowtosave.SortTitle.Value <> "" Then 
-                child = doc.CreateElement("sorttitle") : child.InnerText = tvshowtosave.SortTitle.Value
-                root.AppendChild(child)
+                root.AppendChild(doc, "sorttitle",          tvshowtosave.SortTitle.Value)
             End If
 
             doc.AppendChild(root)
 
             stage = 34
             SaveXMLDoc(doc, filenameandpath)
-            ''Dim output As New XmlTextWriter(filenameandpath, System.Text.Encoding.UTF8)
-            ''output.Formatting = Formatting.Indented
-            ''output.Indentation = 4
-            'Dim settings As New XmlWriterSettings()
-            'settings.Encoding = New UTF8Encoding(False) 
-            'settings.Indent = True
-            'settings.IndentChars = (ControlChars.Tab)
-            'settings.NewLineHandling = NewLineHandling.None
-            'Dim writer As XmlWriter = XmlWriter.Create(filenameandpath, settings)
-            'stage = 35
-            ''doc.WriteTo(output)
-            ''output.Close()
-            'doc.Save(writer)
-            'writer.Close()
         Catch ex As Exception
             MsgBox("Error Encountered at stage " & stage.ToString & vbCrLf & vbCrLf & ex.ToString)
         Finally
@@ -2569,88 +2619,89 @@ Public Class WorkingWithNfoFiles
                             For Each res In thisresult.ChildNodes
                                 Select Case res.name
                                     Case "streamdetails"
-                                        Dim detail As XmlNode = Nothing
-                                        For Each detail In res.ChildNodes
-                                            Select Case detail.Name
-                                                Case "video"
-                                                    Dim videodetails As XmlNode = Nothing
-                                                    For Each videodetails In detail.ChildNodes
-                                                        Select Case videodetails.Name
-                                                            Case "width"
-                                                                newfilenfo.Video.Width.Value = videodetails.InnerText
-                                                            Case "height"
-                                                                newfilenfo.Video.Height.Value = videodetails.InnerText
-                                                            Case "aspect"
-                                                                newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
-                                                            Case "codec"
-                                                                newfilenfo.Video.Codec.Value = videodetails.InnerText
-                                                            Case "format"
-                                                                If newfilenfo.Video.FormatInfo.Value = "" Then
-                                                                    newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                                End If
-                                                            Case "formatinfo"
-                                                                newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                            Case "durationinseconds"
-                                                                newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                            Case "bitrate"
-                                                                newfilenfo.Video.Bitrate.Value = videodetails.InnerText
-                                                            Case "bitratemode"
-                                                                newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
-                                                            Case "bitratemax"
-                                                                newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
-                                                            Case "container"
-                                                                newfilenfo.Video.Container.Value = videodetails.InnerText
-                                                            Case "codecid"
-                                                                newfilenfo.Video.CodecId.Value = videodetails.InnerText
-                                                            Case "codecidinfo"
-                                                                newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
-                                                            Case "scantype"
-                                                                newfilenfo.Video.ScanType.Value = videodetails.InnerText
-                                                        End Select
-                                                    Next
-                                                Case "audio"
-                                                    Dim audiodetails As XmlNode = Nothing
-                                                    Dim audio As New AudioDetails
-                                                    For Each audiodetails In detail.ChildNodes
-                                                        Select Case audiodetails.Name
-                                                            Case "language"
-                                                                audio.Language.Value = audiodetails.InnerText
-                                                            Case "DefaultTrack"
-                                                                audio.DefaultTrack.Value = audiodetails.InnerText
-                                                            Case "codec"
-                                                                audio.Codec.Value = audiodetails.InnerText
-                                                            Case "channels"
-                                                                audio.Channels.Value = audiodetails.InnerText
-                                                            Case "bitrate"
-                                                                audio.Bitrate.Value = audiodetails.InnerText
-                                                        End Select
-                                                    Next
-                                                    newfilenfo.Audio.Add(audio)
-                                                Case "subtitle"
-                                                    Dim subsdetails As XmlNode = Nothing
-                                                    Dim sublang As New SubtitleDetails
-                                                    For Each subsdetails In detail.ChildNodes
-                                                        Select Case subsdetails.Name
-                                                            Case "language"
-                                                                sublang.Language.Value  = subsdetails.InnerText
-                                                            Case "default"
-                                                                sublang.Primary         = subsdetails.InnerXml
-                                                            Case "forced"
-                                                                sublang.Forced          = subsdetails.InnerXml
-                                                        End Select
-                                                    Next
-                                                    newfilenfo.Subtitles.Add(sublang)
-                                            End Select
-                                        Next
-                                        If newfilenfo.Audio.Count = 0 Then
-                                            Dim audio As New AudioDetails
-                                            newfilenfo.Audio.Add(audio)
-                                        End If
-                                        If newfilenfo.Subtitles.Count = 0 Then
-                                            Dim subtitle As New SubtitleDetails
-                                            newfilenfo.Subtitles.Add(subtitle)
-                                        End If
-                                        newmovie.filedetails = newfilenfo
+                                        newmovie.filedetails = Streamdetailsload(res)
+                                        'Dim detail As XmlNode = Nothing
+                                        'For Each detail In res.ChildNodes
+                                        '    Select Case detail.Name
+                                        '        Case "video"
+                                        '            Dim videodetails As XmlNode = Nothing
+                                        '            For Each videodetails In detail.ChildNodes
+                                        '                Select Case videodetails.Name
+                                        '                    Case "width"
+                                        '                        newfilenfo.Video.Width.Value = videodetails.InnerText
+                                        '                    Case "height"
+                                        '                        newfilenfo.Video.Height.Value = videodetails.InnerText
+                                        '                    Case "aspect"
+                                        '                        newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                        '                    Case "codec"
+                                        '                        newfilenfo.Video.Codec.Value = videodetails.InnerText
+                                        '                    Case "format"
+                                        '                        If newfilenfo.Video.FormatInfo.Value = "" Then
+                                        '                            newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                        '                        End If
+                                        '                    Case "formatinfo"
+                                        '                        newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                        '                    Case "durationinseconds"
+                                        '                        newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
+                                        '                    Case "bitrate"
+                                        '                        newfilenfo.Video.Bitrate.Value = videodetails.InnerText
+                                        '                    Case "bitratemode"
+                                        '                        newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
+                                        '                    Case "bitratemax"
+                                        '                        newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
+                                        '                    Case "container"
+                                        '                        newfilenfo.Video.Container.Value = videodetails.InnerText
+                                        '                    Case "codecid"
+                                        '                        newfilenfo.Video.CodecId.Value = videodetails.InnerText
+                                        '                    Case "codecidinfo"
+                                        '                        newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
+                                        '                    Case "scantype"
+                                        '                        newfilenfo.Video.ScanType.Value = videodetails.InnerText
+                                        '                End Select
+                                        '            Next
+                                        '        Case "audio"
+                                        '            Dim audiodetails As XmlNode = Nothing
+                                        '            Dim audio As New AudioDetails
+                                        '            For Each audiodetails In detail.ChildNodes
+                                        '                Select Case audiodetails.Name
+                                        '                    Case "language"
+                                        '                        audio.Language.Value = audiodetails.InnerText
+                                        '                    Case "DefaultTrack"
+                                        '                        audio.DefaultTrack.Value = audiodetails.InnerText
+                                        '                    Case "codec"
+                                        '                        audio.Codec.Value = audiodetails.InnerText
+                                        '                    Case "channels"
+                                        '                        audio.Channels.Value = audiodetails.InnerText
+                                        '                    Case "bitrate"
+                                        '                        audio.Bitrate.Value = audiodetails.InnerText
+                                        '                End Select
+                                        '            Next
+                                        '            newfilenfo.Audio.Add(audio)
+                                        '        Case "subtitle"
+                                        '            Dim subsdetails As XmlNode = Nothing
+                                        '            Dim sublang As New SubtitleDetails
+                                        '            For Each subsdetails In detail.ChildNodes
+                                        '                Select Case subsdetails.Name
+                                        '                    Case "language"
+                                        '                        sublang.Language.Value  = subsdetails.InnerText
+                                        '                    Case "default"
+                                        '                        sublang.Primary         = subsdetails.InnerXml
+                                        '                    Case "forced"
+                                        '                        sublang.Forced          = subsdetails.InnerXml
+                                        '                End Select
+                                        '            Next
+                                        '            newfilenfo.Subtitles.Add(sublang)
+                                        '    End Select
+                                        'Next
+                                        'If newfilenfo.Audio.Count = 0 Then
+                                        '    Dim audio As New AudioDetails
+                                        '    newfilenfo.Audio.Add(audio)
+                                        'End If
+                                        'If newfilenfo.Subtitles.Count = 0 Then
+                                        '    Dim subtitle As New SubtitleDetails
+                                        '    newfilenfo.Subtitles.Add(subtitle)
+                                        'End If
+                                        'newmovie.filedetails = newfilenfo
                                 End Select
                             Next
                     End Select
@@ -2862,42 +2913,43 @@ Public Class WorkingWithNfoFiles
                 
                 stage = 35
                 Try
-                    child = doc.CreateElement("runtime")
-                    If Pref.MovDurationAsRuntine Then
-                        Dim duration As String = movietosave.filedetails.Video.DurationInSeconds.Value
-                        Dim durationInt As Integer = If(String.IsNullOrEmpty(duration), 0, duration.ToInt)
-                        If durationInt > 60 Then
-                            movietosave.fullmoviebody.runtime = Math.Floor(durationInt/60).ToString
-                        End If
-                    End If
-                    If movietosave.fullmoviebody.runtime <> Nothing Then
-                        Dim minutes As String = movietosave.fullmoviebody.runtime.ToMin
-                        Try
-                            If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
-                                Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                                    minutes = minutes.Substring(1, minutes.Length - 1)
-                                Loop
-                                If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
-                                    minutes = "0" & minutes
-                                ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
-                                    minutes = "00" & minutes
-                                End If
-                            End If
-                            If Pref.intruntime = False And IsNumeric(minutes) Then
-                                If minutes = "0" AndAlso Not String.IsNullOrEmpty(movietosave.filedetails.Video.DurationInSeconds.Value) Then
-                                    Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.Video.DurationInSeconds.Value)
-                                    If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
-                                End If
-                                minutes = minutes & " min"
-                            End If
-                        Catch ex As Exception
-                            minutes = movietosave.fullmoviebody.runtime
-                        End Try
-                        child.InnerText = minutes
-                    Else
-                        child.InnerText = movietosave.fullmoviebody.runtime
-                    End If
-                    root.AppendChild(child)
+                    'child = doc.CreateElement("runtime")
+                    'If Pref.MovDurationAsRuntine Then
+                    '    Dim duration As String = movietosave.filedetails.Video.DurationInSeconds.Value
+                    '    Dim durationInt As Integer = If(String.IsNullOrEmpty(duration), 0, duration.ToInt)
+                    '    If durationInt > 60 Then
+                    '        movietosave.fullmoviebody.runtime = Math.Floor(durationInt / 60).ToString
+                    '    End If
+                    'End If
+                    'If movietosave.fullmoviebody.runtime <> Nothing Then
+                    '    Dim minutes As String = movietosave.fullmoviebody.runtime.ToMin
+                    '    Try
+                    '        If Not String.IsNullOrEmpty(minutes) AndAlso Convert.ToInt32(minutes) > 0 Then
+                    '            Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+                    '                minutes = minutes.Substring(1, minutes.Length - 1)
+                    '            Loop
+                    '            If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
+                    '                minutes = "0" & minutes
+                    '            ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
+                    '                minutes = "00" & minutes
+                    '            End If
+                    '        End If
+                    '        If Pref.intruntime = False And IsNumeric(minutes) Then
+                    '            If minutes = "0" AndAlso Not String.IsNullOrEmpty(movietosave.filedetails.Video.DurationInSeconds.Value) Then
+                    '                Dim seconds As Integer = Convert.ToInt32(movietosave.filedetails.Video.DurationInSeconds.Value)
+                    '                If seconds > 0 AndAlso seconds < 60 Then minutes = "1"
+                    '            End If
+                    '            minutes = minutes & " min"
+                    '        End If
+                    '    Catch ex As Exception
+                    '        minutes = movietosave.fullmoviebody.runtime
+                    '    End Try
+                    '    child.InnerText = minutes
+                    'Else
+                    '    child.InnerText = movietosave.fullmoviebody.runtime
+                    'End If
+                    root.AppendChild(doc, "runtime", FormatRunTime(movietosave.fullmoviebody.runtime, movietosave.filedetails.Video.DurationInSeconds.Value, True))
+                    'root.AppendChild(child)
                 Catch
                 End Try
                 stage = 36
@@ -3038,76 +3090,77 @@ Public Class WorkingWithNfoFiles
                                 For Each res In thisresult.ChildNodes
                                     Select Case res.name
                                         Case "streamdetails"
-                                            Dim newfilenfo As New StreamDetails
-                                            Dim detail As XmlNode = Nothing
-                                            For Each detail In res.ChildNodes
-                                                Select Case detail.Name
-                                                    Case "video"
-                                                        Dim videodetails As XmlNode = Nothing
-                                                        For Each videodetails In detail.ChildNodes
-                                                            Select Case videodetails.Name
-                                                                Case "width"
-                                                                    newfilenfo.Video.Width.Value = videodetails.InnerText
-                                                                Case "height"
-                                                                    newfilenfo.Video.Height.Value = videodetails.InnerText
-                                                                Case "aspect"
-                                                                    newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
-                                                                Case "codec"
-                                                                    newfilenfo.Video.Codec.Value = videodetails.InnerText
-                                                                Case "format"
-                                                                    If newfilenfo.Video.FormatInfo.Value = "" Then
-                                                                        newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                                    End If
-                                                                Case "formatinfo"
-                                                                    newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                                Case "durationinseconds"
-                                                                    newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                                Case "bitrate"
-                                                                    newfilenfo.Video.Bitrate.Value = videodetails.InnerText
-                                                                Case "bitratemode"
-                                                                    newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
-                                                                Case "bitratemax"
-                                                                    newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
-                                                                Case "container"
-                                                                    newfilenfo.Video.Container.Value = videodetails.InnerText
-                                                                Case "codecid"
-                                                                    newfilenfo.Video.CodecId.Value = videodetails.InnerText
-                                                                Case "codecidinfo"
-                                                                    newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
-                                                                Case "scantype"
-                                                                    newfilenfo.Video.ScanType.Value = videodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                    Case "audio"
-                                                        Dim audiodetails As XmlNode = Nothing
-                                                        Dim audio As New AudioDetails
-                                                        For Each audiodetails In detail.ChildNodes
+                                            newmovie.filedetails = Streamdetailsload(res)
+                                            'Dim newfilenfo As New StreamDetails
+                                            'Dim detail As XmlNode = Nothing
+                                            'For Each detail In res.ChildNodes
+                                            '    Select Case detail.Name
+                                            '        Case "video"
+                                            '            Dim videodetails As XmlNode = Nothing
+                                            '            For Each videodetails In detail.ChildNodes
+                                            '                Select Case videodetails.Name
+                                            '                    Case "width"
+                                            '                        newfilenfo.Video.Width.Value = videodetails.InnerText
+                                            '                    Case "height"
+                                            '                        newfilenfo.Video.Height.Value = videodetails.InnerText
+                                            '                    Case "aspect"
+                                            '                        newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                            '                    Case "codec"
+                                            '                        newfilenfo.Video.Codec.Value = videodetails.InnerText
+                                            '                    Case "format"
+                                            '                        If newfilenfo.Video.FormatInfo.Value = "" Then
+                                            '                            newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                            '                        End If
+                                            '                    Case "formatinfo"
+                                            '                        newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                            '                    Case "durationinseconds"
+                                            '                        newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
+                                            '                    Case "bitrate"
+                                            '                        newfilenfo.Video.Bitrate.Value = videodetails.InnerText
+                                            '                    Case "bitratemode"
+                                            '                        newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
+                                            '                    Case "bitratemax"
+                                            '                        newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
+                                            '                    Case "container"
+                                            '                        newfilenfo.Video.Container.Value = videodetails.InnerText
+                                            '                    Case "codecid"
+                                            '                        newfilenfo.Video.CodecId.Value = videodetails.InnerText
+                                            '                    Case "codecidinfo"
+                                            '                        newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
+                                            '                    Case "scantype"
+                                            '                        newfilenfo.Video.ScanType.Value = videodetails.InnerText
+                                            '                End Select
+                                            '            Next
+                                            '        Case "audio"
+                                            '            Dim audiodetails As XmlNode = Nothing
+                                            '            Dim audio As New AudioDetails
+                                            '            For Each audiodetails In detail.ChildNodes
 
-                                                            Select Case audiodetails.Name
-                                                                Case "language"
-                                                                    audio.Language.Value = audiodetails.InnerText
-                                                                Case "codec"
-                                                                    audio.Codec.Value = audiodetails.InnerText
-                                                                Case "channels"
-                                                                    audio.Channels.Value = audiodetails.InnerText
-                                                                Case "bitrate"
-                                                                    audio.Bitrate.Value = audiodetails.InnerText
-                                                            End Select
-                                                        Next
-                                                        newfilenfo.Audio.Add(audio)
-                                                    Case "subtitle"
-                                                        Dim subsdetails As XmlNode = Nothing
-                                                        For Each subsdetails In detail.ChildNodes
-                                                            Select Case subsdetails.Name
-                                                                Case "language"
-                                                                    Dim sublang As New SubtitleDetails
-                                                                    sublang.Language.Value = subsdetails.InnerText
-                                                                    newfilenfo.Subtitles.Add(sublang)
-                                                            End Select
-                                                        Next
-                                                End Select
-                                            Next
-                                            newmovie.filedetails = newfilenfo
+                                            '                Select Case audiodetails.Name
+                                            '                    Case "language"
+                                            '                        audio.Language.Value = audiodetails.InnerText
+                                            '                    Case "codec"
+                                            '                        audio.Codec.Value = audiodetails.InnerText
+                                            '                    Case "channels"
+                                            '                        audio.Channels.Value = audiodetails.InnerText
+                                            '                    Case "bitrate"
+                                            '                        audio.Bitrate.Value = audiodetails.InnerText
+                                            '                End Select
+                                            '            Next
+                                            '            newfilenfo.Audio.Add(audio)
+                                            '        Case "subtitle"
+                                            '            Dim subsdetails As XmlNode = Nothing
+                                            '            For Each subsdetails In detail.ChildNodes
+                                            '                Select Case subsdetails.Name
+                                            '                    Case "language"
+                                            '                        Dim sublang As New SubtitleDetails
+                                            '                        sublang.Language.Value = subsdetails.InnerText
+                                            '                        newfilenfo.Subtitles.Add(sublang)
+                                            '                End Select
+                                            '            Next
+                                            '    End Select
+                                            'Next
+                                            'newmovie.filedetails = newfilenfo
                                     End Select
                                 Next
                         End Select
@@ -3196,26 +3249,26 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(doc, "sorttitle", homemovietosave.fullmoviebody.sortorder)
             root.AppendChild(doc, "year", homemovietosave.fullmoviebody.year)
             root.AppendChild(doc, "plot", homemovietosave.fullmoviebody.plot)
-            
-            Dim minutes As String = homemovietosave.fullmoviebody.runtime.ToMin
-            If homemovietosave.fullmoviebody.runtime <> Nothing AndAlso homemovietosave.fullmoviebody.runtime <> "0" Then
-                Try
-                    Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
-                        minutes = minutes.Substring(1, minutes.Length - 1)
-                    Loop
-                    If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
-                        minutes = "0" & minutes
-                    ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
-                        minutes = "00" & minutes
-                    End If
-                    If Pref.intruntime = False And IsNumeric(minutes) Then
-                        minutes = minutes & " min"
-                    End If
-                Catch
-                    minutes = homemovietosave.fullmoviebody.runtime
-                End Try
-            End If
-            root.AppendChild(doc, "runtime"     , minutes)
+            root.AppendChild(doc, "runtime"     , FormatRunTime(homemovietosave.fullmoviebody.runtime, homemovietosave.filedetails.Video.DurationInSeconds.Value, False))
+            'Dim minutes As String = homemovietosave.fullmoviebody.runtime.ToMin
+            'If homemovietosave.fullmoviebody.runtime <> Nothing AndAlso homemovietosave.fullmoviebody.runtime <> "0" Then
+            '    Try
+            '        Do While minutes.IndexOf("0") = 0 And minutes.Length > 0
+            '            minutes = minutes.Substring(1, minutes.Length - 1)
+            '        Loop
+            '        If Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) > 10 Then
+            '            minutes = "0" & minutes
+            '        ElseIf Convert.ToInt32(minutes) < 100 And Convert.ToInt32(minutes) < 10 Then
+            '            minutes = "00" & minutes
+            '        End If
+            '        If Pref.intruntime = False And IsNumeric(minutes) Then
+            '            minutes = minutes & " min"
+            '        End If
+            '    Catch
+            '        minutes = homemovietosave.fullmoviebody.runtime
+            '    End Try
+            'End If
+            'root.AppendChild(doc, "runtime"     , minutes)
             root.AppendChild(doc, "playcount"   , homemovietosave.fullmoviebody.playcount)
             root.AppendChild(doc, "createdate"  , SetCreateDate(homemovietosave.fileinfo.createdate))
             root.AppendChild(doc, "stars"       , homemovietosave.fullmoviebody.stars)
@@ -3322,79 +3375,80 @@ Public Class WorkingWithNfoFiles
                     For Each res In thisresult.ChildNodes
                         Select Case res.name
                             Case "streamdetails"
-                                Dim detail As XmlNode = Nothing
-                                For Each detail In res.ChildNodes
-                                    Select Case detail.Name
-                                        Case "video"
-                                            Dim videodetails As XmlNode = Nothing
-                                            For Each videodetails In detail.ChildNodes
-                                                Select Case videodetails.Name
-                                                    Case "width"
-                                                        newfilenfo.Video.Width.Value = videodetails.InnerText
-                                                    Case "height"
-                                                        newfilenfo.Video.Height.Value = videodetails.InnerText
-                                                    Case "aspect"
-                                                        newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
-                                                    Case "codec"
-                                                        newfilenfo.Video.Codec.Value = videodetails.InnerText
-                                                    Case "format"
-                                                        If newfilenfo.Video.FormatInfo.Value = "" Then
-                                                            newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                        End If
-                                                    Case "formatinfo"
-                                                        newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
-                                                    Case "durationinseconds"
-                                                        newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
-                                                    Case "bitrate"
-                                                        newfilenfo.Video.Bitrate.Value = videodetails.InnerText
-                                                    Case "bitratemode"
-                                                        newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
-                                                    Case "bitratemax"
-                                                        newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
-                                                    Case "container"
-                                                        newfilenfo.Video.Container.Value = videodetails.InnerText
-                                                    Case "codecid"
-                                                        newfilenfo.Video.CodecId.Value = videodetails.InnerText
-                                                    Case "codecidinfo"
-                                                        newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
-                                                    Case "scantype"
-                                                        newfilenfo.Video.ScanType.Value = videodetails.InnerText
-                                                End Select
-                                            Next
-                                        Case "audio"
-                                            Dim audiodetails As XmlNode = Nothing
-                                            Dim audio As New AudioDetails
-                                            For Each audiodetails In detail.ChildNodes
+                                NewMusicVideo.filedetails = Streamdetailsload(res)
+                                'Dim detail As XmlNode = Nothing
+                                'For Each detail In res.ChildNodes
+                                '    Select Case detail.Name
+                                '        Case "video"
+                                '            Dim videodetails As XmlNode = Nothing
+                                '            For Each videodetails In detail.ChildNodes
+                                '                Select Case videodetails.Name
+                                '                    Case "width"
+                                '                        newfilenfo.Video.Width.Value = videodetails.InnerText
+                                '                    Case "height"
+                                '                        newfilenfo.Video.Height.Value = videodetails.InnerText
+                                '                    Case "aspect"
+                                '                        newfilenfo.Video.Aspect.Value = Utilities.FixIntlAspectRatio(videodetails.InnerText)
+                                '                    Case "codec"
+                                '                        newfilenfo.Video.Codec.Value = videodetails.InnerText
+                                '                    Case "format"
+                                '                        If newfilenfo.Video.FormatInfo.Value = "" Then
+                                '                            newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                '                        End If
+                                '                    Case "formatinfo"
+                                '                        newfilenfo.Video.FormatInfo.Value = videodetails.InnerText
+                                '                    Case "durationinseconds"
+                                '                        newfilenfo.Video.DurationInSeconds.Value = videodetails.InnerText
+                                '                    Case "bitrate"
+                                '                        newfilenfo.Video.Bitrate.Value = videodetails.InnerText
+                                '                    Case "bitratemode"
+                                '                        newfilenfo.Video.BitrateMode.Value = videodetails.InnerText
+                                '                    Case "bitratemax"
+                                '                        newfilenfo.Video.BitrateMax.Value = videodetails.InnerText
+                                '                    Case "container"
+                                '                        newfilenfo.Video.Container.Value = videodetails.InnerText
+                                '                    Case "codecid"
+                                '                        newfilenfo.Video.CodecId.Value = videodetails.InnerText
+                                '                    Case "codecidinfo"
+                                '                        newfilenfo.Video.CodecInfo.Value = videodetails.InnerText
+                                '                    Case "scantype"
+                                '                        newfilenfo.Video.ScanType.Value = videodetails.InnerText
+                                '                End Select
+                                '            Next
+                                '        Case "audio"
+                                '            Dim audiodetails As XmlNode = Nothing
+                                '            Dim audio As New AudioDetails
+                                '            For Each audiodetails In detail.ChildNodes
 
-                                                Select Case audiodetails.Name
-                                                    Case "language"
-                                                        audio.Language.Value = audiodetails.InnerText
-                                                    Case "codec"
-                                                        audio.Codec.Value = audiodetails.InnerText
-                                                    Case "channels"
-                                                        audio.Channels.Value = audiodetails.InnerText
-                                                    Case "bitrate"
-                                                        audio.Bitrate.Value = audiodetails.InnerText
-                                                End Select
-                                            Next
-                                            newfilenfo.Audio.Add(audio)
-                                        Case "subtitle"
-                                            Dim subsdetails As XmlNode = Nothing
-                                            For Each subsdetails In detail.ChildNodes
-                                                Select Case subsdetails.Name
-                                                    Case "language"
-                                                        Dim sublang As New SubtitleDetails
-                                                        sublang.Language.Value = subsdetails.InnerText
-                                                        newfilenfo.Subtitles.Add(sublang)
-                                                End Select
-                                            Next
-                                    End Select
-                                Next
-                                If newfilenfo.Audio.Count = 0 Then
-                                    Dim audio As New AudioDetails
-                                    newfilenfo.Audio.Add(audio)
-                                End If
-                                NewMusicVideo.filedetails = newfilenfo
+                                '                Select Case audiodetails.Name
+                                '                    Case "language"
+                                '                        audio.Language.Value = audiodetails.InnerText
+                                '                    Case "codec"
+                                '                        audio.Codec.Value = audiodetails.InnerText
+                                '                    Case "channels"
+                                '                        audio.Channels.Value = audiodetails.InnerText
+                                '                    Case "bitrate"
+                                '                        audio.Bitrate.Value = audiodetails.InnerText
+                                '                End Select
+                                '            Next
+                                '            newfilenfo.Audio.Add(audio)
+                                '        Case "subtitle"
+                                '            Dim subsdetails As XmlNode = Nothing
+                                '            For Each subsdetails In detail.ChildNodes
+                                '                Select Case subsdetails.Name
+                                '                    Case "language"
+                                '                        Dim sublang As New SubtitleDetails
+                                '                        sublang.Language.Value = subsdetails.InnerText
+                                '                        newfilenfo.Subtitles.Add(sublang)
+                                '                End Select
+                                '            Next
+                                '    End Select
+                                'Next
+                                'If newfilenfo.Audio.Count = 0 Then
+                                '    Dim audio As New AudioDetails
+                                '    newfilenfo.Audio.Add(audio)
+                                'End If
+                                'NewMusicVideo.filedetails = newfilenfo
                         End Select
                     Next
             End Select
