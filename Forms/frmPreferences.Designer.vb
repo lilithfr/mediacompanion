@@ -495,6 +495,8 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbRunTimePadding = New System.Windows.Forms.CheckBox()
+        Me.Label26 = New System.Windows.Forms.Label()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1873,6 +1875,8 @@ Partial Class frmPreferences
         '
         'TPCommonSettings
         '
+        Me.TPCommonSettings.Controls.Add(Me.Label26)
+        Me.TPCommonSettings.Controls.Add(Me.cbRunTimePadding)
         Me.TPCommonSettings.Controls.Add(Me.gpbxPrefIgnore)
         Me.TPCommonSettings.Controls.Add(Me.gpbxPrefOverlay)
         Me.TPCommonSettings.Controls.Add(Me.cbGenreCustomBefore)
@@ -1975,7 +1979,7 @@ Partial Class frmPreferences
         'cbGenreCustomBefore
         '
         Me.cbGenreCustomBefore.AutoSize = true
-        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 419)
+        Me.cbGenreCustomBefore.Location = New System.Drawing.Point(12, 452)
         Me.cbGenreCustomBefore.Name = "cbGenreCustomBefore"
         Me.cbGenreCustomBefore.Size = New System.Drawing.Size(276, 19)
         Me.cbGenreCustomBefore.TabIndex = 107
@@ -1984,7 +1988,7 @@ Partial Class frmPreferences
         '
         'btnEditCustomGenreFile
         '
-        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(24, 444)
+        Me.btnEditCustomGenreFile.Location = New System.Drawing.Point(24, 477)
         Me.btnEditCustomGenreFile.Name = "btnEditCustomGenreFile"
         Me.btnEditCustomGenreFile.Size = New System.Drawing.Size(195, 23)
         Me.btnEditCustomGenreFile.TabIndex = 106
@@ -5955,6 +5959,26 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbRunTimePadding
+        '
+        Me.cbRunTimePadding.AutoSize = true
+        Me.cbRunTimePadding.Location = New System.Drawing.Point(12, 418)
+        Me.cbRunTimePadding.Name = "cbRunTimePadding"
+        Me.cbRunTimePadding.Size = New System.Drawing.Size(155, 19)
+        Me.cbRunTimePadding.TabIndex = 112
+        Me.cbRunTimePadding.Text = "Pad runtime to 3 places"
+        Me.cbRunTimePadding.UseVisualStyleBackColor = true
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = true
+        Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label26.Location = New System.Drawing.Point(34, 436)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(138, 13)
+        Me.Label26.TabIndex = 113
+        Me.Label26.Text = "ie: 24 min becomes 024 min"
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6602,4 +6626,6 @@ End Sub
     Friend WithEvents cbLocalActorSaveNoId As CheckBox
     Friend WithEvents cbMovActorFallbackIMDbtoTMDb As CheckBox
     Friend WithEvents cbMovActorFallbackTMDbtoIMDb As CheckBox
+    Friend WithEvents Label26 As Label
+    Friend WithEvents cbRunTimePadding As CheckBox
 End Class

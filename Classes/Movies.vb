@@ -31,8 +31,9 @@ Module Ext
     End Sub
 
     <System.Runtime.CompilerServices.Extension()> _
-    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As List(Of String))
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As List(Of String), Optional ExcludeEmptyNode As Boolean = False)
         If value.Count < 1 Then
+            If ExcludeEmptyNode Then Exit Sub
             root.AppendChild( doc, name, "" )
             Exit Sub
         End If

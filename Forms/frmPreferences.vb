@@ -218,6 +218,7 @@ Public Class frmPreferences
             rbXBMCv_post.Checked = True
         End If
         cbRuntimeAsNumericOnly      .Checked    = Pref.intruntime
+        cbRunTimePadding            .Checked    = Pref.RunTimePadding
         cb_IgnoreThe                .Checked    = Pref.ignorearticle
         cb_IgnoreA                  .Checked    = Pref.ignoreAarticle
         cb_IgnoreAn                 .Checked    = Pref.ignoreAn
@@ -962,6 +963,12 @@ Public Class frmPreferences
     Private Sub cbRuntimeAsNumericOnly_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRuntimeAsNumericOnly.CheckedChanged
         If prefsload Then Exit Sub
         Pref.intruntime = cbRuntimeAsNumericOnly.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbRunTimePadding_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbRunTimePadding.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.RunTimePadding = cbRunTimePadding.Checked
         Changes = True
     End Sub
 

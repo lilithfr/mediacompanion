@@ -149,6 +149,7 @@ Public Class Pref
     Public Shared MovSetTitleIgnArticle As Boolean
     Public Shared MovPosterTabTMDBSelect As Boolean = False
     Public Shared intruntime As Boolean
+    Public Shared RuntimePadding As Boolean
     Public Shared XBMC_version As Byte
     Public Shared ShowMovieGridToolTip As Boolean = False
     Public Shared ShowLogOnError As Boolean = True
@@ -762,6 +763,7 @@ Public Class Pref
         CustomTmdbApiKey = ""
         MovNfoWatchTag = False
         intruntime = False
+        RuntimePadding = False
         actorseasy = True
         startuptab = 0
         font = "Microsoft Sans Serif, 9pt"
@@ -1045,6 +1047,7 @@ Public Class Pref
         root.AppendChild(doc, "MovSetTitleIgnArticle"       , MovSetTitleIgnArticle     ) 'cb_MovSetTitleIgnArticle
         root.AppendChild(doc, "MovPosterTabTMDBSelect"      , MovPosterTabTMDBSelect    ) 'cb_MovPosterTabTMDBSelect
         root.AppendChild(doc, "intruntime"                  , intruntime                ) 'cbRuntimeAsNumericOnly
+        root.AppendChild(doc, "RuntimePadding"              , RuntimePadding            ) 'tobeset
         root.AppendChild(doc, "xbmcartwork"                 , XBMC_version              ) 'rbXBMCv_pre,rbXBMCv_post,rbXBMCv_both
         root.AppendChild(doc, "ShowMovieGridToolTip"        , ShowMovieGridToolTip      ) 'cbShowMovieGridToolTip
         root.AppendChild(doc, "ShowLogOnError"              , ShowLogOnError            ) 'cbShowLogOnError
@@ -1506,6 +1509,7 @@ Public Class Pref
                     Case "DownloadTrailerDuringScrape"          : DownloadTrailerDuringScrape = thisresult.InnerXml
                     Case "tvshowautoquick"                      : tvshowautoquick = thisresult.InnerXml
                     Case "intruntime"                           : intruntime = thisresult.InnerXml
+                    Case "RuntimePadding"                       : RuntimePadding = thisresult.InnerXml
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml
                     Case "CustomTmdbApiKey"                     : CustomTmdbApiKey = thisresult.InnerText
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
