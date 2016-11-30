@@ -45,9 +45,7 @@ Public Class Form2
         If workingmovieedit.fullmoviebody.showlink      <> Nothing Then tb_SeriesLnk.Text = workingmovieedit.fullmoviebody.showlink 
         If workingmovieedit.fullmoviebody.usrrated      <> Nothing Then cbUsrRating.Text = If(workingmovieedit.fullmoviebody.usrrated = "0", "None", workingmovieedit.fullmoviebody.usrrated)
         Try
-            If workingmovieedit.fileinfo.createdate <> Nothing Then 
-                Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Pref.datePattern, Nothing)
-            End If
+            If workingmovieedit.fileinfo.createdate <> Nothing Then Createdatepicker.Value = DateTime.ParseExact(workingmovieedit.fileinfo.createdate, Pref.datePattern, Nothing)
         Catch ex As Exception 
             MsgBox(ex.tostring)
         End Try
@@ -74,12 +72,9 @@ Public Class Form2
                 actorcb.SelectedItem = workingmovieedit.listactors(0).actorname
             End If
         Catch ex As Exception
-            'MsgBox(ex.ToString)
         End Try
 
-        If actorcb.Text <> "" Then
-            roletxt.Text = workingmovieedit.listactors(0).actorrole
-        End If
+        If actorcb.Text <> "" Then roletxt.Text = workingmovieedit.listactors(0).actorrole
         posterpath = Form1.workingMovieDetails.fileinfo.posterpath
         If posterpath <> Nothing Then
             If posterpath <> "" Then
@@ -104,12 +99,8 @@ Public Class Form2
                 If actor.actorname <> Nothing Then
                     actorcount += 1
                     oldactors(actorcount, 0) = actor.actorname
-                    If actor.actorname <> Nothing Then
-                        oldactors(actorcount, 1) = actor.actorrole
-                    End If
-                    If actor.actorthumb <> Nothing Then
-                        oldactors(actorcount, 2) = actor.actorthumb
-                    End If
+                    If actor.actorname <> Nothing Then oldactors(actorcount, 1) = actor.actorrole
+                    If actor.actorthumb <> Nothing Then oldactors(actorcount, 2) = actor.actorthumb
                 End If
             Next
             RemoveHandler Createdatepicker.ValueChanged, AddressOf Createdatepicker_ValueChanged
@@ -161,10 +152,8 @@ Public Class Form2
             Dim t As Integer = MsgBox("Edits were made" & vbCrLf & "Do you wish to Save changes before this form closes", MsgBoxStyle.YesNo)
             If t = DialogResult.Yes Then
                 btnsavechanges.PerformClick()
-
             End If
         End If
-
     End Sub
 
     Private Sub btnexit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnexit.Click
@@ -445,33 +434,32 @@ Public Class Form2
 
     Private Sub btnsavechanges_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsavechanges.Click
         Try
-            
-            workingmovieedit.fullmoviebody.plot = plottxt.Text
-            workingmovieedit.fullmoviebody.title = titletxt.Text
+            workingmovieedit.fullmoviebody.plot         = plottxt.Text
+            workingmovieedit.fullmoviebody.title        = titletxt.Text
             workingmovieedit.fullmoviebody.originaltitle = originaltxt.Text
-            workingmovieedit.fullmoviebody.sortorder = sorttxt.text
-            workingmovieedit.fullmoviebody.director = directortxt.Text
-            workingmovieedit.fullmoviebody.stars = starstxt.Text
-            workingmovieedit.fullmoviebody.runtime = runtimetxt.Text
-            workingmovieedit.fullmoviebody.credits = creditstxt.Text
-            workingmovieedit.fullmoviebody.mpaa = mpaatxt.Text
-            workingmovieedit.fullmoviebody.studio = studiotxt.Text
-            workingmovieedit.fullmoviebody.genre = genretxt.Text
-            workingmovieedit.fullmoviebody.country = countrytxt.Text 
-            workingmovieedit.fullmoviebody.year = yeartxt.Text
-            workingmovieedit.fullmoviebody.rating = ratingtxt.Text
-            workingmovieedit.fullmoviebody.votes = votestxt.Text
-            workingmovieedit.fullmoviebody.outline = outlinetxt.Text
-            workingmovieedit.fullmoviebody.tagline = taglinetxt.Text
-            workingmovieedit.fullmoviebody.showlink = tb_SeriesLnk.Text
-            workingmovieedit.fullmoviebody.usrrated = If(cbUsrRating.Text = "None", "0", cbUsrRating.Text)
-            Form1.workingMovieDetails.fullmoviebody = workingmovieedit.fullmoviebody
-            Form1.workingMovieDetails.listactors = workingmovieedit.listactors
-            Form1.workingMovieDetails.listthumbs = workingmovieedit.listthumbs
+            workingmovieedit.fullmoviebody.sortorder    = sorttxt.text
+            workingmovieedit.fullmoviebody.director     = directortxt.Text
+            workingmovieedit.fullmoviebody.stars        = starstxt.Text
+            workingmovieedit.fullmoviebody.runtime      = runtimetxt.Text
+            workingmovieedit.fullmoviebody.credits      = creditstxt.Text
+            workingmovieedit.fullmoviebody.mpaa         = mpaatxt.Text
+            workingmovieedit.fullmoviebody.studio       = studiotxt.Text
+            workingmovieedit.fullmoviebody.genre        = genretxt.Text
+            workingmovieedit.fullmoviebody.country      = countrytxt.Text 
+            workingmovieedit.fullmoviebody.year         = yeartxt.Text
+            workingmovieedit.fullmoviebody.rating       = ratingtxt.Text
+            workingmovieedit.fullmoviebody.votes        = votestxt.Text
+            workingmovieedit.fullmoviebody.outline      = outlinetxt.Text
+            workingmovieedit.fullmoviebody.tagline      = taglinetxt.Text
+            workingmovieedit.fullmoviebody.showlink     = tb_SeriesLnk.Text
+            workingmovieedit.fullmoviebody.usrrated     = If(cbUsrRating.Text = "None", "0", cbUsrRating.Text)
+            Form1.workingMovieDetails.fullmoviebody     = workingmovieedit.fullmoviebody
+            Form1.workingMovieDetails.listactors        = workingmovieedit.listactors
+            Form1.workingMovieDetails.listthumbs        = workingmovieedit.listthumbs
             If datechanged Then
                 Dim credate As String =  Format(Createdatepicker.Value, Pref.datePattern).ToString
                 If workingmovieedit.fileinfo.createdate <> credate Then
-                    workingmovieedit.fileinfo.createdate = credate 'Format(credate, Pref.datePattern).ToString
+                    workingmovieedit.fileinfo.createdate = credate
                 End If
             End If
             If PremierDateChanged Then
@@ -491,12 +479,9 @@ Public Class Form2
                     End If
                 End If
             End If
-            'Call WorkingWithNfoFiles.mov_NfoSave(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             Movie.SaveNFO(Form1.workingMovieDetails.fileinfo.fullpathandfilename, Form1.workingMovieDetails)
             editsmade = False
             Me.Close()
-            'Dim oldactors(9999, 2)
-            'Dim actorcount As Integer = 0
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -522,7 +507,6 @@ Public Class Form2
 
     Private Sub moviethumb_LoadCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles moviethumb.LoadCompleted
         Try
-            ' Label13.Text = moviethumb.Image.Width & " X " & moviethumb.Image.Height
             Dim exists As Boolean = False
             Label16.Text = moviethumb.Image.Width
             Label17.Text = moviethumb.Image.Height
@@ -582,7 +566,7 @@ Public Class Form2
             PremieredDatePicker.Value = Date.Now
             Createdatepicker.Value = Date.now
             filenametxt.Text = workingmovieedit.fileinfo.fullpathandfilename
-            Dim newmovie As New Media_Companion.FullMovieDetails
+            Dim newmovie As New FullMovieDetails
             Dim currentfiledetails As StreamDetails = workingmovieedit.filedetails
             workingmovieedit = newmovie
             PictureBox1.Image = Nothing
@@ -632,9 +616,6 @@ Public Class Form2
     End Sub
 
     Private Sub AnyTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'Cast the 'sender' object into a TextBox (we are sure it is a textbox!)
-        'Dim txt As TextBox = DirectCast(sender, TextBox)
-        'MessageBox.Show(txt.Name)
         editsmade = True
     End Sub
     

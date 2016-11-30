@@ -7,6 +7,7 @@ Imports System.ComponentModel
 Imports System.Runtime.InteropServices
 Imports System.Drawing
 Imports Media_Companion
+Imports Media_Companion.WorkingWithNfoFiles
 
 Module ext
     <System.Runtime.CompilerServices.Extension()> _
@@ -43,6 +44,7 @@ Module Module1
     Dim CursorLeft As Integer
     Dim CursorTop  As Integer
     Dim CompareType As StringComparison = StringComparison.CurrentCultureIgnoreCase
+    Dim MediaFileExtensions As List(Of String) = New List(Of String)
 
     Dim domovies            As Boolean = False
     Dim dotvepisodes        As Boolean = False
@@ -67,64 +69,34 @@ Module Module1
             listofargs.Add(arg)
         Else
             For f = 1 To arguments.Count - 1
-                If arguments(f) = "-m" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    listofargs.Add(arg)
-                ElseIf arguments(f) = "-e" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    listofargs.Add(arg)
-                ElseIf arguments(f) = "-ex" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    listofargs.Add(arg)
-                ElseIf arguments(f) = "-v" Then
-                    visible = False
-                ElseIf arguments(f) = "-p" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    Try
-                        arg.argu = arguments(f + 1)
-                        listofargs.Add(arg)
-                    Catch
-                        listofargs.Clear()
-                        Dim arg2 As New arguments
-                        arg2.switch = "help"
-                        listofargs.Add(arg2)
-                        Exit For
-                    End Try
-                ElseIf arguments(f) = "-x" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    Try
-                        arg.argu = arguments(f + 1)
-                        listofargs.Add(arg)
-                        Try
+                Try
+                    Select Case arguments(f)
+                        Case "-m", "-e", "-ex", "-c"
+                            Dim arg As New arguments
+                            arg.switch = arguments(f)
+                            listofargs.Add(arg)
+                        Case "-v"
+                            visible = False
+                        Case "-p"
+                            Dim arg As New arguments
+                            arg.switch = arguments(f)
+                            arg.argu = arguments(f + 1)
+                            listofargs.Add(arg)
+                        Case "-x"
+                            Dim arg As New arguments
+                            arg.switch = arguments(f)
                             mediaexportfile = arguments(f + 2)
                             domediaexport = True
-                        Catch ex As Exception
-                            listofargs.Clear()
-                            Dim arg2 As New arguments
-                            arg2.switch = "help"
-                            listofargs.Add(arg2)
-                            Exit For
-                        End Try
-                    Catch
-                        listofargs.Clear()
-                        Dim arg2 As New arguments
-                        arg2.switch = "help"
-                        listofargs.Add(arg2)
-                        Exit For
-                    End Try
-                ElseIf arguments(f) = "-c" Then
-                    Dim arg As New arguments
-                    arg.switch = arguments(f)
-                    listofargs.Add(arg) 
-                'Show trailer download progress               
-                ElseIf arguments(f) = "-d" Then
-                    ShowTrailerDownloadProgess = True
-                End If
+                        Case "-d"
+                            ShowTrailerDownloadProgess = True
+                    End Select
+                Catch
+                    listofargs.Clear()
+                    Dim arg2 As New arguments
+                    arg2.switch = "help"
+                    listofargs.Add(arg2)
+                    Exit For
+                End Try
             Next
         End If
 
@@ -134,47 +106,21 @@ Module Module1
             listofargs.Add(arg)
         End If
         
-        If listofargs(0).switch = "help" Then
-            ConsoleOrLog("****************************************************")
-            ConsoleOrLog("Media Companion Command Line Tool")
-            ConsoleOrLog("")
-            ConsoleOrLog("Useage")
-            ConsoleOrLog("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
-            ConsoleOrLog("-m to scrape movies")
-            ConsoleOrLog("-e to scrape episodes")
-            ConsoleOrLog("-ex to Scan and download missing episodes Thumbnails.")
-            ConsoleOrLog("-x [templatename] [outputpath] to export media info list ")
-            ConsoleOrLog("-v to run with no Console window. All information will be written")
-            ConsoleOrLog("    to a log file in Media Companion's folder.  Log is overwritten")
-            ConsoleOrLog("    each run of mc_com.exe")
-            ConsoleOrLog("-d Shows trailer download progress to console. Ignored if -v specified.")
-            ConsoleOrLog("")
-            ConsoleOrLog("Example")
-            ConsoleOrLog("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
-            ConsoleOrLog("will search for and scrape any new movies and episodes")
-            ConsoleOrLog("using the folders and settings of the 'billy' profile,")
-            ConsoleOrLog("then create a new media list using the named template")
-            ConsoleOrLog("Without the profile arg the default profile will be used")
-            ConsoleOrLog("")
-            ConsoleOrLog("Tip: When using profile, template or filenames that contain")
-            ConsoleOrLog("spaces, enclose with quotes, eg.")
-            ConsoleOrLog("mc_com.exe -m -p ""my profile"" -x ""new list"" ""C:\Movie list\test.html""")
-            ConsoleOrLog("")
-            ConsoleOrLog("****************************************************")
-            EnvExit = 0
-            Environment.Exit(EnvExit)
-        End If
+        If listofargs.Count = 0 OrElse listofargs(0).switch = "help" Then Showhelp()
+
         Pref.applicationPath = AppDomain.CurrentDomain.BaseDirectory
-        If Not visible Then   ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
+        If Not visible Then ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
         LogStart
         
         For Each arg In listofargs
-            If arg.switch   = "-m"  Then domovies = True
-            If arg.switch   = "-e"  Then dotvepisodes = True
-            If arg.switch   = "-p"  Then profile = arg.argu
-            If arg.switch   = "-x"  Then domediaexport = True
-            If arg.switch   = "-c"  Then docacheclean = True
-            If arg.switch   = "-ex" Then dotvmissingepthumb = True
+            Select Case arg.switch
+                Case "-m"   : domovies              = True
+                Case "-e"   : dotvepisodes          = True
+                Case "-p"   : profile               = arg.argu
+                Case "-x"   : domediaexport         = True
+                Case "-c"   : docacheclean          = True
+                Case "-ex"  : dotvmissingepthumb    = True
+            End Select
         Next
 
         Dim done As Boolean = False
@@ -211,28 +157,13 @@ Module Module1
         XBMCTMDBConfigSave
         XBMCTVDBConfigSave
 
-        If domovies Or domediaexport Then
-            If File.Exists(Pref.workingProfile.moviecache) Then
-                ConsoleOrLog("Loading Movie cache")
-                oMovies.LoadMovieCache
-                oMovies.Rebuild_Data_GridViewMovieCache()
-            End If
-        End If
-
-        Try
-            ConsoleOrLog("Loading Movie Database caches")
-            oMovies.LoadPeopleCaches
-            oMovies.LoadMovieSetCache()
-            oMovies.LoadTagCache()
-        Catch
-            oMovies.RebuildMoviePeopleCaches
-        End Try
-
+        If domovies Or domediaexport Then LoadMovieCache()
+        
         If domovies Then DoMoviesStart()
 
         If dotvepisodes OrElse dotvmissingepthumb Then DoTvEpisodeOrMissingThumb()
 
-        If domediaexport = True Then DoExportMedia()
+        If domediaexport Then DoExportMedia()
         If docacheclean Then DoCleanCache()
 
         ConsoleOrLog("")
@@ -241,6 +172,53 @@ Module Module1
         Writelogfile(logstr)
         If Not visible Then exitsound
         System.Environment.Exit(EnvExit)
+    End Sub
+
+    Private Sub Showhelp()
+        ConsoleOrLog("****************************************************")
+            ConsoleOrLog("Media Companion Command Line Tool")
+            ConsoleOrLog("")
+            ConsoleOrLog("Useage")
+            ConsoleOrLog("mc_com.exe [-m] [-e] [-p ProfileName] [-x templatename outputpath] [-v]")
+            ConsoleOrLog("-m to scrape movies")
+            ConsoleOrLog("-e to scrape episodes")
+            ConsoleOrLog("-ex to Scan and download missing episodes Thumbnails.")
+            ConsoleOrLog("-x [templatename] [outputpath] to export media info list ")
+            ConsoleOrLog("-v to run with no Console window. All information will be written")
+            ConsoleOrLog("    to a log file in Media Companion's folder.  Log is overwritten")
+            ConsoleOrLog("    each run of mc_com.exe")
+            ConsoleOrLog("-d Shows trailer download progress to console. Ignored if -v specified.")
+            ConsoleOrLog("")
+            ConsoleOrLog("Example")
+            ConsoleOrLog("mc_com.exe -m -e -p billy -x basiclist C:\Movielist\testfile.html")
+            ConsoleOrLog("will search for and scrape any new movies and episodes")
+            ConsoleOrLog("using the folders and settings of the 'billy' profile,")
+            ConsoleOrLog("then create a new media list using the named template")
+            ConsoleOrLog("Without the profile arg the default profile will be used")
+            ConsoleOrLog("")
+            ConsoleOrLog("Tip: When using profile, template or filenames that contain")
+            ConsoleOrLog("spaces, enclose with quotes, eg.")
+            ConsoleOrLog("mc_com.exe -m -p ""my profile"" -x ""new list"" ""C:\Movie list\test.html""")
+            ConsoleOrLog("")
+            ConsoleOrLog("****************************************************")
+            EnvExit = 0
+            Environment.Exit(EnvExit)
+    End Sub
+
+    Private Sub LoadMovieCache()
+        If File.Exists(Pref.workingProfile.moviecache) Then
+            ConsoleOrLog("Loading Movie cache")
+            oMovies.LoadMovieCache
+            oMovies.Rebuild_Data_GridViewMovieCache()
+        End If
+        Try
+            ConsoleOrLog("Loading Movie Database caches")
+            oMovies.LoadPeopleCaches
+            oMovies.LoadMovieSetCache()
+            oMovies.LoadTagCache()
+        Catch ex As Exception
+            oMovies.RebuildMoviePeopleCaches
+        End Try
     End Sub
 
     Private Sub XBMCTMDBConfigSave()
@@ -290,7 +268,6 @@ Module Module1
                 For Each line In log
                     sw.WriteLine(line.TrimEnd)
                 Next
-                'sw.Close()
             End Using
         Catch
             sw.Close()
@@ -308,62 +285,62 @@ Module Module1
 
     Public Sub DoExportMedia()
         For Each arg In listofargs
-                If arg.switch = "-x" Then
-                    ConsoleOrLog("Starting Media Info Export")
-                    ConsoleOrLog("")
-                    Dim mediaInfoExp As New MediaInfoExport
-                    Dim setMovies = New SortedList(Of String, Media_Companion.ComboList)
-                    Dim key As String = String.Empty
-                    For Each movie In oMovies.MovieCache
-                        Dim title As String = Pref.RemoveIgnoredArticles(movie.title)
-                        movie.title = title
-                        If Pref.sorttitleignorearticle Then
-                            Dim sorttitle As String = Pref.RemoveIgnoredArticles(movie.sortorder)
-                            movie.sortorder = sorttitle
-                        End If
-                        Dim appendIncr As String = String.Empty
-                        For strIncr = 1 To 5
-	                        Select Case Pref.moviesortorder
-		                        Case 0
-				                    key = String.Format("{0}{1}{2}{3}", movie.title, movie.year, movie.id, appendIncr)
-			                    Case 1
-				                    key = String.Format("{0}{1}{2}{3}", movie.year, movie.title, movie.id, appendIncr)
-			                    Case 2
-				                    key = String.Format("{0}{1}{2}{3}", movie.filedate, movie.title, movie.id, appendIncr)
-			                    Case 3
-				                    key = String.Format("{0}{1}{2}{3}", movie.runtime, movie.title, movie.id, appendIncr)
-			                    Case 4
-				                    key = String.Format("{0}{1}{2}{3}", movie.rating, movie.title, movie.id, appendIncr)
-                                Case 4
-				                    key = String.Format("{0}{1}{2}{3}", movie.usrrated, movie.title, movie.id, appendIncr)
-			                    Case 6
-				                    key = String.Format("{0}{1}{2}{3}", movie.sortorder, movie.year, movie.id, appendIncr)
-			                    Case 7
-				                    key = String.Format("{0}{1}{2}{3}", movie.createdate, movie.title, movie.id, appendIncr)
-			                    Case 8
-				                    key = String.Format("{0}{1}{2}{3}", movie.Votes, movie.title, movie.id, appendIncr)
-	                        End Select
-                            If Not setMovies.ContainsKey(key) Then
-			                    setMovies.Add(key, movie)
-			                    Exit For
-		                    End If
-		                    appendIncr = strIncr
-	                    Next
-                    Next
-                    Dim mediaCollection As Object = If(Pref.movieinvertorder, If(Pref.moviesortorder = 7, setMovies.Values.ToList, setMovies.Values.Reverse.ToList), If(Pref.moviesortorder = 7, setMovies.Values.Reverse.ToList, setMovies.Values.ToList))
-                    Call mediaInfoExp.addTemplates()
-                    Dim templateType As MediaInfoExport.mediaType
-                    If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
-                        Call mediaInfoExp.createDocument(mediaexportfile, mediaCollection)
-                    Else
-                        ConsoleOrLog("  Export aborted - template name provided is invalid")
-                        ConsoleOrLog("  (and only Movies are supported currently)")
-                        ConsoleOrLog("")
+            If arg.switch = "-x" Then
+                ConsoleOrLog("Starting Media Info Export")
+                ConsoleOrLog("")
+                Dim mediaInfoExp As New MediaInfoExport
+                Dim setMovies = New SortedList(Of String, Media_Companion.ComboList)
+                Dim key As String = String.Empty
+                For Each movie In oMovies.MovieCache
+                    Dim title As String = Pref.RemoveIgnoredArticles(movie.title)
+                    movie.title = title
+                    If Pref.sorttitleignorearticle Then
+                        Dim sorttitle As String = Pref.RemoveIgnoredArticles(movie.sortorder)
+                        movie.sortorder = sorttitle
                     End If
-                    ConsoleOrLog("Media Info Export complete")
+                    Dim appendIncr As String = String.Empty
+                    For strIncr = 1 To 5
+	                    Select Case Pref.moviesortorder
+		                    Case 0
+				                key = String.Format("{0}{1}{2}{3}", movie.title, movie.year, movie.id, appendIncr)
+			                Case 1
+				                key = String.Format("{0}{1}{2}{3}", movie.year, movie.title, movie.id, appendIncr)
+			                Case 2
+				                key = String.Format("{0}{1}{2}{3}", movie.filedate, movie.title, movie.id, appendIncr)
+			                Case 3
+				                key = String.Format("{0}{1}{2}{3}", movie.runtime, movie.title, movie.id, appendIncr)
+			                Case 4
+				                key = String.Format("{0}{1}{2}{3}", movie.rating, movie.title, movie.id, appendIncr)
+                            Case 4
+				                key = String.Format("{0}{1}{2}{3}", movie.usrrated, movie.title, movie.id, appendIncr)
+			                Case 6
+				                key = String.Format("{0}{1}{2}{3}", movie.sortorder, movie.year, movie.id, appendIncr)
+			                Case 7
+				                key = String.Format("{0}{1}{2}{3}", movie.createdate, movie.title, movie.id, appendIncr)
+			                Case 8
+				                key = String.Format("{0}{1}{2}{3}", movie.Votes, movie.title, movie.id, appendIncr)
+	                    End Select
+                        If Not setMovies.ContainsKey(key) Then
+			                setMovies.Add(key, movie)
+			                Exit For
+		                End If
+		                appendIncr = strIncr
+	                Next
+                Next
+                Dim mediaCollection As Object = If(Pref.movieinvertorder, If(Pref.moviesortorder = 7, setMovies.Values.ToList, setMovies.Values.Reverse.ToList), If(Pref.moviesortorder = 7, setMovies.Values.Reverse.ToList, setMovies.Values.ToList))
+                Call mediaInfoExp.addTemplates()
+                Dim templateType As MediaInfoExport.mediaType
+                If mediaInfoExp.setTemplate(arg.argu, templateType) AndAlso templateType = MediaInfoExport.mediaType.Movie Then
+                    Call mediaInfoExp.createDocument(mediaexportfile, mediaCollection)
+                Else
+                    ConsoleOrLog("  Export aborted - template name provided is invalid")
+                    ConsoleOrLog("  (and only Movies are supported currently)")
                     ConsoleOrLog("")
                 End If
-            Next
+                ConsoleOrLog("Media Info Export complete")
+                ConsoleOrLog("")
+            End If
+        Next
     End Sub
 
     Public Sub DoCleanCache()
@@ -798,39 +775,7 @@ Module Module1
         Next
     End Sub
 
-    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of episodeinfo), ByVal path As String) ', Optional ByVal seasonno As String = "-2", Optional ByVal episodeno As String = "-2")
-        'Monitor.Enter(Me)
-        'Try
-        'If seasonno <> -2 And episodeno <> -2 Then
-        '    Dim timetoexit As Boolean = False
-        '    For Each show In basictvlist
-        '        If show.fullpath = path Then
-        '            For Each episode In show.allepisodes
-        '                If episode.episodeno = episodeno And episode.seasonno = seasonno Then
-        '                    For Each epis In listofepisodes
-        '                        If epis.seasonno = seasonno And epis.episodeno = episodeno Then
-        '                            Dim newep As New episodeinfo
-        '                            newep.episodepath = epis.episodepath
-        '                            newep.title = epis.title
-        '                            newep.seasonno = epis.seasonno
-        '                            newep.episodeno = epis.episodeno
-        '                            newep.playcount = epis.playcount
-        '                            newep.rating = epis.rating
-        '                            newep.votes = epis.votes
-        '                            show.allepisodes.Remove(episode)
-        '                            show.allepisodes.Add(newep)
-        '                            timetoexit = True
-        '                            Exit For
-        '                        End If
-        '                    Next
-        '                End If
-        '                If timetoexit = True Then Exit For
-        '            Next
-        '        End If
-        '        If timetoexit = True Then Exit For
-        '    Next
-        'End If
-
+    Public Sub saveepisodenfo(ByVal listofepisodes As List(Of episodeinfo), ByVal path As String)
         Dim doc As New XmlDocument
         Dim root As XmlElement
         Dim xmlEpisode As XmlElement
@@ -849,37 +794,40 @@ Module Module1
                 Try
                     xmlFileInfo = doc.CreateElement("fileinfo")
                     xmlStreamDetails = doc.CreateElement("streamdetails")
-                    xmlStreamDetailsType = doc.CreateElement("video")
-                    xmlStreamDetailsType.AppendChild(doc, "width"               , ep.filedetails.Video.width.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "height"              , ep.filedetails.Video.height.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "aspect"              , ep.filedetails.Video.aspect.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "codec"               , ep.filedetails.Video.codec.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "format"              , ep.filedetails.Video.formatinfo.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "durationinseconds"   , ep.filedetails.Video.DurationInSeconds.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "bitrate"             , ep.filedetails.Video.bitrate.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "bitratemode"         , ep.filedetails.Video.bitratemode.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "bitratemax"          , ep.filedetails.Video.bitratemax.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "container"           , ep.filedetails.Video.container.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "codecid"             , ep.filedetails.Video.codecid.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "codecidinfo"         , ep.filedetails.Video.codecinfo.Value)
-                    xmlStreamDetailsType.AppendChild(doc, "scantype"            , ep.filedetails.Video.scantype.Value)
-                    xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                    'xmlStreamDetailsType = doc.CreateElement("video")
+                    'xmlStreamDetailsType.AppendChild(doc, "width"               , ep.filedetails.Video.width.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "height"              , ep.filedetails.Video.height.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "aspect"              , ep.filedetails.Video.aspect.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "codec"               , ep.filedetails.Video.codec.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "format"              , ep.filedetails.Video.formatinfo.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "durationinseconds"   , ep.filedetails.Video.DurationInSeconds.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "bitrate"             , ep.filedetails.Video.bitrate.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "bitratemode"         , ep.filedetails.Video.bitratemode.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "bitratemax"          , ep.filedetails.Video.bitratemax.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "container"           , ep.filedetails.Video.container.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "codecid"             , ep.filedetails.Video.codecid.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "codecidinfo"         , ep.filedetails.Video.codecinfo.Value)
+                    'xmlStreamDetailsType.AppendChild(doc, "scantype"            , ep.filedetails.Video.scantype.Value)
+                    'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                    xmlStreamDetails.AppendChild(AppendVideo(doc, ep.filedetails.Video))
 
                     If ep.filedetails.Audio.Count > 0 Then
                         For Each item In ep.filedetails.Audio
-                            xmlStreamDetailsType = doc.CreateElement("audio")
-                            xmlStreamDetailsType.AppendChild(doc, "language"    , item.language.Value)
-                            xmlStreamDetailsType.AppendChild(doc, "codec"       , item.codec.Value)
-                            xmlStreamDetailsType.AppendChild(doc, "channels"    , item.channels.Value)
-                            xmlStreamDetailsType.AppendChild(doc, "bitrate"     , item.bitrate.Value)
-                            xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                            'xmlStreamDetailsType = doc.CreateElement("audio")
+                            'xmlStreamDetailsType.AppendChild(doc, "language"    , item.language.Value)
+                            'xmlStreamDetailsType.AppendChild(doc, "codec"       , item.codec.Value)
+                            'xmlStreamDetailsType.AppendChild(doc, "channels"    , item.channels.Value)
+                            'xmlStreamDetailsType.AppendChild(doc, "bitrate"     , item.bitrate.Value)
+                            'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                            xmlStreamDetails.AppendChild(AppendAudio(doc, item))
                         Next
                     End If
                     If ep.filedetails.Subtitles.Count > 0 Then
                         xmlStreamDetailsType = doc.CreateElement("subtitle")
                         For Each entry In ep.filedetails.Subtitles
-                            xmlStreamDetailsType.AppendChild(doc, "language"    , entry.language.Value)
-                            xmlStreamDetails.AppendChild(xmlStreamDetailsType)
+                            If Not String.IsNullOrEmpty(entry.Language.Value) Then xmlStreamDetails.AppendChild(AppendSub(doc, entry))
+                            'xmlStreamDetailsType.AppendChild(doc, "language"    , entry.language.Value)
+                            'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                         Next
                     End If
                     xmlFileInfo.AppendChild(xmlStreamDetails)
@@ -929,21 +877,6 @@ Module Module1
         Next
         doc.AppendChild(root)
         Try
-            'Dim settings As New XmlWriterSettings()
-            'settings.Encoding = New UTF8Encoding(False)
-            'settings.Indent = True
-            'settings.IndentChars = (ControlChars.Tab)
-            'settings.NewLineHandling = NewLineHandling.None
-            'Dim writer As XmlWriter = XmlWriter.Create(path, settings)
-            'doc.Save(writer)
-            'writer.Close()
-            'doc.AppendChild(root)
-            
-            'Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-            'output.Formatting = Formatting.Indented
-
-            'doc.WriteTo(output)
-            'output.Close()
             WorkingWithNfoFiles.SaveXMLDoc(doc, path)
         Catch
         End Try
@@ -1145,6 +1078,7 @@ Module Module1
             Dim frodo As Boolean = Pref.FrodoEnabled
             Dim artlist As New List(Of TvBanners)
             Dim thumblist As String = tvdb.GetPosterList(thisep.showid, artlist)
+            thumblist = Nothing
             Dim overwriteimage As Boolean = If(Pref.overwritethumbs, True, False)
             Dim doSeason As Boolean = Pref.tvdlseasonthumbs
             Dim isposter As String = Pref.postertype
@@ -1586,66 +1520,7 @@ Module Module1
         End Try
         Return "Error"
     End Function
-
-    'Public Function get_hdtags(ByVal filename As String)
-    '    Try
-    '        If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
-    '            Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
-    '            If File.Exists(temppath) Then
-    '                filename = temppath
-    '            End If
-    '        End If
-    '        Dim newfiledetails As New StreamDetails 
-    '        newfiledetails = Pref.Get_HdTags(filename)
-    '        Dim workingfiledetails As New StreamDetails
-    '        workingfiledetails.Video.width = newfiledetails.Video.Width 
-    '        workingfiledetails.Video.height = newfiledetails.Video.Height
-    '        workingfiledetails.Video.aspect = newfiledetails.Video.Aspect
-    '        workingfiledetails.Video.codec = newfiledetails.Video.Codec
-    '        workingfiledetails.Video.formatinfo = newfiledetails.Video.FormatInfo
-    '        workingfiledetails.Video.DurationInSeconds = newfiledetails.Video.DurationInSeconds
-    '        workingfiledetails.Video.bitrate = newfiledetails.Video.Bitrate
-    '        workingfiledetails.Video.bitratemode = newfiledetails.Video.BitrateMode
-    '        workingfiledetails.Video.bitratemax = newfiledetails.Video.BitrateMax
-    '        workingfiledetails.Video.container = newfiledetails.Video.Container
-    '        workingfiledetails.Video.codecinfo = newfiledetails.Video.CodecInfo
-    '        workingfiledetails.Video.scantype = newfiledetails.Video.ScanType
-            
-    '        Dim NumAudStream As Integer = newfiledetails.Audio.Count
-    '        Dim CurAuStr As Integer = 0
-    '        If NumAudStream > 0 Then
-    '            While CurAuStr < NumAudStream 
-    '                Dim audio As New AudioDetails
-    '                audio.language = newfiledetails.Audio(CurAuStr).Language
-    '                audio.codec = newfiledetails.Audio(CurAuStr).Codec
-    '                audio.bitrate = newfiledetails.Audio(CurAuStr).Bitrate
-    '                audio.channels = newfiledetails.Audio(CurAuStr).Channels
-    '                workingfiledetails.Audio.Add(audio)
-    '                CurAuStr += 1
-    '            End While
-    '        Else
-    '            Dim audio As New AudioDetails
-    '            workingfiledetails.Audio.Add(audio)
-    '        End If
-            
-    '        Dim NumSubStream As Integer = newfiledetails.Subtitles.Count
-    '        Dim CurSbStr As Integer = 0
-    '        If NumSubStream > 0 Then
-    '            While CurSbStr < NumSubStream 
-    '                Dim sublang As New SubtitleDetails
-    '                sublang.language = newfiledetails.Subtitles(CurSbStr).Language
-    '                workingfiledetails.Subtitles.Add(sublang)
-    '                CurSbStr += 1
-    '            End While
-    '        End If
-
-    '        Return workingfiledetails
-    '    Catch ex As Exception
-
-    '    End Try
-    '    Return Nothing
-    'End Function
-
+    
     Private Function GetAspect(ep As episodeinfo)
         Dim thisarray(2) As Integer
         thisarray(0) = 400
@@ -1684,9 +1559,7 @@ Module Module1
         Next
         Return url
     End Function
-
-    Dim MediaFileExtensions As List(Of String) = New List(Of String)
-
+    
     Private Sub InitMediaFileExtensions()
         For Each extn In Utilities.VideoExtensions
             MediaFileExtensions.Add(extn)
@@ -1835,148 +1708,3 @@ Public Class episodeinfo
         extension       = ""
     End Sub
 End Class
-
-'Public Class StreamDetails2
-'    Public Video As New medianfo_video
-'    Public Audio As New List(Of medianfo_audio)
-'    Public Subtitles As New List(Of medianfo_subtitles)
-'End Class
-
-'Public Structure medianfo_audio
-'    Dim language As String
-'    Dim codec As String
-'    Dim channels As String
-'    Dim bitrate As String
-
-'    Sub New(SetDefaults As Boolean)
-'        language    = ""
-'        codec       = ""
-'        channels    = ""
-'        bitrate     = ""
-'    End Sub
-'End Structure
-
-'Public Structure medianfo_subtitles
-'    Dim language As String
-
-'    Sub New(SetDefaults As Boolean)
-'        language    = ""
-'    End Sub
-'End Structure
-
-'Public Structure medianfo_video
-'    Dim width As String
-'    Dim height As String
-'    Dim aspect As String
-'    Dim codec As String
-'    Dim formatinfo As String
-'    Dim duration As String
-'    Dim bitrate As String
-'    Dim bitratemode As String
-'    Dim bitratemax As String
-'    Dim container As String
-'    Dim codecid As String
-'    Dim codecinfo As String
-'    Dim scantype As String
-
-'    Sub New(SetDefaults As Boolean)
-'        width = ""
-'        height = ""
-'        aspect = ""
-'        codec = ""
-'        formatinfo = ""
-'        duration = ""
-'        bitrate = ""
-'        bitratemode = ""
-'        bitratemax = ""
-'        container = ""
-'        codecid = ""
-'        codecinfo = ""
-'        scantype = ""
-'    End Sub
-'End Structure
-
-'Public Enum StreamKind As UInteger
-'    General
-'    Visual
-'    Audio
-'    Text
-'    Chapters
-'    Image
-'    Menu
-'    Max
-'End Enum
-
-'Public Enum InfoKind As UInteger
-'    Name
-'    Text
-'    Measure
-'    Options
-'    NameText
-'    MeasureText
-'    Info
-'    HowTo
-'    Max
-'End Enum
-
-'Public Class mediainfo
-'    Private Declare Unicode Function MediaInfo_New Lib "MediaInfo.DLL" () As IntPtr
-'    Private Declare Unicode Sub MediaInfo_Delete Lib "MediaInfo.DLL" (ByVal Handle As IntPtr)
-'    Private Declare Unicode Function MediaInfo_Open Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal FileName As String) As UIntPtr
-'    Private Declare Unicode Sub MediaInfo_Close Lib "MediaInfo.DLL" (ByVal Handle As IntPtr)
-'    Private Declare Unicode Function MediaInfo_Inform Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal Reserved As UIntPtr) As IntPtr
-'    Private Declare Unicode Function MediaInfo_GetI Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal StreamKind As UIntPtr, ByVal StreamNumber As UIntPtr, ByVal Parameter As UIntPtr, ByVal KindOfInfo As UIntPtr) As IntPtr 'See MediaInfoDLL.h for enumeration values
-'    Private Declare Unicode Function MediaInfo_Get Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal StreamKind As UIntPtr, ByVal StreamNumber As UIntPtr, ByVal Parameter As String, ByVal KindOfInfo As UIntPtr, ByVal KindOfSearch As UIntPtr) As IntPtr
-'    Private Declare Unicode Function MediaInfo_Option Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal Option_ As String, ByVal Value As String) As IntPtr
-'    Private Declare Unicode Function MediaInfo_State_Get Lib "MediaInfo.DLL" (ByVal Handle As IntPtr) As UIntPtr 'see MediaInfo.h for details
-'    Private Declare Unicode Function MediaInfo_Count_Get Lib "MediaInfo.DLL" (ByVal Handle As IntPtr, ByVal StreamKind As UIntPtr, ByVal StreamNumber As IntPtr) As UIntPtr 'see MediaInfoDLL.h for enumeration values
-
-'    Dim Handle As IntPtr
-
-'    Sub New()
-'        Handle = MediaInfo_New()
-'    End Sub
-
-'    Protected Overrides Sub Finalize()
-'        MediaInfo_Delete(Handle)
-'    End Sub
-
-'    Function Open(ByVal FileName As String) As Integer
-'        Return MediaInfo_Open(Handle, FileName)
-'    End Function
-
-'    Sub Close()
-'        MediaInfo_Close(Handle)
-'    End Sub
-
-'    Function Inform() As String
-'        Return Marshal.PtrToStringUni(MediaInfo_Inform(Handle, 0))
-'    End Function
-
-'    Function Get_(ByVal StreamKind As StreamKind, ByVal StreamNumber As Integer, ByVal Parameter As Integer, Optional ByVal KindOfInfo As InfoKind = InfoKind.Text) As String
-'        Return Marshal.PtrToStringUni(MediaInfo_GetI(Handle, StreamKind, StreamNumber, Parameter, KindOfInfo))
-'    End Function
-
-'    Function Get_(ByVal StreamKind As StreamKind, ByVal StreamNumber As Integer, ByVal Parameter As String, Optional ByVal KindOfInfo As InfoKind = InfoKind.Text, Optional ByVal KindOfSearch As InfoKind = InfoKind.Name) As String
-'        Return Marshal.PtrToStringUni(MediaInfo_Get(Handle, StreamKind, StreamNumber, Parameter, KindOfInfo, KindOfSearch))
-'    End Function
-
-'    Function Option_(ByVal Option__ As String, Optional ByVal Value As String = "") As String
-'        Return Marshal.PtrToStringUni(MediaInfo_Option(Handle, Option__, Value))
-'    End Function
-
-'    Function State_Get() As Integer
-'        Return MediaInfo_State_Get(Handle)
-'    End Function
-
-'    Function Count_Get(ByVal StreamKind As StreamKind, Optional ByVal StreamNumber As UInteger = UInteger.MaxValue) As Integer
-'        If StreamNumber = UInteger.MaxValue Then
-'            Dim A As Long
-'            A = 0
-'            A = A - 1 'If you know how to have (IntPtr)(-1) easier, I am interested ;-)
-'            Return MediaInfo_Count_Get(Handle, StreamKind, A)
-'        Else
-'            Return MediaInfo_Count_Get(Handle, StreamKind, StreamNumber)
-'        End If
-'    End Function
-'End Class

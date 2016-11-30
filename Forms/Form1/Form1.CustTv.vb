@@ -403,7 +403,7 @@ Partial Public Class Form1
             FolderList = Pref.custtvFolders ' add all folders to list to scan
             Cache.CustTvCache.Clear() 'Full rescan means clear all old data
             CTvTreeView.Nodes.Clear()
-            realTvPaths.Clear()
+            'realTvPaths.Clear()
         End If
 
         For Each tvfolder In FolderList

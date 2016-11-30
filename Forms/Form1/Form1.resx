@@ -118,23 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="FolderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 54</value>
+    <value>190, 54</value>
   </metadata>
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>177, 54</value>
+    <value>350, 54</value>
   </metadata>
   <metadata name="FanartContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <metadata name="ImageList2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1026, 54</value>
+    <value>17, 91</value>
   </metadata>
   <data name="ImageList2.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAA+
-        DwAAAk1TRnQBSQFMAgEBCQEAAcQBawHEAWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        DwAAAk1TRnQBSQFMAgEBCQEAAcwBawHMAWsBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -203,10 +203,10 @@
 </value>
   </data>
   <metadata name="TvEpContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>832, 165</value>
+    <value>378, 202</value>
   </metadata>
   <metadata name="TvPosterContextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>649, 165</value>
+    <value>195, 202</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btn_SaveTvShowOrEpisode.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -526,7 +526,7 @@
 </value>
   </data>
   <metadata name="HelpProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>713, 128</value>
+    <value>17, 165</value>
   </metadata>
   <data name="lblMovTagMulti2.Text" xml:space="preserve">
     <value>With Multiple movies selected,
@@ -543,13 +543,13 @@ Tag(s) have the Tag(s) removed.
 Removed tags are prefix with '-'</value>
   </data>
   <metadata name="MovieArtworkContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>831, 17</value>
+    <value>815, 17</value>
   </metadata>
   <metadata name="TVContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>429, 17</value>
   </metadata>
   <metadata name="rcmenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>742, 17</value>
+    <value>726, 17</value>
   </metadata>
   <data name="btnMovieDisplay_DirectorFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1597,7 +1597,7 @@ Removed tags are prefix with '-'</value>
 </value>
   </data>
   <metadata name="ToolTip2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>271, 54</value>
+    <value>444, 54</value>
   </metadata>
   <data name="btnMovieDisplay_CountriesFilter.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -4819,7 +4819,7 @@ Conflicting options 'Use folder names' (General tab) and  'Save files as 'movie.
 </value>
   </data>
   <metadata name="cmsConfigureMovieFilters.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>471, 165</value>
+    <value>17, 202</value>
   </metadata>
   <data name="cbFilterYear.Values" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -4883,31 +4883,31 @@ If you do not wish to edit a field then leave it blank, only fields that contain
                                              text will be changed.</value>
   </data>
   <metadata name="SaveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>540, 54</value>
+    <value>713, 54</value>
   </metadata>
   <metadata name="StatusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>669, 54</value>
+    <value>842, 54</value>
   </metadata>
   <metadata name="bckgroundversion.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>781, 54</value>
+    <value>954, 54</value>
   </metadata>
   <metadata name="bckgroundscanepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1132, 54</value>
+    <value>123, 91</value>
   </metadata>
   <metadata name="bckgroundfanart.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 91</value>
+    <value>421, 91</value>
   </metadata>
   <metadata name="bckgrounddroppedfiles.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>150, 91</value>
+    <value>554, 91</value>
   </metadata>
   <metadata name="bckgroundexit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>315, 91</value>
+    <value>719, 91</value>
   </metadata>
   <metadata name="bckepisodethumb.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>606, 91</value>
+    <value>1010, 91</value>
   </metadata>
   <metadata name="MovieTableContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1175, 17</value>
+    <value>17, 54</value>
   </metadata>
   <metadata name="DataGridViewTextBoxColumn1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4922,7 +4922,7 @@ If you do not wish to edit a field then leave it blank, only fields that contain
     <value>True</value>
   </metadata>
   <metadata name="MovSetsContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1016, 17</value>
+    <value>1000, 17</value>
   </metadata>
   <metadata name="DataGridViewImageColumn4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4934,24 +4934,6 @@ If you do not wish to edit a field then leave it blank, only fields that contain
     <value>True</value>
   </metadata>
   <metadata name="tb_MovieSetOverview.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="Label68.Text" xml:space="preserve">
-    <value>These sets can be used to group collections of movies together within XBMC,
-eg. Add the movie set "Star Wars Collection", and make all
-Star Wars movies part of this set. They would be added to the XBMC library
-as "Star Wars Collection" Selecting this in XBMC would list all these movies..</value>
-  </data>
-  <metadata name="movsettitle.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="tmdbid.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="movsetfanart.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="movsetposter.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="Label86.Text" xml:space="preserve">
@@ -4993,14 +4975,14 @@ Once folders have been added and saved, use the
 scrape any located media</value>
   </data>
   <metadata name="ImageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>920, 54</value>
+    <value>1093, 54</value>
   </metadata>
   <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
-        IQAAAk1TRnQBSQFMAgEBAgEAAagBAgGoAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
+        IQAAAk1TRnQBSQFMAgEBAgEAAbABAgGwAQIBKAEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAGg
         AwABEgMAAQEBAAEYBQABwAEhGAAB1wHnAeoBlAHRAdwBeAHNAdwBegHMAdkBfAHLAdkBeQHKAdkBeAHK
         AdkBeAHKAdkBeQHKAdkBegHJAdkBewHKAdkBewHKAdkBegHJAdkBeQHJAdgBegHJAdYBeQHIAdUBeAHI
         AdUBeQHIAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHFAdUBeAHEAdUBdwHDAdQBdwHD
@@ -5199,7 +5181,7 @@ menu item, located in the
 "TV Shows" drop down menu.</value>
   </data>
   <metadata name="TvRootFolderContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 165</value>
+    <value>607, 165</value>
   </metadata>
   <data name="Label84.Text" xml:space="preserve">
     <value>
@@ -5213,14 +5195,14 @@ D:/Root/TV Show 1
 Adding shows using this method means that all shows must be added manually.</value>
   </data>
   <metadata name="ImageList3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>853, 91</value>
+    <value>125, 128</value>
   </metadata>
   <data name="ImageList3.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
-        JQAAAk1TRnQBSQFMAgEBAgEAAbABAgGwAQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
+        JQAAAk1TRnQBSQFMAgEBAgEAAbgBAgG4AQIBMgEAARIBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAHI
         AwABEgMAAQEBAAEYBQABMAEqEgADJAMjAyQGKAMiBiMDHgYdAxkBGwEWARUBJwIYASABGAEVARkBHQEZ
         ARYBJAEdARUBIgEcARcBGwEWASMBGgEXASoBFwEWAS0CFgEmARYBFAEcARYBEwESARgBEwEOARkBDwEN
         ARsCDQEbAQ0BDAEaAQwBDgEZAQ0BDwEYAQ8BEQEXAREBEAEVARABEQEUARIDEwEUARMCFAETARQBFgES
@@ -7414,7 +7396,7 @@ Adding shows using this method means that all shows must be added manually.</val
 </value>
   </data>
   <metadata name="HomeMovieContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>365, 54</value>
+    <value>538, 54</value>
   </metadata>
   <data name="Label65.Text" xml:space="preserve">
     <value>To create a poster, we take a screenshot and then crop it 
@@ -7451,55 +7433,55 @@ You can use this tab to export the entire MC database into an xml file that can 
 method is much faster than using XBMC scrapers to read the nfo files, and secondly, additional information, such as watched status will be included.</value>
   </data>
   <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>745, 91</value>
+    <value>17, 128</value>
   </metadata>
   <metadata name="openFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>959, 91</value>
+    <value>231, 128</value>
   </metadata>
   <metadata name="Timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1048, 91</value>
+    <value>320, 128</value>
   </metadata>
   <metadata name="Timer4.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1134, 91</value>
+    <value>406, 128</value>
   </metadata>
   <metadata name="MovieWallContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>575, 17</value>
+    <value>559, 17</value>
   </metadata>
   <metadata name="bckgrnd_tvshowscraper.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>437, 91</value>
+    <value>841, 91</value>
   </metadata>
   <metadata name="FontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>411, 128</value>
+    <value>886, 128</value>
   </metadata>
   <metadata name="Bckgrndfindmissingepisodes.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>522, 128</value>
+    <value>997, 128</value>
   </metadata>
   <metadata name="tvbckrescrapewizard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>834, 128</value>
+    <value>138, 165</value>
   </metadata>
   <metadata name="ForegroundWorkTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>987, 128</value>
+    <value>291, 165</value>
   </metadata>
   <metadata name="TimerToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>166, 17</value>
   </metadata>
   <metadata name="ScraperStatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>200, 165</value>
+    <value>790, 165</value>
   </metadata>
   <metadata name="ssFileDownload.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>343, 165</value>
+    <value>933, 165</value>
   </metadata>
   <metadata name="BindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1302, 54</value>
+    <value>293, 91</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>211, 128</value>
+    <value>686, 128</value>
   </metadata>
   <metadata name="BasicmovienfoBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 128</value>
+    <value>492, 128</value>
   </metadata>
   <metadata name="TVWallContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>997, 123</value>
+    <value>455, 165</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>

@@ -1,8 +1,6 @@
 ﻿'Imports System.IO
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Xml
-Imports System.Threading
-Imports System.ComponentModel
 'Imports MediaInfoNET
 Imports System.Data.SQLite
 Imports System.Data
@@ -1279,7 +1277,7 @@ Public Class Pref
         root.AppendChild(doc, "MVPrefShowLog",                      MVPrefShowLog)              'cb_MVPrefShowLog        
 
         tempstring = TvdbLanguageCode & "|" & TvdbLanguage
-        root.AppendChild(doc, "tvdblanguage", tempstring)                       'ListBox12,Button91
+        root.AppendChild(doc, "tvdblanguage", tempstring)                       'lb_TvChSeriesLanguages,Button91
 
         root.AppendChild(doc, "XBMC_Active", XBMC_Active)
         root.AppendChild(doc, "XBMC_Link",                          XBMC_Link                 )

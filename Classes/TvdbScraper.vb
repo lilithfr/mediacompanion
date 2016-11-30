@@ -47,8 +47,6 @@ Public Class TVDBScraper
             Dim objReader As New IO.streamReader(objStream)
             xmlfile = objReader.ReadToEnd
             Dim bannerslist As New XmlDocument
-            'Try
-            'Dim bannerlist As String = "<banners>"
             bannerslist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
             For Each thisresult In bannerslist("Banners")
@@ -56,41 +54,31 @@ Public Class TVDBScraper
                 Select Case thisresult.Name
                     Case "Banner"
                         Dim banner As New TvBanners
-                        'bannerlist = bannerlist & "<banner>"
                         Dim bannerselection As XmlNode = Nothing
                         For Each bannerselection In thisresult.ChildNodes
                             Select Case bannerselection.Name
                                 Case "id"
                                     banner.id = bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<id>" & bannerselection.InnerXml & "</id>"
                                 Case "BannerPath"
                                     banner.Url = "http://www.thetvdb.com/banners/" & bannerselection.InnerXml
                                     banner.SmallUrl = "http://www.thetvdb.com/banners/_cache/" & bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<url>http://www.thetvdb.com/banners/" & bannerselection.InnerXml & "</url>"
                                 Case "BannerType"
                                     banner.BannerType = bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<bannertype>" & bannerselection.InnerXml & "</bannertype>"
                                 Case "BannerType2"
                                     banner.Resolution = bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<resolution>" & bannerselection.InnerXml & "</resolution>"
                                 Case "Language"
                                     banner.Language = bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<language>" & bannerselection.InnerXml & "</language>"
                                 Case "Season"
                                     banner.Season = bannerselection.InnerXml
-                                    'bannerlist = bannerlist & "<season>" & bannerselection.InnerXml & "</season>"
                                 Case "Rating"
                                     banner.Rating = bannerselection.InnerText.ToRating
                                 Case ""
                             End Select
                         Next
                         ListOfBanners.Add(banner)
-                        'bannerlist = bannerlist & "</banner>"
                 End Select
             Next
-            'bannerlist = bannerlist & "</banners>"
             Return "ok"
-            'Return bannerlist
         Catch ex As WebException
             Return ex.ToString
         Catch EX As Exception

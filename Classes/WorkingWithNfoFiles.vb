@@ -72,12 +72,17 @@ Public Class WorkingWithNfoFiles
             If File.Exists(tmpxml) Then
                 File.Delete(tmpxml, True)
             End If
-            Dim output As New XmlTextWriter(tmpxml, System.Text.Encoding.UTF8)
+            Using output As XmlTextWriter = New XmlTextWriter(tmpxml, System.Text.Encoding.UTF8)
+                output.Formatting = Formatting.Indented
+                output.Indentation = 4
+                doc.WriteTo(output)
+            End Using
+            'Dim output As New XmlTextWriter(tmpxml, System.Text.Encoding.UTF8)
 
-            output.Formatting = Formatting.Indented
-            output.Indentation = 4
-            doc.WriteTo(output)
-            output.Close()
+            'output.Formatting = Formatting.Indented
+            'output.Indentation = 4
+            'doc.WriteTo(output)
+            'output.Close()
 
             aok = True
             If aok Then

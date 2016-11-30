@@ -1,13 +1,8 @@
 ﻿Imports System.Threading
 Imports System.Net
-'Imports System.IO
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Xml
-'Imports System.IO.Compression
-'Imports System.Text
-'Imports System.Web
-'Imports System.Reflection
 Imports System.Drawing
 Imports System.Security.Cryptography
 Imports Microsoft.Win32
@@ -335,11 +330,6 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         If String.IsNullOrEmpty(Ratio) Then Return ""
         If Ratio.IndexOf(":"c) > -1 Then Ratio = Ratio.Substring(0, Ratio.IndexOf(":"))
         
-        'Dim aspectRatio As Double
-        'If Double.TryParse(Ratio, aspectRatio) Then
-        '    aspectRatio = Math.Round(aspectRatio, 2)
-        '    Ratio = aspectRatio.ToString("F2", testculture)
-        'End If
         Return Ratio
     End Function
 
