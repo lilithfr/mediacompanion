@@ -1369,10 +1369,8 @@ Module Module1
             Next
         Next
         doc.AppendChild(root)
-        Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fullpath)
     End Sub
 
     Private Sub tvcacheClean()

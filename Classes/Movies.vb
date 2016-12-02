@@ -2032,98 +2032,11 @@ Public Class Movies
             End If  
 
             root.AppendChild(child)
-
-            'childchild = doc.CreateElement("filedate") : childchild.InnerText = movie.filedate : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("createdate") : childchild.InnerText = movie.createdate : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("missingdata1") : childchild.InnerText = movie.missingdata1.ToString : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("filename") : childchild.InnerText = movie.filename : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("foldername") : childchild.InnerText = movie.foldername : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("fullpathandfilename") : childchild.InnerText = movie.fullpathandfilename : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("source") :  : childchild.InnerText = If(movie.source = Nothing, "", movie.source) : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("director") : childchild.InnerText = movie.director  : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("credits") : childchild.InnerText = movie.credits  : child.AppendChild(childchild)
             
-            'childchild = doc.CreateElement("set")
-            'childchild.InnerText = If(movie.InASet, movie.SetName, "")
-            'child.AppendChild(childchild)
-
-            'childchild = doc.CreateElement("setid")
-            'childchild.InnerText = If(movie.InASet, movie.TmdbSetId, "")
-            'child.AppendChild(childchild)
-
-            'childchild = doc.CreateElement("genre"    ) : childchild.InnerText = movie.genre     : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("countries") : childchild.InnerText = movie.countries : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("studios"  ) : childchild.InnerText = movie.studios   : child.AppendChild(childchild)
-
-            'For Each item In movie.movietag
-            '    childchild = doc.CreateElement("tag")
-            '    childchild.InnerText = item
-            '    child.AppendChild(childchild)
-            'Next
-
-            'childchild = doc.CreateElement("id") : childchild.InnerText = movie.id : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("tmdbid") : childchild.InnerText = movie.tmdbid : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("playcount") : childchild.InnerText = movie.playcount : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("rating") : childchild.InnerText = movie.rating : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("title") : childchild.InnerText = movie.title : child.AppendChild(childchild)
-            'childchild = doc.CreateElement("originaltitle") : childchild.InnerText = movie.originaltitle : child.AppendChild(childchild)
-
-            ''If Not String.IsNullOrEmpty(movie.sortorder) Then movie.sortorder = movie.title
-            'childchild = doc.CreateElement("outline") : childchild.InnerText = If(String.IsNullOrEmpty(movie.sortorder), movie.title, movie.outline)
-            'child.AppendChild(childchild)
-
-            'childchild = doc.CreateElement("plot") : childchild.InnerText = Microsoft.VisualBasic.Strings.Left(movie.plot, 100) : child.AppendChild(childchild)
-            'child.AppendChild(doc, "tagline",       movie.tagline)
-            ''If movie.plot.Length() > 100 Then
-            ''    childchild.InnerText = movie.plot.Substring(0, 100)     'Only write first 100 chars to cache- this plot is only used for table view - normal full plot comes from the nfo file (fullbody)
-            ''Else
-            ''    childchild.InnerText = movie.plot
-            ''End If
-            ''child.AppendChild(childchild)
-
-            'child.AppendChild(doc, "sortorder",     movie.sortorder)
-            'child.AppendChild(doc, "stars",         movie.stars)
-            'child.AppendChild(doc, "runtime",       movie.runtime)
-            'child.AppendChild(doc, "top250",        movie.top250)
-            'child.AppendChild(doc, "year",          movie.year)
-            'child.AppendChild(doc, "votes",         movie.Votes)
-            'child.AppendChild(doc, "usrrated",      movie.usrrated)
-            'child.AppendChild(doc, "metascore",     movie.metascore)
-            'child.AppendChild(doc, "Resolution",    movie.Resolution)
-            'child.AppendChild(doc, "VideoCodec",    movie.VideoCodec)
-            'child.AppendChild(doc, "Container",     movie.Container)
-
-            'For Each item In movie.Audio
-            '    child.AppendChild(item.GetChild(doc))
-            'Next
-
-            'For Each item In movie.SubLang 
-            '    child.AppendChild(item.GetChild(doc))
-            'Next
-
-            'child.AppendChild(doc, "Premiered", movie.Premiered)
-            'child.AppendChild(doc, "Certificate", movie.Certificate)
-            'child.AppendChild(doc, "FrodoPosterExists", movie.FrodoPosterExists)
-            'child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
-            'child.AppendChild(doc, "FolderSize", movie.FolderSize)
-            'child.AppendChild(doc, "RootFolder", movie.rootfolder)
-            'child.AppendChild(doc, "UserTmdbSetAddition", movie.UserTmdbSetAddition)
-            'child.AppendChild(doc, "UnknownSetCount", movie.UnknownSetCount)
-
-            'If movie.LockedFields.Count>0 Then
-            '    child.AppendChild(doc, "LockedFields", String.Join(",", movie.LockedFields.ToArray()))
-            'End If  
-
-            'root.AppendChild(child)
         Next
 
         doc.AppendChild(root)
-
-        Dim output As New XmlTextWriter(cacheFile, System.Text.Encoding.UTF8)
-
-        output.Formatting = Xml.Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+        WorkingWithNfoFiles.SaveXMLDoc(doc, cacheFile)
     End Sub
 
     Public Sub MVCacheLoadFromNfo()
@@ -2755,29 +2668,17 @@ Public Class Movies
 
         Dim root  As XmlElement
         Dim child As XmlElement
-        Dim childchild As XmlElement
 
         root = doc.CreateElement(typeName & "_cache")
         
-        Try
         For Each actor In peopleDb
             child = doc.CreateElement(typeName)
-            childchild = doc.CreateElement("name")
-            childchild.InnerText = actor.actorname
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = actor.movieid
-            child.AppendChild(childchild)
+            child.AppendChild(doc, "name"   , actor.ActorName)
+            child.AppendChild(doc, "id"     , actor.MovieId)
             root.AppendChild(child)
         Next
         doc.AppendChild(root)
-
-        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
-        Catch
-        End Try
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fileName)
         'Threading.Monitor.Exit(Me)
     End Sub
 
@@ -2785,151 +2686,89 @@ Public Class Movies
         Dim doc As New XmlDocument
         Dim thispref As XmlNode = Nothing
         Dim xmlproc  As XmlDeclaration
+        Dim root  As XmlElement
+        Dim child As XmlElement
 
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
-
-        Dim root  As XmlElement
-        Dim child As XmlElement
-        Dim childchild As XmlElement
-
+        
         root = doc.CreateElement(typeName & "_cache")
         
         For Each actor In peopleDb
             child = doc.CreateElement(typeName)
-            childchild = doc.CreateElement("name")
-            childchild.InnerText = actor.actorname
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = actor.movieid
-            child.AppendChild(childchild)
+            child.AppendChild(doc, "name"   , actor.ActorName)
+            child.AppendChild(doc, "id"     , actor.MovieId)
             root.AppendChild(child)
         Next
         doc.AppendChild(root)
-
-        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fileName)
     End Sub
 
     Sub SaveMovieSetCache(setDb As List(Of MovieSetInfo), typeName As String, fileName As String)
         Dim doc As New XmlDocument
-
         Dim thispref As XmlNode = Nothing
         Dim xmlproc  As XmlDeclaration
+        Dim root  As XmlElement
+        Dim child As XmlElement
+        Dim childchild As XmlElement
 
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
-
-        Dim root  As XmlElement
-        Dim child As XmlElement
-
+        
         root = doc.CreateElement(typeName & "_cache")
-
-        Dim childchild As XmlElement
-        Dim childchildchild As XmlElement 
-
+        
         For Each movieset In setDb
             If movieset.MovieSetName.ToLower = "-none-" Then Continue For
             child = doc.CreateElement(typeName)
             Dim attr As XmlAttribute = doc.CreateAttribute("title")  ' just to pretty it up in notepad++ when colapsing <movieset> node.
             attr.Value = movieset.MovieSetName
             child.SetAttributeNode(attr)
-
-            childchild = doc.CreateElement("moviesetname")
-            childchild.InnerText = movieset.MovieSetName
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = movieset.TmdbSetId 
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("plot")
-            childchild.InnerText = movieset.MovieSetPlot 
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("LastUpdatedTs")
-            childchild.InnerText = movieset.LastUpdatedTs
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("DirtyData")
-            childchild.InnerText = movieset.Dirty
-            child.AppendChild(childchild)
-
-            childchild = doc.CreateElement("UserMovieSetName")
-            childchild.InnerText = movieset.UserMovieSetName
-            child.AppendChild(childchild)
+            
+            child.AppendChild(doc   , "moviesetname"        , movieset.MovieSetName)
+            child.AppendChild(doc   , "id"                  , movieset.TmdbSetId)
+            child.AppendChild(doc   , "plot"                , movieset.MovieSetPlot)
+            child.AppendChild(doc   , "LastUpdatedTs"       , movieset.LastUpdatedTs)
+            child.AppendChild(doc   , "DirtyData"           , movieset.Dirty)
+            child.AppendChild(doc   , "UserMovieSetName"    , movieset.UserMovieSetName)
 
             If Not IsNothing(movieset.Collection) Then
                 For each item In movieset.Collection
                     childchild = doc.CreateElement("collection")
-
-                    childchildchild = doc.createElement("movietitle")
-                    childchildchild.InnerText = item.MovieTitle
-                    childchild.AppendChild(childchildchild)
-
-                    childchildchild = doc.createElement("movieid")
-                    childchildchild.InnerText = item.TmdbMovieId
-                    childchild.AppendChild(childchildchild)
-
-                    childchildchild = doc.createElement("backdrop_path")
-                    childchildchild.InnerText = item.backdrop_path
-                    childchild.AppendChild(childchildchild)
-
-                    childchildchild = doc.createElement("poster_path")
-                    childchildchild.InnerText = item.poster_path
-                    childchild.AppendChild(childchildchild)
-
-                    childchildchild = doc.createElement("release_date")
-                    childchildchild.InnerText = item.release_date
-                    childchild.AppendChild(childchildchild)
-
+                    childchild.AppendChild(doc   , "movietitle"          , item.MovieTitle)
+                    childchild.AppendChild(doc   , "movieid"             , item.TmdbMovieId)
+                    childchild.AppendChild(doc   , "backdrop_path"       , item.backdrop_path)
+                    childchild.AppendChild(doc   , "poster_path"         , item.poster_path)
+                    childchild.AppendChild(doc   , "release_date"        , item.release_date)
                     child.AppendChild(childchild)
                 Next
             End If
             root.AppendChild(child)
         Next
-
         doc.AppendChild(root)
 
-        Dim output As New XmlTextWriter(fileName, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fileName)
     End Sub
 
     Sub SaveTagCache()
         Dim doc As New XmlDocument
-
-        Dim thispref As XmlNode = Nothing
-        Dim xmlproc  As XmlDeclaration
-
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
-
+        Dim thispref    As XmlNode = Nothing
+        Dim xmlproc     As XmlDeclaration
         Dim root        As XmlElement
         Dim child       As XmlElement
-        Dim childchild  As XmlElement
-
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        
         root = doc.CreateElement("tag_cache")
         
         For Each tagtosave In TagDb
             child = doc.CreateElement("Tag")
-            childchild = doc.CreateElement("TagTitle")
-            childchild.InnerText = tagtosave.TagName.Trim
-            child.AppendChild(childchild)
-            childchild = doc.CreateElement("id")
-            childchild.InnerText = tagtosave.movieid
-            child.AppendChild(childchild)
+            child.AppendChild(doc   , "TagTitle"    , tagtosave.TagName.Trim)
+            child.AppendChild(doc   , "id"          , tagtosave.MovieId)
             root.AppendChild(child)
         Next
         doc.AppendChild(root)
 
-        Dim output As New XmlTextWriter(Utilities.applicationPath & "\settings\tagcache.xml", System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        doc.WriteTo(output)
-        output.Close()
+        WorkingWithNfoFiles.SaveXMLDoc(doc, Utilities.applicationPath & "\settings\tagcache.xml")
     End Sub
 
     Public Sub RebuildCaches

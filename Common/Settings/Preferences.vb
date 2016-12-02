@@ -25,6 +25,31 @@ Module Ext
         root.AppendChild(child)
     End Sub
 
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As List(Of String), Optional ExcludeEmptyNode As Boolean = False)
+        If value.Count < 1 Then
+            If ExcludeEmptyNode Then Exit Sub
+            root.AppendChild( doc, name, "" )
+            Exit Sub
+        End If
+        For each sp In value
+            root.AppendChild( doc, name, sp.Trim)
+        Next
+    End Sub 'Dim t As String = path.rpath & "|" & path.selected
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChildList(root As XmlElement, doc As XmlDocument, name As String, value As List(Of str_RootPaths), Optional ExcludeEmptyNode As Boolean = False)
+        If value.Count < 1 Then
+            If ExcludeEmptyNode Then Exit Sub
+            root.AppendChild( doc, name, "" )
+            Exit Sub
+        End If
+        For each path In value
+            Dim t As String = path.rpath & "|" & path.selected
+            root.AppendChild( doc, name, t)
+        Next
+    End Sub
+
 End Module
 
 
@@ -914,52 +939,25 @@ Public Class Pref
         Dim tempstring As String = String.Empty
         Dim doc As New XmlDocument
         Dim xmlproc As XmlDeclaration
+        Dim root As XmlElement
+        Dim child As XmlElement
 
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
-        Dim root As XmlElement
-        Dim child As XmlElement
         root = doc.CreateElement("xbmc_media_companion_config_v1.0")
 
 
         'Folders In Use ------------------------------------------------------
-        For Each path In tvFolders
-            root.AppendChild(doc, "tvfolder", path)
-        Next
-
-        For Each path In tvRootFolders
-            Dim t As String = path.rpath & "|" & path.selected 
-            root.AppendChild(doc, "tvrootfolder", t)
-        Next
-
-        For Each path In movieFolders
-            Dim t As String = path.rpath & "|" & path.selected 
-            root.AppendChild(doc, "nfofolder", t)
-        Next
-        root.AppendChild(doc, "stubfolder", stubfolder)
-        root.AppendChild(doc, "stubmessage", stubmessage)
-        For Each path In offlinefolders
-            root.AppendChild(doc, "offlinefolder", path)
-        Next
-
-        For Each path In homemoviefolders
-            Dim t As String = path.rpath & "|" & path.selected
-            root.AppendChild(doc, "homemoviefolder", t)
-        Next
-
-        For Each path In MVidFolders
-            Dim t As String = path.rpath & "|" & path.selected
-            root.AppendChild(doc, "MVidFolders", t)
-        Next
-
-        For Each path In MVConcertFolders
-            Dim t As String = path.rpath & "|" & path.selected
-            root.AppendChild(doc, "MVConcertFolders", t)
-        Next
-
-        For each path In custtvFolders
-            root.AppendChild(doc, "custtvFolder", path)
-        Next
+        root.AppendChildList(doc, "tvfolder"                , tvFolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "tvrootfolder"            , tvRootFolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "nfofolder"               , movieFolders, ExcludeEmptyNode:=True)
+        root.AppendChild(doc    , "stubfolder"              , stubfolder)
+        root.AppendChild(doc    , "stubmessage"             , stubmessage)
+        root.AppendChildList(doc, "offlinefolder"           , offlinefolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "homemoviefolder"         , homemoviefolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "MVidFolders"             , MVidFolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "MVConcertFolders"        , MVConcertFolders, ExcludeEmptyNode:=True)
+        root.AppendChildList(doc, "custtvFolder"            , custtvFolders, ExcludeEmptyNode:=True)
 
         root.AppendChild(ExcludeFolders.GetChild(doc))
         
@@ -993,37 +991,19 @@ Public Class Pref
         
         'Still to do
         child = doc.CreateElement("moviesets")
-        Dim childchild As XmlElement
-        For Each movieset In moviesets
-            If movieset <> "-None-" Then
-                childchild = doc.CreateElement("set")
-                childchild.InnerText = movieset
-                child.AppendChild(childchild)
-            End If
-        Next
+        Dim moviesetslist As New List(Of String)
+        moviesetslist.AddRange(moviesets)
+        If moviesetslist.Contains("-None-") Then moviesetslist.Remove("-None-")
+        child.AppendChildList(doc, "set"    , moviesetslist)
         root.AppendChild(child)
 
-        child = doc.CreateElement("movietags")  'preparing new movie tags
-        Dim childchild3 As XmlElement
-        For Each movietag In movietags
-            If movietag <> "" And Not IsNothing(movietag) Then
-                childchild3 = doc.CreateElement("tag")
-                childchild3.InnerText = movietag
-                child.AppendChild(childchild3)
-            End If
-        Next
+        child = doc.CreateElement("movietags")
+        child.AppendChildList(doc, "tag"    , movietags)
         root.AppendChild(child)
 
         child = doc.CreateElement("table")
-        Dim childchild2 As XmlElement
-        childchild2 = doc.CreateElement("sort")
-        childchild2.InnerText = tablesortorder
-        child.AppendChild(childchild2)
-        For Each tabs In tableview
-            childchild2 = doc.CreateElement("tab")
-            childchild2.InnerText = tabs
-            child.AppendChild(childchild2)
-        Next
+        child.AppendChild(doc   ,  "sort"       , tablesortorder)
+        child.AppendChildList(doc, "tab"        , tableview, ExcludeEmptyNode:= True)
         root.AppendChild(child)
         
         'General Prefs ------------------------------------------------------------
@@ -1072,12 +1052,8 @@ Public Class Pref
         For Each com In commandlist
             If com.command <> "" And com.title <> "" Then
                 child = doc.CreateElement("comms")
-                childchild = doc.CreateElement("title")
-                childchild.InnerText = com.title
-                child.AppendChild(childchild)
-                childchild = doc.CreateElement("command")
-                childchild.InnerText = com.command
-                child.AppendChild(childchild)
+                child.AppendChild(doc   , "title"       , com.title)
+                child.AppendChild(doc   , "command"     , com.command)
                 root.AppendChild(child)
             End If
         Next
@@ -1299,16 +1275,13 @@ Public Class Pref
         doc.AppendChild(root)
 
         If String.IsNullOrEmpty(workingProfile.Config) Then workingProfile.Config = Path.Combine(applicationPath, "settings\config.xml")
-        Dim output As XmlTextWriter = Nothing
-        Try
-            output = New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
-            output.Formatting = Formatting.Indented
+        
+        Using output As XmlTextWriter   = New XmlTextWriter(workingProfile.Config, System.Text.Encoding.UTF8)
+            output.Formatting           = Formatting.Indented
+            output.Indentation          = 4
             doc.WriteTo(output)
-        Catch ex As Exception
-            Dim x = ex
-        Finally
-            If Not IsNothing(output) Then output.Close
-        End Try
+        End Using
+
         Proxyreload()
     End Sub
     
@@ -1858,10 +1831,6 @@ Public Class Pref
                 If File.Exists(FileName) Then Return FileName
             Next
         Next
-        'For Each item In "mp4,flv,webm,mov,m4v".Split(",")
-        '    FileName = Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer." & item)
-        '    If File.Exists(FileName) Then Return FileName
-        'Next
         Return Path.Combine(s.Replace(Path.GetFileName(s), ""), Path.GetFileNameWithoutExtension(s) & "-trailer.flv")
     End Function
     

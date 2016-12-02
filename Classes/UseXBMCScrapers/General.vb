@@ -1088,10 +1088,7 @@ Module General
             Dim root As XmlElement = doc.DocumentElement
             doc.InsertBefore(xmlproc, root)
             WorkingWithNfoFiles.SaveXMLDoc(doc, nfoFileandPath)
-            'Dim output As New XmlTextWriter(nfoFileandPath, System.Text.Encoding.UTF8)
-            'output.Formatting = Formatting.Indented
-            'doc.WriteTo(output)
-            'output.Close()
+            
             If Filename.ToLower.Contains("tvshow.nfo") Then Return True
 
             ' load nfo file to clean

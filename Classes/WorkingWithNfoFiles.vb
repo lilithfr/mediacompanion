@@ -77,13 +77,6 @@ Public Class WorkingWithNfoFiles
                 output.Indentation = 4
                 doc.WriteTo(output)
             End Using
-            'Dim output As New XmlTextWriter(tmpxml, System.Text.Encoding.UTF8)
-
-            'output.Formatting = Formatting.Indented
-            'output.Indentation = 4
-            'doc.WriteTo(output)
-            'output.Close()
-
             aok = True
             If aok Then
                 If File.Exists(Filename) Then File.Delete(Filename)

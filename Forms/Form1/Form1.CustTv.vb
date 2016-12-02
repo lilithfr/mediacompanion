@@ -276,93 +276,43 @@ Partial Public Class Form1
 
     Private Sub CustTv_RefreshCacheSave(ByVal tvshowlist As List(Of TvShow), ByVal episodeelist As List(Of TvEpisode))
         Dim custtvcachepath As String = Pref.workingProfile.CustomTvCache
-        Dim document As New XmlDocument
+        Dim doc As New XmlDocument
         Dim root As XmlElement
         Dim child As XmlElement
-        Dim childchild As XmlElement
         Dim xmlproc As XmlDeclaration
-        xmlproc = document.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        document.AppendChild(xmlproc)
-        root = document.CreateElement("customtvcache")
+        xmlproc =doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        root =doc.CreateElement("customtvcache")
         root.SetAttribute("ver", "3.5")
         For Each item In tvshowlist
-            child = document.CreateElement("tvshow")
+            child =doc.CreateElement("tvshow")
             child.SetAttribute("NfoPath", item.NfoFilePath)
-
-            childchild = document.CreateElement("state")
-            childchild.InnerText = item.State '"0"
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("title")
-            childchild.InnerText = item.Title.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("id")
-            childchild.InnerText = item.TvdbId.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("status")
-            childchild.InnerText = item.Status.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("plot")
-            childchild.InnerText = item.Plot.Value
-            child.AppendChild(childchild)
-            
-            childchild = document.CreateElement("language")
-            childchild.InnerText = item.Language.Value
-            child.AppendChild(childchild)
-            
-            childchild = document.CreateElement("playcount")
-            childchild.InnerText = item.Playcount.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("hidden")
-            childchild.InnerText = item.Hidden.Value
-            child.AppendChild(childchild)
-
+            child.AppendChild(doc   , "state"           , item.State)
+            child.AppendChild(doc   , "title"           , item.Title.Value)
+            child.AppendChild(doc   , "id"              , item.TvdbId.Value)
+            child.AppendChild(doc   , "status"          , item.Status.Value)
+            child.AppendChild(doc   , "plot"            , item.Plot.Value)
+            child.AppendChild(doc   , "language"        , item.Language.Value)
+            child.AppendChild(doc   , "playcount"       , item.Playcount.Value)
+            child.AppendChild(doc   , "hidden"          , item.Hidden.Value)
             root.AppendChild(child)
         Next
 
         For Each item In episodeelist
-            child = document.CreateElement("episodedetails")
+            child =doc.CreateElement("episodedetails")
             child.SetAttribute("NfoPath", item.NfoFilePath)
-            
-            childchild = document.CreateElement("title")
-            childchild.InnerText = item.Title.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("season")
-            childchild.InnerText = item.Season.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("episode")
-            childchild.InnerText = item.Episode.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("aired")
-            childchild.InnerText = item.Aired.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("showid")
-            childchild.InnerText = item.ShowId.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("epextn")
-            childchild.InnerText = item.EpExtn.Value
-            child.AppendChild(childchild)
-
-            childchild = document.CreateElement("playcount")
-            childchild.InnerText = item.PlayCount.Value
-            child.AppendChild(childchild)
-
+            child.AppendChild(doc   , "title"           , item.Title.Value)
+            child.AppendChild(doc   , "season"          , item.Season.Value)
+            child.AppendChild(doc   , "episode"         , item.Episode.Value)
+            child.AppendChild(doc   , "aired"           , item.Aired.Value)
+            child.AppendChild(doc   , "showid"          , item.ShowId.Value)
+            child.AppendChild(doc   , "epextn"          , item.EpExtn.Value)
+            child.AppendChild(doc   , "playcount"       , item.PlayCount.Value)
             root.AppendChild(child)
         Next
-        document.AppendChild(root)
-        Dim output As New XmlTextWriter(custtvcachepath, System.Text.Encoding.UTF8)
-        output.Formatting = Formatting.Indented
-        document.WriteTo(output)
-        output.Close()
+        doc.AppendChild(root)
+
+        WorkingWithNfoFiles.SaveXMLDoc(doc, custtvcachepath)
     End Sub
 
     Private Sub Custtv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's

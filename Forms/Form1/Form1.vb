@@ -1127,21 +1127,10 @@ Public Class Form1
 		xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
 		doc.AppendChild(xmlproc)
 		root = doc.CreateElement("root")
-		child = doc.CreateElement("MultiEnabled")
-		child.InnerXml = Pref.MultiMonitoEnabled
-		root.AppendChild(child)
-		child = doc.CreateElement("screen")
-		child.InnerText = CurrentScreen.ToString
-		root.AppendChild(child)
+		root.AppendChild(doc   , "MultiEnabled"    , Pref.MultiMonitoEnabled)
+        root.AppendChild(doc   , "screen"          , CurrentScreen.ToString)
 		doc.AppendChild(root)
-		Dim screenpath As String = Pref.applicationPath & "\Settings\screen.xml"
-		Try
-			Dim output As New XmlTextWriter(screenpath, System.Text.Encoding.UTF8)
-			output.Formatting = Formatting.Indented
-			doc.WriteTo(output)
-			output.Close()
-		Catch
-		End Try
+		WorkingWithNfoFiles.SaveXMLDoc(doc, Pref.applicationPath & "\Settings\screen.xml")
 	End Sub
 
 	Private Sub Batch_Rewritenfo()
@@ -1347,41 +1336,18 @@ Public Class Form1
 	End Sub
 
 	Public Sub util_RegexSave(Optional ByVal setScraperDefault As Boolean = False, Optional ByVal setRenameDefault As Boolean = False)
-
-		Dim path As String = workingProfile.regexlist
 		Dim doc As New XmlDocument
 		Dim xmlProc As XmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
 		Dim root As XmlElement
-		Dim child As XmlElement
-		If setScraperDefault = True Then Pref.util_RegexSetDefaultScraper()
-		If setRenameDefault = True Then Pref.util_RegexSetDefaultRename()
+		If setScraperDefault    = True Then Pref.util_RegexSetDefaultScraper()
+		If setRenameDefault     = True Then Pref.util_RegexSetDefaultRename()
 		doc.AppendChild(xmlProc)
 		root = doc.CreateElement("regexlist")
-
-		For Each Regex In Pref.tv_RegexScraper
-			child = doc.CreateElement("tvregexscrape")
-			child.InnerText = Regex
-			root.AppendChild(child)
-		Next
-
-		For Each Regex In Pref.tv_RegexRename
-			child = doc.CreateElement("tvregexrename")
-			child.InnerText = Regex
-			root.AppendChild(child)
-		Next
-
+        root.AppendChildList(doc    , "tvregexscrape"   , Pref.tv_RegexScraper)
+        root.AppendChildList(doc    , "tvregexrename"   , Pref.tv_RegexRename)
 		doc.AppendChild(root)
 
-		Try
-			Using output As New XmlTextWriter(path, System.Text.Encoding.UTF8) With {.Formatting = Formatting.Indented}
-				doc.WriteTo(output)
-				'output.Close()
-			End Using
-		Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
-		End Try
+        WorkingWithNfoFiles.SaveXMLDoc(doc, workingProfile.RegExList)
 	End Sub
 
 	Private Sub GenreMasterLoad()
@@ -1565,20 +1531,15 @@ Public Class Form1
 		Dim doc As New XmlDocument
 		Dim thispref As XmlNode = Nothing
 		Dim xmlproc As XmlDeclaration
+        Dim root As XmlElement
+		Dim child As XmlElement
 		xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
 		doc.AppendChild(xmlproc)
-		Dim root As XmlElement
-		Dim child As XmlElement
+		
 		root = doc.CreateElement("profile")
-		child = doc.CreateElement("default")
-		child.InnerText = profileStruct.DefaultProfile
-		root.AppendChild(child)
-		child = doc.CreateElement("startup")
-		child.InnerText = profileStruct.StartupProfile
-		root.AppendChild(child)
-		doc.AppendChild(root)
-
-
+		root.AppendChild(doc    , "default"     , profileStruct.DefaultProfile)
+		root.AppendChild(doc    , "startup"     , profileStruct.StartupProfile)
+		
 		For Each prof In profileStruct.ProfileList
 			child = doc.CreateElement("profiledetails")
             child.AppendChild(doc   , "actorcache"          , prof.ActorCache.Replace(applicationPath, ""))
@@ -1596,19 +1557,15 @@ Public Class Form1
 		Next
 
 		doc.AppendChild(root)
-		Dim saveing As New XmlTextWriter(profilepath, System.Text.Encoding.UTF8)
-		saveing.Formatting = Formatting.Indented
-		doc.WriteTo(saveing)
-		saveing.Close()
+
+        WorkingWithNfoFiles.SaveXMLDoc(doc, profilepath)
 
 		If profileStruct.ProfileList.Count > 1 Then
 			ProfilesToolStripMenuItem.Visible = True
 			ProfilesToolStripMenuItem.Enabled = True
 			ProfilesToolStripMenuItem.DropDownItems.Clear()
 			For Each prof In profileStruct.ProfileList
-				If prof.ProfileName <> Nothing Then
-					ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
-				End If
+				If prof.ProfileName <> Nothing Then ProfilesToolStripMenuItem.DropDownItems.Add(prof.ProfileName)
 			Next
 			For Each item In ProfilesToolStripMenuItem.DropDownItems
 				If item.text = workingProfile.profilename Then
@@ -9032,7 +8989,7 @@ Public Class Form1
 	Private Sub Button109_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button109.Click
 		Try
 			relativeFolderList.Clear()
-			Dim tempstring2 As String = workingProfile.config.Replace(Path.GetFileName(workingProfile.config), "pathsubstitution.xml")
+			Dim PathSubPath As String = workingProfile.config.Replace(Path.GetFileName(workingProfile.config), "pathsubstitution.xml")
 			Dim temptext As String = ""
 			temptext = "<relativepaths>" & TextBox45.Text & "</relativepaths>"
 			Dim doc As New XmlDocument
@@ -9059,22 +9016,15 @@ Public Class Form1
 				docs.AppendChild(xmlproc)
 				Dim root As XmlElement
 				Dim child As XmlElement
-				Dim childchild As XmlElement
 				root = doc.CreateElement("relativepaths")
 				For Each item In relativeFolderList
 					child = doc.CreateElement("folder")
-					childchild = doc.CreateElement("mc")
-					childchild.InnerText = item.mc
-					child.AppendChild(childchild)
-					childchild = doc.CreateElement("xbmc")
-					childchild.InnerText = item.xbmc
-					child.AppendChild(childchild)
+					child.AppendChild(doc   , "mc"      , item.mc)
+					child.AppendChild(doc   , "xbmc"    , item.xbmc)
 					root.AppendChild(child)
 				Next
-				Dim output As New XmlTextWriter(tempstring2, System.Text.Encoding.UTF8)
-				output.Formatting = Formatting.Indented
-				doc.WriteTo(output)
-				output.Close()
+                doc.AppendChild(root)
+                WorkingWithNfoFiles.SaveXMLDoc(doc, PathSubPath)
 			End If
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)

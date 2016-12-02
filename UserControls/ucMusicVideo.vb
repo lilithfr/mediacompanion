@@ -144,30 +144,29 @@ Public Class ucMusicVideo
 
         Dim doc As New XmlDocument
         Dim xmlproc As XmlDeclaration
-        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-        doc.AppendChild(xmlproc)
         Dim root As XmlElement
         Dim child As XmlElement
-        Dim childchild As XmlElement
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
         root = doc.CreateElement("music_video_cache")
         For Each item In MVCache
             child = doc.CreateElement("musicvideo")
-            childchild = doc.CreateElement("fullpathandfilename")   : childchild.InnerText = item.nfopathandfilename : child.AppendChild(childchild)
-            childchild = doc.CreateElement("tmdbid")                : childchild.InnerText = item.tmdbid : child.AppendChild(childchild)
-			childchild = doc.CreateElement("filename")              : childchild.InnerText = item.filename : child.AppendChild(childchild)
-			childchild = doc.CreateElement("foldername")            : childchild.InnerText = item.foldername : child.AppendChild(childchild)
-			childchild = doc.CreateElement("title")                 : childchild.InnerText = item.title : child.AppendChild(childchild)
-			childchild = doc.CreateElement("artist")                : childchild.InnerText = item.artist : child.AppendChild(childchild)
-			childchild = doc.CreateElement("year")                  : childchild.InnerText = item.year : child.AppendChild(childchild)
-			childchild = doc.CreateElement("filedate")              : childchild.InnerText = item.filedate : child.AppendChild(childchild)
-			childchild = doc.CreateElement("createdate")            : childchild.InnerText = item.createdate : child.AppendChild(childchild)
-			childchild = doc.CreateElement("genre")                 : childchild.InnerText = item.genre : child.AppendChild(childchild)
-            childchild = doc.CreateElement("plot")                  : childchild.InnerText = item.plot : child.AppendChild(childchild)
-			childchild = doc.CreateElement("playcount")             : childchild.InnerText = item.playcount : child.AppendChild(childchild)
-			childchild = doc.CreateElement("runtime")               : childchild.InnerText = item.runtime : child.AppendChild(childchild)
-			childchild = doc.CreateElement("Resolution")            : childchild.InnerText = item.Resolution : child.AppendChild(childchild)
-			childchild = doc.CreateElement("FrodoPosterExists")     : childchild.InnerText = item.FrodoPosterExists : child.AppendChild(childchild)
-			childchild = doc.CreateElement("PreFrodoPosterExists")  : childchild.InnerText = item.PreFrodoPosterExists : child.AppendChild(childchild)
+            child.AppendChild(doc   , "fullpathandfilename"     , item.nfopathandfilename)
+            child.AppendChild(doc   , "tmdbid"                  , item.tmdbid)
+			child.AppendChild(doc   , "filename"                , item.filename)
+			child.AppendChild(doc   , "foldername"              , item.foldername)
+			child.AppendChild(doc   , "title"                   , item.title)
+			child.AppendChild(doc   , "artist"                  , item.artist)
+			child.AppendChild(doc   , "year"                    , item.year)
+			child.AppendChild(doc   , "filedate"                , item.filedate)
+			child.AppendChild(doc   , "createdate"              , item.createdate)
+			child.AppendChild(doc   , "genre"                   , item.genre)
+            child.AppendChild(doc   , "plot"                    , item.plot)
+			child.AppendChild(doc   , "playcount"               , item.playcount)
+			child.AppendChild(doc   , "runtime"                 , item.runtime)
+			child.AppendChild(doc   , "Resolution"              , item.Resolution)
+			child.AppendChild(doc   , "FrodoPosterExists"       , item.FrodoPosterExists)
+			child.AppendChild(doc   , "PreFrodoPosterExists"    , item.PreFrodoPosterExists)
 		    For Each track In item.Audio  
                 child.AppendChild(track.GetChild(doc))
             Next
@@ -175,13 +174,7 @@ Public Class ucMusicVideo
         Next
         doc.AppendChild(root)
 
-        Try
-            Dim output As New XmlTextWriter(fullpath, System.Text.Encoding.UTF8)
-            output.Formatting = Xml.Formatting.Indented
-            doc.WriteTo(output)
-            output.Close()
-        Catch ex As Exception
-        End Try
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fullpath)
     End Sub
 
     Public Sub MVCacheLoad()

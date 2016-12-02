@@ -2177,34 +2177,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Finally
         End Try
     End Function
-
-    'Public Shared Function SaveXml(ByVal path As String, ByVal xmldoc As XmlDocument) As Boolean
-
-    '    Try
-    '        Dim output As New XmlTextWriter(path, System.Text.Encoding.UTF8)
-    '        Try
-    '            output.Formatting = Formatting.Indented
-    '            xmldoc.WriteTo(output)
-    '            output.Close()
-    '            Return True
-    '        Catch ex As Exception
-    '            Try
-    '                output.Close()
-    '                Try
-    '                    File.Delete(path)
-    '                Catch
-    '                End Try
-    '            Catch
-    '            End Try
-    '            Return False
-    '        End Try
-    '    Catch ex As Exception
-    '        Return False
-    '    Finally
-
-    '    End Try
-    'End Function
-
+    
     Public Shared Function createImage(ByVal origImage As String, ByVal sizeLimit As Integer, ByVal target As String, Optional ByVal picType As String = "poster")
 
         Dim isPoster As Boolean = Equals(picType, "poster")

@@ -155,21 +155,15 @@ Public Class MediaStubs
             Dim doc As New XmlDocument
             Dim root As XmlElement
             root = doc.CreateElement("discstub")
-            root.AppendChild(doc, "title", tb_Stub_filename.Text.Trim)
-            root.AppendChild(doc, "message", tb_Stub_Message.Text.Trim)
+            root.AppendChild(doc    , "title"       , tb_Stub_filename.Text.Trim)
+            root.AppendChild(doc    , "message"     , tb_Stub_Message.Text.Trim)
             doc.AppendChild(root)
-
-            'Dim output As XmlTextWriter = Nothing
+            
             Try
                 Dim aok As Boolean = WorkingWithNfoFiles.SaveXMLDoc(doc, Pref.stubfolder & "\" & StubFilename)
                 If Not aok Then Return False
-                'output = New XmlTextWriter(Pref.stubfolder & "\" & StubFilename, System.Text.Encoding.UTF8)
-                'output.Formatting = Formatting.Indented
-                'doc.WriteTo(output)
             Catch 
                 Return False
-            'Finally
-                'If Not IsNothing(output) Then output.Close
             End Try
 
             success = True
