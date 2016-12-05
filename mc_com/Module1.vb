@@ -107,11 +107,13 @@ Module Module1
         End If
         
         If listofargs.Count = 0 OrElse listofargs(0).switch = "help" Then Showhelp()
-
-        Pref.applicationPath = AppDomain.CurrentDomain.BaseDirectory
         If Not visible Then ShowWindow(GetConsoleWindow(), 0)  ' value of '0' = hide, '1' = visible
         LogStart
         
+        Dim P As String = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase)
+        Pref.applicationPath = New Uri(P).LocalPath & "\"
+        ConsoleOrLog("Application path: " & Pref.applicationPath)
+
         For Each arg In listofargs
             Select Case arg.switch
                 Case "-m"   : domovies              = True
