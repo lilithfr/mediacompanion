@@ -85,6 +85,8 @@ Module Module1
                         Case "-x"
                             Dim arg As New arguments
                             arg.switch = arguments(f)
+                            arg.argu = arguments(f + 1)
+                            listofargs.Add(arg)
                             mediaexportfile = arguments(f + 2)
                             domediaexport = True
                         Case "-d"

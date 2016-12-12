@@ -1680,7 +1680,7 @@ Public Class Movie
     End Sub
 
     Function GetTrailerUrl( title As String, imdb As String ) As String
-        ReportProgress("Trailer URL")
+        ReportProgress("Trailer URL", "!!! Getting Trailer URL")
 
         TrailerUrl = ""
         _youTubeTrailer = Nothing
@@ -1996,7 +1996,7 @@ Public Class Movie
             Exit Sub
         End if
 
-        ReportProgress("DL Trailer","Downloading trailer...")
+        ReportProgress("DL Trailer","!!! Downloading trailer...")
         TrailerDownloaded = _WebFileDownloader.DownloadFileWithProgress(TrailerUrl, TrailerPath,_parent.Bw)
 
         DeleteZeroLengthFile(ActualTrailerPath)
@@ -2005,7 +2005,7 @@ Public Class Movie
 
         If TrailerDownloaded Then
             If File.Exists(ActualTrailerPath) Then
-                ReportProgress(MSG_OK,"Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
+                ReportProgress(MSG_OK,"!!! Trailer downloaded OK : [" & ActualTrailerPath & "]" & vbCrLf)
             Else
                 ReportProgress("Aborted by User" & vbCrLf, vbCrLf & "!!! Aborted By User - Trailer not saved" & vbCrLf)
             End If
