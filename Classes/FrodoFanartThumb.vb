@@ -13,19 +13,14 @@ Public Class FrodoFanartThumbs
     Property Thumbs As New List(Of FrodoFanartThumb)
 
     Public Function GetChild(doc As XmlDocument)
-
         Dim child = doc.CreateElement("fanart")
-
         child.SetAttribute("url","")
-
         For Each item In Thumbs
             child.AppendChild(item.GetChild(doc))
         Next
-
         Return child
     End Function
-
-
+    
     Public Sub Load(node As XmlNode)
         For Each child As XmlNode In node.ChildNodes
             Try                 'catch put in place for nfo's not created by MC, where <fanart> node is invalid.

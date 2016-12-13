@@ -1,7 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.Threading
 
-
 Friend NotInheritable Class ExceptionHandler
     Friend Shared Sub LogError(ByVal ex As Exception, Optional paramInfo As String = "")
         If TypeOf (ex) Is UnauthorizedAccessException Then
@@ -12,33 +11,14 @@ Friend NotInheritable Class ExceptionHandler
             For Each frmOpen As Form In My.Application.OpenForms
                 frmOpen.Close()
             Next
-
         Else
-            Dim msg As String=""
-            
-            If paramInfo <> "" Then
-                msg = "Called with: [" & paramInfo & "]" & vbCrLf & vbCrLf
-            End If
+            Dim msg As String = ""
+            If paramInfo <> "" Then msg = "Called with: [" & paramInfo & "]" & vbCrLf & vbCrLf
 
             msg &= ex.ToString
 
             Try
                 Dim ofrmExcept As New frmExceptions
-                '''
-                ''' Best to let Exception Handler form load on Main screen, incase error is caused by MultiMonitor issue.
-                ''' 
-                
-                'Dim scrn As Integer = 0
-                'Try         'Try to get screen from Form1
-                '    scrn = Form1.CurrentScreen
-                'Catch
-                '    scrn = 0    'But Form1 not fully loaded, default to main screen.
-                'End Try
-                'If Form1.multimonitor Then
-                '    ofrmExcept.Bounds = Screen.AllScreens(scrn).Bounds
-                '    ofrmExcept.StartPosition = FormStartPosition.Manual
-                'End If
-
                 ofrmExcept.Bounds = Screen.PrimaryScreen.Bounds
                 ofrmExcept.txtExceptionTrace.Text = msg
                 ofrmExcept.TopMost = True
@@ -47,9 +27,7 @@ Friend NotInheritable Class ExceptionHandler
                 Dim log As New EventLog
                 Dim source As String = "MediaCompanion"
                 Try
-                    If Not EventLog.SourceExists(source) Then
-                        EventLog.CreateEventSource(source, source)
-                    End If
+                    If Not EventLog.SourceExists(source) Then EventLog.CreateEventSource(source, source)
                     log.Source = source
                     log.EnableRaisingEvents = True
                     log.WriteEntry(ex1.ToString, EventLogEntryType.Error)

@@ -3,7 +3,6 @@ Public Class BasicMovieNFO
     Property title         As String = ""
     Property originaltitle As String = ""
     Property sortorder     As String = ""
-'   Property MovieSet      As New MovieSetInfo 
     Property source        As String = ""
     Property year          As String = ""
     Property rating        As String = ""

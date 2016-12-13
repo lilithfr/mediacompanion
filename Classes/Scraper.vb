@@ -15,9 +15,6 @@ Imports System.Linq
 
 
 Public Class MovieRegExs
-    'Public Const REGEX_TAGLINE             = ">Tagline.*?:</h4>[ \t\r\n]+(?<tagline>.*?)[ \t\r\n]+<span"
-    'Const REGEX_MOVIE_TITLE_PATTERN        = "<h1 class=""header"" itemprop=""name"">(.*?)<span class=""nobr"">"
-    'Const REGEX_MOVIE_YEAR_PATTERN         = "<img alt="".*?\((.*?)\).*?"" title="""
     Public Const REGEX_HREF_PATTERN         = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
     Public Const REGEX_RELEASE_DATE         = ">Release Date:</h4>(?<date>.*?)<span"
     Public Const REGEX_STARS                = "Stars:</h4>(.*?)</div>"
@@ -367,8 +364,6 @@ Public Class Classimdb
                     Dim wrGETURL As WebRequest
                     wrGETURL = WebRequest.Create(titlesearch)
                     wrGETURL.Proxy = Utilities.MyProxy
-                    'Dim myProxy As New WebProxy("myproxy", 80)
-                    'myProxy.BypassProxyOnLocal = True
                     Dim objStream As IO.Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
                     Dim objReader As New IO.StreamReader(objStream)
@@ -377,9 +372,7 @@ Public Class Classimdb
                     Do While Not sLine Is Nothing
                         urllinecount += 1
                         sLine = objReader.ReadLine
-                        If Not sLine Is Nothing Then
-                            websource(urllinecount) = sLine
-                        End If
+                        If Not sLine Is Nothing Then websource(urllinecount) = sLine
                     Loop
                     urllinecount -= 1
                     allok = True
@@ -398,12 +391,10 @@ Public Class Classimdb
             Dim exact(1000) As String
             Dim atexact As Boolean = False
             Dim exactcount As Integer = 0
-
             Dim yearcounter As Integer = 0
             Dim year(1000) As Integer
             Dim backup As String = ""
-
-
+            
             For f = 1 To urllinecount
                 If backup = "" And websource(f).IndexOf("href=""/title/tt") <> -1 Then
                     If websource(f).IndexOf("&#34;") = -1 Then
@@ -623,8 +614,6 @@ Public Class Classimdb
                 Try
                     Dim wrGETURL As WebRequest
                     wrGETURL = WebRequest.Create(titlesearch)
-                    'Dim myProxy As New WebProxy("myproxy", 80)
-                    'myProxy.BypassProxyOnLocal = True
                     wrGETURL.Proxy = Utilities.MyProxy
                     Dim objStream As IO.Stream
                     objStream = wrGETURL.GetResponse.GetResponseStream()
@@ -653,12 +642,10 @@ Public Class Classimdb
             Dim exact() As String
             Dim atexact As Boolean = False
             Dim exactcount As Integer = 0
-
             Dim yearcounter As Integer = 0
             Dim year(1000) As Integer
             Dim backup As String = ""
-
-
+            
             For f = 1 To urllinecount
                 If websource(f).IndexOf("<table class=""findList"">") <> -1 Then
                     If websource(f+1).IndexOf("<tr class=""findResult") <> -1 Then
@@ -839,7 +826,6 @@ Public Class Classimdb
             s = StripTags(s)
             If s.ToLower.Contains("add a plot") Then Return ""
             s = s.Replace("&quot;", """")
-            'Return Utilities.CleanInvalidXmlChars(s.Trim())
             Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
     End Property
@@ -894,37 +880,9 @@ Public Class Classimdb
         Get
             Dim s As String = ""
             Try
-                'Dim html3 As String = loadwebpage(Pref.proxysettings, Pref.imdbmirror & "title/" & imdbid &"/technical?ref_=tt_dt_spec", True, 10)
-                'Dim t As String = ""
-                'Dim u() As String = Nothing
-                ''Try technical page first as may be multiple AR's
-                'Try
-                't = Regex.Match(html3, MovieRegExs.REGEX_ASPECTRATIOALL, RegexOptions.Singleline).Groups(1).Value.Trim
-                't = t.Replace(vbLf, "").Replace("<td>", "").Replace("<br>", "!").Trim
-                'u = t.Split("!")
-                'Catch
-                '    u = Nothing
-                'End Try
-                'check if we got results.
-               ' If IsNothing(u) OrElse u.Length < 1 Then
-                    'No results so get from main movie page
-                    s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
-                    If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
-                    s = s.Substring(0, s.IndexOf(":")).Trim
-                'Else
-                '    'If multiple results
-                '    If u.Length > 1 Then
-                '        For each j In u
-                '            If j.Contains("negative") Then Continue For
-                '            s = j.Substring(0, j.IndexOf(":")).trim
-                '            Exit For
-                '        Next
-                '    Else
-                '        'Else use first one.
-                '        s = u(0).Substring(0, u(0).IndexOf(":")).trim
-                '    End If
-
-                'End If
+                s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
+                If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
+                s = s.Substring(0, s.IndexOf(":")).Trim
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))
             Catch ex As Exception
                 Return ""
@@ -1027,7 +985,6 @@ Public Class Classimdb
             End If
             Return s
         End Get
-
     End Property
    
     ReadOnly Property Year As String
@@ -1090,17 +1047,14 @@ Public Class Classimdb
     
     ReadOnly Property ReleaseDate As String
         Get
-            Dim s=""
-
+            Dim s = ""
             Dim RelDate As Date
             Dim sRelDate As String = Regex.Match(Regex.Match(Html, MovieRegExs.REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
-
             If Not sRelDate = "" Then
                 If Date.TryParse(sRelDate, RelDate) Then
                     s = RelDate.ToString("yyyy-MM-dd")
                 End If
             End If
-
             Return s
         End Get
     End Property
@@ -1271,10 +1225,8 @@ Public Class Classimdb
                     allok = True
                 End If
             End If
-            If allok = False Then
-                Return "MIC"
-                Exit Function
-            End If
+            If allok = False Then Return "MIC"
+
             If allok = True Then
                 tempstring = Pref.imdbmirror & "title/" & imdbid
                 webpage.Clear()
@@ -1291,7 +1243,6 @@ Public Class Classimdb
                 totalinfo.AppendTag( "stars"     , Stars       )
                 totalinfo.AppendTag( "title"     , Me.Title    )
                 totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(year = "", Me.Year, year), Me.Year))
-                'totalinfo.AppendTag( "year"      , If(Not Pref.MovieChangeMovie, If(Me.Year<>"", Me.Year, year), year)) ' fails if movie title is the same, ie: Italian Job change movie get 1901 as year.
                 totalinfo.AppendTag( "studio"    , Studio      )
                 totalinfo.AppendTag( "outline"   , Outline     )
                 totalinfo.AppendTag( "top250"    , Top250      )
@@ -1386,7 +1337,6 @@ Public Class Classimdb
                                         If Not Pref.scrapefullcert Then
                                             mpaaresults(g, 1) = mpaaresults(g, 1).Substring(mpaaresults(g, 1).IndexOf(":") + 1, mpaaresults(g, 1).Length - mpaaresults(g, 1).IndexOf(":") - 1)
                                         End If
-
                                         mpaaresults(g, 1) = encodespecialchrs(mpaaresults(g, 1))
                                     Catch
                                         mpaaresults(g, 1) = "error"
@@ -1440,7 +1390,7 @@ Public Class Classimdb
             If String.IsNullOrEmpty(tmdbid) Then
                 ' 1st stage
                 ParametersForScraper(0) = title
-                ParametersForScraper(1) = year    'GetYearByFilename(MovieName, False)
+                ParametersForScraper(1) = year
                 FinalScrapResult = DoScrape(Scraper, "CreateSearchUrl", ParametersForScraper, False, False)
                 FinalScrapResult = FinalScrapResult.Replace("<url>", "")
                 FinalScrapResult = FinalScrapResult.Replace("</url>", "")
@@ -1689,7 +1639,6 @@ Public Class Classimdb
                 End If
             Next
         End If
-        
         Return TotalInfo
     End Function
 
@@ -1852,9 +1801,7 @@ Public Class Classimdb
                             f = webpage.Count-1
                             Exit For
                         End If
-                        If webpage(g).IndexOf("<a href=""/keyword") <>-1 Then
-                            wbpage &= webpage(g).TrimStart & webpage(g+1)
-                        End If
+                        If webpage(g).IndexOf("<a href=""/keyword") <>-1 Then wbpage &= webpage(g).TrimStart & webpage(g+1)
                     Next
                 End If
             Next
@@ -1889,7 +1836,7 @@ Public Class Classimdb
               End Using
             End Using
             If responseContent <> "" Then
-'{"id":584,"keywords":[{"id":830,"name":"car race"},{"id":999,"name":"sports car"},{"id":261,"name":"los angeles "},{"id":416,"name":"miami"}]}
+                '{"id":584,"keywords":[{"id":830,"name":"car race"},{"id":999,"name":"sports car"},{"id":261,"name":"los angeles "},{"id":416,"name":"miami"}]}
                 Dim newkey As New List(Of String)
                 Dim RegExPattern = "name"":""(?<keyword>.*?)"""
                 For Each m As Match In Regex.Matches(responseContent, RegExPattern, RegexOptions.Singleline)

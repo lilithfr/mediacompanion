@@ -21,7 +21,6 @@ Public Class ucGenPref_Proxy
 
         Pref.ConfigSave()
         btnProxySaveChanges.Enabled = False
-        'SetEnabledStates
     End Sub
 
     Private Sub AnyFieldChanged(sender As Object,  e As EventArgs) Handles  cb_prxyEnabled.CheckedChanged, tb_prxyIP.TextChanged, _
@@ -60,12 +59,6 @@ Public Class ucGenPref_Proxy
 #End Region         'Main Subs
 
 #Region "Other Subs"
-    'Sub SetEnabledStates
-
-    '    btnProxySaveChanges.Enabled = Changed
-
-    'End Sub
-
     Sub AssignFormFields
         Changed = True
         cb_prxyEnabled      .Checked    = Pref.prxyEnabled = "true"
@@ -79,7 +72,6 @@ Public Class ucGenPref_Proxy
     End Sub
 
     Sub UpdatePreferences
-        'Preferences.prxyEnabled         = cb_prxyEnabled      .Checked
         Pref.prxyIp              = tb_prxyIP           .Text
         Pref.prxyPort            = tb_prxyPort         .Text
         Pref.prxyUsername        = tb_prxyUsername     .Text

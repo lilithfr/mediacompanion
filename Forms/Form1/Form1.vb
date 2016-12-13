@@ -6609,9 +6609,18 @@ Public Class Form1
 				'If anyone comes across this and thinks "Huey, you twat, just do it like this", then please go right
 				'ahead! - HueyHQ 15Feb13
 				Dim mediaList As New List(Of ComboList)
-				For Each mediaItem As Data_GridViewMovie In DataGridViewMovies.DataSource
-					mediaList.Add(mediaItem.Export(oMovies))
-				Next
+                If DataGridViewMovies.SelectedRows.Count > 1 Then
+                    For each item As DataGridViewRow In DataGridViewMovies.SelectedRows
+                        Dim movnfo As String = item.Cells("fullpathandfilename").Value.ToString
+                        Dim q = From x In oMovies.MovieCache Where x.fullpathandfilename = movnfo
+                        mediaList.Add(q(0))
+                    Next
+                Else
+                    For Each mediaItem As Data_GridViewMovie In DataGridViewMovies.DataSource
+					    mediaList.Add(mediaItem.Export(oMovies))
+				    Next
+                End If
+				
 				mediaCollection = mediaList
 			Else
 				mediaCollection = Cache.TvCache.Shows

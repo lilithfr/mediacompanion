@@ -65,9 +65,7 @@ Public Class ucMusicVideo
         AddHandler keypresstimer.Elapsed, AddressOf keypresstimer_Elapsed
         Form1.Ini_Timer(keypresstimer, 1000)
         For each pb As Control In TableLayoutPanel3.Controls
-            If pb.Name.Contains("pbMvScrSht") Then
-                AddHandler pb.Click, AddressOf pbMvScrSht_click
-            End If
+            If pb.Name.Contains("pbMvScrSht") Then AddHandler pb.Click, AddressOf pbMvScrSht_click
         Next
     End Sub
 
@@ -110,7 +108,6 @@ Public Class ucMusicVideo
 
     Private Sub SearchForNewMV()
         Pref.MusicVidScrape = True
-        'Pref.MusicVidConcertScrape = True
         Form1.RunBackgroundMovieScrape("SearchForNewMusicVideo")
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
@@ -124,7 +121,6 @@ Public Class ucMusicVideo
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
-        'MVCacheLoadFromNfo
         MVCacheSave()
         loadMVDV1()
     End Sub
@@ -479,12 +475,7 @@ Public Class ucMusicVideo
             Return
         End Try
         If selectedRows.Count = 0 Then Exit Sub
-        'If MVDgv1.RowCount = 0 Then Exit Sub
-        'If LastSelected > MVDgv1.RowCount Then
-        '    LastSelected = MVDgv1.RowCount
-        'Else
-        '    LastSelected = MVDgv1.SelectedCells(0).RowIndex
-        'End If
+        
         If selectedRows.Count = 1 Then
             lblMultiMode.Visible = False
             PcBxMusicVideoScreenShot.Visible = True
@@ -538,7 +529,7 @@ Public Class ucMusicVideo
                 Else
                     runtimestr &= " min"
                 End If
-                txtRuntime.Text = runtimestr   'workingMusicVideo.fullmoviebody.runtime
+                txtRuntime.Text = runtimestr
                 txtStudio.Text = workingMusicVideo.fullmoviebody.studio
                 txtTitle.Text = workingMusicVideo.fullmoviebody.title
                 txtYear.Text = workingMusicVideo.fullmoviebody.year
@@ -594,7 +585,6 @@ Public Class ucMusicVideo
         If MVDgv1.RowCount = 0 AndAlso MVDgv1.SelectedRows.Count < 1 Then Exit Sub
         Dim MVRemoved As Boolean = False
         Dim MVCacheIndex As Integer = Nothing
-        'Dim MVDGVRowIndex As Integer = MVDgv1.SelectedRows(0).Index 
         If MVCache.RemoveAll(Function(c) c.nfopathandfilename = workingMusicVideo.fileinfo.fullpathandfilename) = 1 Then
             Dim MVArt As String = workingMusicVideo.fileinfo.fanartpath
             If File.Exists(MVArt) Then Utilities.SafeDeleteFile(MVArt)
@@ -671,9 +661,7 @@ Public Class ucMusicVideo
                     System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
                     Application.DoEvents()
                     Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, path, seconds, 5, 10)
-                    If cachepathandfilename <> "" Then
-                        Return cachepathandfilename
-                    End If
+                    If cachepathandfilename <> "" Then Return cachepathandfilename
                 End If
             End If
         Catch
@@ -1772,11 +1760,6 @@ Public Class ucMusicVideo
         MV_DeleteNfoArtwork()
     End Sub
     
-#End Region
-
-#Region "garbage"
-
-
 #End Region
 
 End Class

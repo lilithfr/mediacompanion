@@ -69,39 +69,31 @@
     End Sub
 
     Private Sub cbMissingFanart_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingFanart.CheckedChanged
-        Try
-            If cbMissingFanart.CheckState = CheckState.Checked Then
-                If Pref.savefanart Then
-                    Form1.rescrapeList.missingfanart = True
-                Else
-                    Form1.rescrapeList.missingfanart = False
-                    cbMissingFanart.Checked = False
-                    MsgBox("Movie Preferences set to not download Fanart.", 48, "Movie Preferences")
-                End If
+        If cbMissingFanart.CheckState = CheckState.Checked Then
+            If Pref.savefanart Then
+                Form1.rescrapeList.missingfanart = True
             Else
                 Form1.rescrapeList.missingfanart = False
+                cbMissingFanart.Checked = False
+                MsgBox("Movie Preferences set to not download Fanart.", 48, "Movie Preferences")
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Else
+            Form1.rescrapeList.missingfanart = False
+        End If
     End Sub
 
     Private Sub cbMissingPosters_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMissingPosters.CheckedChanged
-        Try
-            If cbMissingPosters.CheckState = CheckState.Checked Then
-                If Pref.scrapemovieposters Then
-                    Form1.rescrapeList.missingposters = True
-                Else
-                    Form1.rescrapeList.missingposters = False
-                    cbMissingPosters.Checked = False
-                    MsgBox("Movie Preferences set to not download Posters.", 48, "Movie Preferences")
-                End If
+        If cbMissingPosters.CheckState = CheckState.Checked Then
+            If Pref.scrapemovieposters Then
+                Form1.rescrapeList.missingposters = True
             Else
                 Form1.rescrapeList.missingposters = False
+                cbMissingPosters.Checked = False
+                MsgBox("Movie Preferences set to not download Posters.", 48, "Movie Preferences")
             End If
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
+        Else
+            Form1.rescrapeList.missingposters = False
+        End If
     End Sub
 
     Private Sub btnStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStart.Click

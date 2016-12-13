@@ -19,15 +19,12 @@ Public Class ucFanartTvTv
     Dim usedlist As New List(Of str_fanarttvart)
     Public WorkingShow As New TvShow
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
-    'Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
-    '                                      "Movie Disc", "Movie Banner", "Landscape"}
     Public tvFriendlyname() As String = {"HiDef ClearArt", "HiDef Tv Logo",  "Clear Art", "Clear Logo",  "Tv Poster", "Tv Thumb", 
                                          "Tv Banner", "Season Poster", "Season Banner", "Season Thumb", "Show Background", "Character Art"}
 
 
     Public Sub ucFanartTv_Refresh(ByVal ThisTvShow As TvShow)
         nodata = False
-        'isroot = Pref.GetRootFolderCheck(moviedetails.fileinfo.fullpathandfilename)
         If WorkingShow.Title.Value <> ThisTvShow.Title.Value Then
             WorkingShow = ThisTvShow
         Else
@@ -42,7 +39,6 @@ Public Class ucFanartTvTv
         If String.IsNullOrEmpty(ID) Then
             Call noID
         End If
-        'If isroot Then RootFolderMovie()
         If nodata Then Exit Sub
         GetFanartTvArt(ID)
         If Not ConfirmIfResults() Then Exit Sub
@@ -62,7 +58,6 @@ Public Class ucFanartTvTv
             FanarttvTvlist = newobject.FanarttvTvresults
         Catch ex As Exception
             exmsg = ex.Message 
-            'ExceptionHandler.LogError(ex)
         Finally
             messbox.Close()
         End Try
@@ -209,7 +204,6 @@ Public Class ucFanartTvTv
         Dim MovFanartPicBox As New List(Of FanartPicBox)
         For each item In usedlist
             Dim thispicbox As New FanartPicBox
-            'Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
             artposterpicboxes() = New PictureBox()
             With artposterpicboxes
                 .Location = New Point(xlocation, locHeight)
@@ -217,7 +211,6 @@ Public Class ucFanartTvTv
                 .Height = pbheight
                 .BackColor = Color.Transparent 
                 .SizeMode = PictureBoxSizeMode.Zoom
-                '.ImageLocation = item.urlpreview         'Preview Image url
                 .Tag = item.url                          'Full Image url
                 .Visible = True
                 .BorderStyle = BorderStyle.Fixed3D
@@ -228,7 +221,6 @@ Public Class ucFanartTvTv
             thispicbox.imagepath = item.urlpreview
             MovFanartPicBox.Add(thispicbox)
             Application.DoEvents()
-            'Form1.util_ImageLoad(artposterpicboxes, item2, "")
             
             artcheckboxes() = New RadioButton()
             With artcheckboxes
@@ -380,9 +372,7 @@ Public Class ucFanartTvTv
                 If seasonno <> "" Then
                     Dim epseason As String = seasonno
                     If seasonno.Length = 1 Then seasonno = "0" & seasonno
-                    If seasonno = "00" Then
-                        seasonno = "-specials"
-                    End If
+                    If seasonno = "00" Then seasonno = "-specials"
                     savepath = WorkingShow.FolderPath & artType.Replace("season", "season" & seasonno)
                     If Pref.FrodoEnabled Then savepaths.Add(savepath)
                     If Pref.EdenEnabled AndAlso artType.contains("-poster.jpg") Then

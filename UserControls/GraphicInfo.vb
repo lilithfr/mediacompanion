@@ -44,9 +44,8 @@ Public Class GraphicInfo
                         Dim flagName As String
                         Dim flagPath As String
                         Dim TrueAspect As Boolean = True
-                        If item.Key.IndexOf("aspect") > -1 Then
-                            TrueAspect = If(item.Value= "1.78" OrElse item.Value = "1.33", True, False)
-                        End If
+                        If item.Key.IndexOf("aspect") > -1 Then TrueAspect = If(item.Value= "1.78" OrElse item.Value = "1.33", True, False)
+
                         If item.Key = "lang" OrElse item.Key = "lang_notdefault" OrElse item.Key = "sublang" OrElse Not TrueAspect Then
                             flagPath = Path.Combine(Pref.applicationPath, "Resources\video_flags\" + item.Key + ".png")
                         Else

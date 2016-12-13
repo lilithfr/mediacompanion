@@ -71,18 +71,13 @@ Public Class MediaInfoExport
                     Dim M2 As Match
 
                     M2 = Regex.Match(fileTemplateString, "<<filename>>(?<filename>.*?)<</filename>>", regexBlockOption)
-                    If M2.Success Then
-                        template.FileName = M2.Groups("filename").Value.Trim
-                    End If
+                    If M2.Success Then template.FileName = M2.Groups("filename").Value.Trim
 
                     M2 = Regex.Match(fileTemplateString, "<<textencoding>>(?<textencoding>.*?)<</textencoding>>", regexBlockOption)
                     If M2.Success Then
-                        If M2.Groups("textencoding").Value.Trim.ToUpper() = "ASCII" Then
-                            template.TextEncoding = Encoding.ASCII
-                        End If
+                        If M2.Groups("textencoding").Value.Trim.ToUpper() = "ASCII" Then template.TextEncoding = Encoding.ASCII
                     End If
-
-
+                    
                     If mediaDropdown IsNot Nothing Then mediaDropdown.Add(M.Groups("title").Value.Trim, template.type) 'title used as key to avoid duplicate titles
                     templateList.Add(template)
                 End If
@@ -137,9 +132,7 @@ Public Class MediaInfoExport
         If Regex.IsMatch(templateBody, "<<(smallimage|createimage(:\w*?)*)>>") Then
             pathstring = String.Format("{0}{1}{2}images{1}", Path.GetDirectoryName(savePath), Path.DirectorySeparatorChar, If(isMovies, "", "tv"))
             Dim fso As New DirectoryInfo(pathstring)
-            If fso.Exists = False Then
-                Directory.CreateDirectory(pathstring)
-            End If
+            If fso.Exists = False Then Directory.CreateDirectory(pathstring)
         End If
 
         'Check for media item tag
@@ -175,9 +168,7 @@ Public Class MediaInfoExport
 
         'Check for footer tag, and if present, replace with footer tags and content
         M = Regex.Match(templateBody, "<<footer>>(?<footer>.*?)<</footer>>", regexBlockOption)
-        If M.Success Then
-            templateBody = templateBody.Replace(M.Value, String.Format("<footer>{0}</footer>", M.Groups("footer").Value))
-        End If
+        If M.Success Then templateBody = templateBody.Replace(M.Value, String.Format("<footer>{0}</footer>", M.Groups("footer").Value))
 
         'Populate document template
         templateBody = getTags(templateBody, mediaCollection(0), counter, pathstring, mediaCollection.Count, filetype, mediaInsertIndex)
@@ -372,24 +363,12 @@ Public Class MediaInfoExport
                         Dim newplotdetails As New FullMovieDetails
                         newplotdetails = WorkingWithNfoFiles.mov_NfoLoadFull(movie.fullpathandfilename)
                         If Not IsNothing(newplotdetails) Then
-                            If tokenInstr(0) = "fullplot" Then
-                                strNFOprop = newplotdetails.fullmoviebody.plot
-                            End If
-                            If tokenInstr(0) = "director" Then
-                                strNFOprop = newplotdetails.fullmoviebody.director
-                            End If
-                            If tokenInstr(0) = "stars" Then
-                                strNFOprop = newplotdetails.fullmoviebody.stars
-                            End If
-                            If tokenInstr(0) = "writer" Then
-                                strNFOprop = newplotdetails.fullmoviebody.credits
-                            End If
-                            If tokenInstr(0) = "moviegenre" Then
-                                strNFOprop = newplotdetails.fullmoviebody.genre
-                            End If
-                            If tokenInstr(0) = "releasedate" Then
-                                strNFOprop = newplotdetails.fullmoviebody.premiered
-                            End If
+                            If tokenInstr(0) = "fullplot"       Then strNFOprop = newplotdetails.fullmoviebody.plot
+                            If tokenInstr(0) = "director"       Then strNFOprop = newplotdetails.fullmoviebody.director
+                            If tokenInstr(0) = "stars"          Then strNFOprop = newplotdetails.fullmoviebody.stars
+                            If tokenInstr(0) = "writer"         Then strNFOprop = newplotdetails.fullmoviebody.credits
+                            If tokenInstr(0) = "moviegenre"     Then strNFOprop = newplotdetails.fullmoviebody.genre
+                            If tokenInstr(0) = "releasedate"    Then strNFOprop = newplotdetails.fullmoviebody.premiered
                             If tokenInstr(0) = "actors" Then
                                 Dim idxEndParam As Integer = tokenInstr.Length - 1
                                 Dim numActors As Integer = 9999
@@ -467,7 +446,6 @@ Public Class MediaInfoExport
                             If tokenInstr(0) = "nfo" Then
                                 Try
                                     Select Case tokenInstr(1)
-
                                         Case "file"
                                             Select Case tokenInstr(2)
                                                 Case "video"
@@ -686,7 +664,6 @@ Public Class MediaInfoExport
                     For Each episode In tvShow.Episodes
                         If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
                             keySE = episode.Season.Value & "-" & episode.Episode.Value
-                            'episode.IsMissing = False
                             If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                             If episode.Season.Value > UBound(arrSeasonPresent) Then
                                 ReDim Preserve arrSeasonPresent(episode.Season.Value)
@@ -706,7 +683,6 @@ Public Class MediaInfoExport
                         For Each episode In tvShow.MissingEpisodes
                             If episode.Season.Value <> "-1" And episode.Episode.Value <> "-1" Then
                                 keySE = episode.Season.Value & "-" & episode.Episode.Value
-                                'episode.IsMissing = True
                                 If Not setTVshows.ContainsKey(keySE) Then setTVshows.Add(keySE, episode)
                                 If episode.Season.Value > UBound(arrSeasonPresent) Then
                                     ReDim Preserve arrSeasonPresent(episode.Season.Value)
@@ -811,6 +787,7 @@ Public Class MediaInfoExport
 
         Return String.Join("", templatePopulated)
     End Function
+
     Private Function getTagsTVShow(ByRef text As String, ByVal tvShow As TvShow, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
         Dim fullTVShowDetails As New TvShow
         fullTVShowDetails = nfoFunction.tvshow_NfoLoad(tvShow.NfoFilePath) '.Load(tvShow.NfoFilePath)
@@ -843,62 +820,43 @@ Public Class MediaInfoExport
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
                         strNFOprop &= Utilities.createImage(origImage, tokenInstr(1), imagepath, imageType)
                     End If
-
                 Case "show_title"
                     strNFOprop = tvShow.Title.Value
-
                 Case "show_plot"
-                    strNFOprop = tvShow.Plot.Value 
-
+                    strNFOprop = tvShow.Plot.Value
                 Case "show_year"
                     strNFOprop = tvShow.Year.Value
-
                 Case "show_titleandyear"
                     strNFOprop = tvShow.TitleAndYear
-
                 Case "show_imdbid"
                     strNFOprop = tvShow.ImdbId.Value
-
                 Case "show_imdburl"
                     strNFOprop = If(tvShow.ImdbId <> Nothing, Pref.imdbmirror & "title/" & tvShow.ImdbId.Value & "/", Pref.imdbmirror)
-
                 Case "show_tvdbid"
                     strNFOprop = tvShow.TvdbId.Value
-
                 Case "show_tvdburl"
                     strNFOprop = If(tvShow.TvdbId <> Nothing, "http://thetvdb.com/?tab=series&id=" & tvShow.TvdbId.Value, "http://thetvdb.com/")
-
                 Case "show_genre"
                     strNFOprop = tvShow.Genre.Value
-
                 Case "show_episodeactorsource"
                     strNFOprop = tvShow.EpisodeActorSource.Value
-
                 Case "show_language"
                     strNFOprop = tvShow.Language.Value
-
                 Case "show_locked"
                     strNFOprop = tvShow.State
-
                 Case "show_rating"
                     strNFOprop = If(tvShow.Rating <> Nothing, tvShow.Rating.Value & If(tvShow.Rating.Value.IndexOf(".") <> -1, "", ".0"), "")
-
                 Case "show_sortorder"
                     strNFOprop = tvShow.SortOrder.Value
-
                 Case "show_status"
                     strNFOprop = tvShow.Status.Value
-
                 Case "show_count"
                     strNFOprop = If(Cache.TvCache.Shows.Count, Cache.TvCache.Shows.Count.ToString, "00")
-
                 Case "show_counter"
                     strNFOprop = counter.ToString
-
                 Case "show_seasons"
                     strNFOprop = numSeasons.ToString
                     If addText Then strNFOprop = strNFOprop & " Season" & If(numSeasons <> 1, "s", "")
-
                 Case "class"
                     If tokenInstr.Length > 1 Then
                         If tokenInstr(1).IndexOf("row") <> -1 Then
@@ -907,7 +865,6 @@ Public Class MediaInfoExport
                             strNFOprop = " class=" & tokenInstr(1)
                         End If
                     End If
-
                 Case "show_nfo"
                     Try
                         Select Case tokenInstr(1)
@@ -966,13 +923,10 @@ Public Class MediaInfoExport
                                 strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
                             End If
                         End If
-
                     Catch
                         strNFOprop = "Error in token"
                     End Try
-
             End Select
-
             Try
                 strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
                 text = text.Replace(token.Value, strNFOprop)
@@ -982,6 +936,7 @@ Public Class MediaInfoExport
         Next
         Return text
     End Function
+
     Private Function getTagsTVSeason(ByVal text As String, ByVal tvShow As TvShow, ByVal showCounter As Integer, _
                                      ByVal currSeason As Integer, ByVal numEpisodes As Integer, ByVal numMissingEpisodes As Integer, _
                                      ByVal numTotalEpisodes As Integer, ByVal seasonPresent As Boolean, Optional ByVal imagepath As String = "")
@@ -1010,7 +965,6 @@ Public Class MediaInfoExport
                         If (tokenInstr(UBound(tokenInstr)) <> "nopath") Then strNFOprop &= "tvimages/"
                         strNFOprop &= Utilities.createImage(tvShow.Seasons(currSeason).Poster.Path, tokenInstr(1), imagepath)
                     End If
-
                 Case "show_counter"
                     strNFOprop = showCounter.ToString
                 Case "seas_number"
@@ -1059,6 +1013,7 @@ Public Class MediaInfoExport
         Next
         Return text
     End Function
+
     Private Function getTagsTVEpisode(ByVal text As String, ByVal tvEpisode As TvEpisode, ByVal showCounter As Integer, ByVal episodeCounter As Integer, Optional ByVal imagepath As String = "")
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")
@@ -1080,28 +1035,20 @@ Public Class MediaInfoExport
                     strNFOprop = showCounter.ToString
                 Case "ep_title"
                     strNFOprop = tvEpisode.Title.Value
-
                 Case "ep_season"
                     strNFOprop = If(tvEpisode.Season.Value.Length = 1 And padNumber, "0", "") & tvEpisode.Season.Value
-
                 Case "ep_number"
                     strNFOprop = If(tvEpisode.Episode.Value.Length = 1 And padNumber, "0", "") & tvEpisode.Episode.Value
-
                 Case "ep_rating"
                     strNFOprop = If(tvEpisode.Rating.Value <> Nothing, tvEpisode.Rating.Value & If(tvEpisode.Rating.Value.IndexOf(".") <> -1, "", ".0"), "")
-
                 Case "ep_playcount"
                     strNFOprop = tvEpisode.PlayCount.Value
-
                 Case "ep_imdbid"
                     strNFOprop = tvEpisode.ImdbId.Value
-
                 Case "ep_imdburl"
                     strNFOprop = If(tvEpisode.ImdbId.Value <> Nothing, Pref.imdbmirror & "title/" & tvEpisode.ImdbId.Value & "/", Pref.imdbmirror)
-
                 Case "ep_tvdbid"
                     strNFOprop = tvEpisode.TvdbId.Value
-
                 Case "class"
                     If tokenInstr.Length > 1 Then
                         If tokenInstr(1).IndexOf("missing") <> -1 And Not tvEpisode.IsMissing Then
@@ -1112,7 +1059,6 @@ Public Class MediaInfoExport
                             strNFOprop = " class=" & tokenInstr(1)
                         End If
                     End If
-
                 Case "ep_nfo"
                     Dim TVEpisodeNFO As List(Of TvEpisode) = WorkingWithNfoFiles.ep_NfoLoad(tvEpisode.NfoFilePath)   'ep_NfoLoadGeneric(tvEpisode.NfoFilePath)
                     Dim fullTVEpisodeDetails As TvEpisode = TVEpisodeNFO(0)
@@ -1137,7 +1083,6 @@ Public Class MediaInfoExport
                                             Case Else
                                                 strNFOprop = tokenInstr(3) & "not supported"
                                         End Select
-                                        'strNFOprop = CallByName(fullTVEpisodeDetails.StreamDetails.Video, tokenInstr(3), vbGet)
                                     Case "audio"
                                         Dim i As Integer = 1
                                         For Each audioStream In fullTVEpisodeDetails.StreamDetails.Audio
@@ -1151,7 +1096,6 @@ Public Class MediaInfoExport
                                                 Case "codec"
                                                     strNFOprop &= audioStream.Codec.Value
                                             End Select
-                                            'strNFOprop = strNFOprop & CallByName(audioStream, tokenInstr(3), vbGet)
                                             If (fullTVEpisodeDetails.StreamDetails.Audio.Count > 1 And i <> fullTVEpisodeDetails.StreamDetails.Audio.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
@@ -1164,7 +1108,6 @@ Public Class MediaInfoExport
                                                 Case "language"
                                                     strNFOprop &= subLang.Language.Value
                                             End Select
-                                            'strNFOprop = strNFOprop & CallByName(subLang, tokenInstr(3), vbGet)
                                             If (fullTVEpisodeDetails.StreamDetails.Subtitles.Count > 1 And i <> fullTVEpisodeDetails.StreamDetails.Subtitles.Count) Then
                                                 strNFOprop = strNFOprop & " / "
                                             End If
@@ -1204,7 +1147,6 @@ Public Class MediaInfoExport
                                 Else
                                     strNFOprop = newDate
                                 End If
-                                'strNFOprop = fullTVEpisodeDetails.Aired.Value
                             Case "plot"
                                 strNFOprop = fullTVEpisodeDetails.Plot.Value
                             Case "playcount"
@@ -1240,12 +1182,10 @@ Public Class MediaInfoExport
                                 strNFOprop = strNFOprop.Substring(0, strNFOprop.LastIndexOf(" ", intCharLimit - 3)) & "<font class=dim>...</font>"
                             End If
                         End If
-
                     Catch
                         strNFOprop = "Error in token"
                     End Try
             End Select
-
             Try
                 strNFOprop = strNFOprop.Replace(Chr(34), "&quot;")
                 text = text.Replace(token.Value, strNFOprop)

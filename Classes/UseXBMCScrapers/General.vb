@@ -546,35 +546,7 @@ Module General
 #End Region
 
 #Region "Misc.TVShows Routines"
-
-    'Public Function NeededConversion(ByVal entrada As TvEpisode) As TvEpisode
-    '    'Dim Teste As New EpisodeInfo
-
-    '    'Teste.aired = entrada.aired
-    '    'Teste.credits = entrada.credits
-    '    'Teste.director = entrada.director
-    '    'Teste.episodeno = entrada.episodeNO
-    '    'Teste.episodepath = entrada.episodePath
-    '    'Teste.fanartpath = entrada.fanartPath
-    '    'Teste.filedetails = entrada.fileDetails
-    '    'Teste.genre = entrada.genre
-    '    'For Each merda As Nfo.Actor In entrada.Actors
-
-    '    '    Teste.Actors.Add(merda1)
-    '    'Next
-    '    ''Teste.listactors = entrada.listactors
-    '    ''Teste.listactors.Item(0).actorid = entrada.listactors.Item(0).actorid.ToString
-    '    'Teste.mediaextension = entrada.mediaExtension
-    '    'Teste.playcount = entrada.playCount
-    '    'Teste.plot = entrada.plot
-    '    'Teste.rating = entrada.rating
-    '    'Teste.runtime = entrada.runtime
-    '    'Teste.Season.value = entrada.Season.value
-    '    'Teste.thumb = entrada.thumb
-    '    'Teste.title = entrada.title
-    '    Return entrada
-    'End Function
-
+    
     Public Function Clean_AddTVShowExtraFields(ByVal Entrada As String, ByVal Language As String, ByVal IMDB_ID As String) As String
         Dim m_xmld As XmlDocument
         Dim m_nodelist As XmlNodeList

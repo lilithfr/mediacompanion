@@ -11,7 +11,6 @@ Public Class ucFanartTv
     Dim WithEvents tvreslabel As Label
     Dim nodata As Boolean = False
     Public Dim Form1MainFormLoadedStatus As Boolean = False
-    'Public Shared Dim Imageloading As Boolean = False
     Dim isroot As Boolean
     Dim artheight As Integer = 37
     Dim artwidth As Integer = 200
@@ -26,8 +25,6 @@ Public Class ucFanartTv
     Dim MovfieldNames = GetType(FanarttvMovielist).GetFields().[Select](Function(field) field.Name).ToList()
     Public movFriendlyname() As String = {"HiDef ClearArt", "HiDef Logo", "Movie Art", "Movie Logo", "Movie Poster", "Movie Fanart", 
                                           "Movie Disc", "Movie Banner", "Landscape"}
-    'Public tvFriendlyname() As String = {"HiDef Tv Logo", "HiDef ClearArt", "Clear Logo", "Clear Art", "Tv Poster", "Tv Thumb", 
-    '                                     "Tv Banner", "Show Background", "Season Poster", "Season Thumb",  "Character Art"}
 
 
     Public Sub ucFanartTv_Refresh(ByVal moviedetails As FullMovieDetails)
@@ -75,7 +72,6 @@ Public Class ucFanartTv
 
         Catch ex As Exception
             exmsg = ex.Message 
-            'ExceptionHandler.LogError(ex)
         Finally
             messbox.Close()
         End Try
@@ -213,7 +209,6 @@ Public Class ucFanartTv
         Dim MovFanartPicBox As New List(Of FanartPicBox)
         For each item In usedlist
             Dim thispicbox As New FanartPicBox
-            'Dim item2 As String = Utilities.Download2Cache(item.urlpreview)
             artposterpicboxes() = New PictureBox()
             With artposterpicboxes
                 .Location = New Point(xlocation, locHeight)
@@ -221,7 +216,6 @@ Public Class ucFanartTv
                 .Height = pbheight
                 .BackColor = Color.Transparent 
                 .SizeMode = PictureBoxSizeMode.Zoom
-                '.ImageLocation = item.urlpreview         'Preview Image url
                 .Tag = item.url                          'Full Image url
                 .Visible = True
                 .BorderStyle = BorderStyle.Fixed3D
@@ -232,7 +226,6 @@ Public Class ucFanartTv
             thispicbox.imagepath = item.urlpreview
             MovFanartPicBox.Add(thispicbox)
             Application.DoEvents()
-            'Form1.util_ImageLoad(artposterpicboxes, item2, "")
 
             artcheckboxes() = New RadioButton()
             With artcheckboxes
@@ -331,9 +324,6 @@ Public Class ucFanartTv
         ElseIf Pref.MovFanartNaming Then 
             LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-")
         End If
-        'If isroot Then
-        '    LoadPath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo","")
-        'End If
         LoadPath &= artType
         If File.Exists(LoadPath) Then
             Form1.util_ImageLoad(pbexists, LoadPath, "")
@@ -344,8 +334,7 @@ Public Class ucFanartTv
 
     Private Sub pbexists_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles pbexists.DoubleClick 
         If Not IsNothing(pbexists.Image) Then
-            'Dim loadpath As String = Path.GetDirectoryName(workingMovDetails.fileinfo.fullpathandfilename) & "\" & artType 
-            Form1.util_ZoomImage(pbexists.Tag.ToString) 'loadpath)
+            Form1.util_ZoomImage(pbexists.Tag.ToString)
         End If
     End Sub
 
@@ -382,9 +371,7 @@ Public Class ucFanartTv
                 If MovSetToggle Then
                     savepath = workingMovDetails.fileinfo.movsetposterpath.Replace("poster.jpg", artType)
                 Else
-                    If Pref.MovFanartNaming Then
-                        savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-" & artType)
-                    End If
+                    If Pref.MovFanartNaming Then savepath = workingMovDetails.fileinfo.fullpathandfilename.Replace(".nfo", "-" & artType)
                 End If
                 Dim success As Boolean = Utilities.DownloadImage(selectedimageurl, savepath)
                 If Pref.posterjpg AndAlso Pref.createfolderjpg AndAlso artType.Contains("poster.jpg") Then

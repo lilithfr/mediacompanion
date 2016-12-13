@@ -70,13 +70,9 @@ Public Class FanartTv
     Private Sub Fetch
         Try
             If ID <> "" And Not _fetched Then
-
                 _fetched = True
-
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
-
                 rhs.Add(New RetryHandler(AddressOf GetFanartTvData))
-
                 If Not Utilities.UrlIsValid("http://webservice.fanart.tv/v3/movies/87818?api_key=ed4b784f97227358b31ca4dd966a04f1") Then
                     Throw New Exception("FanartTV is offline")
                 End If
@@ -108,7 +104,6 @@ Public Class FanartTv
 
     Function CheckResults() As Boolean
         Return Not _data.FirstChild.Name = "error"
-        'Return False
     End Function
 
     Private Sub Allocatemovielists()

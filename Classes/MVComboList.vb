@@ -56,7 +56,6 @@ Public Class MVComboList
     Property playcount              As String = ""
     Property lastplayed             As String = ""
     Property runtime                As String = ""
-    'Public Property createdate           As String = ""
     Property plot                   As String = ""
     Property Resolution             As Integer= -1
     Property Audio                  As New List(Of AudioDetails)
@@ -77,23 +76,7 @@ Public Class MVComboList
             _thumb = Value
         End Set
     End Property
-
-    'Private _FolderNameYear As Integer = -1
-
-    'Public ReadOnly Property FolderNameYear As Integer
-    '    Get
-    '        If _FolderNameYear=-1 Then
-    '            Dim m = Regex.Match(foldername,"(\d{4})")
-    '            If m.Success Then
-    '                _FolderNameYear = Convert.ToInt32(m.Value)
-    '            Else
-    '                _FolderNameYear = -2
-    '            End If
-    '        End If
-    '        Return _FolderNameYear
-    '    End Get
-    'End Property
-
+    
     Public Property CreateDate
         Get
             Return _createdate
@@ -152,13 +135,7 @@ Public Class MVComboList
             Return Utilities.GetFileName(nfopathandfilename,True)
         End Get
     End Property  
-
-    'ReadOnly Property FrodoPosterExists As Boolean
-    '    Get
-    '        Return Pref.FrodoPosterExists(nfopathandfilename)
-    '    End Get
-    'End Property
-
+    
     ReadOnly Property ActualNfoFileName As String
         Get
             Return Path.GetFileName(nfopathandfilename)
@@ -182,22 +159,7 @@ Public Class MVComboList
             _IntRuntime = value
         End Set
     End Property
-
-    'ReadOnly Property UserDefinedFileName As String
-    '    Get
-    '        Dim s As String = Pref.MovieRenameTemplate
-    '        s = s.Replace("%T", title)
-    '        s = s.Replace("%Y", year)
-    '        s = s.Replace("%I", id)
-    '        s = s.Replace("%P", Premiered)     
-    '        s = s.Replace("%R", rating)
-    '        s = s.Replace("%L", runtime)
-    '        s = s.Replace("%S", source)
-    '        s = Utilities.cleanFilenameIllegalChars(s)
-    '        Return s
-    '    End Get
-    'End Property
-
+    
     Public Function DecodeDateTime(s As String) As String
 
         Dim YYYY As String = s.SubString( 0,4)

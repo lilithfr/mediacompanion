@@ -96,10 +96,7 @@ Public Class TVDBScraper
             Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/mirrors.xml"
             Dim wrGETURL As WebRequest = WebRequest.Create(mirrorsurl)
             
-            'wrGETURL = WebRequest.Create(mirrorsurl)
             wrGETURL.Proxy = Utilities.MyProxy
-            'Dim myProxy As New WebProxy("myproxy", 80)
-            'myProxy.BypassProxyOnLocal = True
             Dim objStream As IO.stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New IO.streamReader(objStream)
@@ -150,7 +147,6 @@ Public Class TVDBScraper
             showlist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
             For Each thisresult In showlist("Data")
-
                 Select Case thisresult.Name
                     Case "Series"
                         Dim newshow As New str_possibleshowlist(SetDefaults)
@@ -177,12 +173,8 @@ Public Class TVDBScraper
                         returnstring = returnstring & "<show>"
                         returnstring = returnstring & "<showid>" & show.showid & "</showid>"
                         ok = True
-                        If show.showtitle <> Nothing Then
-                            returnstring = returnstring & "<showtitle>" & show.showtitle & "</showtitle>"
-                        End If
-                        If show.showbanner <> Nothing Then
-                            returnstring = returnstring & "<showbanner>" & show.showbanner & "</showbanner>"
-                        End If
+                        If show.showtitle <> Nothing Then returnstring = returnstring & "<showtitle>" & show.showtitle & "</showtitle>"
+                        If show.showbanner <> Nothing Then returnstring = returnstring & "<showbanner>" & show.showbanner & "</showbanner>"
                         returnstring = returnstring & "</show>"
                     End If
                 Next
@@ -273,128 +265,11 @@ Public Class TVDBScraper
                 actor.actorthumb = ""
             End If
             actor.order = Mc.SortOrder.Value
-            'actor.actorthumb = Mc.Image.Value
             results.Add(actor)
         Next
-
-        'Return showlist
         Return results
     End Function
-
-    'Public Function getshow(ByVal tvdbid As String, ByVal language As String)
-    '    Monitor.Enter(Me)
-    '    Try
-    '        Dim tvshowdetails As String = "<fulltvshow>"
-    '        Dim xmlfile As String
-    '        Dim wrGETURL As WebRequest
-    '        Dim episodeguideurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language & ".zip"
-    '        Dim mirrorsurl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & language & ".xml"
-    '        wrGETURL = WebRequest.Create(mirrorsurl)
-    '        Dim myProxy As New WebProxy("myproxy", 80)
-    '        myProxy.BypassProxyOnLocal = True
-    '        Dim objStream As IO.stream
-    '        objStream = wrGETURL.GetResponse.GetResponseStream()
-    '        Dim objReader As New IO.streamReader(objStream)
-    '        xmlfile = objReader.ReadToEnd
-    '        Dim showlist As New XmlDocument
-    '        'Try
-    '        showlist.LoadXml(xmlfile)
-    '        Dim thisresult As XmlNode = Nothing
-    '        For Each thisresult In showlist("Data")
-
-    '            Select Case thisresult.Name
-    '                Case "Series"
-    '                    Dim newshow As New str_possibleshowlist(SetDefaults)
-    '                    Dim mirrorselection As XmlNode = Nothing
-    '                    For Each mirrorselection In thisresult.ChildNodes
-    '                        Select Case mirrorselection.Name
-    '                            Case "SeriesName"
-    '                                tvshowdetails = tvshowdetails & "<title>" & mirrorselection.InnerXml & "</title>"
-    '                            Case "ContentRating"
-    '                                tvshowdetails = tvshowdetails & "<mpaa>" & mirrorselection.InnerXml & "</mpaa>"
-    '                            Case "FirstAired"
-    '                                tvshowdetails = tvshowdetails & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
-    '                            Case "Genre"
-    '                                tvshowdetails = tvshowdetails & "<genre>" & mirrorselection.InnerXml & "</genre>"
-    '                            Case "IMDB_ID"
-    '                                tvshowdetails = tvshowdetails & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
-    '                            Case "Network"
-    '                                tvshowdetails = tvshowdetails & "<studio>" & mirrorselection.InnerXml & "</studio>"
-    '                            Case "Overview"
-    '                                tvshowdetails = tvshowdetails & "<plot>" & mirrorselection.InnerXml & "</plot>"
-    '                            Case "Rating"
-    '                                tvshowdetails = tvshowdetails & "<rating>" & mirrorselection.InnerXml & "</rating>"
-    '                            Case "Runtime"
-    '                                tvshowdetails = tvshowdetails & "<runtime>" & mirrorselection.InnerXml & "</runtime>"
-    '                            Case "banner"
-    '                                tvshowdetails = tvshowdetails & "<banner>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</banner>"
-    '                            Case "fanart"
-    '                                tvshowdetails = tvshowdetails & "<fanart>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</fanart>"
-    '                            Case "poster"
-    '                                tvshowdetails = tvshowdetails & "<poster>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</poster>"
-    '                        End Select
-    '                    Next
-    '            End Select
-    '        Next
-
-    '        tvshowdetails = tvshowdetails & "<episodeguideurl>" & episodeguideurl & "</episodeguideurl>"
-
-
-
-    '        mirrorsurl = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/actors.xml"
-    '        wrGETURL = WebRequest.Create(mirrorsurl)
-    '        Dim objStream2 As IO.stream
-    '        objStream2 = wrGETURL.GetResponse.GetResponseStream()
-    '        Dim objReader2 As New IO.streamReader(objStream2)
-    '        xmlfile = objReader2.ReadToEnd
-    '        Dim showlist2 As New XmlDocument
-    '        'Try
-    '        showlist2.LoadXml(xmlfile)
-    '        thisresult = Nothing
-    '        For Each thisresult In showlist2("Actors")
-
-    '            Select Case thisresult.Name
-    '                Case "Actor"
-    '                    tvshowdetails = tvshowdetails & "<actor>"
-    '                    Dim newshow As New str_possibleshowlist(SetDefaults)
-    '                    Dim mirrorselection As XmlNode = Nothing
-    '                    For Each mirrorselection In thisresult.ChildNodes
-    '                        Select Case mirrorselection.Name
-    '                            Case "id"
-    '                                tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
-    '                            Case "Image"
-    '                                If mirrorselection.InnerXml <> Nothing Then
-    '                                    If mirrorselection.InnerXml <> "" Then
-    '                                        tvshowdetails = tvshowdetails & "<thumb>" & "http://thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-    '                                    End If
-    '                                End If
-    '                            Case "Name"
-    '                                tvshowdetails = tvshowdetails & "<name>" & mirrorselection.InnerXml & "</name>"
-    '                            Case "Role"
-    '                                If mirrorselection.InnerXml <> Nothing Then
-    '                                    If mirrorselection.InnerXml <> "" Then
-    '                                        tvshowdetails = tvshowdetails & "<role>" & mirrorselection.InnerXml & "</role>"
-    '                                    End If
-    '                                End If
-    '                        End Select
-    '                    Next
-    '                    tvshowdetails = tvshowdetails & "</actor>"
-    '            End Select
-    '        Next
-
-    '        tvshowdetails = tvshowdetails & "</fulltvshow>"
-
-    '        Return tvshowdetails
-    '    Catch
-    '        Return "!!!Error!!!"
-    '    Finally
-    '        Monitor.Exit(Me)
-    '    End Try
-
-
-    'End Function
-
-
+    
     Public Function getepisode(ByVal tvdbid As String, ByVal sortorder As String, ByVal seasonno As String, ByVal episodeno As String, ByVal language As String, Optional ByVal forcedownload As Boolean = False)
         Monitor.Enter(Me)
         Dim episodestring As String = ""
@@ -465,11 +340,10 @@ Public Class TVDBScraper
             episodestring = "<episodedetails>"
             episodestring = episodestring & "<url>" & episodeurl & "</url>"
             Dim mirrorslist As New XmlDocument
-            'Try
+            
             mirrorslist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
             For Each thisresult In mirrorslist("Data")
-
                 Select Case thisresult.Name
                     Case "Episode"
                         Dim mirrorselection As XmlNode = Nothing
@@ -556,7 +430,7 @@ Public Class TVDBScraper
             xmlfile = Utilities.DownloadTextFiles(episodeurl, forcedownload) 'this function has gzip detection in it 
             Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
             Dim mirrorslist As New XmlDocument
-            'Try
+            
             mirrorslist.LoadXml(xmlfile)
             Dim thisresult As XmlNode = Nothing
             For Each thisresult In mirrorslist("Data")

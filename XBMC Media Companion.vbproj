@@ -176,7 +176,6 @@
     <Compile Include="Classes\xbmcExport.vb" />
     <Compile Include="Classes\FanartTvList.vb" />
     <Compile Include="Classes\MVComboList.vb" />
-    <Compile Include="Classes\Music_Video_Class.vb" />
     <Compile Include="Classes\PriorityQueue.vb" />
     <Compile Include="Classes\FanartTv.vb" />
     <Compile Include="Classes\TvdbArgs.vb" />
@@ -358,9 +357,7 @@
     <Compile Include="Structures\RelativeFileList.vb" />
     <Compile Include="Structures\TableItems.vb" />
     <Compile Include="Structures\BatchWizard.vb" />
-    <Compile Include="Classes\MediaInfoDLLComplete.vb" />
     <Compile Include="Structures\RunningThreads.vb" />
-    <Compile Include="Structures\NewMovie.vb" />
     <Compile Include="Structures\FileDetails.vb" />
     <Compile Include="Classes\FullMovieDetails.vb" />
     <Compile Include="Structures\MovieActors.vb" />
@@ -468,9 +465,7 @@
     <Compile Include="Forms\frmTvPosters.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Structures\TempMovieActors.vb" />
     <Compile Include="Classes\TvBanners.vb" />
-    <Compile Include="Structures\TvPosterType.vb" />
     <Compile Include="Structures\TvPosterSeason.vb" />
     <Compile Include="Classes\TvArt.vb" />
     <Compile Include="Structures\TvShowBatchWizard.vb" />
@@ -483,7 +478,6 @@
     <Compile Include="Classes\UseXBMCScrapers\ScraperManager.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperQuery.vb" />
     <Compile Include="Classes\UseXBMCScrapers\ScraperSettings.vb" />
-    <Compile Include="Structures\TvShowLanguages.vb" />
     <Compile Include="UserControls\MediaStubs.Designer.vb">
       <DependentUpon>MediaStubs.vb</DependentUpon>
     </Compile>

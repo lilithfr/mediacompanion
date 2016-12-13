@@ -14,8 +14,7 @@ Public Class MovieSetInfo
     Property Collection             As New List(Of CollectionMovie)
     Property LastUpdatedTs          As Date = DateTime.MinValue
     '  Property MergeWithMovieSetId As String = ""                     'Merged sets support    
-
-
+    
     Property UserMovieSetName As String                              'Stores users preferred set name 
         Get
             Return _userMovieSetName
@@ -32,9 +31,7 @@ Public Class MovieSetInfo
             End If
         End Set
     End Property
-
-
-
+    
     Property MovieSetName As String
         Get
             Return _movieSetName
@@ -53,15 +50,13 @@ Public Class MovieSetInfo
             'Return _movieSetDisplayName
         End Get
     End Property
-
-
+    
     Public ReadOnly Property DaysOld As Integer
         Get
             Return Date.Now.Subtract(LastUpdatedTs).Days
         End Get
     End Property   
-
-
+    
     Public ReadOnly Property MissingInfo As Boolean
         Get
             Return TmdbSetId="" OrElse TmdbSetId="0" OrElse IsNothing(Collection) OrElse Collection.Count=0
@@ -86,7 +81,6 @@ Public Class MovieSetInfo
         End Set
     End Property
     
-
     Sub New
     End Sub
 
@@ -114,13 +108,10 @@ Public Class MovieSetInfo
         If from.UserMovieSetName   <>"" Then UserMovieSetName    = from.UserMovieSetName
   '      If from.MergeWithMovieSetId<>"" Then MergeWithMovieSetId = from.MergeWithMovieSetId
     End Sub
-
-
-
+    
     Sub UpdateMovieSetDisplayName
         _movieSetDisplayName = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(MovieSetName), MovieSetName)
     End Sub
-
     
     Function MovieBelongsInCollection( tmdbId )
         Dim res = From x In Collection Where x.TmdbMovieId=tmdbId

@@ -257,8 +257,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 web_response.Close()
         End Try
     End Function
-
-
+    
     Public Shared Function IsNumeric(ByVal TestString As String) As Boolean
         Dim SeasonInt As Integer
         If Integer.TryParse(TestString, SeasonInt) Then
@@ -673,6 +672,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Next
         Return "error"
     End Function
+
     Public Shared Function ValidMovieDir(ByVal PathToCheck As String) As Boolean
         Dim passed As Boolean = True
         Dim s As String = PathToCheck.ToLower
@@ -2082,44 +2082,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         Return "Error"
     End Function
-
-    'Public Shared Function SaveText(ByVal text As String, ByVal path As String) As Boolean
-
-    '    Try
-    '        Dim file As IO.StreamWriter = File.CreateText(path)
-    '        Try
-    '            file.Write(text, False, Encoding.UTF8)
-    '            file.Close()
-    '            Return True
-    '        Catch ex As Exception
-    '            file.Close()
-    '            Try
-    '                File.Delete(path)
-    '            Catch
-    '            End Try
-    '            Return False
-    '        End Try
-    '    Catch ex As Exception
-    '    Finally
-
-    '    End Try
-    '    Return False
-    'End Function
-
-    'Public Shared Function DeleteFile(ByVal path As String) As Boolean
-
-    '    Try
-    '        If File.Exists(path) Then
-    '            File.Delete(path)
-    '        End If
-    '        Return True
-    '    Catch
-    '        Return False
-    '    Finally
-
-    '    End Try
-    'End Function
-
+    
     Public Shared Function LoadTextLines(ByVal path As String) As List(Of String)
 
         Dim listoflines As New List(Of String)
@@ -2255,23 +2218,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         image.Dispose()
     End Function
-
-    'Public Shared Function SaveImageNoDispose(ByVal image As Bitmap, ByVal path As String) As Boolean
-    '    Try
-    '        If File.Exists(path) Then
-    '            File.Delete(path)
-    '        Else
-    '            Utilities.EnsureFolderExists(path)
-    '        End If
-
-    '        image.Save(path, Imaging.ImageFormat.Jpeg)
-
-    '        Return True
-    '    Catch ex As Exception
-    '        Return False
-    '    End Try
-    'End Function
-
+    
     Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
         Using gr As Graphics = Graphics.FromImage(bm_dest)
@@ -2306,17 +2253,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         End Try
     End Function
-
-    'Public Shared Function LoadImage(ByVal path As String, ByVal width As Integer, ByVal height As Integer) As Bitmap
-    '    Try
-    '        Using img As Bitmap = New Bitmap(path)
-    '            Return Utilities.ResizeImage(img, width, height)
-    '        End Using
-    '    Catch
-    '        Return Nothing
-    '    End Try
-    'End Function
-
+    
     Public Shared Sub copyImage(ByVal src As String, ByVal dest As String, Optional ByVal resizeFanart As Integer = 0)
         Try
             Dim img = Utilities.GetImage(src)
@@ -2370,12 +2307,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
             Return ""
         End Try
     End Function
-
-    'Public Shared Function GetResourceStream(ByVal resfile As String) As Stream
-    '    Dim asm As Assembly = Assembly.GetExecutingAssembly
-    '    Return asm.GetManifestResourceStream(resfile)
-    'End Function
-
+    
     Public Shared Function EnsureFolderExists(ByVal foldPath As String) As Boolean
         Dim Parts As String() = Split(Path.GetDirectoryName(foldPath), "\")
         Dim currentPath As String = Parts(0)
@@ -2399,15 +2331,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
         Return True
     End Function
-
-    'Public Shared Function GetFileNameFromURL(ByVal URL As String) As String
-    '    Try
-    '        Return URL.Substring(URL.LastIndexOf("/") + 1)
-    '    Catch ex As Exception
-    '        Return URL
-    '    End Try
-    'End Function
-
+    
     Public Shared Function GetFileNameFromPath(ByVal ispath As String) As String
         Try
             Return ispath.Substring(ispath.LastIndexOf("\") + 1)
@@ -2419,11 +2343,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Function ComputeHashValueToByte(ByVal Input As String) As Byte()
         Return ComputeHashValue(StrToByteArray(Input))
     End Function
-
-    'Public Shared Function ComputeHashValueToString(ByVal Input As String) As String
-    '    Return ByteArrayToStr(ComputeHashValue(StrToByteArray(Input)))
-    'End Function
-
+    
     Public Shared Function ComputeHashValue(ByVal data() As Byte) As Byte()
         Dim hashAlg As SHA1 = SHA1.Create()
         Dim hashvalue() As Byte = hashAlg.ComputeHash(data)
@@ -2553,18 +2473,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         lines(linenumber - 1) = suspectLine.Replace(suspectChar, System.Security.SecurityElement.Escape(suspectChar))
         Return String.Join(Environment.NewLine, lines)
     End Function
-
-    'Public Shared Function cleanTvActorRole (ByVal s As String) As String
-    '    Dim a As Integer = 1
-    '    Dim Words As String() = s.Split(" ")
-    '    s = Words(0)
-    '    Do Until Words(a) = "" and Words(a+1) = ""
-    '        s &= " " & Words(a)
-    '        a = a + 1
-    '    Loop
-    '    Return s
-    'End Function
-
+    
     Public Shared Function SafeDeleteFile(ByVal fileName As String) As Boolean
         If Not File.Exists(fileName) Then Return True
         Try

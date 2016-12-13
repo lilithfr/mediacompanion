@@ -14,8 +14,7 @@ Public Class SeasonEpisodeComparer
         Return Integer.Parse(firstPart)
     End Function
 
-    Public Function Compare(ByVal first As String, ByVal second As String) _
-                As Integer Implements IComparer(Of String).Compare
+    Public Function Compare(ByVal first As String, ByVal second As String) As Integer Implements IComparer(Of String).Compare
         ' In real code you would probably add nullity checks
         Dim firstSeason As Integer = ParseSeasonEpisode(first, True)
         Dim secondSeason As Integer = ParseSeasonEpisode(second, True)
@@ -51,7 +50,6 @@ Public Class TVShows
                     End If
                 Next
                 newfilename = Renamer.setTVFilename(showtitle, episodetitle, episodeno, seasonno)
-
                 newfilename = newfilename.Replace("?", "")
                 newfilename = newfilename.Replace("/", "")
                 newfilename = newfilename.Replace("\", "")
@@ -87,38 +85,21 @@ Public Class TVShows
                 Next
 
                 temppath = temppath.Replace(Path.GetExtension(temppath), ".nfo")
-                If File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
+                If File.Exists(temppath) AndAlso Not listtorename.Contains(temppath) Then listtorename.Add(temppath)
 
                 temppath = temppath.Replace(Path.GetExtension(temppath), ".rar")
-                If File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
+                If File.Exists(temppath) AndAlso Not listtorename.Contains(temppath) Then listtorename.Add(temppath)
 
                 temppath = temppath.Replace(Path.GetExtension(temppath), ".jpg")
-                If File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
+                If File.Exists(temppath) AndAlso Not listtorename.Contains(temppath) Then listtorename.Add(temppath)
 
                 temppath = temppath.Replace(Path.GetExtension(temppath), "-thumb.jpg")
-                If File.Exists(temppath) Then
-                    If Not listtorename.Contains(temppath) Then
-                        listtorename.Add(temppath)
-                    End If
-                End If
+                If File.Exists(temppath) AndAlso Not listtorename.Contains(temppath) Then listtorename.Add(temppath)
 
                 Dim StillOk As Boolean = True   'first we test every file we are going to rename, if they all can be renamed we then rename
                 Dim RenameFailedFile As String = ""
                 For Each ITEMS In listtorename
                     Dim newname As String = ITEMS.Replace(filenama, newfilename)
-                    'newname = newname.Replace("..", ".")
                     Dim fi As New FileInfo(ITEMS)
                     If File.Exists(newname) Then
                         RenameFailedFile = newname
@@ -130,7 +111,6 @@ Public Class TVShows
                     Dim FirstCount As Boolean = True
                     For Each ITEMS In listtorename
                         Dim newname As String = ITEMS.Replace(filenama, newfilename)
-                        'newname = newname.Replace("..", ".")
                         done = newname.Replace(Path.GetExtension(newname), ".nfo")
                         If done.Contains("-thumb.") Then done = done.Replace("-thumb", "")
                         Try

@@ -20,8 +20,7 @@ Public Class ComboList
     Property top250               As String = 0
     Property genre                As String = ""
     Property countries            As String = ""
-
-
+    
     Private _setName              As String = "-None-"
     Private _setId                As String = ""
 
@@ -36,9 +35,7 @@ Public Class ComboList
             End If
         End Set
     End Property
-
-
-
+    
     Public Property TmdbSetId As String
         Get
             Return _setId
@@ -49,9 +46,7 @@ Public Class ComboList
             End If
         End Set
     End Property
-
-
-
+    
     Public ReadOnly Property countriesList As List(Of String)
         Get
             Dim splist() As String = countries.Split(" / ")
@@ -102,7 +97,6 @@ Public Class ComboList
     Property Container            As String = ""
     Property VideoMissing         As Boolean = False
     Property SubLang              As New List(Of SubtitleDetails)
-    
     Property stars                As String = ""
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
@@ -134,8 +128,7 @@ Public Class ComboList
             Return res
         End Get
     End Property
-
-
+    
     Public Property title As String
         Get
             Return _title
@@ -331,22 +324,19 @@ Public Class ComboList
             Return InASet AndAlso MovieSet.MissingInfo
         End Get
     End Property  
-
-
+    
     Public ReadOnly Property InASet As Boolean
         Get
             Return SetName <> "-None-" 
         End Get
     End Property  
-
-
+    
     Public ReadOnly Property GotTmdbSetDetail As Boolean
         Get
             Return Not MovieSet.MissingInfo
         End Get
     End Property  
-
-
+    
     Public ReadOnly Property GotTmdbId As Boolean
         Get
             Return tmdbid<>"" AndAlso Integer.TryParse(tmdbid,Nothing)
@@ -358,8 +348,7 @@ Public Class ComboList
             Return TmdbSetId<>"" AndAlso Integer.TryParse(TmdbSetId,Nothing)
         End Get
     End Property  
-
-
+    
     Public ReadOnly Property Watched As Boolean
         Get
             Return playcount<>"0"
@@ -440,8 +429,7 @@ Public Class ComboList
             Return s
         End Get
     End Property
-
-
+    
     Private _assignedDefaultAudioTrack As Boolean = False
     Private _defaultAudioTrack As New AudioDetails
 
@@ -579,6 +567,5 @@ Public Class ComboList
     Function Locked(field As String) As Boolean
         Return FieldsLockEnabled AndAlso LockedFields.Contains(field)
     End Function
-
-
+    
 End Class
