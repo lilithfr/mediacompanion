@@ -691,6 +691,7 @@
     <None Include="Assets\AlphaFS.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\ffmpeg source.txt" />
     <Content Include="Media Companion.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
