@@ -12293,7 +12293,7 @@ Public Class Form1
 				Else
 					row.CreateCells(dgvMovieSets, mset.MovieSetName, Global.Media_Companion.My.Resources.Resources.correct)
 				End If
-				If mset.MovieSetId <> "" Then row.Cells(1).Tag = mset.MovieSetId
+				If mset.MovieSetId <> "-None-" Then row.Cells(1).Tag = mset.MovieSetId
 				dgvMovieSets.Rows.Add(row)
 			End If
 		Next
@@ -12307,10 +12307,17 @@ Public Class Form1
     Private Sub dgvMovieSets_CellEnter(sender As Object, e As DataGridViewCellEventArgs) Handles dgvMovieSets.CellEnter
         Try
             Application.DoEvents()
-            Dim found As Boolean = False
             If e.ColumnIndex < 0 Or e.RowIndex < 0 Then Exit Sub
-            Dim MsetName As String = dgvMovieSets.Rows(e.RowIndex).Cells(0).Value
+            dgvpopulate(dgvMovieSets.Rows(e.RowIndex).Cells(0).Value)
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub dgvpopulate(ByVal MsetName As String)
+        Try
             Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName)
+            Dim found As Boolean = False
             If MsetName <> tbMovieSetTitle.Text OrElse dgvMovieSets.Rows.Count = 1 Then
                 Dim CustomCollection As Boolean = False
                 Dim dirtycollection As Boolean = False
@@ -12402,7 +12409,7 @@ Public Class Form1
                 End If
             End If
         Catch ex As Exception
-            ExceptionHandler.LogError(ex)
+
         End Try
     End Sub
 
@@ -12509,22 +12516,29 @@ Public Class Form1
         If RowIndexFromMouseDown < 0 Then Exit Sub
         
         Dim MsetName As String = dgvMovieSets.Rows(RowIndexFromMouseDown).Cells(0).Value
+        Dim MsetHasId As Boolean = False
+        Dim SetId As String = dgvMovieSets.Rows(RowIndexFromMouseDown).Cells(1).Tag
+        If Not SetId.Contains("L") AndAlso SetId <> "" AndAlso SetId.ToLower <> "-none-" Then MsetHasId = True
+
         
         If ColIndexFromMouseDown = 0 Then
-            tsmiMovSetName.Text = MsetName
-            tsmiMovSetEditName.Visible = True
-            tsmiMovSetGetFanart.Visible = False
-            tsmiMovSetGetPoster.Visible = False
+            tsmiMovSetName      .Text       = MsetName
+            tsmiMovSetRebuild   .Visible    = MsetHasId
+            tsmiMovSetEditName  .Visible    = True
+            tsmiMovSetGetFanart .Visible    = False
+            tsmiMovSetGetPoster .Visible    = False
         ElseIf ColIndexFromMouseDown = 2 Then
-            tsmiMovSetName.Text = MsetName
-            tsmiMovSetEditName.Visible = False
-            tsmiMovSetGetFanart.Visible = True
-            tsmiMovSetGetPoster.Visible = False
+            tsmiMovSetName      .Text       = MsetName
+            tsmiMovSetRebuild   .Visible    = False
+            tsmiMovSetEditName  .Visible    = False
+            tsmiMovSetGetFanart .Visible    = True
+            tsmiMovSetGetPoster .Visible    = False
         ElseIf ColIndexFromMouseDown = 3 Then
-            tsmiMovSetName.Text = MsetName
-            tsmiMovSetEditName.Visible = False
-            tsmiMovSetGetFanart.Visible = False
-            tsmiMovSetGetPoster.Visible = True
+            tsmiMovSetName      .Text       = MsetName
+            tsmiMovSetRebuild   .Visible    = False
+            tsmiMovSetEditName  .Visible    = False
+            tsmiMovSetGetFanart .Visible    = False
+            tsmiMovSetGetPoster .Visible    = True
         End If
     End Sub
 
@@ -12624,6 +12638,27 @@ Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub tsmiMovSetRebuild_Click(sender As Object, e As EventArgs) Handles tsmiMovSetRebuild.Click
+        Dim MovSet As MovieSetInfo = GetMovSetDetails()
+        If MovSet.TmdbSetId = "" OrElse MovSet.TmdbSetId = "-None-" OrElse MovSet.TmdbSetId.StartsWith("L") Then Exit Sub
+        Try
+            messbox = New frmMessageBox("Updating selected collection from TMDb", "", "Please Wait")
+            messbox.Show()
+            messbox.Refresh()
+            Dim tmdb As New TMDb
+            tmdb.SetId = MovSet.TmdbSetId
+            Dim McMovieSetInfo As MovieSetInfo = tmdb.MovieSet
+            If IsNothing(McMovieSetInfo) Then Exit Sub
+            oMovies.AddUpdateMovieSetInCache(McMovieSetInfo, True)
+            dgvpopulate(MovSet.MovieSetName)
+        Catch ex As Exception
+
+        Finally
+            messbox.Close()
+        End Try
+        
     End Sub
 
     Private Function GetMovSetDetails() As MovieSetInfo

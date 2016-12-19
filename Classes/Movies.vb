@@ -3295,7 +3295,7 @@ Public Class Movies
 
 #End Region
 
-    Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo)
+    Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo, Optional ByVal Update As Boolean = False)
 
         If IsNothing(movieSetInfo) Then Return
 
@@ -3310,7 +3310,7 @@ Public Class Movies
             Return
         End If
         If Not IsNothing(c) Then
-            If c.Dirty Then
+            If c.Dirty OrElse Update Then
                 MovieSetDB.Remove(c)
                 MovieSetDB.Add(movieSetInfo)
             End If
