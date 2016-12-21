@@ -139,6 +139,8 @@ Partial Class frmPreferences
         Me.rb_MediaPlayerWMP = New System.Windows.Forms.RadioButton()
         Me.rb_MediaPlayerDefault = New System.Windows.Forms.RadioButton()
         Me.TPCommonSettings = New System.Windows.Forms.TabPage()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.cbRunTimePadding = New System.Windows.Forms.CheckBox()
         Me.gpbxPrefIgnore = New System.Windows.Forms.GroupBox()
         Me.cb_IgnoreAn = New System.Windows.Forms.CheckBox()
         Me.cb_IgnoreThe = New System.Windows.Forms.CheckBox()
@@ -495,8 +497,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbRunTimePadding = New System.Windows.Forms.CheckBox()
-        Me.Label26 = New System.Windows.Forms.Label()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1481,7 +1481,7 @@ Partial Class frmPreferences
         'cbtvDisplayNextAiredToolTip
         '
         Me.cbtvDisplayNextAiredToolTip.AutoSize = true
-        Me.cbtvDisplayNextAiredToolTip.Location = New System.Drawing.Point(128, 501)
+        Me.cbtvDisplayNextAiredToolTip.Location = New System.Drawing.Point(132, 377)
         Me.cbtvDisplayNextAiredToolTip.Name = "cbtvDisplayNextAiredToolTip"
         Me.cbtvDisplayNextAiredToolTip.Size = New System.Drawing.Size(205, 19)
         Me.cbtvDisplayNextAiredToolTip.TabIndex = 74
@@ -1897,6 +1897,26 @@ Partial Class frmPreferences
         Me.TPCommonSettings.TabIndex = 0
         Me.TPCommonSettings.Text = "Common Settings"
         Me.TPCommonSettings.UseVisualStyleBackColor = true
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = true
+        Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label26.Location = New System.Drawing.Point(34, 436)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(138, 13)
+        Me.Label26.TabIndex = 113
+        Me.Label26.Text = "ie: 24 min becomes 024 min"
+        '
+        'cbRunTimePadding
+        '
+        Me.cbRunTimePadding.AutoSize = true
+        Me.cbRunTimePadding.Location = New System.Drawing.Point(12, 418)
+        Me.cbRunTimePadding.Name = "cbRunTimePadding"
+        Me.cbRunTimePadding.Size = New System.Drawing.Size(155, 19)
+        Me.cbRunTimePadding.TabIndex = 112
+        Me.cbRunTimePadding.Text = "Pad runtime to 3 places"
+        Me.cbRunTimePadding.UseVisualStyleBackColor = true
         '
         'gpbxPrefIgnore
         '
@@ -4577,13 +4597,13 @@ Partial Class frmPreferences
         Me.GroupBox22.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox22.Name = "GroupBox22"
         Me.GroupBox22.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox22.Size = New System.Drawing.Size(270, 400)
+        Me.GroupBox22.Size = New System.Drawing.Size(270, 275)
         Me.GroupBox22.TabIndex = 66
         Me.GroupBox22.TabStop = false
         '
         'cbtvdbIMDbRating
         '
-        Me.cbtvdbIMDbRating.Location = New System.Drawing.Point(14, 159)
+        Me.cbtvdbIMDbRating.Location = New System.Drawing.Point(12, 128)
         Me.cbtvdbIMDbRating.Name = "cbtvdbIMDbRating"
         Me.cbtvdbIMDbRating.Size = New System.Drawing.Size(228, 39)
         Me.cbtvdbIMDbRating.TabIndex = 34
@@ -4592,7 +4612,7 @@ Partial Class frmPreferences
         '
         'Button91
         '
-        Me.Button91.Location = New System.Drawing.Point(8, 19)
+        Me.Button91.Location = New System.Drawing.Point(8, 15)
         Me.Button91.Margin = New System.Windows.Forms.Padding(4)
         Me.Button91.Name = "Button91"
         Me.Button91.Size = New System.Drawing.Size(208, 29)
@@ -4604,7 +4624,7 @@ Partial Class frmPreferences
         '
         Me.rbTvEpSortDefault.AutoSize = true
         Me.rbTvEpSortDefault.Checked = true
-        Me.rbTvEpSortDefault.Location = New System.Drawing.Point(24, 99)
+        Me.rbTvEpSortDefault.Location = New System.Drawing.Point(18, 91)
         Me.rbTvEpSortDefault.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvEpSortDefault.Name = "rbTvEpSortDefault"
         Me.rbTvEpSortDefault.Size = New System.Drawing.Size(89, 19)
@@ -4616,7 +4636,7 @@ Partial Class frmPreferences
         'rbTvEpSortDVD
         '
         Me.rbTvEpSortDVD.AutoSize = true
-        Me.rbTvEpSortDVD.Location = New System.Drawing.Point(24, 119)
+        Me.rbTvEpSortDVD.Location = New System.Drawing.Point(18, 111)
         Me.rbTvEpSortDVD.Margin = New System.Windows.Forms.Padding(4)
         Me.rbTvEpSortDVD.Name = "rbTvEpSortDVD"
         Me.rbTvEpSortDVD.Size = New System.Drawing.Size(92, 19)
@@ -4627,7 +4647,7 @@ Partial Class frmPreferences
         'Label124
         '
         Me.Label124.AutoSize = true
-        Me.Label124.Location = New System.Drawing.Point(20, 80)
+        Me.Label124.Location = New System.Drawing.Point(14, 72)
         Me.Label124.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label124.Name = "Label124"
         Me.Label124.Size = New System.Drawing.Size(111, 15)
@@ -4637,7 +4657,7 @@ Partial Class frmPreferences
         'Label123
         '
         Me.Label123.AutoSize = true
-        Me.Label123.Location = New System.Drawing.Point(11, 51)
+        Me.Label123.Location = New System.Drawing.Point(15, 47)
         Me.Label123.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label123.Name = "Label123"
         Me.Label123.Size = New System.Drawing.Size(194, 15)
@@ -4647,7 +4667,7 @@ Partial Class frmPreferences
         'Label138
         '
         Me.Label138.AutoSize = true
-        Me.Label138.Location = New System.Drawing.Point(5, 231)
+        Me.Label138.Location = New System.Drawing.Point(5, 168)
         Me.Label138.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label138.Name = "Label138"
         Me.Label138.Size = New System.Drawing.Size(261, 60)
@@ -4659,7 +4679,7 @@ Partial Class frmPreferences
         'cbTvSeriesActorstoEpisodeActors
         '
         Me.cbTvSeriesActorstoEpisodeActors.AutoSize = true
-        Me.cbTvSeriesActorstoEpisodeActors.Location = New System.Drawing.Point(8, 317)
+        Me.cbTvSeriesActorstoEpisodeActors.Location = New System.Drawing.Point(12, 235)
         Me.cbTvSeriesActorstoEpisodeActors.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvSeriesActorstoEpisodeActors.Name = "cbTvSeriesActorstoEpisodeActors"
         Me.cbTvSeriesActorstoEpisodeActors.Size = New System.Drawing.Size(224, 34)
@@ -4683,7 +4703,7 @@ Partial Class frmPreferences
         '
         Me.cbTvUse_XBMC_TVDB_Scraper.AutoSize = true
         Me.cbTvUse_XBMC_TVDB_Scraper.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvUse_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(128, 428)
+        Me.cbTvUse_XBMC_TVDB_Scraper.Location = New System.Drawing.Point(132, 304)
         Me.cbTvUse_XBMC_TVDB_Scraper.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvUse_XBMC_TVDB_Scraper.Name = "cbTvUse_XBMC_TVDB_Scraper"
         Me.cbTvUse_XBMC_TVDB_Scraper.Size = New System.Drawing.Size(195, 19)
@@ -5053,7 +5073,7 @@ Partial Class frmPreferences
         '
         Me.cbTvEpEnableHDTags.AutoSize = true
         Me.cbTvEpEnableHDTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvEpEnableHDTags.Location = New System.Drawing.Point(128, 451)
+        Me.cbTvEpEnableHDTags.Location = New System.Drawing.Point(132, 327)
         Me.cbTvEpEnableHDTags.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvEpEnableHDTags.Name = "cbTvEpEnableHDTags"
         Me.cbTvEpEnableHDTags.Size = New System.Drawing.Size(229, 19)
@@ -5065,7 +5085,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDisableLogs.AutoSize = true
         Me.cbTvDisableLogs.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDisableLogs.Location = New System.Drawing.Point(128, 475)
+        Me.cbTvDisableLogs.Location = New System.Drawing.Point(132, 351)
         Me.cbTvDisableLogs.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDisableLogs.Name = "cbTvDisableLogs"
         Me.cbTvDisableLogs.Size = New System.Drawing.Size(216, 19)
@@ -5958,26 +5978,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbRunTimePadding
-        '
-        Me.cbRunTimePadding.AutoSize = true
-        Me.cbRunTimePadding.Location = New System.Drawing.Point(12, 418)
-        Me.cbRunTimePadding.Name = "cbRunTimePadding"
-        Me.cbRunTimePadding.Size = New System.Drawing.Size(155, 19)
-        Me.cbRunTimePadding.TabIndex = 112
-        Me.cbRunTimePadding.Text = "Pad runtime to 3 places"
-        Me.cbRunTimePadding.UseVisualStyleBackColor = true
-        '
-        'Label26
-        '
-        Me.Label26.AutoSize = true
-        Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label26.Location = New System.Drawing.Point(34, 436)
-        Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(138, 13)
-        Me.Label26.TabIndex = 113
-        Me.Label26.Text = "ie: 24 min becomes 024 min"
         '
         'frmPreferences
         '

@@ -363,6 +363,8 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.ShowId.Value = thisresult.InnerText 
                             Case "uniqueid"
                                 newtvepisode.UniqueId.Value = thisresult.InnerText
+                            Case "imdbid"
+                                newtvepisode.ImdbId.Value   = thisresult.InnerText
                             Case "epbookmark"
                                 newtvepisode.EpBookmark.Value = thisresult.InnerText
                             Case "runtime"
@@ -618,6 +620,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(doc, "uniqueid"      , ep.uniqueid.Value     )
             xmlEpisode.AppendChild(doc, "runtime"       , ep.runtime.Value      )
             xmlEpisode.AppendChild(doc, "showid"        , ep.showid.Value       )
+            xmlEpisode.AppendChild(doc, "imdbid"        , ep.imdbid.Value       )
             xmlEpisode.AppendChild(doc, "displayseason" , ep.DisplaySeason.Value)
             xmlEpisode.AppendChild(doc, "displayepisode", ep.DisplayEpisode.Value)
             xmlEpisode.AppendChild(doc, "runtime"       , ep.Runtime.Value      )

@@ -1142,6 +1142,55 @@ Partial Public Class Form1
         Return rating <> ""
     End Function
 
+    Private Function epGetImdbRatingOmdbapi(ByRef ep As TvEpisode) As Boolean
+        Dim GotEpImdbId As Boolean = False
+        If Not ep.Showimdbid.Value.StartsWith("tt") OrElse ep.Season.Value = "" OrElse ep.Episode.Value = "" Then Return False
+        Dim url As String = Nothing
+        If ep.ImdbId.Value.StartsWith("tt") Then
+            GotEpImdbId = True
+        Else
+            url = String.Format("http://www.omdbapi.com/?i={0}&Season={1}&r=xml", ep.Showimdbid.Value, ep.Season.Value)
+        End If
+        Dim imdb As New Classimdb
+        If Not GotEpImdbId Then
+            Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+            If result = "error" Then Return ""
+            Dim adoc As New XmlDocument
+            adoc.LoadXml(result)
+            If adoc("root").Attributes("Response").Value = "False" Then Return False
+            Dim thisresult As XmlNode = Nothing
+            For each thisresult In adoc("root")
+                If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
+                    Dim TmpValue As String = thisresult.Attributes("Episode").Value
+                    If TmpValue <> "" AndAlso TmpValue = ep.Episode.Value Then
+                        Dim epimdbid As String = thisresult.Attributes("imdbID").Value
+                        ep.ImdbId.Value = epimdbid
+                        Exit For
+                    End If
+                End If
+            Next
+            If Not ep.ImdbId.Value.StartsWith("tt") Then Return False
+        End If
+
+        url = String.Format("http://www.omdbapi.com/?i={0}&r=xml", ep.ImdbId.Value)
+        Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+        If result2 = "error" Then Return ""
+        Dim bdoc As New XmlDocument
+        bdoc.LoadXml(result2)
+        If bdoc("root").Attributes("response").Value = "False" Then Return False
+
+        For each thisresult In bdoc("root")
+            If Not IsNothing(thisresult.Attributes.ItemOf("imdbRating")) Then
+                Dim ratingVal As String = thisresult.Attributes("imdbRating").Value
+                If ratingVal.ToLower = "n/a" Then Return False
+                ep.Rating.Value = ratingVal
+            End If
+            If Not IsNothing(thisresult.Attributes.ItemOf("imdbVotes")) Then ep.Votes.Value = thisresult.Attributes("imdbVotes").Value
+        Next
+        
+        Return True
+    End Function
+
     Public Sub ep_VideoSourcePopulate()
         Try
             cbTvSource.Items.Clear()
@@ -2042,31 +2091,16 @@ Partial Public Class Form1
                                         Dim episodescreenurl As String = ""
                                         Try
                                             listofnewepisodes(h).ImdbId.Value = Episodedata.ImdbId.Value
+                                            listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
+                                            listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
+                                            listofnewepisodes(h).Showimdbid.Value = Cache.TvCache.Shows(f).ImdbId.Value
                                             If tvBatchList.epAired      Then listofnewepisodes(h).Aired.Value       = Episodedata.FirstAired.Value
                                             If tvBatchList.epPlot       Then listofnewepisodes(h).Plot.Value        = Episodedata.Overview.Value
                                             If tvBatchList.epDirector   Then listofnewepisodes(h).Director.Value    = Utilities.Cleanbraced(Episodedata.Director.Value)
                                             If tvBatchList.epCredits    Then listofnewepisodes(h).Credits.Value     = Utilities.Cleanbraced(Episodedata.Writer.Value)
-                                            Dim ratingdone As Boolean = False
-                                            If tvBatchList.epRating Then
-                                                If Pref.tvdbIMDbRating Then
-                                                    Dim rating As String = ""
-                                                    Dim votes As String = ""
-                                                    If ep_getIMDbRating(listofnewepisodes(h).ImdbId.Value, rating, votes) Then
-                                                        If rating <> "" Then
-                                                            ratingdone = True
-                                                            listofnewepisodes(h).Rating.Value = rating
-                                                            listofnewepisodes(h).Votes.Value = votes
-                                                        End If
-                                                    End If
-                                                End If
-                                                If Not ratingdone Then
-                                                    listofnewepisodes(h).Rating.Value      = Episodedata.Rating.Value
-                                                    listofnewepisodes(h).Votes.Value       = Episodedata.Votes.Value
-                                                End If
-                                            End If
+                                            If tvBatchList.epRating     Then GetEpRating(listofnewepisodes(h), Episodedata)
                                             If tvBatchList.epTitle      Then listofnewepisodes(h).Title.Value       = Episodedata.EpisodeName.Value
-                                            listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
-                                            listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
+                                            
                                             If tvBatchList.epActor Then
                                                 If actorsource = "tvdb" Then
                                                     listofnewepisodes(h).ListActors.Clear()
@@ -2145,6 +2179,17 @@ Partial Public Class Form1
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub GetEpRating(ByRef tvep As TvEpisode, ByVal epdata As Tvdb.Episode)
+        Dim ratingdone As Boolean = False
+        If Pref.tvdbIMDbRating Then ratingdone = epGetImdbRatingOmdbapi(tvep)
+
+        ''' Fallback to TVDb if nothing from IMDb
+        If Not ratingdone Then
+            tvep.Rating.Value   = epdata.Rating.Value
+            tvep.Votes.Value    = epdata.Votes.Value
+        End If
     End Sub
 
     Private Sub tvbckrescrapewizard_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles tvbckrescrapewizard.ProgressChanged
@@ -2298,6 +2343,10 @@ Partial Public Class Form1
                             End If
                         End If
                         newepisode.actorsource.Value = Shows.EpisodeActorSource.Value
+
+                        ''' Fix for Episode getting Show's IMDb Id number, not the Episode IMDb Id number.
+                        newepisode.ImdbId.Value = ""
+
                         Exit For
                     End If
                 Next
@@ -2635,15 +2684,13 @@ Partial Public Class Form1
                                                 Next
                                         End Select
                                     Next
-                                    If Pref.tvdbIMDbRating Then
-                                        Dim rating As String = ""
-                                        Dim votes As String = ""
-                                        If ep_getIMDbRating(singleepisode.ImdbId.Value, rating, votes) Then
-                                            If rating <> "" Then
-                                                singleepisode.Rating.Value = rating
-                                                singleepisode.Votes.Value = votes
-                                            End If
-                                        End If
+                                    Dim ratingdone As Boolean = False
+                                    Dim rating As String    = singleepisode.Rating.Value
+                                    Dim votes As String     = singleepisode.Votes.Value
+                                    If Pref.tvdbIMDbRating Then ratingdone = epGetImdbRatingOmdbapi(singleepisode)
+                                    If Not ratingdone Then
+                                        singleepisode.Rating.Value  = rating
+                                        singleepisode.Votes.Value   = votes
                                     End If
                                     stage = "12b5b"
                                     singleepisode.PlayCount.Value = "0"
@@ -2833,7 +2880,7 @@ Partial Public Class Form1
         End Try
     End Sub
     
-    Sub tv_Rescrape_Episode(ByRef WorkingTvShow, ByRef WorkingEpisode)
+    Sub tv_Rescrape_Episode(ByRef WorkingTvShow As TVShow, ByRef WorkingEpisode As TvEpisode)
         Dim tempint As Integer = 0
         Dim tempstring As String = ""
         If WorkingEpisode.IsMissing Then
@@ -2942,15 +2989,14 @@ Partial Public Class Form1
                         Next
                 End Select
             Next
-            If Pref.tvdbIMDbRating Then
-                Dim rating As String = ""
-                Dim votes As String = ""
-                If ep_getIMDbRating(newepisode.ImdbId.Value, rating, votes) Then
-                    If rating <> "" Then
-                        newepisode.Rating.Value = rating
-                        newepisode.Votes.Value = votes
-                    End If
-                End If
+            newepisode.Showimdbid.Value = WorkingTvShow.ImdbId.Value
+            Dim rating As String    = newepisode.Rating.Value
+            Dim votes As String     = newepisode.Votes.Value
+            Dim ratingsdone As Boolean = False
+            If Pref.tvdbIMDbRating Then ratingsdone = epGetImdbRatingOmdbapi(newepisode)
+            If Not ratingsdone Then
+                newepisode.Rating.Value  = rating
+                newepisode.Votes.Value   = votes
             End If
             newepisode.PlayCount.Value = "0"
         Catch ex As Exception

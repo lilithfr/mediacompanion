@@ -571,7 +571,7 @@ Public Class frmPreferences
         Else
             rbTvEpSortDefault   .Checked = True
         End If
-        cbTvSeriesActorstoEpisodeActors                      .Checked    = Pref.copytvactorthumbs
+        cbTvSeriesActorstoEpisodeActors .Checked    = Pref.copytvactorthumbs
         cbtvdbIMDbRating                .Checked    = Pref.tvdbIMDbRating
 
         'TV Autoscrape Options
