@@ -2115,18 +2115,41 @@ Partial Public Class Form1
                                                         listofnewepisodes(h).ListActors.Add(newactor)
                                                     Next
                                                 ElseIf actorsource = "imdb" Then
-                                                    Dim epid As String = GetEpImdbId(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
+                                                    Dim epid As String = ""
+                                                    If listofnewepisodes(h).ImdbId.Value <> "" Then
+	                                                    epid = listofnewepisodes(h).ImdbId.Value 
+                                                    Else
+	                                                    epid = GetEpImdbId(listofnewepisodes(h).Showimdbid.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
+                                                    End If
+                                                    'Dim epid As String = GetEpImdbId(Cache.TvCache.Shows(f).ImdbId.Value, listofnewepisodes(h).Season.Value, listofnewepisodes(h).Episode.Value)
                                                     If epid.Contains("tt") Then
-                                                        Dim scraperfunction As New Classimdb
-                                                        Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-                                                        If actorlist.Count > 0 Then
-                                                            listofnewepisodes(h).ListActors.Clear()
-                                                            For Each act In actorlist
-                                                                listofnewepisodes(h).ListActors.Add(act)
-                                                            Next
-                                                        End If
+                                                        EpGetActorImdb(listofnewepisodes(h))
+                                                        'Dim scraperfunction As New Classimdb
+                                                        'Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
+                                                        'If actorlist.Count > 0 Then
+                                                        '    listofnewepisodes(h).ListActors.Clear()
+                                                        '    For Each act In actorlist
+                                                        '        listofnewepisodes(h).ListActors.Add(act)
+                                                        '    Next
+                                                        'End If
                                                     End If
                                                 End If
+                                                If Pref.copytvactorthumbs AndAlso Not IsNothing(Cache.TvCache.Shows(f)) Then
+		                                            If listofnewepisodes(h).ListActors.Count = 0 Then
+			                                            For each act In Cache.TvCache.Shows(f).ListActors
+				                                            listofnewepisodes(h).ListActors.Add(act)
+			                                            Next
+		                                            Else
+			                                            Dim t As Integer = 0
+			                                            For each act In Cache.TvCache.Shows(f).ListActors
+				                                            Dim q = From x In listofnewepisodes(h).ListActors Where x.actorname = act.actorname
+				                                            If q.Count = 1 Then listofnewepisodes(h).ListActors.Remove(q(0))
+				                                            t += 1
+				                                            listofnewepisodes(h).ListActors.Add(act)
+				                                            If t = Pref.maxactors Then Exit For
+			                                            Next
+		                                            End If
+	                                            End If
                                             End If
                                             If tvBatchList.doEpisodeArt AndAlso tvBatchList.epScreenshot Then
                                                 listofnewepisodes(h).Thumbnail.FileName = Episodedata.ThumbNail.Value
@@ -2523,6 +2546,7 @@ Partial Public Class Form1
                         Pref.tvScraperLog &= "Season: " & episodearray(0).Season.Value & " Episodes, "
                         For Each ep In episodearray
                             Pref.tvScraperLog &= ep.Episode.Value & ", "
+                            ep.Showimdbid.Value = imdbid
                         Next
                         Pref.tvScraperLog &= vbCrLf
                     End If
@@ -2725,32 +2749,40 @@ Partial Public Class Form1
                                         End If
                                         stage = "12b5e3"
                                         If epid.contains("tt") Then
-                                            Dim scraperfunction As New Classimdb
                                             stage = "12b5e3a"
-                                            Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-                                                If bckgroundscanepisodes.CancellationPending Then
-                                                    Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
-                                                    Exit Sub
-                                                End If
-                                            stage = "12b5e3b"
-                                            If tempactorlist.Count > 0 Then
+                                            'singleepisode.ListActors.Clear()
+                                            Dim aok As Boolean = EpGetActorImdb(singleepisode)
+                                            If aok Then
                                                 Pref.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
                                                 progresstext &= "OK."
                                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                                stage = "12b5e3c"
-                                                While tempactorlist.Count > Pref.maxactors
-                                                    tempactorlist.RemoveAt(tempactorlist.Count - 1)
-                                                End While
-                                                stage = "12b5e3d"
-                                                singleepisode.ListActors.Clear()
-                                                For Each actor In tempactorlist
-                                                    singleepisode.ListActors.Add(actor)
-                                                Next
-                                                stage = "12b5e3e"
-                                                tempactorlist.Clear()
                                             Else
-                                                Pref.tvScraperLog &= "!!! WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
+                                                Pref.tvScraperLog &= "!!! WARNING: Actors not available to scraped from IMDB" & vbCrLf
                                             End If
+                                            'Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
+                                            '    If bckgroundscanepisodes.CancellationPending Then
+                                            '        Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
+                                            '        Exit Sub
+                                            '    End If
+                                            'stage = "12b5e3b"
+                                            'If tempactorlist.Count > 0 Then
+                                            '    Pref.tvScraperLog &= "Actors scraped from IMDB OK" & vbCrLf
+                                            '    progresstext &= "OK."
+                                            '    bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                                            '    stage = "12b5e3c"
+                                            '    While tempactorlist.Count > Pref.maxactors
+                                            '        tempactorlist.RemoveAt(tempactorlist.Count - 1)
+                                            '    End While
+                                            '    stage = "12b5e3d"
+                                            '    singleepisode.ListActors.Clear()
+                                            '    For Each actor In tempactorlist
+                                            '        singleepisode.ListActors.Add(actor)
+                                            '    Next
+                                            '    stage = "12b5e3e"
+                                            '    tempactorlist.Clear()
+                                            'Else
+                                            '    Pref.tvScraperLog &= "!!! WARNING: Actors not scraped from IMDB, reverting to TVDB actorlist" & vbCrLf
+                                            'End If
                                             If bckgroundscanepisodes.CancellationPending Then
                                                 Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                                                 Exit Sub
@@ -2763,10 +2795,21 @@ Partial Public Class Form1
                                     If imdbid = "" Then
                                         Pref.tvScraperLog &= "Failed Scraping Actors from IMDB!!!  No IMDB Id for Show:  " & showtitle & vbCrLf
                                     End If
-                                    If Pref.copytvactorthumbs AndAlso singleepisode.ListActors.Count = 0 AndAlso Not IsNothing(singleepisode.ShowObj) Then
-                                        For each act In singleepisode.ShowObj.ListActors
-                                            singleepisode.ListActors.Add(act)
-                                        Next
+                                    If Pref.copytvactorthumbs AndAlso Not IsNothing(singleepisode.ShowObj) Then
+                                        If singleepisode.ListActors.Count = 0 Then
+                                            For each act In singleepisode.ShowObj.ListActors
+                                                singleepisode.ListActors.Add(act)
+                                            Next
+                                        Else
+                                            Dim i As Integer = singleepisode.ListActors.Count
+                                            For each act In singleepisode.ShowObj.ListActors
+                                                Dim q = From x In singleepisode.ListActors Where x.actorname = act.actorname
+                                                If q.Count = 1 Then singleepisode.ListActors.Remove(q(0))
+                                                i += 1
+                                                singleepisode.ListActors.Add(act)
+                                                If i = Pref.maxactors Then Exit For
+                                            Next
+                                        End If
                                     End If
                                     stage = "12b5f"
                                     If Pref.enabletvhdtags = True Then
@@ -3002,33 +3045,58 @@ Partial Public Class Form1
         Catch ex As Exception
         End Try
 
-        If actorsource = "imdb" Then
-            If imdbid <> "" OrElse newepisode.ImdbId.Value <> "" Then
-                tvScraperLog = tvScraperLog & "Scraping actors from IMDB" & vbCrLf
-                Dim epid As String = ""
-                If newepisode.ImdbId.Value <> Nothing AndAlso newepisode.ImdbId.Value.Contains("tt") Then
-                    epid = newepisode.ImdbId.Value
-                Else
-                    epid = GetEpImdbId(imdbid, newepisode.Season.Value, newepisode.Episode.Value)
-                End If
-                If bckgroundscanepisodes.CancellationPending Then
-                    tvScraperLog = tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
-                    Exit Sub
-                End If
-                If epid.Contains("tt") Then
-                    Dim scraperfunction As New Classimdb
-                    Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-                    If actorlist.Count > 0 Then
-                        newepisode.ListActors.Clear()
-                        For Each act In actorlist
-                            newepisode.ListActors.Add(act)
-                        Next
-                    End If
-                Else
-
-                End If
+        If actorsource = "imdb" And (newepisode.Showimdbid.Value <> "" OrElse newepisode.ImdbId.Value <> "") Then
+            Dim epid As String = ""
+            If newepisode.ImdbId.Value <> "" Then
+	            epid = newepisode.ImdbId.Value 
+            Else
+	            epid = GetEpImdbId(newepisode.Showimdbid.Value, newepisode.Season.Value, newepisode.Episode.Value)
+            End If
+            If epid.contains("tt") Then
+	            EpGetActorImdb(newepisode)
             End If
         End If
+        If Pref.copytvactorthumbs AndAlso Not IsNothing(WorkingTvShow) Then
+	        If newepisode.ListActors.Count = 0 Then
+		        For each act In newepisode.ShowObj.ListActors
+			        newepisode.ListActors.Add(act)
+		        Next
+	        Else
+		        Dim i As Integer = 0
+		        For each act In WorkingTvShow.ListActors
+			        Dim q = From x In newepisode.ListActors Where x.actorname = act.actorname
+			        If q.Count = 1 Then newepisode.ListActors.Remove(q(0))
+			        i += 1
+			        newepisode.ListActors.Add(act)
+			        If i = Pref.maxactors Then Exit For
+		        Next
+	        End If
+        End If
+            'If imdbid <> "" OrElse newepisode.ImdbId.Value <> "" Then
+            '    tvScraperLog = tvScraperLog & "Scraping actors from IMDB" & vbCrLf
+            '    Dim epid As String = ""
+            '    If newepisode.ImdbId.Value <> Nothing AndAlso newepisode.ImdbId.Value.Contains("tt") Then
+            '        epid = newepisode.ImdbId.Value
+            '    Else
+            '        epid = GetEpImdbId(imdbid, newepisode.Season.Value, newepisode.Episode.Value)
+            '    End If
+            '    If bckgroundscanepisodes.CancellationPending Then
+            '        tvScraperLog = tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
+            '        Exit Sub
+            '    End If
+            '    If epid.Contains("tt") Then
+            '        Dim scraperfunction As New Classimdb
+            '        Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
+            '        If actorlist.Count > 0 Then
+            '            newepisode.ListActors.Clear()
+            '            For Each act In actorlist
+            '                newepisode.ListActors.Add(act)
+            '            Next
+            '        End If
+            '    Else
+
+            '    End If
+            'End If
             
         If Pref.enablehdtags = True Then
             Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
@@ -4082,20 +4150,57 @@ Partial Public Class Form1
 
     Private Function TvGetActorImdb(ByRef NewShow As Media_Companion.TvShow) As Boolean
         Dim imdbscraper As New Classimdb
-        Dim success As Boolean = True
-        Dim actmax As Integer = Pref.maxactors
-        Dim actcount As Integer = 0
-        Dim actorstring As New XmlDocument
+        Dim success As Boolean = False
         If String.IsNullOrEmpty(NewShow.ImdbId.Value) Then Return success
-        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewShow.ImdbId.Value, actmax)
+        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewShow.ImdbId.Value, Pref.maxactors)
         Dim workingpath As String = ""
         If Pref.actorseasy And Not Pref.tvshowautoquick Then
             workingpath = NewShow.NfoFilePath.Replace(Path.GetFileName(NewShow.NfoFilePath), "")
             workingpath = workingpath & ".actors\"
             Utilities.EnsureFolderExists(workingpath)
         End If
+
+        Dim listofactors As List(Of str_MovieActors) = IMDbActors(actorlist, success, workingpath)
+        
+        Dim i As Integer = 0
+        For each listact In listofactors
+            i += 1
+            NewShow.ListActors.Add(listact)
+            If i > Pref.maxactors Then Exit For
+        Next
+        Return success
+    End Function
+
+    Private Function EpGetActorImdb(ByRef NewEpisode As TvEpisode) As Boolean
+        Dim imdbscraper As New Classimdb
+        Dim success As Boolean = False
+        If String.IsNullOrEmpty(NewEpisode.ImdbId.Value) Then Return success
+        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewEpisode.ImdbId.Value, Pref.maxactors)
+        Dim workingpath As String = ""
+        If Pref.actorseasy And Not Pref.tvshowautoquick Then
+            workingpath = NewEpisode.ShowObj.FolderPath
+            workingpath = workingpath & ".actors\"
+            Utilities.EnsureFolderExists(workingpath)
+        End If
+
+        Dim listofactors As List(Of str_MovieActors) = IMDbActors(actorlist, success, workingpath)
+        If Not success Then Return success
+
+        NewEpisode.ListActors.Clear()
+        Dim i As Integer = 0
+        For each listact In listofactors
+            i += 1
+            NewEpisode.ListActors.Add(listact)
+            If i > Pref.maxactors Then Exit For
+        Next
+        Return success
+    End Function
+
+    Private Function IMDbActors(ByVal actorlist As List(Of str_MovieActors), ByRef success As Boolean, ByVal workingpath As String) As List(Of str_MovieActors)
+        Dim actcount As Integer = 0
+        Dim totalactors As New List(Of str_MovieActors)
         For Each thisresult In actorlist
-            If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (actmax + 1) Then
+            If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
                 If Pref.actorseasy And Not Pref.tvshowautoquick Then
                     Dim actorpaths As New List(Of String)
                     Dim filename As String = Utilities.cleanFilenameIllegalChars(thisresult.actorname)
@@ -4140,14 +4245,11 @@ Partial Public Class Form1
                     End If
                 End If
             End If
-            NewShow.ListActors.Add(thisresult)
+            totalactors.Add(thisresult)
             success = True
             actcount += 1
         Next
-        While NewShow.ListActors.Count > actmax
-            NewShow.ListActors.RemoveAt(NewShow.ListActors.Count - 1)
-        End While
-        Return success
+        Return totalactors
     End Function
 
     Private Sub FixTvActorsNfo(ByRef TvSeries As TvShow)

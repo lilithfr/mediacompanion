@@ -401,6 +401,7 @@ Module Module1
         Dim tempint As Integer
         Dim language As String = ""
         Dim realshowpath As String = ""
+        Dim listactors As New List(Of Actor)
 
         newEpisodeList.Clear()
         Dim newtvfolders As New List(Of String)
@@ -602,12 +603,17 @@ Module Module1
 
                 For Each Shows In basictvlist
                     If episodearray(0).episodepath.IndexOf(Shows.fullpath.Replace("tvshow.nfo", ""), CompareType) <> -1 Then
-                        language = Shows.language
-                        sortorder = Shows.sortorder
-                        tvdbid = Shows.id
-                        imdbid = Shows.imdbid
+                        Dim TvShow As New TvShow
+                        TvShow.Load(Shows.fullpath)
+                        language = TvShow.Language.Value
+                        sortorder = TvShow.SortOrder.Value
+                        tvdbid = TvShow.TvdbId.Value
+                        imdbid = TvShow.ImdbId.Value
                         realshowpath = Shows.fullpath
-                        actorsource = Shows.episodeactorsource
+                        actorsource = TvShow.EpisodeActorSource.Value
+                        listactors.Clear()
+                        listactors.AddRange(TvShow.ListActors)
+                        episodearray(0).realshowpath = realshowpath
                         Exit For
                     End If
                 Next
@@ -615,6 +621,7 @@ Module Module1
                     ConsoleOrLog("Multipart episode found: ")
                     Dim episodenumbers As String = ""
                     For Each ep In episodearray
+                        ep.realshowpath = realshowpath
                         If episodenumbers = "" Then
                             episodenumbers = ep.episodeno
                         Else
@@ -720,29 +727,50 @@ Module Module1
                                     If singleepisode.imdbid <> "" Then
                                         epid = singleepisode.imdbid
                                     Else
-                                        'url = "http://www.imdb.com/title/" & imdbid & "/episodes?season=" & singleepisode.Season.Value
                                         epid = GetEpImdbId(imdbid, singleepisode.seasonno, singleepisode.episodeno)
                                     End If
                                     If epid.contains("tt") Then
-                                        Dim scraperfunction As New Classimdb
-                                        Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-                                        If tempactorlist.Count > 0 Then
+                                        Dim aok As Boolean = EpGetActorImdb(singleepisode)
+                                        If aok Then
                                             ConsoleOrLog("Actors scraped from IMDB OK")
-                                            While tempactorlist.Count > Pref.maxactors
-                                                tempactorlist.RemoveAt(tempactorlist.Count - 1)
-                                            End While
-                                            singleepisode.listactors.Clear()
-                                            For Each actor In tempactorlist
-                                                singleepisode.listactors.Add(actor)
-                                            Next
-                                            tempactorlist.Clear()
                                         Else
                                             ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                         End If
+                                        'Dim scraperfunction As New Classimdb
+                                        'Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
+                                        'If tempactorlist.Count > 0 Then
+                                        '    ConsoleOrLog("Actors scraped from IMDB OK")
+                                        '    While tempactorlist.Count > Pref.maxactors
+                                        '        tempactorlist.RemoveAt(tempactorlist.Count - 1)
+                                        '    End While
+                                        '    singleepisode.listactors.Clear()
+                                        '    For Each actor In tempactorlist
+                                        '        singleepisode.listactors.Add(actor)
+                                        '    Next
+                                        '    tempactorlist.Clear()
+                                        'Else
+                                        '    ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
+                                        'End If
                                     Else
                                         ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                     End If
                                 End If
+                                If Pref.copytvactorthumbs AndAlso Not IsNothing(listactors) Then
+		                            If singleepisode.ListActors.Count = 0 Then
+			                            For each act In listactors
+				                            singleepisode.ListActors.Add(act)
+			                            Next
+		                            Else
+			                            Dim i As Integer = 0
+			                            For each act In listactors
+				                            Dim q = From x In singleepisode.ListActors Where x.actorname = act.actorname
+				                            If q.Count = 1 Then singleepisode.ListActors.Remove(q(0))
+				                            i += 1
+				                            singleepisode.ListActors.Add(act)
+				                            If i = Pref.maxactors Then Exit For
+			                            Next
+		                            End If
+	                            End If
                             End If
 
                             If Pref.enablehdtags = True Then
@@ -1561,6 +1589,87 @@ Module Module1
         Next
         Return url
     End Function
+
+    Private Function EpGetActorImdb(ByRef NewEpisode As episodeinfo) As Boolean
+        Dim imdbscraper As New Classimdb
+        Dim success As Boolean = False
+        If String.IsNullOrEmpty(NewEpisode.ImdbId) Then Return success
+        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewEpisode.ImdbId, Pref.maxactors)
+        Dim workingpath As String = ""
+        If Pref.actorseasy And Not Pref.tvshowautoquick Then
+            workingpath = NewEpisode.realshowpath
+            workingpath = workingpath & ".actors\"
+            Utilities.EnsureFolderExists(workingpath)
+        End If
+
+        Dim listofactors As List(Of str_MovieActors) = IMDbActors(actorlist, success, workingpath)
+        If Not success Then Return success
+
+        NewEpisode.ListActors.Clear()
+        Dim i As Integer = 0
+        For each listact In listofactors
+            i += 1
+            NewEpisode.ListActors.Add(listact)
+            If i > Pref.maxactors Then Exit For
+        Next
+        Return success
+    End Function
+
+     Private Function IMDbActors(ByVal actorlist As List(Of str_MovieActors), ByRef success As Boolean, ByVal workingpath As String) As List(Of str_MovieActors)
+        Dim actcount As Integer = 0
+        Dim totalactors As New List(Of str_MovieActors)
+        For Each thisresult In actorlist
+            If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
+                If Pref.actorseasy And Not Pref.tvshowautoquick Then
+                    Dim actorpaths As New List(Of String)
+                    Dim filename As String = Utilities.cleanFilenameIllegalChars(thisresult.actorname)
+                    filename = filename.Replace(" ", "_")
+                    filename = Path.Combine(workingpath, filename)
+                    If Pref.FrodoEnabled Then actorpaths.Add(filename & ".jpg")
+                    If Pref.EdenEnabled Then actorpaths.Add(filename & ".tbn")
+                    Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
+                    If cachename <> "" Then
+                        For Each p In actorpaths
+                            Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
+                        Next
+                    End If
+                End If
+                If Pref.actorsave = True AndAlso Pref.tvshowautoquick = False Then
+                    Dim tempstring As String = Pref.actorsavepath
+                    Dim workingpath2 As String = ""
+                    If Pref.actorsavealpha Then
+                        Dim actorfilename As String = thisresult.actorname.Replace(" ", "_") & "_" & If(Pref.LocalActorSaveNoId, "", thisresult.actorid) ' & ".tbn"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath2 = tempstring & actorfilename
+                    Else
+                        tempstring = tempstring & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\"
+                        workingpath2 = tempstring & thisresult.actorid ' & ".tbn"
+                    End If
+                    Dim actorpaths As New List(Of String)
+                    If Pref.FrodoEnabled Then actorpaths.Add(workingpath2 & ".jpg")
+                    If Pref.EdenEnabled Then actorpaths.Add(workingpath2 & ".tbn")
+                    Utilities.EnsureFolderExists(tempstring)
+                    Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
+                    If cachename <> "" Then
+                        For Each p In actorpaths
+                            Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
+                        Next
+                    End If
+                    If Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
+                        If Pref.actornetworkpath.IndexOf("/") <> -1 Then
+                            thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("\", "/")
+                        Else
+                            thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("/", "\")
+                        End If
+                    End If
+                End If
+            End If
+            totalactors.Add(thisresult)
+            success = True
+            actcount += 1
+        Next
+        Return totalactors
+    End Function
     
     Private Sub InitMediaFileExtensions()
         For Each extn In Utilities.VideoExtensions
@@ -1655,6 +1764,7 @@ Public Class basictvshownfo
     Public playcount As String
     Public hidden As String
     Public allepisodes As New List(Of episodeinfo)
+    Public listactors As New List(Of str_MovieActors)
 End Class
 
 Public Class episodeinfo
@@ -1681,8 +1791,9 @@ Public Class episodeinfo
     Public episodepath As String
     Public missing As String
     Public extension As String
-    Public listactors As New List(Of str_MovieActors)
+    Public listactors As New List(Of actor)
     Public filedetails As New StreamDetails
+    Public realshowpath As String
 
     Sub New()
         title           = ""
@@ -1708,5 +1819,6 @@ Public Class episodeinfo
         episodepath     = ""
         missing         = ""
         extension       = ""
+        realshowpath    = ""
     End Sub
 End Class
