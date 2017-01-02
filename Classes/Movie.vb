@@ -1512,17 +1512,25 @@ Public Class Movie
             Next
         End If
         ' Assign certificate
-        Dim done As Boolean = False
-        For g = 0 To UBound(Pref.certificatepriority)
-            For Each cert In Certificates
-                If cert.IndexOf(Pref.certificatepriority(g)) <> -1 Then
-                    _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
-                    done = True
-                    Exit For
-                End If
+        If Certificates.Count = 0 Then
+            Dim tmdb2 As New TMDb
+            tmdb2.Imdb = _scrapedMovie.fullmoviebody.imdbid
+            tmdb2.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
+            _scrapedMovie.fullmoviebody.mpaa = tmdb2.Certification
+        Else
+            Dim done As Boolean = False
+            For g = 0 To UBound(Pref.certificatepriority)
+                For Each cert In Certificates
+                    If cert.IndexOf(Pref.certificatepriority(g)) <> -1 Then
+                        _scrapedMovie.fullmoviebody.mpaa = cert.Substring(cert.IndexOf("|") + 1, cert.Length - cert.IndexOf("|") - 1)
+                        done = True
+                        Exit For
+                    End If
+                Next
+                If done = True Then Exit For
             Next
-            If done = True Then Exit For
-        Next
+        End If
+        
         If Pref.MovCertRemovePhrase Then
             Dim mpaa As String = _scrapedMovie.fullmoviebody.mpaa
             If mpaa.Contains(" for") Then
@@ -3137,7 +3145,7 @@ Public Class Movie
             UpdateProperty( _rescrapedMovie.fullmoviebody.country  , _scrapedMovie.fullmoviebody.country  , rl.country   , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.year     , _scrapedMovie.fullmoviebody.year     , rl.year      , rl.EmptyMainTags)  
             UpdateProperty( _rescrapedMovie.fullmoviebody.title    , _scrapedMovie.fullmoviebody.title    , rl.title     , rl.EmptyMainTags)
-
+            UpdateProperty( _rescrapedMovie.alternativetitles      , _scrapedMovie.alternativetitles      , rl.title)
 
             'If Pref.movies_useXBMC_Scraper Then
             '    If Pref.XbmcTmdbVotesFromImdb Then UpdateProperty(IMDB_Votes, _scrapedMovie.fullmoviebody.votes, rl.votes, rl.EmptyMainTags)
