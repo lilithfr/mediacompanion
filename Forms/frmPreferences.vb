@@ -638,6 +638,7 @@ Public Class frmPreferences
         cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
         cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize
         cbtvDisplayNextAiredToolTip     .Checked    = Pref.tvDisplayNextAiredToolTip
+        cbTvThousSeparator              .Checked    = Pref.TvThousSeparator
         
     End Sub
 
@@ -2042,7 +2043,7 @@ End Sub
         Pref.MovThousSeparator = cbMovThousSeparator.Checked
         Changes = True
     End Sub
-
+    
     Private Sub cbNoAltTitle_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles cbNoAltTitle.CheckedChanged
         If prefsload Then Exit Sub
         Pref.NoAltTitle = cbNoAltTitle.Checked
@@ -2777,6 +2778,12 @@ End Sub
     Private Sub cbtvDisplayNextAiredToolTip_CheckedChanged(sender As Object, e As EventArgs) Handles cbtvDisplayNextAiredToolTip.CheckedChanged
         If prefsload Then Exit Sub
         Pref.tvDisplayNextAiredToolTip = cbtvDisplayNextAiredToolTip.checked
+        Changes = True
+    End Sub
+
+    Private Sub cbTvThousSeparator_CheckedChanged(sender As Object, e As EventArgs) Handles cbTvThousSeparator.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvThousSeparator = cbTvThousSeparator.Checked
         Changes = True
     End Sub
 

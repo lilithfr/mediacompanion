@@ -497,6 +497,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbTvThousSeparator = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -3486,7 +3487,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4493,6 +4494,7 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
+        Me.GroupBox17.Controls.Add(Me.cbTvThousSeparator)
         Me.GroupBox17.Controls.Add(Me.cbtvDisplayNextAiredToolTip)
         Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
         Me.GroupBox17.Controls.Add(Me.GroupBox43)
@@ -5979,6 +5981,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbTvThousSeparator
+        '
+        Me.cbTvThousSeparator.AutoSize = true
+        Me.cbTvThousSeparator.Location = New System.Drawing.Point(132, 402)
+        Me.cbTvThousSeparator.Name = "cbTvThousSeparator"
+        Me.cbTvThousSeparator.Size = New System.Drawing.Size(235, 19)
+        Me.cbTvThousSeparator.TabIndex = 75
+        Me.cbTvThousSeparator.Text = "Set , as separator in Votes saved to nfo"
+        Me.cbTvThousSeparator.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6628,4 +6640,5 @@ End Sub
     Friend WithEvents cbMovActorFallbackTMDbtoIMDb As CheckBox
     Friend WithEvents Label26 As Label
     Friend WithEvents cbRunTimePadding As CheckBox
+    Friend WithEvents cbTvThousSeparator As CheckBox
 End Class

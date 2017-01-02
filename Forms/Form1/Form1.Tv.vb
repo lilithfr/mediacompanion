@@ -3057,7 +3057,7 @@ Partial Public Class Form1
             End If
         End If
         If Pref.copytvactorthumbs AndAlso Not IsNothing(WorkingTvShow) Then
-	        If newepisode.ListActors.Count = 0 Then
+	        If newepisode.ListActors.Count = 0 AndAlso Not IsNothing(newepisode.ShowObj) Then
 		        For each act In newepisode.ShowObj.ListActors
 			        newepisode.ListActors.Add(act)
 		        Next

@@ -399,6 +399,7 @@ Public Class Pref
 
     'Saved TV Prefs
     Public Shared tvDisplayNextAiredToolTip As Boolean = True
+    Public Shared TvThousSeparator As Boolean
     Public Shared tvshowautoquick As Boolean
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared tvdbIMDbRating As Boolean = False
@@ -738,6 +739,7 @@ Public Class Pref
         autoepisodescreenshot = False
         tvscrnshtTVDBResize = False
         tvshowautoquick = False
+        TvThousSeparator = True
         copytvactorthumbs = True
         tvdbIMDbRating = False
         enabletvhdtags = True
@@ -1205,6 +1207,7 @@ Public Class Pref
 
         'TV Prefs ------------------------------------------------------------
         root.AppendChild(doc, "tvshowautoquick",                    tvshowautoquick)            'cbTvQuickAddShow
+        root.AppendChild(doc, "TvThousSeparator",                   TvThousSeparator)           'cbTvThousSeparator
         root.AppendChild(doc, "copytvactorthumbs",                  copytvactorthumbs)          'CheckBox34
         root.AppendChild(doc, "tvdbIMDbRating",                     tvdbIMDbRating)             'cbtvdbIMDbRating
         root.AppendChild(doc, "tvdbmode",                           sortorder)                  'RadioButton42
@@ -1479,6 +1482,7 @@ Public Class Pref
                     Case "gettrailer"                           : gettrailer = thisresult.InnerXml
                     Case "DownloadTrailerDuringScrape"          : DownloadTrailerDuringScrape = thisresult.InnerXml
                     Case "tvshowautoquick"                      : tvshowautoquick = thisresult.InnerXml
+                    Case "TvThousSeparator"                     : TvThousSeparator = thisresult.InnerXml
                     Case "intruntime"                           : intruntime = thisresult.InnerXml
                     Case "RuntimePadding"                       : RuntimePadding = thisresult.InnerXml
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml

@@ -253,6 +253,23 @@ Public Class WorkingWithNfoFiles
         Return output
     End Function
 
+    Public Shared Function CommaNoComma(ByVal t As String, ByVal choice As Boolean) As String
+        If Not String.IsNullOrEmpty(t) then
+            If Not choice Then
+                t = t.Replace(",", "")
+            Else
+                If Not t.Contains(",") Then
+                    If t.Length > 3 Then
+                        t = t.Insert(t.Length-3, ",")
+                    End If
+                    If t.Length > 7 Then
+                        t = t.Insert(t.Length-7, ",")
+                    End If
+                End If
+            End If
+        End If
+        Return t
+    End Function
 
     '  All Tv Load/Save Routines
 #Region " Tv Routines "
@@ -616,7 +633,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(doc, "director"      , ep.director.Value     )
             xmlEpisode.AppendChild(doc, "credits"       , ep.credits.Value      )
             xmlEpisode.AppendChild(doc, "rating"        , ep.rating.Value       )
-            xmlEpisode.AppendChild(doc, "votes"         , ep.votes.Value        )
+            xmlEpisode.AppendChild(doc, "votes"         , CommaNoComma(ep.votes.Value, Pref.TvThousSeparator))
             xmlEpisode.AppendChild(doc, "uniqueid"      , ep.uniqueid.Value     )
             xmlEpisode.AppendChild(doc, "runtime"       , ep.runtime.Value      )
             xmlEpisode.AppendChild(doc, "showid"        , ep.showid.Value       )
@@ -786,7 +803,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(doc, "status"              , tvshowtosave.Status.Value)
             root.AppendChild(doc, "runtime"             , FormatRunTime(tvshowtosave.Runtime.Value, "", False))
             root.AppendChild(doc, "rating"              , tvshowtosave.Rating.Value)
-            root.AppendChild(doc, "votes"               , tvshowtosave.Votes.Value)
+            root.AppendChild(doc, "votes"               , CommaNoComma(tvshowtosave.Votes.Value, Pref.TvThousSeparator))
             root.AppendChild(doc, "year"                , tvshowtosave.Year.Value)
             root.AppendChild(doc, "premiered"           , tvshowtosave.Premiered.Value)
             root.AppendChild(doc, "studio"              , tvshowtosave.Studio.Value)
@@ -1659,22 +1676,7 @@ Public Class WorkingWithNfoFiles
                     root.AppendChild(child)
                 End If
                 
-                Dim votes As String = movietosave.fullmoviebody.votes
-                If Not String.IsNullOrEmpty(votes) then
-                    If Not Pref.MovThousSeparator Then
-                        votes = votes.Replace(",", "")
-                    Else
-                        If Not votes.Contains(",") Then
-                            If votes.Length > 3 Then
-                                votes = votes.Insert(votes.Length-3, ",")
-                            End If
-                            If votes.Length > 7 Then
-                                votes = votes.Insert(votes.Length-7, ",")
-                            End If
-                        End If
-                    End If
-                End If
-                root.AppendChild(doc, "votes"           , votes)
+                root.AppendChild(doc, "votes"           , CommaNoComma(movietosave.fullmoviebody.votes, Pref.MovThousSeparator))
                 root.AppendChild(doc, "top250"          , movietosave.fullmoviebody.top250)
                 root.AppendChild(doc, "outline"         , movietosave.fullmoviebody.outline)
                 root.AppendChild(doc, "plot"            , movietosave.fullmoviebody.plot)
