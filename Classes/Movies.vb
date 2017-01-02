@@ -1378,6 +1378,8 @@ Public Class Movies
     Public Sub AddOnlineFolders(folders As List(Of String), searchfolders As List(Of str_RootPaths))
         For Each moviefolder In searchfolders 'Pref.movieFolders
             If Not moviefolder.selected Then Continue For
+            If Not moviefolder.IncludeInSearchForNew Then Continue For
+
             Dim dirInfo As New DirectoryInfo(moviefolder.rpath)
 
             If dirInfo.Exists Then

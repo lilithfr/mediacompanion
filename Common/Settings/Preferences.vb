@@ -44,9 +44,8 @@ Module Ext
             root.AppendChild( doc, name, "" )
             Exit Sub
         End If
-        For each path In value
-            Dim t As String = path.rpath & "|" & path.selected
-            root.AppendChild( doc, name, t)
+        For each o In value
+            root.AppendChild( doc, name, o.ConfigStr)
         Next
     End Sub
 
@@ -1363,12 +1362,7 @@ Public Class Pref
                             commandlist.Add(newcom)
                         End If
                     Case "nfofolder"
-                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        Dim t() As String = decodestring.Split("|")
-                        Dim u As New str_RootPaths
-                        u.rpath = t(0)
-                        If t.Count > 1 Then u.selected = t(1)
-                        movieFolders.Add(u)
+                        movieFolders.Add(New str_RootPaths(thisresult.InnerText))
                     Case "stubfolder"
                         stubfolder = thisresult.InnerText 
                     Case "stubmessage"
