@@ -9757,6 +9757,43 @@ Public Class Form1
 		UpdateFilteredList
 	End Sub
 
+	Private Sub Mov_DeleteMovieFolder()
+
+		If Not Pref.usefoldernames Then Exit Sub
+
+		Dim lastRow As Integer
+
+		For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+			lastRow = row.Index
+		Next
+
+		dim selectRow = nothing
+
+		Try
+			 selectRow = DataGridViewMovies.Rows(lastRow+1)
+		Catch ex As Exception
+		End Try
+
+
+		For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
+			oMovies.Mov_DeleteMovieFolder(row.Cells("fullpathandfilename").Value.ToString)
+
+			DataGridViewMovies.Rows.RemoveAt(row.Index)
+		Next
+
+		DataGridViewMovies.ClearSelection
+
+		Try
+			selectRow.Selected = true
+			DisplayMovie()
+		Catch ex As Exception
+		End Try
+
+		'oMovies.SaveMovieCache
+		'UpdateFilteredList
+	End Sub
+	
+
 	Private Sub Mov_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
 		Dim msgstr As String = " Are you sure you wish to delete" & vbCrLf
 		msgstr &= ".nfo" & If(DelArtwork, ", Fanart, Poster and Actors", " only") & " for" & vbCrLf
@@ -10277,6 +10314,12 @@ Public Class Form1
 		Mov_DeleteNfoArtwork(DelArt)
 	End Sub
 
+
+	Private Sub tsmiMov_DeleteMovieFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_DeleteMovieFolder.Click
+		Mov_DeleteMovieFolder()
+	End Sub
+
+	
 	Private Sub tsmiMov_ReloadFromCache_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ReloadFromCache.Click
 		Try
 			Call mov_FormPopulate()

@@ -2843,6 +2843,22 @@ Public Class Movies
         SaveTagCache()
     End Sub
 
+
+	 Sub Mov_DeleteMovieFolder(fullpathandfilename)
+
+		If Pref.usefoldernames Then
+			Dim str = Path.GetDirectoryName(fullpathandfilename)
+
+			FileIO.FileSystem.DeleteDirectory(str, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+
+			RemoveMovieFromCache(fullpathandfilename)
+		End If
+
+	 End Sub
+	  
+
+
+
     Sub RemoveMovieFromCache(fullpathandfilename)
 
         If fullpathandfilename = "" Then Exit Sub

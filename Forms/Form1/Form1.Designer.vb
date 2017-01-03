@@ -143,6 +143,7 @@ Partial Class Form1
         Me.tsmiMov_ViewNfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_Separator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiMov_DeleteNfoArtwork = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiMov_DeleteMovieFolder = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_Separator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiMov_ReloadFromCache = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_RemoveMovie = New System.Windows.Forms.ToolStripMenuItem()
@@ -2359,7 +2360,7 @@ Partial Class Form1
         '
         'MovieContextMenu
         '
-        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbMoviePage, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_LockSpecific, Me.tsmiMov_UnLockSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
+        Me.MovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMov_MovieName, Me.tsmiMov_PlayMovie, Me.tsmiMov_PlayTrailer, Me.tsmiMov_ViewMovieDbMoviePage, Me.tsmiMov_ViewMovieDbSetPage, Me.tsmiMov_Separator1, Me.tsmiMov_OpenFolder, Me.tsmiMov_ViewNfo, Me.tsmiMov_Separator2, Me.tsmiMov_DeleteNfoArtwork, Me.tsmiMov_DeleteMovieFolder, Me.tsmiMov_Separator3, Me.tsmiMov_ReloadFromCache, Me.tsmiMov_RemoveMovie, Me.tsmiMov_RenameMovie, Me.tsmiMov_Separator4, Me.tsmiMov_RescrapeAll, Me.tsmiMov_RescrapeSpecific, Me.tsmiMov_LockSpecific, Me.tsmiMov_UnLockSpecific, Me.tsmiMov_Separator5, Me.tsmiMov_SetWatched, Me.tsmiMov_ClearWatched, Me.tsmiMov_Separator6, Me.tsmiMov_FanartBrowserAlt, Me.tsmiMov_PosterBrowserAlt, Me.tsmiMov_EditMovieAlt, Me.tsmiMov_Separator7, Me.tsmiMov_ExportMovies, Me.tsmiMov_OpenInMkvmergeGUI, Me.tsmiMov_SyncToXBMC, Me.tsmiMov_ConvertToFrodo})
         Me.MovieContextMenu.Name = "ContextMenuStrip1"
         Me.MovieContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.MovieContextMenu.Size = New System.Drawing.Size(242, 574)
@@ -2426,6 +2427,13 @@ Partial Class Form1
         Me.tsmiMov_DeleteNfoArtwork.Name = "tsmiMov_DeleteNfoArtwork"
         Me.tsmiMov_DeleteNfoArtwork.Size = New System.Drawing.Size(241, 22)
         Me.tsmiMov_DeleteNfoArtwork.Text = "Delete movie(s) Nfo and Artwork"
+
+        Me.tsmiMov_DeleteMovieFolder.Name = "tsmiMov_DeleteMovieFolder"
+        Me.tsmiMov_DeleteMovieFolder.Size = New System.Drawing.Size(241, 22)
+        Me.tsmiMov_DeleteMovieFolder.Text = "Delete movie folder"
+        Me.tsmiMov_DeleteMovieFolder.ToolTipText = "Deletes movie folder to recycle bin i.e. the movie and all the scraped data"
+		  Me.tsmiMov_DeleteMovieFolder.ShortcutKeys = Keys.Control Or Keys.D
+
         '
         'tsmiMov_Separator3
         '
@@ -14940,6 +14948,7 @@ End Sub
     Friend WithEvents MediaStubs1 As Media_Companion.MediaStubs
     Friend WithEvents tsmiMov_Separator2 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents tsmiMov_DeleteNfoArtwork As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tsmiMov_DeleteMovieFolder As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TableLayoutPanel26 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents Panel4 As System.Windows.Forms.Panel
