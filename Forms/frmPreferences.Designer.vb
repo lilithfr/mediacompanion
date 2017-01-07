@@ -372,6 +372,7 @@ Partial Class frmPreferences
         Me.TabControl6 = New System.Windows.Forms.TabControl()
         Me.TabPage30 = New System.Windows.Forms.TabPage()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
+        Me.cbTvThousSeparator = New System.Windows.Forms.CheckBox()
         Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
         Me.GroupBox43 = New System.Windows.Forms.GroupBox()
         Me.cb_TvMissingEpOffset = New System.Windows.Forms.CheckBox()
@@ -497,7 +498,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbTvThousSeparator = New System.Windows.Forms.CheckBox()
+        Me.cbEnableMovDeleteFolderTsmi = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1239,7 +1240,7 @@ Partial Class frmPreferences
         'cbMovRootFolderCheck
         '
         Me.cbMovRootFolderCheck.AutoSize = true
-        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(7, 367)
+        Me.cbMovRootFolderCheck.Location = New System.Drawing.Point(8, 358)
         Me.cbMovRootFolderCheck.Name = "cbMovRootFolderCheck"
         Me.cbMovRootFolderCheck.Size = New System.Drawing.Size(158, 19)
         Me.cbMovRootFolderCheck.TabIndex = 82
@@ -1299,7 +1300,7 @@ Partial Class frmPreferences
         'cb_MovPosterTabTMDBSelect
         '
         Me.cb_MovPosterTabTMDBSelect.AutoSize = true
-        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(7, 440)
+        Me.cb_MovPosterTabTMDBSelect.Location = New System.Drawing.Point(8, 431)
         Me.cb_MovPosterTabTMDBSelect.Name = "cb_MovPosterTabTMDBSelect"
         Me.cb_MovPosterTabTMDBSelect.Size = New System.Drawing.Size(255, 19)
         Me.cb_MovPosterTabTMDBSelect.TabIndex = 95
@@ -1322,7 +1323,7 @@ Partial Class frmPreferences
         'cbEnableFolderSize
         '
         Me.cbEnableFolderSize.AutoSize = true
-        Me.cbEnableFolderSize.Location = New System.Drawing.Point(7, 486)
+        Me.cbEnableFolderSize.Location = New System.Drawing.Point(8, 477)
         Me.cbEnableFolderSize.Name = "cbEnableFolderSize"
         Me.cbEnableFolderSize.Size = New System.Drawing.Size(174, 19)
         Me.cbEnableFolderSize.TabIndex = 97
@@ -3988,6 +3989,7 @@ Partial Class frmPreferences
         '
         'grpbxMovieGeneralOptions
         '
+        Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbEnableMovDeleteFolderTsmi)
         Me.grpbxMovieGeneralOptions.Controls.Add(Me.cb_MovRuntimeAsDuration)
         Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbEnableFolderSize)
         Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbShowMovieGridToolTip)
@@ -4011,7 +4013,7 @@ Partial Class frmPreferences
         Me.grpbxMovieGeneralOptions.Controls.Add(Me.cbMovieTrailerUrl)
         Me.grpbxMovieGeneralOptions.Location = New System.Drawing.Point(6, 6)
         Me.grpbxMovieGeneralOptions.Name = "grpbxMovieGeneralOptions"
-        Me.grpbxMovieGeneralOptions.Size = New System.Drawing.Size(299, 511)
+        Me.grpbxMovieGeneralOptions.Size = New System.Drawing.Size(299, 525)
         Me.grpbxMovieGeneralOptions.TabIndex = 73
         Me.grpbxMovieGeneralOptions.TabStop = false
         Me.grpbxMovieGeneralOptions.Text = "General Options"
@@ -4019,7 +4021,7 @@ Partial Class frmPreferences
         'cb_MovRuntimeAsDuration
         '
         Me.cb_MovRuntimeAsDuration.AutoSize = true
-        Me.cb_MovRuntimeAsDuration.Location = New System.Drawing.Point(17, 252)
+        Me.cb_MovRuntimeAsDuration.Location = New System.Drawing.Point(17, 249)
         Me.cb_MovRuntimeAsDuration.Name = "cb_MovRuntimeAsDuration"
         Me.cb_MovRuntimeAsDuration.Size = New System.Drawing.Size(241, 19)
         Me.cb_MovRuntimeAsDuration.TabIndex = 83
@@ -4029,7 +4031,7 @@ Partial Class frmPreferences
         'cbShowMovieGridToolTip
         '
         Me.cbShowMovieGridToolTip.AutoSize = true
-        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(7, 463)
+        Me.cbShowMovieGridToolTip.Location = New System.Drawing.Point(8, 454)
         Me.cbShowMovieGridToolTip.Margin = New System.Windows.Forms.Padding(4)
         Me.cbShowMovieGridToolTip.Name = "cbShowMovieGridToolTip"
         Me.cbShowMovieGridToolTip.Size = New System.Drawing.Size(162, 19)
@@ -4040,7 +4042,7 @@ Partial Class frmPreferences
         'cb_MovSetTitleIgnArticle
         '
         Me.cb_MovSetTitleIgnArticle.AutoSize = true
-        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(7, 415)
+        Me.cb_MovSetTitleIgnArticle.Location = New System.Drawing.Point(8, 406)
         Me.cb_MovSetTitleIgnArticle.Name = "cb_MovSetTitleIgnArticle"
         Me.cb_MovSetTitleIgnArticle.Size = New System.Drawing.Size(236, 19)
         Me.cb_MovSetTitleIgnArticle.TabIndex = 94
@@ -4050,7 +4052,7 @@ Partial Class frmPreferences
         'cb_SorttitleIgnoreArticles
         '
         Me.cb_SorttitleIgnoreArticles.AutoSize = true
-        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(7, 390)
+        Me.cb_SorttitleIgnoreArticles.Location = New System.Drawing.Point(8, 381)
         Me.cb_SorttitleIgnoreArticles.Name = "cb_SorttitleIgnoreArticles"
         Me.cb_SorttitleIgnoreArticles.Size = New System.Drawing.Size(278, 19)
         Me.cb_SorttitleIgnoreArticles.TabIndex = 93
@@ -4060,7 +4062,7 @@ Partial Class frmPreferences
         'cb_MovDurationAsRuntine
         '
         Me.cb_MovDurationAsRuntine.AutoSize = true
-        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(17, 231)
+        Me.cb_MovDurationAsRuntine.Location = New System.Drawing.Point(17, 228)
         Me.cb_MovDurationAsRuntine.Name = "cb_MovDurationAsRuntine"
         Me.cb_MovDurationAsRuntine.Size = New System.Drawing.Size(210, 19)
         Me.cb_MovDurationAsRuntine.TabIndex = 78
@@ -4070,7 +4072,7 @@ Partial Class frmPreferences
         'cbMissingMovie
         '
         Me.cbMissingMovie.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbMissingMovie.Location = New System.Drawing.Point(6, 334)
+        Me.cbMissingMovie.Location = New System.Drawing.Point(7, 325)
         Me.cbMissingMovie.Name = "cbMissingMovie"
         Me.cbMissingMovie.Size = New System.Drawing.Size(275, 36)
         Me.cbMissingMovie.TabIndex = 81
@@ -4116,7 +4118,7 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeFile)
         Me.PanelDisplayRuntime.Controls.Add(Me.rbRuntimeScraper)
         Me.PanelDisplayRuntime.Enabled = false
-        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(6, 273)
+        Me.PanelDisplayRuntime.Location = New System.Drawing.Point(6, 270)
         Me.PanelDisplayRuntime.Name = "PanelDisplayRuntime"
         Me.PanelDisplayRuntime.Size = New System.Drawing.Size(268, 49)
         Me.PanelDisplayRuntime.TabIndex = 68
@@ -4171,7 +4173,7 @@ Partial Class frmPreferences
         '
         Me.cb_EnableMediaTags.AutoSize = true
         Me.cb_EnableMediaTags.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cb_EnableMediaTags.Location = New System.Drawing.Point(7, 207)
+        Me.cb_EnableMediaTags.Location = New System.Drawing.Point(7, 204)
         Me.cb_EnableMediaTags.Margin = New System.Windows.Forms.Padding(4)
         Me.cb_EnableMediaTags.Name = "cb_EnableMediaTags"
         Me.cb_EnableMediaTags.Size = New System.Drawing.Size(251, 19)
@@ -4522,6 +4524,16 @@ Partial Class frmPreferences
         Me.GroupBox17.TabIndex = 22
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
+        '
+        'cbTvThousSeparator
+        '
+        Me.cbTvThousSeparator.AutoSize = true
+        Me.cbTvThousSeparator.Location = New System.Drawing.Point(132, 402)
+        Me.cbTvThousSeparator.Name = "cbTvThousSeparator"
+        Me.cbTvThousSeparator.Size = New System.Drawing.Size(235, 19)
+        Me.cbTvThousSeparator.TabIndex = 75
+        Me.cbTvThousSeparator.Text = "Set , as separator in Votes saved to nfo"
+        Me.cbTvThousSeparator.UseVisualStyleBackColor = true
         '
         'cbTvScrShtTVDBResize
         '
@@ -5981,15 +5993,18 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbTvThousSeparator
+        'cbEnableMovDeleteFolderTsmi
         '
-        Me.cbTvThousSeparator.AutoSize = true
-        Me.cbTvThousSeparator.Location = New System.Drawing.Point(132, 402)
-        Me.cbTvThousSeparator.Name = "cbTvThousSeparator"
-        Me.cbTvThousSeparator.Size = New System.Drawing.Size(235, 19)
-        Me.cbTvThousSeparator.TabIndex = 75
-        Me.cbTvThousSeparator.Text = "Set , as separator in Votes saved to nfo"
-        Me.cbTvThousSeparator.UseVisualStyleBackColor = true
+        Me.cbEnableMovDeleteFolderTsmi.AutoSize = true
+        Me.cbEnableMovDeleteFolderTsmi.Location = New System.Drawing.Point(7, 500)
+        Me.cbEnableMovDeleteFolderTsmi.Name = "cbEnableMovDeleteFolderTsmi"
+        Me.cbEnableMovDeleteFolderTsmi.Size = New System.Drawing.Size(265, 19)
+        Me.cbEnableMovDeleteFolderTsmi.TabIndex = 83
+        Me.cbEnableMovDeleteFolderTsmi.Text = "Enable 'Delete Folder' context menu option."
+        Me.ToolTip1.SetToolTip(Me.cbEnableMovDeleteFolderTsmi, "***Danger***"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will Allow user to delete movie if in its own folder."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will delete "& _ 
+        "to Recycle Bin if on local hard drive, but"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from NAS, or if Recycle Bin disabled"& _ 
+        ", deletes permanently.")
+        Me.cbEnableMovDeleteFolderTsmi.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6641,4 +6656,5 @@ End Sub
     Friend WithEvents Label26 As Label
     Friend WithEvents cbRunTimePadding As CheckBox
     Friend WithEvents cbTvThousSeparator As CheckBox
+    Friend WithEvents cbEnableMovDeleteFolderTsmi As CheckBox
 End Class

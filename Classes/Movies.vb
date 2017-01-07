@@ -2844,17 +2844,24 @@ Public Class Movies
     End Sub
 
 
-	 Sub Mov_DeleteMovieFolder(fullpathandfilename)
-
+    Function Mov_DeleteMovieFolder(fullpathandfilename) As Boolean
+        Dim aok As Boolean = True
 		If Pref.usefoldernames Then
 			Dim str = Path.GetDirectoryName(fullpathandfilename)
 
-			FileIO.FileSystem.DeleteDirectory(str, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
-
-			RemoveMovieFromCache(fullpathandfilename)
+            Try
+                FileIO.FileSystem.DeleteDirectory(str, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            Catch ex As OperationCanceledException
+                aok = False
+            Catch ex As IO.DirectoryNotFoundException
+                aok = False
+            End Try
+			
+			If aok Then RemoveMovieFromCache(fullpathandfilename)
 		End If
+        Return aok
 
-	 End Sub
+    End Function
 	  
 
 

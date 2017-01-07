@@ -187,6 +187,7 @@ Public Class Pref
     Public Shared DisplayAllSubtitleLang As Boolean
     'Private Shared _MkvMergeGuiPath As String
     Public Shared MkvMergeGuiPath As String
+    Public Shared EnableMovDeleteFolderTsmi As Boolean
 
     'Shared Property MkvMergeGuiPath As String
     '    Get
@@ -627,6 +628,7 @@ Public Class Pref
         ShowAllAudioTracks = False
         DisplayDefaultSubtitleLang = True
         DisplayAllSubtitleLang = False
+        EnableMovDeleteFolderTsmi = False
         incmissingmovies = False
         startupCache = True
         rarsize = 8
@@ -1033,6 +1035,7 @@ Public Class Pref
         root.AppendChild(doc, "CheckForNewVersion"          , CheckForNewVersion        ) 'cbCheckForNewVersion
         root.AppendChild(doc, "CloseMCForDLNewVersion"      , CloseMCForDLNewVersion    ) 'cbMcCloseMCForDLNewVersion
         root.AppendChild(doc, "MkvMergeGuiPath"             , MkvMergeGuiPath           ) 'tbMkvMergeGuiPath
+        root.AppendChild(doc, "EnableMovDeleteFolderTsmi"   , EnableMovDeleteFolderTsmi ) 'cbEnableMovDeleteFolderTsmi
         root.AppendChild(doc, "prxyEnabled"                 , prxyEnabled               ) 'ucGenPref_Proxy.cb_prxyEnable
         root.AppendChild(doc, "prxyIp"                      , prxyIp                    ) 'ucGenPref_Proxy.tb_prxyIp
         root.AppendChild(doc, "prxyPort"                    , prxyPort                  ) 'ucGenPref_Proxy.prxyPort
@@ -1690,6 +1693,7 @@ Public Class Pref
                     Case "CheckForNewVersion"                   : CheckForNewVersion        = thisresult.InnerXml
                     Case "CloseMCForDLNewVersion"               : CloseMCForDLNewVersion    = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml
+                    Case "EnableMovDeleteFolderTsmi"            : EnableMovDeleteFolderTsmi = thisresult.InnerXml
 
                     Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerText.ToLower
                     Case "prxyIp"                               : prxyIp                    = thisresult.InnerText

@@ -471,6 +471,7 @@ Public Class frmPreferences
         cb_MovPosterTabTMDBSelect           .Checked        = Pref.MovPosterTabTMDBSelect
         cbShowMovieGridToolTip              .Checked        = Pref.ShowMovieGridToolTip
         cbEnableFolderSize                  .Checked        = Pref.EnableFolderSize
+        cbEnableMovDeleteFolderTsmi         .Checked        = Pref.EnableMovDeleteFolderTsmi
 
         'Rename Movie Settings
         cbMovFolderRename                   .Checked        = Pref.MovFolderRename
@@ -2197,6 +2198,12 @@ End Sub
     Private Sub cbEnableFolderSize_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbEnableFolderSize.CheckedChanged
         If prefsload Then Exit Sub
         Pref.EnableFolderSize = cbEnableFolderSize.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbEnableMovDeleteFolderTsmi_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbEnableMovDeleteFolderTsmi.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.EnableMovDeleteFolderTsmi = cbEnableMovDeleteFolderTsmi.Checked
         Changes = True
     End Sub
 

@@ -9507,9 +9507,11 @@ Public Class Form1
 				e.Cancel = True
 			End If
 			tsmiRescrapeRenameFiles.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
-			tsmiMov_OpenInMkvmergeGUI.Enabled = (Pref.MkvMergeGuiPath <> "")
+			tsmiMov_OpenInMkvmergeGUI.Enabled       = (Pref.MkvMergeGuiPath <> "")
 			tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Pref.FrodoEnabled
 			tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Pref.FrodoEnabled
+            tsmiMov_DeleteMovieFolder.Enabled       = Pref.EnableMovDeleteFolderTsmi
+            tsmiMov_DeleteMovieFolder.Visible       = Pref.EnableMovDeleteFolderTsmi
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -9776,9 +9778,12 @@ Public Class Form1
 
 
 		For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
-			oMovies.Mov_DeleteMovieFolder(row.Cells("fullpathandfilename").Value.ToString)
 
-			DataGridViewMovies.Rows.RemoveAt(row.Index)
+            If Pref.GetRootFolderCheck(row.Cells("fullpathandfilename").Value.ToString) Then Continue For
+
+			Dim aok As Boolean = oMovies.Mov_DeleteMovieFolder(row.Cells("fullpathandfilename").Value.ToString)
+
+			If aok Then DataGridViewMovies.Rows.RemoveAt(row.Index)
 		Next
 
 		DataGridViewMovies.ClearSelection
@@ -10316,7 +10321,7 @@ Public Class Form1
 
 
 	Private Sub tsmiMov_DeleteMovieFolder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_DeleteMovieFolder.Click
-		Mov_DeleteMovieFolder()
+		If Pref.EnableMovDeleteFolderTsmi Then Mov_DeleteMovieFolder()
 	End Sub
 
 	
