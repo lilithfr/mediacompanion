@@ -104,6 +104,7 @@ Partial Class frmPreferences
         Me.cbDisplayDefaultSubtitleLang = New System.Windows.Forms.CheckBox()
         Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
         Me.cbtvDisplayNextAiredToolTip = New System.Windows.Forms.CheckBox()
+        Me.cbEnableMovDeleteFolderTsmi = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -498,7 +499,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbEnableMovDeleteFolderTsmi = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1491,6 +1491,19 @@ Partial Class frmPreferences
         Me.ToolTip1.SetToolTip(Me.cbtvDisplayNextAiredToolTip, "Only over TV Show, and will only display if Display Missing"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Episodes option is e"& _ 
         "nabled also.")
         Me.cbtvDisplayNextAiredToolTip.UseVisualStyleBackColor = true
+        '
+        'cbEnableMovDeleteFolderTsmi
+        '
+        Me.cbEnableMovDeleteFolderTsmi.AutoSize = true
+        Me.cbEnableMovDeleteFolderTsmi.Location = New System.Drawing.Point(7, 500)
+        Me.cbEnableMovDeleteFolderTsmi.Name = "cbEnableMovDeleteFolderTsmi"
+        Me.cbEnableMovDeleteFolderTsmi.Size = New System.Drawing.Size(266, 19)
+        Me.cbEnableMovDeleteFolderTsmi.TabIndex = 83
+        Me.cbEnableMovDeleteFolderTsmi.Text = "Enable 'Delete Movie Folder' context option."
+        Me.ToolTip1.SetToolTip(Me.cbEnableMovDeleteFolderTsmi, "***Danger***"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will Allow user to delete movie if in its own folder."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will delete "& _ 
+        "to Recycle Bin if on local hard drive, but"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from NAS, or if Recycle Bin disabled"& _ 
+        ", deletes permanently.")
+        Me.cbEnableMovDeleteFolderTsmi.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbActorFromImdb
         '
@@ -5992,19 +6005,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.TabIndex = 23
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
-        '
-        'cbEnableMovDeleteFolderTsmi
-        '
-        Me.cbEnableMovDeleteFolderTsmi.AutoSize = true
-        Me.cbEnableMovDeleteFolderTsmi.Location = New System.Drawing.Point(7, 500)
-        Me.cbEnableMovDeleteFolderTsmi.Name = "cbEnableMovDeleteFolderTsmi"
-        Me.cbEnableMovDeleteFolderTsmi.Size = New System.Drawing.Size(265, 19)
-        Me.cbEnableMovDeleteFolderTsmi.TabIndex = 83
-        Me.cbEnableMovDeleteFolderTsmi.Text = "Enable 'Delete Folder' context menu option."
-        Me.ToolTip1.SetToolTip(Me.cbEnableMovDeleteFolderTsmi, "***Danger***"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will Allow user to delete movie if in its own folder."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Will delete "& _ 
-        "to Recycle Bin if on local hard drive, but"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from NAS, or if Recycle Bin disabled"& _ 
-        ", deletes permanently.")
-        Me.cbEnableMovDeleteFolderTsmi.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
