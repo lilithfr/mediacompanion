@@ -136,10 +136,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WatTmdb, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Assets\WatTmdb.dll</HintPath>
-    </Reference>
     <Reference Include="wfcl_MC">
       <HintPath>Assets\wfcl_MC.dll</HintPath>
     </Reference>
@@ -1313,9 +1309,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Assets\WatTmdb.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="Assets\TakeOwnership.htm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1907,6 +1900,10 @@
     <ProjectReference Include="Utilites\Utilites.vbproj">
       <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
       <Name>Utilites</Name>
+    </ProjectReference>
+    <ProjectReference Include="WatTmdb\WatTmdb.csproj">
+      <Project>{efc11645-fab4-4c30-a498-29f5ecdf77e8}</Project>
+      <Name>WatTmdb</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
