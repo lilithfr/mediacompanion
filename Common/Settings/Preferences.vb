@@ -1365,45 +1365,25 @@ Public Class Pref
                             commandlist.Add(newcom)
                         End If
                     Case "nfofolder"
-                        movieFolders.Add(New str_RootPaths(thisresult.InnerText))
+                        movieFolders.       Add(New str_RootPaths(thisresult.InnerText))
                     Case "stubfolder"
                         stubfolder = thisresult.InnerText 
                     Case "stubmessage"
                         stubmessage = thisresult.InnerText
                     Case "offlinefolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        offlinefolders.Add(decodestring)
+                        offlinefolders.     Add(decodestring)
                     Case "tvfolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        tvFolders.Add(decodestring)
+                        tvFolders.          Add(decodestring)
                     Case "tvrootfolder"
-                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        Dim t() As String = decodestring.Split("|")
-                        Dim u As New str_RootPaths
-                        u.rpath = t(0)
-                        If t.Count > 1 Then u.selected = t(1)
-                        tvRootFolders.Add(u)
+                        tvRootFolders.      Add(New str_RootPaths(thisresult.InnerText))
                     Case "homemoviefolder"
-                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        Dim t() As String = decodestring.Split("|")
-                        Dim u As New str_RootPaths
-                        u.rpath = t(0)
-                        If t.Count > 1 Then u.selected = t(1)
-                        homemoviefolders.Add(u)
+                        homemoviefolders.   Add(New str_RootPaths(thisresult.InnerText))
                     Case "MVidFolders"
-                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        Dim t() As String = decodestring.Split("|")
-                        Dim u As New str_RootPaths
-                        u.rpath = t(0)
-                        If t.Count > 1 Then u.selected = t(1)
-                        MVidFolders.Add(u)
+                        MVidFolders.        Add(New str_RootPaths(thisresult.InnerText))
                     Case "MVConcertFolders"
-                        Dim decodestring As String = decxmlchars(thisresult.InnerText)
-                        Dim t() As String = decodestring.Split("|")
-                        Dim u As New str_RootPaths
-                        u.rpath = t(0)
-                        If t.Count > 1 Then u.selected = t(1)
-                        MVConcertFolders.Add(u)
+                        MVConcertFolders.   Add(New str_RootPaths(thisresult.InnerText))
                     Case "custtvFolder"
                         Dim decodestring As String = decxmlchars(thisresult.InnerText)
                         custtvFolders.Add(decodestring)
