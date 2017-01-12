@@ -243,6 +243,8 @@ Public Class Form1
 	Public Imageloading As Boolean = False
 	Dim MoviesFiltersResizeCalled As Boolean = False
 	Private tb_tagtxt_changed As Boolean = False
+    Private MovSetOverviewEdit As Boolean = False
+    Private tb_MovieSetOverviewChanged As Boolean = False
 
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -12292,8 +12294,15 @@ Public Class Form1
 
 #Region "Movie Set Tab"
 
-    Private Sub tpMovSets_Enter(sender As Object, e As EventArgs) Handles tpMovSets.Enter
-
+    Private Sub tpMovSets_Leave(sender As Object, e As EventArgs) Handles tpMovSets.Leave
+        If MovSetOverviewEdit Then
+            Dim result As MsgBoxResult = MsgBox("Edits made to overview," & vbCrLf & "do you wish to save edits?", MsgBoxStyle.OkCancel)
+            If result = MsgBoxResult.Cancel Then
+                tb_MovieSetOverviewReset()
+                Exit Sub
+            End If
+            btn_MovSetOverviewSave.PerformClick()
+        End If
     End Sub
 
     Private Sub MovieSetstabSetup()
@@ -12348,6 +12357,7 @@ Public Class Form1
 			End If
 		Next
         AddHandler dgvMovieSets.CellEnter, AddressOf dgvMovieSets_CellEnter
+        If Tmplist.Count > 0 Then dgvpopulate(dgvMovieSets.Rows(dgvMovieSets.CurrentRow.Index).Cells(0).Value)
 	End Sub
 
 	
@@ -12369,6 +12379,7 @@ Public Class Form1
             Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName)
             Dim found As Boolean = False
             If MsetName <> tbMovieSetTitle.Text OrElse dgvMovieSets.Rows.Count = 1 Then
+                tb_MovieSetOverviewReset()
                 Dim CustomCollection As Boolean = False
                 Dim dirtycollection As Boolean = False
                 Dim MovCollectionList As New List(Of MovieSetDatabase)
@@ -12413,9 +12424,7 @@ Public Class Form1
             
                     For Each x In MovCollectionList
                         Dim q = From y In oMovies.MovieCache Where y.tmdbid = x.tmdbid
-                        If q.Count = 0 Then
-                            Continue For
-                        End If
+                        If q.Count = 0 Then Continue For
                         found = True
                         x.present = True
                     Next
@@ -12456,6 +12465,11 @@ Public Class Form1
                 Else
                     lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
                     lbCollectionCount.BackColor = Color.Red
+                End If
+                If CustomCollection Then
+                    btn_MovSetOverviewEdit.Enabled = False
+                Else
+                    btn_MovSetOverviewEdit.Enabled = True
                 End If
             End If
         Catch ex As Exception
@@ -12524,9 +12538,64 @@ Public Class Form1
 		Pref.moviesets.Clear()
 		Pref.moviesets.Add("-None-")
 		Pref.moviesets.AddRange(oMovies.MovieSetsNoSetId)
+	End Sub 'btn_MovSetOverviewEdit
+
+    Private Sub btn_MovSetOverviewEdit_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSetOverviewEdit.Click
+		tb_MovieSetOverview.ReadOnly = False
+        tb_MovieSetOverview.BackColor = SystemColors.Window
+        tb_MovieSetOverview.ShortcutsEnabled = True
+        MovSetOverviewEdit = True
 	End Sub
 
-	Private Sub MovSetArtworkCheck()
+    Private Sub btn_MovSetOverviewSave_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSetOverviewSave.Click
+        If tb_MovieSetOverviewChanged Then
+		    Try
+                Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(dgvMovieSets.Rows(dgvMovieSets.CurrentRow.Index).Cells(0).Value)
+                MovSet.MovieSetPlot = tb_MovieSetOverview.Text
+                oMovies.AddUpdateMovieSetInCache(MovSet, True)
+                If Pref.MovSetOverviewToNfo Then
+                    Dim q = From x In DataGridViewMovies.Rows Where x.cells("tmdbsetid").Value = MovSet.TmdbSetId
+                    If q.Count > 0 Then
+                        For each t In q
+                            Dim movpath As String = t.Cells("fullpathandfilename").Value.ToString
+                            Dim tmpmov As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(movpath)
+                            tmpmov.fullmoviebody.SetOverview = MovSet.MovieSetPlot
+                            WorkingWithNfoFiles.mov_NfoSave(movpath, tmpmov, True)
+                        Next
+                    End If
+                End If
+		    Catch ex As Exception
+
+		    End Try
+        End If
+        tb_MovieSetOverviewReset()
+	End Sub
+
+    Private Sub tb_MovieSetOverview_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_MovieSetOverview.KeyPress
+        If e.KeyChar = Convert.ToChar(1) Then
+            DirectCast(sender, TextBox).SelectAll()
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub tb_MovieSetOverview_TextChanged(sender As Object, e As EventArgs) Handles tb_MovieSetOverview.TextChanged
+        If MovSetOverviewEdit Then
+            tb_MovieSetOverviewChanged = True
+            btn_MovSetOverviewSave.Enabled = True
+        End If
+    End Sub
+
+    Private Sub tb_MovieSetOverviewReset()
+        MovSetOverviewEdit = False
+        tb_MovieSetOverviewChanged = False 
+        tb_MovieSetOverview.ReadOnly = True
+        tb_MovieSetOverview.BackColor = SystemColors.Control
+        tb_MovieSetOverview.ShortcutsEnabled = False
+        btn_MovSetOverviewSave.Enabled = False
+        Application.DoEvents()
+    End Sub
+
+    Private Sub MovSetArtworkCheck()
 		For Each row As DataGridViewRow In dgvMovieSets.Rows
 			Dim mset As String = row.Cells(0).Value
 			For Each mov In oMovies.MovieCache
