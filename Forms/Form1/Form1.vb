@@ -2507,6 +2507,7 @@ Public Class Form1
 			If movie.ScrapedMovie.fullmoviebody.SetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) AndAlso cbMovieDisplay_MovieSet.SelectedIndex <> -1 Then
 				movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
 				movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+                movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 			End If
 			movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
 			If TabControl2.SelectedTab.Name = tpMovTags.Name Then
@@ -2606,6 +2607,7 @@ Public Class Form1
 					If Not cbMovieDisplay_MovieSet.SelectedIndex < 1 Then
 						movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
 						movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+                        movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 					End If
 					If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString 'text
 					movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))

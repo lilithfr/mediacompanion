@@ -1345,7 +1345,15 @@ Public Class WorkingWithNfoFiles
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
                         Case "set"
-                            newmovie.fullmoviebody.SetName = thisresult.InnerText
+                            If thisresult.HasChildNodes AndAlso thisresult.ChildNodes(0).Name <> "#text" Then
+                                For i = 0 To thisresult.ChildNodes.Count - 1
+                                    If thisresult.ChildNodes(i).Name = "name"       Then newmovie.fullmoviebody.SetName     = thisresult.ChildNodes(i).InnerText
+                                    If thisresult.ChildNodes(i).Name = "overview"   Then newmovie.fullmoviebody.SetOverview = thisresult.ChildNodes(i).InnerText
+                                Next i
+                            Else
+                                newmovie.fullmoviebody.SetName = thisresult.InnerText
+                            End If
+                            
                         Case "setid"
                             newmovie.fullmoviebody.TmdbSetId = thisresult.InnerText
                         Case "collectionnumber"
@@ -1609,6 +1617,7 @@ Public Class WorkingWithNfoFiles
                 Dim child As XmlElement = Nothing
                 Dim actorchild As XmlElement = Nothing
                 Dim filedetailschild As XmlElement = Nothing
+                Dim setchild As XmlElement = Nothing
                 Dim anotherchild As XmlElement = Nothing
 
                 root = doc.CreateElement("movie")
@@ -1654,11 +1663,24 @@ Public Class WorkingWithNfoFiles
                     Next
                 End If
                 stage = 25
-                If movietosave.fullmoviebody.SetName <> "-None-" Then root.AppendChild(doc, "set", movietosave.fullmoviebody.SetName)
-				If movietosave.fullmoviebody.TmdbSetId <> "" Then
+                If Pref.MovSetOverviewToNfo AndAlso movietosave.fullmoviebody.SetName.ToLower <> "-none-" Then
+                    setchild = doc.CreateElement("set")
+                    setchild.AppendChild(doc, "name"    , movietosave.fullmoviebody.SetName)
+                    setchild.AppendChild(doc, "overview", movietosave.fullmoviebody.SetOverview)
+                    root.AppendChild(setchild)
+                Else
+                    If movietosave.fullmoviebody.SetName <> "-None-" Then root.AppendChild(doc, "set", movietosave.fullmoviebody.SetName)
+                End If
+                If movietosave.fullmoviebody.TmdbSetId <> "" Then
                     root.AppendChild(doc, "setid"       , movietosave.fullmoviebody.TmdbSetId)
                     If Pref.SetIdAsCollectionnumber Then root.AppendChild(doc, "collectionnumber", movietosave.fullmoviebody.TmdbSetId)
                 End If
+
+    '            If movietosave.fullmoviebody.SetName <> "-None-" Then root.AppendChild(doc, "set", movietosave.fullmoviebody.SetName)
+				'If movietosave.fullmoviebody.TmdbSetId <> "" Then
+    '                root.AppendChild(doc, "setid"       , movietosave.fullmoviebody.TmdbSetId)
+    '                If Pref.SetIdAsCollectionnumber Then root.AppendChild(doc, "collectionnumber", movietosave.fullmoviebody.TmdbSetId)
+    '            End If
 
                 stage = 26
                 If String.IsNullOrEmpty(movietosave.fullmoviebody.sortorder) Then movietosave.fullmoviebody.sortorder = movietosave.fullmoviebody.title

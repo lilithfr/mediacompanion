@@ -366,6 +366,7 @@ Public Class Pref
     Public Shared CustomTmdbApiKey As String = ""
     Public Shared MovNfoWatchTag As Boolean
     Public Shared SetIdAsCollectionnumber As Boolean
+    Public Shared MovSetOverviewToNfo As Boolean
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -729,6 +730,7 @@ Public Class Pref
         MovFiltLastSize = 384
         RenameSpaceCharacter = "_"
         SetIdAsCollectionnumber = False
+        MovSetOverviewToNfo = False
 
 
         'TV
@@ -1048,6 +1050,7 @@ Public Class Pref
         root.AppendChild(doc, "CustomTmdbApiKey"            , CustomTmdbApiKey          ) 'tbTMDbAPI
         root.AppendChild(doc, "MovNfoWatchTag"              , MovNfoWatchTag            ) 'cbMovNfoWatchTag
         root.AppendChild(doc, "SetIdAsCollectionnumber"     , SetIdAsCollectionnumber   ) 'cbSetIdAsCollectionnumber
+        root.AppendChild(doc, "MovSetOverviewToNfo"         , MovSetOverviewToNfo       ) 'cbMovSetOverviewToNfo
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1466,6 +1469,7 @@ Public Class Pref
                     Case "CustomTmdbApiKey"                     : CustomTmdbApiKey = thisresult.InnerText
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
                     Case "SetIdAsCollectionnumber"              : SetIdAsCollectionnumber = thisresult.InnerXml
+                    Case "MovSetOverviewToNfo"                  : MovSetOverviewToNfo = thisresult.InnerXml
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)

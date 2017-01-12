@@ -39,6 +39,7 @@ Public Class BasicMovieNFO
 
     Private _setName       As String = "-None-"
     Private _setId         As String = ""
+    Private _setoverview   As String = ""
 
     Public Property SetName As String
         Get
@@ -62,7 +63,16 @@ Public Class BasicMovieNFO
         End Set
     End Property
 
-
+    Public Property SetOverview As String
+        Get
+            Return _setoverview
+        End Get
+        Set(value As String)
+            If Not Locked("set") Then
+                _setoverview = value
+            End If
+        End Set
+    End Property
 
     Sub New
     End Sub

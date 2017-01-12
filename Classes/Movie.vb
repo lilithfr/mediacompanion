@@ -1284,7 +1284,7 @@ Public Class Movie
             If Not IsNothing(movieSet) Then
 
                 Try
-                    Dim q = From x In movieSet.Collection Where x.TmdbMovieId=_movieCache.tmdbid
+                    Dim q = From x In movieSet.Collection Where x.TmdbMovieId = _movieCache.tmdbid
 
                     If q.Count=0 Then
                         _movieCache.UserTmdbSetAddition = "Y"
@@ -3319,6 +3319,7 @@ Public Class Movie
                                     _rescrapedMovie.fullmoviebody.TmdbSetId = _scrapedMovie.fullmoviebody.TmdbSetId
                                 End If
                             End If
+                            _rescrapedMovie.fullmoviebody.SetOverview = tmdb.MovieSet.MovieSetPlot
                             ChangedSet = True
                             
                         End If
@@ -3326,8 +3327,9 @@ Public Class Movie
                         ''' Update set only if there was a Change.
                         ''' Need to improve this to support usernamed Sets that exist on TMDb 
                         If ChangedSet Then
-                            UpdateProperty(_rescrapedMovie.fullmoviebody.SetName   , _scrapedMovie.fullmoviebody.SetName   , , rl.EmptyMainTags)
-                            UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId , _scrapedMovie.fullmoviebody.TmdbSetId , , rl.EmptyMainTags)
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.SetName    , _scrapedMovie.fullmoviebody.SetName       , , rl.EmptyMainTags)
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId  , _scrapedMovie.fullmoviebody.TmdbSetId     , , rl.EmptyMainTags)
+                            UpdateProperty(_rescrapedMovie.fullmoviebody.SetOverview, _scrapedMovie.fullmoviebody.SetOverview   , , rl.EmptyMainTags)
                             UpdateMovieSetCache(True)
                             ''' Finally, check if old collection is still in custom collection list and remove if it is.
                             If Pref.moviesets.Contains(_scrapedMovie.fullmoviebody.SetName) Then
@@ -3474,7 +3476,10 @@ Public Class Movie
         _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
 
         ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
-        If Not ms Is Nothing Then _scrapedMovie.fullmoviebody.SetName = ms.MovieSetDisplayName
+        If Not ms Is Nothing Then
+            _scrapedMovie.fullmoviebody.SetName     = ms.MovieSetDisplayName
+            _scrapedMovie.fullmoviebody.SetOverview = ms.MovieSetPlot
+        End If
     End Sub
 
     Sub UpdateTagCache

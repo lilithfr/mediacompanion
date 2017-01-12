@@ -499,6 +499,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbMovSetOverviewToNfo = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -2983,7 +2984,7 @@ Partial Class frmPreferences
         Me.grpbxScraperLimits.Controls.Add(Me.lblMaxStudios)
         Me.grpbxScraperLimits.Controls.Add(Me.Label92)
         Me.grpbxScraperLimits.Controls.Add(Me.cmbxMovScraper_MaxGenres)
-        Me.grpbxScraperLimits.Location = New System.Drawing.Point(6, 196)
+        Me.grpbxScraperLimits.Location = New System.Drawing.Point(6, 180)
         Me.grpbxScraperLimits.Name = "grpbxScraperLimits"
         Me.grpbxScraperLimits.Size = New System.Drawing.Size(331, 80)
         Me.grpbxScraperLimits.TabIndex = 75
@@ -3014,12 +3015,13 @@ Partial Class frmPreferences
         '
         'grpbxScraperMisc
         '
+        Me.grpbxScraperMisc.Controls.Add(Me.cbMovSetOverviewToNfo)
         Me.grpbxScraperMisc.Controls.Add(Me.cbSetIdAsCollectionnumber)
         Me.grpbxScraperMisc.Controls.Add(Me.cbIMDbOriginalTitle)
         Me.grpbxScraperMisc.Controls.Add(Me.cbGetMovieSetFromTMDb)
-        Me.grpbxScraperMisc.Location = New System.Drawing.Point(6, 282)
+        Me.grpbxScraperMisc.Location = New System.Drawing.Point(6, 266)
         Me.grpbxScraperMisc.Name = "grpbxScraperMisc"
-        Me.grpbxScraperMisc.Size = New System.Drawing.Size(331, 92)
+        Me.grpbxScraperMisc.Size = New System.Drawing.Size(331, 108)
         Me.grpbxScraperMisc.TabIndex = 52
         Me.grpbxScraperMisc.TabStop = false
         Me.grpbxScraperMisc.Text = " Other options "
@@ -3028,7 +3030,7 @@ Partial Class frmPreferences
         '
         Me.cbIMDbOriginalTitle.AutoSize = true
         Me.cbIMDbOriginalTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbIMDbOriginalTitle.Location = New System.Drawing.Point(12, 59)
+        Me.cbIMDbOriginalTitle.Location = New System.Drawing.Point(10, 85)
         Me.cbIMDbOriginalTitle.Name = "cbIMDbOriginalTitle"
         Me.cbIMDbOriginalTitle.Size = New System.Drawing.Size(303, 17)
         Me.cbIMDbOriginalTitle.TabIndex = 51
@@ -3044,7 +3046,7 @@ Partial Class frmPreferences
         Me.grpbxMovPreferLang.Controls.Add(Me.cmbxTMDbSelectedLanguage)
         Me.grpbxMovPreferLang.Location = New System.Drawing.Point(6, 16)
         Me.grpbxMovPreferLang.Name = "grpbxMovPreferLang"
-        Me.grpbxMovPreferLang.Size = New System.Drawing.Size(331, 168)
+        Me.grpbxMovPreferLang.Size = New System.Drawing.Size(331, 158)
         Me.grpbxMovPreferLang.TabIndex = 38
         Me.grpbxMovPreferLang.TabStop = false
         Me.grpbxMovPreferLang.Text = "Preferred Language"
@@ -3066,7 +3068,7 @@ Partial Class frmPreferences
         Me.grpbxCustomLanguage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.grpbxCustomLanguage.Location = New System.Drawing.Point(28, 88)
         Me.grpbxCustomLanguage.Name = "grpbxCustomLanguage"
-        Me.grpbxCustomLanguage.Size = New System.Drawing.Size(291, 68)
+        Me.grpbxCustomLanguage.Size = New System.Drawing.Size(291, 64)
         Me.grpbxCustomLanguage.TabIndex = 22
         Me.grpbxCustomLanguage.TabStop = false
         Me.grpbxCustomLanguage.Text = " Custom string"
@@ -6006,6 +6008,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbMovSetOverviewToNfo
+        '
+        Me.cbMovSetOverviewToNfo.AutoSize = true
+        Me.cbMovSetOverviewToNfo.Location = New System.Drawing.Point(37, 56)
+        Me.cbMovSetOverviewToNfo.Name = "cbMovSetOverviewToNfo"
+        Me.cbMovSetOverviewToNfo.Size = New System.Drawing.Size(262, 19)
+        Me.cbMovSetOverviewToNfo.TabIndex = 53
+        Me.cbMovSetOverviewToNfo.Text = "Save Set Overview to nfo (Kodi 17 onwards)"
+        Me.cbMovSetOverviewToNfo.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6657,4 +6669,5 @@ End Sub
     Friend WithEvents cbRunTimePadding As CheckBox
     Friend WithEvents cbTvThousSeparator As CheckBox
     Friend WithEvents cbEnableMovDeleteFolderTsmi As CheckBox
+    Friend WithEvents cbMovSetOverviewToNfo As CheckBox
 End Class

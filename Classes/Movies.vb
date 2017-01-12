@@ -1273,6 +1273,20 @@ Public Class Movies
         Return ""
     End Function
 
+    Public Function GetMovieSetOverviewFromName(mSetName As String) As String
+        For Each mset In MovieSetDB
+            If mset.MovieSetName = mSetName Then
+                Return mset.MovieSetPlot
+            End If
+        Next
+        'If Not mSetName.ToLower = "-none-" Then
+        '    Dim newmset As New MovieSetInfo
+        '    newmset.MovieSetName = mSetName
+        '    MovieSetDB.Add(newmset)
+        'End If
+        Return ""
+    End Function
+
     Public ReadOnly Property Cancelled As Boolean
         Get
             Application.DoEvents()
@@ -3366,8 +3380,9 @@ Public Class Movies
 
 				Dim movie As Movie = LoadMovie(m.fullpathandfilename)
 
-            movie.ScrapedMovie.fullmoviebody.SetName   = m.SetName
-            movie.ScrapedMovie.fullmoviebody.TmdbSetId = m.TmdbSetId
+            movie.ScrapedMovie.fullmoviebody.SetName        = m.SetName
+            movie.ScrapedMovie.fullmoviebody.TmdbSetId      = m.TmdbSetId
+            'movie.ScrapedMovie.fullmoviebody.SetOverview    = m.SetOverview
 
             movie.AssignMovieToCache
             movie.UpdateMovieCache
