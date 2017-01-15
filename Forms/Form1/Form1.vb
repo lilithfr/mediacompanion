@@ -45,9 +45,9 @@ Public Class Form1
 	Private Declare Function GetActiveWindow Lib "user32" Alias "GetActiveWindow" () As IntPtr
 
 	Public Property XBMC_Controller_LogLastShownDt As Date = Now
-	Private XBMC_Link_ErrorLog_Timer As Timers.Timer = New Timers.Timer()
-	Private XBMC_Link_Idle_Timer As Timers.Timer = New Timers.Timer()
-	Private XBMC_Link_Check_Timer As Timers.Timer = New Timers.Timer()
+	Private XBMC_Link_ErrorLog_Timer    As Timers.Timer = New Timers.Timer()
+	Private XBMC_Link_Idle_Timer        As Timers.Timer = New Timers.Timer()
+	Private XBMC_Link_Check_Timer       As Timers.Timer = New Timers.Timer()
 
 	Declare Function AttachConsole Lib "kernel32.dll" (ByVal dwProcessId As Int32) As Boolean
 
@@ -162,8 +162,10 @@ Public Class Form1
 	Dim mov_TableRowNum As Integer = -1
 	Dim MovFanartToggle As Boolean = False
 	Dim MovPosterToggle As Boolean = False
-	Private keypresstimer As Timers.Timer = New Timers.Timer()
-	Private statusstripclear As Timers.Timer = New Timers.Timer()
+	Private keypresstimer       As Timers.Timer = New Timers.Timer()
+	Private statusstripclear    As Timers.Timer = New Timers.Timer()
+    Private TvAutoScrapeTimer   As Timers.Timer = New Timers.Timer()
+    Private TvAutoScrapeTimerTripped As Boolean = False
 	Private MovieKeyPress As String = ""
 	Public cropMode As String = "movieposter"
 
@@ -743,11 +745,18 @@ Public Class Form1
 			AddHandler statusstripclear.Elapsed, AddressOf statusstripclear_Elapsed
 			Ini_Timer(statusstripclear, 2000)
 
+            AddHandler TvAutoScrapeTimer.Elapsed, AddressOf TvAutoScrapeTimer_Elapsed
+            Ini_Timer(TvAutoScrapeTimer, ((Pref.TvAutoScrapeInterval * 60) * 1000), True)
+
 
 			AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
 			AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
 
 			BckWrkXbmcController.RunWorkerAsync(Me)
+
+            If Pref.TvEnableAutoScrape AndAlso Not TvAutoScrapeTimer.Enabled Then
+                TvAutoScrapeTimer.Start()
+            End If
 
 			For each pb As Control In TableLayoutPanel6.Controls
 				If pb.Name.Contains("pbEpScrSht") Then
@@ -1080,6 +1089,16 @@ Public Class Form1
 	Private Sub keypresstimer_Elapsed()
 		MovieKeyPress = ""
 	End Sub
+
+    Private Sub TvAutoScrapeTimer_Elapsed()
+        Do Until TvAutoScrapeTimerTripped
+            If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+                TvAutoScrapeTimerTripped = True
+			    Call ep_Search()
+		    End If
+            Application.DoEvents()
+        Loop
+    End Sub
 
 	Private Sub statusstripclear_Elapsed()
 		ToolStripStatusLabel2.Visible = False
@@ -6695,7 +6714,7 @@ Public Class Form1
 			Tv_CacheSave()
 			tv_CacheLoad()
 			tv_Filter()
-			If Pref.disabletvlogs Or ScraperErrorDetected Then
+			If (Not TvAutoScrapeTimerTripped AndAlso Pref.disabletvlogs) Or ScraperErrorDetected Then
 				Dim MyFormObject As New frmoutputlog(tvScraperLog, True)
 				Try
 					MyFormObject.ShowDialog()
@@ -6708,6 +6727,7 @@ Public Class Form1
 			Else
 				BlinkTaskBar()
 			End If
+            TvAutoScrapeTimerTripped = False
 			GC.Collect()
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
@@ -8728,6 +8748,11 @@ Public Class Form1
 				t.StartPosition = FormStartPosition.Manual
 			End If
 			t.ShowDialog()
+            If Pref.TvEnableAutoScrape AndAlso Not TvAutoScrapeTimer.Enabled Then
+                TvAutoScrapeTimer.Start()
+            Else If Not Pref.TvEnableAutoScrape AndAlso TvAutoScrapeTimer.Enabled Then
+                TvAutoScrapeTimer.Stop()
+            End If
 			If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
 				Statusstrip_Enable(False)
 			End If

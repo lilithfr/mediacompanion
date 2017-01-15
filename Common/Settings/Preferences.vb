@@ -401,6 +401,8 @@ Public Class Pref
     'Saved TV Prefs
     Public Shared tvDisplayNextAiredToolTip As Boolean = True
     Public Shared TvThousSeparator As Boolean
+    Public Shared TvEnableAutoScrape As Boolean
+    Public Shared TvAutoScrapeInterval As Integer
     Public Shared tvshowautoquick As Boolean
     Public Shared copytvactorthumbs As Boolean = False
     Public Shared tvdbIMDbRating As Boolean = False
@@ -743,6 +745,8 @@ Public Class Pref
         tvscrnshtTVDBResize = False
         tvshowautoquick = False
         TvThousSeparator = True
+        TvEnableAutoScrape = False
+        TvAutoScrapeInterval = 30
         copytvactorthumbs = True
         tvdbIMDbRating = False
         enabletvhdtags = True
@@ -1213,6 +1217,8 @@ Public Class Pref
         'TV Prefs ------------------------------------------------------------
         root.AppendChild(doc, "tvshowautoquick",                    tvshowautoquick)            'cbTvQuickAddShow
         root.AppendChild(doc, "TvThousSeparator",                   TvThousSeparator)           'cbTvThousSeparator
+        root.AppendChild(doc, "TvEnableAutoScrape",                 TvEnableAutoScrape)         'cbTvEnableAutoScrape
+        root.AppendChild(doc, "TvAutoScrapeInterval",               TvAutoScrapeInterval)       'tbTvAutoScrapeInterval
         root.AppendChild(doc, "copytvactorthumbs",                  copytvactorthumbs)          'CheckBox34
         root.AppendChild(doc, "tvdbIMDbRating",                     tvdbIMDbRating)             'cbtvdbIMDbRating
         root.AppendChild(doc, "tvdbmode",                           sortorder)                  'RadioButton42
@@ -1463,6 +1469,8 @@ Public Class Pref
                     Case "DownloadTrailerDuringScrape"          : DownloadTrailerDuringScrape = thisresult.InnerXml
                     Case "tvshowautoquick"                      : tvshowautoquick = thisresult.InnerXml
                     Case "TvThousSeparator"                     : TvThousSeparator = thisresult.InnerXml
+                    Case "TvEnableAutoScrape"                   : TvEnableAutoScrape = thisresult.InnerXml
+                    Case "TvAutoScrapeInterval"                 : TvAutoScrapeInterval = Convert.ToInt16(thisresult.InnerText)
                     Case "intruntime"                           : intruntime = thisresult.InnerXml
                     Case "RuntimePadding"                       : RuntimePadding = thisresult.InnerXml
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml

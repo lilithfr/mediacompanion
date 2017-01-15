@@ -240,6 +240,7 @@ Partial Class frmPreferences
         Me.lblMaxStudios = New System.Windows.Forms.Label()
         Me.Label92 = New System.Windows.Forms.Label()
         Me.grpbxScraperMisc = New System.Windows.Forms.GroupBox()
+        Me.cbMovSetOverviewToNfo = New System.Windows.Forms.CheckBox()
         Me.cbIMDbOriginalTitle = New System.Windows.Forms.CheckBox()
         Me.grpbxMovPreferLang = New System.Windows.Forms.GroupBox()
         Me.Label27 = New System.Windows.Forms.Label()
@@ -499,7 +500,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovSetOverviewToNfo = New System.Windows.Forms.CheckBox()
+        Me.cbTvEnableAutoScrape = New System.Windows.Forms.CheckBox()
+        Me.tbTvAutoScrapeInterval = New System.Windows.Forms.TextBox()
+        Me.Label28 = New System.Windows.Forms.Label()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -3026,6 +3029,16 @@ Partial Class frmPreferences
         Me.grpbxScraperMisc.TabStop = false
         Me.grpbxScraperMisc.Text = " Other options "
         '
+        'cbMovSetOverviewToNfo
+        '
+        Me.cbMovSetOverviewToNfo.AutoSize = true
+        Me.cbMovSetOverviewToNfo.Location = New System.Drawing.Point(37, 56)
+        Me.cbMovSetOverviewToNfo.Name = "cbMovSetOverviewToNfo"
+        Me.cbMovSetOverviewToNfo.Size = New System.Drawing.Size(262, 19)
+        Me.cbMovSetOverviewToNfo.TabIndex = 53
+        Me.cbMovSetOverviewToNfo.Text = "Save Set Overview to nfo (Kodi 17 onwards)"
+        Me.cbMovSetOverviewToNfo.UseVisualStyleBackColor = true
+        '
         'cbIMDbOriginalTitle
         '
         Me.cbIMDbOriginalTitle.AutoSize = true
@@ -3503,7 +3516,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4511,6 +4524,9 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
+        Me.GroupBox17.Controls.Add(Me.Label28)
+        Me.GroupBox17.Controls.Add(Me.tbTvAutoScrapeInterval)
+        Me.GroupBox17.Controls.Add(Me.cbTvEnableAutoScrape)
         Me.GroupBox17.Controls.Add(Me.cbTvThousSeparator)
         Me.GroupBox17.Controls.Add(Me.cbtvDisplayNextAiredToolTip)
         Me.GroupBox17.Controls.Add(Me.cbTvScrShtTVDBResize)
@@ -6008,15 +6024,31 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbMovSetOverviewToNfo
+        'cbTvEnableAutoScrape
         '
-        Me.cbMovSetOverviewToNfo.AutoSize = true
-        Me.cbMovSetOverviewToNfo.Location = New System.Drawing.Point(37, 56)
-        Me.cbMovSetOverviewToNfo.Name = "cbMovSetOverviewToNfo"
-        Me.cbMovSetOverviewToNfo.Size = New System.Drawing.Size(262, 19)
-        Me.cbMovSetOverviewToNfo.TabIndex = 53
-        Me.cbMovSetOverviewToNfo.Text = "Save Set Overview to nfo (Kodi 17 onwards)"
-        Me.cbMovSetOverviewToNfo.UseVisualStyleBackColor = true
+        Me.cbTvEnableAutoScrape.AutoSize = true
+        Me.cbTvEnableAutoScrape.Location = New System.Drawing.Point(132, 431)
+        Me.cbTvEnableAutoScrape.Name = "cbTvEnableAutoScrape"
+        Me.cbTvEnableAutoScrape.Size = New System.Drawing.Size(194, 19)
+        Me.cbTvEnableAutoScrape.TabIndex = 76
+        Me.cbTvEnableAutoScrape.Text = "AutoScrape Tv episodes every :"
+        Me.cbTvEnableAutoScrape.UseVisualStyleBackColor = true
+        '
+        'tbTvAutoScrapeInterval
+        '
+        Me.tbTvAutoScrapeInterval.Location = New System.Drawing.Point(161, 456)
+        Me.tbTvAutoScrapeInterval.Name = "tbTvAutoScrapeInterval"
+        Me.tbTvAutoScrapeInterval.Size = New System.Drawing.Size(47, 21)
+        Me.tbTvAutoScrapeInterval.TabIndex = 77
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = true
+        Me.Label28.Location = New System.Drawing.Point(214, 459)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(51, 15)
+        Me.Label28.TabIndex = 78
+        Me.Label28.Text = "Minutes"
         '
         'frmPreferences
         '
@@ -6670,4 +6702,7 @@ End Sub
     Friend WithEvents cbTvThousSeparator As CheckBox
     Friend WithEvents cbEnableMovDeleteFolderTsmi As CheckBox
     Friend WithEvents cbMovSetOverviewToNfo As CheckBox
+    Friend WithEvents Label28 As Label
+    Friend WithEvents tbTvAutoScrapeInterval As TextBox
+    Friend WithEvents cbTvEnableAutoScrape As CheckBox
 End Class

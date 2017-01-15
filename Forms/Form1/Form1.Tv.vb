@@ -190,7 +190,9 @@ Partial Public Class Form1
                 If Not String.IsNullOrEmpty(TvShow.Hidden.Value) AndAlso TvShow.Hidden.Value = True Then Continue For
                 shcount += 1
                 epcount += TvShow.Episodes.Count
-                TvTreeview.Nodes.Add(TvShow.ShowNode)
+                'TvTreeview.Nodes.Add(TvShow.ShowNode)
+                Dim action As Action = Sub() TvTreeview.Nodes.Add(TvShow.ShowNode)
+                TvTreeview.Invoke(action)
                 TvShow.UpdateTreenode()
             Next
 
@@ -201,7 +203,12 @@ Partial Public Class Form1
 
             TextBox_TotTVShowCount.Text = shcount.ToString
             TextBox_TotEpisodeCount.Text = epcount.ToString
-            TvTreeview.Sort()
+            If MainFormLoadedStatus Then
+                Dim action2 As Action = Sub() TvTreeview.Sort()
+                TvTreeview.Invoke(action2)
+            Else
+                TvTreeview.Sort()
+            End If
         Finally
             TvTreeview.EndUpdate()
         End Try
@@ -1261,7 +1268,9 @@ Partial Public Class Form1
             TvTreeview.Nodes.Clear()              'clear the treeview of old data
             ''Dirty work around until TvShows is repalced with TvCache.Shows universally
             For Each TvShow As Media_Companion.TvShow In Cache.TvCache.Shows
-                TvTreeview.Nodes.Add(TvShow.ShowNode)
+                Dim action As Action = Sub() TvTreeview.Nodes.Add(TvShow.ShowNode)
+                TvTreeview.Invoke(action)
+                'TvTreeview.Nodes.Add(TvShow.ShowNode)
                 TvShow.UpdateTreenode()
             Next
         Finally

@@ -127,7 +127,9 @@ Public Class frmPreferences
             Return False
         End If
         Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
-        
+
+        Pref.TvAutoScrapeInterval = tbTvAutoScrapeInterval.Text.ToInt
+
         If cleanfilenameprefchanged OrElse videosourceprefchanged Then
             applyAdvancedLists()
         End If
@@ -640,7 +642,10 @@ Public Class frmPreferences
         cbTvAutoScreenShot              .Checked    = Pref.autoepisodescreenshot
         cbTvScrShtTVDBResize            .Checked    = Pref.tvscrnshtTVDBResize
         cbtvDisplayNextAiredToolTip     .Checked    = Pref.tvDisplayNextAiredToolTip
+        tbTvAutoScrapeInterval          .Text       = Pref.TvAutoScrapeInterval.ToString
+        cbtvDisplayNextAiredToolTip     .Checked    = Pref.tvDisplayNextAiredToolTip
         cbTvThousSeparator              .Checked    = Pref.TvThousSeparator
+        cbTvEnableAutoScrape            .Checked    = Pref.TvEnableAutoScrape
         
     End Sub
 
@@ -2797,6 +2802,26 @@ End Sub
     Private Sub cbTvThousSeparator_CheckedChanged(sender As Object, e As EventArgs) Handles cbTvThousSeparator.CheckedChanged
         If prefsload Then Exit Sub
         Pref.TvThousSeparator = cbTvThousSeparator.Checked
+        Changes = True
+    End Sub
+
+    Private Sub cbTvEnableAutoScrape_CheckedChanged(sender As Object, e As EventArgs) Handles cbTvEnableAutoScrape.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvEnableAutoScrape = cbTvEnableAutoScrape.Checked
+        Changes = True
+    End Sub
+
+    Private Sub tbTvAutoScrapeInterval_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbTvAutoScrapeInterval.KeyPress
+        If Not Char.IsNumber(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub tbTvAutoScrapeInterval_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles tbTvAutoScrapeInterval.TextChanged
+        If prefsload Then Exit Sub
+        Dim digitsOnly As Regex = New Regex("[^\d]")
+        tbTvAutoScrapeInterval.Text = digitsOnly.Replace(tbTvAutoScrapeInterval.Text, "")
         Changes = True
     End Sub
 
