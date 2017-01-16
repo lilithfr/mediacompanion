@@ -374,6 +374,9 @@ Partial Class frmPreferences
         Me.TabControl6 = New System.Windows.Forms.TabControl()
         Me.TabPage30 = New System.Windows.Forms.TabPage()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.tbTvAutoScrapeInterval = New System.Windows.Forms.TextBox()
+        Me.cbTvEnableAutoScrape = New System.Windows.Forms.CheckBox()
         Me.cbTvThousSeparator = New System.Windows.Forms.CheckBox()
         Me.cbTvScrShtTVDBResize = New System.Windows.Forms.CheckBox()
         Me.GroupBox43 = New System.Windows.Forms.GroupBox()
@@ -500,9 +503,10 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbTvEnableAutoScrape = New System.Windows.Forms.CheckBox()
-        Me.tbTvAutoScrapeInterval = New System.Windows.Forms.TextBox()
-        Me.Label28 = New System.Windows.Forms.Label()
+        Me.gpbx_MovTimerAutoScrape = New System.Windows.Forms.GroupBox()
+        Me.cbMovEnableAutoScrape = New System.Windows.Forms.CheckBox()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.tbMovAutoScrapeInterval = New System.Windows.Forms.TextBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -593,6 +597,7 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
+        Me.gpbx_MovTimerAutoScrape.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -4293,6 +4298,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbx_MovTimerAutoScrape)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieCustomPlaycountTag)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieSeparateIdentifier)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieNfoPosterOptions)
@@ -4300,7 +4306,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4308,9 +4314,9 @@ Partial Class frmPreferences
         '
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.cbMovNfoWatchTag)
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.Label23)
-        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(401, 130)
+        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(10, 137)
         Me.grpbxMovieCustomPlaycountTag.Name = "grpbxMovieCustomPlaycountTag"
-        Me.grpbxMovieCustomPlaycountTag.Size = New System.Drawing.Size(463, 76)
+        Me.grpbxMovieCustomPlaycountTag.Size = New System.Drawing.Size(389, 76)
         Me.grpbxMovieCustomPlaycountTag.TabIndex = 77
         Me.grpbxMovieCustomPlaycountTag.TabStop = false
         Me.grpbxMovieCustomPlaycountTag.Text = "Custom playcount tag"
@@ -4342,16 +4348,16 @@ Partial Class frmPreferences
         Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.btn_MovSepAdd)
         Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.tb_MovSeptb)
         Me.grpbxMovieSeparateIdentifier.Controls.Add(Me.lb_MovSepLst)
-        Me.grpbxMovieSeparateIdentifier.Location = New System.Drawing.Point(7, 8)
+        Me.grpbxMovieSeparateIdentifier.Location = New System.Drawing.Point(427, 7)
         Me.grpbxMovieSeparateIdentifier.Name = "grpbxMovieSeparateIdentifier"
-        Me.grpbxMovieSeparateIdentifier.Size = New System.Drawing.Size(387, 408)
+        Me.grpbxMovieSeparateIdentifier.Size = New System.Drawing.Size(387, 354)
         Me.grpbxMovieSeparateIdentifier.TabIndex = 76
         Me.grpbxMovieSeparateIdentifier.TabStop = false
         Me.grpbxMovieSeparateIdentifier.Text = "Separate Movie Identifyer"
         '
         'btn_MovSepReset
         '
-        Me.btn_MovSepReset.Location = New System.Drawing.Point(215, 281)
+        Me.btn_MovSepReset.Location = New System.Drawing.Point(215, 236)
         Me.btn_MovSepReset.Name = "btn_MovSepReset"
         Me.btn_MovSepReset.Size = New System.Drawing.Size(75, 23)
         Me.btn_MovSepReset.TabIndex = 5
@@ -4360,7 +4366,7 @@ Partial Class frmPreferences
         '
         'Label198
         '
-        Me.Label198.Location = New System.Drawing.Point(203, 42)
+        Me.Label198.Location = New System.Drawing.Point(203, 20)
         Me.Label198.Name = "Label198"
         Me.Label198.Size = New System.Drawing.Size(178, 226)
         Me.Label198.TabIndex = 4
@@ -4368,7 +4374,7 @@ Partial Class frmPreferences
         '
         'btn_MovSepRem
         '
-        Me.btn_MovSepRem.Location = New System.Drawing.Point(215, 338)
+        Me.btn_MovSepRem.Location = New System.Drawing.Point(215, 286)
         Me.btn_MovSepRem.Name = "btn_MovSepRem"
         Me.btn_MovSepRem.Size = New System.Drawing.Size(75, 23)
         Me.btn_MovSepRem.TabIndex = 3
@@ -4377,7 +4383,7 @@ Partial Class frmPreferences
         '
         'btn_MovSepAdd
         '
-        Me.btn_MovSepAdd.Location = New System.Drawing.Point(215, 372)
+        Me.btn_MovSepAdd.Location = New System.Drawing.Point(215, 320)
         Me.btn_MovSepAdd.Name = "btn_MovSepAdd"
         Me.btn_MovSepAdd.Size = New System.Drawing.Size(75, 23)
         Me.btn_MovSepAdd.TabIndex = 2
@@ -4386,7 +4392,7 @@ Partial Class frmPreferences
         '
         'tb_MovSeptb
         '
-        Me.tb_MovSeptb.Location = New System.Drawing.Point(6, 372)
+        Me.tb_MovSeptb.Location = New System.Drawing.Point(6, 321)
         Me.tb_MovSeptb.Name = "tb_MovSeptb"
         Me.tb_MovSeptb.Size = New System.Drawing.Size(191, 21)
         Me.tb_MovSeptb.TabIndex = 1
@@ -4395,9 +4401,9 @@ Partial Class frmPreferences
         '
         Me.lb_MovSepLst.FormattingEnabled = true
         Me.lb_MovSepLst.ItemHeight = 15
-        Me.lb_MovSepLst.Location = New System.Drawing.Point(6, 42)
+        Me.lb_MovSepLst.Location = New System.Drawing.Point(6, 20)
         Me.lb_MovSepLst.Name = "lb_MovSepLst"
-        Me.lb_MovSepLst.Size = New System.Drawing.Size(191, 304)
+        Me.lb_MovSepLst.Size = New System.Drawing.Size(191, 289)
         Me.lb_MovSepLst.TabIndex = 0
         '
         'grpbxMovieNfoPosterOptions
@@ -4408,7 +4414,7 @@ Partial Class frmPreferences
         Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.tmdb_chk)
         Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.IMPA_chk)
         Me.grpbxMovieNfoPosterOptions.Controls.Add(Me.Label89)
-        Me.grpbxMovieNfoPosterOptions.Location = New System.Drawing.Point(401, 8)
+        Me.grpbxMovieNfoPosterOptions.Location = New System.Drawing.Point(427, 383)
         Me.grpbxMovieNfoPosterOptions.Margin = New System.Windows.Forms.Padding(4)
         Me.grpbxMovieNfoPosterOptions.Name = "grpbxMovieNfoPosterOptions"
         Me.grpbxMovieNfoPosterOptions.Padding = New System.Windows.Forms.Padding(4)
@@ -4555,6 +4561,32 @@ Partial Class frmPreferences
         Me.GroupBox17.TabIndex = 22
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = true
+        Me.Label28.Location = New System.Drawing.Point(214, 459)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(51, 15)
+        Me.Label28.TabIndex = 78
+        Me.Label28.Text = "Minutes"
+        '
+        'tbTvAutoScrapeInterval
+        '
+        Me.tbTvAutoScrapeInterval.Location = New System.Drawing.Point(161, 456)
+        Me.tbTvAutoScrapeInterval.Name = "tbTvAutoScrapeInterval"
+        Me.tbTvAutoScrapeInterval.Size = New System.Drawing.Size(47, 21)
+        Me.tbTvAutoScrapeInterval.TabIndex = 77
+        '
+        'cbTvEnableAutoScrape
+        '
+        Me.cbTvEnableAutoScrape.AutoSize = true
+        Me.cbTvEnableAutoScrape.Location = New System.Drawing.Point(132, 431)
+        Me.cbTvEnableAutoScrape.Name = "cbTvEnableAutoScrape"
+        Me.cbTvEnableAutoScrape.Size = New System.Drawing.Size(194, 19)
+        Me.cbTvEnableAutoScrape.TabIndex = 76
+        Me.cbTvEnableAutoScrape.Text = "AutoScrape Tv episodes every :"
+        Me.cbTvEnableAutoScrape.UseVisualStyleBackColor = true
         '
         'cbTvThousSeparator
         '
@@ -6024,31 +6056,43 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbTvEnableAutoScrape
+        'gpbx_MovTimerAutoScrape
         '
-        Me.cbTvEnableAutoScrape.AutoSize = true
-        Me.cbTvEnableAutoScrape.Location = New System.Drawing.Point(132, 431)
-        Me.cbTvEnableAutoScrape.Name = "cbTvEnableAutoScrape"
-        Me.cbTvEnableAutoScrape.Size = New System.Drawing.Size(194, 19)
-        Me.cbTvEnableAutoScrape.TabIndex = 76
-        Me.cbTvEnableAutoScrape.Text = "AutoScrape Tv episodes every :"
-        Me.cbTvEnableAutoScrape.UseVisualStyleBackColor = true
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.tbMovAutoScrapeInterval)
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.Label29)
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.cbMovEnableAutoScrape)
+        Me.gpbx_MovTimerAutoScrape.Location = New System.Drawing.Point(10, 7)
+        Me.gpbx_MovTimerAutoScrape.Name = "gpbx_MovTimerAutoScrape"
+        Me.gpbx_MovTimerAutoScrape.Size = New System.Drawing.Size(389, 111)
+        Me.gpbx_MovTimerAutoScrape.TabIndex = 78
+        Me.gpbx_MovTimerAutoScrape.TabStop = false
+        Me.gpbx_MovTimerAutoScrape.Text = "AutoScrape Timer"
         '
-        'tbTvAutoScrapeInterval
+        'cbMovEnableAutoScrape
         '
-        Me.tbTvAutoScrapeInterval.Location = New System.Drawing.Point(161, 456)
-        Me.tbTvAutoScrapeInterval.Name = "tbTvAutoScrapeInterval"
-        Me.tbTvAutoScrapeInterval.Size = New System.Drawing.Size(47, 21)
-        Me.tbTvAutoScrapeInterval.TabIndex = 77
+        Me.cbMovEnableAutoScrape.AutoSize = true
+        Me.cbMovEnableAutoScrape.Location = New System.Drawing.Point(13, 20)
+        Me.cbMovEnableAutoScrape.Name = "cbMovEnableAutoScrape"
+        Me.cbMovEnableAutoScrape.Size = New System.Drawing.Size(168, 19)
+        Me.cbMovEnableAutoScrape.TabIndex = 0
+        Me.cbMovEnableAutoScrape.Text = "AutoScrape Movies every :"
+        Me.cbMovEnableAutoScrape.UseVisualStyleBackColor = true
         '
-        'Label28
+        'Label29
         '
-        Me.Label28.AutoSize = true
-        Me.Label28.Location = New System.Drawing.Point(214, 459)
-        Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(51, 15)
-        Me.Label28.TabIndex = 78
-        Me.Label28.Text = "Minutes"
+        Me.Label29.AutoSize = true
+        Me.Label29.Location = New System.Drawing.Point(95, 48)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(51, 15)
+        Me.Label29.TabIndex = 1
+        Me.Label29.Text = "Minutes"
+        '
+        'tbMovAutoScrapeInterval
+        '
+        Me.tbMovAutoScrapeInterval.Location = New System.Drawing.Point(33, 45)
+        Me.tbMovAutoScrapeInterval.Name = "tbMovAutoScrapeInterval"
+        Me.tbMovAutoScrapeInterval.Size = New System.Drawing.Size(56, 21)
+        Me.tbMovAutoScrapeInterval.TabIndex = 2
         '
         'frmPreferences
         '
@@ -6223,6 +6267,8 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
+        Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
+        Me.gpbx_MovTimerAutoScrape.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6705,4 +6751,8 @@ End Sub
     Friend WithEvents Label28 As Label
     Friend WithEvents tbTvAutoScrapeInterval As TextBox
     Friend WithEvents cbTvEnableAutoScrape As CheckBox
+    Friend WithEvents gpbx_MovTimerAutoScrape As GroupBox
+    Friend WithEvents tbMovAutoScrapeInterval As TextBox
+    Friend WithEvents Label29 As Label
+    Friend WithEvents cbMovEnableAutoScrape As CheckBox
 End Class

@@ -367,6 +367,8 @@ Public Class Pref
     Public Shared MovNfoWatchTag As Boolean
     Public Shared SetIdAsCollectionnumber As Boolean
     Public Shared MovSetOverviewToNfo As Boolean
+    Public Shared MovEnableAutoScrape As Boolean
+    Public Shared MovAutoScrapeInterval As Integer
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -733,6 +735,8 @@ Public Class Pref
         RenameSpaceCharacter = "_"
         SetIdAsCollectionnumber = False
         MovSetOverviewToNfo = False
+        MovEnableAutoScrape = False
+        MovAutoScrapeInterval = 5
 
 
         'TV
@@ -1055,6 +1059,8 @@ Public Class Pref
         root.AppendChild(doc, "MovNfoWatchTag"              , MovNfoWatchTag            ) 'cbMovNfoWatchTag
         root.AppendChild(doc, "SetIdAsCollectionnumber"     , SetIdAsCollectionnumber   ) 'cbSetIdAsCollectionnumber
         root.AppendChild(doc, "MovSetOverviewToNfo"         , MovSetOverviewToNfo       ) 'cbMovSetOverviewToNfo
+        root.AppendChild(doc, "MovEnableAutoScrape"         , MovEnableAutoScrape       ) 'cbMovEnableAutoScrape
+        root.AppendChild(doc, "MovAutoScrapeInterval"       , MovAutoScrapeInterval     ) 'tbMovAutoScrapeInterval
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1478,6 +1484,8 @@ Public Class Pref
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
                     Case "SetIdAsCollectionnumber"              : SetIdAsCollectionnumber = thisresult.InnerXml
                     Case "MovSetOverviewToNfo"                  : MovSetOverviewToNfo = thisresult.InnerXml
+                    Case "MovEnableAutoScrape"                  : MovEnableAutoScrape = thisresult.InnerXml
+                    Case "MovAutoScrapeInterval"                : MovAutoScrapeInterval = Convert.ToInt16(thisresult.InnerText)
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)

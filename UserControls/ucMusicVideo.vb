@@ -112,6 +112,7 @@ Public Class ucMusicVideo
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
+        Pref.MusicVidScrape = False
         loadMVDV1()
     End Sub
 
@@ -121,6 +122,7 @@ Public Class ucMusicVideo
         While Form1.BckWrkScnMovies.IsBusy
             Application.DoEvents()
         End While
+        Pref.MusicVidScrape = False
         MVCacheSave()
         loadMVDV1()
     End Sub

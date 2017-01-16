@@ -128,7 +128,8 @@ Public Class frmPreferences
         End If
         Pref.ExcludeFolders.PopFromTextBox(tbExcludeFolders)
 
-        Pref.TvAutoScrapeInterval = tbTvAutoScrapeInterval.Text.ToInt
+        Pref.TvAutoScrapeInterval   = tbTvAutoScrapeInterval.Text.ToInt
+        Pref.MovAutoScrapeInterval  = tbMovAutoScrapeInterval.Text.ToInt
 
         If cleanfilenameprefchanged OrElse videosourceprefchanged Then
             applyAdvancedLists()
@@ -361,6 +362,8 @@ Public Class frmPreferences
         cbGetMovieSetFromTMDb               .Checked    = Pref.GetMovieSetFromTMDb
         cbSetIdAsCollectionnumber           .Checked    = Pref.SetIdAsCollectionnumber
         cbMovSetOverviewToNfo               .Checked    = Pref.MovSetOverviewToNfo
+        cbMovEnableAutoScrape               .Checked    = Pref.MovEnableAutoScrape
+        tbMovAutoScrapeInterval             .Text       = Pref.MovAutoScrapeInterval.ToString
         cbIMDbOriginalTitle                 .Checked    = Pref.Original_Title
 
         'BasicSave Mode
@@ -1477,6 +1480,26 @@ Public Class frmPreferences
     Private Sub cbMovSetOverviewToNfo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovSetOverviewToNfo.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovSetOverviewToNfo = cbMovSetOverviewToNfo.checked
+    End Sub
+
+    Private Sub cbMovEnableAutoScrape_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovEnableAutoScrape.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovEnableAutoScrape = cbMovEnableAutoScrape.Checked
+        Changes = True
+    End Sub
+
+    Private Sub tbMovAutoScrapeInterval_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbMovAutoScrapeInterval.KeyPress
+        If Not Char.IsNumber(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+        Changes = True
+    End Sub
+
+    Private Sub tbMovAutoScrapeInterval_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles tbMovAutoScrapeInterval.TextChanged
+        If prefsload Then Exit Sub
+        Dim digitsOnly As Regex = New Regex("[^\d]")
+        tbMovAutoScrapeInterval.Text = digitsOnly.Replace(tbMovAutoScrapeInterval.Text, "")
+        Changes = True
     End Sub
 
     Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles cbIMDbOriginalTitle.CheckedChanged
