@@ -1816,13 +1816,13 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 newmovie.fullmoviebody.title = Pref.RemoveIgnoredArticles(tempstring)
-                            Case "set"          : newmovie.fullmoviebody.movieset = thisresult.InnerText
-                            Case "stars"        : newmovie.fullmoviebody.stars = thisresult.InnerText
-                            Case "year"         : newmovie.fullmoviebody.year = thisresult.InnerText
-                            Case "plot"         : newmovie.fullmoviebody.plot = thisresult.InnerText
-                            Case "playcount"    : newmovie.fullmoviebody.playcount = thisresult.InnerText
-                            Case "sorttitle"    : newmovie.fullmoviebody.sortorder = thisresult.InnerText
-                            Case "runtime"      : newmovie.fullmoviebody.runtime = thisresult.InnerText
+                            Case "set"          : newmovie.fullmoviebody.movieset   = thisresult.InnerText
+                            Case "stars"        : newmovie.fullmoviebody.stars      = thisresult.InnerText
+                            Case "year"         : newmovie.fullmoviebody.year       = thisresult.InnerText
+                            Case "plot"         : newmovie.fullmoviebody.plot       = thisresult.InnerText
+                            Case "playcount"    : newmovie.fullmoviebody.playcount  = thisresult.InnerText
+                            Case "sorttitle"    : newmovie.fullmoviebody.sortorder  = thisresult.InnerText
+                            Case "runtime"      : newmovie.fullmoviebody.runtime    = thisresult.InnerText
                                 If IsNumeric(newmovie.fullmoviebody.runtime) Then
                                     newmovie.fullmoviebody.runtime = newmovie.fullmoviebody.runtime & " min"
                                 End If
@@ -1834,6 +1834,12 @@ Public Class WorkingWithNfoFiles
                                             newmovie.filedetails = Streamdetailsload(res)
                                     End Select
                                 Next
+                            Case "genre"
+                                If newmovie.fullmoviebody.genre = "" Then
+                                    newmovie.fullmoviebody.genre = thisresult.InnerText
+                                Else
+                                    newmovie.fullmoviebody.genre = newmovie.fullmoviebody.genre & " / " & thisresult.InnerText
+                                End If
                         End Select
                     Catch ex As Exception
                         MsgBox(ex.ToString)
@@ -1905,17 +1911,17 @@ Public Class WorkingWithNfoFiles
                 child.AppendChild(anotherchild)
                 root.AppendChild(child)
             End If
-            
-            root.AppendChild(doc, "title"       , homemovietosave.fullmoviebody.title)
-            root.AppendChild(doc, "set"         , homemovietosave.fullmoviebody.movieset)
             If String.IsNullOrEmpty(homemovietosave.fullmoviebody.sortorder) Then homemovietosave.fullmoviebody.sortorder = homemovietosave.fullmoviebody.title
-            root.AppendChild(doc, "sorttitle"   , homemovietosave.fullmoviebody.sortorder)
-            root.AppendChild(doc, "year"        , homemovietosave.fullmoviebody.year)
-            root.AppendChild(doc, "plot"        , homemovietosave.fullmoviebody.plot)
-            root.AppendChild(doc, "runtime"     , FormatRunTime(homemovietosave.fullmoviebody.runtime, homemovietosave.filedetails.Video.DurationInSeconds.Value, False))
-            root.AppendChild(doc, "playcount"   , homemovietosave.fullmoviebody.playcount)
-            root.AppendChild(doc, "createdate"  , SetCreateDate(homemovietosave.fileinfo.createdate))
-            root.AppendChild(doc, "stars"       , homemovietosave.fullmoviebody.stars)
+            root.AppendChild(doc        , "title"       , homemovietosave.fullmoviebody.title)
+            root.AppendChild(doc        , "set"         , homemovietosave.fullmoviebody.movieset)
+            root.AppendChild(doc        , "sorttitle"   , homemovietosave.fullmoviebody.sortorder)
+            root.AppendChild(doc        , "year"        , homemovietosave.fullmoviebody.year)
+            root.AppendChild(doc        , "plot"        , homemovietosave.fullmoviebody.plot)
+            root.AppendChild(doc        , "runtime"     , FormatRunTime(homemovietosave.fullmoviebody.runtime, homemovietosave.filedetails.Video.DurationInSeconds.Value, False))
+            root.AppendChild(doc        , "playcount"   , homemovietosave.fullmoviebody.playcount)
+            root.AppendChild(doc        , "createdate"  , SetCreateDate(homemovietosave.fileinfo.createdate))
+            root.AppendChild(doc        , "stars"       , homemovietosave.fullmoviebody.stars)
+            root.AppendChildList(doc    , "genre"       , homemovietosave.fullmoviebody.genre, "/")
             doc.AppendChild(root)
             SaveXMLDoc(doc, filenameandpath)
         Else

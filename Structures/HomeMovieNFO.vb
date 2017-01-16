@@ -6,6 +6,7 @@
     Dim plot As String
     Dim runtime As String
     Dim stars As String
+    Dim genre As String
     Dim playcount As String
     Dim filename As String
     Dim fanart As String
@@ -17,6 +18,7 @@
         plot = ""
         runtime = ""
         stars = ""
+        genre = ""
         playcount = ""
         filename = ""
         fanart = ""

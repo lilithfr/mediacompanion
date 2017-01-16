@@ -16038,9 +16038,10 @@ Public Class Form1
 		If HmMovSort.Text <> "" Then
 			WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
 		End If
-		WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
-		WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
-		WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
+		WorkingHomeMovie.fullmoviebody.year     = HmMovYear.Text
+		WorkingHomeMovie.fullmoviebody.plot     = HmMovPlot.Text
+		WorkingHomeMovie.fullmoviebody.stars    = HmMovStars.Text
+        WorkingHomeMovie.fullmoviebody.genre    = HmMovGenre.Text
 		nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
 	End Sub
 
@@ -16051,6 +16052,44 @@ Public Class Form1
 	Private Sub btn_HMRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMRefresh.Click
 		Call rebuildHomeMovies()
 	End Sub
+
+    Private Sub HmMovGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles HmMovGenre.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Try
+                Dim item() As String = WorkingHomeMovie.fullmoviebody.genre.Split("/")
+                Dim genre As String = ""
+                Dim listof As New List(Of str_genre)
+                listof.Clear()
+                For Each i In item
+                    If i = "" Then Continue For
+                    Dim g As str_genre
+                    g.genre = i.Trim
+                    g.count = 1
+                    listof.Add(g)
+                Next
+                Dim frm As New frmGenreSelect 
+                frm.multicount = 1
+                frm.SelectedGenres = listof
+                frm.Init()
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                    listof.Clear()
+                    listof.AddRange(frm.SelectedGenres)
+                    For each g In listof
+                        If g.count = 0 Then Continue For
+                        If genre = "" Then
+                            genre = g.genre
+                        Else
+                            genre += " / " & g.genre
+                        End If
+                    Next
+                    WorkingHomeMovie.fullmoviebody.genre = genre
+                    HmMovGenre.Text = genre
+                   nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie, True)
+                End If
+            Catch
+            End Try
+        End If
+    End Sub
 
 #End Region
 
@@ -16715,17 +16754,19 @@ Public Class Form1
 
 	Private Sub loadhomemoviedetails()
 		HmMovTitle.Text = ""
-		HmMovSort.Text = ""
-		HmMovYear.Text = ""
-		HmMovPlot.Text = ""
-		HmMovStars.Text = ""
+		HmMovSort   .Text = ""
+		HmMovYear   .Text = ""
+		HmMovPlot   .Text = ""
+		HmMovStars  .Text = ""
+        HmMovGenre  .Text = ""
 		pbx_HmFanart.Image = Nothing
 		WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
-		HmMovTitle.Text = WorkingHomeMovie.fullmoviebody.title
-		HmMovSort.Text = WorkingHomeMovie.fullmoviebody.sortorder
-		HmMovPlot.Text = WorkingHomeMovie.fullmoviebody.plot
-		HmMovStars.Text = WorkingHomeMovie.fullmoviebody.stars
-		HmMovYear.Text = WorkingHomeMovie.fullmoviebody.year
+		HmMovTitle  .Text = WorkingHomeMovie.fullmoviebody.title
+		HmMovSort   .Text = WorkingHomeMovie.fullmoviebody.sortorder
+		HmMovPlot   .Text = WorkingHomeMovie.fullmoviebody.plot
+		HmMovStars  .Text = WorkingHomeMovie.fullmoviebody.stars
+		HmMovYear   .Text = WorkingHomeMovie.fullmoviebody.year
+        HmMovGenre  .Text = WorkingHomeMovie.fullmoviebody.genre
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
