@@ -1215,6 +1215,7 @@ Public Class Movie
             _movieCache.FolderSize = Utilities.GetFolderSize(NfoPath)
         End If
 
+        _movieCache.MediaFileSize = Utilities.GetFileSize(mediapathandfilename)
 
         _movieCache.title               = _scrapedMovie.fullmoviebody.title
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
@@ -1274,7 +1275,7 @@ Public Class Movie
         AssignUserTmdbSetAddition
         AssignUnknownSetCount
     End Sub
-    
+
     Sub AssignUserTmdbSetAddition
         _movieCache.UserTmdbSetAddition = "N"
         If _movieCache.TmdbSetId <> "" Then

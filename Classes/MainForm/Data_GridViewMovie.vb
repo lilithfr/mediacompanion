@@ -49,7 +49,7 @@ Public Class Data_GridViewMovie
     Property FrodoPosterExists    As Boolean
     Property PreFrodoPosterExists As Boolean
     Property FolderSize           As Long = -1
-
+    Property MediaFileSize        As Long = -1
     Property tmdbid               As String = ""
     Property UserSetAddition As Char = ""
     Property oMovies As Movies
@@ -136,6 +136,7 @@ Public Class Data_GridViewMovie
         stars                   = movie.stars 
         AssignSubtitleLang(movie.SubLang)
         FolderSize              = movie.FolderSize
+        MediaFileSize           = movie.MediaFileSize
         DefaultAudioTrack       = movie.DefaultAudioTrack
         rootfolder              = movie.rootfolder
         usrrated                = movie.usrrated
@@ -196,6 +197,7 @@ Public Class Data_GridViewMovie
         convertedMovie.FrodoPosterExists    = Me.FrodoPosterExists
         convertedMovie.PreFrodoPosterExists = Me.PreFrodoPosterExists
         convertedMovie.FolderSize           = Me.FolderSize
+        convertedMovie.MediaFileSize        = Me.MediaFileSize
         convertedMovie.DefaultAudioTrack    = Me.DefaultAudioTrack
         convertedMovie.rootfolder           = Me.rootfolder
         convertedMovie.usrrated             = Me.usrrated

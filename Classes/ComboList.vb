@@ -101,6 +101,7 @@ Public Class ComboList
     Property Actorlist            As New List(Of str_MovieActors)
     Property DirectorList         As New List(Of DirectorDatabase)
     Property FolderSize           As Long = -1
+    Property MediaFileSize        As Long = -1
     Property _rootfolder          As String = ""
     Property _usrrated            As Integer = 0
     Property _metascore           As Integer = 0
@@ -109,7 +110,13 @@ Public Class ComboList
 
     Public ReadOnly Property DisplayFolderSize As Double
         Get
-            Return Math.Round( FolderSize/(1024*1024*1024),1 )
+            Return FormatDisplaySize(FolderSize)
+        End Get
+    End Property
+
+    Public ReadOnly Property DisplayMediaFileSize As Double
+        Get
+            Return FormatDisplaySize(MediaFileSize)
         End Get
     End Property
 
@@ -543,6 +550,7 @@ Public Class ComboList
         Me.Actorlist            = From.Actorlist 
         Me.DirectorList         = From.DirectorList 
         Me.FolderSize           = From.FolderSize
+        Me.MediaFileSize        = From.MediaFileSize
         Me.rootfolder           = From.rootfolder
         Me.usrrated             = From.usrrated
         Me.metascore            = From.metascore
@@ -567,5 +575,9 @@ Public Class ComboList
     Function Locked(field As String) As Boolean
         Return FieldsLockEnabled AndAlso LockedFields.Contains(field)
     End Function
-    
+
+    Function FormatDisplaySize(size As Long) As Double
+        Return Math.Round(size / (1024 * 1024 * 1024), 1)
+    End Function
+	    
 End Class

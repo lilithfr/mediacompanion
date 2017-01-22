@@ -25,6 +25,8 @@ Public Class Form1
 	Const TMDB_SITE = "www.themoviedb.org/"
 	Const TMDB_SET_URL = TMDB_SITE & "collection/"
 	Const TMDB_MOVIE_URL = TMDB_SITE & "movie/"
+	Const RELATIVE_SIZE_THRESHOLD = 0.63F
+	Const MIN_MEDIA_SIZE As Integer = 10000000
 
 	Public Const XBMC_Controller_full_log_file As String = "XBMC-Controller-full-log-file.txt"
 	Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt"
@@ -3193,6 +3195,7 @@ Public Class Form1
 				workingMovie.top250 = queryList(0).top250
 				workingMovie.year = queryList(0).year
 				workingMovie.FolderSize = queryList(0).FolderSize
+                workingMovie.MediaFileSize = queryList(0).MediaFileSize
 				workingMovie.rootfolder = queryList(0).rootfolder
 				workingMovie.SetName = queryList(0).SetName
 				workingMovie.TmdbSetId = queryList(0).TmdbSetId
@@ -9842,11 +9845,29 @@ Public Class Form1
 
 		For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 
+            'Pre delete movie folder validation:
+            '
+            '  Not root folder
+            '  Folder size at least 10MB
+            '  Media  size at least 10MB
+            '  Media size at least 63% of the folder size 
+            '
+
             If Pref.GetRootFolderCheck(row.Cells("fullpathandfilename").Value.ToString) Then Continue For
 
-			Dim aok As Boolean = oMovies.Mov_DeleteMovieFolder(row.Cells("fullpathandfilename").Value.ToString)
+            Dim FolderSize    As Long = Convert.ToInt64(row.Cells("FolderSize"   ).Value)
+            Dim MediaFileSize As Long = Convert.ToInt64(row.Cells("MediaFileSize").Value)
 
-			If aok Then DataGridViewMovies.Rows.RemoveAt(row.Index)
+            If FolderSize   <MIN_MEDIA_SIZE Then Continue For 
+            If MediaFileSize<MIN_MEDIA_SIZE Then Continue For 
+
+            Dim relativeSize = (MediaFileSize + 0.0) / FolderSize
+
+            If (relativeSize < RELATIVE_SIZE_THRESHOLD) Then Continue For 
+
+            Dim aok As Boolean = oMovies.Mov_DeleteMovieFolder(row.Cells("fullpathandfilename").Value.ToString)
+
+            If aok Then DataGridViewMovies.Rows.RemoveAt(row.Index)
 		Next
 
 		DataGridViewMovies.ClearSelection
@@ -9864,7 +9885,7 @@ Public Class Form1
 
 	Private Sub Mov_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
 		Dim msgstr As String = " Are you sure you wish to delete" & vbCrLf
-		msgstr &= ".nfo" & If(DelArtwork, ", Fanart, Poster and Actors", " only") & " for" & vbCrLf
+		msgstr &= ".nfo" & If(DelArtwork, ", Fanart, Poster And Actors", " only") & " for" & vbCrLf
 		msgstr &= "Selected Movie(s)?"
 		If MsgBox(msgstr, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
 			Dim movielist As New List(Of String)
@@ -9881,7 +9902,7 @@ Public Class Form1
 			Mov_RemoveMovie()
 			Pref.MovieDeleteNfoArtwork = False
 		Else
-			MsgBox(" Deletion of .nfo, artwork and Actors " & vbCrLf & "has been Cancelled")
+			MsgBox(" Deletion of .nfo, artwork And Actors " & vbCrLf & "has been Cancelled")
 		End If
 	End Sub
 
@@ -9955,7 +9976,7 @@ Public Class Form1
 			End While
 			If Not Pref.MusicVidScrape Then oMovies.SaveCaches
 		Else
-			MsgBox("The " & If(Pref.MusicVidScrape, "MusicVideo", "Movie") & " Scraper is Already Running")
+			MsgBox("The " & If(Pref.MusicVidScrape, "MusicVideo", "Movie") & " Scraper Is Already Running")
 		End If
 	End Sub
 
@@ -10299,7 +10320,7 @@ Public Class Form1
 		Dim Displayed As Boolean = False
 		If ScraperErrorDetected And Pref.ShowLogOnError Then
 			scraperLog = "******************************************************************************" & vbCrLf &
-							 "* One or more errors were detected during scraping. See below for details.   *" & vbCrLf &
+							 "* One Or more errors were detected during scraping. See below for details.   *" & vbCrLf &
 							 "* To disable seeing this, turn off General Preferences -'Show log on error'. *" & vbCrLf &
 							 "******************************************************************************" & vbCrLf & vbCrLf & scraperLog
 		End If

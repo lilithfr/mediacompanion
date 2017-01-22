@@ -508,6 +508,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return 0
     End Function
 
+
     Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
       Dim size As Long          = 0
       Dim di   As DirectoryInfo = New DirectoryInfo(DirPath)

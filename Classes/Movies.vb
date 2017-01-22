@@ -1879,12 +1879,20 @@ Public Class Movies
                                     Dim subtitle As New SubtitleDetails
                                     subtitle.Language.Value = detail.InnerText
                                     newmovie.SubLang.Add(subtitle)
-                                Case "FolderSize"           : 
+                                Case "FolderSize" : 
                                     Try
                                         newmovie.FolderSize = detail.InnerText
                                     Catch
                                         newmovie.FolderSize = -1
-                                    End Try                                
+                                    End Try 
+
+                                Case "MediaFileSize" : 
+                                    Try
+                                        newmovie.MediaFileSize = detail.InnerText
+                                    Catch
+                                        newmovie.MediaFileSize = -1
+                                    End Try 
+												        												                               
                                 Case "RootFolder"           : newmovie.rootfolder          = detail.InnerText
                                 Case "UserTmdbSetAddition"  : newmovie.UserTmdbSetAddition = detail.InnerText
                                 Case "UnknownSetCount"      : newmovie.UnknownSetCount     = detail.InnerText
@@ -1977,6 +1985,7 @@ Public Class Movies
             child.AppendChild(doc, "FrodoPosterExists", movie.FrodoPosterExists)
             child.AppendChild(doc, "PreFrodoPosterExists", movie.PreFrodoPosterExists)
             child.AppendChild(doc, "FolderSize", movie.FolderSize)
+            child.AppendChild(doc, "MediaFileSize", movie.MediaFileSize)
             child.AppendChild(doc, "RootFolder", movie.rootfolder)
             child.AppendChild(doc, "UserTmdbSetAddition", movie.UserTmdbSetAddition)
             child.AppendChild(doc, "UnknownSetCount", movie.UnknownSetCount)
@@ -2870,6 +2879,7 @@ Public Class Movies
     Function Mov_DeleteMovieFolder(fullpathandfilename) As Boolean
         Dim aok As Boolean = True
 		If Pref.usefoldernames Then
+
 			Dim str = Path.GetDirectoryName(fullpathandfilename)
 
             Try
