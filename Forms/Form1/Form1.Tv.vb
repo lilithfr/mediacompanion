@@ -3141,6 +3141,125 @@ Partial Public Class Form1
         messbox.Close()
     End Sub
 
+    Private Sub tv_NewFind(ByVal tvpath As String, ByVal pattern As String)
+		Dim episode As New List(Of TvEpisode)
+		Dim propfile As Boolean = False
+		Dim allok As Boolean = False
+		Dim dir_info As New DirectoryInfo(tvpath)
+
+		Dim fs_infos() As String = Directory.GetFiles(tvpath, "*" & pattern, IO.SearchOption.TopDirectoryOnly)
+		Dim counter As Integer = 1
+		Dim counter2 As Integer = 1
+		For Each FilePath As String In fs_infos
+			Dim filename_video As String = FilePath
+			Dim filename_nfo As String = filename_video.Replace(Path.GetExtension(filename_video), ".nfo")
+			If File.Exists(filename_nfo) Then
+				If ep_NfoValidate(filename_nfo) = False And Pref.renamenfofiles = True Then
+					Dim movefilename As String = filename_nfo.Replace(Path.GetExtension(filename_nfo), ".info")
+					Try
+						If File.Exists(movefilename) Then
+							Utilities.SafeDeleteFile(movefilename)
+						End If
+						File.Move(filename_nfo, movefilename)
+					Catch ex As Exception
+						Utilities.SafeDeleteFile(movefilename)
+					End Try
+				End If
+			End If
+			If Not File.Exists(filename_nfo) Then
+				Dim add As Boolean = True
+				If pattern = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
+					Dim name As String = filename_nfo
+					name = name.Replace(Path.GetFileName(name), "VIDEO_TS.IFO")
+					If File.Exists(name) Then
+						add = False
+					End If
+				End If
+				If pattern = "*.rar" Then
+					Dim tempmovie As String = String.Empty
+					Dim tempint2 As Integer = 0
+					Dim tempmovie2 As String = FilePath
+					If Path.GetExtension(tempmovie2).ToLower = ".rar" Then
+						If File.Exists(tempmovie2) = True Then
+							If File.Exists(tempmovie) = False Then
+								Dim rarname As String = tempmovie2
+								Dim SizeOfFile As Integer = FileLen(rarname)
+								tempint2 = Convert.ToInt32(Pref.rarsize) * 1048576
+								If SizeOfFile > tempint2 Then
+									Dim mat As Match
+									mat = Regex.Match(rarname, "\.part[0-9][0-9]?[0-9]?[0-9]?.rar")
+									If mat.Success = True Then
+										rarname = mat.Value
+										If rarname.ToLower.IndexOf(".part1.rar") <> -1 Or rarname.ToLower.IndexOf(".part01.rar") <> -1 Or rarname.ToLower.IndexOf(".part001.rar") <> -1 Or rarname.ToLower.IndexOf(".part0001.rar") <> -1 Then
+											Dim stackrarexists As Boolean = False
+											rarname = tempmovie.Replace(".nfo", ".rar")
+											If rarname.ToLower.IndexOf(".part1.rar") <> -1 Then
+												rarname = rarname.Replace(".part1.rar", ".nfo")
+												If File.Exists(rarname) Then
+													stackrarexists = True
+													tempmovie = rarname
+												Else
+													stackrarexists = False
+													tempmovie = rarname
+												End If
+											End If
+											If rarname.ToLower.IndexOf(".part01.rar") <> -1 Then
+												rarname = rarname.Replace(".part01.rar", ".nfo")
+												If File.Exists(rarname) Then
+													stackrarexists = True
+													tempmovie = rarname
+												Else
+													stackrarexists = False
+													tempmovie = rarname
+												End If
+											End If
+											If rarname.ToLower.IndexOf(".part001.rar") <> -1 Then
+												rarname = rarname.Replace(".part001.rar", ".nfo")
+												If File.Exists(rarname) Then
+													tempmovie = rarname
+													stackrarexists = True
+												Else
+													stackrarexists = False
+													tempmovie = rarname
+												End If
+											End If
+											If rarname.ToLower.IndexOf(".part0001.rar") <> -1 Then
+												rarname = rarname.Replace(".part0001.rar", ".nfo")
+												If File.Exists(rarname) Then
+													tempmovie = rarname
+													stackrarexists = True
+												Else
+													stackrarexists = False
+													tempmovie = rarname
+												End If
+											End If
+										Else
+											add = False
+										End If
+									Else
+										'remove = True
+									End If
+								Else
+									add = False
+								End If
+							End If
+						End If
+					End If
+				End If
+				Dim truefilename As String = Utilities.GetFileNameFromPath(filename_video)
+				If truefilename.Substring(0, 2) = "._" Then add = False
+				If add = True Then
+					Dim newep As New TvEpisode
+					newep.NfoFilePath = filename_nfo
+					newep.VideoFilePath = filename_video
+					newep.MediaExtension = Path.GetExtension(filename_video)
+					newEpisodeList.Add(newep)
+				End If
+			End If
+		Next
+		fs_infos = Nothing
+	End Sub
+
     Public Function tv_EpisodeFanartGet(ByVal episode As TvEpisode, ByVal doScreenShot As Boolean) As String
         Dim result As String = "!!!  *** Unable to download Episode Thumb ***"
         Dim fpath As String = episode.NfoFilePath.Replace(".nfo", ".tbn")

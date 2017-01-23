@@ -247,9 +247,7 @@ Module Module1
 
     Public Sub LogStart
         logfile = Pref.applicationPath & logfile
-        If File.Exists(logfile) Then
-            File.Delete(logfile)
-        End If
+        If File.Exists(logfile) Then File.Delete(logfile)
 
         Dim logstr As String = ""
         
@@ -260,9 +258,7 @@ Module Module1
     End Sub
 
     Public Sub ConsoleOrLog(ByVal str As String)
-        If visible Then
-            Console.WriteLine(str)
-        End If
+        If visible Then Console.WriteLine(str)
         logstr.Add(str)
     End Sub
 
@@ -298,10 +294,7 @@ Module Module1
                 For Each movie In oMovies.MovieCache
                     Dim title As String = Pref.RemoveIgnoredArticles(movie.title)
                     movie.title = title
-                    If Pref.sorttitleignorearticle Then
-                        Dim sorttitle As String = Pref.RemoveIgnoredArticles(movie.sortorder)
-                        movie.sortorder = sorttitle
-                    End If
+                    If Pref.sorttitleignorearticle Then movie.sortorder = Pref.RemoveIgnoredArticles(movie.sortorder)
                     Dim appendIncr As String = String.Empty
                     For strIncr = 1 To 5
 	                    Select Case Pref.moviesortorder
@@ -365,7 +358,7 @@ Module Module1
         If Pref.tv_RegexRename.Count = 0 Then Pref.util_RegexSetDefaultRename()
 
         For Each item In basictvlist
-            If item.fullpath.IndexOf("tvshow.nfo", CompareType) <> -1 Then showstoscrapelist.Add(item.fullpath)
+            If item.nfopathandfilename.IndexOf("tvshow.nfo", CompareType) <> -1 Then showstoscrapelist.Add(item.nfopathandfilename)
         Next
         If showstoscrapelist.Count > 0 Then
             If Not dotvmissingepthumb Then
@@ -400,12 +393,11 @@ Module Module1
         Dim tempstring As String = ""
         Dim tempint As Integer
         Dim language As String = ""
-        Dim realshowpath As String = ""
+        Dim seriespath As String = ""
         Dim listactors As New List(Of Actor)
 
         newEpisodeList.Clear()
         Dim newtvfolders As New List(Of String)
-
         Dim dirpath As String = String.Empty
 
         ConsoleOrLog("")
@@ -421,13 +413,9 @@ Module Module1
         For Each tvfolder In listofshowfolders
             Dim add As Boolean = True
             For Each tvshow In basictvlist
-                If tvshow.fullpath.IndexOf(tvfolder, CompareType) <> -1 Then
-                    If tvshow.locked = True Or tvshow.locked = 2 Then
-                        If manual = False Then
-                            add = False
-                            Exit For
-                        End If
-                    End If
+                If tvshow.nfopathandfilename.IndexOf(tvfolder, CompareType) <> -1 Then
+                    If tvshow.locked = True Or tvshow.locked = 2 Then add = manual
+                    If Not add Then Exit For
                 End If
             Next
             If add = True Then
@@ -437,21 +425,10 @@ Module Module1
                 If hg.Exists Then
                     newtvfolders.Add(tvfolder)
                     Try
-                        For Each strfolder As String In My.Computer.FileSystem.GetDirectories(tvfolder)
-                            Try
-                                If strfolder.IndexOf("System Volume Information", CompareType) = -1 Then
-                                    newtvfolders.Add(strfolder)
-                                    For Each strfolder2 As String In My.Computer.FileSystem.GetDirectories(strfolder, FileIO.SearchOption.SearchAllSubDirectories)
-                                        Try
-                                            If strfolder2.IndexOf("System Volume Information", CompareType) = -1 Then newtvfolders.Add(strfolder2)
-                                        Catch ex As Exception
-                                            MsgBox(ex.Message)
-                                        End Try
-                                    Next
-                                End If
-                            Catch ex As Exception
-                                MsgBox(ex.Message)
-                            End Try
+                        Dim ExtraFolder As List(Of String) = Utilities.EnumerateFolders(tvfolder, 3)
+                        For Each Item As String In ExtraFolder
+                            If Pref.ExcludeFolders.Match(Item) Then Continue For
+                            newtvfolders.Add(Item)
                         Next
                     Catch ex As Exception
                         MsgBox(ex.ToString)
@@ -468,9 +445,7 @@ Module Module1
             If (dir_info.FullName.EndsWith(".actors", CompareType)) Then Continue For
             findnewepisodes(dirpath)
             tempint = newEpisodeList.Count - mediacounter
-            If tempint > 0 Then
-                ConsoleOrLog(tempint.ToString() & " New episodes found in directory:- " & dirpath)
-            End If
+            If tempint > 0 Then ConsoleOrLog(tempint.ToString() & " New episodes found in directory:- " & dirpath)
             mediacounter = newEpisodeList.Count
         Next g
 
@@ -484,7 +459,7 @@ Module Module1
         For Each newepisode In newEpisodeList
             S = ""
             newepisodetoadd.episodeno = ""
-            newepisodetoadd.episodepath = ""
+            newepisodetoadd.epnfopath = ""
             newepisodetoadd.showid = ""
             newepisodetoadd.playcount = ""
             newepisodetoadd.rating = ""
@@ -493,7 +468,7 @@ Module Module1
             newepisodetoadd.title = ""
             
             For Each Regexs In Pref.tv_RegexScraper
-                S = newepisode.episodepath
+                S = newepisode.epnfopath
                 S = S.Replace("x264", "")
                 S = S.Replace("x265", "")
                 S = S.Replace("720p", "")
@@ -513,7 +488,7 @@ Module Module1
                         newepisode.seasonno = M.Groups(1).Value.ToString
                         newepisode.episodeno = M.Groups(2).Value.ToString
                         If newepisode.seasonno <> "-1" And newepisode.episodeno <> "-1" Then
-                            Dim file As String = newepisode.episodepath
+                            Dim file As String = newepisode.epnfopath
                             Dim fileName As String = Path.GetFileNameWithoutExtension(file)
                             newepisode.filename = Path.GetFileName(newepisode.mediaextension)
                             newepisode.filepath = newepisode.mediaextension.Replace(newepisode.filename, "")
@@ -544,16 +519,16 @@ Module Module1
             Dim multieps2 As New episodeinfo
             multieps2.seasonno = eps.seasonno
             multieps2.episodeno = eps.episodeno
-            multieps2.episodepath = eps.episodepath
+            multieps2.epnfopath = eps.epnfopath
             multieps2.mediaextension = eps.mediaextension
             multieps2.extension = eps.extension 
             multieps2.filename = eps.filename
             multieps2.filepath = eps.filepath 
             episodearray.Add(multieps2)
-            ConsoleOrLog(vbCrLf & "Working on episode: " & eps.episodepath)
+            ConsoleOrLog(vbCrLf & "Working on episode: " & eps.epnfopath)
             
             If eps.seasonno = "-1" Or eps.episodeno = "-1" Then
-                eps.title = getfilename(eps.episodepath)
+                eps.title = getfilename(eps.epnfopath)
                 eps.rating = "0"
                 eps.votes = "0"
                 eps.playcount = "0"
@@ -561,7 +536,7 @@ Module Module1
                 eps.genre = "Unknown Episode Season and/or Episode Number"
                 eps.filedetails = Pref.Get_HdTags(eps.mediaextension)
                 episodearray.Add(eps)
-                savepath = episodearray(0).episodepath
+                savepath = episodearray(0).epnfopath
             Else
                 
                 'check for multiepisode files
@@ -581,7 +556,7 @@ Module Module1
                             Dim multieps As New episodeinfo
                             multieps.seasonno = eps.seasonno
                             multieps.episodeno = M2.Groups(3).Value
-                            multieps.episodepath = eps.episodepath
+                            multieps.epnfopath = eps.epnfopath
                             multieps.mediaextension = eps.mediaextension
                             multieps.extension = eps.extension
                             multieps.filepath = eps.filepath
@@ -599,21 +574,21 @@ Module Module1
                 Dim imdbid As String = ""
                 Dim actorsource As String = ""
 
-                savepath = episodearray(0).episodepath
+                savepath = episodearray(0).epnfopath
 
                 For Each Shows In basictvlist
-                    If episodearray(0).episodepath.IndexOf(Shows.fullpath.Replace("tvshow.nfo", ""), CompareType) <> -1 Then
+                    If episodearray(0).epnfopath.IndexOf(Shows.nfopathandfilename.Replace("tvshow.nfo", ""), CompareType) <> -1 Then
                         Dim TvShow As New TvShow
-                        TvShow.Load(Shows.fullpath)
+                        TvShow.Load(Shows.nfopathandfilename)
                         language = TvShow.Language.Value
                         sortorder = TvShow.SortOrder.Value
                         tvdbid = TvShow.TvdbId.Value
                         imdbid = TvShow.ImdbId.Value
-                        realshowpath = Shows.fullpath
+                        seriespath = Shows.nfopathandfilename.Replace("tvshow.nfo", "")
                         actorsource = TvShow.EpisodeActorSource.Value
                         listactors.Clear()
                         listactors.AddRange(TvShow.ListActors)
-                        episodearray(0).realshowpath = realshowpath
+                        episodearray(0).seriespath = seriespath
                         Exit For
                     End If
                 Next
@@ -621,7 +596,7 @@ Module Module1
                     ConsoleOrLog("Multipart episode found: ")
                     Dim episodenumbers As String = ""
                     For Each ep In episodearray
-                        ep.realshowpath = realshowpath
+                        ep.seriespath = seriespath
                         If episodenumbers = "" Then
                             episodenumbers = ep.episodeno
                         Else
@@ -638,9 +613,7 @@ Module Module1
                         Do Until singleepisode.seasonno.IndexOf("0") <> 0 Or singleepisode.seasonno.Length = 1
                             singleepisode.seasonno = singleepisode.seasonno.Substring(1, singleepisode.seasonno.Length - 1)
                         Loop
-                        If singleepisode.episodeno = "00" Then
-                            singleepisode.episodeno = "0"
-                        End If
+                        If singleepisode.episodeno = "00" Then singleepisode.episodeno = "0"
                         If singleepisode.episodeno <> "0" Then
                             Do Until singleepisode.episodeno.IndexOf("0") <> 0
                                 singleepisode.episodeno = singleepisode.episodeno.Substring(1, singleepisode.episodeno.Length - 1)
@@ -736,21 +709,6 @@ Module Module1
                                         Else
                                             ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                         End If
-                                        'Dim scraperfunction As New Classimdb
-                                        'Dim tempactorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-                                        'If tempactorlist.Count > 0 Then
-                                        '    ConsoleOrLog("Actors scraped from IMDB OK")
-                                        '    While tempactorlist.Count > Pref.maxactors
-                                        '        tempactorlist.RemoveAt(tempactorlist.Count - 1)
-                                        '    End While
-                                        '    singleepisode.listactors.Clear()
-                                        '    For Each actor In tempactorlist
-                                        '        singleepisode.listactors.Add(actor)
-                                        '    Next
-                                        '    tempactorlist.Clear()
-                                        'Else
-                                        '    ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
-                                        'End If
                                     Else
                                         ConsoleOrLog("Actors not scraped from IMDB, reverting to TVDB actorlist")
                                     End If
@@ -775,7 +733,7 @@ Module Module1
 
                             If Pref.enablehdtags = True Then
                                 Try
-                                    singleepisode.filedetails = Pref.Get_HdTags(getfilename(singleepisode.episodepath))
+                                    singleepisode.filedetails = Pref.Get_HdTags(getfilename(singleepisode.epnfopath))
                                     If Not singleepisode.filedetails.Video.DurationInSeconds.Value Is Nothing Then
                                         Dim minutes As Integer
                                         tempstring = singleepisode.filedetails.Video.DurationInSeconds.Value
@@ -800,7 +758,7 @@ Module Module1
             End If
 
             If savepath <> "" And scrapedok = True Then
-                DlMissingSeasonArt(episodearray(0), language, realshowpath.Replace("tvshow.nfo", ""))
+                DlMissingSeasonArt(episodearray(0), language, seriespath)
                 Call addepisode(episodearray, savepath)
                 '9999999
             End If
@@ -826,31 +784,10 @@ Module Module1
                 Try
                     xmlFileInfo = doc.CreateElement("fileinfo")
                     xmlStreamDetails = doc.CreateElement("streamdetails")
-                    'xmlStreamDetailsType = doc.CreateElement("video")
-                    'xmlStreamDetailsType.AppendChild(doc, "width"               , ep.filedetails.Video.width.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "height"              , ep.filedetails.Video.height.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "aspect"              , ep.filedetails.Video.aspect.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "codec"               , ep.filedetails.Video.codec.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "format"              , ep.filedetails.Video.formatinfo.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "durationinseconds"   , ep.filedetails.Video.DurationInSeconds.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "bitrate"             , ep.filedetails.Video.bitrate.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "bitratemode"         , ep.filedetails.Video.bitratemode.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "bitratemax"          , ep.filedetails.Video.bitratemax.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "container"           , ep.filedetails.Video.container.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "codecid"             , ep.filedetails.Video.codecid.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "codecidinfo"         , ep.filedetails.Video.codecinfo.Value)
-                    'xmlStreamDetailsType.AppendChild(doc, "scantype"            , ep.filedetails.Video.scantype.Value)
-                    'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                     xmlStreamDetails.AppendChild(AppendVideo(doc, ep.filedetails.Video))
 
                     If ep.filedetails.Audio.Count > 0 Then
                         For Each item In ep.filedetails.Audio
-                            'xmlStreamDetailsType = doc.CreateElement("audio")
-                            'xmlStreamDetailsType.AppendChild(doc, "language"    , item.language.Value)
-                            'xmlStreamDetailsType.AppendChild(doc, "codec"       , item.codec.Value)
-                            'xmlStreamDetailsType.AppendChild(doc, "channels"    , item.channels.Value)
-                            'xmlStreamDetailsType.AppendChild(doc, "bitrate"     , item.bitrate.Value)
-                            'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                             xmlStreamDetails.AppendChild(AppendAudio(doc, item))
                         Next
                     End If
@@ -858,8 +795,6 @@ Module Module1
                         xmlStreamDetailsType = doc.CreateElement("subtitle")
                         For Each entry In ep.filedetails.Subtitles
                             If Not String.IsNullOrEmpty(entry.Language.Value) Then xmlStreamDetails.AppendChild(AppendSub(doc, entry))
-                            'xmlStreamDetailsType.AppendChild(doc, "language"    , entry.language.Value)
-                            'xmlStreamDetails.AppendChild(xmlStreamDetailsType)
                         Next
                     End If
                     xmlFileInfo.AppendChild(xmlStreamDetails)
@@ -919,7 +854,7 @@ Module Module1
 
         If Pref.autorenameepisodes = True Then
             For Each show In basictvlist
-                If alleps(0).episodepath.IndexOf(show.fullpath.Replace("\tvshow.nfo", "")) <> -1 Then
+                If alleps(0).epnfopath.IndexOf(show.nfopathandfilename.Replace("\tvshow.nfo", "")) <> -1 Then
                     Dim eps As New List(Of String)
                     eps.Clear()
                     For Each ep In alleps
@@ -931,7 +866,7 @@ Module Module1
                     If tempspath <> "false" Then
                         path = tempspath
                         For each ep In alleps
-                            ep.episodepath = path
+                            ep.epnfopath = path
                             ep.mediaextension = path.Replace(".nfo", ep.extension)
                             ep.filename = path.Replace(ep.filepath, "")
                         Next
@@ -942,12 +877,12 @@ Module Module1
 
         Call saveepisodenfo(alleps, path)
         For Each Shows In basictvlist
-            If alleps(0).episodepath.IndexOf(Shows.fullpath.Replace("\tvshow.nfo", "")) <> -1 Then
+            If alleps(0).epnfopath.IndexOf(Shows.nfopathandfilename.Replace("\tvshow.nfo", "")) <> -1 Then
 
                 For Each ep In alleps
                     Dim newwp As New episodeinfo
                     newwp.episodeno = ep.episodeno
-                    newwp.episodepath = path
+                    newwp.epnfopath = path
                     newwp.seasonno = ep.seasonno
                     newwp.title = ep.title
                     newwp.missing = "False"
@@ -979,9 +914,7 @@ Module Module1
                     If fs_info.Extension = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
                         Dim name As String = filename2
                         name = name.Replace(Path.GetFileName(name), "VIDEO_TS.IFO")
-                        If File.Exists(name) Then
-                            add = False
-                        End If
+                        If File.Exists(name) Then add = False
                     End If
                     If fs_info.Extension = ".rar" Then
                         Dim tempmovie As String = String.Empty
@@ -1055,7 +988,7 @@ Module Module1
                     End If
                     If add = True Then
                         Dim newep As New episodeinfo
-                        newep.episodepath = filename2
+                        newep.epnfopath = filename2
                         newep.mediaextension = filename
                         newep.extension = Path.GetExtension(filename)
                         newEpisodeList.Add(newep)
@@ -1216,24 +1149,24 @@ Module Module1
         For Each show In basictvlist
             If show.locked = True OrElse show.locked > 0 Then Continue For
             For Each ep In show.allepisodes
-                ep.mediaextension = ep.episodepath.Replace(".nfo", ep.extension)
+                ep.mediaextension = ep.epnfopath.Replace(".nfo", ep.extension)
                 If Not File.Exists(ep.mediaextension) Then
                     ConsoleOrLog("Video file is missing, please complete a Full Refresh in Media Companion" & vbCrLf)
                     Continue For
                 End If
                 Dim imagepresent As Boolean = True
                 For each extn In thumbextn
-                    If Not File.Exists(ep.episodepath.Replace(".nfo", extn)) Then imagepresent = False
+                    If Not File.Exists(ep.epnfopath.Replace(".nfo", extn)) Then imagepresent = False
                 Next
                 If Not imagepresent Then 
                     If show.id = "" OrElse ep.uniqueid = "" Then 
-                        ConsoleOrLog("Missing Show Id or Episode Id for: " & vbCrLf & ep.episodepath)
+                        ConsoleOrLog("Missing Show Id or Episode Id for: " & vbCrLf & ep.epnfopath)
                         ConsoleOrLog(" *** Not able to download Thumbnail for this episode" & vbCrLf)
                         Continue For
                     End If
                     ConsoleOrLog("Missing Thumbnail found for: " & vbCrLf & show.title & " - " & "Season: " & ep.seasonno & ", Episode: " & ep.episodeno & ", Title: " & ep.title)
                     ep.thumb = String.Format("http://www.thetvdb.com/banners/episodes/{0}/{1}.jpg", show.id, ep.uniqueid)
-                    DlEpThumb(ep, ep.episodepath)
+                    DlEpThumb(ep, ep.epnfopath)
                     ConsoleOrLog(vbCrLf)
                 End If
             Next
@@ -1253,8 +1186,8 @@ Module Module1
                 Case "tvshow"
                     Dim newtvshow As New basictvshownfo
                     If (thisresult.Attributes.Count > 0) Then
-                        newtvshow.fullpath = thisresult.Attributes(0).Value
-                        If File.Exists(newtvshow.fullpath) Then
+                        newtvshow.nfopathandfilename = thisresult.Attributes(0).Value
+                        If File.Exists(newtvshow.nfopathandfilename) Then
                             Dim detail As XmlNode = Nothing
                             For Each detail In thisresult.ChildNodes
                                 Select Case detail.Name
@@ -1279,7 +1212,7 @@ Module Module1
                                     Case "imdbid"
                                         newtvshow.imdbid = detail.InnerText
                                     Case "fullpathandfilename"
-                                        newtvshow.fullpath = detail.InnerText
+                                        newtvshow.nfopathandfilename = detail.InnerText
                                     Case "hidden"
                                         newtvshow.hidden = detail.InnerText
                                 End Select
@@ -1291,32 +1224,33 @@ Module Module1
                 Case "episodedetails"
                     Dim newepisode As New episodeinfo
                     If (thisresult.Attributes.Count > 0) Then
-                        newepisode.episodepath = thisresult.Attributes(0).Value
+                        Dim episodenew As XMLNode = Nothing
+                        newepisode.epnfopath = thisresult.Attributes(0).Value
                         'It seems that multiple <episodedetails> attributes are no longer used in tvcache, NfoPath is the only one - HueyHQ
                         'newepisode.pure = thisresult.Attributes(1).Value
                         'If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
                         For Each episodenew In thisresult.ChildNodes
                             Select Case episodenew.Name
                                 Case "title"
-                                    newepisode.title = episodenew.InnerText
-                                Case "episodepath"
-                                    newepisode.episodepath = episodenew.InnerText
+                                    newepisode.title        = episodenew.InnerText
+                                Case "epnfopath"
+                                    newepisode.epnfopath    = episodenew.InnerText
                                 Case "season"
-                                    newepisode.seasonno = episodenew.InnerText
+                                    newepisode.seasonno     = episodenew.InnerText
                                 Case "episode"
-                                    newepisode.episodeno = episodenew.InnerText
+                                    newepisode.episodeno    = episodenew.InnerText
                                 Case "showid"
-                                    newepisode.showid = episodenew.InnerText
+                                    newepisode.showid       = episodenew.InnerText
                                 Case "uniqueid"
-                                    newepisode.uniqueid = episodenew.InnerText
+                                    newepisode.uniqueid     = episodenew.InnerText
                                 Case "aired"
-                                    newepisode.aired = episodenew.InnerText
+                                    newepisode.aired        = episodenew.InnerText
                                 Case "missing"
-                                    newepisode.missing = episodenew.InnerText
+                                    newepisode.missing      = episodenew.InnerText
                                 Case "playcount"
-                                    newepisode.playcount = episodenew.InnerText
+                                    newepisode.playcount    = episodenew.InnerText
                                 Case "epextn"
-                                    newepisode.extension = episodenew.InnerText
+                                    newepisode.extension    = episodenew.InnerText
                             End Select
                         Next
                         unsortedepisodelist.Add(newepisode)
@@ -1327,7 +1261,7 @@ Module Module1
             'fill in blanks
             Dim tvshowdata As New XmlDocument
             If String.IsNullOrEmpty(show.language) Then      'if user still on old tvcache, fill in blanks from tvshow's nfo.
-                Using tmpstrm As IO.StreamReader = File.OpenText(show.fullpath)
+                Using tmpstrm As IO.StreamReader = File.OpenText(show.nfopathandfilename)
                     tvshowdata.Load(tmpstrm)
                 End Using
                 
@@ -1371,7 +1305,7 @@ Module Module1
         root.SetAttribute("ver", "3.5")
         For Each item In basictvlist
             child = doc.CreateElement("tvshow")
-            child.SetAttribute("NfoPath", item.fullpath)
+            child.SetAttribute("NfoPath"                , item.nfopathandfilename)
             child.AppendChild(doc, "playcount"          , item.playcount)
             child.AppendChild(doc, "state"              , item.locked)
             child.AppendChild(doc, "title"              , item.title)
@@ -1387,7 +1321,7 @@ Module Module1
         For Each item In basictvlist 
             For Each episode In item.allepisodes
                 child = doc.CreateElement("episodedetails")
-                child.SetAttribute("NfoPath", episode.episodepath)
+                child.SetAttribute("NfoPath"            , episode.epnfopath)
                 child.AppendChild(doc, "missing"        , episode.missing.ToLower)
                 child.AppendChild(doc, "title"          , episode.Title)
                 child.AppendChild(doc, "season"         , episode.seasonno)
@@ -1529,9 +1463,7 @@ Module Module1
                                 For h = 1 To possiblemoviescount
                                     workingstring = multistrings(f) & types(h) & "1"
                                     Dim workingtitle As String = possiblemovies(h).ToLower
-                                    If workingtitle.IndexOf(workingstring, CompareType) <> -1 Then
-                                        actualpathandfilename = possiblemovies(h)
-                                    End If
+                                    If workingtitle.IndexOf(workingstring, CompareType) <> -1 Then actualpathandfilename = possiblemovies(h)
                                 Next
                             Next
                         Next
@@ -1539,9 +1471,7 @@ Module Module1
                 End If
             End If
 
-            If actualpathandfilename = "" Then
-                actualpathandfilename = "none"
-            End If
+            If actualpathandfilename = "" Then actualpathandfilename = "none"
             
             Return actualpathandfilename
         Catch
@@ -1559,9 +1489,7 @@ Module Module1
             Dim epw As Integer = ep.filedetails.Video.width.Value.ToInt
             Dim eph As Integer= ep.filedetails.Video.height.Value.ToInt
             Dim ThisAsp As Double = epw/eph
-            If ThisAsp < 1.37 Then  'aspect greater than Industry Standard of 1.37:1 is classed as WideScreen
-                thisarray(1) = 300
-            End If
+            If ThisAsp < 1.37 Then thisarray(1) = 300  'aspect greater than Industry Standard of 1.37:1 is classed as WideScreen
         Catch
             thisarray(0) = 0
         End Try
@@ -1597,7 +1525,7 @@ Module Module1
         Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewEpisode.ImdbId, Pref.maxactors)
         Dim workingpath As String = ""
         If Pref.actorseasy And Not Pref.tvshowautoquick Then
-            workingpath = NewEpisode.realshowpath
+            workingpath = NewEpisode.seriespath
             workingpath = workingpath & ".actors\"
             Utilities.EnsureFolderExists(workingpath)
         End If
@@ -1710,9 +1638,8 @@ Module Module1
     Private Sub scraper_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles scraper.ProgressChanged
         Dim oProgress As Progress = CType(e.UserState, Progress) 
 
-        If Not IsNothing(oProgress.Log) Then
-            If oProgress.Log.Contains("!!! ") Then ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
-        End If
+        If Not IsNothing(oProgress.Log) AndAlso oProgress.Log.Contains("!!! ") Then ConsoleOrLog(oProgress.Log.Replace("!!! ", ""))
+
         Thread.Sleep(1)
     End Sub
 
@@ -1752,7 +1679,7 @@ Public Structure arguments
 End Structure
 
 Public Class basictvshownfo
-    Public fullpath As String
+    Public nfopathandfilename As String
     Public title As String
     Public id As String
     Public status As String
@@ -1788,12 +1715,12 @@ Public Class episodeinfo
     Public fanartpath As String
     Public genre As String
     Public mediaextension As String
-    Public episodepath As String
+    Public epnfopath As String
     Public missing As String
     Public extension As String
     Public listactors As New List(Of actor)
     Public filedetails As New StreamDetails
-    Public realshowpath As String
+    Public seriespath As String
 
     Sub New()
         title           = ""
@@ -1816,9 +1743,9 @@ Public Class episodeinfo
         fanartpath      = ""
         genre           = ""
         mediaextension  = ""
-        episodepath     = ""
+        epnfopath       = ""
         missing         = ""
         extension       = ""
-        realshowpath    = ""
+        seriespath      = ""
     End Sub
 End Class
