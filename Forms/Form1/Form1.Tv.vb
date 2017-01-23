@@ -1135,6 +1135,24 @@ Partial Public Class Form1
         Return path
     End Function
 
+    Private Function GetEpRating(ByRef tvep As TvEpisode, ByVal Rating As String, ByVal Votes As String) As Boolean
+        Dim ratingdone As Boolean = False
+        If Pref.tvdbIMDbRating Then
+            'Try IMDb Direct first
+            ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
+            'If no success, try Omdbapi
+            If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
+        End If
+
+        ''' Fallback to TVDb if nothing from IMDb
+        If Not ratingdone Then
+            tvep.Rating.Value   = Rating
+            tvep.Votes.Value    = Votes
+            ratingdone = True
+        End If
+        Return ratingdone
+    End Function
+
     Private Function ep_getIMDbRating(ByVal epid As String, ByRef rating As String, ByRef votes As String) As Boolean
         Dim aok As Boolean = True
         If String.IsNullOrEmpty(epid) Then Return False
@@ -2107,7 +2125,7 @@ Partial Public Class Form1
                                             If tvBatchList.epPlot       Then listofnewepisodes(h).Plot.Value        = Episodedata.Overview.Value
                                             If tvBatchList.epDirector   Then listofnewepisodes(h).Director.Value    = Utilities.Cleanbraced(Episodedata.Director.Value)
                                             If tvBatchList.epCredits    Then listofnewepisodes(h).Credits.Value     = Utilities.Cleanbraced(Episodedata.Writer.Value)
-                                            If tvBatchList.epRating     Then GetEpRating(listofnewepisodes(h), Episodedata)
+                                            If tvBatchList.epRating     Then GetEpRating(listofnewepisodes(h), Episodedata.Rating.Value, Episodedata.Votes.Value)
                                             If tvBatchList.epTitle      Then listofnewepisodes(h).Title.Value       = Episodedata.EpisodeName.Value
                                             
                                             If tvBatchList.epActor Then
@@ -2204,18 +2222,7 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
-
-    Private Sub GetEpRating(ByRef tvep As TvEpisode, ByVal epdata As Tvdb.Episode)
-        Dim ratingdone As Boolean = False
-        If Pref.tvdbIMDbRating Then ratingdone = epGetImdbRatingOmdbapi(tvep)
-
-        ''' Fallback to TVDb if nothing from IMDb
-        If Not ratingdone Then
-            tvep.Rating.Value   = epdata.Rating.Value
-            tvep.Votes.Value    = epdata.Votes.Value
-        End If
-    End Sub
-
+    
     Private Sub tvbckrescrapewizard_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles tvbckrescrapewizard.ProgressChanged
         Try
             If e.ProgressPercentage = 999999 Then
@@ -2721,7 +2728,9 @@ Partial Public Class Form1
                                     Dim ratingdone As Boolean = False
                                     Dim rating As String    = singleepisode.Rating.Value
                                     Dim votes As String     = singleepisode.Votes.Value
-                                    If Pref.tvdbIMDbRating Then ratingdone = epGetImdbRatingOmdbapi(singleepisode)
+                                    If Pref.tvdbIMDbRating Then
+                                        ratingdone = GetEpRating(singleepisode, rating, votes)  'epGetImdbRatingOmdbapi(singleepisode)
+                                    End If
                                     If Not ratingdone Then
                                         singleepisode.Rating.Value  = rating
                                         singleepisode.Votes.Value   = votes
@@ -3022,7 +3031,7 @@ Partial Public Class Form1
             Dim rating As String    = newepisode.Rating.Value
             Dim votes As String     = newepisode.Votes.Value
             Dim ratingsdone As Boolean = False
-            If Pref.tvdbIMDbRating Then ratingsdone = epGetImdbRatingOmdbapi(newepisode)
+            If Pref.tvdbIMDbRating Then ratingsdone = GetEpRating(newepisode, rating, votes)  'epGetImdbRatingOmdbapi(newepisode)
             If Not ratingsdone Then
                 newepisode.Rating.Value  = rating
                 newepisode.Votes.Value   = votes
