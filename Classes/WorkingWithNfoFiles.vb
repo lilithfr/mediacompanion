@@ -1866,7 +1866,11 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.fanartpath            = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
                 If newmovie.filedetails.Video.Container.Value <> "" Then
                     Dim container As String             = newmovie.filedetails.Video.Container.Value
-                    newmovie.fileinfo.filenameandpath   = filepath.Replace(".nfo", container)
+                    If container = ".vro" Then
+                        newmovie.fileinfo.filenameandpath   = filepath.Replace("VR_MANGR.nfo", "VR_MOVIE.VRO")
+                    Else
+                        newmovie.fileinfo.filenameandpath   = filepath.Replace(".nfo", container)
+                    End If
                 Else
                     newmovie.fileinfo.filenameandpath   = Utilities.GetFileName(filepath, True)
                 End If
@@ -1880,7 +1884,7 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
+    Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
 
         If homemovietosave Is Nothing Then Exit Sub
         If Not File.Exists(filenameandpath) Or overwrite = True Then
@@ -1927,6 +1931,16 @@ Public Class WorkingWithNfoFiles
         Else
             MsgBox("File already exists")
         End If
+    End Sub
+
+    Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
+        Dim homemovie As New HomeMovieDetails
+        homemovie.filedetails = homemovietosave.filedetails
+        homemovie.fileinfo = homemovietosave.fileinfo
+        homemovie.fullmoviebody.title = homemovietosave.fullmoviebody.title
+        homemovie.fullmoviebody.movieset = homemovietosave.fullmoviebody.SetName
+        homemovie.fullmoviebody.year = homemovietosave.fullmoviebody.year
+        nfoSaveHomeMovie(filenameandpath, homemovie, True)
     End Sub
 #End Region
 

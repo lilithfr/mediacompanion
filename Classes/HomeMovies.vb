@@ -22,9 +22,7 @@ Public Class HomeMovies
                 End If
 
                 Dim movieNfoFile As String = titleFull
-
                 Dim needtorename As Boolean = False
-
                 If Utilities.findFileOfType(movieNfoFile, ".nfo") Then
                     Try
                         Using filechck As IO.StreamReader = File.OpenText(movieNfoFile)
@@ -50,7 +48,6 @@ Public Class HomeMovies
                                     'not a valid nfo file
                                     needtorename = True
                                     Exit Do
-
                                 End If
                             Loop Until filechck.EndOfStream
                         End Using
@@ -67,16 +64,17 @@ Public Class HomeMovies
                     End Try
                 End If
 
-                If moviePattern = "*.vob" Then
+                If moviePattern = "*.vob" Or moviePattern = "*.vro" Then
                     If File.Exists(titleDir & "video_ts.ifo") Then
                         scraperLog &= " VOB Pattern Found! DVD File Structure Found!"
+                    ElseIf File.Exists(titleDir & "vr_mangr.ifo") Then
+                        scraperLog &= " VRO Pattern Found! DVD File Structure Found!"
                     Else
                         scraperLog &= " WARNING: No DVD File Structure Found - (VIDEO_TS.IFO missing)"
                     End If
                     scraperLog &= vbCrLf
                     Exit For
                 Else
-
                     If Not doNotAdd And titleExt <> "ttt" Then
                         newHomeMovieDetails.Title = Path.GetFileNameWithoutExtension(titleFull) '<--- could be movieStackName?
                         newHomeMovieDetails.FullPathAndFilename = titleFull
@@ -97,8 +95,7 @@ Public Class HomeMovies
                     Else
                         alreadyadded = False
                     End If
-                    'End If
-                    End If
+                End If
                 Application.DoEvents()
                 scraperLog &= vbCrLf
             Next fs_info

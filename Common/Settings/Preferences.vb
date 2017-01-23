@@ -72,6 +72,7 @@ Public Class Pref
     Public Shared DoneAMov As Boolean = False
     Public Shared MusicVidScrape As Boolean = False
     Public Shared MusicVidConcertScrape As Boolean = False
+    Public Shared HomeVidScrape As Boolean = False
     Public Shared DlMissingEpData As Boolean = False
     Public Shared googlecount As Integer = 0
     Public Shared engineno As Integer = 0
@@ -2242,12 +2243,14 @@ Public Class Pref
 
     Public Shared Function Get_HdTags(ByVal filename As String) As StreamDetails
         Try
-            If Path.GetFileName(filename).ToLower = "video_ts.ifo" Then
+            Dim chkdvdfile As String = Path.GetFileName(filename).ToLower
+            If chkdvdfile = "video_ts.ifo" Then
                 Dim temppath As String = Utilities.GetDvdLargestVobSet(filename)
-                'Dim temppath As String = filename.Replace(Path.GetFileName(filename), "VTS_01_0.IFO")
-                If File.Exists(temppath) Then
-                    filename = temppath
-                End If
+                If File.Exists(temppath) Then filename = temppath
+            End If
+            If chkdvdfile = "vr_mangr.ifo" Then
+                Dim temppath As String = filename.ToLower.Replace("vr_mangr.ifo", "vr_movie.vro")
+                If File.Exists(temppath) Then filename = temppath
             End If
             Dim tmpaud As String = ""
             Dim possibleISO As String = String.Empty 
@@ -2262,7 +2265,7 @@ Public Class Pref
             Dim tempstring As String
             tempstring = Utilities.GetFileName(filename)
             playlist = Utilities.GetMediaList(tempstring)
-            If Not filename.ToLower.Contains("vts") AndAlso filename <> tempstring Then
+            If Not filename.ToLower.Contains("vts") AndAlso filename <> tempstring AndAlso Not filename.ToLower.Contains("vr_movie") Then
                 filename = tempstring 
             End If
 
@@ -2340,7 +2343,7 @@ Public Class Pref
                     End If
                     If Not String.IsNullOrEmpty(duration) Then
                         Dim Tempvar As Double = Nothing
-                        If Double.TryParse(duration, Tempvar) Then
+                        If Double.TryParse(duration, Globalization.NumberStyles.Any,  Globalization.CultureInfo.InvariantCulture, Tempvar) Then
                             workingfiledetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(Tempvar) / 1000)
                         Else
                             workingfiledetails.Video.DurationInSeconds.Value = Math.Round(Convert.ToInt32(duration) / 1000)

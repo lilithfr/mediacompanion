@@ -148,7 +148,7 @@ Public Class Form1
 	Public Data_GridViewMovie As Data_GridViewMovie
 	Public DataGridViewBindingSource As New BindingSource
 
-	Public homemovielist As New List(Of str_BasicHomeMovie)
+	Public Shared homemovielist As New List(Of str_BasicHomeMovie)
 	Public WorkingHomeMovie As New HomeMovieDetails
 	Public workingMovie As New ComboList
 	Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
@@ -2051,6 +2051,12 @@ Public Class Form1
 		'if the file is a .vob then check it is not part of a dvd folder (Stop dvdfolders vobs getting seperate nfos)
 		If Path.GetExtension(fullpathandfilename) = ".vob" Then
 			If File.Exists(fullpathandfilename.Replace(Path.GetFileName(fullpathandfilename), "VIDEO_TS.IFO")) Then
+				validfile = False
+			End If
+		End If
+
+        If Path.GetExtension(fullpathandfilename) = ".vro" Then
+			If File.Exists(fullpathandfilename.Replace(Path.GetFileName(fullpathandfilename), "VR_MANGR.IFO")) Then
 				validfile = False
 			End If
 		End If
@@ -10024,18 +10030,19 @@ Public Class Form1
 	Function Get_MultiMovieProgressBar_Visiblity(action As String)
 
 		Select Case action
-			Case "BatchRescrape" : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
-			Case "ChangeMovie" : Return False
-			Case "RescrapeAll" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-			Case "RescrapeDisplayedMovie" : Return False
-			Case "RescrapeSpecific" : Return _rescrapeList.FullPathAndFilenames.Count > 1
-			Case "LockSpecific" : Return _lockList.FullPathAndFilenames.Count > 1
-			Case "ScrapeDroppedFiles" : Return droppedItems.Count > 1
-			Case "SearchForNewMovies" : Return True
-			Case "SearchForNewMusicVideo" : Return True
-			Case "RefreshMVCache" : Return True
-			Case "ChangeMusicVideo" : Return True
-			Case "RebuildCaches" : Return True
+			Case "BatchRescrape"            : Return _rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
+			Case "ChangeMovie"              : Return False
+			Case "RescrapeAll"              : Return _rescrapeList.FullPathAndFilenames.Count > 1
+			Case "RescrapeDisplayedMovie"   : Return False
+			Case "RescrapeSpecific"         : Return _rescrapeList.FullPathAndFilenames.Count > 1
+			Case "LockSpecific"             : Return _lockList.FullPathAndFilenames.Count > 1
+			Case "ScrapeDroppedFiles"       : Return droppedItems.Count > 1
+			Case "SearchForNewMovies"       : Return True
+			Case "SearchForNewMusicVideo"   : Return True
+			Case "RefreshMVCache"           : Return True
+            Case "HomeVidScrape"            : Return True
+			Case "ChangeMusicVideo"         : Return True
+			Case "RebuildCaches"            : Return True
 		End Select
 
 		MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
@@ -10100,6 +10107,10 @@ Public Class Form1
 	Public Sub ChangeMusicVideo
 		oMovies.ChangeMovie(ucMusicVideo.changeMVList(0), ucMusicVideo.changeMVList(3), ucMusicVideo.changeMVList(1))
 	End Sub
+
+    Public Sub HomeVidScrape()
+        oMovies.FindNewHomeVideos()
+    End Sub
 
 	Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
 
@@ -10255,6 +10266,7 @@ Public Class Form1
 			If SubTab = tpTvMainBrowser.Name Then tv_CacheRefresh()
 			If SubTab = tpTvFanart.Name Then tv_Fanart_Load()
 		End If
+        If CurrentTab = TabPage3.Name AndAlso TabControl1.SelectedTab.Name = tp_HmMainBrowser.Name Then btn_HMRefresh.PerformClick
 		If CurrentTab = TabMV.Name Then ucMusicVideo1.btnRefresh.PerformClick()
 	End Sub
 
@@ -10262,6 +10274,7 @@ Public Class Form1
 		Dim CurrentTab As String = TabLevel1.SelectedTab.Name
 		If CurrentTab = TabPage1.name AndAlso TabControl2.SelectedTab.Name = tpMovMain.Name Then SearchForNew()
 		If CurrentTab = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then ep_Search()
+        If CurrentTab = TabPage3.Name AndAlso TabControl1.SelectedTab.Name = tp_HmMainBrowser.Name Then btn_HMSearch.PerformClick
 		If CurrentTab = TabMV.Name Then ucMusicVideo1.btnSearchNew.PerformClick()
 	End Sub
 
@@ -15999,7 +16012,14 @@ Public Class Form1
 	End Sub
 
 	Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
-		Call homeMovieScan()
+        Pref.HomeVidScrape = True
+		'Call homeMovieScan()
+        RunBackgroundMovieScrape("HomeVidScrape")
+        While BckWrkScnMovies.IsBusy
+            Application.DoEvents()
+        End While
+        Pref.HomeVidScrape = False
+	    loadhomemovielist()
 	End Sub
 
 	Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
@@ -16063,11 +16083,18 @@ Public Class Form1
 		WorkingHomeMovie.fullmoviebody.plot     = HmMovPlot.Text
 		WorkingHomeMovie.fullmoviebody.stars    = HmMovStars.Text
         WorkingHomeMovie.fullmoviebody.genre    = HmMovGenre.Text
-		nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
+		WorkingWithNfoFiles.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
 	End Sub
 
 	Private Sub btn_HMSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMSearch.Click
-		Call homeMovieScan()
+		Pref.HomeVidScrape = True
+		'Call homeMovieScan()
+        RunBackgroundMovieScrape("HomeVidScrape")
+        While BckWrkScnMovies.IsBusy
+            Application.DoEvents()
+        End While
+        Pref.HomeVidScrape = False
+        loadhomemovielist()
 	End Sub
 
 	Private Sub btn_HMRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMRefresh.Click
@@ -16105,7 +16132,7 @@ Public Class Form1
                     Next
                     WorkingHomeMovie.fullmoviebody.genre = genre
                     HmMovGenre.Text = genre
-                   nfoFunction.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie, True)
+                    WorkingWithNfoFiles.nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie, True)
                 End If
             Catch
             End Try
@@ -16488,129 +16515,7 @@ Public Class Form1
 	End Sub
 #End Region
     
-	Private Sub homeMovieScan()
-		'Search for new Home Movies
-		Dim moviepattern As String
-		Dim newhomemoviefolders As New List(Of String)
-		Dim progress As Integer = 0
-		progress = 0
-		scraperLog = ""
-		Dim dirpath As String = String.Empty
-		scraperLog &= "MC " & Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)) & vbCrLf
-		Statusstrip_Enable()
-		ToolStripProgressBar8.Value = 0
-		ToolStripProgressBar8.ProgressBar.Refresh()
-		ToolStripStatusLabel9.Text = "Scanning for Home Movies"
-		ToolStripProgressBar8.Visible = True
-		ToolStripStatusLabel9.Visible = True
-		Dim newHomeMovieList As New List(Of str_BasicHomeMovie)
-
-		Dim totalfolders As New List(Of String)
-		totalfolders.Clear()
-		For Each moviefolder In homemoviefolders
-			If Not moviefolder.selected Then Continue For
-			Dim hg As New DirectoryInfo(moviefolder.rpath)
-			If hg.Exists Then
-				scraperLog &= "Found Movie Folder: " & hg.FullName.ToString & vbCrLf
-				totalfolders.Add(moviefolder.rpath)
-				Dim newlist As List(Of String)
-				Try
-					newlist = Utilities.EnumerateFolders(moviefolder.rpath)       'Max levels restriction of 6 deep removed
-					For Each subfolder In newlist
-						scraperLog = scraperLog & "Subfolder added :- " & subfolder.ToString & vbCrLf
-						totalfolders.Add(subfolder)
-					Next
-				Catch ex As Exception
-#If SilentErrorScream Then
-                        Throw ex
-#End If
-				End Try
-			End If
-		Next
-		For Each homemoviefolder In totalfolders
-			For Each ext In Utilities.VideoExtensions
-				Dim returnedhomemovielist As New List(Of str_BasicHomeMovie)
-				moviepattern = If((ext = "VIDEO_TS.IFO"), ext, "*" & ext)  'this bit adds the * for the extension search in mov_ListFiles2 if its not the string VIDEO_TS.IFO 
-				dirpath = homemoviefolder
-				Dim dir_info As New DirectoryInfo(dirpath)
-				returnedhomemovielist = HomeMovies.listHomeMovieFiles(dir_info, moviepattern, scraperLog)         'titlename is logged in here
-				If returnedhomemovielist.Count > 0 Then
-					For Each newhomemovie In returnedhomemovielist
-						Dim existsincache As Boolean = False
-						Dim pathOnly As String = Path.GetDirectoryName(newhomemovie.FullPathAndFilename) & "\"
-						Dim nfopath As String = pathOnly & Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
-						If File.Exists(nfopath) Then
-							Try
-								Dim newexistingmovie As New HomeMovieDetails
-								newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
-								Dim newexistingbasichomemovie As New str_BasicHomeMovie
-								newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
-								newexistingbasichomemovie.Title = newexistingmovie.fullmoviebody.title
-								homemovielist.Add(newexistingbasichomemovie)
-								lb_HomeMovies.Items.Add(New ValueDescriptionPair(newexistingbasichomemovie.FullPathAndFilename, newexistingbasichomemovie.Title))
-							Catch ex As Exception
-							End Try
-						Else
-							newHomeMovieList.Add(newhomemovie)
-						End If
-					Next
-				End If
-			Next
-		Next
-		ToolStripStatusLabel9.Text = newHomeMovieList.Count.ToString & " New Home Movies Found"
-		Dim counter As Integer = 1
-		For Each item In newHomeMovieList
-			ToolStripStatusLabel9.Text = "Adding Home Movie " & counter & " of " & newHomeMovieList.Count
-			Me.Refresh()
-			Application.DoEvents()
-			If item.FullPathAndFilename <> "" Then
-				Dim newhomemovie As New str_BasicHomeMovie
-				newhomemovie.FullPathAndFilename = item.FullPathAndFilename
-				newhomemovie.Title = item.Title
-				Dim fulldetails As New HomeMovieDetails
-				fulldetails.fullmoviebody.title = newhomemovie.Title
-
-				'Get year for home movie using modified time since more accurate (Creation date is reset if a file is copied)
-				Dim fileCreatedDate As DateTime = File.GetLastWriteTime(item.FullPathAndFilename)
-				Dim format As String = "yyyy"
-				Dim yearstring As String = fileCreatedDate.ToString(format)
-				fulldetails.fullmoviebody.year = yearstring
-
-				'create fanart for home movie if it does not exist
-				If Pref.HmFanartScrnShot Then
-					Dim thumbpathandfilename As String = Pref.GetFanartPath(item.FullPathAndFilename)
-					If Not File.Exists(thumbpathandfilename) Then
-						Try
-							Utilities.CreateScreenShot(item.FullPathAndFilename, thumbpathandfilename, Pref.HmFanartTime)
-						Catch ex As Exception
-
-						End Try
-					End If
-				End If
-				Dim nfofilename As String = ""
-				Dim extension As String = ""
-				fulldetails.fullmoviebody.movieset = "Home Movie"
-				fulldetails.fileinfo.fullpathandfilename = newhomemovie.FullPathAndFilename
-				fulldetails.filedetails = Pref.Get_HdTags(fulldetails.fileinfo.fullpathandfilename)
-				Dim rtime As Integer = (fulldetails.filedetails.Video.DurationInSeconds.Value / 60)
-				fulldetails.fullmoviebody.runtime = rtime.ToString
-				Dim pathOnly As String = Path.GetDirectoryName(fulldetails.fileinfo.fullpathandfilename) & "\"
-				Dim nfopath As String = pathOnly & Path.GetFileNameWithoutExtension(fulldetails.fileinfo.fullpathandfilename) & ".nfo"
-				newhomemovie.FullPathAndFilename = nfopath
-				nfoFunction.nfoSaveHomeMovie(nfopath, fulldetails)
-				homemovielist.Add(newhomemovie)
-				lb_HomeMovies.Items.Add(New ValueDescriptionPair(newhomemovie.FullPathAndFilename, newhomemovie.Title))
-			End If
-			counter += 1
-			progress = ((100 / newHomeMovieList.Count) * (counter))
-			If progress > 100 Then progress = 100
-			ToolStripProgressBar8.Value = progress
-		Next
-		ToolStripProgressBar8.Visible = False
-		ToolStripStatusLabel9.Visible = False
-		Statusstrip_Enable(False)
-	End Sub
-
+	
 	Private Sub rebuildHomeMovies()
 		homemovielist.Clear()
 		lb_HomeMovies.Items.Clear()
@@ -16672,6 +16577,10 @@ Public Class Form1
 		Next
 		Call HomeMovieCacheSave()
 	End Sub
+
+    Public Shared Sub HomeMovieAdd(ByVal newHomeMovie As str_BasicHomeMovie)
+        homemovielist.Add(newHomeMovie)
+    End Sub
 
 	Private Sub HomeMovieCacheSave()
 		Dim fullpath As String = workingProfile.HomeMovieCache

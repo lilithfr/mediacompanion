@@ -594,7 +594,7 @@ Public Class Movie
             'End If
 
             'Return ""
-            Return Utilities.GetYearByFilename(If(Pref.usefoldernames, Title, NfoPathAndFilename))
+            Return Utilities.GetYearByFilename(If((Pref.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv"), Title, NfoPathAndFilename), False, "tmdb")
         End Get
     End Property
 
@@ -649,10 +649,9 @@ Public Class Movie
 
         Dim titleDir As String = fileInfo.Directory.ToString & Path.DirectorySeparatorChar
 
-        If fileInfo.Extension.ToLower = ".vob" Then  'Check if DVD Structure
-            If File.Exists(titleDir & "video_ts.ifo") Then
-                Return False
-            End If
+        If fileInfo.Extension.ToLower = ".vob" OrElse fileInfo.Extension.ToLower = ".vro" Then  'Check if DVD Structure
+            If File.Exists(titleDir & "video_ts.ifo")   Then Return False
+            If File.Exists(titleDir & "vr_mangr.ifo")   Then Return False
 
             Dim PartNumberIndex = fileInfo.Name.LastIndexOf(".") - 1
             If PartNumberIndex > 0 Then
@@ -832,18 +831,29 @@ Public Class Movie
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"                  ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf DoRename                    , "Rename"                          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie            , "Assign scraped movie"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                  , "Assign HD Tags"                  ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf DoRename                     , "Rename"                          ) )
         If Pref.MusicVidConcertScrape Then
-            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
-            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
+            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs      , "Getting extra Frodo Poster thumbs") )
+            Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs      , "Getting extra Frodo Fanart thumbs") )
         End If
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache             , "Assigning music Video to cache"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                        ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"                 ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"                 ) )
-        
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMVToCache               , "Assigning music Video to cache"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                       , "Save Nfo"                        ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster                , "Poster download"                 ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart                , "Fanart download"                 ) )
+    End Sub
+
+    Sub AppendHMScrapeSuccessActions    'Add only for Home Movie success
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie            , "Assign scraped movie"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                  , "Assign HD Tags"                  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHMToCache               , "Assigning HomeMovie to cache"    ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                       , "Save Nfo"                        ) )
+    End Sub
+	
+	Sub AppendScraperHomeVidSpecific
+        Actions.Items.Add( New ScrapeAction(AddressOf HomeVidScraper_GetBody        , "Scraping HomeVideo Body"         ))
+        Actions.Items.Add( New ScrapeAction(AddressOf CheckHomeVidBodyScrape        , "Checking HomeVideo body scrape"  ))
     End Sub
  
     Sub AppendScrapeFailedActions
@@ -887,14 +897,19 @@ Public Class Movie
         If Not Scraped then
             Scraped  = True
             'General
-            Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
-            Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
-            If (Pref.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb") AndAlso Not Pref.MusicVidScrape
+            If Not Pref.HomeVidScrape Then
+                Actions.Items.Add( New ScrapeAction(AddressOf IniTmdb             , "Initialising TMDb"              ) )
+                Actions.Items.Add( New ScrapeAction(AddressOf getspecialMovie     , "Check if special version"       ) )
+            End If
+            
+            If (Pref.movies_useXBMC_Scraper Or MovieSearchEngine = "tmdb") AndAlso Not Pref.MusicVidScrape AndAlso Not Pref.HomeVidScrape Then
                 AppendScraperTMDBSpecific 
-            ElseIf Not Pref.movies_useXBMC_Scraper AndAlso Not MovieSearchEngine = "tmdb" AndAlso Not Pref.MusicVidScrape
+            ElseIf Not Pref.movies_useXBMC_Scraper AndAlso Not MovieSearchEngine = "tmdb" AndAlso Not Pref.MusicVidScrape AndAlso Not Pref.HomeVidScrape Then
                 AppendScraperIMDBSpecific 
-            Else If Pref.MusicVidScrape
+            Else If Pref.MusicVidScrape Then
                 AppendScraperMusicVidSpecific 
+            Else If Pref.HomeVidScrape Then
+                AppendScraperHomeVidSpecific()
             End If
             RunScrapeActions
         End if
@@ -1012,6 +1027,25 @@ Public Class Movie
         Else
             ReportProgress(MSG_OK,"!!! Music Video Body Scraped OK" & vbCrLf)
             AppendMVScrapeSuccessActions
+        End If
+    End Sub
+
+    Sub HomeVidScraper_GetBody()
+        _imdbBody = HomeVidScraper_GetBody(Utilities.CleanReleaseFormat(SearchName, Pref.releaseformat), PossibleYear)
+    End Sub
+
+    Function HomeVidScraper_GetBody(ByVal Title As String, ByVal Year As String)
+        If Title = "" Then Return "error"
+        Return "<movie>" & vbCrLf & "<title>" & Title & "</title>" & vbCrLf & "<year>" & Year & "</year>" & vbCrLf & "<set>Home Movie</set>" & vbCrLf & "</movie>"
+    End Function
+
+    Sub CheckHomeVidBodyScrape()
+        If ImdbBody.ToLower = "error" Then
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """" & vbCrLf)
+            AppendMVScrapeFailedActions
+        Else
+            ReportProgress(MSG_OK,"!!! Home Movie found OK -  " & SearchName & vbCrLf)
+            AppendHMScrapeSuccessActions
         End If
     End Sub
 
@@ -1148,6 +1182,9 @@ Public Class Movie
         'Dim MovieUpdated As Boolean = File.Exists(Nfo)
         If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then
             WorkingWithNfoFiles.MVsaveNfo(nfo, fmd)
+            Exit Sub
+        ElseIf Pref.HomeVidScrape Then
+            WorkingWithNfoFiles.nfoSaveHomeMovie(Nfo, fmd, true)
             Exit Sub
         Else
             WorkingWithNfoFiles.mov_NfoSave(Nfo, fmd, True)    
@@ -1345,6 +1382,13 @@ Public Class Movie
         _mvcache.lastplayed  = _scrapedMovie.fullmoviebody.lastplayed 
         ucMusicVideo.MVCache.Add(_mvcache)
     End Sub
+
+    Sub AssignHMToCache()
+        Dim HomeMovie As New str_BasicHomeMovie
+        HomeMovie.FullPathAndFilename = NfoPathPrefName
+        HomeMovie.Title = _scrapedMovie.fullmoviebody.title
+        Form1.HomeMovieAdd(HomeMovie)
+    End Sub
     
     Sub AssignScrapedMovie
         AssignScrapedMovie(_scrapedMovie)
@@ -1512,6 +1556,9 @@ Public Class Movie
                 End If
             Next
         End If
+
+        If Pref.HomeVidScrape Then Exit Sub
+
         ' Assign certificate
         If Certificates.Count = 0 Then
             Dim tmdb2 As New TMDb

@@ -1488,7 +1488,7 @@ Public Class Movies
         Dim found As Integer = 0
 
         For Each ext In Utilities.VideoExtensions
-            ext = If((ext = "video_ts.ifo"), ext, "*" & ext)
+            ext = If((ext = "video_ts.ifo" OrElse ext = "vr_mangr.ifo"), ext, "*" & ext)
             Try
                 For Each Filefound As FileInfo In dirInfo.GetFiles(ext)
                     If Not ValidateFile(Filefound) Then
@@ -2986,6 +2986,33 @@ Public Class Movies
     End Sub
 #End Region
 
+#Region " Home Movie Routines"
+
+    Public Sub FindNewHomeVideos(Optional scrape = True)
+        NewMovies.Clear
+        PercentDone = 0
+
+        Dim folders As New List(Of String)
+
+        AddOnlineFolders ( folders , Pref.homemoviefolders)
+
+        Dim i = 0
+        For Each folder In folders
+            i += 1
+            PercentDone = CalcPercentDone(i,folders.Count)
+            ReportProgress("Scanning folder " & i & " of " & folders.Count)
+
+            AddNewMovies(folder)
+            
+            If Cancelled then 
+                NewMovies.Clear
+                Exit Sub
+            End If
+        Next
+
+        If scrape then ScrapeNewMovies
+    End Sub
+#End Region
 
 #Region "Filters"
 
