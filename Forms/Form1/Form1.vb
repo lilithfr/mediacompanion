@@ -16570,6 +16570,7 @@ Public Class Form1
 		HmMovPlot   .Text = ""
 		HmMovStars  .Text = ""
         HmMovGenre  .Text = ""
+        HmMovPath   .Text = ""
 		pbx_HmFanart.Image = Nothing
 		WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
 		HmMovTitle  .Text = WorkingHomeMovie.fullmoviebody.title
@@ -16578,6 +16579,7 @@ Public Class Form1
 		HmMovStars  .Text = WorkingHomeMovie.fullmoviebody.stars
 		HmMovYear   .Text = WorkingHomeMovie.fullmoviebody.year
         HmMovGenre  .Text = WorkingHomeMovie.fullmoviebody.genre
+        HmMovPath   .Text = WorkingHomeMovie.fileinfo.fullpathandfilename
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
 		PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
