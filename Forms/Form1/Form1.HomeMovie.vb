@@ -6,6 +6,7 @@ Imports System.Linq
 
 Partial Public Class Form1
     Public Shared homemovielist As New List(Of str_BasicHomeMovie)
+    Public Shared Property HomMovCache As New List(Of HmMovComboList)
     Public WorkingHomeMovie As New HomeMovieDetails
 	Public hmfolderschanged             As Boolean = False
 

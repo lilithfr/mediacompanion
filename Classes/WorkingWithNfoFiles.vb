@@ -1935,11 +1935,11 @@ Public Class WorkingWithNfoFiles
 
     Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
         Dim homemovie As New HomeMovieDetails
-        homemovie.filedetails = homemovietosave.filedetails
-        homemovie.fileinfo = homemovietosave.fileinfo
-        homemovie.fullmoviebody.title = homemovietosave.fullmoviebody.title
-        homemovie.fullmoviebody.movieset = homemovietosave.fullmoviebody.SetName
-        homemovie.fullmoviebody.year = homemovietosave.fullmoviebody.year
+        homemovie.filedetails               = homemovietosave.filedetails
+        homemovie.fileinfo                  = homemovietosave.fileinfo
+        homemovie.fullmoviebody.title       = homemovietosave.fullmoviebody.title
+        homemovie.fullmoviebody.movieset    = homemovietosave.fullmoviebody.SetName
+        homemovie.fullmoviebody.year        = homemovietosave.fullmoviebody.year
         nfoSaveHomeMovie(filenameandpath, homemovie, True)
     End Sub
 #End Region

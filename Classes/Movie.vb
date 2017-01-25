@@ -1384,10 +1384,27 @@ Public Class Movie
     End Sub
 
     Sub AssignHMToCache()
+        Dim _hmmovcache As New HmMovComboList
+        ''to be deleted
         Dim HomeMovie As New str_BasicHomeMovie
         HomeMovie.FullPathAndFilename = NfoPathPrefName
         HomeMovie.Title = _scrapedMovie.fullmoviebody.title
         Form1.HomeMovieAdd(HomeMovie)
+        ''
+        _hmmovcache.filename            = Path.GetFileName(TitleFull)
+        _hmmovcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
+        _hmmovcache.nfopathandfilename  = NfoPathPrefName
+        _hmmovcache.Title               = _scrapedMovie.fullmoviebody.title
+        _hmmovcache.runtime             = _scrapedMovie.fullmoviebody.runtime
+        _hmmovcache.year                = _scrapedMovie.fullmoviebody.year.ToInt
+        _hmmovcache.Resolution          = _scrapedMovie.filedetails.Video.VideoResolution
+        If String.IsNullOrEmpty(_scrapedMovie.fileinfo.createdate) Then
+            _hmmovcache.createdate = Format(System.DateTime.Now, Pref.datePattern).ToString
+        Else
+            _hmmovcache.createdate = _scrapedMovie.fileinfo.createdate
+        End If
+        _hmmovcache.AssignAudio(_scrapedMovie.filedetails.Audio)
+        
     End Sub
     
     Sub AssignScrapedMovie
