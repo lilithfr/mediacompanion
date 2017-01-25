@@ -104,7 +104,7 @@ Public Class TvEpisode
     Public Property Missing As New ProtoProperty(Me, "missing", CacheMode:=CacheMode.Both)
     Public Property EpExtn As New ProtoProperty(Me, "epextn", CacheMode:=CacheMode.Both)  'Storing in tvcache so we don't have to search for correct extension every
                                                                                           'time cache is loaded.
-    Public Property ImdbId As New ProtoProperty(Me, "imdbid")
+    Public Property ImdbId As New ProtoProperty(Me, "imdbid", "")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
     Public Property UniqueId As New ProtoProperty(Me, "uniqueid", CacheMode:=CacheMode.Both)
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)

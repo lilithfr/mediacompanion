@@ -799,7 +799,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(doc, "showtitle"           , tvshowtosave.Title.Value)
             root.AppendChild(doc, "mpaa"                , tvshowtosave.Mpaa.Value)
             root.AppendChild(doc, "plot"                , tvshowtosave.Plot.Value)
-            root.AppendChild(doc, "imdbid"              , tvshowtosave.ImdbId.Value)
+            root.AppendChild(doc, "imdbid"              , If(tvshowtosave.ImdbId.Value = "0", "", tvshowtosave.ImdbId.Value))
             root.AppendChild(doc, "status"              , tvshowtosave.Status.Value)
             root.AppendChild(doc, "runtime"             , FormatRunTime(tvshowtosave.Runtime.Value, "", False))
             root.AppendChild(doc, "rating"              , tvshowtosave.Rating.Value)
@@ -969,7 +969,7 @@ Public Class WorkingWithNfoFiles
             newtvshow.NfoFilePath = path
             
             If newtvshow.tvdbid         = Nothing Then newtvshow.TvdbId.Value = ""
-            If newtvshow.ImdbId.Value   = Nothing Then newtvshow.ImdbId.Value = "0"
+            If newtvshow.ImdbId.Value   = Nothing Then newtvshow.ImdbId.Value = ""
             If newtvshow.Mpaa.Value     = Nothing Then newtvshow.Mpaa.Value = "na"
             If newtvshow.Studio.Value   = Nothing Then newtvshow.Studio.Value = "-"
             If newtvshow.Runtime.Value  = Nothing Then newtvshow.Runtime.Value = "0"

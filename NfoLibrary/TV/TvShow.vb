@@ -158,9 +158,7 @@ Public Class TvShow
     Dim _PossibleShowList As List(Of Tvdb.Series)
     Public Property PossibleShowList As List(Of Tvdb.Series)
         Get
-            If _PossibleShowList Is Nothing Then
-                Me.GetPossibleShows()
-            End If
+            If _PossibleShowList Is Nothing Then Me.GetPossibleShows()
 
             Return _PossibleShowList
         End Get
@@ -177,9 +175,7 @@ Public Class TvShow
     Public Sub GetPossibleShows()
         'Dim possibleshows As New List(Of possibleshowlist)
         Dim xmlfile As String
-        If String.IsNullOrEmpty(Me.FolderPath) Then
-            Exit Sub
-        End If
+        If String.IsNullOrEmpty(Me.FolderPath) Then Exit Sub
 
         'TODO: Properly encode URL
         Dim SearchTitle As String
@@ -200,24 +196,25 @@ Public Class TvShow
         mirrorsurl = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & SearchTitle & "&language=all"
         xmlfile = Utilities.DownloadTextFiles(mirrorsurl, True)
 
-        If String.IsNullOrEmpty(xmlfile) Then
-            Exit Sub
-        End If
+        If String.IsNullOrEmpty(xmlfile) Then Exit Sub
+
         'clean html tags from xml data
         xmlfile = xmlfile.Replace("<br>", "")
 
         Dim ReturnData As New Tvdb.ShowData
 
-        ReturnData.LoadXml(xmlfile)
+        Try
+            ReturnData.LoadXml(xmlfile)
+        Catch ex As Exception
+            MsgBox("Error is returned xml file from TVDb" & vbCrLf & xmlfile)
+        End Try
 
         If _PossibleShowList Is Nothing Then _PossibleShowList = New List(Of Tvdb.Series)
 
         Dim Found As Boolean
         For Each Item As Tvdb.Series In ReturnData.Series.List
             For Each Existing As Tvdb.Series In _PossibleShowList
-                If Existing.Id = Item.Id Then
-                    Found = True
-                End If
+                If Existing.Id = Item.Id Then Found = True
             Next
             If Not Found Then
                 _PossibleShowList.Add(Item)

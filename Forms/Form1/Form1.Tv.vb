@@ -1169,9 +1169,10 @@ Partial Public Class Form1
 
     Private Function epGetImdbRatingOmdbapi(ByRef ep As TvEpisode) As Boolean
         Dim GotEpImdbId As Boolean = False
-        If Not ep.Showimdbid.Value.StartsWith("tt") OrElse ep.Season.Value = "" OrElse ep.Episode.Value = "" Then Return False
+        If (String.IsNullOrEmpty(ep.Showimdbid.Value) OrElse ep.Showimdbid.Value = "0") AndAlso String.IsNullOrEmpty(ep.ImdbId.Value) Then Return False
+        If Not ep.Showimdbid.Value.StartsWith("tt") AndAlso (String.IsNullOrEmpty(ep.Season.Value) AndAlso String.IsNullOrEmpty(ep.Episode.Value)) Then Return False
         Dim url As String = Nothing
-        If ep.ImdbId.Value.StartsWith("tt") Then
+        If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then
             GotEpImdbId = True
         Else
             url = String.Format("http://www.omdbapi.com/?i={0}&Season={1}&r=xml", ep.Showimdbid.Value, ep.Season.Value)
@@ -2725,6 +2726,7 @@ Partial Public Class Form1
                                                 Next
                                         End Select
                                     Next
+                                    stage = "22b5a13"
                                     Dim ratingdone As Boolean = False
                                     Dim rating As String    = singleepisode.Rating.Value
                                     Dim votes As String     = singleepisode.Votes.Value
