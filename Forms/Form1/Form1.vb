@@ -715,6 +715,7 @@ Public Class Form1
 			UcFanartTvTv1.Form1MainFormLoadedStatus = True
 			ReloadMovieCacheToolStripMenuItem.Visible = False
 			ToolStripSeparator9.Visible = False
+            HMDGV_FiltersAndSortApply()
 
 			ResetFilters()
 
@@ -752,6 +753,8 @@ Public Class Form1
             AddHandler MovAutoScrapeTimer.Elapsed, AddressOf MovAutoScrapeTimer_Elapsed
             Ini_Timer(MovAutoScrapeTimer, ((Pref.MovAutoScrapeInterval * 60) * 1000), True)
 
+            AddHandler HMkeypresstimer.Elapsed, AddressOf HMkeypresstimer_Elapsed
+            Ini_Timer(HMkeypresstimer, 1000)
 
 			AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
 			AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
@@ -9085,7 +9088,7 @@ Public Class Form1
 			loadinginfo = "Status :- Loading Home Movie Database"
 			frmSplash.Label3.Text = loadinginfo
 			frmSplash.Label3.Refresh()
-			Call homemovieCacheLoad()
+			Call HomeMovieCacheLoad()
 		End If
 
 		If File.Exists(workingProfile.MusicVideoCache) Then

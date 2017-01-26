@@ -5,9 +5,17 @@ Imports Media_Companion.Pref
 Imports System.Linq
 
 Partial Public Class Form1
+    Public DataGridViewBindingSourceHM As New BindingSource
     Public Shared homemovielist As New List(Of str_BasicHomeMovie)
-    Public Shared Property HomMovCache As New List(Of HmMovComboList)
-    Public WorkingHomeMovie As New HomeMovieDetails
+    Public Shared Property HMCache As New List(Of HmMovComboList)
+    Public WorkingHomeMovie As New FullMovieDetails
+    Public WorkingHomeVid As New HmMovComboList
+    Dim LastHV As String = ""
+    Dim HMGridFieldToDisplay1 As String ="TitleAndYear"
+    Dim HMGridFieldToDisplay2 As String ="A-Z"
+    Dim HMGridInvert As Boolean = False
+    Private HMkeypresstimer As Timers.Timer = New Timers.Timer()
+    Private HVKeyPress As String = ""
 	Public hmfolderschanged             As Boolean = False
 
 
@@ -73,7 +81,8 @@ Partial Public Class Form1
             Application.DoEvents()
         End While
         Pref.HomeVidScrape = False
-	    loadhomemovielist()
+	    'loadhomemovielist()
+        HMDGVload()
 	End Sub
 
 	Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
@@ -118,7 +127,7 @@ Partial Public Class Form1
 			For Each homemovie In homemovielist
 				If homemovie.FullPathAndFilename Is CType(lb_HomeMovies.SelectedItem, ValueDescriptionPair).Value Then
 					WorkingHomeMovie.fileinfo.fullpathandfilename = CType(lb_HomeMovies.SelectedItem, ValueDescriptionPair).Value
-					Call loadhomemoviedetails()
+					'Call loadhomemoviedetails()
 				End If
 			Next
 		Catch
@@ -148,7 +157,8 @@ Partial Public Class Form1
             Application.DoEvents()
         End While
         Pref.HomeVidScrape = False
-        loadhomemovielist()
+        'loadhomemovielist()
+        HMDGVload()
 	End Sub
 
 	Private Sub btn_HMRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMRefresh.Click
@@ -613,7 +623,7 @@ Partial Public Class Form1
 					Dim nfopath As String = pathOnly & Path.GetFileNameWithoutExtension(newhomemovie.FullPathAndFilename) & ".nfo"
 					If File.Exists(nfopath) Then
 						Try
-							Dim newexistingmovie As New HomeMovieDetails
+							Dim newexistingmovie As New FullMovieDetails
 							newexistingmovie = nfoFunction.nfoLoadHomeMovie(nfopath)
 							Dim newexistingbasichomemovie As New str_BasicHomeMovie
 							newexistingbasichomemovie.FullPathAndFilename = newexistingmovie.fileinfo.fullpathandfilename
@@ -635,134 +645,423 @@ Partial Public Class Form1
     Public Shared Sub HomeMovieAdd(ByVal newHomeMovie As str_BasicHomeMovie)
         homemovielist.Add(newHomeMovie)
     End Sub
+    
+    Public Sub HomeMovieCacheSave()
+        Dim fullpath As String = Pref.workingProfile.HomeMovieCache
+        If File.Exists(fullpath) Then 
+            Dim aok As Boolean = Utilities.SafeDeleteFile(fullpath)
+            If Not aok Then
+                MsgBox(" Error Overwriting existing HomeVideo Cache! ")
+                Exit Sub
+            End If
+        End If
 
-	Private Sub HomeMovieCacheSave()
-		Dim fullpath As String = workingProfile.HomeMovieCache
-		If homemovielist.Count > 0 And homemoviefolders.Count > 0 Then
-			If File.Exists(fullpath) Then
-				Dim don As Boolean = False
-				Dim count As Integer = 0
-				Do
-					Try
-						If File.Exists(fullpath) Then
-							File.Delete(fullpath)
-							don = True
-						Else
-							don = True
-						End If
-					Catch ex As Exception
-#If SilentErrorScream Then
-                    Throw ex
-#End If
-					Finally
-						count += 1
-					End Try
-				Loop Until don = True
-			End If
-			frmSplash2.Label1.Text = "Creating Home Movie Cache xml....."
-			frmSplash2.Label2.Visible = False
-			frmSplash2.ProgressBar1.Visible = False
-			Dim doc As New XmlDocument
-			Dim thispref As XmlNode = Nothing
-			Dim xmlproc As XmlDeclaration
-			xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
-			doc.AppendChild(xmlproc)
-			Dim root As XmlElement
-			Dim child As XmlElement
-			root = doc.CreateElement("homemovie_cache")
-			Dim count2 As Integer = 0
-			frmSplash2.Label2.Text = "Creating cache xml...."
-			For Each movie In homemovielist
-				child = doc.CreateElement("movie")
-                child.AppendChild(doc, "fullpathandfilename", movie.FullPathAndFilename)
-                child.AppendChild(doc, "title"              , movie.Title)
-				root.AppendChild(child)
-			Next
-			doc.AppendChild(root)
+        Dim doc As New XmlDocument
+        Dim xmlproc As XmlDeclaration
+        Dim root As XmlElement
+        Dim child As XmlElement
+        xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        doc.AppendChild(xmlproc)
+        root = doc.CreateElement("homemovie_cache")
+        For Each item In HMCache
+            child = doc.CreateElement("movie")
+            child.AppendChild(doc   , "fullpathandfilename"     , item.nfopathandfilename)
+			child.AppendChild(doc   , "filename"                , item.filename)
+			child.AppendChild(doc   , "foldername"              , item.foldername)
+			child.AppendChild(doc   , "title"                   , item.title)
+			child.AppendChild(doc   , "year"                    , item.year)
+			child.AppendChild(doc   , "filedate"                , item.filedate)
+			child.AppendChild(doc   , "createdate"              , item.createdate)
+			child.AppendChild(doc   , "genre"                   , item.genre)
+            child.AppendChild(doc   , "plot"                    , item.plot)
+			child.AppendChild(doc   , "playcount"               , item.playcount)
+			child.AppendChild(doc   , "runtime"                 , item.runtime)
+			child.AppendChild(doc   , "Resolution"              , item.Resolution)
+			child.AppendChild(doc   , "FrodoPosterExists"       , item.FrodoPosterExists)
+			child.AppendChild(doc   , "PreFrodoPosterExists"    , item.PreFrodoPosterExists)
+		    For Each track In item.Audio  
+                child.AppendChild(track.GetChild(doc))
+            Next
+            root.AppendChild(child)
+        Next
+        doc.AppendChild(root)
 
-			frmSplash2.Label2.Text = "Saving cache xml...."
-            WorkingWithNfoFiles.SaveXMLDoc(doc, fullpath)
-		Else
-			Try
-				If File.Exists(fullpath) Then
-					File.Delete(fullpath)
-				End If
-			Catch
-			End Try
-		End If
-	End Sub
+        WorkingWithNfoFiles.SaveXMLDoc(doc, fullpath)
+    End Sub
 
-	Private Sub homemovieCacheLoad()
+	Private Sub HomeMovieCacheLoad()
 		homemovielist.Clear()
 
 		Dim movielist As New XmlDocument
-		Dim objReader As New IO.StreamReader(workingProfile.HomeMovieCache)
-		Dim tempstring As String = objReader.ReadToEnd
-		objReader.Close()
-		objReader = Nothing
+        Dim tempstring As String = Nothing
+		Using objReader As IO.StreamReader = File.OpenText(workingProfile.HomeMovieCache)
+            tempstring = objReader.ReadToEnd
+		End Using
 
 		movielist.LoadXml(tempstring)
 		Dim thisresult As XmlNode = Nothing
 		For Each thisresult In movielist("homemovie_cache")
 			Select Case thisresult.Name
 				Case "movie"
-					Dim newmovie As New str_BasicHomeMovie(SetDefaults)
-					Dim detail As XmlNode = Nothing
-					For Each detail In thisresult.ChildNodes
+					Dim newmovie As New HmMovComboList  'str_BasicHomeMovie(SetDefaults)
+					For Each detail As XmlNode In thisresult.ChildNodes
 						Select Case detail.Name
-							Case "fullpathandfilename"
-								newmovie.FullPathAndFilename = detail.InnerText
-							Case "title"
-								newmovie.Title = detail.InnerText
+							Case "fullpathandfilename"          : newmovie.nfopathandfilename   = detail.InnerText
+							Case "title"                        : newmovie.Title                = detail.InnerText
+                            Case "year"                         : newmovie.year                 = detail.InnerText
+                            Case "filename"                     : newmovie.filename             = detail.InnerText
+                            Case "foldername"                   : newmovie.foldername           = detail.InnerText
+                            Case "genre"                        : newmovie.genre                = detail.InnerText & newmovie.genre
+                            Case "plot"                         : newmovie.plot                 = detail.InnerText
+                            Case "playcount"                    : newmovie.playcount            = detail.InnerText
+                            Case "runtime"                      : newmovie.runtime              = detail.InnerText
+                            Case "Resolution"                   : newmovie.Resolution           = detail.InnerText
+                            Case "FrodoPosterExists"            : newmovie.FrodoPosterExists    = detail.InnerText
+                            Case "PreFrodoPosterExists"         : newmovie.PreFrodoPosterExists = detail.InnerText
+                            Case "audio"
+                                Dim audio As New AudioDetails
+                                For Each audiodetails As XmlNode In detail.ChildNodes
+                                    Select Case audiodetails.Name
+                                        Case "language" : audio.Language.Value          = audiodetails.InnerText
+                                        Case "codec"    : audio.Codec.Value             = audiodetails.InnerText
+                                        Case "channels" : audio.Channels.Value          = audiodetails.InnerText
+                                        Case "bitrate"  : audio.Bitrate.Value           = audiodetails.InnerText
+                                    End Select
+                                Next
+                            Case "createdate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.CreateDate = "18500101000000" '01/01/1850 00:00:00
+                                Else
+                                    newmovie.CreateDate = detail.InnerText
+                                End If
+                            Case "filedate"
+                                If detail.InnerText.Length <> 14 Then 'i.e. invalid date
+                                    newmovie.filedate = "18500101000000" '01/01/1850 00:00:00
+                                Else
+                                    newmovie.filedate = detail.InnerText
+                                End If
 						End Select
 					Next
-					homemovielist.Add(newmovie)
+                    HMCache.Add(newmovie)
+					'homemovielist.Add(newmovie)
 			End Select
 		Next
-		Call loadhomemovielist()
+        Call HMDGVload()
+		'Call loadhomemovielist()
 		Try
-			lb_HomeMovies.SelectedIndex = 0
+			If HVDgv1.Rows.Count > 0 Then HVDgv1.Rows(0).Selected = True
+            DisplayHV()
 		Catch ex As Exception
-#If SilentErrorScream Then
-            Throw ex
-#End If
 		End Try
 	End Sub
 
-	Private Sub loadhomemovielist()
-		lb_HomeMovies.Items.Clear()
-		For Each item In homemovielist
-			lb_HomeMovies.Items.Add(New ValueDescriptionPair(item.FullPathAndFilename, item.Title))
-		Next
-	End Sub
+	'Private Sub loadhomemovielist()
+	'	lb_HomeMovies.Items.Clear()
+	'	For Each item In homemovielist
+	'		lb_HomeMovies.Items.Add(New ValueDescriptionPair(item.FullPathAndFilename, item.Title))
+	'	Next
+	'End Sub
 
-	Private Sub loadhomemoviedetails()
-		HmMovTitle.Text = ""
+    Private Sub DisplayHV()
+        Try
+            DisplayMV(HVDgv1.SelectedCells, HVDgv1.selectedrows)
+        Catch
+            Return
+        End Try
+    End Sub
+
+    Private Sub DisplayMV(ByVal selectedCells As DataGridViewSelectedCellCollection, ByVal selectedRows As DataGridViewSelectedRowCollection)
+        Try
+            If selectedRows.Count = 1 Then
+                If LastHV = selectedCells(0).Value.ToString Then Return
+                LastHV = selectedCells(0).Value.ToString
+            Else
+                LastHV = ""
+            End If
+        Catch
+            Return
+        End Try
+        If selectedRows.Count = 0 Then Exit Sub
+        HVForm_Init()
+        If selectedRows.Count = 1 Then
+            'lblMultiMode.Visible = False
+            pbx_HmFanart.Visible = True
+            pbx_HmPoster.Visible = True
+            'btnMVPlay.Enabled = True
+            'HVForm_Init()
+            Dim query = From f In HMCache Where f.nfopathandfilename = selectedCells(0).Value.ToString
+            Dim queryList As List(Of HmMovComboList) = query.ToList()
+
+            If queryList.Count > 0 Then
+                WorkingHomeVid.nfopathandfilename = queryList(0).nfopathandfilename
+                HMForm_Populate()
+            Else
+                HMForm_Populate()
+            End If
+      '  Else
+      '      'lblMultiMode.Visible                = True
+      '      pbx_HmFanart.Image      = Nothing
+      '      pbx_HmFanart.Visible    = False
+      '      pbx_HmPoster.Image      = Nothing
+      '      pbx_HmPoster.Visible    = False
+      '      'btnMVPlay.Enabled                   = False
+      '      HmMovTitle  .Text = ""
+		    'HmMovSort   .Text = ""
+		    'HmMovYear   .Text = ""
+		    'HmMovPlot   .Text = ""
+		    'HmMovStars  .Text = ""
+      '      HmMovGenre  .Text = ""
+      '      HmMovPath   .Text = ""
+        End If
+        
+    End Sub
+
+    Private Sub HVForm_Init()
+        pbx_HmFanart.Image      = Nothing
+        pbx_HmFanart.Visible    = False
+        pbx_HmPoster.Image      = Nothing
+        pbx_HmPoster.Visible    = False
+        HmMovTitle  .Text = ""
 		HmMovSort   .Text = ""
 		HmMovYear   .Text = ""
 		HmMovPlot   .Text = ""
 		HmMovStars  .Text = ""
         HmMovGenre  .Text = ""
         HmMovPath   .Text = ""
-		pbx_HmFanart.Image = Nothing
-		WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
-		HmMovTitle  .Text = WorkingHomeMovie.fullmoviebody.title
-		HmMovSort   .Text = WorkingHomeMovie.fullmoviebody.sortorder
-		HmMovPlot   .Text = WorkingHomeMovie.fullmoviebody.plot
-		HmMovStars  .Text = WorkingHomeMovie.fullmoviebody.stars
-		HmMovYear   .Text = WorkingHomeMovie.fullmoviebody.year
-        HmMovGenre  .Text = WorkingHomeMovie.fullmoviebody.genre
-        HmMovPath   .Text = WorkingHomeMovie.fileinfo.fullpathandfilename
-		PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
-		PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
-		PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
-		If File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
-			util_ImageLoad(pbx_HmFanart, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-			Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
-			movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
-		End If
-		util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
-	End Sub
+    End Sub
+
+    Private Sub HMForm_Populate()
+        If Not String.IsNullOrEmpty(WorkingHomeVid.nfopathandfilename) AndAlso HVDgv1.Rows.Count > 0 Then
+            WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeVid.nfopathandfilename)
+            If IsNothing(WorkingHomeMovie) = False Then
+                HmMovTitle  .Text = WorkingHomeMovie.fullmoviebody.title
+		        HmMovSort   .Text = WorkingHomeMovie.fullmoviebody.sortorder
+		        HmMovPlot   .Text = WorkingHomeMovie.fullmoviebody.plot
+		        HmMovStars  .Text = WorkingHomeMovie.fullmoviebody.stars
+		        HmMovYear   .Text = WorkingHomeMovie.fullmoviebody.year
+                HmMovGenre  .Text = WorkingHomeMovie.fullmoviebody.genre
+                HmMovPath   .Text = WorkingHomeMovie.fileinfo.fullpathandfilename
+                
+                Dim runtimestr As String = WorkingHomeMovie.fullmoviebody.runtime
+                If runtimestr = "" OrElse runtimestr = "-1" Then
+                    If WorkingHomeMovie.filedetails.Video.DurationInSeconds.Value <> "" AndAlso WorkingHomeMovie.filedetails.Video.DurationInSeconds.Value <> "-1" Then
+                        runtimestr = Math.Floor((WorkingHomeMovie.filedetails.Video.DurationInSeconds.Value.ToInt)/60).ToString & " min"
+                    End If
+                Else
+                    runtimestr &= " min"
+                End If
+                'txtRuntime.Text = runtimestr
+               ' txtStudio.Text = WorkingHomeMovie.fullmoviebody.studio
+                
+                util_ImageLoad(pbx_HmFanart, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                util_ImageLoad(pbx_HmFanartSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+                'Label16.Text = pbx_HmFanartSht.Image.Width
+                'Label17.Text = pbx_HmFanartSht.Image.Height
+                'Set Media overlay
+                Dim video_flags = Form1.VidMediaFlags(WorkingHomeMovie.filedetails)
+                movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
+                
+                If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
+                    util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                    util_ImageLoad(pbx_HmPosterSht, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultFanartPath)
+                    'Label19.Text = pbx_HmPosterSht.Image.Width
+                    'Label18.Text = pbx_HmPosterSht.Image.Height
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub HMDGVload()
+        HVDgv1.DataSource = Nothing
+        HVDgv1.DataSource = HmCache
+        HMDGVGridviewMovieDesign()
+        HMDGV_FiltersAndSortApply()
+        DisplayHV()
+    End Sub
+
+    Public Sub HMDGVGridviewMovieDesign()
+        If Not MainFormLoadedStatus Then Exit Sub
+        Dim dgv As DataGridView = HVDgv1
+        If dgv.Columns.Count < 27 Then Return
+        Cursor.Current = Cursors.WaitCursor
+        While dgv.Columns(0).CellType.Name="DataGridViewImageCell"
+            dgv.Columns.Remove(dgv.Columns(0))
+        End While
+        
+        Dim header_style As New DataGridViewCellStyle
+        header_style.ForeColor = Color.White
+        header_style.BackColor = Color.ForestGreen
+        header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
+        For Each col As DataGridViewcolumn in dgv.Columns
+            col.HeaderCell.Style = header_style
+        Next
+        dgv.EnableHeadersVisualStyles = False
+        For Each column As DataGridViewColumn In dgv.Columns
+            column.Resizable = DataGridViewTriState.True
+            column.ReadOnly  = True
+            column.SortMode  = DataGridViewColumnSortMode.Automatic
+            column.Visible   = False
+        Next
+
+        'Highlight titles in datagridview with missing video files.
+        If Pref.incmissingmovies Then
+            For Each row As DataGridViewRow In dgv.Rows
+                If row.Cells("videomissing").Value = True Then
+                    row.DefaultCellStyle.BackColor = Color.Red
+                End If
+            Next
+        End If
+        dgv.RowHeadersVisible = False
+        'If HMGridFieldToDisplay1="ArtistTitle" Then
+        '    HMDGVIniColumn(dgv,"ArtistTitle"     ,HMGridFieldToDisplay2= "Year","Artist & Title"   , "Artist & Title"         )
+        '    HMDGVIniColumn(dgv,"ArtistTitleYear" ,HMGridFieldToDisplay2<>"Year","Title & Year"     , "Artist, Title & Year"   )
+        'End If
+        If HMGridFieldToDisplay1="TitleAndYear" Then
+            HMDGVIniColumn(dgv,"Title"           ,HMGridFieldToDisplay2= "Year","Title"       )
+            HMDGVIniColumn(dgv,"TitleYear"       ,HMGridFieldToDisplay2<>"Year","Title & Year")
+        End If
+        HMDGVIniColumn(dgv,"filename"            ,HMGridFieldToDisplay1="FileName"    ,"File name"                                                                   )
+        HMDGVIniColumn(dgv,"year"                ,HMGridFieldToDisplay2="Year"        ,"Movie year"       ,"Year"    , -20                                           )
+        HMDGVIniColumn(dgv,"runtime"             ,HMGridFieldToDisplay2="Runtime"     ,"Runtime"          ,          , -20, DataGridViewContentAlignment.MiddleRight )
+        HMDGVIniColumn(dgv,"DisplayCreateDate"   ,HMGridFieldToDisplay2="DateAdded"   ,"Date Added"       ,"Added"                                                   )
+        HmDGVSetFirstColumnWidth(dgv)
+        Cursor.Current = Cursors.Default
+    End Sub
+
+    Private Sub HMDGVIniColumn(dgv As DataGridView, name As String, visible As Boolean, Optional toolTip As String=Nothing, Optional headerText As String=Nothing, Optional widthAdjustment As Integer=0, Optional alignment As DataGridViewContentAlignment=Nothing )
+
+        Dim col As DataGridViewColumn = dgv.Columns(name)
+        If IsNothing(toolTip) Then toolTip = Utilities.TitleCase(name)  'CapsFirstLetter(name)
+        col.Visible     = visible
+        col.ToolTipText = toolTip
+        col.HeaderText  = If(IsNothing(headerText),toolTip,headerText)
+        HmDGVSetColWidth(col,widthAdjustment)
+       
+        If Not IsNothing(alignment) Then
+            Dim header_style As New DataGridViewCellStyle
+            header_style.ForeColor = Color.White
+            header_style.BackColor = Color.ForestGreen
+            header_style.Font      = new Font(dgv.Font, FontStyle.Bold)
+            header_style.Alignment = alignment
+            col.HeaderCell.Style = header_style
+            col.DefaultCellStyle.Alignment = alignment
+        End If
+    End Sub
+
+    Sub HmDGVSetColWidth(col As DataGridViewColumn, Optional widthAdjustment As Integer=0)
+        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells    'Set auto-size mode
+        Dim initialAutoSizeWidth As Integer = col.Width                 'Save calculated width after auto-sizing
+        col.AutoSizeMode = DataGridViewAutoSizeColumnMode.NotSet        'Revert sizing mode to default
+        col.Width = initialAutoSizeWidth+widthAdjustment                'Set width to calculated auto-size - adjustment needed because header has excess padding
+    End Sub
+
+    Sub HmDGVSetFirstColumnWidth(dgvHomMov As DataGridView)
+        Try
+            Dim firstColWidth As Integer = dgvHomMov.Width - 17
+            
+            If Not IsNothing(dgvHomMov.Columns("Watched")) AndAlso dgvHomMov.Columns("Watched").Visible then firstColWidth -= dgvHomMov.Columns("Watched").Width
+            
+            If HMGridFieldToDisplay2 = "Year"         Then firstColWidth -= dgvHomMov.Columns("Year"             ).Width
+            If HMGridFieldToDisplay2 = "Runtime"      Then firstColWidth -= dgvHomMov.Columns("runtime"          ).Width
+            If HMGridFieldToDisplay2 = "DateAdded"    Then firstColWidth -= dgvHomMov.Columns("DisplayCreateDate").Width
+            
+            If firstColWidth>0 Then
+                If Not IsNothing(dgvHomMov.Columns("filename"           )) Then dgvHomMov.Columns("filename"            ).Width = firstColWidth
+                If Not IsNothing(dgvHomMov.Columns("ArtistTitle"        )) Then dgvHomMov.Columns("ArtistTitle"         ).Width = firstColWidth
+                If Not IsNothing(dgvHomMov.Columns("ArtistTitleYear"    )) Then dgvHomMov.Columns("ArtistTitleYear"     ).Width = firstColWidth
+                If Not IsNothing(dgvHomMov.Columns("Title"              )) Then dgvHomMov.Columns("Title"               ).Width = firstColWidth
+                If Not IsNothing(dgvHomMov.Columns("TitleYear"          )) Then dgvHomMov.Columns("TitleYear"           ).Width = firstColWidth
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Public Sub HMDGV_FiltersAndSortApply(Optional ByVal Force As Boolean = False) 'Form1 As Form1)
+        If Not MainFormLoadedStatus AndAlso Not Force Then Exit Sub
+
+        Dim b = From f In HMCache
+        'If txtFilter.Text.ToUpper<>"" Then
+        '    If rbMVArtistAndTitle.Checked Then
+        '        b = From f In b Where f.ArtistTitle.ToUpper.Contains(txtFilter.Text.ToUpper)
+        '    ElseIf rbMVTitleandYear.Checked Then
+        '        b = From f In b Where f.TitleUcase.Contains(txtFilter.Text.ToUpper)
+        '    ElseIf Form1.rbFileName.Checked Then
+        '        b = From f In b Where f.filename.ToLower.Contains(txtFilter.Text.ToLower)
+        '    End If
+        'End If
+        
+        'Select Case cmbxMVSort.Text
+        '    Case "A-Z"
+        '        If Not HMGridInvert Then
+        '            If HMGridFieldToDisplay1="ArtistTitle" Then
+        '                b = From f In b Order By f.ArtistTitle Ascending
+        '            ElseIf HMGridFieldToDisplay1="TitleYear" Then
+        '                b = From f In b Order By f.Title Ascending
+        '            Else
+        '                b = From f In b Order By f.filename Ascending
+        '            End If
+        '        Else
+        '            If HMGridFieldToDisplay1="ArtistTitle" Then
+        '                b = From f In b Order By f.ArtistTitle Descending
+        '            ElseIf HMGridFieldToDisplay1="TitleYear" Then
+        '                b = From f In b Order By f.Title Descending
+        '            Else
+        '                b = From f In b Order By f.filename Descending
+        '            End If
+        '        End If
+        '    Case "Year"
+        '        If Not HMGridInvert Then
+        '            b = From f In b Order By f.year Ascending
+        '        Else
+        '            b = From f In b Order By f.year Descending
+        '        End If
+        '    Case "Runtime"
+        '        If Not HMGridInvert Then
+        '            b = From f In b Order By f.IntRuntime Ascending        
+        '        Else
+        '            b = From f In b Order By f.IntRuntime Descending
+        '        End If
+        '    Case "DateAdded"
+        '        If Not HMGridInvert Then
+        '            b = From f In b Order By f.Createdate Descending
+        '        Else
+        '            b = From f In b Order By f.Createdate Ascending
+        '        End If
+        'End Select
+        
+        Dim lst = b.ToList
+        DataGridViewBindingSourceHM .DataSource = lst
+        HVDgv1                      .DataSource = DataGridViewBindingSourceHM
+        HMDGVGridviewMovieDesign()
+    End Sub
+
+	'Private Sub loadhomemoviedetails()
+	'	HmMovTitle.Text = ""
+	'	HmMovSort   .Text = ""
+	'	HmMovYear   .Text = ""
+	'	HmMovPlot   .Text = ""
+	'	HmMovStars  .Text = ""
+ '       HmMovGenre  .Text = ""
+ '       HmMovPath   .Text = ""
+	'	pbx_HmFanart.Image = Nothing
+	'	WorkingHomeMovie = nfoFunction.nfoLoadHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename)
+	'	HmMovTitle  .Text = WorkingHomeMovie.fullmoviebody.title
+	'	HmMovSort   .Text = WorkingHomeMovie.fullmoviebody.sortorder
+	'	HmMovPlot   .Text = WorkingHomeMovie.fullmoviebody.plot
+	'	HmMovStars  .Text = WorkingHomeMovie.fullmoviebody.stars
+	'	HmMovYear   .Text = WorkingHomeMovie.fullmoviebody.year
+ '       HmMovGenre  .Text = WorkingHomeMovie.fullmoviebody.genre
+ '       HmMovPath   .Text = WorkingHomeMovie.fileinfo.fullpathandfilename
+	'	PlaceHolderforHomeMovieTitleToolStripMenuItem.Text = WorkingHomeMovie.fullmoviebody.title
+	'	PlaceHolderforHomeMovieTitleToolStripMenuItem.BackColor = Color.Honeydew
+	'	PlaceHolderforHomeMovieTitleToolStripMenuItem.Font = New Font("Arial", 10, FontStyle.Bold)
+	'	If File.Exists(WorkingHomeMovie.fileinfo.fanartpath) Then
+	'		util_ImageLoad(pbx_HmFanart, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+	'		Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
+	'		movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
+	'	End If
+	'	util_ImageLoad(pbx_HmPoster, WorkingHomeMovie.fileinfo.posterpath, Utilities.DefaultPosterPath)
+	'End Sub
 
 	Private Sub HomeMovieFoldersRefresh()
 		AuthorizeCheck = True
@@ -780,5 +1079,85 @@ Partial Public Class Form1
 		hmfolderschanged = False
 		TabControl1.SelectedIndex = 0
 	End Sub
+
+#Region "MVDgv1 Handlers"
+
+    Private Sub HVDgv1_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles HVDgv1.CellClick
+        DisplayHV()
+    End Sub
+
+    Private Sub HVDgv1_KeyUp(sender As Object, e As KeyEventArgs) Handles HVDgv1.KeyUp
+        DisplayHV()
+    End Sub
+
+    Private Sub HVDgv1_ColumnHeaderMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles HVDgv1.ColumnHeaderMouseClick
+        HMGridInvert = Not HMGridInvert
+        HMDGV_FiltersAndSortApply()
+        DisplayHV()
+    End Sub
+
+    Private Sub HVDgv1_DoubleClick(sender As Object, e As MouseEventArgs) Handles HVDgv1.DoubleClick
+        Try
+            Dim info = HVDgv1.HitTest(e.X, e.Y)
+            If info.ColumnX = -1 Then Return
+            Try
+                If IsNumeric(HVDgv1.SelectedCells(1).Value.ToString) Then Return
+            Catch
+                Return
+            End Try
+            If info.Type <> DataGridViewHitTestType.ColumnHeader Then
+                'MVPlay()
+            End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+
+    Private Sub HVDgv1_MouseUp(sender As Object, e As MouseEventArgs) Handles HVDgv1.MouseUp
+        Try
+            If e.Button = MouseButtons.Right Then
+                Dim RowIndexFromMouseDown As Integer = Nothing
+                Try
+                    RowIndexFromMouseDown = HVDgv1.HitTest(e.X, e.Y).RowIndex
+                Catch
+                End Try
+                If RowIndexFromMouseDown <> Nothing AndAlso RowIndexFromMouseDown <> -1 Then
+                    HVDgv1.ClearSelection()
+                    HVDgv1.rows(RowIndexFromMouseDown).Selected = True
+                    DisplayHV()
+                    TSMIHVConfig()
+                End If
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub HVDgv1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles HVDgv1.Keypress
+	    If [Char].IsLetter(e.KeyChar) or [Char].IsDigit(e.KeyChar) Then
+            Dim ekey As String = e.KeyChar.ToString.ToLower
+            HMkeypresstimer.Stop()
+            HVKeyPress &= ekey
+            HMkeypresstimer.Start()
+		    For i As Integer = 0 To (HVDgv1.Rows.Count) - 1
+                Dim rtitle As String = HVDgv1.Rows(i).Cells(HMGridFieldToDisplay1).Value.ToString.ToLower
+			    If rtitle.StartsWith(HVKeyPress) Then
+                    Dim icell As Integer = HVDgv1.CurrentCell.ColumnIndex 
+                    HVDgv1.CurrentCell = HVDgv1.Rows(i).Cells(icell)
+                    DisplayHV()
+				    Return
+			    End If
+		    Next
+	    End If
+    End Sub
+
+#End Region             'MVDgv1 Handlers
+
+    Private Sub HMkeypresstimer_Elapsed()
+        HVKeyPress = ""
+    End Sub
+
+    Private Sub TSMIHVConfig()
+        'tsmiMVName.Text = "'" & MVDgv1.SelectedCells(3).Value.ToString & "'"
+    End Sub
     
 End Class

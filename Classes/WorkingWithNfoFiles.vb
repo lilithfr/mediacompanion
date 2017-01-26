@@ -1790,7 +1790,7 @@ Public Class WorkingWithNfoFiles
 #Region " Home Movie Routines "
     Public Function nfoLoadHomeMovie(ByVal filepath As String)
         Try
-            Dim newmovie As New HomeMovieDetails
+            Dim newmovie As New FullMovieDetails
             newmovie.fileinfo.fullpathandfilename = filepath
             If Not File.Exists(filepath) Then
                 Return "Error"
@@ -1816,7 +1816,7 @@ Public Class WorkingWithNfoFiles
                                 Dim tempstring As String = ""
                                 tempstring = thisresult.InnerText
                                 newmovie.fullmoviebody.title = Pref.RemoveIgnoredArticles(tempstring)
-                            Case "set"          : newmovie.fullmoviebody.movieset   = thisresult.InnerText
+                            Case "set"          : newmovie.fullmoviebody.SetName    = thisresult.InnerText
                             Case "stars"        : newmovie.fullmoviebody.stars      = thisresult.InnerText
                             Case "year"         : newmovie.fullmoviebody.year       = thisresult.InnerText
                             Case "plot"         : newmovie.fullmoviebody.plot       = thisresult.InnerText
