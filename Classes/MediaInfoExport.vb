@@ -319,7 +319,7 @@ Public Class MediaInfoExport
                         strNFOprop = If(movie.title <> Nothing, movie.title, "") & " (" & If(movie.year <> Nothing, movie.year, "0000") & ")"
 
                     Case "rating"
-                        strNFOprop = If(movie.rating <> Nothing, movie.rating, "")
+                        strNFOprop = If(movie.rating <> Nothing, movie.rating.ToString(Globalization.CultureInfo.InvariantCulture), "")
 
                     Case "userrating"
                         strNFOprop = movie.usrrated.ToString
