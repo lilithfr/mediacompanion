@@ -16,7 +16,7 @@ Partial Public Class Form1
 
 	Public ReadOnly Property MovieFiltersPanel As Panel
 		Get
-			Return  SplitContainer5.Panel2
+			Return  SpltCntr_MovBrowserList.Panel2
 		End Get
 	End Property	
      
@@ -372,7 +372,7 @@ Partial Public Class Form1
     End Sub
 
 
-    Private Sub SplitContainer5_DoubleClick(sender As Object, e As EventArgs) Handles SplitContainer5.DoubleClick
+    Private Sub SplitContainer5_DoubleClick(sender As Object, e As EventArgs) Handles SpltCntr_MovBrowserList.DoubleClick
 
         If MovieFiltersPanel.Height = MovieFiltersPanelMaxHeight - 5 Then
             ResizeBottomLHSPanel(0)
@@ -385,9 +385,9 @@ Partial Public Class Form1
     Private Sub ResizeBottomLHSPanel(height As Integer, Optional ByVal MaxHeight As Integer = 0)
         ProgState = ProgramState.ResizingSplitterPanel
 
-        SplitContainer5.SplitterDistance = If((SplitContainer5.Height - height) < 0, 0, SplitContainer5.Height - height)
+        SpltCntr_MovBrowserList.SplitterDistance = If((SpltCntr_MovBrowserList.Height - height) < 0, 0, SpltCntr_MovBrowserList.Height - height)
 
-        DataGridViewMovies.Height = SplitContainer5.SplitterDistance - 140
+        DataGridViewMovies.Height = SpltCntr_MovBrowserList.SplitterDistance - 140
 
         If MaxHeight = 0 Then
             MovieFiltersPanel.AutoScrollMinSize = New Size(MovieFiltersPanel.AutoScrollMinSize.Width, height - 10)
@@ -408,16 +408,16 @@ Partial Public Class Form1
         Dim maxSize = MovieFiltersPanelMaxHeight
         Dim minSize = 2
 
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance > maxSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - maxSize
+        If SpltCntr_MovBrowserList.Height - SpltCntr_MovBrowserList.SplitterDistance > maxSize Then
+            SpltCntr_MovBrowserList.SplitterDistance = SpltCntr_MovBrowserList.Height - maxSize
         End If
 
-        If SplitContainer5.Height - SplitContainer5.SplitterDistance < minSize Then
-            SplitContainer5.SplitterDistance = SplitContainer5.Height - minSize
+        If SpltCntr_MovBrowserList.Height - SpltCntr_MovBrowserList.SplitterDistance < minSize Then
+            SpltCntr_MovBrowserList.SplitterDistance = SpltCntr_MovBrowserList.Height - minSize
         End If
 
         'Needed as workaround for splitter panel framework bug:
-        Dim h = SplitContainer5.SplitterDistance - 140
+        Dim h = SpltCntr_MovBrowserList.SplitterDistance - 140
         If h < minSize Then h = minSize
         DataGridViewMovies.Height = h
     End Sub

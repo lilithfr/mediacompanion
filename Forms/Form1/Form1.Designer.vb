@@ -210,8 +210,8 @@ Partial Class Form1
         Me.tsmiMov_SyncToXBMC = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMov_ConvertToFrodo = New System.Windows.Forms.ToolStripMenuItem()
         Me.tpMovMain = New System.Windows.Forms.TabPage()
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_MovDisplay = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_MovBrowserList = New System.Windows.Forms.SplitContainer()
         Me.cbBtnLink = New System.Windows.Forms.CheckBox()
         Me.TooltipGridViewMovies1 = New Media_Companion.TooltipGridViewMovies()
         Me.DataGridViewMovies = New System.Windows.Forms.DataGridView()
@@ -319,7 +319,7 @@ Partial Class Form1
         Me.Label75 = New System.Windows.Forms.Label()
         Me.TextBox34 = New System.Windows.Forms.TextBox()
         Me.titletxt = New System.Windows.Forms.ComboBox()
-        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_MovPictures = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMutisave = New System.Windows.Forms.TextBox()
         Me.plottxt = New System.Windows.Forms.TextBox()
@@ -567,8 +567,8 @@ Partial Class Form1
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.TabControl3 = New System.Windows.Forms.TabControl()
         Me.tpTvMainBrowser = New System.Windows.Forms.TabPage()
-        Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
-        Me.SplitContainer10 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_TvDisplay = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_TvBrowserList = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel7 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBox_TotEpisodeCount = New System.Windows.Forms.TextBox()
         Me.TextBox_TotTVShowCount = New System.Windows.Forms.TextBox()
@@ -630,7 +630,7 @@ Partial Class Form1
         Me.lbl_TvShSortOrder = New System.Windows.Forms.Label()
         Me.btn_TvShState = New System.Windows.Forms.Button()
         Me._tv_SplitContainer = New System.Windows.Forms.SplitContainer()
-        Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_TvPictures = New System.Windows.Forms.SplitContainer()
         Me.tv_PictureBoxLeft = New System.Windows.Forms.PictureBox()
         Me.TvEpContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.ReScrFanartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -801,7 +801,7 @@ Partial Class Form1
         Me.btnTvWebForward = New System.Windows.Forms.Button()
         Me.btnTvWebRefresh = New System.Windows.Forms.Button()
         Me.tpTvFolders = New System.Windows.Forms.TabPage()
-        Me.SplitContainer9 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_TvFolders = New System.Windows.Forms.SplitContainer()
         Me.SpltCtnr6 = New System.Windows.Forms.SplitContainer()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_TvFoldersRootRemove = New System.Windows.Forms.Button()
@@ -835,6 +835,18 @@ Partial Class Form1
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tp_HmMainBrowser = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel21 = New System.Windows.Forms.TableLayoutPanel()
+        Me.cmbxHMSort = New System.Windows.Forms.ComboBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.HmMovTag = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.HVDgv1 = New System.Windows.Forms.DataGridView()
+        Me.HomeMovieContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.PlaceHolderforHomeMovieTitleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator25 = New System.Windows.Forms.ToolStripSeparator()
+        Me.PlayHomeMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
+        Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OpenFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HmMovPath = New System.Windows.Forms.TextBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.HmMovGenre = New System.Windows.Forms.TextBox()
@@ -849,14 +861,6 @@ Partial Class Form1
         Me.Label168 = New System.Windows.Forms.Label()
         Me.HmMovSort = New System.Windows.Forms.TextBox()
         Me.Label39 = New System.Windows.Forms.Label()
-        Me.lb_HomeMovies = New System.Windows.Forms.ListBox()
-        Me.HomeMovieContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.PlaceHolderforHomeMovieTitleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator25 = New System.Windows.Forms.ToolStripSeparator()
-        Me.PlayHomeMovieToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
-        Me.OpenFolderToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OpenFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Label167 = New System.Windows.Forms.Label()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.HmMovTitle = New System.Windows.Forms.TextBox()
@@ -899,15 +903,15 @@ Partial Class Form1
         Me.TabCustTv = New System.Windows.Forms.TabPage()
         Me.CustTvTabControl = New System.Windows.Forms.TabControl()
         Me.TpCustTvBrowser = New System.Windows.Forms.TabPage()
-        Me.SpCont1 = New System.Windows.Forms.SplitContainer()
-        Me.Spltctnr11 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_CustTvBrowserTab = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_CustTvBrowser = New System.Windows.Forms.SplitContainer()
         Me.btnCRefresh = New System.Windows.Forms.Button()
         Me.tbCShowCount = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.btnCSearch = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.tbCEpCount = New System.Windows.Forms.TextBox()
-        Me.SpltCtnr12 = New System.Windows.Forms.SplitContainer()
+        Me.SpltCntr_CustTvBrowserList = New System.Windows.Forms.SplitContainer()
         Me.Panel_Show = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel33 = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_CustTvShRunTime = New System.Windows.Forms.Label()
@@ -1085,21 +1089,21 @@ Partial Class Form1
         Me.tsmiTvWallPosterChange = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallLargeView = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiTvWallOpenFolder = New System.Windows.Forms.ToolStripMenuItem()
-        Me.HVDgv1 = New System.Windows.Forms.DataGridView()
+        Me.Panel7 = New System.Windows.Forms.Panel()
         CType(Me.PbMovieFanArt,System.ComponentModel.ISupportInitialize).BeginInit
         Me.MovieArtworkContextMenu.SuspendLayout
         CType(Me.PbMoviePoster,System.ComponentModel.ISupportInitialize).BeginInit
         Me.TVContextMenu.SuspendLayout
         Me.MovieContextMenu.SuspendLayout
         Me.tpMovMain.SuspendLayout
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer1.Panel1.SuspendLayout
-        Me.SplitContainer1.Panel2.SuspendLayout
-        Me.SplitContainer1.SuspendLayout
-        CType(Me.SplitContainer5,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer5.Panel1.SuspendLayout
-        Me.SplitContainer5.Panel2.SuspendLayout
-        Me.SplitContainer5.SuspendLayout
+        CType(Me.SpltCntr_MovDisplay,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_MovDisplay.Panel1.SuspendLayout
+        Me.SpltCntr_MovDisplay.Panel2.SuspendLayout
+        Me.SpltCntr_MovDisplay.SuspendLayout
+        CType(Me.SpltCntr_MovBrowserList,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_MovBrowserList.Panel1.SuspendLayout
+        Me.SpltCntr_MovBrowserList.Panel2.SuspendLayout
+        Me.SpltCntr_MovBrowserList.SuspendLayout
         CType(Me.DataGridViewMovies,System.ComponentModel.ISupportInitialize).BeginInit
         Me.Panel1.SuspendLayout
         Me.cmsConfigureMovieFilters.SuspendLayout
@@ -1108,10 +1112,10 @@ Partial Class Form1
         Me.tlpMovies.SuspendLayout
         Me.TableLayoutPanel3.SuspendLayout
         Me.TableLayoutPanel4.SuspendLayout
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer2.Panel1.SuspendLayout
-        Me.SplitContainer2.Panel2.SuspendLayout
-        Me.SplitContainer2.SuspendLayout
+        CType(Me.SpltCntr_MovPictures,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_MovPictures.Panel1.SuspendLayout
+        Me.SpltCntr_MovPictures.Panel2.SuspendLayout
+        Me.SpltCntr_MovPictures.SuspendLayout
         Me.TableLayoutPanel2.SuspendLayout
         CType(Me.PictureBoxActor,System.ComponentModel.ISupportInitialize).BeginInit
         Me.tlpMovieButtons.SuspendLayout
@@ -1178,14 +1182,14 @@ Partial Class Form1
         Me.TabPage2.SuspendLayout
         Me.TabControl3.SuspendLayout
         Me.tpTvMainBrowser.SuspendLayout
-        CType(Me.SplitContainer3,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer3.Panel1.SuspendLayout
-        Me.SplitContainer3.Panel2.SuspendLayout
-        Me.SplitContainer3.SuspendLayout
-        CType(Me.SplitContainer10,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer10.Panel1.SuspendLayout
-        Me.SplitContainer10.Panel2.SuspendLayout
-        Me.SplitContainer10.SuspendLayout
+        CType(Me.SpltCntr_TvDisplay,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_TvDisplay.Panel1.SuspendLayout
+        Me.SpltCntr_TvDisplay.Panel2.SuspendLayout
+        Me.SpltCntr_TvDisplay.SuspendLayout
+        CType(Me.SpltCntr_TvBrowserList,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_TvBrowserList.Panel1.SuspendLayout
+        Me.SpltCntr_TvBrowserList.Panel2.SuspendLayout
+        Me.SpltCntr_TvBrowserList.SuspendLayout
         Me.TableLayoutPanel7.SuspendLayout
         Me.Panel11.SuspendLayout
         Me.Panel_EpisodeActors.SuspendLayout
@@ -1200,10 +1204,10 @@ Partial Class Form1
         Me._tv_SplitContainer.Panel1.SuspendLayout
         Me._tv_SplitContainer.Panel2.SuspendLayout
         Me._tv_SplitContainer.SuspendLayout
-        CType(Me.SplitContainer4,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer4.Panel1.SuspendLayout
-        Me.SplitContainer4.Panel2.SuspendLayout
-        Me.SplitContainer4.SuspendLayout
+        CType(Me.SpltCntr_TvPictures,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_TvPictures.Panel1.SuspendLayout
+        Me.SpltCntr_TvPictures.Panel2.SuspendLayout
+        Me.SpltCntr_TvPictures.SuspendLayout
         CType(Me.tv_PictureBoxLeft,System.ComponentModel.ISupportInitialize).BeginInit
         Me.TvEpContextMenuStrip.SuspendLayout
         CType(Me.tv_PictureBoxRight,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1246,10 +1250,10 @@ Partial Class Form1
         Me.TableLayoutPanel15.SuspendLayout
         Me.Panel14.SuspendLayout
         Me.tpTvFolders.SuspendLayout
-        CType(Me.SplitContainer9,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer9.Panel1.SuspendLayout
-        Me.SplitContainer9.Panel2.SuspendLayout
-        Me.SplitContainer9.SuspendLayout
+        CType(Me.SpltCntr_TvFolders,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_TvFolders.Panel1.SuspendLayout
+        Me.SpltCntr_TvFolders.Panel2.SuspendLayout
+        Me.SpltCntr_TvFolders.SuspendLayout
         CType(Me.SpltCtnr6,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SpltCtnr6.Panel1.SuspendLayout
         Me.SpltCtnr6.Panel2.SuspendLayout
@@ -1263,9 +1267,10 @@ Partial Class Form1
         Me.TabControl1.SuspendLayout
         Me.tp_HmMainBrowser.SuspendLayout
         Me.TableLayoutPanel21.SuspendLayout
+        CType(Me.HVDgv1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.HomeMovieContextMenu.SuspendLayout
         CType(Me.pbx_HmPoster,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.pbx_HmFanart,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.HomeMovieContextMenu.SuspendLayout
         Me.tp_HmScrnSht.SuspendLayout
         Me.TableLayoutPanel27.SuspendLayout
         CType(Me.pbx_HmFanartSht,System.ComponentModel.ISupportInitialize).BeginInit
@@ -1282,17 +1287,17 @@ Partial Class Form1
         Me.TabCustTv.SuspendLayout
         Me.CustTvTabControl.SuspendLayout
         Me.TpCustTvBrowser.SuspendLayout
-        CType(Me.SpCont1,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SpCont1.Panel1.SuspendLayout
-        Me.SpCont1.Panel2.SuspendLayout
-        Me.SpCont1.SuspendLayout
-        CType(Me.Spltctnr11,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.Spltctnr11.Panel1.SuspendLayout
-        Me.Spltctnr11.Panel2.SuspendLayout
-        Me.Spltctnr11.SuspendLayout
-        CType(Me.SpltCtnr12,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SpltCtnr12.Panel1.SuspendLayout
-        Me.SpltCtnr12.SuspendLayout
+        CType(Me.SpltCntr_CustTvBrowserTab,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_CustTvBrowserTab.Panel1.SuspendLayout
+        Me.SpltCntr_CustTvBrowserTab.Panel2.SuspendLayout
+        Me.SpltCntr_CustTvBrowserTab.SuspendLayout
+        CType(Me.SpltCntr_CustTvBrowser,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_CustTvBrowser.Panel1.SuspendLayout
+        Me.SpltCntr_CustTvBrowser.Panel2.SuspendLayout
+        Me.SpltCntr_CustTvBrowser.SuspendLayout
+        CType(Me.SpltCntr_CustTvBrowserList,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.SpltCntr_CustTvBrowserList.Panel1.SuspendLayout
+        Me.SpltCntr_CustTvBrowserList.SuspendLayout
         Me.Panel_Show.SuspendLayout
         Me.TableLayoutPanel33.SuspendLayout
         Me.Panel_Episode.SuspendLayout
@@ -1331,7 +1336,7 @@ Partial Class Form1
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).BeginInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).BeginInit
         Me.TVWallContextMenu.SuspendLayout
-        CType(Me.HVDgv1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.Panel7.SuspendLayout
         Me.SuspendLayout
         '
         'ToolTip1
@@ -1511,10 +1516,10 @@ Partial Class Form1
         Me.ButtonSaveAndQuickRefresh.Anchor = System.Windows.Forms.AnchorStyles.Right
         Me.ButtonSaveAndQuickRefresh.AutoSize = true
         Me.ButtonSaveAndQuickRefresh.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ButtonSaveAndQuickRefresh.Location = New System.Drawing.Point(613, 573)
+        Me.ButtonSaveAndQuickRefresh.Location = New System.Drawing.Point(4, 51)
         Me.ButtonSaveAndQuickRefresh.Margin = New System.Windows.Forms.Padding(4)
         Me.ButtonSaveAndQuickRefresh.Name = "ButtonSaveAndQuickRefresh"
-        Me.ButtonSaveAndQuickRefresh.Size = New System.Drawing.Size(101, 25)
+        Me.ButtonSaveAndQuickRefresh.Size = New System.Drawing.Size(1, 1)
         Me.ButtonSaveAndQuickRefresh.TabIndex = 19
         Me.ButtonSaveAndQuickRefresh.Text = "Save && Refresh"
         Me.ToolTip1.SetToolTip(Me.ButtonSaveAndQuickRefresh, "Use this button to update the movie list"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"when folders have been added or removed"& _ 
@@ -2103,7 +2108,7 @@ Partial Class Form1
         Me.CTvTreeView.Name = "CTvTreeView"
         Me.CTvTreeView.SelectedImageIndex = 4
         Me.CTvTreeView.ShowLines = false
-        Me.CTvTreeView.Size = New System.Drawing.Size(296, 237)
+        Me.CTvTreeView.Size = New System.Drawing.Size(296, 238)
         Me.CTvTreeView.StateImageList = Me.ImageList2
         Me.CTvTreeView.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.CTvTreeView, "Double click an episode to playback,"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Use context menu (Right Mouse Click)"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"for a"& _ 
@@ -2840,7 +2845,7 @@ Partial Class Form1
         Me.tpMovMain.AutoScroll = true
         Me.tpMovMain.AutoScrollMinSize = New System.Drawing.Size(956, 450)
         Me.tpMovMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.tpMovMain.Controls.Add(Me.SplitContainer1)
+        Me.tpMovMain.Controls.Add(Me.SpltCntr_MovDisplay)
         Me.tpMovMain.Location = New System.Drawing.Point(4, 25)
         Me.tpMovMain.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMovMain.Name = "tpMovMain"
@@ -2851,153 +2856,153 @@ Partial Class Form1
         Me.tpMovMain.ToolTipText = "Main Movie Browser"
         Me.tpMovMain.UseVisualStyleBackColor = true
         '
-        'SplitContainer1
+        'SpltCntr_MovDisplay
         '
-        Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer1.Cursor = System.Windows.Forms.Cursors.Default
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(4)
-        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SpltCntr_MovDisplay.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.SpltCntr_MovDisplay.Cursor = System.Windows.Forms.Cursors.Default
+        Me.SpltCntr_MovDisplay.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_MovDisplay.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_MovDisplay.Margin = New System.Windows.Forms.Padding(4)
+        Me.SpltCntr_MovDisplay.Name = "SpltCntr_MovDisplay"
         '
-        'SplitContainer1.Panel1
+        'SpltCntr_MovDisplay.Panel1
         '
-        Me.SplitContainer1.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.SplitContainer1.Panel1.Controls.Add(Me.SplitContainer5)
-        Me.SplitContainer1.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer1.Panel1MinSize = 325
+        Me.SpltCntr_MovDisplay.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.SpltCntr_MovDisplay.Panel1.Controls.Add(Me.SpltCntr_MovBrowserList)
+        Me.SpltCntr_MovDisplay.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovDisplay.Panel1MinSize = 325
         '
-        'SplitContainer1.Panel2
+        'SpltCntr_MovDisplay.Panel2
         '
-        Me.SplitContainer1.Panel2.AutoScroll = true
-        Me.SplitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.SplitContainer1.Panel2.Controls.Add(Me.ftvArtPicBox)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Label128)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel6)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.tlpMovies)
-        Me.SplitContainer1.Panel2.Controls.Add(Me.movieGraphicInfo)
-        Me.SplitContainer1.Panel2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.SplitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer1.Panel2MinSize = 630
-        Me.SplitContainer1.Size = New System.Drawing.Size(1045, 607)
-        Me.SplitContainer1.SplitterDistance = 329
-        Me.SplitContainer1.SplitterWidth = 5
-        Me.SplitContainer1.TabIndex = 137
+        Me.SpltCntr_MovDisplay.Panel2.AutoScroll = true
+        Me.SpltCntr_MovDisplay.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.SpltCntr_MovDisplay.Panel2.Controls.Add(Me.ftvArtPicBox)
+        Me.SpltCntr_MovDisplay.Panel2.Controls.Add(Me.Label128)
+        Me.SpltCntr_MovDisplay.Panel2.Controls.Add(Me.Panel6)
+        Me.SpltCntr_MovDisplay.Panel2.Controls.Add(Me.tlpMovies)
+        Me.SpltCntr_MovDisplay.Panel2.Controls.Add(Me.movieGraphicInfo)
+        Me.SpltCntr_MovDisplay.Panel2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.SpltCntr_MovDisplay.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovDisplay.Panel2MinSize = 630
+        Me.SpltCntr_MovDisplay.Size = New System.Drawing.Size(1045, 607)
+        Me.SpltCntr_MovDisplay.SplitterDistance = 329
+        Me.SpltCntr_MovDisplay.SplitterWidth = 5
+        Me.SpltCntr_MovDisplay.TabIndex = 137
         '
-        'SplitContainer5
+        'SpltCntr_MovBrowserList
         '
-        Me.SplitContainer5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
-        Me.SplitContainer5.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer5.Margin = New System.Windows.Forms.Padding(4)
-        Me.SplitContainer5.Name = "SplitContainer5"
-        Me.SplitContainer5.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SpltCntr_MovBrowserList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.SpltCntr_MovBrowserList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_MovBrowserList.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.SpltCntr_MovBrowserList.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_MovBrowserList.Margin = New System.Windows.Forms.Padding(4)
+        Me.SpltCntr_MovBrowserList.Name = "SpltCntr_MovBrowserList"
+        Me.SpltCntr_MovBrowserList.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
-        'SplitContainer5.Panel1
+        'SpltCntr_MovBrowserList.Panel1
         '
-        Me.SplitContainer5.Panel1.Controls.Add(Me.cbBtnLink)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.TooltipGridViewMovies1)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.btnMovRefreshAll)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.DataGridViewMovies)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.cbSort)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.btnreverse)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.DebugSplitter5PosLabel)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.btnResetFilters)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.LabelCountFilter)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.txt_titlesearch)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.btnMovSearchNew)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.Panel1)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.TextBox1)
-        Me.SplitContainer5.Panel1.Controls.Add(Me.Label1)
-        Me.SplitContainer5.Panel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.SplitContainer5.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.cbBtnLink)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.TooltipGridViewMovies1)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.btnMovRefreshAll)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.DataGridViewMovies)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.cbSort)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.btnreverse)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.DebugSplitter5PosLabel)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.btnResetFilters)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.LabelCountFilter)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.txt_titlesearch)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.btnMovSearchNew)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.Panel1)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.TextBox1)
+        Me.SpltCntr_MovBrowserList.Panel1.Controls.Add(Me.Label1)
+        Me.SpltCntr_MovBrowserList.Panel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.SpltCntr_MovBrowserList.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
         '
-        'SplitContainer5.Panel2
+        'SpltCntr_MovBrowserList.Panel2
         '
-        Me.SplitContainer5.Panel2.AutoScroll = true
-        Me.SplitContainer5.Panel2.AutoScrollMinSize = New System.Drawing.Size(0, 400)
-        Me.SplitContainer5.Panel2.BackColor = System.Drawing.Color.Transparent
-        Me.SplitContainer5.Panel2.ContextMenuStrip = Me.cmsConfigureMovieFilters
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterSubTitleLang)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterUserRated)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterRootFolder)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSubTitleLangMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterUserRatedMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterRootFolderMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSubTitleLang)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterUserRated)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterRootFolder)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterVideoCodec)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterVideoCodecMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterVideoCodec)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterDirector)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterDirectorMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterDirector)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterTag)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterTagMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterTag)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSourceMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterSource)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterActorMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterActor)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioLanguagesMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguagesMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioLanguages)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioDefaultLanguages)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterNumAudioTracksMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterNumAudioTracks)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioBitratesMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioBitrates)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioChannelsMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioChannels)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterCertificateMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioCodecsMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterResolutionMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSetMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterGenreMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterCountriesMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterStudiosMode)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterAudioCodecs)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterResolution)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterSet)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterCertificate)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterCertificate)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterGenre)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterCountries)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterStudios)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterYear)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterYear)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterVotes)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterRuntime)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterFolderSizes)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterFolderSizes)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterVotes)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterRuntime)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterRating)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterNumAudioTracks)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioBitrates)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioChannels)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioLanguages)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguages)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterAudioCodecs)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterResolution)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterGeneral)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterActor)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSet)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterSource)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterCountries)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterStudios)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.lblFilterGenre)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterGeneral)
-        Me.SplitContainer5.Panel2.Controls.Add(Me.cbFilterRating)
-        Me.SplitContainer5.Panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.SplitContainer5.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer5.Panel2MinSize = 1
-        Me.SplitContainer5.Size = New System.Drawing.Size(329, 607)
-        Me.SplitContainer5.SplitterDistance = 271
-        Me.SplitContainer5.SplitterWidth = 5
-        Me.SplitContainer5.TabIndex = 68
+        Me.SpltCntr_MovBrowserList.Panel2.AutoScroll = true
+        Me.SpltCntr_MovBrowserList.Panel2.AutoScrollMinSize = New System.Drawing.Size(0, 400)
+        Me.SpltCntr_MovBrowserList.Panel2.BackColor = System.Drawing.Color.Transparent
+        Me.SpltCntr_MovBrowserList.Panel2.ContextMenuStrip = Me.cmsConfigureMovieFilters
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterSubTitleLang)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterUserRated)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterRootFolder)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSubTitleLangMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterUserRatedMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterRootFolderMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSubTitleLang)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterUserRated)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterRootFolder)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterVideoCodec)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterVideoCodecMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterVideoCodec)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterDirector)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterDirectorMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterDirector)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterTag)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterTagMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterTag)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSourceMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterSource)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterActorMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterActor)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioLanguagesMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguagesMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterAudioLanguages)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterAudioDefaultLanguages)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterNumAudioTracksMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterNumAudioTracks)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioBitratesMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterAudioBitrates)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioChannelsMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterAudioChannels)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterCertificateMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioCodecsMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterResolutionMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSetMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterGenreMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterCountriesMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterStudiosMode)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterAudioCodecs)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterResolution)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterSet)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterCertificate)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterCertificate)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterGenre)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterCountries)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterStudios)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterYear)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterYear)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterVotes)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterRuntime)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterFolderSizes)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterFolderSizes)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterVotes)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterRuntime)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterRating)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterNumAudioTracks)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioBitrates)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioChannels)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioLanguages)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioDefaultLanguages)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterAudioCodecs)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterResolution)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterGeneral)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterActor)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSet)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterSource)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterCountries)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterStudios)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.lblFilterGenre)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterGeneral)
+        Me.SpltCntr_MovBrowserList.Panel2.Controls.Add(Me.cbFilterRating)
+        Me.SpltCntr_MovBrowserList.Panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl
+        Me.SpltCntr_MovBrowserList.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovBrowserList.Panel2MinSize = 1
+        Me.SpltCntr_MovBrowserList.Size = New System.Drawing.Size(329, 607)
+        Me.SpltCntr_MovBrowserList.SplitterDistance = 268
+        Me.SpltCntr_MovBrowserList.SplitterWidth = 5
+        Me.SpltCntr_MovBrowserList.TabIndex = 68
         '
         'cbBtnLink
         '
@@ -3070,7 +3075,7 @@ Partial Class Form1
         Me.DataGridViewMovies.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewMovies.ShowCellErrors = false
         Me.DataGridViewMovies.ShowRowErrors = false
-        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 173)
+        Me.DataGridViewMovies.Size = New System.Drawing.Size(316, 170)
         Me.DataGridViewMovies.StandardTab = true
         Me.DataGridViewMovies.TabIndex = 174
         '
@@ -3105,7 +3110,7 @@ Partial Class Form1
         Me.DebugSplitter5PosLabel.AutoSize = true
         Me.DebugSplitter5PosLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.DebugSplitter5PosLabel.ForeColor = System.Drawing.Color.Red
-        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 251)
+        Me.DebugSplitter5PosLabel.Location = New System.Drawing.Point(142, 248)
         Me.DebugSplitter5PosLabel.Name = "DebugSplitter5PosLabel"
         Me.DebugSplitter5PosLabel.Size = New System.Drawing.Size(185, 16)
         Me.DebugSplitter5PosLabel.TabIndex = 69
@@ -3258,7 +3263,7 @@ Partial Class Form1
         Me.cbFilterUserRated.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbFilterUserRated.FormattingEnabled = true
         Me.cbFilterUserRated.IntegralHeight = false
-        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 7785)
+        Me.cbFilterUserRated.Location = New System.Drawing.Point(147, 7998)
         Me.cbFilterUserRated.Mode = MC_UserControls.TriStateCheckedComboBox.OperationMode.Follow
         Me.cbFilterUserRated.Name = "cbFilterUserRated"
         Me.cbFilterUserRated.QuickSelect = false
@@ -3308,7 +3313,7 @@ Partial Class Form1
         Me.lblFilterUserRatedMode.BackColor = System.Drawing.Color.Gray
         Me.lblFilterUserRatedMode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lblFilterUserRatedMode.ForeColor = System.Drawing.Color.White
-        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 11668)
+        Me.lblFilterUserRatedMode.Location = New System.Drawing.Point(129, 11881)
         Me.lblFilterUserRatedMode.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFilterUserRatedMode.Name = "lblFilterUserRatedMode"
         Me.lblFilterUserRatedMode.Size = New System.Drawing.Size(17, 21)
@@ -4418,7 +4423,7 @@ Partial Class Form1
         Me.ftvArtPicBox.BackColor = System.Drawing.Color.Transparent
         Me.ftvArtPicBox.Location = New System.Drawing.Point(180, 45)
         Me.ftvArtPicBox.Name = "ftvArtPicBox"
-        Me.ftvArtPicBox.Size = New System.Drawing.Size(262, 207)
+        Me.ftvArtPicBox.Size = New System.Drawing.Size(259, 207)
         Me.ftvArtPicBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ftvArtPicBox.TabIndex = 128
         Me.ftvArtPicBox.TabStop = false
@@ -4428,7 +4433,7 @@ Partial Class Form1
         '
         Me.Label128.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label128.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold)
-        Me.Label128.Location = New System.Drawing.Point(74, 71)
+        Me.Label128.Location = New System.Drawing.Point(71, 71)
         Me.Label128.Margin = New System.Windows.Forms.Padding(40, 40, 4, 0)
         Me.Label128.Name = "Label128"
         Me.Label128.Size = New System.Drawing.Size(517, 163)
@@ -4664,7 +4669,7 @@ Partial Class Form1
         Me.tlpMovies.SetColumnSpan(Me.TableLayoutPanel3, 10)
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel3.Controls.Add(Me.TableLayoutPanel4, 0, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.SplitContainer2, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.SpltCntr_MovPictures, 0, 1)
         Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(70, 2)
         Me.TableLayoutPanel3.Margin = New System.Windows.Forms.Padding(0, 2, 0, 0)
@@ -4733,27 +4738,27 @@ Partial Class Form1
         Me.titletxt.Size = New System.Drawing.Size(381, 28)
         Me.titletxt.TabIndex = 161
         '
-        'SplitContainer2
+        'SpltCntr_MovPictures
         '
-        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer2.Location = New System.Drawing.Point(0, 35)
-        Me.SplitContainer2.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
-        Me.SplitContainer2.Name = "SplitContainer2"
+        Me.SpltCntr_MovPictures.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_MovPictures.Location = New System.Drawing.Point(0, 35)
+        Me.SpltCntr_MovPictures.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
+        Me.SpltCntr_MovPictures.Name = "SpltCntr_MovPictures"
         '
-        'SplitContainer2.Panel1
+        'SpltCntr_MovPictures.Panel1
         '
-        Me.SplitContainer2.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.SplitContainer2.Panel1.Controls.Add(Me.PbMovieFanArt)
-        Me.SplitContainer2.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovPictures.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.SpltCntr_MovPictures.Panel1.Controls.Add(Me.PbMovieFanArt)
+        Me.SpltCntr_MovPictures.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No
         '
-        'SplitContainer2.Panel2
+        'SpltCntr_MovPictures.Panel2
         '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.PbMoviePoster)
-        Me.SplitContainer2.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.SplitContainer2.Size = New System.Drawing.Size(636, 245)
-        Me.SplitContainer2.SplitterDistance = 298
-        Me.SplitContainer2.SplitterWidth = 5
-        Me.SplitContainer2.TabIndex = 151
+        Me.SpltCntr_MovPictures.Panel2.Controls.Add(Me.PbMoviePoster)
+        Me.SpltCntr_MovPictures.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.SpltCntr_MovPictures.Size = New System.Drawing.Size(636, 245)
+        Me.SpltCntr_MovPictures.SplitterDistance = 298
+        Me.SpltCntr_MovPictures.SplitterWidth = 5
+        Me.SpltCntr_MovPictures.TabIndex = 151
         '
         'TableLayoutPanel2
         '
@@ -7419,7 +7424,7 @@ Partial Class Form1
         Me.tpMovFolders.Location = New System.Drawing.Point(4, 25)
         Me.tpMovFolders.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMovFolders.Name = "tpMovFolders"
-        Me.tpMovFolders.Size = New System.Drawing.Size(1049, 611)
+        Me.tpMovFolders.Size = New System.Drawing.Size(192, 71)
         Me.tpMovFolders.TabIndex = 11
         Me.tpMovFolders.Text = "Folders"
         Me.tpMovFolders.UseVisualStyleBackColor = true
@@ -7430,7 +7435,7 @@ Partial Class Form1
         Me.Panel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel4.Location = New System.Drawing.Point(327, 0)
         Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(718, 607)
+        Me.Panel4.Size = New System.Drawing.Size(0, 51)
         Me.Panel4.TabIndex = 15
         '
         'TableLayoutPanel28
@@ -7447,17 +7452,17 @@ Partial Class Form1
         Me.TableLayoutPanel28.RowCount = 2
         Me.TableLayoutPanel28.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 93.22916!))
         Me.TableLayoutPanel28.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.770833!))
-        Me.TableLayoutPanel28.Size = New System.Drawing.Size(718, 607)
+        Me.TableLayoutPanel28.Size = New System.Drawing.Size(0, 51)
         Me.TableLayoutPanel28.TabIndex = 0
         '
         'Label147
         '
         Me.Label147.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.Label147.AutoSize = true
-        Me.Label147.Location = New System.Drawing.Point(16, 571)
+        Me.Label147.Location = New System.Drawing.Point(4, 47)
         Me.Label147.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label147.Name = "Label147"
-        Me.Label147.Size = New System.Drawing.Size(317, 30)
+        Me.Label147.Size = New System.Drawing.Size(1, 4)
         Me.Label147.TabIndex = 18
         Me.Label147.Text = "These only create the folders, you will still need to use the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"'Search for new Mo"& _ 
     "vies' option to add the movie data."
@@ -7469,7 +7474,7 @@ Partial Class Form1
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel5.Location = New System.Drawing.Point(3, 3)
         Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(712, 559)
+        Me.Panel5.Size = New System.Drawing.Size(1, 41)
         Me.Panel5.TabIndex = 20
         '
         'SpltCntr_MovFolders
@@ -7489,7 +7494,7 @@ Partial Class Form1
         '
         Me.SpltCntr_MovFolders.Panel2.Controls.Add(Me.tbllayoutpanelOffLineMovie)
         Me.SpltCntr_MovFolders.Panel2.Controls.Add(Me.Label145)
-        Me.SpltCntr_MovFolders.Size = New System.Drawing.Size(712, 559)
+        Me.SpltCntr_MovFolders.Size = New System.Drawing.Size(1, 41)
         Me.SpltCntr_MovFolders.SplitterDistance = 350
         Me.SpltCntr_MovFolders.TabIndex = 15
         '
@@ -7780,7 +7785,7 @@ Partial Class Form1
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Left
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(327, 607)
+        Me.Panel3.Size = New System.Drawing.Size(327, 51)
         Me.Panel3.TabIndex = 20
         '
         'Label86
@@ -7883,7 +7888,7 @@ Partial Class Form1
         '
         Me.tpTvMainBrowser.AutoScroll = true
         Me.tpTvMainBrowser.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.tpTvMainBrowser.Controls.Add(Me.SplitContainer3)
+        Me.tpTvMainBrowser.Controls.Add(Me.SpltCntr_TvDisplay)
         Me.tpTvMainBrowser.Location = New System.Drawing.Point(4, 25)
         Me.tpTvMainBrowser.Margin = New System.Windows.Forms.Padding(0)
         Me.tpTvMainBrowser.Name = "tpTvMainBrowser"
@@ -7892,53 +7897,53 @@ Partial Class Form1
         Me.tpTvMainBrowser.Text = "Main Browser"
         Me.tpTvMainBrowser.UseVisualStyleBackColor = true
         '
-        'SplitContainer3
+        'SpltCntr_TvDisplay
         '
-        Me.SplitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer3.Margin = New System.Windows.Forms.Padding(4)
-        Me.SplitContainer3.Name = "SplitContainer3"
+        Me.SpltCntr_TvDisplay.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.SpltCntr_TvDisplay.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_TvDisplay.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SpltCntr_TvDisplay.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_TvDisplay.Margin = New System.Windows.Forms.Padding(4)
+        Me.SpltCntr_TvDisplay.Name = "SpltCntr_TvDisplay"
         '
-        'SplitContainer3.Panel1
+        'SpltCntr_TvDisplay.Panel1
         '
-        Me.SplitContainer3.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.SplitContainer3.Panel1.Controls.Add(Me.SplitContainer10)
-        Me.SplitContainer3.Panel1MinSize = 315
+        Me.SpltCntr_TvDisplay.Panel1.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.SpltCntr_TvDisplay.Panel1.Controls.Add(Me.SpltCntr_TvBrowserList)
+        Me.SpltCntr_TvDisplay.Panel1MinSize = 315
         '
-        'SplitContainer3.Panel2
+        'SpltCntr_TvDisplay.Panel2
         '
-        Me.SplitContainer3.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
-        Me.SplitContainer3.Panel2.Controls.Add(Me.Panel_EpisodeActors)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.Panel_EpisodeInfo)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.pbtvfanarttv)
-        Me.SplitContainer3.Panel2.Controls.Add(Me.TableLayoutPanel20)
-        Me.SplitContainer3.Size = New System.Drawing.Size(1045, 607)
-        Me.SplitContainer3.SplitterDistance = 315
-        Me.SplitContainer3.SplitterWidth = 5
-        Me.SplitContainer3.TabIndex = 1
+        Me.SpltCntr_TvDisplay.Panel2.BackColor = System.Drawing.SystemColors.ControlLight
+        Me.SpltCntr_TvDisplay.Panel2.Controls.Add(Me.Panel_EpisodeActors)
+        Me.SpltCntr_TvDisplay.Panel2.Controls.Add(Me.Panel_EpisodeInfo)
+        Me.SpltCntr_TvDisplay.Panel2.Controls.Add(Me.pbtvfanarttv)
+        Me.SpltCntr_TvDisplay.Panel2.Controls.Add(Me.TableLayoutPanel20)
+        Me.SpltCntr_TvDisplay.Size = New System.Drawing.Size(1045, 607)
+        Me.SpltCntr_TvDisplay.SplitterDistance = 315
+        Me.SpltCntr_TvDisplay.SplitterWidth = 5
+        Me.SpltCntr_TvDisplay.TabIndex = 1
         '
-        'SplitContainer10
+        'SpltCntr_TvBrowserList
         '
-        Me.SplitContainer10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer10.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
-        Me.SplitContainer10.IsSplitterFixed = true
-        Me.SplitContainer10.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer10.Margin = New System.Windows.Forms.Padding(0)
-        Me.SplitContainer10.Name = "SplitContainer10"
-        Me.SplitContainer10.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SpltCntr_TvBrowserList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_TvBrowserList.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.SpltCntr_TvBrowserList.IsSplitterFixed = true
+        Me.SpltCntr_TvBrowserList.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_TvBrowserList.Margin = New System.Windows.Forms.Padding(0)
+        Me.SpltCntr_TvBrowserList.Name = "SpltCntr_TvBrowserList"
+        Me.SpltCntr_TvBrowserList.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
-        'SplitContainer10.Panel1
+        'SpltCntr_TvBrowserList.Panel1
         '
-        Me.SplitContainer10.Panel1.Controls.Add(Me.TableLayoutPanel7)
+        Me.SpltCntr_TvBrowserList.Panel1.Controls.Add(Me.TableLayoutPanel7)
         '
-        'SplitContainer10.Panel2
+        'SpltCntr_TvBrowserList.Panel2
         '
-        Me.SplitContainer10.Panel2.Controls.Add(Me.Panel11)
-        Me.SplitContainer10.Size = New System.Drawing.Size(311, 603)
-        Me.SplitContainer10.SplitterDistance = 498
-        Me.SplitContainer10.TabIndex = 0
+        Me.SpltCntr_TvBrowserList.Panel2.Controls.Add(Me.Panel11)
+        Me.SpltCntr_TvBrowserList.Size = New System.Drawing.Size(311, 603)
+        Me.SpltCntr_TvBrowserList.SplitterDistance = 498
+        Me.SpltCntr_TvBrowserList.TabIndex = 0
         '
         'TableLayoutPanel7
         '
@@ -8166,7 +8171,7 @@ Partial Class Form1
         '
         Me.Panel_EpisodeActors.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
         Me.Panel_EpisodeActors.Controls.Add(Me.TableLayoutPanel_EpisodeActors)
-        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(538, 337)
+        Me.Panel_EpisodeActors.Location = New System.Drawing.Point(535, 337)
         Me.Panel_EpisodeActors.MaximumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.MinimumSize = New System.Drawing.Size(175, 267)
         Me.Panel_EpisodeActors.Name = "Panel_EpisodeActors"
@@ -8634,7 +8639,7 @@ Partial Class Form1
         Me.pbtvfanarttv.BackColor = System.Drawing.Color.Transparent
         Me.pbtvfanarttv.Location = New System.Drawing.Point(120, 75)
         Me.pbtvfanarttv.Name = "pbtvfanarttv"
-        Me.pbtvfanarttv.Size = New System.Drawing.Size(294, 240)
+        Me.pbtvfanarttv.Size = New System.Drawing.Size(291, 240)
         Me.pbtvfanarttv.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.pbtvfanarttv.TabIndex = 129
         Me.pbtvfanarttv.TabStop = false
@@ -8829,7 +8834,7 @@ Partial Class Form1
         '
         '_tv_SplitContainer.Panel1
         '
-        Me._tv_SplitContainer.Panel1.Controls.Add(Me.SplitContainer4)
+        Me._tv_SplitContainer.Panel1.Controls.Add(Me.SpltCntr_TvPictures)
         '
         '_tv_SplitContainer.Panel2
         '
@@ -8839,25 +8844,25 @@ Partial Class Form1
         Me._tv_SplitContainer.SplitterDistance = 149
         Me._tv_SplitContainer.TabIndex = 11
         '
-        'SplitContainer4
+        'SpltCntr_TvPictures
         '
-        Me.SplitContainer4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SplitContainer4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer4.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer4.Margin = New System.Windows.Forms.Padding(4)
-        Me.SplitContainer4.Name = "SplitContainer4"
+        Me.SpltCntr_TvPictures.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.SpltCntr_TvPictures.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_TvPictures.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_TvPictures.Margin = New System.Windows.Forms.Padding(4)
+        Me.SpltCntr_TvPictures.Name = "SpltCntr_TvPictures"
         '
-        'SplitContainer4.Panel1
+        'SpltCntr_TvPictures.Panel1
         '
-        Me.SplitContainer4.Panel1.Controls.Add(Me.tv_PictureBoxLeft)
+        Me.SpltCntr_TvPictures.Panel1.Controls.Add(Me.tv_PictureBoxLeft)
         '
-        'SplitContainer4.Panel2
+        'SpltCntr_TvPictures.Panel2
         '
-        Me.SplitContainer4.Panel2.Controls.Add(Me.tv_PictureBoxRight)
-        Me.SplitContainer4.Size = New System.Drawing.Size(526, 149)
-        Me.SplitContainer4.SplitterDistance = 280
-        Me.SplitContainer4.SplitterWidth = 5
-        Me.SplitContainer4.TabIndex = 50
+        Me.SpltCntr_TvPictures.Panel2.Controls.Add(Me.tv_PictureBoxRight)
+        Me.SpltCntr_TvPictures.Size = New System.Drawing.Size(526, 149)
+        Me.SpltCntr_TvPictures.SplitterDistance = 280
+        Me.SpltCntr_TvPictures.SplitterWidth = 5
+        Me.SpltCntr_TvPictures.TabIndex = 50
         '
         'tv_PictureBoxLeft
         '
@@ -10952,7 +10957,7 @@ Partial Class Form1
         '
         Me.tpTvFolders.AutoScroll = true
         Me.tpTvFolders.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.tpTvFolders.Controls.Add(Me.SplitContainer9)
+        Me.tpTvFolders.Controls.Add(Me.SpltCntr_TvFolders)
         Me.tpTvFolders.Location = New System.Drawing.Point(4, 25)
         Me.tpTvFolders.Margin = New System.Windows.Forms.Padding(4)
         Me.tpTvFolders.Name = "tpTvFolders"
@@ -10961,25 +10966,25 @@ Partial Class Form1
         Me.tpTvFolders.Text = "Folders"
         Me.tpTvFolders.UseVisualStyleBackColor = true
         '
-        'SplitContainer9
+        'SpltCntr_TvFolders
         '
-        Me.SplitContainer9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer9.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
-        Me.SplitContainer9.IsSplitterFixed = true
-        Me.SplitContainer9.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer9.Name = "SplitContainer9"
-        Me.SplitContainer9.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SpltCntr_TvFolders.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_TvFolders.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.SpltCntr_TvFolders.IsSplitterFixed = true
+        Me.SpltCntr_TvFolders.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_TvFolders.Name = "SpltCntr_TvFolders"
+        Me.SpltCntr_TvFolders.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
-        'SplitContainer9.Panel1
+        'SpltCntr_TvFolders.Panel1
         '
-        Me.SplitContainer9.Panel1.Controls.Add(Me.SpltCtnr6)
+        Me.SpltCntr_TvFolders.Panel1.Controls.Add(Me.SpltCtnr6)
         '
-        'SplitContainer9.Panel2
+        'SpltCntr_TvFolders.Panel2
         '
-        Me.SplitContainer9.Panel2.Controls.Add(Me.TableLayoutPanel25)
-        Me.SplitContainer9.Size = New System.Drawing.Size(1045, 607)
-        Me.SplitContainer9.SplitterDistance = 558
-        Me.SplitContainer9.TabIndex = 9
+        Me.SpltCntr_TvFolders.Panel2.Controls.Add(Me.TableLayoutPanel25)
+        Me.SpltCntr_TvFolders.Size = New System.Drawing.Size(1045, 607)
+        Me.SpltCntr_TvFolders.SplitterDistance = 558
+        Me.SpltCntr_TvFolders.TabIndex = 9
         '
         'SpltCtnr6
         '
@@ -11434,8 +11439,8 @@ Partial Class Form1
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131!))
-        Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27!))
-        Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 51!))
+        Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20!))
+        Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 58!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 51!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129!))
@@ -11445,227 +11450,137 @@ Partial Class Form1
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 196!))
         Me.TableLayoutPanel21.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40!))
-        Me.TableLayoutPanel21.Controls.Add(Me.HVDgv1, 1, 2)
-        Me.TableLayoutPanel21.Controls.Add(Me.HmMovPath, 6, 10)
-        Me.TableLayoutPanel21.Controls.Add(Me.Label19, 5, 10)
-        Me.TableLayoutPanel21.Controls.Add(Me.HmMovGenre, 8, 8)
-        Me.TableLayoutPanel21.Controls.Add(Me.Label17, 7, 8)
+        Me.TableLayoutPanel21.Controls.Add(Me.cmbxHMSort, 2, 2)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label21, 1, 2)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovTag, 8, 9)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label20, 7, 9)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovPath, 6, 11)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label19, 5, 11)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovGenre, 6, 7)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label17, 5, 7)
         Me.TableLayoutPanel21.Controls.Add(Me.btn_HMRefresh, 3, 1)
         Me.TableLayoutPanel21.Controls.Add(Me.btn_HMSearch, 1, 1)
         Me.TableLayoutPanel21.Controls.Add(Me.pbx_HmPoster, 13, 7)
         Me.TableLayoutPanel21.Controls.Add(Me.btnHomeMovieSave, 14, 1)
-        Me.TableLayoutPanel21.Controls.Add(Me.HmMovPlot, 6, 3)
-        Me.TableLayoutPanel21.Controls.Add(Me.HmMovStars, 6, 6)
-        Me.TableLayoutPanel21.Controls.Add(Me.pbx_HmFanart, 6, 12)
-        Me.TableLayoutPanel21.Controls.Add(Me.HmMovYear, 6, 8)
-        Me.TableLayoutPanel21.Controls.Add(Me.Label113, 5, 8)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovPlot, 6, 2)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovStars, 6, 5)
+        Me.TableLayoutPanel21.Controls.Add(Me.pbx_HmFanart, 6, 13)
+        Me.TableLayoutPanel21.Controls.Add(Me.HmMovYear, 6, 9)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label113, 5, 9)
         Me.TableLayoutPanel21.Controls.Add(Me.Label168, 11, 1)
         Me.TableLayoutPanel21.Controls.Add(Me.HmMovSort, 12, 1)
-        Me.TableLayoutPanel21.Controls.Add(Me.Label39, 5, 6)
-        Me.TableLayoutPanel21.Controls.Add(Me.lb_HomeMovies, 4, 2)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label39, 5, 5)
         Me.TableLayoutPanel21.Controls.Add(Me.Label167, 5, 1)
-        Me.TableLayoutPanel21.Controls.Add(Me.Label32, 5, 3)
+        Me.TableLayoutPanel21.Controls.Add(Me.Label32, 5, 2)
         Me.TableLayoutPanel21.Controls.Add(Me.HmMovTitle, 6, 1)
+        Me.TableLayoutPanel21.Controls.Add(Me.Panel7, 1, 3)
         Me.TableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel21.Location = New System.Drawing.Point(3, 3)
         Me.TableLayoutPanel21.Name = "TableLayoutPanel21"
-        Me.TableLayoutPanel21.RowCount = 15
+        Me.TableLayoutPanel21.RowCount = 16
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
+        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
+        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32!))
+        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
+        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
+        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100!))
         Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
-        Me.TableLayoutPanel21.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20!))
         Me.TableLayoutPanel21.Size = New System.Drawing.Size(1043, 600)
         Me.TableLayoutPanel21.TabIndex = 37
         '
-        'HmMovPath
+        'cmbxHMSort
         '
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovPath, 5)
-        Me.HmMovPath.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HmMovPath.Location = New System.Drawing.Point(384, 301)
-        Me.HmMovPath.Name = "HmMovPath"
-        Me.HmMovPath.ReadOnly = true
-        Me.HmMovPath.Size = New System.Drawing.Size(344, 21)
-        Me.HmMovPath.TabIndex = 189
+        Me.TableLayoutPanel21.SetColumnSpan(Me.cmbxHMSort, 2)
+        Me.cmbxHMSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbxHMSort.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.cmbxHMSort.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.cmbxHMSort.FormattingEnabled = true
+        Me.cmbxHMSort.Items.AddRange(New Object() {"A - Z", "Year", "Runtime", "Sort Order", "Date Added", "Resolution"})
+        Me.cmbxHMSort.Location = New System.Drawing.Point(158, 58)
+        Me.cmbxHMSort.Name = "cmbxHMSort"
+        Me.cmbxHMSort.Size = New System.Drawing.Size(129, 21)
+        Me.cmbxHMSort.TabIndex = 194
         '
-        'Label19
+        'Label21
         '
-        Me.Label19.AutoSize = true
-        Me.Label19.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label19.Location = New System.Drawing.Point(343, 298)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label19.Size = New System.Drawing.Size(35, 32)
-        Me.Label19.TabIndex = 188
-        Me.Label19.Text = "Path:"
+        Me.Label21.AutoSize = true
+        Me.Label21.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label21.Location = New System.Drawing.Point(107, 61)
+        Me.Label21.Margin = New System.Windows.Forms.Padding(4, 6, 4, 0)
+        Me.Label21.Name = "Label21"
+        Me.Label21.Size = New System.Drawing.Size(44, 18)
+        Me.Label21.TabIndex = 193
+        Me.Label21.Text = "Sort By:"
+        Me.Label21.UseMnemonic = false
         '
-        'HmMovGenre
+        'HmMovTag
         '
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovGenre, 3)
-        Me.HmMovGenre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HmMovGenre.Location = New System.Drawing.Point(564, 259)
-        Me.HmMovGenre.Name = "HmMovGenre"
-        Me.HmMovGenre.Size = New System.Drawing.Size(164, 21)
-        Me.HmMovGenre.TabIndex = 187
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovTag, 3)
+        Me.HmMovTag.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovTag.Location = New System.Drawing.Point(564, 249)
+        Me.HmMovTag.Name = "HmMovTag"
+        Me.HmMovTag.Size = New System.Drawing.Size(164, 21)
+        Me.HmMovTag.TabIndex = 192
         '
-        'Label17
+        'Label20
         '
-        Me.Label17.AutoSize = true
-        Me.Label17.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label17.Location = New System.Drawing.Point(514, 256)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label17.Size = New System.Drawing.Size(44, 32)
-        Me.Label17.TabIndex = 186
-        Me.Label17.Text = "Genre:"
+        Me.Label20.AutoSize = true
+        Me.Label20.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label20.Location = New System.Drawing.Point(513, 246)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label20.Size = New System.Drawing.Size(45, 30)
+        Me.Label20.TabIndex = 191
+        Me.Label20.Text = "Tag(s):"
+        Me.Label20.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'pbx_HmPoster
+        'HVDgv1
         '
-        Me.pbx_HmPoster.BackColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.pbx_HmPoster.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.pbx_HmPoster.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pbx_HmPoster.Location = New System.Drawing.Point(810, 249)
-        Me.pbx_HmPoster.Name = "pbx_HmPoster"
-        Me.TableLayoutPanel21.SetRowSpan(Me.pbx_HmPoster, 6)
-        Me.pbx_HmPoster.Size = New System.Drawing.Size(190, 308)
-        Me.pbx_HmPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pbx_HmPoster.TabIndex = 37
-        Me.pbx_HmPoster.TabStop = false
-        '
-        'btnHomeMovieSave
-        '
-        Me.btnHomeMovieSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.btnHomeMovieSave.BackgroundImage = CType(resources.GetObject("btnHomeMovieSave.BackgroundImage"),System.Drawing.Image)
-        Me.btnHomeMovieSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btnHomeMovieSave.Location = New System.Drawing.Point(1010, 13)
-        Me.btnHomeMovieSave.Name = "btnHomeMovieSave"
-        Me.btnHomeMovieSave.Size = New System.Drawing.Size(30, 30)
-        Me.btnHomeMovieSave.TabIndex = 28
-        Me.btnHomeMovieSave.UseVisualStyleBackColor = true
-        '
-        'HmMovPlot
-        '
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovPlot, 8)
-        Me.HmMovPlot.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HmMovPlot.Location = New System.Drawing.Point(384, 82)
-        Me.HmMovPlot.Multiline = true
-        Me.HmMovPlot.Name = "HmMovPlot"
-        Me.TableLayoutPanel21.SetRowSpan(Me.HmMovPlot, 2)
-        Me.HmMovPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.HmMovPlot.Size = New System.Drawing.Size(616, 119)
-        Me.HmMovPlot.TabIndex = 31
-        '
-        'HmMovStars
-        '
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovStars, 4)
-        Me.HmMovStars.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HmMovStars.Location = New System.Drawing.Point(384, 217)
-        Me.HmMovStars.Name = "HmMovStars"
-        Me.HmMovStars.Size = New System.Drawing.Size(329, 21)
-        Me.HmMovStars.TabIndex = 33
-        '
-        'pbx_HmFanart
-        '
-        Me.pbx_HmFanart.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.pbx_HmFanart.BackColor = System.Drawing.SystemColors.ControlDarkDark
-        Me.pbx_HmFanart.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.TableLayoutPanel21.SetColumnSpan(Me.pbx_HmFanart, 6)
-        Me.pbx_HmFanart.Location = New System.Drawing.Point(384, 343)
-        Me.pbx_HmFanart.Name = "pbx_HmFanart"
-        Me.pbx_HmFanart.Size = New System.Drawing.Size(400, 214)
-        Me.pbx_HmFanart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pbx_HmFanart.TabIndex = 27
-        Me.pbx_HmFanart.TabStop = false
-        '
-        'HmMovYear
-        '
-        Me.HmMovYear.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HmMovYear.Location = New System.Drawing.Point(384, 259)
-        Me.HmMovYear.Name = "HmMovYear"
-        Me.HmMovYear.Size = New System.Drawing.Size(123, 21)
-        Me.HmMovYear.TabIndex = 35
-        '
-        'Label113
-        '
-        Me.Label113.AutoSize = true
-        Me.Label113.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label113.Location = New System.Drawing.Point(343, 256)
-        Me.Label113.Name = "Label113"
-        Me.Label113.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label113.Size = New System.Drawing.Size(35, 32)
-        Me.Label113.TabIndex = 36
-        Me.Label113.Text = "Year:"
-        '
-        'Label168
-        '
-        Me.Label168.AutoSize = true
-        Me.Label168.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label168.Location = New System.Drawing.Point(752, 10)
-        Me.Label168.Name = "Label168"
-        Me.Label168.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label168.Size = New System.Drawing.Size(32, 45)
-        Me.Label168.TabIndex = 22
-        Me.Label168.Text = "Sort:"
-        '
-        'HmMovSort
-        '
-        Me.HmMovSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovSort, 2)
-        Me.HmMovSort.Location = New System.Drawing.Point(790, 13)
-        Me.HmMovSort.Name = "HmMovSort"
-        Me.HmMovSort.Size = New System.Drawing.Size(210, 21)
-        Me.HmMovSort.TabIndex = 20
-        '
-        'Label39
-        '
-        Me.Label39.AutoSize = true
-        Me.Label39.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label39.Location = New System.Drawing.Point(335, 214)
-        Me.Label39.Name = "Label39"
-        Me.Label39.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label39.Size = New System.Drawing.Size(43, 32)
-        Me.Label39.TabIndex = 34
-        Me.Label39.Text = "Starring:"
-        '
-        'lb_HomeMovies
-        '
-        Me.lb_HomeMovies.ContextMenuStrip = Me.HomeMovieContextMenu
-        Me.lb_HomeMovies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lb_HomeMovies.FormattingEnabled = true
-        Me.lb_HomeMovies.ItemHeight = 15
-        Me.lb_HomeMovies.Location = New System.Drawing.Point(306, 58)
-        Me.lb_HomeMovies.Name = "lb_HomeMovies"
-        Me.lb_HomeMovies.Size = New System.Drawing.Size(21, 18)
-        Me.lb_HomeMovies.TabIndex = 18
+        Me.HVDgv1.AllowUserToAddRows = false
+        Me.HVDgv1.AllowUserToDeleteRows = false
+        Me.HVDgv1.AllowUserToResizeRows = false
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
+        Me.HVDgv1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle6
+        Me.HVDgv1.BackgroundColor = System.Drawing.SystemColors.Control
+        Me.HVDgv1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
+        Me.HVDgv1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
+        Me.HVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.HVDgv1.ContextMenuStrip = Me.HomeMovieContextMenu
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.MediumSeaGreen
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.HVDgv1.DefaultCellStyle = DataGridViewCellStyle7
+        Me.HVDgv1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HVDgv1.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
+        Me.HVDgv1.Location = New System.Drawing.Point(1, 1)
+        Me.HVDgv1.Name = "HVDgv1"
+        Me.HVDgv1.RowHeadersVisible = false
+        Me.HVDgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.HVDgv1.ShowCellErrors = false
+        Me.HVDgv1.Size = New System.Drawing.Size(289, 485)
+        Me.HVDgv1.StandardTab = true
+        Me.HVDgv1.TabIndex = 190
+        Me.HVDgv1.TabStop = false
         '
         'HomeMovieContextMenu
         '
         Me.HomeMovieContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PlaceHolderforHomeMovieTitleToolStripMenuItem, Me.ToolStripSeparator25, Me.PlayHomeMovieToolStripMenuItem, Me.ToolStripSeparator26, Me.OpenFolderToolStripMenuItem, Me.OpenFileToolStripMenuItem})
         Me.HomeMovieContextMenu.Name = "HomeMovieContextMenu"
-        Me.HomeMovieContextMenu.Size = New System.Drawing.Size(220, 104)
+        Me.HomeMovieContextMenu.Size = New System.Drawing.Size(220, 126)
         '
         'PlaceHolderforHomeMovieTitleToolStripMenuItem
         '
@@ -11699,7 +11614,158 @@ Partial Class Form1
         '
         Me.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem"
         Me.OpenFileToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
-        Me.OpenFileToolStripMenuItem.Text = "Open File"
+        Me.OpenFileToolStripMenuItem.Text = "Open Nfo File"
+        '
+        'HmMovPath
+        '
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovPath, 5)
+        Me.HmMovPath.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovPath.Location = New System.Drawing.Point(384, 289)
+        Me.HmMovPath.Name = "HmMovPath"
+        Me.HmMovPath.ReadOnly = true
+        Me.HmMovPath.Size = New System.Drawing.Size(344, 21)
+        Me.HmMovPath.TabIndex = 189
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = true
+        Me.Label19.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label19.Location = New System.Drawing.Point(343, 286)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label19.Size = New System.Drawing.Size(35, 30)
+        Me.Label19.TabIndex = 188
+        Me.Label19.Text = "Path:"
+        '
+        'HmMovGenre
+        '
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovGenre, 3)
+        Me.HmMovGenre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovGenre.Location = New System.Drawing.Point(384, 209)
+        Me.HmMovGenre.Name = "HmMovGenre"
+        Me.HmMovGenre.Size = New System.Drawing.Size(303, 21)
+        Me.HmMovGenre.TabIndex = 187
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = true
+        Me.Label17.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label17.Location = New System.Drawing.Point(334, 206)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label17.Size = New System.Drawing.Size(44, 30)
+        Me.Label17.TabIndex = 186
+        Me.Label17.Text = "Genre:"
+        '
+        'pbx_HmPoster
+        '
+        Me.pbx_HmPoster.BackColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.pbx_HmPoster.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.pbx_HmPoster.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pbx_HmPoster.Location = New System.Drawing.Point(810, 209)
+        Me.pbx_HmPoster.Name = "pbx_HmPoster"
+        Me.TableLayoutPanel21.SetRowSpan(Me.pbx_HmPoster, 7)
+        Me.pbx_HmPoster.Size = New System.Drawing.Size(190, 334)
+        Me.pbx_HmPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbx_HmPoster.TabIndex = 37
+        Me.pbx_HmPoster.TabStop = false
+        '
+        'btnHomeMovieSave
+        '
+        Me.btnHomeMovieSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.btnHomeMovieSave.BackgroundImage = CType(resources.GetObject("btnHomeMovieSave.BackgroundImage"),System.Drawing.Image)
+        Me.btnHomeMovieSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btnHomeMovieSave.Location = New System.Drawing.Point(1010, 13)
+        Me.btnHomeMovieSave.Name = "btnHomeMovieSave"
+        Me.btnHomeMovieSave.Size = New System.Drawing.Size(30, 30)
+        Me.btnHomeMovieSave.TabIndex = 28
+        Me.btnHomeMovieSave.UseVisualStyleBackColor = true
+        '
+        'HmMovPlot
+        '
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovPlot, 8)
+        Me.HmMovPlot.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovPlot.Location = New System.Drawing.Point(384, 58)
+        Me.HmMovPlot.Multiline = true
+        Me.HmMovPlot.Name = "HmMovPlot"
+        Me.TableLayoutPanel21.SetRowSpan(Me.HmMovPlot, 2)
+        Me.HmMovPlot.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.HmMovPlot.Size = New System.Drawing.Size(616, 95)
+        Me.HmMovPlot.TabIndex = 31
+        '
+        'HmMovStars
+        '
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovStars, 4)
+        Me.HmMovStars.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovStars.Location = New System.Drawing.Point(384, 169)
+        Me.HmMovStars.Name = "HmMovStars"
+        Me.HmMovStars.Size = New System.Drawing.Size(329, 21)
+        Me.HmMovStars.TabIndex = 33
+        '
+        'pbx_HmFanart
+        '
+        Me.pbx_HmFanart.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
+            Or System.Windows.Forms.AnchorStyles.Left)  _
+            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.pbx_HmFanart.BackColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.pbx_HmFanart.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.TableLayoutPanel21.SetColumnSpan(Me.pbx_HmFanart, 6)
+        Me.pbx_HmFanart.Location = New System.Drawing.Point(384, 329)
+        Me.pbx_HmFanart.Name = "pbx_HmFanart"
+        Me.pbx_HmFanart.Size = New System.Drawing.Size(400, 214)
+        Me.pbx_HmFanart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pbx_HmFanart.TabIndex = 27
+        Me.pbx_HmFanart.TabStop = false
+        '
+        'HmMovYear
+        '
+        Me.HmMovYear.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HmMovYear.Location = New System.Drawing.Point(384, 249)
+        Me.HmMovYear.Name = "HmMovYear"
+        Me.HmMovYear.Size = New System.Drawing.Size(123, 21)
+        Me.HmMovYear.TabIndex = 35
+        '
+        'Label113
+        '
+        Me.Label113.AutoSize = true
+        Me.Label113.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label113.Location = New System.Drawing.Point(343, 246)
+        Me.Label113.Name = "Label113"
+        Me.Label113.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label113.Size = New System.Drawing.Size(35, 30)
+        Me.Label113.TabIndex = 36
+        Me.Label113.Text = "Year:"
+        '
+        'Label168
+        '
+        Me.Label168.AutoSize = true
+        Me.Label168.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label168.Location = New System.Drawing.Point(752, 10)
+        Me.Label168.Name = "Label168"
+        Me.Label168.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label168.Size = New System.Drawing.Size(32, 45)
+        Me.Label168.TabIndex = 22
+        Me.Label168.Text = "Sort:"
+        '
+        'HmMovSort
+        '
+        Me.HmMovSort.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel21.SetColumnSpan(Me.HmMovSort, 2)
+        Me.HmMovSort.Location = New System.Drawing.Point(790, 13)
+        Me.HmMovSort.Name = "HmMovSort"
+        Me.HmMovSort.Size = New System.Drawing.Size(210, 21)
+        Me.HmMovSort.TabIndex = 20
+        '
+        'Label39
+        '
+        Me.Label39.AutoSize = true
+        Me.Label39.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Label39.Location = New System.Drawing.Point(329, 166)
+        Me.Label39.Name = "Label39"
+        Me.Label39.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
+        Me.Label39.Size = New System.Drawing.Size(49, 30)
+        Me.Label39.TabIndex = 34
+        Me.Label39.Text = "Staring:"
         '
         'Label167
         '
@@ -11716,10 +11782,10 @@ Partial Class Form1
         '
         Me.Label32.AutoSize = true
         Me.Label32.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Label32.Location = New System.Drawing.Point(347, 79)
+        Me.Label32.Location = New System.Drawing.Point(347, 55)
         Me.Label32.Name = "Label32"
         Me.Label32.Padding = New System.Windows.Forms.Padding(0, 6, 0, 0)
-        Me.Label32.Size = New System.Drawing.Size(31, 77)
+        Me.Label32.Size = New System.Drawing.Size(31, 24)
         Me.Label32.TabIndex = 32
         Me.Label32.Text = "Plot:"
         '
@@ -12199,7 +12265,7 @@ Partial Class Form1
         '
         'TpCustTvBrowser
         '
-        Me.TpCustTvBrowser.Controls.Add(Me.SpCont1)
+        Me.TpCustTvBrowser.Controls.Add(Me.SpltCntr_CustTvBrowserTab)
         Me.TpCustTvBrowser.Location = New System.Drawing.Point(4, 24)
         Me.TpCustTvBrowser.Name = "TpCustTvBrowser"
         Me.TpCustTvBrowser.Padding = New System.Windows.Forms.Padding(3)
@@ -12208,54 +12274,54 @@ Partial Class Form1
         Me.TpCustTvBrowser.Text = "Main Browser"
         Me.TpCustTvBrowser.UseVisualStyleBackColor = true
         '
-        'SpCont1
+        'SpltCntr_CustTvBrowserTab
         '
-        Me.SpCont1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.SpCont1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SpCont1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.SpCont1.IsSplitterFixed = true
-        Me.SpCont1.Location = New System.Drawing.Point(3, 3)
-        Me.SpCont1.Name = "SpCont1"
+        Me.SpltCntr_CustTvBrowserTab.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.SpltCntr_CustTvBrowserTab.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_CustTvBrowserTab.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SpltCntr_CustTvBrowserTab.IsSplitterFixed = true
+        Me.SpltCntr_CustTvBrowserTab.Location = New System.Drawing.Point(3, 3)
+        Me.SpltCntr_CustTvBrowserTab.Name = "SpltCntr_CustTvBrowserTab"
         '
-        'SpCont1.Panel1
+        'SpltCntr_CustTvBrowserTab.Panel1
         '
-        Me.SpCont1.Panel1.Controls.Add(Me.Spltctnr11)
-        Me.SpCont1.Panel1MinSize = 300
+        Me.SpltCntr_CustTvBrowserTab.Panel1.Controls.Add(Me.SpltCntr_CustTvBrowser)
+        Me.SpltCntr_CustTvBrowserTab.Panel1MinSize = 300
         '
-        'SpCont1.Panel2
+        'SpltCntr_CustTvBrowserTab.Panel2
         '
-        Me.SpCont1.Panel2.Controls.Add(Me.Panel_Show)
-        Me.SpCont1.Panel2.Controls.Add(Me.Panel_Episode)
-        Me.SpCont1.Panel2.Controls.Add(Me.TableLayoutPanel35)
-        Me.SpCont1.Size = New System.Drawing.Size(729, 34)
-        Me.SpCont1.SplitterDistance = 300
-        Me.SpCont1.TabIndex = 0
+        Me.SpltCntr_CustTvBrowserTab.Panel2.Controls.Add(Me.Panel_Show)
+        Me.SpltCntr_CustTvBrowserTab.Panel2.Controls.Add(Me.Panel_Episode)
+        Me.SpltCntr_CustTvBrowserTab.Panel2.Controls.Add(Me.TableLayoutPanel35)
+        Me.SpltCntr_CustTvBrowserTab.Size = New System.Drawing.Size(729, 34)
+        Me.SpltCntr_CustTvBrowserTab.SplitterDistance = 300
+        Me.SpltCntr_CustTvBrowserTab.TabIndex = 0
         '
-        'Spltctnr11
+        'SpltCntr_CustTvBrowser
         '
-        Me.Spltctnr11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Spltctnr11.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.Spltctnr11.IsSplitterFixed = true
-        Me.Spltctnr11.Location = New System.Drawing.Point(0, 0)
-        Me.Spltctnr11.Name = "Spltctnr11"
-        Me.Spltctnr11.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SpltCntr_CustTvBrowser.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_CustTvBrowser.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SpltCntr_CustTvBrowser.IsSplitterFixed = true
+        Me.SpltCntr_CustTvBrowser.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_CustTvBrowser.Name = "SpltCntr_CustTvBrowser"
+        Me.SpltCntr_CustTvBrowser.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
-        'Spltctnr11.Panel1
+        'SpltCntr_CustTvBrowser.Panel1
         '
-        Me.Spltctnr11.Panel1.Controls.Add(Me.btnCRefresh)
-        Me.Spltctnr11.Panel1.Controls.Add(Me.tbCShowCount)
-        Me.Spltctnr11.Panel1.Controls.Add(Me.Label5)
-        Me.Spltctnr11.Panel1.Controls.Add(Me.btnCSearch)
-        Me.Spltctnr11.Panel1.Controls.Add(Me.Label4)
-        Me.Spltctnr11.Panel1.Controls.Add(Me.tbCEpCount)
-        Me.Spltctnr11.Panel1MinSize = 85
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.btnCRefresh)
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.tbCShowCount)
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.Label5)
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.btnCSearch)
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.Label4)
+        Me.SpltCntr_CustTvBrowser.Panel1.Controls.Add(Me.tbCEpCount)
+        Me.SpltCntr_CustTvBrowser.Panel1MinSize = 80
         '
-        'Spltctnr11.Panel2
+        'SpltCntr_CustTvBrowser.Panel2
         '
-        Me.Spltctnr11.Panel2.Controls.Add(Me.SpltCtnr12)
-        Me.Spltctnr11.Size = New System.Drawing.Size(296, 30)
-        Me.Spltctnr11.SplitterDistance = 85
-        Me.Spltctnr11.TabIndex = 6
+        Me.SpltCntr_CustTvBrowser.Panel2.Controls.Add(Me.SpltCntr_CustTvBrowserList)
+        Me.SpltCntr_CustTvBrowser.Size = New System.Drawing.Size(296, 30)
+        Me.SpltCntr_CustTvBrowser.SplitterDistance = 80
+        Me.SpltCntr_CustTvBrowser.TabIndex = 6
         '
         'btnCRefresh
         '
@@ -12314,19 +12380,19 @@ Partial Class Form1
         Me.tbCEpCount.Size = New System.Drawing.Size(33, 21)
         Me.tbCEpCount.TabIndex = 3
         '
-        'SpltCtnr12
+        'SpltCntr_CustTvBrowserList
         '
-        Me.SpltCtnr12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SpltCtnr12.Location = New System.Drawing.Point(0, 0)
-        Me.SpltCtnr12.Name = "SpltCtnr12"
-        Me.SpltCtnr12.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SpltCntr_CustTvBrowserList.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SpltCntr_CustTvBrowserList.Location = New System.Drawing.Point(0, 0)
+        Me.SpltCntr_CustTvBrowserList.Name = "SpltCntr_CustTvBrowserList"
+        Me.SpltCntr_CustTvBrowserList.Orientation = System.Windows.Forms.Orientation.Horizontal
         '
-        'SpltCtnr12.Panel1
+        'SpltCntr_CustTvBrowserList.Panel1
         '
-        Me.SpltCtnr12.Panel1.Controls.Add(Me.CTvTreeView)
-        Me.SpltCtnr12.Size = New System.Drawing.Size(296, 515)
-        Me.SpltCtnr12.SplitterDistance = 237
-        Me.SpltCtnr12.TabIndex = 1
+        Me.SpltCntr_CustTvBrowserList.Panel1.Controls.Add(Me.CTvTreeView)
+        Me.SpltCntr_CustTvBrowserList.Size = New System.Drawing.Size(296, 520)
+        Me.SpltCntr_CustTvBrowserList.SplitterDistance = 238
+        Me.SpltCntr_CustTvBrowserList.TabIndex = 1
         '
         'Panel_Show
         '
@@ -13928,38 +13994,18 @@ Partial Class Form1
         Me.tsmiTvWallOpenFolder.Size = New System.Drawing.Size(160, 22)
         Me.tsmiTvWallOpenFolder.Text = "Open Folder"
         '
-        'HVDgv1
+        'Panel7
         '
-        Me.HVDgv1.AllowUserToAddRows = false
-        Me.HVDgv1.AllowUserToDeleteRows = false
-        Me.HVDgv1.AllowUserToResizeRows = false
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
-        Me.HVDgv1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle6
-        Me.HVDgv1.BackgroundColor = System.Drawing.Color.Gray
-        Me.HVDgv1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
-        Me.HVDgv1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
-        Me.HVDgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.TableLayoutPanel21.SetColumnSpan(Me.HVDgv1, 3)
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.MediumSeaGreen
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.HVDgv1.DefaultCellStyle = DataGridViewCellStyle7
-        Me.HVDgv1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HVDgv1.GridColor = System.Drawing.Color.FromArgb(CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer), CType(CType(240,Byte),Integer))
-        Me.HVDgv1.Location = New System.Drawing.Point(9, 58)
-        Me.HVDgv1.Name = "HVDgv1"
-        Me.HVDgv1.RowHeadersVisible = false
-        Me.TableLayoutPanel21.SetRowSpan(Me.HVDgv1, 12)
-        Me.HVDgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.HVDgv1.ShowCellErrors = false
-        Me.HVDgv1.Size = New System.Drawing.Size(291, 511)
-        Me.HVDgv1.StandardTab = true
-        Me.HVDgv1.TabIndex = 190
-        Me.HVDgv1.TabStop = false
+        Me.Panel7.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.TableLayoutPanel21.SetColumnSpan(Me.Panel7, 3)
+        Me.Panel7.Controls.Add(Me.HVDgv1)
+        Me.Panel7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel7.Location = New System.Drawing.Point(9, 82)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Padding = New System.Windows.Forms.Padding(1)
+        Me.TableLayoutPanel21.SetRowSpan(Me.Panel7, 12)
+        Me.Panel7.Size = New System.Drawing.Size(291, 487)
+        Me.Panel7.TabIndex = 195
         '
         'Form1
         '
@@ -13991,15 +14037,15 @@ Partial Class Form1
         Me.TVContextMenu.ResumeLayout(false)
         Me.MovieContextMenu.ResumeLayout(false)
         Me.tpMovMain.ResumeLayout(false)
-        Me.SplitContainer1.Panel1.ResumeLayout(false)
-        Me.SplitContainer1.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer1.ResumeLayout(false)
-        Me.SplitContainer5.Panel1.ResumeLayout(false)
-        Me.SplitContainer5.Panel1.PerformLayout
-        Me.SplitContainer5.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer5,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer5.ResumeLayout(false)
+        Me.SpltCntr_MovDisplay.Panel1.ResumeLayout(false)
+        Me.SpltCntr_MovDisplay.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_MovDisplay,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_MovDisplay.ResumeLayout(false)
+        Me.SpltCntr_MovBrowserList.Panel1.ResumeLayout(false)
+        Me.SpltCntr_MovBrowserList.Panel1.PerformLayout
+        Me.SpltCntr_MovBrowserList.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_MovBrowserList,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_MovBrowserList.ResumeLayout(false)
         CType(Me.DataGridViewMovies,System.ComponentModel.ISupportInitialize).EndInit
         Me.Panel1.ResumeLayout(false)
         Me.Panel1.PerformLayout
@@ -14012,10 +14058,10 @@ Partial Class Form1
         Me.TableLayoutPanel3.ResumeLayout(false)
         Me.TableLayoutPanel4.ResumeLayout(false)
         Me.TableLayoutPanel4.PerformLayout
-        Me.SplitContainer2.Panel1.ResumeLayout(false)
-        Me.SplitContainer2.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer2.ResumeLayout(false)
+        Me.SpltCntr_MovPictures.Panel1.ResumeLayout(false)
+        Me.SpltCntr_MovPictures.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_MovPictures,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_MovPictures.ResumeLayout(false)
         Me.TableLayoutPanel2.ResumeLayout(false)
         Me.TableLayoutPanel2.PerformLayout
         CType(Me.PictureBoxActor,System.ComponentModel.ISupportInitialize).EndInit
@@ -14103,14 +14149,14 @@ Partial Class Form1
         Me.TabPage2.ResumeLayout(false)
         Me.TabControl3.ResumeLayout(false)
         Me.tpTvMainBrowser.ResumeLayout(false)
-        Me.SplitContainer3.Panel1.ResumeLayout(false)
-        Me.SplitContainer3.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer3,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer3.ResumeLayout(false)
-        Me.SplitContainer10.Panel1.ResumeLayout(false)
-        Me.SplitContainer10.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer10,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer10.ResumeLayout(false)
+        Me.SpltCntr_TvDisplay.Panel1.ResumeLayout(false)
+        Me.SpltCntr_TvDisplay.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_TvDisplay,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_TvDisplay.ResumeLayout(false)
+        Me.SpltCntr_TvBrowserList.Panel1.ResumeLayout(false)
+        Me.SpltCntr_TvBrowserList.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_TvBrowserList,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_TvBrowserList.ResumeLayout(false)
         Me.TableLayoutPanel7.ResumeLayout(false)
         Me.TableLayoutPanel7.PerformLayout
         Me.Panel11.ResumeLayout(false)
@@ -14131,10 +14177,10 @@ Partial Class Form1
         Me._tv_SplitContainer.Panel2.ResumeLayout(false)
         CType(Me._tv_SplitContainer,System.ComponentModel.ISupportInitialize).EndInit
         Me._tv_SplitContainer.ResumeLayout(false)
-        Me.SplitContainer4.Panel1.ResumeLayout(false)
-        Me.SplitContainer4.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer4,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer4.ResumeLayout(false)
+        Me.SpltCntr_TvPictures.Panel1.ResumeLayout(false)
+        Me.SpltCntr_TvPictures.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_TvPictures,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_TvPictures.ResumeLayout(false)
         CType(Me.tv_PictureBoxLeft,System.ComponentModel.ISupportInitialize).EndInit
         Me.TvEpContextMenuStrip.ResumeLayout(false)
         CType(Me.tv_PictureBoxRight,System.ComponentModel.ISupportInitialize).EndInit
@@ -14192,10 +14238,10 @@ Partial Class Form1
         Me.TableLayoutPanel15.PerformLayout
         Me.Panel14.ResumeLayout(false)
         Me.tpTvFolders.ResumeLayout(false)
-        Me.SplitContainer9.Panel1.ResumeLayout(false)
-        Me.SplitContainer9.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer9,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SplitContainer9.ResumeLayout(false)
+        Me.SpltCntr_TvFolders.Panel1.ResumeLayout(false)
+        Me.SpltCntr_TvFolders.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_TvFolders,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_TvFolders.ResumeLayout(false)
         Me.SpltCtnr6.Panel1.ResumeLayout(false)
         Me.SpltCtnr6.Panel2.ResumeLayout(false)
         CType(Me.SpltCtnr6,System.ComponentModel.ISupportInitialize).EndInit
@@ -14213,9 +14259,10 @@ Partial Class Form1
         Me.tp_HmMainBrowser.PerformLayout
         Me.TableLayoutPanel21.ResumeLayout(false)
         Me.TableLayoutPanel21.PerformLayout
+        CType(Me.HVDgv1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.HomeMovieContextMenu.ResumeLayout(false)
         CType(Me.pbx_HmPoster,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.pbx_HmFanart,System.ComponentModel.ISupportInitialize).EndInit
-        Me.HomeMovieContextMenu.ResumeLayout(false)
         Me.tp_HmScrnSht.ResumeLayout(false)
         Me.TableLayoutPanel27.ResumeLayout(false)
         Me.TableLayoutPanel27.PerformLayout
@@ -14235,18 +14282,18 @@ Partial Class Form1
         Me.TabCustTv.ResumeLayout(false)
         Me.CustTvTabControl.ResumeLayout(false)
         Me.TpCustTvBrowser.ResumeLayout(false)
-        Me.SpCont1.Panel1.ResumeLayout(false)
-        Me.SpCont1.Panel2.ResumeLayout(false)
-        CType(Me.SpCont1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SpCont1.ResumeLayout(false)
-        Me.Spltctnr11.Panel1.ResumeLayout(false)
-        Me.Spltctnr11.Panel1.PerformLayout
-        Me.Spltctnr11.Panel2.ResumeLayout(false)
-        CType(Me.Spltctnr11,System.ComponentModel.ISupportInitialize).EndInit
-        Me.Spltctnr11.ResumeLayout(false)
-        Me.SpltCtnr12.Panel1.ResumeLayout(false)
-        CType(Me.SpltCtnr12,System.ComponentModel.ISupportInitialize).EndInit
-        Me.SpltCtnr12.ResumeLayout(false)
+        Me.SpltCntr_CustTvBrowserTab.Panel1.ResumeLayout(false)
+        Me.SpltCntr_CustTvBrowserTab.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_CustTvBrowserTab,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_CustTvBrowserTab.ResumeLayout(false)
+        Me.SpltCntr_CustTvBrowser.Panel1.ResumeLayout(false)
+        Me.SpltCntr_CustTvBrowser.Panel1.PerformLayout
+        Me.SpltCntr_CustTvBrowser.Panel2.ResumeLayout(false)
+        CType(Me.SpltCntr_CustTvBrowser,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_CustTvBrowser.ResumeLayout(false)
+        Me.SpltCntr_CustTvBrowserList.Panel1.ResumeLayout(false)
+        CType(Me.SpltCntr_CustTvBrowserList,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SpltCntr_CustTvBrowserList.ResumeLayout(false)
         Me.Panel_Show.ResumeLayout(false)
         Me.TableLayoutPanel33.ResumeLayout(false)
         Me.TableLayoutPanel33.PerformLayout
@@ -14296,7 +14343,7 @@ Partial Class Form1
         CType(Me.BasicmovienfoBindingSource1,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.BasicmovienfoBindingSource,System.ComponentModel.ISupportInitialize).EndInit
         Me.TVWallContextMenu.ResumeLayout(false)
-        CType(Me.HVDgv1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.Panel7.ResumeLayout(false)
         Me.ResumeLayout(false)
         Me.PerformLayout
 
@@ -14334,7 +14381,7 @@ End Sub
     Friend WithEvents BatchRescraperToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents TabControl2 As System.Windows.Forms.TabControl
     Friend WithEvents tpMovMain As System.Windows.Forms.TabPage
-    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_MovDisplay As System.Windows.Forms.SplitContainer
     Friend WithEvents btnResetFilters As System.Windows.Forms.Button
     Friend WithEvents LabelCountFilter As System.Windows.Forms.Label
     Friend WithEvents Label31 As System.Windows.Forms.Label
@@ -14397,7 +14444,7 @@ End Sub
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents TabControl3 As System.Windows.Forms.TabControl
     Friend WithEvents tpTvMainBrowser As System.Windows.Forms.TabPage
-    Friend WithEvents SplitContainer3 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_TvDisplay As System.Windows.Forms.SplitContainer
     Friend WithEvents tpTvFanart As System.Windows.Forms.TabPage
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox
     Friend WithEvents tb_Sh_Ep_Title As System.Windows.Forms.TextBox
@@ -14564,7 +14611,7 @@ End Sub
     Friend WithEvents lbl_TvShState As System.Windows.Forms.Label
     Friend WithEvents Tv_TreeViewContext_SearchNewEp As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ImageList2 As System.Windows.Forms.ImageList
-    Friend WithEvents SplitContainer5 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_MovBrowserList As System.Windows.Forms.SplitContainer
     Friend WithEvents rbTvListAll As System.Windows.Forms.RadioButton
     Friend WithEvents rbTvMissingThumb As System.Windows.Forms.RadioButton
     Friend WithEvents rbTvMissingPoster As System.Windows.Forms.RadioButton
@@ -14799,7 +14846,6 @@ End Sub
     Friend WithEvents Label167 As System.Windows.Forms.Label
     Friend WithEvents HmMovSort As System.Windows.Forms.TextBox
     Friend WithEvents HmMovTitle As System.Windows.Forms.TextBox
-    Friend WithEvents lb_HomeMovies As System.Windows.Forms.ListBox
     Friend WithEvents tp_HmFolders As System.Windows.Forms.TabPage
     Friend WithEvents btnHomeFoldersRemove As System.Windows.Forms.Button
     Friend WithEvents btnHomeFolderAdd As System.Windows.Forms.Button
@@ -14834,7 +14880,7 @@ End Sub
     Friend WithEvents gpbxActorSource As System.Windows.Forms.GroupBox
     Friend WithEvents _tv_SplitContainer As System.Windows.Forms.SplitContainer
     Friend WithEvents tv_PictureBoxBottom As System.Windows.Forms.PictureBox
-    Friend WithEvents SplitContainer4 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_TvPictures As System.Windows.Forms.SplitContainer
     Friend WithEvents tv_PictureBoxLeft As System.Windows.Forms.PictureBox
     Friend WithEvents tv_PictureBoxRight As System.Windows.Forms.PictureBox
     Friend WithEvents tsmiRescrapeTMDbSetName As System.Windows.Forms.ToolStripMenuItem
@@ -14945,7 +14991,7 @@ End Sub
     Friend WithEvents lblFilterCertificate As System.Windows.Forms.Label
     Friend WithEvents tlpMovies As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_MovPictures As System.Windows.Forms.SplitContainer
     Friend WithEvents PbMovieFanArt As System.Windows.Forms.PictureBox
     Friend WithEvents PbMoviePoster As System.Windows.Forms.PictureBox
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
@@ -15050,7 +15096,7 @@ End Sub
     Friend WithEvents TableLayoutPanel12 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel16 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel15 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents SplitContainer9 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_TvFolders As System.Windows.Forms.SplitContainer
     Friend WithEvents TableLayoutPanel17 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel18 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents TableLayoutPanel20 As System.Windows.Forms.TableLayoutPanel
@@ -15165,7 +15211,7 @@ End Sub
     Friend WithEvents cbFilterSubTitleLang As MC_UserControls.TriStateCheckedComboBox
     Friend WithEvents lblFilterSubTitleLangMode As System.Windows.Forms.Label
     Friend WithEvents lblFilterSubTitleLang As System.Windows.Forms.Label
-    Friend WithEvents SplitContainer10 As System.Windows.Forms.SplitContainer
+    Friend WithEvents SpltCntr_TvBrowserList As System.Windows.Forms.SplitContainer
     Friend WithEvents Panel11 As System.Windows.Forms.Panel
     Friend WithEvents rbTvDisplayUnWatched As System.Windows.Forms.RadioButton
     Friend WithEvents rbTvDisplayWatched As System.Windows.Forms.RadioButton
@@ -15248,7 +15294,7 @@ End Sub
     Friend WithEvents btnMovWebRefresh As Button
     Friend WithEvents CustTvTabControl As TabControl
     Friend WithEvents TpCustTvBrowser As TabPage
-    Friend WithEvents SpCont1 As SplitContainer
+    Friend WithEvents SpltCntr_CustTvBrowserTab As SplitContainer
     Friend WithEvents tbCShowCount As TextBox
     Friend WithEvents btnCSearch As Button
     Friend WithEvents btnCRefresh As Button
@@ -15298,8 +15344,8 @@ End Sub
     Friend WithEvents TpCustTvArt As TabPage
     Friend WithEvents TableLayoutPanel36 As TableLayoutPanel
     Friend WithEvents TpCustTvFolders As TabPage
-    Friend WithEvents Spltctnr11 As SplitContainer
-    Friend WithEvents SpltCtnr12 As SplitContainer
+    Friend WithEvents SpltCntr_CustTvBrowser As SplitContainer
+    Friend WithEvents SpltCntr_CustTvBrowserList As SplitContainer
     Friend WithEvents Label11 As Label
     Friend WithEvents btnCFolderSave As Button
     Friend WithEvents btnCFolderRemove As Button
@@ -15366,4 +15412,9 @@ End Sub
     Friend WithEvents HmMovPath As TextBox
     Friend WithEvents Label19 As Label
     Friend WithEvents HVDgv1 As DataGridView
+    Friend WithEvents HmMovTag As TextBox
+    Friend WithEvents Label20 As Label
+    Public WithEvents cmbxHMSort As ComboBox
+    Friend WithEvents Label21 As Label
+    Friend WithEvents Panel7 As Panel
 End Class

@@ -534,9 +534,9 @@ Public Class Form1
 			Statusstrip_Enable(False)
 
 			'These lines fixed the associated panel so that they don't automove when the Form1 is resized
-			SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
-			SplitContainer5.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
-			SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
+			SpltCntr_MovDisplay.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on Movie tab - Movie Listing 
+			SpltCntr_MovBrowserList.FixedPanel = System.Windows.Forms.FixedPanel.Panel2 'Bottom Left Panel on Movie Tab - Filters
+			SpltCntr_TvDisplay.FixedPanel = System.Windows.Forms.FixedPanel.Panel1 'Left Panel on TV Tab
 
 			Movies.SpinUpDrives()
 
@@ -552,11 +552,11 @@ Public Class Form1
 					intX = Screen.PrimaryScreen.Bounds.Width
 					intY = Screen.PrimaryScreen.Bounds.Height
 				End If
-				SplitContainer1.IsSplitterFixed = True
-				SplitContainer2.IsSplitterFixed = True
-				SplitContainer3.IsSplitterFixed = True
-				SplitContainer4.IsSplitterFixed = True
-				SplitContainer5.IsSplitterFixed = True
+				SpltCntr_MovDisplay.IsSplitterFixed = True
+				SpltCntr_MovPictures.IsSplitterFixed = True
+				SpltCntr_TvDisplay.IsSplitterFixed = True
+				SpltCntr_TvPictures.IsSplitterFixed = True
+				SpltCntr_MovBrowserList.IsSplitterFixed = True
 
 				If intX >= 0 Then  'First check if screen is Centre or to the right of main screen.
 					If Pref.locx < 0 Then Pref.locx = 0
@@ -597,7 +597,7 @@ Public Class Form1
 				TabControl3.TabPages.RemoveAt(1)
 
 				If Pref.splt5 = 0 Then
-					Dim tempint As Integer = SplitContainer1.Height
+					Dim tempint As Integer = SpltCntr_MovDisplay.Height
 					tempint = tempint / 4
 					tempint = tempint * 3
 					If tempint > 275 Then
@@ -607,11 +607,11 @@ Public Class Form1
 					End If
 				End If
 
-				SplitContainer1.SplitterDistance = Pref.splt1
-				SplitContainer2.SplitterDistance = Pref.splt2
-				SplitContainer5.SplitterDistance = Pref.splt5
-				SplitContainer3.SplitterDistance = Pref.splt3
-				SplitContainer4.SplitterDistance = Pref.splt4
+				SpltCntr_MovDisplay.SplitterDistance = Pref.splt1
+				SpltCntr_MovPictures.SplitterDistance = Pref.splt2
+				SpltCntr_MovBrowserList.SplitterDistance = Pref.splt5
+				SpltCntr_TvDisplay.SplitterDistance = Pref.splt3
+				SpltCntr_TvPictures.SplitterDistance = Pref.splt4
 				TabLevel1.SelectedIndex = Pref.startuptab
 
 				If Pref.startuptab = 0 Then
@@ -624,11 +624,11 @@ Public Class Form1
 				End If
 				btn_MPDB_posters.Enabled = False        'Disable MoviePoster button on Movie Poster Tab as now not available to us.
 
-				SplitContainer1.IsSplitterFixed = False
-				SplitContainer2.IsSplitterFixed = False
-				SplitContainer3.IsSplitterFixed = False
-				SplitContainer4.IsSplitterFixed = False
-				SplitContainer5.IsSplitterFixed = False
+				SpltCntr_MovDisplay.IsSplitterFixed = False
+				SpltCntr_MovPictures.IsSplitterFixed = False
+				SpltCntr_TvDisplay.IsSplitterFixed = False
+				SpltCntr_TvPictures.IsSplitterFixed = False
+				SpltCntr_MovBrowserList.IsSplitterFixed = False
 			End If
 
 			If scrapeAndQuit Or refreshAndQuit Then
@@ -701,6 +701,7 @@ Public Class Form1
 			Catch
 				cbSort.SelectedIndex = 0
 			End Try
+            cmbxHMSort.SelectedIndex = 0
 			btnreverse.Checked = Pref.movieinvertorder
 			If btnreverse.Checked Then
 				Mc.clsGridViewMovie.GridSort = "Desc"
@@ -837,14 +838,14 @@ Public Class Form1
 
 			'Todo: Code a better way to serialize the data
 
-			Pref.splt1 = SplitContainer1.SplitterDistance
-			Pref.splt2 = SplitContainer2.SplitterDistance
-			Pref.splt3 = SplitContainer3.SplitterDistance
-			Pref.splt4 = SplitContainer4.SplitterDistance
-			Pref.splt5 = SplitContainer5.SplitterDistance
+			Pref.splt1 = SpltCntr_MovDisplay.SplitterDistance
+			Pref.splt2 = SpltCntr_MovPictures.SplitterDistance
+			Pref.splt3 = SpltCntr_TvDisplay.SplitterDistance
+			Pref.splt4 = SpltCntr_TvPictures.SplitterDistance
+			Pref.splt5 = SpltCntr_MovBrowserList.SplitterDistance
 			Pref.splt6 = _tv_SplitContainer.SplitterDistance
 			Pref.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
-			Pref.MovFiltLastSize = SplitContainer5.Height - SplitContainer5.SplitterDistance
+			Pref.MovFiltLastSize = SpltCntr_MovBrowserList.Height - SpltCntr_MovBrowserList.SplitterDistance
 			Pref.preferredscreen = CurrentScreen
 
 
@@ -1269,7 +1270,7 @@ Public Class Form1
 				Dim pic2ImszH = PbMoviePoster.Image.Size.Height
 				pic1ratio = pic1ImSzW / pic1ImszH
 				pic2ratio = pic2ImSzW / pic2ImszH
-				Dim width As Integer = SplitContainer2.Size.Width
+				Dim width As Integer = SpltCntr_MovPictures.Size.Width
 				' MsgBox(from & " = " & width & ":" & Int(SplitContainer2.Size.Width * (pic1ratio / (pic1ratio + pic2ratio))) - 5 & " - " & pic1ImSzW & "x" & pic1ImszH & " " & pic2ImszH & "x" & pic2ImSzW)
 			Else
 				pic1ratio = 2
@@ -1280,7 +1281,7 @@ Public Class Form1
 			pic2ratio = 1
 			'MsgBox("Movie Splitter Exception")
 		End Try
-		SplitContainer2.SplitterDistance = (SplitContainer2.Size.Width - 8) * (pic1ratio / (pic1ratio + pic2ratio))
+		SpltCntr_MovPictures.SplitterDistance = (SpltCntr_MovPictures.Size.Width - 8) * (pic1ratio / (pic1ratio + pic2ratio))
 	End Sub
 
 	Sub tv_SplitContainerAutoPosition()
@@ -1296,7 +1297,7 @@ Public Class Form1
 				Dim pic4ImszH = tv_PictureBoxRight.Image.Size.Height
 				pic3ratio = pic3ImSzW / pic3ImszH
 				pic4ratio = pic4ImSzW / pic4ImszH
-				HorizontalSplit = ((SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio)) / pic3ratio)
+				HorizontalSplit = ((SpltCntr_TvPictures.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio)) / pic3ratio)
 			Else
 				pic3ratio = 2
 				pic4ratio = 1
@@ -1307,7 +1308,7 @@ Public Class Form1
 			pic4ratio = 1
 			HorizontalSplit = 235
 		End Try
-		SplitContainer4.SplitterDistance = (SplitContainer4.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
+		SpltCntr_TvPictures.SplitterDistance = (SpltCntr_TvPictures.Size.Width - 8) * (pic3ratio / (pic3ratio + pic4ratio))
 		Try     'Try Catch for minimize of MC when Full-screen
 			If _tv_SplitContainer.Height > 100 Then
 				If Pref.tvbannersplit = 0 Then
@@ -1977,8 +1978,8 @@ Public Class Form1
 			If IsNothing(imagepath) Then Exit Sub
 			util_ImageLoad(ftvArtPicBox, imagepath, "")
 			Try
-				Dim panelwidth As Integer = SplitContainer1.Panel2.Width
-				Dim panelheight As Integer = SplitContainer1.Panel2.Height
+				Dim panelwidth As Integer = SpltCntr_MovDisplay.Panel2.Width
+				Dim panelheight As Integer = SpltCntr_MovDisplay.Panel2.Height
 				Dim pbw As Integer = Math.Ceiling(panelwidth * .413)
 				Dim pbh As Integer = Math.Ceiling(PbMovieFanArt.Height * .90)
 				Dim imgw As Integer = ftvArtPicBox.Image.Width
@@ -2919,8 +2920,8 @@ Public Class Form1
 				Dim movie = oMovies.LoadMovie(fullpathandfilename)
 				If movie.TrailerExists Then playlist.Add(movie.ActualTrailerPath)
 			Case "HomeMovie"
-				fullpathandfilename = CType(lb_HomeMovies.SelectedItem, ValueDescriptionPair).Value
-				fullpathandfilename = Utilities.GetFileName(fullpathandfilename)
+				'fullpathandfilename = CType(lb_HomeMovies.SelectedItem, ValueDescriptionPair).Value
+				fullpathandfilename = Utilities.GetFileName(WorkingHomeMovie.fileinfo.fullpathandfilename)
 				playlist = Utilities.GetMediaList(fullpathandfilename)
 		End Select
 		If playlist.Count <= 0 Then
@@ -3169,7 +3170,7 @@ Public Class Form1
 			titletxt.Visible = True
 			TextBoxMutisave.Visible = False
 			btnMovRescrape.Visible = True
-			SplitContainer2.Visible = True
+			SpltCntr_MovPictures.Visible = True
 			Label128.Visible = False
 			Label75.Visible = True
 			TextBox34.Visible = True
@@ -3225,7 +3226,7 @@ Public Class Form1
 			PbMoviePoster.Image = Nothing
 			roletxt.Text = ""
 			PictureBoxActor.Image = Nothing
-			SplitContainer2.Visible = False
+			SpltCntr_MovPictures.Visible = False
 			titletxt.Visible = False
 			Label75.Visible = False
 			TextBox34.Visible = False
@@ -6947,35 +6948,35 @@ Public Class Form1
 		Application.DoEvents()
 
 		If Pref.splt5 = 0 Then
-			Dim tempint As Integer = SplitContainer1.Height
+			Dim tempint As Integer = SpltCntr_MovDisplay.Height
 			tempint = tempint / 4
 			tempint = tempint * 3
 			Pref.splt5 = If(tempint > 275, tempint, 275)
 		End If
 
 		If Pref.startuptab = 0 Then
-			SplitContainer1.SplitterDistance = Pref.splt1
-			SplitContainer2.SplitterDistance = Pref.splt2
-			SplitContainer5.SplitterDistance = Pref.splt5
+			SpltCntr_MovDisplay.SplitterDistance = Pref.splt1
+			SpltCntr_MovPictures.SplitterDistance = Pref.splt2
+			SpltCntr_MovBrowserList.SplitterDistance = Pref.splt5
 			TabLevel1.SelectedIndex = 1
-			SplitContainer3.SplitterDistance = Pref.splt3
-			SplitContainer4.SplitterDistance = Pref.splt4
+			SpltCntr_TvDisplay.SplitterDistance = Pref.splt3
+			SpltCntr_TvPictures.SplitterDistance = Pref.splt4
 			_tv_SplitContainer.SplitterDistance = Pref.splt6
 			TabLevel1.SelectedIndex = 0
 		Else
-			SplitContainer1.SplitterDistance = Pref.splt1
-			SplitContainer2.SplitterDistance = Pref.splt2
-			SplitContainer5.SplitterDistance = Pref.splt5
+			SpltCntr_MovDisplay.SplitterDistance = Pref.splt1
+			SpltCntr_MovPictures.SplitterDistance = Pref.splt2
+			SpltCntr_MovBrowserList.SplitterDistance = Pref.splt5
 			TabLevel1.SelectedIndex = 1
-			SplitContainer3.SplitterDistance = Pref.splt3
-			SplitContainer4.SplitterDistance = Pref.splt4
+			SpltCntr_TvDisplay.SplitterDistance = Pref.splt3
+			SpltCntr_TvPictures.SplitterDistance = Pref.splt4
 			_tv_SplitContainer.SplitterDistance = Pref.splt6
 		End If
-		SplitContainer1.IsSplitterFixed = False
-		SplitContainer2.IsSplitterFixed = False
-		SplitContainer3.IsSplitterFixed = False
-		SplitContainer4.IsSplitterFixed = False
-		SplitContainer5.IsSplitterFixed = False
+		SpltCntr_MovDisplay.IsSplitterFixed = False
+		SpltCntr_MovPictures.IsSplitterFixed = False
+		SpltCntr_TvDisplay.IsSplitterFixed = False
+		SpltCntr_TvPictures.IsSplitterFixed = False
+		SpltCntr_MovBrowserList.IsSplitterFixed = False
 		_tv_SplitContainer.IsSplitterFixed = False
 
 		Try
@@ -8994,15 +8995,15 @@ Public Class Form1
 	End Sub
 
 
-	Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer1.SplitterMoved
+	Private Sub SplitContainer1_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SpltCntr_MovDisplay.SplitterMoved
 		Mc.clsGridViewMovie.SetFirstColumnWidth(DataGridViewMovies)
 	End Sub
 
-	Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitContainer5.SplitterMoved
+	Private Sub SplitContainer5_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SpltCntr_MovBrowserList.SplitterMoved
 
 		ResizeBottomLHSPanel()
 		Try
-			DebugSplitter5PosLabel.Text = SplitContainer5.SplitterDistance
+			DebugSplitter5PosLabel.Text = SpltCntr_MovBrowserList.SplitterDistance
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -9922,6 +9923,7 @@ Public Class Form1
 			Case "SearchForNewMusicVideo"   : Return True
 			Case "RefreshMVCache"           : Return True
             Case "HomeVidScrape"            : Return True
+            Case "HomeVidRebuild"           : Return True
 			Case "ChangeMusicVideo"         : Return True
 			Case "RebuildCaches"            : Return True
 		End Select
@@ -9991,6 +9993,10 @@ Public Class Form1
 
     Public Sub HomeVidScrape()
         oMovies.FindNewHomeVideos()
+    End Sub
+
+    Public Sub HomeVidRebuild()
+        oMovies.RebuildHomeVideoCache()
     End Sub
 
 	Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged

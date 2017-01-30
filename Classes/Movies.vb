@@ -67,6 +67,7 @@ Public Class Movies
     Public Property MovieCache          As New List(Of ComboList)
     Public Property TmpMovieCache       As New List(Of ComboList)
     Public Property tmpMVCache          As New List(Of MVComboList)
+    Public Property tmpHmVidCache       As New List(Of HmMovComboList)
     
     Public Property NewMovies           As New List(Of Movie)
     Public Property PercentDone         As Integer = 0
@@ -2034,11 +2035,11 @@ Public Class Movies
 
         Dim t As New List(Of String)
         For Each rtpath In Pref.movieFolders 
-                If rtpath.selected Then
-                    t.Add(rtpath.rpath)
-                End If
-            Next
-        't.AddRange(Pref.movieFolders)
+            If rtpath.selected Then
+                t.Add(rtpath.rpath)
+            End If
+        Next
+        
         t.AddRange(Pref.offlinefolders)
 
         ReportProgress("Searching movie folders...")
@@ -2319,7 +2320,11 @@ Public Class Movies
             PercentDone = CalcPercentDone(i, moviePaths.Count)
             ReportProgress("Scanning folder " & i & " of " & moviePaths.Count)
 
-            mov_ListFiles(pattern, New DirectoryInfo(Path))
+            If Not Pref.HomeVidScrape Then
+                mov_ListFiles(pattern, New DirectoryInfo(Path))
+            Else
+                HV_ListFiles(pattern, New DirectoryInfo(Path))
+            End If
             If Cancelled Then Exit Sub
         Next
     End Sub
@@ -2337,10 +2342,7 @@ Public Class Movies
                 If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
                 If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
                 movie.LoadNFO(False)
-
-                'If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
-                '    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
-                'End If
+                
                 TmpMovieCache.Add(movie.Cache)
             Catch
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
@@ -2398,6 +2400,27 @@ Public Class Movies
                 mvideo = WorkingWithNfoFiles.MVloadNfo(oFileInfo.FullName)
                 tmp.Assign(mvideo)
                 tmpMVCache.Add(tmp)
+            Catch
+                MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
+            End Try
+        Next
+
+    End Sub
+
+    Private Sub HV_ListFiles(ByVal pattern As String, ByVal dirInfo As DirectoryInfo)
+        If IsNothing(dirInfo) Then Exit Sub
+         
+        For Each oFileInfo In dirInfo.GetFiles(pattern)
+            Dim tmp As New HmMovComboList
+            Application.DoEvents
+            If Cancelled Then Exit Sub
+            If Not File.Exists(oFileInfo.FullName) Then Continue For
+            Try
+                If Not Utilities.NfoValidate(oFileInfo.FullName) Then Continue For
+                Dim hvideo As New FullMovieDetails
+                hvideo = WorkingWithNfoFiles.nfoLoadHomeMovie(oFileInfo.FullName)
+                tmp.Assign(hvideo)
+                tmpHmVidCache.Add(tmp)
             Catch
                 MsgBox("problem with : " & oFileInfo.FullName & " - Skipped" & vbCrLf & "Please check this file manually")
             End Try
@@ -2874,8 +2897,7 @@ Public Class Movies
         SaveMovieSetCache()
         SaveTagCache()
     End Sub
-
-
+    
     Function Mov_DeleteMovieFolder(fullpathandfilename) As Boolean
         Dim aok As Boolean = True
 		If Pref.usefoldernames Then
@@ -2895,10 +2917,7 @@ Public Class Movies
         Return aok
 
     End Function
-	  
-
-
-
+	
     Sub RemoveMovieFromCache(fullpathandfilename)
 
         If fullpathandfilename = "" Then Exit Sub
@@ -3011,6 +3030,21 @@ Public Class Movies
         Next
 
         If scrape then ScrapeNewMovies
+    End Sub
+
+    Public Sub RebuildHomeVideoCache()
+        tmpHmVidCache.Clear()
+        Dim t As New List(Of String)
+        For Each rtpath In Pref.homemoviefolders 
+            If rtpath.selected Then
+                t.Add(rtpath.rpath)
+            End If
+        Next
+
+        ReportProgress("Searching Home Movie folders...")
+        mov_NfoLoad(t)
+        Form1.HMCache.Clear()
+        Form1.HMCache.AddRange(tmpHmVidCache)
     End Sub
 #End Region
 

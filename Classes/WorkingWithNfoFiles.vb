@@ -1788,7 +1788,7 @@ Public Class WorkingWithNfoFiles
     
     '  All HomeMovie Load/Save Routines
 #Region " Home Movie Routines "
-    Public Function nfoLoadHomeMovie(ByVal filepath As String)
+    Public Shared Function nfoLoadHomeMovie(ByVal filepath As String)
         Try
             Dim newmovie As New FullMovieDetails
             newmovie.fileinfo.fullpathandfilename = filepath
@@ -1840,6 +1840,8 @@ Public Class WorkingWithNfoFiles
                                 Else
                                     newmovie.fullmoviebody.genre = newmovie.fullmoviebody.genre & " / " & thisresult.InnerText
                                 End If
+                            Case "tag"
+                                newmovie.fullmoviebody.tag.Add(thisresult.InnerText)
                         End Select
                     Catch ex As Exception
                         MsgBox(ex.ToString)
@@ -1884,7 +1886,7 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As HomeMovieDetails, Optional ByVal overwrite As Boolean = True)
+    Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
 
         If homemovietosave Is Nothing Then Exit Sub
         If Not File.Exists(filenameandpath) Or overwrite = True Then
@@ -1917,7 +1919,7 @@ Public Class WorkingWithNfoFiles
             End If
             If String.IsNullOrEmpty(homemovietosave.fullmoviebody.sortorder) Then homemovietosave.fullmoviebody.sortorder = homemovietosave.fullmoviebody.title
             root.AppendChild(doc        , "title"       , homemovietosave.fullmoviebody.title)
-            root.AppendChild(doc        , "set"         , homemovietosave.fullmoviebody.movieset)
+            root.AppendChild(doc        , "set"         , homemovietosave.fullmoviebody.SetName)
             root.AppendChild(doc        , "sorttitle"   , homemovietosave.fullmoviebody.sortorder)
             root.AppendChild(doc        , "year"        , homemovietosave.fullmoviebody.year)
             root.AppendChild(doc        , "plot"        , homemovietosave.fullmoviebody.plot)
@@ -1926,6 +1928,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(doc        , "createdate"  , SetCreateDate(homemovietosave.fileinfo.createdate))
             root.AppendChild(doc        , "stars"       , homemovietosave.fullmoviebody.stars)
             root.AppendChildList(doc    , "genre"       , homemovietosave.fullmoviebody.genre, "/")
+            root.AppendChildList(doc    , "tag"         , homemovietosave.fullmoviebody.tag)
             doc.AppendChild(root)
             SaveXMLDoc(doc, filenameandpath)
         Else
@@ -1933,15 +1936,15 @@ Public Class WorkingWithNfoFiles
         End If
     End Sub
 
-    Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
-        Dim homemovie As New HomeMovieDetails
-        homemovie.filedetails               = homemovietosave.filedetails
-        homemovie.fileinfo                  = homemovietosave.fileinfo
-        homemovie.fullmoviebody.title       = homemovietosave.fullmoviebody.title
-        homemovie.fullmoviebody.movieset    = homemovietosave.fullmoviebody.SetName
-        homemovie.fullmoviebody.year        = homemovietosave.fullmoviebody.year
-        nfoSaveHomeMovie(filenameandpath, homemovie, True)
-    End Sub
+    'Public Shared Sub nfoSaveHomeMovie(ByVal filenameandpath As String, ByVal homemovietosave As FullMovieDetails, Optional ByVal overwrite As Boolean = True)
+    '    Dim homemovie As New HomeMovieDetails
+    '    homemovie.filedetails               = homemovietosave.filedetails
+    '    homemovie.fileinfo                  = homemovietosave.fileinfo
+    '    homemovie.fullmoviebody.title       = homemovietosave.fullmoviebody.title
+    '    homemovie.fullmoviebody.movieset    = homemovietosave.fullmoviebody.SetName
+    '    homemovie.fullmoviebody.year        = homemovietosave.fullmoviebody.year
+    '    nfoSaveHomeMovie(filenameandpath, homemovie, True)
+    'End Sub
 #End Region
 
     '  All Music Video Load/Save Routines

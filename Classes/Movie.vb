@@ -1153,6 +1153,8 @@ Public Class Movie
     Sub LoadNFO(Optional bUpdateCaches As Boolean=True)
         If Pref.MusicVidScrape OrElse Pref.MusicVidConcertScrape Then
             _scrapedMovie = WorkingWithNfoFiles.MVloadNfo(ActualNfoPathAndFilename)  'NfoPathPrefName
+        ElseIf Pref.HomeVidScrape Then
+            _scrapedMovie = WorkingWithNfoFiles.nfoLoadHomeMovie(ActualNfoPathAndFilename)
         Else
             _scrapedMovie = WorkingWithNfoFiles.mov_NfoLoadFull(ActualNfoPathAndFilename)  'NfoPathPrefName
         End If
@@ -1160,7 +1162,7 @@ Public Class Movie
         _nfoPathAndFilename = ActualNfoPathAndFilename
         Scraped=True
         Try
-            If Not Pref.MusicVidScrape Then
+            If Not Pref.MusicVidScrape AndAlso Not Pref.HomeVidScrape Then
                 AssignMovieToCache
                 If bUpdateCaches Then UpdateCaches
             End If
@@ -1389,7 +1391,7 @@ Public Class Movie
         Dim HomeMovie As New str_BasicHomeMovie
         HomeMovie.FullPathAndFilename = NfoPathPrefName
         HomeMovie.Title = _scrapedMovie.fullmoviebody.title
-        Form1.HomeMovieAdd(HomeMovie)
+        'Form1.HomeMovieAdd(HomeMovie)
         ''
         _hmmovcache.filename            = Path.GetFileName(TitleFull)
         _hmmovcache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
@@ -1404,7 +1406,7 @@ Public Class Movie
             _hmmovcache.createdate = _scrapedMovie.fileinfo.createdate
         End If
         _hmmovcache.AssignAudio(_scrapedMovie.filedetails.Audio)
-        
+        Form1.HMCache.Add(_hmmovcache)
     End Sub
     
     Sub AssignScrapedMovie

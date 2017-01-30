@@ -151,8 +151,8 @@ Public Class HmMovComboList
         Return x
     End Function
 
-    Public Sub Assign(From As HmMovComboList)
-        nfopathandfilename      = From.nfopathandfilename
+    Public Sub Assign(From As Combolist)
+        nfopathandfilename      = From.fullpathandfilename 'From.nfopathandfilename
         filename                = From.filename
         foldername              = From.foldername
         Title                   = From.Title
@@ -167,7 +167,7 @@ Public Class HmMovComboList
         plot                    = From.plot
         TitleUcase              = From.Title.ToUpper            
         Resolution              = From.Resolution
-        thumb                   = From.thumb
+        'thumb                   = From.thumb
         VideoMissing            = From.videomissing
         FrodoPosterExists       = From.FrodoPosterExists
         PreFrodoPosterExists    = From.PreFrodoPosterExists

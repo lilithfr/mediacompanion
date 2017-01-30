@@ -2222,11 +2222,19 @@ Public Class Pref
         Dim isroot As Boolean = False
         If Pref.movrootfoldercheck Then
             Dim lastfolder As String = Utilities.GetLastFolder(fullpath)
-            Dim rtfolder As String = Nothing
-            For Each rfolder In Pref.movieFolders
-                rtfolder = Path.GetFileName(rfolder.rpath)
-                If rtfolder = lastfolder Then isroot = True
-            Next
+            If Not Pref.HomeVidScrape Then
+                Dim rtfolder As String = Nothing
+                For Each rfolder In Pref.movieFolders
+                    rtfolder = Path.GetFileName(rfolder.rpath)
+                    If rtfolder = lastfolder Then isroot = True
+                Next
+            Else
+                Dim rtfolder As String = Nothing
+                For Each rfolder In Pref.homemoviefolders
+                    rtfolder = Path.GetFileName(rfolder.rpath)
+                    If rtfolder = lastfolder Then isroot = True
+                Next
+            End If
         End If
         Return isroot
     End Function
