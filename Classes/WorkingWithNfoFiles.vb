@@ -1251,7 +1251,7 @@ Public Class WorkingWithNfoFiles
                 newmovie.rootfolder             = Pref.GetRootFolder(loadpath) & "\"
                 If newmovie.genre               = Nothing Then newmovie.genre = ""
                 If newmovie.id                  = Nothing Then newmovie.id = ""
-                If newmovie.tmdbid              = Nothing Then newmovie.tmdbid = ""
+                If (newmovie.tmdbid = Nothing Or newmovie.tmdbid = "0") Then newmovie.tmdbid = ""
                 If newmovie.missingdata1        = Nothing Then newmovie.missingdata1 = 0
                 If newmovie.source              = Nothing Then newmovie.source = ""
                 If newmovie.director            = Nothing Then newmovie.director = ""

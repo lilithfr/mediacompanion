@@ -654,12 +654,7 @@ Public Class TMDb
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TMDB_EXC_MSG)
                 Next
-
-                ''Set TMDB ID from scraped data
-                'Try
-                '    If _movie.id > 0 AndAlso TmdbId = "" Then _tmdbId = _movie.id.ToString
-                'Catch
-                'End Try
+                
 
                 'If movie isn't found -> Create empty child objects
                 If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)

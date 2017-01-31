@@ -1127,7 +1127,7 @@ Public Class Movie
         End If
 
         Try     'Set TMDB Id in _scrapedMovie if not already set.
-            If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId
+            If (_scrapedMovie.fullmoviebody.tmdbid = "" Or _scrapedMovie.fullmoviebody.tmdbid = "0") AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId
         Catch
         End Try
     End Sub
@@ -3426,7 +3426,7 @@ Public Class Movie
                     _scrapedMovie.listactors.AddRange(_rescrapedMovie.listactors)
                 End If
             End If
-            If _scrapedMovie.fullmoviebody.tmdbid = "" AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId 
+            If (_scrapedMovie.fullmoviebody.tmdbid = "" Or _scrapedMovie.fullmoviebody.tmdbid = "0") AndAlso tmdb.TmdbId <> "" Then _scrapedMovie.fullmoviebody.tmdbid = tmdb.TmdbId 
         End If
         If Cancelled() Then Exit Sub
         
