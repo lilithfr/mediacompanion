@@ -12701,7 +12701,6 @@ Public Class Form1
                     MovieSetstabSetup()
                     Exit Sub
                 End If
-                Dim Something As String = Nothing
             End If
 		End If
     End Sub

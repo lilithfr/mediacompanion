@@ -1866,10 +1866,17 @@ Public Class WorkingWithNfoFiles
                 newmovie.fileinfo.path                  = Path.GetDirectoryName(filepath) & "\"
                 newmovie.fileinfo.basepath              = Pref.GetMovBasePath(newmovie.fileinfo.path)
                 newmovie.fileinfo.fanartpath            = Pref.GetFanartPath(filepath, newmovie.fileinfo.filename)
+                If Path.GetFileName(filepath).ToLower = "video_ts.nfo" Or Path.GetFileName(filepath).ToLower = "index.nfo" Or Path.GetFileName(filepath).ToLower = "vr_mangr.nfo" Then
+                    newmovie.fileinfo.videotspath       = Utilities.RootVideoTsFolder(filepath)
+                Else
+                    newmovie.fileinfo.videotspath = ""
+                End If
                 If newmovie.filedetails.Video.Container.Value <> "" Then
                     Dim container As String             = newmovie.filedetails.Video.Container.Value
-                    If container = ".vro" Then
+                    If container.tolower = ".vro" Then
                         newmovie.fileinfo.filenameandpath   = filepath.Replace("VR_MANGR.nfo", "VR_MOVIE.VRO")
+                    ElseIf container.tolower = ".ifo"
+                        newmovie.fileinfo.filenameandpath   = filepath.Replace("VIDEO_TS.nfo", "VTS_01_1.VOB")
                     Else
                         newmovie.fileinfo.filenameandpath   = filepath.Replace(".nfo", container)
                     End If
