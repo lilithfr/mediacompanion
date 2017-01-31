@@ -1579,12 +1579,13 @@ Public Class Movie
         If Pref.HomeVidScrape Then Exit Sub
 
         ' Assign certificate
-        If Certificates.Count = 0 Then
-            Dim tmdb2 As New TMDb
-            tmdb2.Imdb = _scrapedMovie.fullmoviebody.imdbid
-            tmdb2.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
-            _scrapedMovie.fullmoviebody.mpaa = tmdb2.Certification
-        Else
+        If Certificates.Count > 0 Then
+        'If Certificates.Count = 0 Then
+        '    Dim tmdb2 As New TMDb
+        '    tmdb2.Imdb = _scrapedMovie.fullmoviebody.imdbid
+        '    tmdb2.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
+        '    _scrapedMovie.fullmoviebody.mpaa = tmdb2.Certification
+        'Else
             Dim done As Boolean = False
             For g = 0 To UBound(Pref.certificatepriority)
                 For Each cert In Certificates
@@ -3507,11 +3508,13 @@ Public Class Movie
         End If
     End Sub
 
-    Sub UpdateMovieSetCache(Optional ByVal clearusernameing As Boolean = False)
+    Sub UpdateMovieSetCache()
+        If Pref.GetMovieSetFromTMDb Then UpdateMovieSetCache(False)
+    End Sub
+
+    Sub UpdateMovieSetCache(ByVal clearusernameing As Boolean)
         
-        If _scrapedMovie.fullmoviebody.Locked("set") Then 
-            Return
-        End If
+        If _scrapedMovie.fullmoviebody.Locked("set") Then Return
         
         ''' This data is set on Rescrape Specific routine.
     '    If (Rescrape OrElse Pref.GetMovieSetFromTMDb) AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then

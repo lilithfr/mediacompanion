@@ -244,13 +244,9 @@ Public Class TMDb
         Get
             FetchSet
 
-            If IsNothing(_collection) Then
-                Return Nothing
-            End If
+            If IsNothing(_collection) Then Return Nothing
 
-            If _collection.id=0 Then
-                Return Nothing
-            End If
+            If _collection.id=0 Then Return Nothing
 
             Return New MovieSetInfo(_collection.name, _collection.id, _collection.overview, CollectionMovies, Date.Now )
         End Get
