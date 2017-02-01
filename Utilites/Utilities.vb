@@ -2222,6 +2222,17 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
         image.Dispose()
     End Function
+
+    Public Shared Sub ResizeImage(ByVal path As String, ByVal width As Integer, ByVal height As Integer)
+        Using ms As IO.MemoryStream = New IO.MemoryStream()
+            Using r As IO.Filestream = File.Open(path, IO.FileMode.Open)
+                r.CopyTo(ms)
+            End Using
+            Using img As Bitmap = ResizeImage(New Bitmap(ms), width, height)
+                SaveImage(img, path)
+            End Using
+        End Using
+    End Sub
     
     Public Shared Function ResizeImage(ByVal bm_source As Bitmap, ByVal width As Integer, ByVal height As Integer) As Bitmap
         Dim bm_dest As New Bitmap(width, height)
@@ -2273,8 +2284,8 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                     height = 540
             End Select
 
-            img = Utilities.ResizeImage(img, width, height)
-            Utilities.SaveImage(img, dest)
+            img = ResizeImage(img, width, height)
+            SaveImage(img, dest)
             img.Dispose()   'because image is passed in ByRef to SaveImage, it should be disposed of, but alas it is not.
             GC.Collect()
         Catch

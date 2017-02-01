@@ -224,6 +224,11 @@ Partial Public Class Form1
                     Application.DoEvents()
                     Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(tempstring2, path, seconds, 5, 10)
                     If cachepathandfilename <> "" Then
+                        'if vro, check width & height as can be reversed.
+                        If tempstring2.ToLower.Contains(".vro") AndAlso WorkingHomeMovie.filedetails.Video.Height.Value > WorkingHomeMovie.filedetails.Video.Width.Value Then
+                            Resizescreenshots(cachepathandfilename)
+                        End If
+
                         Return cachepathandfilename
                     End If
                 End If
@@ -239,6 +244,12 @@ Partial Public Class Form1
         Form1.util_ImageLoad(pbx_HmFanartSht, pb.Tag, Utilities.DefaultTvFanartPath)
     End Sub
 
+    Private Sub Resizescreenshots(ByVal path As String)
+        For i = 0 To 4
+            Dim image2load As String = path.Substring(0, path.Length - 5) & i.ToString & ".jpg"
+            If IO.File.Exists(image2load) Then Utilities.ResizeImage(image2load, WorkingHomeMovie.filedetails.Video.Height.Value, WorkingHomeMovie.filedetails.Video.Width.Value)
+        Next
+    End Sub
 #End Region
 
 #Region "Home poster"

@@ -107,9 +107,7 @@ Public Class DownloadCache
             If (resizeWidth <> 0 And img.Width > resizeWidth) Or img.Height > resizeHeight And Not (resizeWidth = 0 And resizeHeight = 0) Then
 
                 'Calc scaled height - width is passed in as zero for people pictures and posters.
-                If resizeWidth = 0 Then
-                    resizeWidth = img.Width * resizeHeight / img.Height
-                End If
+                If resizeWidth = 0 Then resizeWidth = img.Width * resizeHeight / img.Height
 
                 img = Utilities.ResizeImage(img, resizeWidth, resizeHeight)
                 resized = True
