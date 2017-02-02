@@ -19,6 +19,7 @@ Partial Public Class Form1
     Private HVKeyPress As String = ""
     Public hmfolderschanged As Boolean = False
     Private HDGV1RowSelected As Integer = -1
+    Const HomeCacheVersion As String = "1.1"
 
 
 #Region "Browser Tab"
@@ -75,11 +76,11 @@ Partial Public Class Form1
         End Try
     End Sub
 
-    Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click
+    Private Sub SearchForNewHomeMoviesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForNewHomeMoviesToolStripMenuItem.Click, btn_HMSearch.Click
         Call SearchNewHomeVideo()
     End Sub
 
-    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click
+    Private Sub RebuildHomeMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RebuildHomeMovieCacheToolStripMenuItem.Click, btn_HMRefresh.Click
         Call RefreshHomeVideoCache()
     End Sub
     
@@ -90,21 +91,20 @@ Partial Public Class Form1
         If HmMovSort.Text <> "" Then
             WorkingHomeMovie.fullmoviebody.sortorder = HmMovSort.Text
         End If
-        WorkingHomeMovie.fullmoviebody.year = HmMovYear.Text
-        WorkingHomeMovie.fullmoviebody.plot = HmMovPlot.Text
-        WorkingHomeMovie.fullmoviebody.stars = HmMovStars.Text
-        WorkingHomeMovie.fullmoviebody.genre = HmMovGenre.Text
+        WorkingHomeMovie.fullmoviebody.year     = HmMovYear.Text
+        WorkingHomeMovie.fullmoviebody.plot     = HmMovPlot.Text
+        WorkingHomeMovie.fullmoviebody.stars    = HmMovStars.Text
+        WorkingHomeMovie.fullmoviebody.genre    = HmMovGenre.Text
+        WorkingHomeMovie.fullmoviebody.tag.Clear()
+        If Not IsNothing(HmMovTag.Text) Then
+            Dim p() As String = HmMovTag.Text.Split(",")
+            For each t In p
+                WorkingHomeMovie.fullmoviebody.tag.Add(t.Trim())
+            Next
+        End If
         nfoSaveHomeMovie(WorkingHomeMovie.fileinfo.fullpathandfilename, WorkingHomeMovie)
     End Sub
-
-    Private Sub btn_HMSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMSearch.Click
-        Call SearchNewHomeVideo()
-    End Sub
-
-    Private Sub btn_HMRefresh_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_HMRefresh.Click
-        Call RefreshHomeVideoCache()
-    End Sub
-
+    
     Private Sub HmMovGenre_MouseDown(sender As Object, e As MouseEventArgs) Handles HmMovGenre.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Try
@@ -204,10 +204,10 @@ Partial Public Class Form1
                     Dim pb As PictureBox = DirectCast(matches(0), PictureBox)
                     pb.SizeMode = PictureBoxSizeMode.StretchImage
                     Dim image2load As String = Cachename.Substring(0, Cachename.Length - 5) & i.ToString & ".jpg"
-                    Form1.util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
+                    util_ImageLoad(pb, image2load, Utilities.DefaultTvFanartPath)
                 End If
             Next
-            If Not IsNothing(pbHmScrSht0.Image) Then Form1.util_ImageLoad(pbx_HmFanartSht, pbHmScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
+            If Not IsNothing(pbHmScrSht0.Image) Then util_ImageLoad(pbx_HmFanartSht, pbHmScrSht0.Tag.ToString, Utilities.DefaultTvFanartPath)
         Catch
         End Try
     End Sub
@@ -337,9 +337,7 @@ Partial Public Class Form1
         Try
             If hmfolderschanged Then
                 Dim save = MsgBox("You have made changes to some folders" & vbCrLf & "    Do you wish to save these changes?", MsgBoxStyle.YesNo)
-                If save = DialogResult.Yes Then
-                    Call HomeMovieFoldersRefresh()
-                End If
+                If save = DialogResult.Yes Then Call HomeMovieFoldersRefresh()
                 hmfolderschanged = False
             End If
         Catch ex As Exception
@@ -537,6 +535,7 @@ Partial Public Class Form1
             Application.DoEvents()
         End While
         Pref.HomeVidScrape = False
+        HomeMovieCacheSave()
         HMDGVload()
     End Sub
 
@@ -547,13 +546,10 @@ Partial Public Class Form1
             Application.DoEvents()
         End While
         Pref.HomeVidScrape = False
+        HomeMovieCacheSave()
         HMDGVload()
     End Sub
-
-    Public Shared Sub HomeMovieAdd(ByVal newHomeMovie As str_BasicHomeMovie)
-        homemovielist.Add(newHomeMovie)
-    End Sub
-
+    
     Public Sub HomeMovieCacheSave()
         Dim fullpath As String = Pref.workingProfile.HomeMovieCache
         If File.Exists(fullpath) Then
@@ -571,22 +567,26 @@ Partial Public Class Form1
         xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
         doc.AppendChild(xmlproc)
         root = doc.CreateElement("homemovie_cache")
+        Dim attr As XmlAttribute = doc.CreateAttribute("ver")
+        attr.Value = HomeCacheVersion
+        root.SetAttributeNode(attr)
+
         For Each item In HMCache
             child = doc.CreateElement("movie")
-            child.AppendChild(doc, "fullpathandfilename", item.nfopathandfilename)
-            child.AppendChild(doc, "filename", item.filename)
-            child.AppendChild(doc, "foldername", item.foldername)
-            child.AppendChild(doc, "title", item.title)
-            child.AppendChild(doc, "year", item.year)
-            child.AppendChild(doc, "filedate", item.filedate)
-            child.AppendChild(doc, "createdate", item.createdate)
-            child.AppendChild(doc, "genre", item.genre)
-            child.AppendChild(doc, "plot", item.plot)
-            child.AppendChild(doc, "playcount", item.playcount)
-            child.AppendChild(doc, "runtime", item.runtime)
-            child.AppendChild(doc, "Resolution", item.Resolution)
-            child.AppendChild(doc, "FrodoPosterExists", item.FrodoPosterExists)
-            child.AppendChild(doc, "PreFrodoPosterExists", item.PreFrodoPosterExists)
+            child.AppendChild(doc, "fullpathandfilename"    , item.nfopathandfilename)
+            child.AppendChild(doc, "filename"               , item.filename)
+            child.AppendChild(doc, "foldername"             , item.foldername)
+            child.AppendChild(doc, "title"                  , item.title)
+            child.AppendChild(doc, "year"                   , item.year)
+            child.AppendChild(doc, "filedate"               , item.filedate)
+            child.AppendChild(doc, "createdate"             , item.createdate)
+            child.AppendChild(doc, "genre"                  , item.genre)
+            child.AppendChild(doc, "plot"                   , item.plot)
+            child.AppendChild(doc, "playcount"              , item.playcount)
+            child.AppendChild(doc, "runtime"                , item.runtime)
+            child.AppendChild(doc, "Resolution"             , item.Resolution)
+            child.AppendChild(doc, "FrodoPosterExists"      , item.FrodoPosterExists)
+            child.AppendChild(doc, "PreFrodoPosterExists"   , item.PreFrodoPosterExists)
             For Each track In item.Audio
                 child.AppendChild(track.GetChild(doc))
             Next
@@ -594,11 +594,11 @@ Partial Public Class Form1
         Next
         doc.AppendChild(root)
 
-        WorkingWithNfoFiles.SaveXMLDoc(doc, fullpath)
+        SaveXMLDoc(doc, fullpath)
     End Sub
 
-    Private Sub HomeMovieCacheLoad()
-
+    Private Function HomeMovieCacheLoad() As Boolean
+        Dim aok As Boolean = True
         Dim movielist As New XmlDocument
         Dim tempstring As String = Nothing
         Using objReader As IO.StreamReader = File.OpenText(workingProfile.HomeMovieCache)
@@ -606,6 +606,13 @@ Partial Public Class Form1
         End Using
 
         movielist.LoadXml(tempstring)
+        Dim root as XmlElement = movielist.DocumentElement
+        If root.HasAttribute("ver") Then
+            Dim docversion As String = root.GetAttribute("ver")
+            If docversion <> HomeCacheVersion Then Return False
+        Else
+            Return False
+        End If
         Dim thisresult As XmlNode = Nothing
         For Each thisresult In movielist("homemovie_cache")
             Select Case thisresult.Name
@@ -613,26 +620,26 @@ Partial Public Class Form1
                     Dim newmovie As New HmMovComboList
                     For Each detail As XmlNode In thisresult.ChildNodes
                         Select Case detail.Name
-                            Case "fullpathandfilename" : newmovie.nfopathandfilename = detail.InnerText
-                            Case "title" : newmovie.Title = detail.InnerText
-                            Case "year" : newmovie.year = detail.InnerText
-                            Case "filename" : newmovie.filename = detail.InnerText
-                            Case "foldername" : newmovie.foldername = detail.InnerText
-                            Case "genre" : newmovie.genre = detail.InnerText & newmovie.genre
-                            Case "plot" : newmovie.plot = detail.InnerText
-                            Case "playcount" : newmovie.playcount = detail.InnerText
-                            Case "runtime" : newmovie.runtime = detail.InnerText
-                            Case "Resolution" : newmovie.Resolution = detail.InnerText
-                            Case "FrodoPosterExists" : newmovie.FrodoPosterExists = detail.InnerText
-                            Case "PreFrodoPosterExists" : newmovie.PreFrodoPosterExists = detail.InnerText
+                            Case "fullpathandfilename"      : newmovie.nfopathandfilename   = detail.InnerText
+                            Case "title"                    : newmovie.Title                = detail.InnerText
+                            Case "year"                     : newmovie.year                 = detail.InnerText
+                            Case "filename"                 : newmovie.filename             = detail.InnerText
+                            Case "foldername"               : newmovie.foldername           = detail.InnerText
+                            Case "genre"                    : newmovie.genre                = detail.InnerText
+                            Case "plot"                     : newmovie.plot                 = detail.InnerText
+                            Case "playcount"                : newmovie.playcount            = detail.InnerText
+                            Case "runtime"                  : newmovie.runtime              = detail.InnerText
+                            Case "Resolution"               : newmovie.Resolution           = detail.InnerText
+                            Case "FrodoPosterExists"        : newmovie.FrodoPosterExists    = detail.InnerText
+                            Case "PreFrodoPosterExists"     : newmovie.PreFrodoPosterExists = detail.InnerText
                             Case "audio"
                                 Dim audio As New AudioDetails
                                 For Each audiodetails As XmlNode In detail.ChildNodes
                                     Select Case audiodetails.Name
-                                        Case "language" : audio.Language.Value = audiodetails.InnerText
-                                        Case "codec" : audio.Codec.Value = audiodetails.InnerText
-                                        Case "channels" : audio.Channels.Value = audiodetails.InnerText
-                                        Case "bitrate" : audio.Bitrate.Value = audiodetails.InnerText
+                                        Case "language" : audio.Language.Value  = audiodetails.InnerText
+                                        Case "codec"    : audio.Codec.Value     = audiodetails.InnerText
+                                        Case "channels" : audio.Channels.Value  = audiodetails.InnerText
+                                        Case "bitrate"  : audio.Bitrate.Value   = audiodetails.InnerText
                                     End Select
                                 Next
                             Case "createdate"
@@ -651,6 +658,7 @@ Partial Public Class Form1
                     Next
                     HMCache.Add(newmovie)
             End Select
+            
         Next
         Call HMDGVload()
         Try
@@ -658,7 +666,8 @@ Partial Public Class Form1
             DisplayHV()
         Catch ex As Exception
         End Try
-    End Sub
+        Return aok
+    End Function
 
     Private Sub DisplayHV()
         Try
@@ -702,13 +711,14 @@ Partial Public Class Form1
         pbx_HmFanart.Visible = False
         pbx_HmPoster.Image = Nothing
         pbx_HmPoster.Visible = False
-        HmMovTitle.Text = ""
-        HmMovSort.Text = ""
-        HmMovYear.Text = ""
-        HmMovPlot.Text = ""
-        HmMovStars.Text = ""
-        HmMovGenre.Text = ""
-        HmMovPath.Text = ""
+        HmMovTitle  .Text = ""
+        HmMovSort   .Text = ""
+        HmMovYear   .Text = ""
+        HmMovPlot   .Text = ""
+        HmMovStars  .Text = ""
+        HmMovGenre  .Text = ""
+        HmMovTag    .Text = ""
+        HmMovPath   .Text = ""
     End Sub
 
     Private Sub HMForm_Populate()

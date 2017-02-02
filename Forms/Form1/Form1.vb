@@ -9089,7 +9089,12 @@ Public Class Form1
 			loadinginfo = "Status :- Loading Home Movie Database"
 			frmSplash.Label3.Text = loadinginfo
 			frmSplash.Label3.Refresh()
-			Call HomeMovieCacheLoad()
+			If Not HomeMovieCacheLoad() Then
+                loadinginfo = "Status :- Building Home Movie Database"
+			    frmSplash.Label3.Text = loadinginfo
+			    frmSplash.Label3.Refresh()
+                RefreshHomeVideoCache()
+			End If
 		End If
 
 		If File.Exists(workingProfile.MusicVideoCache) Then
