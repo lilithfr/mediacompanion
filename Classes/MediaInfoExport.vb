@@ -141,7 +141,7 @@ Public Class MediaInfoExport
             mediaTagpresent = True
             mediaInsertIndex = M.Index
             mediaTemplate = M.Groups("mediaitem").Value.Trim(vbCrLf)
-            If filetype = "csv" Then mediaTemplate = mediaTemplate.Replace(vbCrLf, "")
+    '       If filetype = "csv" Then mediaTemplate = mediaTemplate.Replace(vbCrLf, "")
             templateBody = templateBody.Replace(M.Value, "")
             Integer.TryParse(M.Groups("limit").Value.TrimStart(":"), limit) 'a fail means "limit" remains at default of 0 - display all media items
         End If
