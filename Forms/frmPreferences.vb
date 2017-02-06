@@ -585,6 +585,7 @@ Public Class frmPreferences
         cbTvDlPosterArt                 .Checked    = Pref.tvdlposter
         cbTvDlFanart                    .Checked    = Pref.tvdlfanart
         cbTvDlSeasonArt                 .Checked    = Pref.tvdlseasonthumbs
+        cbTvDlEpisodeThumb              .Checked    = Pref.TvDlEpisodeThumb
         cbTvDlXtraFanart                .Checked    = Pref.dlTVxtrafanart
         cmbxTvXtraFanartQty.SelectedIndex           = cmbxTvXtraFanartQty.FindStringExact(Pref.TvXtraFanartQty.ToString)
         cbTvDlFanartTvArt               .Checked    = Pref.TvDlFanartTvArt
@@ -2706,7 +2707,13 @@ End Sub
         If prefsload Then Exit Sub
         Pref.tvdlseasonthumbs = cbTvDlSeasonArt.Checked
         Changes = True
-    End Sub
+    End Sub 'cbTvDlEpisodeThumb
+    
+    Private Sub cbTvDlEpisodeThumb_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvDlEpisodeThumb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvDlEpisodeThumb = cbTvDlEpisodeThumb.Checked
+        Changes = True
+    End Sub 'cbTvDlEpisodeThumb
 
     Private Sub cbTvDlXtraFanart_CheckedChanged( sender As System.Object,  e As System.EventArgs) Handles cbTvDlXtraFanart.CheckedChanged
         If prefsload Then Exit Sub

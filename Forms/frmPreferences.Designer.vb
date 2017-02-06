@@ -353,6 +353,10 @@ Partial Class frmPreferences
         Me.lblNameModeEg = New System.Windows.Forms.Label()
         Me.cbMoviePartsNameMode = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_Advanced = New System.Windows.Forms.TabPage()
+        Me.gpbx_MovTimerAutoScrape = New System.Windows.Forms.GroupBox()
+        Me.tbMovAutoScrapeInterval = New System.Windows.Forms.TextBox()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.cbMovEnableAutoScrape = New System.Windows.Forms.CheckBox()
         Me.grpbxMovieCustomPlaycountTag = New System.Windows.Forms.GroupBox()
         Me.cbMovNfoWatchTag = New System.Windows.Forms.CheckBox()
         Me.Label23 = New System.Windows.Forms.Label()
@@ -503,10 +507,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.gpbx_MovTimerAutoScrape = New System.Windows.Forms.GroupBox()
-        Me.cbMovEnableAutoScrape = New System.Windows.Forms.CheckBox()
-        Me.Label29 = New System.Windows.Forms.Label()
-        Me.tbMovAutoScrapeInterval = New System.Windows.Forms.TextBox()
+        Me.cbTvDlEpisodeThumb = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -571,6 +572,7 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.SuspendLayout
         Me.grpbxMovieNameMode.SuspendLayout
         Me.tpMoviePreferences_Advanced.SuspendLayout
+        Me.gpbx_MovTimerAutoScrape.SuspendLayout
         Me.grpbxMovieCustomPlaycountTag.SuspendLayout
         Me.grpbxMovieSeparateIdentifier.SuspendLayout
         Me.grpbxMovieNfoPosterOptions.SuspendLayout
@@ -597,7 +599,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.gpbx_MovTimerAutoScrape.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1456,7 +1457,7 @@ Partial Class frmPreferences
         '
         Me.cmbxTvMaxGenres.FormattingEnabled = true
         Me.cmbxTvMaxGenres.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(158, 315)
+        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(157, 320)
         Me.cmbxTvMaxGenres.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbxTvMaxGenres.MaxDropDownItems = 30
         Me.cmbxTvMaxGenres.Name = "cmbxTvMaxGenres"
@@ -4306,9 +4307,47 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
+        '
+        'gpbx_MovTimerAutoScrape
+        '
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.tbMovAutoScrapeInterval)
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.Label29)
+        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.cbMovEnableAutoScrape)
+        Me.gpbx_MovTimerAutoScrape.Location = New System.Drawing.Point(10, 7)
+        Me.gpbx_MovTimerAutoScrape.Name = "gpbx_MovTimerAutoScrape"
+        Me.gpbx_MovTimerAutoScrape.Size = New System.Drawing.Size(389, 111)
+        Me.gpbx_MovTimerAutoScrape.TabIndex = 78
+        Me.gpbx_MovTimerAutoScrape.TabStop = false
+        Me.gpbx_MovTimerAutoScrape.Text = "AutoScrape Timer"
+        '
+        'tbMovAutoScrapeInterval
+        '
+        Me.tbMovAutoScrapeInterval.Location = New System.Drawing.Point(33, 45)
+        Me.tbMovAutoScrapeInterval.Name = "tbMovAutoScrapeInterval"
+        Me.tbMovAutoScrapeInterval.Size = New System.Drawing.Size(56, 21)
+        Me.tbMovAutoScrapeInterval.TabIndex = 2
+        '
+        'Label29
+        '
+        Me.Label29.AutoSize = true
+        Me.Label29.Location = New System.Drawing.Point(95, 48)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(51, 15)
+        Me.Label29.TabIndex = 1
+        Me.Label29.Text = "Minutes"
+        '
+        'cbMovEnableAutoScrape
+        '
+        Me.cbMovEnableAutoScrape.AutoSize = true
+        Me.cbMovEnableAutoScrape.Location = New System.Drawing.Point(13, 20)
+        Me.cbMovEnableAutoScrape.Name = "cbMovEnableAutoScrape"
+        Me.cbMovEnableAutoScrape.Size = New System.Drawing.Size(168, 19)
+        Me.cbMovEnableAutoScrape.TabIndex = 0
+        Me.cbMovEnableAutoScrape.Text = "AutoScrape Movies every :"
+        Me.cbMovEnableAutoScrape.UseVisualStyleBackColor = true
         '
         'grpbxMovieCustomPlaycountTag
         '
@@ -4803,6 +4842,7 @@ Partial Class frmPreferences
         '
         'GroupBox20
         '
+        Me.GroupBox20.Controls.Add(Me.cbTvDlEpisodeThumb)
         Me.GroupBox20.Controls.Add(Me.Label24)
         Me.GroupBox20.Controls.Add(Me.cmbxTvMaxGenres)
         Me.GroupBox20.Controls.Add(Me.Label7)
@@ -4831,7 +4871,7 @@ Partial Class frmPreferences
         '
         Me.Label24.AutoSize = true
         Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label24.Location = New System.Drawing.Point(16, 318)
+        Me.Label24.Location = New System.Drawing.Point(15, 323)
         Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(134, 15)
@@ -4841,7 +4881,7 @@ Partial Class frmPreferences
         'Label7
         '
         Me.Label7.AutoSize = true
-        Me.Label7.Location = New System.Drawing.Point(160, 101)
+        Me.Label7.Location = New System.Drawing.Point(160, 118)
         Me.Label7.Name = "Label7"
         Me.Label7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label7.Size = New System.Drawing.Size(82, 15)
@@ -4854,7 +4894,7 @@ Partial Class frmPreferences
         Me.cmbxTvXtraFanartQty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbxTvXtraFanartQty.FormattingEnabled = true
         Me.cmbxTvXtraFanartQty.Items.AddRange(New Object() {"5", "10", "15", "20"})
-        Me.cmbxTvXtraFanartQty.Location = New System.Drawing.Point(245, 95)
+        Me.cmbxTvXtraFanartQty.Location = New System.Drawing.Point(245, 112)
         Me.cmbxTvXtraFanartQty.Name = "cmbxTvXtraFanartQty"
         Me.cmbxTvXtraFanartQty.Size = New System.Drawing.Size(55, 23)
         Me.cmbxTvXtraFanartQty.TabIndex = 74
@@ -4862,7 +4902,7 @@ Partial Class frmPreferences
         'cbTvFanartTvFirst
         '
         Me.cbTvFanartTvFirst.AutoSize = true
-        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(189, 119)
+        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(189, 133)
         Me.cbTvFanartTvFirst.Name = "cbTvFanartTvFirst"
         Me.cbTvFanartTvFirst.Size = New System.Drawing.Size(110, 34)
         Me.cbTvFanartTvFirst.TabIndex = 73
@@ -4872,7 +4912,7 @@ Partial Class frmPreferences
         'cbTvDlFanartTvArt
         '
         Me.cbTvDlFanartTvArt.AutoSize = true
-        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 127)
+        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 141)
         Me.cbTvDlFanartTvArt.Name = "cbTvDlFanartTvArt"
         Me.cbTvDlFanartTvArt.Size = New System.Drawing.Size(155, 19)
         Me.cbTvDlFanartTvArt.TabIndex = 72
@@ -4882,7 +4922,7 @@ Partial Class frmPreferences
         'cbSeasonFolderjpg
         '
         Me.cbSeasonFolderjpg.AutoSize = true
-        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 276)
+        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 281)
         Me.cbSeasonFolderjpg.Name = "cbSeasonFolderjpg"
         Me.cbSeasonFolderjpg.Size = New System.Drawing.Size(237, 34)
         Me.cbSeasonFolderjpg.TabIndex = 71
@@ -4892,7 +4932,7 @@ Partial Class frmPreferences
         'cb_TvFolderJpg
         '
         Me.cb_TvFolderJpg.AutoSize = true
-        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 256)
+        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 261)
         Me.cb_TvFolderJpg.Name = "cb_TvFolderJpg"
         Me.cb_TvFolderJpg.Size = New System.Drawing.Size(221, 19)
         Me.cb_TvFolderJpg.TabIndex = 70
@@ -4902,7 +4942,7 @@ Partial Class frmPreferences
         'cbTvDlXtraFanart
         '
         Me.cbTvDlXtraFanart.AutoSize = true
-        Me.cbTvDlXtraFanart.Location = New System.Drawing.Point(10, 99)
+        Me.cbTvDlXtraFanart.Location = New System.Drawing.Point(10, 116)
         Me.cbTvDlXtraFanart.Name = "cbTvDlXtraFanart"
         Me.cbTvDlXtraFanart.Size = New System.Drawing.Size(148, 19)
         Me.cbTvDlXtraFanart.TabIndex = 69
@@ -4914,9 +4954,9 @@ Partial Class frmPreferences
         Me.GroupBox18.Controls.Add(Me.posterbtn)
         Me.GroupBox18.Controls.Add(Me.bannerbtn)
         Me.GroupBox18.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox18.Location = New System.Drawing.Point(10, 205)
+        Me.GroupBox18.Location = New System.Drawing.Point(10, 214)
         Me.GroupBox18.Name = "GroupBox18"
-        Me.GroupBox18.Size = New System.Drawing.Size(290, 45)
+        Me.GroupBox18.Size = New System.Drawing.Size(290, 41)
         Me.GroupBox18.TabIndex = 68
         Me.GroupBox18.TabStop = false
         Me.GroupBox18.Text = "Default TV Show Thumbnails"
@@ -4925,7 +4965,7 @@ Partial Class frmPreferences
         '
         Me.posterbtn.AutoSize = true
         Me.posterbtn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.posterbtn.Location = New System.Drawing.Point(8, 19)
+        Me.posterbtn.Location = New System.Drawing.Point(7, 16)
         Me.posterbtn.Margin = New System.Windows.Forms.Padding(4)
         Me.posterbtn.Name = "posterbtn"
         Me.posterbtn.Size = New System.Drawing.Size(60, 19)
@@ -4938,7 +4978,7 @@ Partial Class frmPreferences
         '
         Me.bannerbtn.AutoSize = true
         Me.bannerbtn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.bannerbtn.Location = New System.Drawing.Point(79, 19)
+        Me.bannerbtn.Location = New System.Drawing.Point(78, 16)
         Me.bannerbtn.Margin = New System.Windows.Forms.Padding(4)
         Me.bannerbtn.Name = "bannerbtn"
         Me.bannerbtn.Size = New System.Drawing.Size(65, 19)
@@ -4950,7 +4990,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDlPosterArt.AutoSize = true
         Me.cbTvDlPosterArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlPosterArt.Location = New System.Drawing.Point(10, 25)
+        Me.cbTvDlPosterArt.Location = New System.Drawing.Point(10, 20)
         Me.cbTvDlPosterArt.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDlPosterArt.Name = "cbTvDlPosterArt"
         Me.cbTvDlPosterArt.Size = New System.Drawing.Size(212, 19)
@@ -4962,7 +5002,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDlSeasonArt.AutoSize = true
         Me.cbTvDlSeasonArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlSeasonArt.Location = New System.Drawing.Point(10, 74)
+        Me.cbTvDlSeasonArt.Location = New System.Drawing.Point(10, 68)
         Me.cbTvDlSeasonArt.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDlSeasonArt.Name = "cbTvDlSeasonArt"
         Me.cbTvDlSeasonArt.Size = New System.Drawing.Size(175, 19)
@@ -4974,7 +5014,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDlFanart.AutoSize = true
         Me.cbTvDlFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlFanart.Location = New System.Drawing.Point(10, 47)
+        Me.cbTvDlFanart.Location = New System.Drawing.Point(10, 43)
         Me.cbTvDlFanart.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDlFanart.Name = "cbTvDlFanart"
         Me.cbTvDlFanart.Size = New System.Drawing.Size(171, 19)
@@ -4988,11 +5028,11 @@ Partial Class frmPreferences
         Me.GroupBox19.Controls.Add(Me.RadioButton40)
         Me.GroupBox19.Controls.Add(Me.RadioButton41)
         Me.GroupBox19.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox19.Location = New System.Drawing.Point(10, 153)
+        Me.GroupBox19.Location = New System.Drawing.Point(10, 166)
         Me.GroupBox19.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox19.Name = "GroupBox19"
         Me.GroupBox19.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox19.Size = New System.Drawing.Size(290, 45)
+        Me.GroupBox19.Size = New System.Drawing.Size(290, 41)
         Me.GroupBox19.TabIndex = 12
         Me.GroupBox19.TabStop = false
         Me.GroupBox19.Text = "Download season-all.tbn"
@@ -5001,7 +5041,7 @@ Partial Class frmPreferences
         '
         Me.RadioButton39.AutoSize = true
         Me.RadioButton39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton39.Location = New System.Drawing.Point(156, 17)
+        Me.RadioButton39.Location = New System.Drawing.Point(156, 15)
         Me.RadioButton39.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton39.Name = "RadioButton39"
         Me.RadioButton39.Size = New System.Drawing.Size(65, 19)
@@ -5014,7 +5054,7 @@ Partial Class frmPreferences
         '
         Me.RadioButton40.AutoSize = true
         Me.RadioButton40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton40.Location = New System.Drawing.Point(79, 17)
+        Me.RadioButton40.Location = New System.Drawing.Point(79, 15)
         Me.RadioButton40.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton40.Name = "RadioButton40"
         Me.RadioButton40.Size = New System.Drawing.Size(60, 19)
@@ -5027,7 +5067,7 @@ Partial Class frmPreferences
         '
         Me.RadioButton41.AutoSize = true
         Me.RadioButton41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.RadioButton41.Location = New System.Drawing.Point(8, 17)
+        Me.RadioButton41.Location = New System.Drawing.Point(8, 15)
         Me.RadioButton41.Margin = New System.Windows.Forms.Padding(4)
         Me.RadioButton41.Name = "RadioButton41"
         Me.RadioButton41.Size = New System.Drawing.Size(55, 19)
@@ -6056,43 +6096,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'gpbx_MovTimerAutoScrape
+        'cbTvDlEpisodeThumb
         '
-        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.tbMovAutoScrapeInterval)
-        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.Label29)
-        Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.cbMovEnableAutoScrape)
-        Me.gpbx_MovTimerAutoScrape.Location = New System.Drawing.Point(10, 7)
-        Me.gpbx_MovTimerAutoScrape.Name = "gpbx_MovTimerAutoScrape"
-        Me.gpbx_MovTimerAutoScrape.Size = New System.Drawing.Size(389, 111)
-        Me.gpbx_MovTimerAutoScrape.TabIndex = 78
-        Me.gpbx_MovTimerAutoScrape.TabStop = false
-        Me.gpbx_MovTimerAutoScrape.Text = "AutoScrape Timer"
-        '
-        'cbMovEnableAutoScrape
-        '
-        Me.cbMovEnableAutoScrape.AutoSize = true
-        Me.cbMovEnableAutoScrape.Location = New System.Drawing.Point(13, 20)
-        Me.cbMovEnableAutoScrape.Name = "cbMovEnableAutoScrape"
-        Me.cbMovEnableAutoScrape.Size = New System.Drawing.Size(168, 19)
-        Me.cbMovEnableAutoScrape.TabIndex = 0
-        Me.cbMovEnableAutoScrape.Text = "AutoScrape Movies every :"
-        Me.cbMovEnableAutoScrape.UseVisualStyleBackColor = true
-        '
-        'Label29
-        '
-        Me.Label29.AutoSize = true
-        Me.Label29.Location = New System.Drawing.Point(95, 48)
-        Me.Label29.Name = "Label29"
-        Me.Label29.Size = New System.Drawing.Size(51, 15)
-        Me.Label29.TabIndex = 1
-        Me.Label29.Text = "Minutes"
-        '
-        'tbMovAutoScrapeInterval
-        '
-        Me.tbMovAutoScrapeInterval.Location = New System.Drawing.Point(33, 45)
-        Me.tbMovAutoScrapeInterval.Name = "tbMovAutoScrapeInterval"
-        Me.tbMovAutoScrapeInterval.Size = New System.Drawing.Size(56, 21)
-        Me.tbMovAutoScrapeInterval.TabIndex = 2
+        Me.cbTvDlEpisodeThumb.AutoSize = true
+        Me.cbTvDlEpisodeThumb.Location = New System.Drawing.Point(10, 91)
+        Me.cbTvDlEpisodeThumb.Name = "cbTvDlEpisodeThumb"
+        Me.cbTvDlEpisodeThumb.Size = New System.Drawing.Size(192, 19)
+        Me.cbTvDlEpisodeThumb.TabIndex = 78
+        Me.cbTvDlEpisodeThumb.Text = "Download Episode Thumbnail"
+        Me.cbTvDlEpisodeThumb.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6222,6 +6234,8 @@ Partial Class frmPreferences
         Me.grpbxMovieNameMode.ResumeLayout(false)
         Me.grpbxMovieNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
+        Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
+        Me.gpbx_MovTimerAutoScrape.PerformLayout
         Me.grpbxMovieCustomPlaycountTag.ResumeLayout(false)
         Me.grpbxMovieCustomPlaycountTag.PerformLayout
         Me.grpbxMovieSeparateIdentifier.ResumeLayout(false)
@@ -6267,8 +6281,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
-        Me.gpbx_MovTimerAutoScrape.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6755,4 +6767,5 @@ End Sub
     Friend WithEvents tbMovAutoScrapeInterval As TextBox
     Friend WithEvents Label29 As Label
     Friend WithEvents cbMovEnableAutoScrape As CheckBox
+    Friend WithEvents cbTvDlEpisodeThumb As CheckBox
 End Class

@@ -47,7 +47,7 @@ Partial Class tv_batch_wizard
         Me.cbepTitle = New System.Windows.Forms.CheckBox()
         Me.cbepStreamDetails = New System.Windows.Forms.CheckBox()
         Me.cbepCreateScreenshot = New System.Windows.Forms.CheckBox()
-        Me.cbepScreenshot = New System.Windows.Forms.CheckBox()
+        Me.cbepdlThumbnail = New System.Windows.Forms.CheckBox()
         Me.cbepRuntime = New System.Windows.Forms.CheckBox()
         Me.cbepActor = New System.Windows.Forms.CheckBox()
         Me.cbepCredits = New System.Windows.Forms.CheckBox()
@@ -93,8 +93,8 @@ Partial Class tv_batch_wizard
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.GroupBox2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(414, 414)
-        Me.SplitContainer1.SplitterDistance = 240
+        Me.SplitContainer1.Size = New System.Drawing.Size(414, 413)
+        Me.SplitContainer1.SplitterDistance = 239
         Me.SplitContainer1.TabIndex = 0
         '
         'GroupBox1
@@ -323,7 +323,7 @@ Partial Class tv_batch_wizard
         Me.GroupBox2.Controls.Add(Me.cbepTitle)
         Me.GroupBox2.Controls.Add(Me.cbepStreamDetails)
         Me.GroupBox2.Controls.Add(Me.cbepCreateScreenshot)
-        Me.GroupBox2.Controls.Add(Me.cbepScreenshot)
+        Me.GroupBox2.Controls.Add(Me.cbepdlThumbnail)
         Me.GroupBox2.Controls.Add(Me.cbepRuntime)
         Me.GroupBox2.Controls.Add(Me.cbepActor)
         Me.GroupBox2.Controls.Add(Me.cbepCredits)
@@ -364,20 +364,20 @@ Partial Class tv_batch_wizard
         Me.cbepCreateScreenshot.Enabled = false
         Me.cbepCreateScreenshot.Location = New System.Drawing.Point(6, 114)
         Me.cbepCreateScreenshot.Name = "cbepCreateScreenshot"
-        Me.cbepCreateScreenshot.Size = New System.Drawing.Size(265, 17)
+        Me.cbepCreateScreenshot.Size = New System.Drawing.Size(294, 17)
         Me.cbepCreateScreenshot.TabIndex = 8
-        Me.cbepCreateScreenshot.Text = "Create Screenshot if none is available to download"
+        Me.cbepCreateScreenshot.Text = "Create Screenshot if no thumbnail available to download."
         Me.cbepCreateScreenshot.UseVisualStyleBackColor = true
         '
-        'cbepScreenshot
+        'cbepdlThumbnail
         '
-        Me.cbepScreenshot.AutoSize = true
-        Me.cbepScreenshot.Location = New System.Drawing.Point(6, 91)
-        Me.cbepScreenshot.Name = "cbepScreenshot"
-        Me.cbepScreenshot.Size = New System.Drawing.Size(220, 17)
-        Me.cbepScreenshot.TabIndex = 7
-        Me.cbepScreenshot.Text = "Attempt to download missing screenshots"
-        Me.cbepScreenshot.UseVisualStyleBackColor = true
+        Me.cbepdlThumbnail.AutoSize = true
+        Me.cbepdlThumbnail.Location = New System.Drawing.Point(6, 91)
+        Me.cbepdlThumbnail.Name = "cbepdlThumbnail"
+        Me.cbepdlThumbnail.Size = New System.Drawing.Size(257, 17)
+        Me.cbepdlThumbnail.TabIndex = 7
+        Me.cbepdlThumbnail.Text = "Attempt to download missing Episode thumbnails."
+        Me.cbepdlThumbnail.UseVisualStyleBackColor = true
         '
         'cbepRuntime
         '
@@ -478,7 +478,7 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbincludeLocked)
         Me.SplitContainer2.Size = New System.Drawing.Size(414, 486)
-        Me.SplitContainer2.SplitterDistance = 414
+        Me.SplitContainer2.SplitterDistance = 413
         Me.SplitContainer2.TabIndex = 1
         '
         'cbShSeries
@@ -580,7 +580,7 @@ End Sub
     Friend WithEvents cbshFanart As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
     Friend WithEvents cbepCreateScreenshot As System.Windows.Forms.CheckBox
-    Friend WithEvents cbepScreenshot As System.Windows.Forms.CheckBox
+    Friend WithEvents cbepdlThumbnail As System.Windows.Forms.CheckBox
     Friend WithEvents cbepRuntime As System.Windows.Forms.CheckBox
     Friend WithEvents cbepActor As System.Windows.Forms.CheckBox
     Friend WithEvents cbepCredits As System.Windows.Forms.CheckBox

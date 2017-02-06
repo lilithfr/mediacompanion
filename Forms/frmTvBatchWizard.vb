@@ -92,7 +92,7 @@
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeBody = True
             End If
-            If cbepScreenshot.Checked Then
+            If cbepdlThumbnail.Checked Then
                 Form1.tvBatchList.doEpisodes = True
                 Form1.tvBatchList.doEpisodeArt = True
             End If
@@ -230,14 +230,14 @@
         'media tags
         Form1.tvBatchList.epStreamDetails = cbepStreamDetails.Checked 
     End Sub
-    Private Sub cbepScreenshot_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepScreenshot.CheckedChanged
+    Private Sub cbepdlThumbnail_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepdlThumbnail.CheckedChanged
         'download screenshot
-        If cbepScreenshot.Checked Then
-            Form1.tvBatchList.epScreenshot = True
-            cbepCreateScreenshot.Enabled = True
+        If cbepdlThumbnail.Checked Then
+            Form1.tvBatchList.epdlThumbnail = True
+            cbepCreateScreenshot.Enabled    = True
         Else
-            Form1.tvBatchList.epScreenshot = False
-            cbepCreateScreenshot.Enabled = False
+            Form1.tvBatchList.epdlThumbnail = False
+            cbepCreateScreenshot.Enabled    = False
             cbepCreateScreenshot.CheckState = CheckState.Unchecked
             Form1.tvBatchList.epCreateScreenshot = False
         End If

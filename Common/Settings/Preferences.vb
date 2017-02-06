@@ -416,6 +416,7 @@ Public Class Pref
     Public Shared tvdlposter As Boolean
     Public Shared tvdlfanart As Boolean
     Public Shared tvdlseasonthumbs As Boolean
+    Public Shared TvDlEpisodeThumb As Boolean
     Public Shared TvDlFanartTvArt As Boolean
     Public Shared TvFanartTvFirst As Boolean
     Public Shared dlTVxtrafanart As Boolean
@@ -761,6 +762,7 @@ Public Class Pref
         tvdlfanart = True
         tvdlposter = True
         tvdlseasonthumbs = True
+        TvDlEpisodeThumb = True
         TvDlFanartTvArt = False
         TvFanartTvFirst = False
         dlTVxtrafanart = False
@@ -1235,6 +1237,7 @@ Public Class Pref
         root.AppendChild(doc, "downloadtvfanart",                   tvdlfanart)                 'cbTvDlFanart
         root.AppendChild(doc, "downloadtvposter",                   tvdlposter)                 'cbTvDlPosterArt
         root.AppendChild(doc, "downloadtvseasonthumbs",             tvdlseasonthumbs)           'cbTvDlSeasonArt
+        root.AppendChild(doc, "downloadEpisodeThumb",               TvDlEpisodeThumb)           'cbTvDlEpisodeThumb
         root.AppendChild(doc, "TvDlFanartTvArt",                    TvDlFanartTvArt)            'cbTvDlFanartTvArt
         root.AppendChild(doc, "TvFanartTvFirst",                    TvFanartTvFirst)            'cbTvFanartTvFirst
         root.AppendChild(doc, "dlTVxtrafanart",                     dlTVxtrafanart)             'cbDlTVxtrafanart
@@ -1558,6 +1561,7 @@ Public Class Pref
                     Case "moviesUseXBMCScraper"                 : movies_useXBMC_Scraper = thisresult.InnerXml
                     Case "downloadtvposter"                     : tvdlposter = thisresult.InnerXml
                     Case "downloadtvseasonthumbs"               : tvdlseasonthumbs = thisresult.InnerXml
+                    Case "downloadEpisodeThumb"                 : TvDlEpisodeThumb = thisresult.InnerXml
                     Case "maximumthumbs"                        : maximumthumbs = Convert.ToInt32(thisresult.InnerXml)
                     Case "lastrefreshmissingdate"               : lastrefreshmissingdate = thisresult.InnerText 
                     Case "excludefromshowfoldername"            : excludefromshowfoldername = thisresult.InnerText

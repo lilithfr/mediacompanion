@@ -1119,7 +1119,11 @@ Partial Public Class Form1
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
         tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
         WorkingWithNfoFiles.ep_NfoSave(alleps, path)
-        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.autoepisodescreenshot) & vbcrlf
+        If Pref.TvDlEpisodeThumb Then
+            tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.autoepisodescreenshot) & vbcrlf
+        Else
+            tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
+        End If
         If Pref.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             eps.Clear()
@@ -2171,7 +2175,7 @@ Partial Public Class Form1
 		                                            End If
 	                                            End If
                                             End If
-                                            If tvBatchList.doEpisodeArt AndAlso tvBatchList.epScreenshot Then
+                                            If tvBatchList.doEpisodeArt AndAlso tvBatchList.epdlThumbnail Then
                                                 listofnewepisodes(h).Thumbnail.FileName = Episodedata.ThumbNail.Value
                                                 progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epCreateScreenshot).Replace("!!! ","")
                                             End If
@@ -3136,7 +3140,11 @@ Partial Public Class Form1
         End If
         
         '''''Get Episode Fanart
-        tvScraperLog &= tv_EpisodeFanartGet(newepisode, Pref.autoepisodescreenshot) & vbcrlf
+        If Pref.TvDlEpisodeThumb Then
+            tvScraperLog &= tv_EpisodeFanartGet(newepisode, Pref.autoepisodescreenshot) & vbcrlf
+        Else
+            tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
+        End If
 
         '''''Call LoadTvEpisode(WorkingEpisode)
         tv_EpisodeSelected(TvTreeview.SelectedNode.Tag, True) 'reload the episode after it has been rescraped
