@@ -594,7 +594,7 @@ Public Class Movie
             'End If
 
             'Return ""
-            Return Utilities.GetYearByFilename(If((Pref.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv"), Title, NfoPathAndFilename), False, "tmdb")
+            Return Utilities.GetYearByFilename(If((Pref.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv"), Title, NfoPathAndFilename), True, "tmdb")
         End Get
     End Property
 
