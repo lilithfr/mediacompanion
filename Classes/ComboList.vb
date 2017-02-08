@@ -105,6 +105,7 @@ Public Class ComboList
     Property _rootfolder          As String = ""
     Property _usrrated            As Integer = 0
     Property _metascore           As Integer = 0
+    Property NfoPath              As String = ""
 
     Property oMovies As Movies
 
@@ -557,6 +558,7 @@ Public Class ComboList
         Me.UserTmdbSetAddition  = From.UserTmdbSetAddition
         Me.UnknownSetCount      = From.UnknownSetCount
         Me.LockedFields         = From.LockedFields
+        Me.NfoPath              = From.NfoPath
 
         Me.FieldsLockEnabled = True
     End Sub

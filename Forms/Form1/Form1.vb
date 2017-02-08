@@ -9749,6 +9749,7 @@ Public Class Form1
             If Pref.GetRootFolderCheck(row.Cells("fullpathandfilename").Value.ToString) Then Continue For
 
             Dim FolderSize    As Long = Convert.ToInt64(row.Cells("FolderSize"   ).Value)
+            If FolderSize = -1 Then FolderSize = Utilities.GetFolderSize(row.Cells("NfoPath").Value)
             Dim MediaFileSize As Long = Convert.ToInt64(row.Cells("MediaFileSize").Value)
 
             If FolderSize   <MIN_MEDIA_SIZE Then Continue For 

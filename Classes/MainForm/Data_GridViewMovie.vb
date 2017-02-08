@@ -40,6 +40,7 @@ Public Class Data_GridViewMovie
     Dim _rootfolder             As String = ""
     Dim _usrrated               As Integer=0
     Dim _metascore              As Integer=0
+    Dim _nfopath                As String = ""
     
 
    
@@ -146,6 +147,7 @@ Public Class Data_GridViewMovie
         MissingTmdbSetInfo      = movie.UnknownSetCount
         oMovies                 = movie.oMovies
         LockedFields            = movie.LockedFields
+        NfoPath                 = movie.NfoPath
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -205,6 +207,7 @@ Public Class Data_GridViewMovie
         convertedMovie.tmdbid               = Me.tmdbid
         convertedMovie.UserTmdbSetAddition  = Me.UserSetAddition
         convertedMovie.UnknownSetCount      = Me.MissingTmdbSetInfo
+        convertedMovie.NfoPath              = Me.NfoPath
 
         convertedMovie.FieldsLockEnabled = True
 
@@ -922,6 +925,15 @@ Public Class Data_GridViewMovie
         Get
             Return videomissing
         End Get
+    End Property
+
+    Public Property NfoPath As String
+        Get
+            Return _nfopath
+        End Get
+        Set(value As String)
+            _nfopath = value
+        End Set
     End Property
 
 End Class
