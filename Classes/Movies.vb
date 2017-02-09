@@ -2541,7 +2541,14 @@ Public Class Movies
                                 moviesetplot = detail.InnerText
 
                             Case "LastUpdatedTs"
-                                LastUpdatedTs = detail.InnerText
+                                Dim tmpdate As String = detail.InnerText
+                                If IsNumeric(tmpdate) Then
+                                    LastUpdatedTs = DateTime.ParseExact(tmpdate, Pref.datePattern, Nothing)
+                                Else
+                                    tmpdate = tmpdate.Replace("a.m.", "AM").Replace("p.m.", "PM")
+                                    LastUpdatedTs = tmpdate
+                                End If
+                                'LastUpdatedTs = detail.InnerText
 
                             Case "UserMovieSetName"
                                 UserMovieSetName = detail.InnerText
@@ -2554,21 +2561,11 @@ Public Class Movies
                                 Dim detail2 As XmlNode = Nothing
                                 For Each detail2 In detail.ChildNodes
                                     Select Case detail2.Name
-                                        Case "movietitle"
-                                            ac.MovieTitle = detail2.InnerText
-
-                                        Case "movieid"
-                                            ac.TmdbMovieId = detail2.InnerText
-
-                                        Case "backdrop_path"
-                                            ac.backdrop_path = detail2.InnerText
-
-                                        Case "poster_path"
-                                            ac.poster_path = detail2.InnerText
-
-                                        Case "release_date"
-                                            ac.release_date = detail2.InnerText
-
+                                        Case "movietitle"       : ac.MovieTitle     = detail2.InnerText
+                                        Case "movieid"          : ac.TmdbMovieId    = detail2.InnerText
+                                        Case "backdrop_path"    : ac.backdrop_path  = detail2.InnerText
+                                        Case "poster_path"      : ac.poster_path    = detail2.InnerText
+                                        Case "release_date"     : ac.release_date   = detail2.InnerText
                                     End Select
                                 Next
                                 movac.Add(ac)
@@ -2713,7 +2710,7 @@ Public Class Movies
             child.AppendChild(doc   , "moviesetname"        , movieset.MovieSetName)
             child.AppendChild(doc   , "id"                  , movieset.TmdbSetId)
             child.AppendChild(doc   , "plot"                , movieset.MovieSetPlot)
-            child.AppendChild(doc   , "LastUpdatedTs"       , movieset.LastUpdatedTs)
+            child.AppendChild(doc   , "LastUpdatedTs"       , Format(movieset.LastUpdatedTs, Pref.datePattern).ToString) 'movieset.LastUpdatedTs.ToString)
             child.AppendChild(doc   , "DirtyData"           , movieset.Dirty)
             child.AppendChild(doc   , "UserMovieSetName"    , movieset.UserMovieSetName)
 
