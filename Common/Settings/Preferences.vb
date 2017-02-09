@@ -1867,6 +1867,9 @@ Public Class Pref
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
             If File.Exists(dvdbdpath & "poster.jpg") Then Return dvdbdpath & "poster.jpg"
         End If
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then
+            Return FullPath.Replace(Path.GetExtension(FullPath), "-poster.jpg")
+        End If
         If Not Utilities.findFileOfType(posterpath, "-poster.jpg", Pref.basicsavemode) Then
             'Check Frodo naming convention
             If Not Utilities.findFileOfType(posterpath, ".tbn", Pref.basicsavemode) Then
@@ -1933,13 +1936,11 @@ Public Class Pref
         If File.Exists(dir & "\fanart.jpg") Then Return dir & "\fanart.jpg"
         Return ""
     End Function
-
-
+    
     Public Shared Function PreFrodoPosterExists(ByVal nfoFile As String) As Boolean
         Return File.Exists(nfoFile.Replace(Path.GetExtension(nfoFile), ".tbn"))
     End Function
-
-
+    
     Public Shared Function GetAllPosters(ByVal nfoFile As String) As List(Of String)
         Dim Results As List(Of String) = New List(Of String)
         Dim dir As String = Path.GetDirectoryName(nfoFile)
@@ -2140,6 +2141,9 @@ Public Class Pref
         If Pref.FrodoEnabled AndAlso MovFilePath.ToLower.Contains("video_ts.nfo") OrElse MovFilePath.ToLower.Contains("index.nfo") Then
             Dim dvdbdpath As String = Utilities.RootVideoTsFolder(FullPath)
             If File.Exists(dvdbdpath & "fanart.jpg") Then Return dvdbdpath & "fanart.jpg"
+        End If
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then
+            Return FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
         End If
         If Not Utilities.findFileOfType(fanartPath, "-fanart.jpg", Pref.basicsavemode, Pref.fanartjpg, False) Then
             If Not GetRootFolderCheck(FullPath) AndAlso Pref.fanartjpg AndAlso MovFilePath <> "" Then
