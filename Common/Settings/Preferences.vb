@@ -1961,6 +1961,27 @@ Public Class Pref
         Dim Path1 As String = FullPath
         Dim isroot As Boolean = Pref.GetRootFolderCheck(FullPath)
 
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then
+            If Pref.EdenEnabled Then
+                Path1 = FullPath.Replace(Path.GetExtension(FullPath), ".tbn")
+                lst.Add(Path1)
+            End If
+            If Pref.basicsavemode Or Pref.createfolderjpg And Not isroot Then
+                Path1 = Path.GetDirectoryName(FullPath) & "\folder.jpg" 'where movie-per-folder may use folder.jpg
+                lst.Add(Path1)
+            End If
+            If Pref.FrodoEnabled Then
+                If videots = "" Then
+                    Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-poster.jpg")
+                    lst.Add(Path1)
+                Else
+                    Path1 = videots + "poster.jpg"
+                    lst.Add(Path1)
+                End If
+            End If
+            Return lst
+        End If
+
         If (Pref.posterjpg Or Pref.basicsavemode) AndAlso Not isroot Then
             If videots <> "" Then
                 If Pref.EdenEnabled Then
@@ -2026,6 +2047,30 @@ Public Class Pref
         Dim Path1 As String = FullPath
         Dim isroot As Boolean = Pref.GetRootFolderCheck(FullPath)
         Dim fanartjpg As Boolean = Pref.fanartjpg
+
+        If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then
+            If Pref.EdenEnabled Then
+                Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
+                lst.Add(Path1)
+            End If
+            If Pref.FrodoEnabled Then
+                If Not Pref.EdenEnabled Then
+                    If Not videots = "" Then
+                        Path1 = videots + "fanart.jpg"
+                        lst.Add(Path1)
+                    Else
+                        Path1 = FullPath.Replace(Path.GetExtension(FullPath), "-fanart.jpg")
+                        lst.Add(Path1)
+                    End If
+                 Else
+                    If Not videots = "" Then
+                        Path1 = videots + "fanart.jpg"
+                        lst.Add(Path1)
+                    End If
+                End If
+            End If
+            Return lst
+        End If
 
         If (fanartjpg Or Pref.basicsavemode) AndAlso Not isroot Then
             If videots <> "" Then
