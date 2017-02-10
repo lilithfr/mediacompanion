@@ -1184,7 +1184,7 @@ Partial Public Class Form1
         Dim imdb As New Classimdb
         If Not GotEpImdbId Then
             Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True)
-            If result = "error" Then Return ""
+            If result = "error" Then Return False
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
             If adoc("root").Attributes("Response").Value = "False" Then Return False
@@ -1204,7 +1204,7 @@ Partial Public Class Form1
 
         url = String.Format("http://www.omdbapi.com/?i={0}&r=xml", ep.ImdbId.Value)
         Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
-        If result2 = "error" Then Return ""
+        If result2 = "error" Then Return False
         Dim bdoc As New XmlDocument
         bdoc.LoadXml(result2)
         If bdoc("root").Attributes("response").Value = "False" Then Return False

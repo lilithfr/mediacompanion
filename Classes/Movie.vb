@@ -346,6 +346,29 @@ Public Class Movie
         End Get
     End Property
 
+    ReadOnly Property folderandfilename As String
+        Get
+            Dim mediapath As String = mediapathandfilename
+            Dim listofrootfolders As New List(Of str_RootPaths)
+            If Pref.MusicVidScrape Then
+                listofrootfolders.AddRange(Pref.MVidFolders)
+            ElseIf Pref.MusicVidConcertScrape Then
+                listofrootfolders.AddRange(Pref.MVConcertFolders)
+            ElseIf Pref.HomeVidScrape Then
+                listofrootfolders.AddRange(Pref.homemoviefolders)
+            Else
+                listofrootfolders.AddRange(Pref.movieFolders)
+            End If
+            For each p In listofrootfolders
+                If p.selected AndAlso mediapath.Contains(p.rpath) Then
+                    mediapath = mediapath.Replace(p.rpath, "")
+                    Exit For
+                End If
+            Next
+            Return mediapath
+        End Get
+    End Property
+
     ReadOnly Property ActorPath As String
         Get
             Return nfopathandfilename.Replace(Path.GetFileName(nfopathandfilename), "") & ".actors\"
@@ -594,7 +617,7 @@ Public Class Movie
             'End If
 
             'Return ""
-            Return Utilities.GetYearByFilename(If((Pref.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv"), Title, NfoPathAndFilename), True, "tmdb")
+            Return Utilities.GetYearByFilename(If((Pref.usefoldernames Or Extension.ToLower = ".ifo" Or Extension.ToLower = ".bdmv"), Title, folderandfilename), True, "tmdb")
         End Get
     End Property
 
