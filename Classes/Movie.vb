@@ -3203,7 +3203,7 @@ Public Class Movie
                     End Try
                 End If
             Else
-                _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, _scrapedMovie.fullmoviebody.year, _scrapedMovie.fullmoviebody.imdbid)
+                _imdbBody = ImdbScrapeBody(_scrapedMovie.fullmoviebody.title, If(rl.year, "", _scrapedMovie.fullmoviebody.year), _scrapedMovie.fullmoviebody.imdbid)
 
                 If _imdbBody = "MIC" Then                        
                     ReportProgress(MSG_ERROR, "!!! - ERROR! - Rescrape IMDB body failed with refs """ & _scrapedMovie.fullmoviebody.title & """, """ & _scrapedMovie.fullmoviebody.year & """, """ & _scrapedMovie.fullmoviebody.imdbid & """, """ & Pref.imdbmirror & """" & vbCrLf)
