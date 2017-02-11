@@ -716,6 +716,59 @@ Public Class Classimdb
 
     End Function
     
+    ReadOnly Property Genres As String
+        Get
+            Dim s As String=""
+            Dim D = 0
+            Dim W = 0
+            D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
+            If Not D <= 0 Then
+                W = Html.IndexOf("</div>", D)
+                Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline)
+                Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
+                s.AppendList(lst, " / ")
+            End If
+            If TitleAndYear.ToLower.Contains("(tv movie ") Then s.AppendValue("TV Movie", " / ")
+            Return s
+        End Get
+    End Property
+
+    ReadOnly Property Directors As String
+        Get
+            Dim s As String=""
+            Dim D = Html.IndexOf("itemprop=""director""")
+            Dim W = If(D > 0, Html.IndexOf("</div>", D), 0)
+            If Not D <= 0 And Not W <= 0 Then
+                Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN)
+                Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
+                             Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
+                s.AppendList(lst, " / ")
+            End If
+            Return s
+        End Get
+    End Property
+    
+    'NB Credits = Writer
+    ReadOnly Property Credits As String
+        Get
+            Return GetNames(MovieRegExs.REGEX_CREDITS)
+        End Get
+    End Property
+    
+    ReadOnly Property ReleaseDate As String
+        Get
+            Dim s = ""
+            Dim RelDate As Date
+            Dim sRelDate As String = Regex.Match(Regex.Match(Html, MovieRegExs.REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
+            If Not sRelDate = "" Then
+                If Date.TryParse(sRelDate, RelDate) Then
+                    s = RelDate.ToString("yyyy-MM-dd")
+                End If
+            End If
+            Return s
+        End Get
+    End Property
+
     ReadOnly Property Stars As String
         Get
             Dim s       As String = ""
@@ -730,7 +783,36 @@ Public Class Classimdb
             Return s
         End Get
     End Property
-
+    
+    ReadOnly Property Title As String
+        Get
+            Dim s As String = ""
+            If Pref.Original_Title Then
+                s=Original_Title
+            End If
+            s = s.Replace("""", "")
+            If s="" Then  
+                s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
+                s = s.Replace("&amp;", "&")
+                s = s.Replace( "&quot;", """")
+            End If
+            Return s
+        End Get
+    End Property
+    
+    ReadOnly Property Year As String
+        Get
+            Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
+        End Get
+    End Property
+    
+    'Studio = Production
+    ReadOnly Property Studio As String
+        Get
+            Return GetNames(MovieRegExs.REGEX_STUDIO,Pref.MovieScraper_MaxStudios)
+        End Get
+    End Property
+    
     ReadOnly Property Outline As String
         Get
             Dim s As String = Regex.Match(Html,MovieRegExs.REGEX_OUTLINE, RegexOptions.Singleline).Groups(1).Value.Trim
@@ -748,7 +830,7 @@ Public Class Classimdb
             Return Utilities.cleanSpecChars(encodespecialchrs(s.Trim()))
         End Get
     End Property
-
+    
     ReadOnly Property Top250 As String
         Get
             Try
@@ -773,7 +855,18 @@ Public Class Classimdb
             End Try
         End Get
     End Property
-
+    
+    ReadOnly Property Rating As String
+        Get
+            Try
+                Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_RATING, RegexOptions.Singleline).Groups(1).Value.Trim
+                Return encodespecialchrs(s)
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+    End Property
+    
     ReadOnly Property TagLine As String
         Get
             Try
@@ -788,27 +881,7 @@ Public Class Classimdb
             End Try
         End Get
     End Property
-
-    ''' <summary>
-    ''' Get Aspect Ratio from IMDb.  Code in place to get AR from Technical page, but as so many returned, no guarantee which is correct.
-    ''' Reverted 19/8/2016 to get AR from IMDB main page.
-    ''' </summary>
-    ''' <param name="imdbid"></param>
-    ''' <returns>AR in a String</returns>
-    ReadOnly Property ARImdb (ByVal imdbid As String) As String
-        Get
-            Dim s As String = ""
-            Try
-                s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
-                If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
-                s = s.Substring(0, s.IndexOf(":")).Trim
-                Return Utilities.cleanSpecChars(encodespecialchrs(s))
-            Catch ex As Exception
-                Return ""
-            End Try
-        End Get
-    End Property
-
+    
     ReadOnly Property Duration As String
         Get
             Try
@@ -856,7 +929,7 @@ Public Class Classimdb
         End Try
         Return tmpInfo
     End Function
-
+    
     ReadOnly Property Countrys As String
         Get
             Try
@@ -872,120 +945,7 @@ Public Class Classimdb
             End Try
         End Get
     End Property
-
-    ReadOnly Property Rating As String
-        Get
-            Try
-                Dim s As String = Regex.Match(Html, MovieRegExs.REGEX_RATING, RegexOptions.Singleline).Groups(1).Value.Trim
-                Return encodespecialchrs(s)
-            Catch ex As Exception
-                Return ""
-            End Try
-        End Get
-    End Property
-
-    ReadOnly Property TitleAndYear As String
-        Get
-            Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
-        End Get
-    End Property
-   
-    ReadOnly Property Title As String
-        Get
-            Dim s As String = ""
-            If Pref.Original_Title Then
-                s=Original_Title
-            End If
-            s = s.Replace("""", "")
-            If s="" Then  
-                s=Regex.Match(TitleAndYear,MovieRegExs.REGEX_TITLE, RegexOptions.Singleline).Groups(1).Value
-                s = s.Replace("&amp;", "&")
-                s = s.Replace( "&quot;", """")
-            End If
-            Return s
-        End Get
-    End Property
-   
-    ReadOnly Property Year As String
-        Get
-            Return Regex.Match(TitleAndYear,MovieRegExs.REGEX_YEAR, RegexOptions.Singleline).Groups(1).Value
-        End Get
-    End Property
-   
-    ReadOnly Property Original_Title As String
-        Get
-            Return Regex.Match(Html,MovieRegExs.REGEX_ORIGINAL_TITLE, RegexOptions.Singleline).Groups(1).Value.Trim
-        End Get
-    End Property
-   
-    ReadOnly Property Genres As String
-        Get
-            Dim s As String=""
-            Dim D = 0
-            Dim W = 0
-            D = Html.IndexOf("<h4 class=""inline"">Genres:</h4>")
-            If Not D <= 0 Then
-                W = Html.IndexOf("</div>", D)
-                Dim rGenres As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN, RegexOptions.Singleline)
-                Dim lst = From M As Match In rGenres Select N = M.Groups("name").ToString Where Not N.Contains("more")
-                s.AppendList(lst, " / ")
-            End If
-            If TitleAndYear.ToLower.Contains("(tv movie ") Then s.AppendValue("TV Movie", " / ")
-            Return s
-        End Get
-    End Property
-
-    ReadOnly Property Directors As String
-        Get
-            Dim s As String=""
-            Dim D = Html.IndexOf("itemprop=""director""")
-            Dim W = If(D > 0, Html.IndexOf("</div>", D), 0)
-            If Not D <= 0 And Not W <= 0 Then
-                Dim rDir As MatchCollection = Regex.Matches(Html.Substring(D, W - D), MovieRegExs.REGEX_HREF_PATTERN)
-                Dim lst = From M As Match In rDir Where Not M.Groups("name").ToString.Contains("more") _
-                             Select Net.WebUtility.HtmlDecode(M.Groups("name").ToString)
-                s.AppendList(lst, " / ")
-            End If
-            Return s
-        End Get
-    End Property
-
-    'Studio = Production
-    ReadOnly Property Studio As String
-        Get
-            Return GetNames(MovieRegExs.REGEX_STUDIO,Pref.MovieScraper_MaxStudios)
-        End Get
-    End Property
-
-    'NB Credits = Writer
-    ReadOnly Property Credits As String
-        Get
-            Return GetNames(MovieRegExs.REGEX_CREDITS)
-        End Get
-    End Property
     
-    ReadOnly Property ReleaseDate As String
-        Get
-            Dim s = ""
-            Dim RelDate As Date
-            Dim sRelDate As String = Regex.Match(Regex.Match(Html, MovieRegExs.REGEX_RELEASE_DATE, RegexOptions.Singleline).Groups("date").ToString.Replace("&nbsp;"," "), "\d+\s\w+\s\d\d\d\d\s").ToString
-            If Not sRelDate = "" Then
-                If Date.TryParse(sRelDate, RelDate) Then
-                    s = RelDate.ToString("yyyy-MM-dd")
-                End If
-            End If
-            Return s
-        End Get
-    End Property
-
-    ReadOnly Property GetFromImdb As Boolean
-        Get
-            Return Pref.XbmcTmdbCertFromImdb OrElse Pref.XbmcTmdbStarsFromImdb OrElse Pref.XbmcTmdbTop250FromImdb OrElse 
-                Pref.XbmcTmdbVotesFromImdb OrElse Pref.XbmcTmdbMissingFromImdb OrElse Pref.XbmcTmdbAkasFromImdb OrElse
-                Pref.XbmcTmdbAspectFromImdb OrElse Pref.XbmcTmdbMetascoreFromImdb
-        End Get
-    End Property
-
     Public Function metacritic(ByVal imdbid As String) As String
         Try
             Dim url As String = String.Format("http://www.omdbapi.com/?i={0}&plot=short&r=xml", imdbid)
@@ -1004,6 +964,46 @@ Public Class Classimdb
         End Try
         Return ""
     End Function
+
+    ''' <summary>
+    ''' Get Aspect Ratio from IMDb.  Code in place to get AR from Technical page, but as so many returned, no guarantee which is correct.
+    ''' Reverted 19/8/2016 to get AR from IMDB main page.
+    ''' </summary>
+    ''' <param name="imdbid"></param>
+    ''' <returns>AR in a String</returns>
+    ReadOnly Property ARImdb (ByVal imdbid As String) As String
+        Get
+            Dim s As String = ""
+            Try
+                s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
+                If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
+                s = s.Substring(0, s.IndexOf(":")).Trim
+                Return Utilities.cleanSpecChars(encodespecialchrs(s))
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+    End Property
+
+    ReadOnly Property TitleAndYear As String
+        Get
+            Return Regex.Match(Html,MovieRegExs.REGEX_TITLE_AND_YEAR, RegexOptions.Singleline).ToString.Trim
+        End Get
+    End Property
+   
+    ReadOnly Property Original_Title As String
+        Get
+            Return Regex.Match(Html,MovieRegExs.REGEX_ORIGINAL_TITLE, RegexOptions.Singleline).Groups(1).Value.Trim
+        End Get
+    End Property
+   
+    ReadOnly Property GetFromImdb As Boolean
+        Get
+            Return Pref.XbmcTmdbCertFromImdb OrElse Pref.XbmcTmdbStarsFromImdb OrElse Pref.XbmcTmdbTop250FromImdb OrElse 
+                Pref.XbmcTmdbVotesFromImdb OrElse Pref.XbmcTmdbMissingFromImdb OrElse Pref.XbmcTmdbAkasFromImdb OrElse
+                Pref.XbmcTmdbAspectFromImdb OrElse Pref.XbmcTmdbMetascoreFromImdb
+        End Get
+    End Property
 
     Function AKAS(ByVal imdbid As String) As String
         Dim totalinfo As String = ""
@@ -1122,7 +1122,6 @@ Public Class Classimdb
             mpaaresults(31, 0) = "Germany"
             mpaaresults(32, 0) = "Greece"
             mpaaresults(33, 0) = "Austria"
-
             Dim movienfoarray As String = String.Empty
             Dim genre(20)
             Dim thumbs(500)
@@ -1166,12 +1165,12 @@ Public Class Classimdb
                 totalinfo.AppendTag( "outline"   , Outline     )
                 totalinfo.AppendTag( "top250"    , Top250      )
                 totalinfo.AppendTag( "votes"     , Votes       )
+                totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "tagline"   , TagLine     )
                 Dim DurationStr As String = Duration
                 If DurationStr = "" Then DurationStr = RuntimefromTechSpecs(imdbid)
                 totalinfo.AppendTag( "runtime"   , DurationStr )
                 totalinfo.AppendTag( "id"        , imdbid      )
-                totalinfo.AppendTag( "rating"    , Rating      )
                 totalinfo.AppendTag( "country"   , Countrys    )
                 totalinfo.AppendTag( "metacritic", metacritic(imdbid))
                 If Pref.MovImdbAspectRatio Then totalinfo.AppendTag( "aspect"    , ARImdb(imdbid))
@@ -1956,5 +1955,5 @@ Public Class Classimdb
         Return False
         Monitor.Exit(Me)
     End Function
-
+    
 End Class
