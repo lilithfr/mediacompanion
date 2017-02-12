@@ -988,7 +988,15 @@ Public Class Movie
         SeparateMovie = Utilities.checktitle(TitleFull, Pref.MovSepLst)
         If SeparateMovie = "3D" Then ThreeDKeep = Utilities.checktitle(TitleFull, Pref.ThreeDKeyWords)
     End Sub
+    
+    Sub IniTmdb
+        IniTmdb(PossibleImdb)
+    End Sub
 
+    Sub IniTmdb( imdb As String )
+        tmdb = New TMDb(imdb)
+    End Sub
+    
     Sub ImdbScraper_GetBody
         _imdbBody = ImdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Pref.releaseformat), PossibleYear, PossibleImdb)
     End Sub
@@ -998,10 +1006,7 @@ Public Class Movie
         If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
 
         If PossibleImdb <> "" Then ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
-
-        'ReportProgress( String.Format(" - Using '{0}{1}'", title.Replace(PossibleYear, ""), If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
-
-        'ReportProgress( "- Main body " )
+        
         ReportProgress(String.Format(" - Using '{0} {1}'", Title, PossibleYear) & " - Main body ")
 
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
@@ -1018,12 +1023,30 @@ Public Class Movie
         End If
     End Sub
 
-    Sub IniTmdb
-        IniTmdb(PossibleImdb)
+    Sub TmdbScraper_GetBody()
+        _imdbBody = TmdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Pref.releaseformat), If(Pref.MovieExcludeYearSearch, "", PossibleYear), PossibleImdb)
     End Sub
 
-    Sub IniTmdb( imdb As String )
-        tmdb = New TMDb(imdb)
+    Function TmdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
+        If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
+
+        If PossibleImdb <> "" Then ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
+
+        ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
+
+        ReportProgress( "- Main body " )
+        
+        Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
+    End Function
+
+    Sub CheckTmdbBodyScrape()
+        If ImdbBody.ToLower = "error" Then   'Failed...
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """" & vbCrLf & "TMDB may not be available or Movie Title is invalid" & vbCrLf )
+            AppendScrapeFailedActions
+        Else
+            ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
+            AppendScrapeSuccessActions
+        End If
     End Sub
     
     Sub musicVid_GetBody()
@@ -1072,32 +1095,6 @@ Public Class Movie
         End If
     End Sub
 
-    Sub TmdbScraper_GetBody()
-        _imdbBody = TmdbScrapeBody(Utilities.CleanReleaseFormat(SearchName, Pref.releaseformat), PossibleYear, PossibleImdb)
-    End Sub
-
-    Function TmdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
-        If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
-
-        If PossibleImdb <> "" Then ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
-
-        ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
-
-        ReportProgress( "- Main body " )
-        
-        Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
-    End Function
-
-    Sub CheckTmdbBodyScrape()
-        If ImdbBody.ToLower = "error" Then   'Failed...
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """" & vbCrLf & "TMDB may not be available or Movie Title is invalid" & vbCrLf )
-            AppendScrapeFailedActions
-        Else
-            ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
-            AppendScrapeSuccessActions
-        End If
-    End Sub
-    
     Sub TidyUpAnyUnscrapedFields
         Dim success As Boolean = True
         If _scrapedMovie.fullmoviebody.title = Nothing or _scrapedMovie.fullmoviebody.title = "" Then

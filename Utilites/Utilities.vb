@@ -836,13 +836,13 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 M = Regex.Match(filename, "\d{4}")
                 If M.Success = True Then movieyear = M.Value
             End If
-            If String.IsNullOrEmpty(movieyear) Then
-                M = Regex.Match(filename, "\d{8}")
-                If M.Success = True Then
-                    movieyear = M.Value
-                    movieyear = movieyear.Substring(0,4)
-                End If
-            End If
+            'If String.IsNullOrEmpty(movieyear) Then
+            '    M = Regex.Match(filename, "\d{8}")
+            '    If M.Success = True Then
+            '        movieyear = M.Value
+            '        movieyear = movieyear.Substring(0,4)
+            '    End If
+            'End If
         End If
         Return movieyear
     End Function

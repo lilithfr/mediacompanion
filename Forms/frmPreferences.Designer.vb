@@ -401,6 +401,7 @@ Partial Class frmPreferences
         Me.cbTvUse_XBMC_TVDB_Scraper = New System.Windows.Forms.CheckBox()
         Me.Label139 = New System.Windows.Forms.Label()
         Me.GroupBox20 = New System.Windows.Forms.GroupBox()
+        Me.cbTvDlEpisodeThumb = New System.Windows.Forms.CheckBox()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cmbxTvXtraFanartQty = New System.Windows.Forms.ComboBox()
@@ -507,7 +508,9 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbTvDlEpisodeThumb = New System.Windows.Forms.CheckBox()
+        Me.MovieExcludeYearSearch = New System.Windows.Forms.GroupBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.cbMovieExcludeYearSearch = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -599,6 +602,7 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
+        Me.MovieExcludeYearSearch.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -4299,6 +4303,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.MovieExcludeYearSearch)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbx_MovTimerAutoScrape)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieCustomPlaycountTag)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieSeparateIdentifier)
@@ -4307,7 +4312,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4866,6 +4871,16 @@ Partial Class frmPreferences
         Me.GroupBox20.TabIndex = 35
         Me.GroupBox20.TabStop = false
         Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
+        '
+        'cbTvDlEpisodeThumb
+        '
+        Me.cbTvDlEpisodeThumb.AutoSize = true
+        Me.cbTvDlEpisodeThumb.Location = New System.Drawing.Point(10, 91)
+        Me.cbTvDlEpisodeThumb.Name = "cbTvDlEpisodeThumb"
+        Me.cbTvDlEpisodeThumb.Size = New System.Drawing.Size(192, 19)
+        Me.cbTvDlEpisodeThumb.TabIndex = 78
+        Me.cbTvDlEpisodeThumb.Text = "Download Episode Thumbnail"
+        Me.cbTvDlEpisodeThumb.UseVisualStyleBackColor = true
         '
         'Label24
         '
@@ -6096,15 +6111,37 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbTvDlEpisodeThumb
+        'MovieExcludeYearSearch
         '
-        Me.cbTvDlEpisodeThumb.AutoSize = true
-        Me.cbTvDlEpisodeThumb.Location = New System.Drawing.Point(10, 91)
-        Me.cbTvDlEpisodeThumb.Name = "cbTvDlEpisodeThumb"
-        Me.cbTvDlEpisodeThumb.Size = New System.Drawing.Size(192, 19)
-        Me.cbTvDlEpisodeThumb.TabIndex = 78
-        Me.cbTvDlEpisodeThumb.Text = "Download Episode Thumbnail"
-        Me.cbTvDlEpisodeThumb.UseVisualStyleBackColor = true
+        Me.MovieExcludeYearSearch.Controls.Add(Me.cbMovieExcludeYearSearch)
+        Me.MovieExcludeYearSearch.Controls.Add(Me.Label31)
+        Me.MovieExcludeYearSearch.Location = New System.Drawing.Point(10, 228)
+        Me.MovieExcludeYearSearch.Name = "MovieExcludeYearSearch"
+        Me.MovieExcludeYearSearch.Size = New System.Drawing.Size(389, 106)
+        Me.MovieExcludeYearSearch.TabIndex = 79
+        Me.MovieExcludeYearSearch.TabStop = false
+        Me.MovieExcludeYearSearch.Text = "Exclude Year of Movie from Title search."
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = true
+        Me.Label31.Location = New System.Drawing.Point(10, 19)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(373, 45)
+        Me.Label31.TabIndex = 0
+        Me.Label31.Text = "Selecting this option will exclude searching by Movie Title and Year."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Caution:  "& _ 
+    "Successful search results will be reduced."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use if you have no other choice"& _ 
+    "!"
+        '
+        'cbMovieExcludeYearSearch
+        '
+        Me.cbMovieExcludeYearSearch.AutoSize = true
+        Me.cbMovieExcludeYearSearch.Location = New System.Drawing.Point(11, 68)
+        Me.cbMovieExcludeYearSearch.Name = "cbMovieExcludeYearSearch"
+        Me.cbMovieExcludeYearSearch.Size = New System.Drawing.Size(209, 19)
+        Me.cbMovieExcludeYearSearch.TabIndex = 1
+        Me.cbMovieExcludeYearSearch.Text = "Exclude year from Scrape search."
+        Me.cbMovieExcludeYearSearch.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6281,6 +6318,8 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
+        Me.MovieExcludeYearSearch.ResumeLayout(false)
+        Me.MovieExcludeYearSearch.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6768,4 +6807,7 @@ End Sub
     Friend WithEvents Label29 As Label
     Friend WithEvents cbMovEnableAutoScrape As CheckBox
     Friend WithEvents cbTvDlEpisodeThumb As CheckBox
+    Friend WithEvents MovieExcludeYearSearch As GroupBox
+    Friend WithEvents cbMovieExcludeYearSearch As CheckBox
+    Friend WithEvents Label31 As Label
 End Class

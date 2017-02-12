@@ -541,7 +541,8 @@ Public Class frmPreferences
         mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
         imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
 
-        cbMovNfoWatchTag.Checked    = Pref.MovNfoWatchTag
+        cbMovNfoWatchTag            .Checked = Pref.MovNfoWatchTag
+        cbMovieExcludeYearSearch    .Checked = Pref.MovieExcludeYearSearch
     End Sub
 
     Private Sub TVInit()
@@ -2522,6 +2523,12 @@ End Sub
     Private Sub cbMovNfoWatchTag_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovNfoWatchTag.CheckedChanged
         If prefsload Then Exit Sub
         Pref.MovNfoWatchTag = cbMovNfoWatchTag.Checked
+        Changes = True
+    End Sub
+    
+    Private Sub cbMovieExcludeYearSearch_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovieExcludeYearSearch.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovieExcludeYearSearch = cbMovieExcludeYearSearch.Checked
         Changes = True
     End Sub
 

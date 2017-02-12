@@ -366,6 +366,7 @@ Public Class Pref
     Public Shared GenreCustomBefore As Boolean
     Public Shared CustomTmdbApiKey As String = ""
     Public Shared MovNfoWatchTag As Boolean
+    Public Shared MovieExcludeYearSearch As Boolean
     Public Shared SetIdAsCollectionnumber As Boolean
     Public Shared MovSetOverviewToNfo As Boolean
     Public Shared MovEnableAutoScrape As Boolean
@@ -801,6 +802,7 @@ Public Class Pref
         GenreCustomBefore = False
         CustomTmdbApiKey = ""
         MovNfoWatchTag = False
+        MovieExcludeYearSearch = False
         intruntime = False
         RuntimePadding = False
         actorseasy = True
@@ -1060,6 +1062,7 @@ Public Class Pref
         root.AppendChild(doc, "GenreCustomBefore"           , GenreCustomBefore         ) 'cbGenreCustomBefore
         root.AppendChild(doc, "CustomTmdbApiKey"            , CustomTmdbApiKey          ) 'tbTMDbAPI
         root.AppendChild(doc, "MovNfoWatchTag"              , MovNfoWatchTag            ) 'cbMovNfoWatchTag
+        root.AppendChild(doc, "MovieExcludeYearSearch"      , MovieExcludeYearSearch    ) 'cbMovieExcludeYearSearch
         root.AppendChild(doc, "SetIdAsCollectionnumber"     , SetIdAsCollectionnumber   ) 'cbSetIdAsCollectionnumber
         root.AppendChild(doc, "MovSetOverviewToNfo"         , MovSetOverviewToNfo       ) 'cbMovSetOverviewToNfo
         root.AppendChild(doc, "MovEnableAutoScrape"         , MovEnableAutoScrape       ) 'cbMovEnableAutoScrape
@@ -1486,6 +1489,7 @@ Public Class Pref
                     Case "GenreCustomBefore"                    : GenreCustomBefore = thisresult.InnerXml
                     Case "CustomTmdbApiKey"                     : CustomTmdbApiKey = thisresult.InnerText
                     Case "MovNfoWatchTag"                       : MovNfoWatchTag = thisresult.InnerXml
+                    Case "MovieExcludeYearSearch"               : MovieExcludeYearSearch = thisresult.InnerXml
                     Case "SetIdAsCollectionnumber"              : SetIdAsCollectionnumber = thisresult.InnerXml
                     Case "MovSetOverviewToNfo"                  : MovSetOverviewToNfo = thisresult.InnerXml
                     Case "MovEnableAutoScrape"                  : MovEnableAutoScrape = thisresult.InnerXml

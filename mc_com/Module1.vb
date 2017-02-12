@@ -896,7 +896,7 @@ Module Module1
             End If
         Next
 
-        DlEpThumb(alleps(0), path)
+        If Pref.TvDlEpisodeThumb Then DlEpThumb(alleps(0), path)
 
     End Sub
 
