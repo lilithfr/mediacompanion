@@ -233,37 +233,30 @@ Public Class Classimdb
             Dim engine As Integer = Pref.engineno 
             Dim newimdbid As String = ""
             Dim goodyear As Boolean = False
-            If IsNumeric(year) Then
-                If year.Length = 4 Then
-                    goodyear = True
-                End If
-            End If
-
-            newimdbid = getimdbID_fromOmdbapi(title, year)
-            If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then Return newimdbid
-
+            If IsNumeric(year) AndAlso year.Length = 4 Then goodyear = True
+            
             'Dim url As String = "http://www.google.co.uk/search?hl=en&q=%3C"
             'Dim url As String = "http://www.google.co.uk/search?hl=en-US&as_q="
             Dim url As String = Pref.enginefront(engine)
             Dim titlesearch As String = Utilities.searchurltitle(title)
-            If goodyear = True Then
-                titlesearch = titlesearch & "+%28" & year & "%29"
-            End If
+            If goodyear = True Then titlesearch = titlesearch & "+%28" & year & "%29"
+
             url = url & titlesearch & Pref.engineend(engine)
             Dim webpage As String = loadwebpage(Pref.proxysettings, url, True)
 
             'www.imdb.com/title/tt0402022
-            If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then
-                newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
-            End If
-            If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
-                Return newimdbid
-            Else
-                newimdbid = getimdbID_fromimdb(title, imdbmirror, year)
-                If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then
-                    Return newimdbid
-                End If
-            End If
+            '''Try one of the search engines
+            If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
+            If newimdbid <> "" AndAlso newimdbid.StartsWith("tt") AndAlso newimdbid.Length = 9 Then Return newimdbid
+            
+            '''Next try IMDb itself
+            If newimdbid = "" Then newimdbid = getimdbID_fromimdb(title, imdbmirror, year)
+            If newimdbid <> "" AndAlso newimdbid.StartsWith("tt") = 0 AndAlso newimdbid.Length = 9 Then Return newimdbid
+
+            '''Last resort try Omdbapi
+            newimdbid = getimdbID_fromOmdbapi(title, year)
+            If newimdbid <> "" And newimdbid.IndexOf("tt") = 0 And newimdbid.Length = 9 Then Return newimdbid
+
             Return ""
         Catch
             Return ""
@@ -277,7 +270,7 @@ Public Class Classimdb
         Try
             title = title.Replace("  ", "+").Replace(" ", "+").Replace("&", "%26")
             Dim url As String = String.Format("http://www.omdbapi.com/?s={0}&y={1}&plot=full&r=xml", title, year)
-            Dim result As String = loadwebpage(Pref.proxysettings, url, True)
+            Dim result As String = loadwebpage(Pref.proxysettings, url, True, 5)
             If result = "error" Then Return ""
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
@@ -502,15 +495,10 @@ Public Class Classimdb
                         If websource(f).IndexOf("Popular Titles") <> -1 Then
                             Dim type As String
                             type = websource(f).Substring(websource(f).IndexOf("Popular Titles"), websource(f).Length - websource(f).IndexOf("Popular Titles"))
-                            If type.IndexOf("Exact Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Exact Matches"))
-                            End If
-                            If type.IndexOf("Partial Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Partial Matches"))
-                            End If
-                            If type.IndexOf("Approx Matches") <> -1 Then
-                                type = type.Substring(0, type.IndexOf("Approx Matches"))
-                            End If
+                            If type.IndexOf("Exact Matches") <> -1      Then type = type.Substring(0, type.IndexOf("Exact Matches"))
+                            If type.IndexOf("Partial Matches") <> -1    Then type = type.Substring(0, type.IndexOf("Partial Matches"))
+                            If type.IndexOf("Approx Matches") <> -1     Then type = type.Substring(0, type.IndexOf("Approx Matches"))
+
                             Do Until type.IndexOf("</td></tr>") = -1
                                 Dim pyte As String = ""
                                 If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
@@ -522,17 +510,12 @@ Public Class Classimdb
                                         type = type.Replace(pyte, "")
                                     End If
                                 Else
-                                    If type.Length = 0 Then
-                                        Exit Do
-                                    Else
-                                        type = type.Substring(5, type.Length - 5)
-                                    End If
+                                    If type.Length = 0 Then Exit Do
+                                    type = type.Substring(5, type.Length - 5)
                                 End If
                             Loop
                             M = Regex.Match(type, "(tt\d{7})")
-                            If M.Success = True Then
-                                popularreturn = M.Value
-                            End If
+                            If M.Success Then popularreturn = M.Value
                         End If
                     Next
                 End If
@@ -544,13 +527,9 @@ Public Class Classimdb
                             type = websource(f).Substring(websource(f).IndexOf("Titles (Exact Matches)"), websource(f).Length - websource(f).IndexOf("Titles (Exact Matches)"))
                             Do Until type.IndexOf("</td></tr>") = -1
                                 Dim pyte As String = ""
-                                If type.IndexOf("</td></tr>") <> -1 Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
-                                If type.IndexOf("Partial Matches") <> -1 Then
-                                    type = type.Substring(0, type.IndexOf("Partial Matches"))
-                                End If
-                                If type.IndexOf("Approx Matches") <> -1 Then
-                                    type = type.Substring(0, type.IndexOf("Approx Matches"))
-                                End If
+                                If type.IndexOf("</td></tr>") <> -1         Then pyte = type.Substring(0, type.IndexOf("</td></tr>"))
+                                If type.IndexOf("Partial Matches") <> -1    Then type = type.Substring(0, type.IndexOf("Partial Matches"))
+                                If type.IndexOf("Approx Matches") <> -1     Then type = type.Substring(0, type.IndexOf("Approx Matches"))
                                 If pyte <> "" Then
                                     If pyte.IndexOf("&#34;") = -1 And pyte.IndexOf("<small>(TV") = -1 And pyte.IndexOf("(VG)") = -1 Then
                                         type = pyte
@@ -559,11 +538,8 @@ Public Class Classimdb
                                         type = type.Replace(pyte, "")
                                     End If
                                 Else
-                                    If type.Length = 0 Then
-                                        Exit Do
-                                    Else
-                                        type = type.Substring(5, type.Length - 5)
-                                    End If
+                                    If type.Length = 0 Then Exit Do
+                                    type = type.Substring(5, type.Length - 5)
                                 End If
                             Loop
                             M = Regex.Match(type, "(tt\d{7})")
@@ -583,9 +559,7 @@ Public Class Classimdb
                 Dim NoResults As Match
                 For f = 1 To urllinecount
                     NoResults = Regex.Match(websource(f), "No results.")
-                    If NoResults.Success Then
-                        Return GOT_IMDBID 
-                    End If
+                    If NoResults.Success Then Return GOT_IMDBID
                 Next
                 For f = 1 To urllinecount
                     matc = Regex.Match(websource(f), "tt\d{7}")
