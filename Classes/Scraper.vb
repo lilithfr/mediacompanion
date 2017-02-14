@@ -1848,6 +1848,8 @@ Public Class Classimdb
         Dim FinalScrapResult As String
         Dim Scraper As String = "metadata.musicvideos.imvdb"
         Dim title As String = getArtistAndTitle(FullPathandFilename)
+        
+
         MVSearchName = title
         Try
             ' 1st stage
@@ -1899,19 +1901,29 @@ Public Class Classimdb
     Private Function getArtistAndTitle(ByVal fullpathandfilename As String)
         Monitor.Enter(Me)
         Dim searchTerm As String = ""
-        Dim filenameWithoutExtension As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
+        Dim filenameWithoutExtension As String = CleanYear(Path.GetFileNameWithoutExtension(fullpathandfilename))
         If filenameWithoutExtension.IndexOf(" - ") <> -1 Then
             searchTerm = filenameWithoutExtension
         Else 'assume /artist/title.ext convention
             Try
+                Dim pathwithoutroot As String = Pref.folderandfilename(fullpathandfilename)
+                Dim p() As String = pathwithoutroot.Split("\")
                 Dim lastfolder As String = Utilities.GetLastFolder(fullpathandfilename)
-                searchTerm = lastfolder & " - " & filenameWithoutExtension
+                If p.Count > 2 Then
+                    If lastfolder = filenameWithoutExtension AndAlso p(0) <> lastfolder Then
+                        searchTerm = p(0)  & " - " & filenameWithoutExtension
+                    Else
+                        searchTerm = lastfolder & " - " & filenameWithoutExtension
+                    End If
+                Else
+                    searchTerm = lastfolder & " - " & filenameWithoutExtension
+                End If
             Catch
             End Try
         End If
 
         If searchTerm = "" Then searchTerm = filenameWithoutExtension
-
+        
         Return searchTerm
         Monitor.Exit(Me)
     End Function
@@ -1928,6 +1940,18 @@ Public Class Classimdb
         If SongTitle.Contains(mvsearch) Then Return True
         Return False
         Monitor.Exit(Me)
+    End Function
+
+    Private Function CleanYear(ByVal filename As String) As String
+        '''Remove year if any.
+        Dim movieyear As String = Utilities.GetYearByFilename(filename, False)
+        If movieyear <> Nothing Then
+            Dim posYear As Integer = filename.IndexOf(movieyear)
+            If posYear <> -1 AndAlso posYear > 0 AndAlso posYear < filename.length Then
+                filename = filename.Substring(0, posYear)
+            End If
+        End If
+        Return filename.Trim
     End Function
     
 End Class

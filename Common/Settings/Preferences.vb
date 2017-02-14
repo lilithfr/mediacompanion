@@ -2722,5 +2722,28 @@ Public Class Pref
         End Try
         Return match
     End Function
+
+    Public Shared Function folderandfilename(ByVal mediapathandfilename As String) As String
+        Dim mediapath As String = mediapathandfilename
+        Dim listofrootfolders As New List(Of str_RootPaths)
+        If Pref.MusicVidScrape Then
+            listofrootfolders.AddRange(Pref.MVidFolders)
+        ElseIf Pref.MusicVidConcertScrape Then
+            listofrootfolders.AddRange(Pref.MVConcertFolders)
+        ElseIf Pref.HomeVidScrape Then
+            listofrootfolders.AddRange(Pref.homemoviefolders)
+        Else
+            listofrootfolders.AddRange(Pref.movieFolders)
+        End If
+        For each p In listofrootfolders
+            If p.selected AndAlso mediapath.Contains(p.rpath) Then
+                mediapath = mediapath.Replace(p.rpath, "")
+                If mediapath.StartsWith("\") Then mediapath = mediapath.Substring(1, mediapath.Length-1)
+                Exit For
+            End If
+        Next
+        Return mediapath
+    End Function
+
 End Class
 
