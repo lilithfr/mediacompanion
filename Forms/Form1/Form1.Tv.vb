@@ -1142,9 +1142,17 @@ Partial Public Class Form1
     Private Function GetEpRating(ByRef tvep As TvEpisode, ByVal Rating As String, ByVal Votes As String) As Boolean
         Dim ratingdone As Boolean = False
         If Pref.tvdbIMDbRating Then
-            'Try IMDb Direct first
-            ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
-            'If no success, try Omdbapi
+            Dim aok As Boolean = False
+
+            '''If no Ep IMDB Id, try getting from TMDb first.
+            If String.IsNullOrEmpty(tvep.ImdbId.Value) Then
+                aok = gettmdbepid(tvep)
+            End If
+
+            '''Try IMDb Direct if we have the IMDB Id
+            If aok Then ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
+
+            ''If no success, try Omdbapi (Omdbapi is much slower)
             If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
         End If
 
@@ -1176,14 +1184,14 @@ Partial Public Class Form1
         If (String.IsNullOrEmpty(ep.Showimdbid.Value) OrElse ep.Showimdbid.Value = "0") AndAlso String.IsNullOrEmpty(ep.ImdbId.Value) Then Return False
         If Not ep.Showimdbid.Value.StartsWith("tt") AndAlso (String.IsNullOrEmpty(ep.Season.Value) AndAlso String.IsNullOrEmpty(ep.Episode.Value)) Then Return False
         Dim url As String = Nothing
-        If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then
-            GotEpImdbId = True
-        Else
-            url = String.Format("http://www.omdbapi.com/?i={0}&Season={1}&r=xml", ep.Showimdbid.Value, ep.Season.Value)
-        End If
+
+        If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then GotEpImdbId = True
+
+        If Not GotEpImdbId Then url = String.Format("http://www.omdbapi.com/?i={0}&Season={1}&r=xml", ep.Showimdbid.Value, ep.Season.Value)
+
         Dim imdb As New Classimdb
         If Not GotEpImdbId Then
-            Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+            Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
             If result = "error" Then Return False
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
@@ -1203,7 +1211,7 @@ Partial Public Class Form1
         End If
 
         url = String.Format("http://www.omdbapi.com/?i={0}&r=xml", ep.ImdbId.Value)
-        Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+        Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
         If result2 = "error" Then Return False
         Dim bdoc As New XmlDocument
         bdoc.LoadXml(result2)
@@ -1215,10 +1223,41 @@ Partial Public Class Form1
                 If ratingVal.ToLower = "n/a" Then Return False
                 ep.Rating.Value = ratingVal
             End If
-            If Not IsNothing(thisresult.Attributes.ItemOf("imdbVotes")) Then ep.Votes.Value = thisresult.Attributes("imdbVotes").Value
+            If Not IsNothing(thisresult.Attributes.ItemOf("imdbVotes")) Then
+                Dim voteval As String = thisresult.Attributes("imdbVotes").Value
+                If Not voteval.ToLower = "n/a" Then ep.Votes.Value = voteval
+            End If
         Next
         
         Return True
+    End Function
+
+    Private Function gettmdbepid(ByRef ep As TvEpisode) As Boolean
+        Dim url As String = String.Format("https://api.themoviedb.org/3/find/{0}?api_key={1}&language=en-US&external_source=tvdb_id", ep.ShowId.Value, Utilities.TMDBAPI)
+        Dim imdb As New Classimdb
+        Try
+            Dim reply As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+            If reply <> "error" Then
+                Dim m As Match = Regex.Match(reply, """id"":(.*?),""")
+                If m.Success Then
+                    Dim pie As String = m.Groups(1).Value.Trim
+                    url = String.Format("https://api.themoviedb.org/3/tv/{0}/season/{1}/episode/{2}/external_ids?api_key={3}&language=en-US", pie, ep.Season.Value, ep.Episode.Value, Utilities.TMDBAPI)
+                    Dim reply2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+                    If reply2 <> "" Then
+                        Dim n As Match = Regex.Match(reply2, """imdb_id"":""(.*?)"",""")
+                        If n.Success Then
+                            Dim epimdbid As String = n.Groups(1).Value.Trim
+                            If epimdbid.StartsWith("tt") AndAlso epimdbid.Length = 9 Then
+                                ep.ImdbId.Value = epimdbid
+                                Return True
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+        Return False
     End Function
 
     Public Sub ep_VideoSourcePopulate()
@@ -2626,13 +2665,16 @@ Partial Public Class Form1
                                     Dim FinalResult As String = ""
                                     stage = "12b1"
                                     episodearray = XBMCScrape_TVShow_EpisodeDetails(tvdbid, tempsortorder, episodearray, language)
-                                    episodearray(0).NfoFilePath = savepath
                                     stage = "12b2"
                                     If episodearray.Count >= 1 Then
+                                        stage = "12b2a"
+                                        episodearray(0).NfoFilePath = savepath
+                                        stage = "12b2b"
                                         For x As Integer = 0 To episodearray.Count - 1
                                              episodearray(x).ShowObj = singleepisode.ShowObj
                                             Pref.tvScraperLog &= "Scraping body of episode: " & episodearray(x).Episode.Value & " - OK" & vbCrLf
                                         Next
+                                        stage = "12b2c"
                                         scrapedok = True
                                     Else
                                         Pref.tvScraperLog &= "!!! WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
