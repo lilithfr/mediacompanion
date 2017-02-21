@@ -1481,7 +1481,8 @@ Public Class frmPreferences
     
     Private Sub cbMovSetOverviewToNfo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovSetOverviewToNfo.CheckedChanged
         If prefsload Then Exit Sub
-        Pref.MovSetOverviewToNfo = cbMovSetOverviewToNfo.checked
+        Pref.MovSetOverviewToNfo = cbMovSetOverviewToNfo.Checked
+        Changes = True
     End Sub
 
     Private Sub cbMovEnableAutoScrape_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovEnableAutoScrape.CheckedChanged

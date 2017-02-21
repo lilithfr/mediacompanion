@@ -1149,6 +1149,9 @@ Partial Public Class Form1
                 aok = gettmdbepid(tvep)
             End If
 
+            '''Check if not still empty and if is IMDB Id
+            If Not String.IsNullOrEmpty(tvep.ImdbId.Value) AndAlso tvep.ImdbId.Value.StartsWith("tt") Then aok = True
+
             '''Try IMDb Direct if we have the IMDB Id
             If aok Then ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
 
@@ -1192,10 +1195,10 @@ Partial Public Class Form1
         Dim imdb As New Classimdb
         If Not GotEpImdbId Then
             Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
-            If result = "error" Then Return False
+            If result.Contains("<error>") Then Return False
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
-            If adoc("root").Attributes("Response").Value = "False" Then Return False
+            If adoc("root").HasAttribute("response") AndAlso  adoc("root").Attributes("response").Value = "False" Then Return False
             Dim thisresult As XmlNode = Nothing
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
