@@ -814,6 +814,7 @@ Module Module1
             xmlEpisode.AppendChild(doc, "rating"        , ep.rating     )
             xmlEpisode.AppendChild(doc, "votes"         , ep.votes      )
             xmlEpisode.AppendChild(doc, "uniqueid"      , ep.uniqueid   )
+            xmlEpisode.AppendChild(doc, "imdbid"        , ep.imdbid     )
             xmlEpisode.AppendChild(doc, "runtime"       , ep.runtime    )
             xmlEpisode.AppendChild(doc, "showid"        , ep.showid     )
             
