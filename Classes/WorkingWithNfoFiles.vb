@@ -509,6 +509,8 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.ShowId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "uniqueid"
                                             anotherepisode.UniqueId.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "imdbid"
+                                            anotherepisode.ImdbId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "epbookmark"
                                             anotherepisode.EpBookmark.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"

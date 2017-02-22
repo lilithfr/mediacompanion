@@ -62,6 +62,7 @@ Partial Class tv_batch_wizard
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
+        Me.cbepIMDBId = New System.Windows.Forms.CheckBox()
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -320,6 +321,7 @@ Partial Class tv_batch_wizard
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.cbepIMDBId)
         Me.GroupBox2.Controls.Add(Me.cbepTitle)
         Me.GroupBox2.Controls.Add(Me.cbepStreamDetails)
         Me.GroupBox2.Controls.Add(Me.cbepCreateScreenshot)
@@ -530,6 +532,16 @@ Partial Class tv_batch_wizard
         Me.cbincludeLocked.Text = "Include locked shows"
         Me.cbincludeLocked.UseVisualStyleBackColor = true
         '
+        'cbepIMDBId
+        '
+        Me.cbepIMDBId.AutoSize = true
+        Me.cbepIMDBId.Location = New System.Drawing.Point(104, 68)
+        Me.cbepIMDBId.Name = "cbepIMDBId"
+        Me.cbepIMDBId.Size = New System.Drawing.Size(110, 17)
+        Me.cbepIMDBId.TabIndex = 11
+        Me.cbepIMDBId.Text = "Update IMDB Id's"
+        Me.cbepIMDBId.UseVisualStyleBackColor = true
+        '
         'tv_batch_wizard
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -604,4 +616,5 @@ End Sub
     Friend WithEvents cbshStatus As CheckBox
     Friend WithEvents cbshBannerMain As CheckBox
     Friend WithEvents cbShSeries As CheckBox
+    Friend WithEvents cbepIMDBId As CheckBox
 End Class

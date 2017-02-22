@@ -2164,7 +2164,10 @@ Partial Public Class Form1
                                         'its an episode
                                         Dim episodescreenurl As String = ""
                                         Try
-                                            listofnewepisodes(h).ImdbId.Value = Episodedata.ImdbId.Value
+                                            Dim epimdbid As String = listofnewepisodes(h).ImdbId.Value
+                                            If tvBatchList.epIMDBId OrElse (Not epimdbid.StartsWith("tt") AndAlso epimdbid.Length < 9) Then
+                                                listofnewepisodes(h).ImdbId.Value = Episodedata.ImdbId.Value
+                                            End If
                                             listofnewepisodes(h).UniqueId.Value = Episodedata.Id.Value
                                             listofnewepisodes(h).ShowId.Value = Episodedata.SeriesId.Value
                                             listofnewepisodes(h).Showimdbid.Value = Cache.TvCache.Shows(f).ImdbId.Value

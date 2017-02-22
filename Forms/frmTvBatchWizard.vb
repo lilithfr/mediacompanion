@@ -2,106 +2,110 @@
 
     Private Sub btnTvBatchStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvBatchStart.Click
         
-            Form1.tvBatchList.activate = True
-            If cbshYear.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshRating.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshPlot.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshRuntime.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshMpaa.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshGenre.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshStudio.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshActor.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowActors = True
-            End If
-            If cbshStatus.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowBody = True
-            End If
-            If cbshPosters.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowArt = True
-            End If
-            If cbshFanart.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowArt = True
-            End If
-            If cbshXtraFanart.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowArt = True
-            End If
-            If cbshFanartTv.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowArt = True
-            End If
-            If cbshSeason.Checked Then
-                Form1.tvBatchList.doShows = True
-                Form1.tvBatchList.doShowArt = True
-            End If
+        Form1.tvBatchList.activate = True
+        If cbshYear.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshRating.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshPlot.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshRuntime.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshMpaa.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshGenre.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshStudio.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshActor.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowActors = True
+        End If
+        If cbshStatus.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowBody = True
+        End If
+        If cbshPosters.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowArt = True
+        End If
+        If cbshFanart.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowArt = True
+        End If
+        If cbshXtraFanart.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowArt = True
+        End If
+        If cbshFanartTv.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowArt = True
+        End If
+        If cbshSeason.Checked Then
+            Form1.tvBatchList.doShows = True
+            Form1.tvBatchList.doShowArt = True
+        End If
 
-            If cbepPlot.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepAired.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepRating.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepDirector.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepCredits.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepActor.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeActors = True
-            End If
-            If cbepRuntime.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeMediaTags = True
-            End If
-            If cbepTitle.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeBody = True
-            End If
-            If cbepdlThumbnail.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeArt = True
-            End If
-            If cbepStreamDetails.Checked Then
-                Form1.tvBatchList.doEpisodes = True
-                Form1.tvBatchList.doEpisodeMediaTags = True
-            End If
+        If cbepPlot.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepAired.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepRating.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepDirector.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepCredits.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepActor.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeActors = True
+        End If
+        If cbepIMDBId.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepRuntime.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeMediaTags = True
+        End If
+        If cbepTitle.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeBody = True
+        End If
+        If cbepdlThumbnail.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeArt = True
+        End If
+        If cbepStreamDetails.Checked Then
+            Form1.tvBatchList.doEpisodes = True
+            Form1.tvBatchList.doEpisodeMediaTags = True
+        End If
 
-            Me.Close()
+        Me.Close()
     End Sub
 
     Private Sub btn_TvBatchCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvBatchCancel.Click
@@ -216,7 +220,11 @@
     End Sub
     Private Sub cbepActor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepActor.CheckedChanged
         'actors
-        Form1.tvBatchList.epActor = cbepActor.checked
+        Form1.tvBatchList.epActor = cbepActor.Checked
+    End Sub
+    Private Sub cbepIMDBId_CheckedChanged(sender As Object, e As EventArgs) Handles cbepIMDBId.CheckedChanged
+        'Force update episode IMDB Id's.
+        Form1.tvBatchList.epIMDBId = cbepIMDBId.Checked
     End Sub
     Private Sub cbepRuntime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbepRuntime.CheckedChanged
         'runtime
@@ -302,5 +310,5 @@
     Private Sub tv_batch_wizard_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
         If e.KeyCode = Keys.Escape Then btn_TvBatchCancel.PerformClick 
     End Sub
-
+    
 End Class
