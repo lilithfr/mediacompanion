@@ -108,7 +108,7 @@ Public Class Form1
 	Public workingMovieDetails As FullMovieDetails
 	Public _rescrapeList As New RescrapeSpecificParams
 	Public _lockList As New LockSpecificParams
-	Public ChangeMovieId = ""
+	Public ChangeMovieId As String = ""
 	Public droppedItems As New List(Of String)
 	Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
 
@@ -8852,17 +8852,13 @@ Public Class Form1
 						Dim filenama As String = Path.GetFileNameWithoutExtension(fullpathandfilename)
 						Dim fils As FileInfo() = di.GetFiles(filenama & ".*")
 						For Each fiNext In fils
-							If Not listoffilestomove.Contains(fiNext.FullName) Then
-								listoffilestomove.Add(fiNext.FullName)
-							End If
+							If Not listoffilestomove.Contains(fiNext.FullName) Then listoffilestomove.Add(fiNext.FullName)
 						Next
 						Dim trailerpath As String = Pref.ActualTrailerPath(fullpathandfilename)
 						Dim filenama2 As String = Path.GetFileNameWithoutExtension(trailerpath)
 						Dim fils2 As FileInfo() = di.GetFiles(filenama2 & ".*")
 						For Each fiNext In fils2
-							If Not listoffilestomove.Contains(fiNext.FullName) Then
-								listoffilestomove.Add(fiNext.FullName)
-							End If
+							If Not listoffilestomove.Contains(fiNext.FullName) Then listoffilestomove.Add(fiNext.FullName)
 						Next
 					End If
 				Next
@@ -9049,9 +9045,7 @@ Public Class Form1
 
 		SearchForMissingEpisodesToolStripMenuItem.Checked = Pref.displayMissingEpisodes
 		RefreshMissingEpisodesToolStripMenuItem.Enabled = Pref.displayMissingEpisodes
-		If Pref.displayMissingEpisodes Then
-			Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
-		End If
+		If Pref.displayMissingEpisodes Then Me.RefreshMissingEpisodesToolStripMenuItem.ToolTipText = "Last Refresh: " & Pref.lastrefreshmissingdate
 		rbTvMissingEpisodes  .Enabled = Pref.displayMissingEpisodes
 		rbTvMissingAiredEp   .Enabled = Pref.displayMissingEpisodes
         rbTvMissingNextToAir .Enabled = Pref.displayMissingEpisodes
@@ -9465,12 +9459,12 @@ Public Class Form1
 			If DataGridViewMovies.SelectedRows.Count = 0 Then
 				e.Cancel = True
 			End If
-			tsmiRescrapeRenameFiles.Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
-			tsmiMov_OpenInMkvmergeGUI.Enabled       = (Pref.MkvMergeGuiPath <> "")
-			tsmiRescrapeFrodo_Poster_Thumbs.Enabled = Pref.FrodoEnabled
-			tsmiRescrapeFrodo_Fanart_Thumbs.Enabled = Pref.FrodoEnabled
-            tsmiMov_DeleteMovieFolder.Enabled       = Pref.EnableMovDeleteFolderTsmi
-            tsmiMov_DeleteMovieFolder.Visible       = Pref.EnableMovDeleteFolderTsmi
+			tsmiRescrapeRenameFiles         .Enabled = Not Pref.usefoldernames AndAlso Not Pref.basicsavemode And Pref.MovieRenameEnable
+			tsmiMov_OpenInMkvmergeGUI       .Enabled = (Pref.MkvMergeGuiPath <> "")
+			tsmiRescrapeFrodo_Poster_Thumbs .Enabled = Pref.FrodoEnabled
+			tsmiRescrapeFrodo_Fanart_Thumbs .Enabled = Pref.FrodoEnabled
+            tsmiMov_DeleteMovieFolder       .Enabled = Pref.EnableMovDeleteFolderTsmi
+            tsmiMov_DeleteMovieFolder       .Visible = Pref.EnableMovDeleteFolderTsmi
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -9478,9 +9472,7 @@ Public Class Form1
 
 	Private Sub TVContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles TVContextMenu.Opening
 		Try
-			If (TvTreeview.SelectedNode Is Nothing) Then
-				e.Cancel = True
-			End If
+			If (TvTreeview.SelectedNode Is Nothing) Then e.Cancel = True
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -9776,7 +9768,6 @@ Public Class Form1
 		'UpdateFilteredList
 	End Sub
 	
-
 	Private Sub Mov_DeleteNfoArtwork(Optional ByVal DelArtwork As Boolean = True)
 		Dim msgstr As String = " Are you sure you wish to delete" & vbCrLf
 		msgstr &= ".nfo" & If(DelArtwork, ", Fanart, Poster And Actors", " only") & " for" & vbCrLf
@@ -9803,38 +9794,29 @@ Public Class Form1
 	Private Sub TabLevel1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TabLevel1.SelectedIndexChanged
 
 		Select Case TabLevel1.SelectedTab.Text.ToLower
-			Case "config.xml"
-				RichTextBoxTabConfigXML.Text = Utilities.LoadFullText(workingProfile.config)
-			Case "moviecache"
-				RichTextBoxTabMovieCache.Text = Utilities.LoadFullText(workingProfile.moviecache)
-			Case = "tvcache"
-				RichTextBoxTabTVCache.Text = Utilities.LoadFullText(workingProfile.tvcache)
-			Case = "actorcache"
-				RichTextBoxTabActorCache.Text = Utilities.LoadFullText(workingProfile.actorcache)
-			Case = "profile"
-				RichTextBoxTabProfile.Text = Utilities.LoadFullText(applicationPath & "\Settings\profile.xml")
-			Case = "regex"
-				RichTextBoxTabRegex.Text = Utilities.LoadFullText(workingProfile.regexlist)
-			Case "export"
-				frm_ExportTabSetup()
-			Case "movies"
+			Case "config.xml"   : RichTextBoxTabConfigXML   .Text = Utilities.LoadFullText(workingProfile.config)
+			Case "moviecache"   : RichTextBoxTabMovieCache  .Text = Utilities.LoadFullText(workingProfile.moviecache)
+			Case "tvcache"      : RichTextBoxTabTVCache     .Text = Utilities.LoadFullText(workingProfile.tvcache)
+			Case "actorcache"   : RichTextBoxTabActorCache  .Text = Utilities.LoadFullText(workingProfile.actorcache)
+			Case "profile"      : RichTextBoxTabProfile     .Text = Utilities.LoadFullText(applicationPath & "\Settings\profile.xml")
+			Case "regex"        : RichTextBoxTabRegex       .Text = Utilities.LoadFullText(workingProfile.regexlist)
+			Case "export"       : frm_ExportTabSetup()
+            Case "music videos" : UcMusicVideo1.mv_FiltersAndSortApply(True)
+            Case "movies"
 				If Not MoviesFiltersResizeCalled Then
 					MoviesFiltersResizeCalled = True
 					Pref.movie_filters.SetMovieFiltersVisibility
 					UpdateMovieFiltersPanel
 				End If
-			Case "music videos"
-				UcMusicVideo1.mv_FiltersAndSortApply(True)
 		End Select
-
 	End Sub
 
 	Sub HandleMovieList_DisplayChange(DisplayField As String)
 		Mc.clsGridViewMovie.GridFieldToDisplay1 = DisplayField
 
-		If rbTitleAndYear.Checked Then Pref.moviedefaultlist = 0
-		If rbFileName.Checked Then Pref.moviedefaultlist = 1
-		If rbFolder.Checked Then Pref.moviedefaultlist = 2
+		If rbTitleAndYear   .Checked Then Pref.moviedefaultlist = 0
+		If rbFileName       .Checked Then Pref.moviedefaultlist = 1
+		If rbFolder         .Checked Then Pref.moviedefaultlist = 2
 
 		Mc.clsGridViewMovie.GridviewMovieDesign(Me)
 		If MainFormLoadedStatus Then
@@ -9974,8 +9956,7 @@ Public Class Form1
 	Public Sub RescrapeSpecific
 		oMovies.RescrapeSpecific(_rescrapeList)
 	End Sub
-
-
+    
 	Public Sub ScrapeDroppedFiles
 		oMovies.ScrapeFiles(droppedItems)
 	End Sub
@@ -10008,9 +9989,7 @@ Public Class Form1
 	Private Sub BckWrkScnMovies_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkScnMovies.ProgressChanged
 
 		Dim oProgress As Progress = CType(e.UserState, Progress)
-		If e.ProgressPercentage <> -1 Then
-			tsMultiMovieProgressBar.Value = e.ProgressPercentage
-		End If
+		If e.ProgressPercentage <> -1 Then tsMultiMovieProgressBar.Value = e.ProgressPercentage
 
 		If oProgress.Command = Progress.Commands.Append Then
 			Dim msgtxt As String = tsStatusLabel.Text & oProgress.Message
@@ -10023,13 +10002,9 @@ Public Class Form1
 			tsStatusLabel.Text = oProgress.Message
 		End If
 
-		If oProgress.Message = Movie.MSG_ERROR then
-			ScraperErrorDetected = True
-		End If
+		If oProgress.Message = Movie.MSG_ERROR Then ScraperErrorDetected = True
 
-		If Not IsNothing(oProgress.Log) Then
-			scraperLog += oProgress.Log
-		End If
+		If Not IsNothing(oProgress.Log) Then scraperLog += oProgress.Log
 	End Sub
 
 	Private Sub BckWrkScnMovies_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkScnMovies.RunWorkerCompleted
@@ -13097,37 +13072,24 @@ Public Class Form1
 	Private Sub btnChangeMovie_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChangeMovie.Click
 		Dim messagestring As String = "Changing the movie will Overwrite all the current details"
 		messagestring &= vbCrLf & "If this is an offline video, please delete folder and add as New" & vbCrLf & "Do you wish to continue?"
-		If MovieSearchEngine = "imdb" Then
-			Dim mat = Regex.Match(WebBrowser1.Url.ToString, "(tt\d{7})")
-			If mat.Success Then
-				ChangeMovieId = mat.Value
-			Else
-				MsgBox("Please Browse to a Movie page")
-				Exit Sub
-			End If
-			If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
-				Exit Sub
-			End If
-			Pref.MovieChangeMovie = True
-			RunBackgroundMovieScrape("ChangeMovie")
-		ElseIf MovieSearchEngine = "tmdb" Then
-			Dim mat As String = WebBrowser1.Url.ToString
-			mat = mat.Substring(mat.LastIndexOf("/") + 1, mat.Length - mat.LastIndexOf("/") - 1)
-			Dim urlsplit As String()
-			urlsplit = Split(mat, "-")
-			If Integer.TryParse(urlsplit(0), Nothing) Then
-				ChangeMovieId = urlsplit(0)
-			Else
-				MsgBox("Please Browse to a Movie page")
-				Exit Sub
-			End If
-			If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then
-				Exit Sub
-			End If
-			Pref.MovieChangeMovie = True
-			RunBackgroundMovieScrape("ChangeMovie")
-		End If
+        ChangeMovieId = ""
+        Dim RegexString As String = ""
+		If MovieSearchEngine = "imdb" Then RegexString = "(tt\d{7})"
+        If MovieSearchEngine = "tmdb" Then RegexString = "/(\d*)-"
 
+        If Not RegexString = "" Then
+            Dim mat As Match = Regex.Match(WebBrowser1.Url.ToString, RegexString)
+            If mat.Success Then
+				ChangeMovieId = mat.Groups(1).Value.ToString
+			Else
+				MsgBox("Please Browse to a Movie page")
+				Exit Sub
+			End If
+            If ChangeMovieId <> "" Then
+                If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
+		        RunBackgroundMovieScrape("ChangeMovie")
+            End If
+        End If
 		TabControl2.SelectedIndex = 0
 	End Sub
 
@@ -13140,19 +13102,13 @@ Public Class Form1
 	End Sub
 
 	Private Sub btn_IMDBSearch_Click(sender As System.Object, e As System.EventArgs) Handles btn_IMDBSearch.Click
-		Try
-			MovieSearchEngine = "imdb"
-			mov_ChangeMovieSetup(MovieSearchEngine)
-		Catch
-		End Try
+		MovieSearchEngine = "imdb"
+		mov_ChangeMovieSetup(MovieSearchEngine)
 	End Sub
 
 	Private Sub btn_TMDBSearch_Click(sender As System.Object, e As System.EventArgs) Handles btn_TMDBSearch.Click
-		Try
-			MovieSearchEngine = "tmdb"
-			mov_ChangeMovieSetup(MovieSearchEngine)
-		Catch
-		End Try
+		MovieSearchEngine = "tmdb"
+		mov_ChangeMovieSetup(MovieSearchEngine)
 	End Sub
 
 	Private Sub CheckBox2_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles CheckBox2.CheckedChanged

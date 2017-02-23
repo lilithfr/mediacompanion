@@ -5163,6 +5163,8 @@ Partial Public Class Form1
             WorkingWithNfoFiles.ep_NfoSave(episodelist, WorkingEpisode.NfoFilePath)
             WorkingEpisode.Load
             WorkingEpisode.UpdateTreenode()
+            WorkingTvSeason.UpdateTreenode()
+            WorkingTvShow.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvSeason) Then
             For Each ep In WorkingTvSeason.Episodes
                 If ep.IsMissing Then Continue For
@@ -5176,6 +5178,7 @@ Partial Public Class Form1
                 ep.UpdateTreenode()
             Next
             WorkingTvSeason.UpdateTreenode()
+            WorkingTvShow.UpdateTreenode()
         ElseIf Not IsNothing(WorkingTvShow) Then
             For Each ep In WorkingTvShow.Episodes
                 If ep.IsMissing Then Continue For

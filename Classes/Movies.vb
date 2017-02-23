@@ -1583,6 +1583,7 @@ Public Class Movies
     End Sub
 
     Sub ChangeMovie(NfoPathAndFilename As String, ChangeMovieId As String, MovieSearchEngine As String)
+        Pref.MovieChangeMovie = True
         Dim movie = New Movie(Me, NfoPathAndFilename)
 
         movie.DeleteScrapedFiles(True)

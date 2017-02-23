@@ -274,7 +274,7 @@ Public Class Classimdb
             If result = "error" Then Return ""
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
-            If adoc("root").Attributes("response").Value = "False" Then Return "Error"
+            If adoc("root").Attributes("Response").Value = "False" Then Return "Error"
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
                     Dim TmpValue As String = thisresult.Attributes("imdbID").Value
@@ -950,6 +950,7 @@ Public Class Classimdb
             Dim s As String = ""
             Try
                 s = Regex.Match(Html, MovieRegExs.REGEX_ASPECTRATIO, RegexOptions.Singleline).Groups(1).Value.Trim
+                If s = "" Then Return ""
                 If s.Contains("</div>") Then s = s.Substring(0, s.IndexOf("</div>"))
                 s = s.Substring(0, s.IndexOf(":")).Trim
                 Return Utilities.cleanSpecChars(encodespecialchrs(s))

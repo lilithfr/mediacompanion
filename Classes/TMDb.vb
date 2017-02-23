@@ -333,6 +333,7 @@ Public Class TMDb
             Fetch
             FetchReleases
             Try
+                If IsNothing(_releases.countries) Then Return ""
                 For Each country In _releases.countries
                     If country.iso_3166_1.ToLower = LookupLanguages.Item(0) then
                         Return country.certification
