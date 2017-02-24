@@ -60,7 +60,6 @@ Public Class frmPreferences
                 Else
                     Form1.util_ConfigLoad(True)
                     Form1.util_RegexLoad()
-                    'Pref.ConfigLoad()
                 End If
                 Changes = False
                 XbmcTvdbScraperChanged = False
@@ -114,8 +113,8 @@ Public Class frmPreferences
     End Sub
 
     Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click, btn_SettingsClose2.Click
-        Changes = False
-        Pref.ConfigLoad()
+        'Changes = False
+        'Pref.ConfigLoad()
         Me.Close()
     End Sub
     
@@ -131,9 +130,12 @@ Public Class frmPreferences
         Pref.TvAutoScrapeInterval   = tbTvAutoScrapeInterval.Text.ToInt
         Pref.MovAutoScrapeInterval  = tbMovAutoScrapeInterval.Text.ToInt
 
-        If cleanfilenameprefchanged OrElse videosourceprefchanged Then
-            applyAdvancedLists()
+        If tbOmdbapiUrl.Text <> Pref.CustomOmdbapiUrl AndAlso tbOmdbapiUrl.Text.StartsWith("http") Then
+            Dim aok As Boolean = Utilities.UrlIsValid(tbOmdbapiUrl.Text)
+            If aok Then Pref.CustomOmdbapiUrl = tbOmdbapiUrl.text
         End If
+
+        If cleanfilenameprefchanged OrElse videosourceprefchanged Then applyAdvancedLists()
 
         Form1.SetTagTxtField
 
@@ -207,6 +209,7 @@ Public Class frmPreferences
         cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled
         tbaltnfoeditor              .Text       = Pref.altnfoeditor
         tbMkvMergeGuiPath           .Text       = Pref.MkvMergeGuiPath
+        tbOmdbapiUrl                .Text       = Pref.CustomOmdbapiUrl
 
 
         'Common Section
@@ -541,8 +544,9 @@ Public Class frmPreferences
         mpdb_chk.CheckState = If(Pref.nfoposterscraper And 4, CheckState.Checked, CheckState.Unchecked)
         imdb_chk.CheckState = If(Pref.nfoposterscraper And 8, CheckState.Checked, CheckState.Unchecked)
 
-        cbMovNfoWatchTag            .Checked = Pref.MovNfoWatchTag
-        cbMovieExcludeYearSearch    .Checked = Pref.MovieExcludeYearSearch
+        cbMovNfoWatchTag            .Checked    = Pref.MovNfoWatchTag
+        cbMovieExcludeYearSearch    .Checked    = Pref.MovieExcludeYearSearch
+        
     End Sub
 
     Private Sub TVInit()
@@ -860,6 +864,12 @@ Public Class frmPreferences
             tbaltnfoeditor.Text = Pref.altnfoeditor 
             Changes = True
         End If
+    End Sub
+    
+    Private Sub tbOmdbapiUrl_TextChanged(sender As Object, e As EventArgs) Handles tbOmdbapiUrl.TextChanged
+        If prefsload Then Exit Sub
+        Pref.CustomOmdbapiUrl = tbOmdbapiUrl.Text
+        Changes = True
     End Sub
 
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged

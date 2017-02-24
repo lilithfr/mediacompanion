@@ -189,6 +189,7 @@ Public Class Pref
     'Private Shared _MkvMergeGuiPath As String
     Public Shared MkvMergeGuiPath As String
     Public Shared EnableMovDeleteFolderTsmi As Boolean
+    Private Shared _customomdbapiurl As String = ""
 
     'Shared Property MkvMergeGuiPath As String
     '    Get
@@ -201,6 +202,26 @@ Public Class Pref
     '        End If
     '    End Set
     'End Property
+
+    Shared Readonly Property Omdbapiurl As String
+        Get
+            Return If(CustomOmdbapiUrl <> "", CustomOmdbapiUrl, "http://www.omdbapi.com/")
+        End Get
+    End Property
+
+    Shared Property CustomOmdbapiUrl As String
+        Get
+            Return _customomdbapiurl
+        End Get
+        Set(value As String)
+            If Not value.ToLower.Contains(Omdbapiurl) AndAlso value.StartsWith("http") Then
+                If Not value.EndsWith("/") Then value = value & "/"
+                _customomdbapiurl = value
+            Else
+                _customomdbapiurl = ""
+            End If
+        End Set
+    End Property
 
     'Saved General Proxy Prefs
     Public Shared prxyEnabled As String
@@ -1036,6 +1057,7 @@ Public Class Pref
         root.AppendChild(doc, "externalbrowser"             , externalbrowser           ) 'cbExternalbrowser
         root.AppendChild(doc, "selectedBrowser"             , selectedBrowser           ) 'btnFindBrowser
         root.AppendChild(doc, "altnfoeditor"                , altnfoeditor              ) 'btnaltnfoeditor
+        'root.AppendChild(doc, "CustomOmdbapiUrl"            , CustomOmdbapiUrl          ) 'tbOmdbapiUrl
         root.AppendChild(doc, "ignorearticle"               , ignorearticle             ) 'cb_IgnoreThe
         root.AppendChild(doc, "ignoreAarticle"              , ignoreAarticle            ) 'cb_IgnoreA
         root.AppendChild(doc, "ignoreAn"                    , ignoreAn                  ) 'cb_IgnoreAn
@@ -1621,6 +1643,7 @@ Public Class Pref
                     Case "externalbrowser"                      : externalbrowser = thisresult.InnerXml
                     Case "selectedBrowser"                      : selectedBrowser = thisresult.InnerXml
                     Case "altnfoeditor"                         : altnfoeditor = thisresult.InnerXml
+                    'Case "CustomOmdbapiUrl"                     : CustomOmdbapiUrl          = thisresult.InnerText
                     Case "tvrename"                             : tvrename = Convert.ToInt32(thisresult.InnerText)
                     Case "autorenameepisodes"                   : autorenameepisodes = thisresult.InnerXml
                     Case "eprenamelowercase"                    : eprenamelowercase = thisresult.InnerXml
@@ -1703,6 +1726,7 @@ Public Class Pref
                     Case "CloseMCForDLNewVersion"               : CloseMCForDLNewVersion    = thisresult.InnerXml
                     Case "MkvMergeGuiPath"                      : MkvMergeGuiPath           = thisresult.InnerXml
                     Case "EnableMovDeleteFolderTsmi"            : EnableMovDeleteFolderTsmi = thisresult.InnerXml
+                    
 
                     Case "prxyEnabled"                          : prxyEnabled               = thisresult.InnerText.ToLower
                     Case "prxyIp"                               : prxyIp                    = thisresult.InnerText

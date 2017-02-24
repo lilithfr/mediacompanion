@@ -269,7 +269,7 @@ Public Class Classimdb
         Dim GOT_IMDBID As String = ""
         Try
             title = title.Replace("  ", "+").Replace(" ", "+").Replace("&", "%26")
-            Dim url As String = String.Format("http://www.omdbapi.com/?s={0}&y={1}&plot=full&r=xml", title, year)
+            Dim url As String = String.Format("{0}?s={1}&y={2}&plot=full&r=xml", Pref.Omdbapiurl, title, year)
             Dim result As String = loadwebpage(Pref.proxysettings, url, True, 5)
             If result = "error" Then Return ""
             Dim adoc As New XmlDocument
@@ -922,7 +922,7 @@ Public Class Classimdb
     
     Public Function metacritic(ByVal imdbid As String) As String
         Try
-            Dim url As String = String.Format("http://www.omdbapi.com/?i={0}&plot=short&r=xml", imdbid)
+            Dim url As String = String.Format("{0}?i={1}&plot=short&r=xml", Pref.Omdbapiurl, imdbid)
             Dim getresult As String = loadwebpage(Pref.proxysettings, url, True)
             If getresult = "error" Then Return ""
             Dim adoc As New XmlDocument
@@ -1507,7 +1507,7 @@ Public Class Classimdb
 
     Public Function getomdbTomato(IMDBId As String)  As String
         Dim TotalInfo As String = ""
-        Dim urlpath As String = "http://www.omdbapi.com/?i=" & IMDBId & "&tomatoes=true&r=xml"
+        Dim urlpath As String = String.Format("{0}?i={1}&tomatoes=true&r=xml", Pref.Omdbapiurl, IMDBId)
         Dim page As String = Utilities.DownloadTextFiles(urlpath)
         If page <> "" AndAlso page.Replace("""", "").Contains("root response=True") Then 
             Dim adoc As New XmlDocument

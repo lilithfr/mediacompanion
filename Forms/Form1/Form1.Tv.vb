@@ -1190,15 +1190,16 @@ Partial Public Class Form1
 
         If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then GotEpImdbId = True
 
-        If Not GotEpImdbId Then url = String.Format("http://www.omdbapi.com/?i={0}&Season={1}&r=xml", ep.Showimdbid.Value, ep.Season.Value)
+        If Not GotEpImdbId Then url = String.Format("{0}?i={1}&Season={2}&r=xml", Pref.Omdbapiurl, ep.Showimdbid.Value, ep.Season.Value)
 
         Dim imdb As New Classimdb
         If Not GotEpImdbId Then
             Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
-            If result.Contains("<error>") Then Return False
+            If result.Contains("error") Then Return False
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
-            If adoc("root").HasAttribute("response") AndAlso  adoc("root").Attributes("response").Value = "False" Then Return False
+            If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return False
+            If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return False
             Dim thisresult As XmlNode = Nothing
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
@@ -1213,12 +1214,13 @@ Partial Public Class Form1
             If Not ep.ImdbId.Value.StartsWith("tt") Then Return False
         End If
 
-        url = String.Format("http://www.omdbapi.com/?i={0}&r=xml", ep.ImdbId.Value)
+        url = String.Format("{0}?i={1}&r=xml", Pref.Omdbapiurl, ep.ImdbId.Value)
         Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
         If result2 = "error" Then Return False
         Dim bdoc As New XmlDocument
         bdoc.LoadXml(result2)
-        If bdoc("root").Attributes("response").Value = "False" Then Return False
+        If bdoc("root").HasAttribute("response") AndAlso bdoc("root").Attributes("response").Value = "False" Then Return False
+        If bdoc("root").HasAttribute("Response") AndAlso bdoc("root").Attributes("Response").Value = "False" Then Return False
 
         For each thisresult In bdoc("root")
             If Not IsNothing(thisresult.Attributes.ItemOf("imdbRating")) Then

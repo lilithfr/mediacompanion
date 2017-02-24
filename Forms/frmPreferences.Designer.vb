@@ -353,6 +353,12 @@ Partial Class frmPreferences
         Me.lblNameModeEg = New System.Windows.Forms.Label()
         Me.cbMoviePartsNameMode = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_Advanced = New System.Windows.Forms.TabPage()
+        Me.gpbxPatronOmdbapi = New System.Windows.Forms.GroupBox()
+        Me.tbOmdbapiUrl = New System.Windows.Forms.TextBox()
+        Me.lblOmdbapiUrl = New System.Windows.Forms.Label()
+        Me.gpbxMovieExcludeYearSearch = New System.Windows.Forms.GroupBox()
+        Me.cbMovieExcludeYearSearch = New System.Windows.Forms.CheckBox()
+        Me.Label31 = New System.Windows.Forms.Label()
         Me.gpbx_MovTimerAutoScrape = New System.Windows.Forms.GroupBox()
         Me.tbMovAutoScrapeInterval = New System.Windows.Forms.TextBox()
         Me.Label29 = New System.Windows.Forms.Label()
@@ -508,9 +514,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.MovieExcludeYearSearch = New System.Windows.Forms.GroupBox()
-        Me.Label31 = New System.Windows.Forms.Label()
-        Me.cbMovieExcludeYearSearch = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -575,6 +578,8 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.SuspendLayout
         Me.grpbxMovieNameMode.SuspendLayout
         Me.tpMoviePreferences_Advanced.SuspendLayout
+        Me.gpbxPatronOmdbapi.SuspendLayout
+        Me.gpbxMovieExcludeYearSearch.SuspendLayout
         Me.gpbx_MovTimerAutoScrape.SuspendLayout
         Me.grpbxMovieCustomPlaycountTag.SuspendLayout
         Me.grpbxMovieSeparateIdentifier.SuspendLayout
@@ -602,7 +607,6 @@ Partial Class frmPreferences
         Me.TableLayoutPanel1.SuspendLayout
         Me.GroupBox42.SuspendLayout
         Me.GroupBox15.SuspendLayout
-        Me.MovieExcludeYearSearch.SuspendLayout
         Me.SuspendLayout
         '
         'OpenFileDialog1
@@ -1349,7 +1353,7 @@ Partial Class frmPreferences
         'cbDisplayLocalActor
         '
         Me.cbDisplayLocalActor.AutoSize = true
-        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(416, 352)
+        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(375, 457)
         Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
         Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
         Me.cbDisplayLocalActor.TabIndex = 113
@@ -1361,7 +1365,7 @@ Partial Class frmPreferences
         'cbCheckForNewVersion
         '
         Me.cbCheckForNewVersion.AutoSize = true
-        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(416, 297)
+        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(375, 402)
         Me.cbCheckForNewVersion.Margin = New System.Windows.Forms.Padding(4)
         Me.cbCheckForNewVersion.Name = "cbCheckForNewVersion"
         Me.cbCheckForNewVersion.Size = New System.Drawing.Size(198, 19)
@@ -1593,6 +1597,7 @@ Partial Class frmPreferences
         Me.TPGeneral.Controls.Add(Me.btnFindBrowser)
         Me.TPGeneral.Controls.Add(Me.cbExternalbrowser)
         Me.TPGeneral.Controls.Add(Me.chkbx_disablecache)
+        Me.TPGeneral.Controls.Add(Me.gpbxPatronOmdbapi)
         Me.TPGeneral.Controls.Add(Me.GroupBox45)
         Me.TPGeneral.Controls.Add(Me.GroupBox36)
         Me.TPGeneral.Controls.Add(Me.GroupBox33)
@@ -1626,7 +1631,7 @@ Partial Class frmPreferences
         '
         'cbMcCloseMCForDLNewVersion
         '
-        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(425, 313)
+        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(384, 418)
         Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
         Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
         Me.cbMcCloseMCForDLNewVersion.TabIndex = 116
@@ -1648,7 +1653,7 @@ Partial Class frmPreferences
         'cbMultiMonitorEnable
         '
         Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(416, 401)
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(21, 476)
         Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
         Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
         Me.cbMultiMonitorEnable.TabIndex = 114
@@ -1658,7 +1663,7 @@ Partial Class frmPreferences
         'cbRenameNFOtoINFO
         '
         Me.cbRenameNFOtoINFO.AutoSize = true
-        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(416, 378)
+        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(21, 501)
         Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
         Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
         Me.cbRenameNFOtoINFO.TabIndex = 111
@@ -3526,7 +3531,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4303,7 +4308,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
-        Me.tpMoviePreferences_Advanced.Controls.Add(Me.MovieExcludeYearSearch)
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbxMovieExcludeYearSearch)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbx_MovTimerAutoScrape)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieCustomPlaycountTag)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieSeparateIdentifier)
@@ -4315,6 +4320,65 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
+        '
+        'gpbxPatronOmdbapi
+        '
+        Me.gpbxPatronOmdbapi.Controls.Add(Me.tbOmdbapiUrl)
+        Me.gpbxPatronOmdbapi.Controls.Add(Me.lblOmdbapiUrl)
+        Me.gpbxPatronOmdbapi.Location = New System.Drawing.Point(486, 285)
+        Me.gpbxPatronOmdbapi.Name = "gpbxPatronOmdbapi"
+        Me.gpbxPatronOmdbapi.Size = New System.Drawing.Size(364, 99)
+        Me.gpbxPatronOmdbapi.TabIndex = 80
+        Me.gpbxPatronOmdbapi.TabStop = false
+        Me.gpbxPatronOmdbapi.Text = "OMDBAPI Url"
+        '
+        'tbOmdbapiUrl
+        '
+        Me.tbOmdbapiUrl.Location = New System.Drawing.Point(11, 73)
+        Me.tbOmdbapiUrl.Name = "tbOmdbapiUrl"
+        Me.tbOmdbapiUrl.Size = New System.Drawing.Size(347, 21)
+        Me.tbOmdbapiUrl.TabIndex = 1
+        '
+        'lblOmdbapiUrl
+        '
+        Me.lblOmdbapiUrl.Location = New System.Drawing.Point(10, 18)
+        Me.lblOmdbapiUrl.Name = "lblOmdbapiUrl"
+        Me.lblOmdbapiUrl.Size = New System.Drawing.Size(348, 49)
+        Me.lblOmdbapiUrl.TabIndex = 0
+        Me.lblOmdbapiUrl.Text = "Users that are Patrons to OMDB site may prefer to use their"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"personal Patrons Url"& _ 
+    ".  Please enter this here.  Blank uses"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"default OMDBAPI url."
+        '
+        'gpbxMovieExcludeYearSearch
+        '
+        Me.gpbxMovieExcludeYearSearch.Controls.Add(Me.cbMovieExcludeYearSearch)
+        Me.gpbxMovieExcludeYearSearch.Controls.Add(Me.Label31)
+        Me.gpbxMovieExcludeYearSearch.Location = New System.Drawing.Point(10, 210)
+        Me.gpbxMovieExcludeYearSearch.Name = "gpbxMovieExcludeYearSearch"
+        Me.gpbxMovieExcludeYearSearch.Size = New System.Drawing.Size(389, 106)
+        Me.gpbxMovieExcludeYearSearch.TabIndex = 79
+        Me.gpbxMovieExcludeYearSearch.TabStop = false
+        Me.gpbxMovieExcludeYearSearch.Text = "Exclude Year of Movie from Title search."
+        '
+        'cbMovieExcludeYearSearch
+        '
+        Me.cbMovieExcludeYearSearch.AutoSize = true
+        Me.cbMovieExcludeYearSearch.Location = New System.Drawing.Point(11, 68)
+        Me.cbMovieExcludeYearSearch.Name = "cbMovieExcludeYearSearch"
+        Me.cbMovieExcludeYearSearch.Size = New System.Drawing.Size(209, 19)
+        Me.cbMovieExcludeYearSearch.TabIndex = 1
+        Me.cbMovieExcludeYearSearch.Text = "Exclude year from Scrape search."
+        Me.cbMovieExcludeYearSearch.UseVisualStyleBackColor = true
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = true
+        Me.Label31.Location = New System.Drawing.Point(10, 19)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(373, 45)
+        Me.Label31.TabIndex = 0
+        Me.Label31.Text = "Selecting this option will exclude searching by Movie Title and Year."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Caution:  "& _ 
+    "Successful search results will be reduced."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use if you have no other choice"& _ 
+    "!"
         '
         'gpbx_MovTimerAutoScrape
         '
@@ -4358,7 +4422,7 @@ Partial Class frmPreferences
         '
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.cbMovNfoWatchTag)
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.Label23)
-        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(10, 137)
+        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(10, 124)
         Me.grpbxMovieCustomPlaycountTag.Name = "grpbxMovieCustomPlaycountTag"
         Me.grpbxMovieCustomPlaycountTag.Size = New System.Drawing.Size(389, 76)
         Me.grpbxMovieCustomPlaycountTag.TabIndex = 77
@@ -6111,38 +6175,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'MovieExcludeYearSearch
-        '
-        Me.MovieExcludeYearSearch.Controls.Add(Me.cbMovieExcludeYearSearch)
-        Me.MovieExcludeYearSearch.Controls.Add(Me.Label31)
-        Me.MovieExcludeYearSearch.Location = New System.Drawing.Point(10, 228)
-        Me.MovieExcludeYearSearch.Name = "MovieExcludeYearSearch"
-        Me.MovieExcludeYearSearch.Size = New System.Drawing.Size(389, 106)
-        Me.MovieExcludeYearSearch.TabIndex = 79
-        Me.MovieExcludeYearSearch.TabStop = false
-        Me.MovieExcludeYearSearch.Text = "Exclude Year of Movie from Title search."
-        '
-        'Label31
-        '
-        Me.Label31.AutoSize = true
-        Me.Label31.Location = New System.Drawing.Point(10, 19)
-        Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(373, 45)
-        Me.Label31.TabIndex = 0
-        Me.Label31.Text = "Selecting this option will exclude searching by Movie Title and Year."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Caution:  "& _ 
-    "Successful search results will be reduced."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Only use if you have no other choice"& _ 
-    "!"
-        '
-        'cbMovieExcludeYearSearch
-        '
-        Me.cbMovieExcludeYearSearch.AutoSize = true
-        Me.cbMovieExcludeYearSearch.Location = New System.Drawing.Point(11, 68)
-        Me.cbMovieExcludeYearSearch.Name = "cbMovieExcludeYearSearch"
-        Me.cbMovieExcludeYearSearch.Size = New System.Drawing.Size(209, 19)
-        Me.cbMovieExcludeYearSearch.TabIndex = 1
-        Me.cbMovieExcludeYearSearch.Text = "Exclude year from Scrape search."
-        Me.cbMovieExcludeYearSearch.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6271,6 +6303,10 @@ Partial Class frmPreferences
         Me.grpbxMovieNameMode.ResumeLayout(false)
         Me.grpbxMovieNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
+        Me.gpbxPatronOmdbapi.ResumeLayout(false)
+        Me.gpbxPatronOmdbapi.PerformLayout
+        Me.gpbxMovieExcludeYearSearch.ResumeLayout(false)
+        Me.gpbxMovieExcludeYearSearch.PerformLayout
         Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
         Me.gpbx_MovTimerAutoScrape.PerformLayout
         Me.grpbxMovieCustomPlaycountTag.ResumeLayout(false)
@@ -6318,8 +6354,6 @@ Partial Class frmPreferences
         Me.GroupBox42.PerformLayout
         Me.GroupBox15.ResumeLayout(false)
         Me.GroupBox15.PerformLayout
-        Me.MovieExcludeYearSearch.ResumeLayout(false)
-        Me.MovieExcludeYearSearch.PerformLayout
         Me.ResumeLayout(false)
 
 End Sub
@@ -6807,7 +6841,10 @@ End Sub
     Friend WithEvents Label29 As Label
     Friend WithEvents cbMovEnableAutoScrape As CheckBox
     Friend WithEvents cbTvDlEpisodeThumb As CheckBox
-    Friend WithEvents MovieExcludeYearSearch As GroupBox
+    Friend WithEvents gpbxMovieExcludeYearSearch As GroupBox
     Friend WithEvents cbMovieExcludeYearSearch As CheckBox
     Friend WithEvents Label31 As Label
+    Friend WithEvents gpbxPatronOmdbapi As GroupBox
+    Friend WithEvents tbOmdbapiUrl As TextBox
+    Friend WithEvents lblOmdbapiUrl As Label
 End Class
