@@ -60,6 +60,7 @@ Public Class Pref
     Public Const datePattern As String = "yyyyMMddHHmmss"
     Public Const nfoDatePattern As String = "yyyy-MM-dd"
     Public Const tv_EpRegexDate As String = "([0-9]{4})[.\-_]([0-9]{2})[.\-_]([0-9]{2})"
+    Public Const Omdbapiurl As String = "http://www.omdbapi.com/"
     
     'Not saved items
     Public Shared fixnfoid As Boolean
@@ -189,40 +190,7 @@ Public Class Pref
     'Private Shared _MkvMergeGuiPath As String
     Public Shared MkvMergeGuiPath As String
     Public Shared EnableMovDeleteFolderTsmi As Boolean
-    Private Shared _customomdbapiurl As String = ""
-
-    'Shared Property MkvMergeGuiPath As String
-    '    Get
-    '        Return _MkvMergeGuiPath
-    '    End Get
-    '    Set (ByVal value As String)
-    '        If File.Exists(value) Then
-    '            _MkvMergeGuiPath = value
-    '            RaiseEvent PropertyChanged_MkvMergeGuiPath
-    '        End If
-    '    End Set
-    'End Property
-
-    Shared Readonly Property Omdbapiurl As String
-        Get
-            Return If(CustomOmdbapiUrl <> "", CustomOmdbapiUrl, "http://www.omdbapi.com/")
-        End Get
-    End Property
-
-    Shared Property CustomOmdbapiUrl As String
-        Get
-            Return _customomdbapiurl
-        End Get
-        Set(value As String)
-            If Not value.ToLower.Contains(Omdbapiurl) AndAlso value.StartsWith("http") Then
-                If Not value.EndsWith("/") Then value = value & "/"
-                _customomdbapiurl = value
-            Else
-                _customomdbapiurl = ""
-            End If
-        End Set
-    End Property
-
+    
     'Saved General Proxy Prefs
     Public Shared prxyEnabled As String
     Public Shared prxyIp As String
@@ -1057,7 +1025,6 @@ Public Class Pref
         root.AppendChild(doc, "externalbrowser"             , externalbrowser           ) 'cbExternalbrowser
         root.AppendChild(doc, "selectedBrowser"             , selectedBrowser           ) 'btnFindBrowser
         root.AppendChild(doc, "altnfoeditor"                , altnfoeditor              ) 'btnaltnfoeditor
-        'root.AppendChild(doc, "CustomOmdbapiUrl"            , CustomOmdbapiUrl          ) 'tbOmdbapiUrl
         root.AppendChild(doc, "ignorearticle"               , ignorearticle             ) 'cb_IgnoreThe
         root.AppendChild(doc, "ignoreAarticle"              , ignoreAarticle            ) 'cb_IgnoreA
         root.AppendChild(doc, "ignoreAn"                    , ignoreAn                  ) 'cb_IgnoreAn
@@ -1643,7 +1610,6 @@ Public Class Pref
                     Case "externalbrowser"                      : externalbrowser = thisresult.InnerXml
                     Case "selectedBrowser"                      : selectedBrowser = thisresult.InnerXml
                     Case "altnfoeditor"                         : altnfoeditor = thisresult.InnerXml
-                    'Case "CustomOmdbapiUrl"                     : CustomOmdbapiUrl          = thisresult.InnerText
                     Case "tvrename"                             : tvrename = Convert.ToInt32(thisresult.InnerText)
                     Case "autorenameepisodes"                   : autorenameepisodes = thisresult.InnerXml
                     Case "eprenamelowercase"                    : eprenamelowercase = thisresult.InnerXml

@@ -129,12 +129,7 @@ Public Class frmPreferences
 
         Pref.TvAutoScrapeInterval   = tbTvAutoScrapeInterval.Text.ToInt
         Pref.MovAutoScrapeInterval  = tbMovAutoScrapeInterval.Text.ToInt
-
-        If tbOmdbapiUrl.Text <> Pref.CustomOmdbapiUrl AndAlso tbOmdbapiUrl.Text.StartsWith("http") Then
-            Dim aok As Boolean = Utilities.UrlIsValid(tbOmdbapiUrl.Text)
-            If aok Then Pref.CustomOmdbapiUrl = tbOmdbapiUrl.text
-        End If
-
+        
         If cleanfilenameprefchanged OrElse videosourceprefchanged Then applyAdvancedLists()
 
         Form1.SetTagTxtField
@@ -209,7 +204,6 @@ Public Class frmPreferences
         cbMultiMonitorEnable        .Checked    = Pref.MultiMonitoEnabled
         tbaltnfoeditor              .Text       = Pref.altnfoeditor
         tbMkvMergeGuiPath           .Text       = Pref.MkvMergeGuiPath
-        tbOmdbapiUrl                .Text       = Pref.CustomOmdbapiUrl
 
 
         'Common Section
@@ -866,12 +860,6 @@ Public Class frmPreferences
         End If
     End Sub
     
-    Private Sub tbOmdbapiUrl_TextChanged(sender As Object, e As EventArgs) Handles tbOmdbapiUrl.TextChanged
-        If prefsload Then Exit Sub
-        Pref.CustomOmdbapiUrl = tbOmdbapiUrl.Text
-        Changes = True
-    End Sub
-
     Private Sub cbExternalbrowser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbExternalbrowser.CheckedChanged
         If prefsload Then Exit Sub
         Pref.externalbrowser = cbExternalbrowser.Checked

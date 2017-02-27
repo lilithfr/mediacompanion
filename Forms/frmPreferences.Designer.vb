@@ -353,9 +353,6 @@ Partial Class frmPreferences
         Me.lblNameModeEg = New System.Windows.Forms.Label()
         Me.cbMoviePartsNameMode = New System.Windows.Forms.CheckBox()
         Me.tpMoviePreferences_Advanced = New System.Windows.Forms.TabPage()
-        Me.gpbxPatronOmdbapi = New System.Windows.Forms.GroupBox()
-        Me.tbOmdbapiUrl = New System.Windows.Forms.TextBox()
-        Me.lblOmdbapiUrl = New System.Windows.Forms.Label()
         Me.gpbxMovieExcludeYearSearch = New System.Windows.Forms.GroupBox()
         Me.cbMovieExcludeYearSearch = New System.Windows.Forms.CheckBox()
         Me.Label31 = New System.Windows.Forms.Label()
@@ -578,7 +575,6 @@ Partial Class frmPreferences
         Me.PanelDisplayRuntime.SuspendLayout
         Me.grpbxMovieNameMode.SuspendLayout
         Me.tpMoviePreferences_Advanced.SuspendLayout
-        Me.gpbxPatronOmdbapi.SuspendLayout
         Me.gpbxMovieExcludeYearSearch.SuspendLayout
         Me.gpbx_MovTimerAutoScrape.SuspendLayout
         Me.grpbxMovieCustomPlaycountTag.SuspendLayout
@@ -1353,7 +1349,7 @@ Partial Class frmPreferences
         'cbDisplayLocalActor
         '
         Me.cbDisplayLocalActor.AutoSize = true
-        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(375, 457)
+        Me.cbDisplayLocalActor.Location = New System.Drawing.Point(408, 352)
         Me.cbDisplayLocalActor.Name = "cbDisplayLocalActor"
         Me.cbDisplayLocalActor.Size = New System.Drawing.Size(198, 19)
         Me.cbDisplayLocalActor.TabIndex = 113
@@ -1365,7 +1361,7 @@ Partial Class frmPreferences
         'cbCheckForNewVersion
         '
         Me.cbCheckForNewVersion.AutoSize = true
-        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(375, 402)
+        Me.cbCheckForNewVersion.Location = New System.Drawing.Point(408, 297)
         Me.cbCheckForNewVersion.Margin = New System.Windows.Forms.Padding(4)
         Me.cbCheckForNewVersion.Name = "cbCheckForNewVersion"
         Me.cbCheckForNewVersion.Size = New System.Drawing.Size(198, 19)
@@ -1597,7 +1593,6 @@ Partial Class frmPreferences
         Me.TPGeneral.Controls.Add(Me.btnFindBrowser)
         Me.TPGeneral.Controls.Add(Me.cbExternalbrowser)
         Me.TPGeneral.Controls.Add(Me.chkbx_disablecache)
-        Me.TPGeneral.Controls.Add(Me.gpbxPatronOmdbapi)
         Me.TPGeneral.Controls.Add(Me.GroupBox45)
         Me.TPGeneral.Controls.Add(Me.GroupBox36)
         Me.TPGeneral.Controls.Add(Me.GroupBox33)
@@ -1615,7 +1610,7 @@ Partial Class frmPreferences
         Me.lbExternalBrowserPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
         Me.lbExternalBrowserPath.Location = New System.Drawing.Point(17, 348)
         Me.lbExternalBrowserPath.Name = "lbExternalBrowserPath"
-        Me.lbExternalBrowserPath.Size = New System.Drawing.Size(380, 23)
+        Me.lbExternalBrowserPath.Size = New System.Drawing.Size(370, 23)
         Me.lbExternalBrowserPath.TabIndex = 118
         Me.lbExternalBrowserPath.Text = "-None-"
         '
@@ -1631,7 +1626,7 @@ Partial Class frmPreferences
         '
         'cbMcCloseMCForDLNewVersion
         '
-        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(384, 418)
+        Me.cbMcCloseMCForDLNewVersion.Location = New System.Drawing.Point(417, 313)
         Me.cbMcCloseMCForDLNewVersion.Name = "cbMcCloseMCForDLNewVersion"
         Me.cbMcCloseMCForDLNewVersion.Size = New System.Drawing.Size(219, 38)
         Me.cbMcCloseMCForDLNewVersion.TabIndex = 116
@@ -1653,7 +1648,7 @@ Partial Class frmPreferences
         'cbMultiMonitorEnable
         '
         Me.cbMultiMonitorEnable.AutoSize = true
-        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(21, 476)
+        Me.cbMultiMonitorEnable.Location = New System.Drawing.Point(408, 378)
         Me.cbMultiMonitorEnable.Name = "cbMultiMonitorEnable"
         Me.cbMultiMonitorEnable.Size = New System.Drawing.Size(187, 19)
         Me.cbMultiMonitorEnable.TabIndex = 114
@@ -1663,7 +1658,7 @@ Partial Class frmPreferences
         'cbRenameNFOtoINFO
         '
         Me.cbRenameNFOtoINFO.AutoSize = true
-        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(21, 501)
+        Me.cbRenameNFOtoINFO.Location = New System.Drawing.Point(408, 403)
         Me.cbRenameNFOtoINFO.Name = "cbRenameNFOtoINFO"
         Me.cbRenameNFOtoINFO.Size = New System.Drawing.Size(272, 19)
         Me.cbRenameNFOtoINFO.TabIndex = 111
@@ -3531,7 +3526,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_General.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_General.Name = "tpMoviePreferences_General"
         Me.tpMoviePreferences_General.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_General.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_General.TabIndex = 2
         Me.tpMoviePreferences_General.Text = "General"
         '
@@ -4317,36 +4312,9 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
-        '
-        'gpbxPatronOmdbapi
-        '
-        Me.gpbxPatronOmdbapi.Controls.Add(Me.tbOmdbapiUrl)
-        Me.gpbxPatronOmdbapi.Controls.Add(Me.lblOmdbapiUrl)
-        Me.gpbxPatronOmdbapi.Location = New System.Drawing.Point(486, 285)
-        Me.gpbxPatronOmdbapi.Name = "gpbxPatronOmdbapi"
-        Me.gpbxPatronOmdbapi.Size = New System.Drawing.Size(364, 99)
-        Me.gpbxPatronOmdbapi.TabIndex = 80
-        Me.gpbxPatronOmdbapi.TabStop = false
-        Me.gpbxPatronOmdbapi.Text = "OMDBAPI Url"
-        '
-        'tbOmdbapiUrl
-        '
-        Me.tbOmdbapiUrl.Location = New System.Drawing.Point(11, 73)
-        Me.tbOmdbapiUrl.Name = "tbOmdbapiUrl"
-        Me.tbOmdbapiUrl.Size = New System.Drawing.Size(347, 21)
-        Me.tbOmdbapiUrl.TabIndex = 1
-        '
-        'lblOmdbapiUrl
-        '
-        Me.lblOmdbapiUrl.Location = New System.Drawing.Point(10, 18)
-        Me.lblOmdbapiUrl.Name = "lblOmdbapiUrl"
-        Me.lblOmdbapiUrl.Size = New System.Drawing.Size(348, 49)
-        Me.lblOmdbapiUrl.TabIndex = 0
-        Me.lblOmdbapiUrl.Text = "Users that are Patrons to OMDB site may prefer to use their"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"personal Patrons Url"& _ 
-    ".  Please enter this here.  Blank uses"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"default OMDBAPI url."
         '
         'gpbxMovieExcludeYearSearch
         '
@@ -6303,8 +6271,6 @@ Partial Class frmPreferences
         Me.grpbxMovieNameMode.ResumeLayout(false)
         Me.grpbxMovieNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
-        Me.gpbxPatronOmdbapi.ResumeLayout(false)
-        Me.gpbxPatronOmdbapi.PerformLayout
         Me.gpbxMovieExcludeYearSearch.ResumeLayout(false)
         Me.gpbxMovieExcludeYearSearch.PerformLayout
         Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
@@ -6844,7 +6810,4 @@ End Sub
     Friend WithEvents gpbxMovieExcludeYearSearch As GroupBox
     Friend WithEvents cbMovieExcludeYearSearch As CheckBox
     Friend WithEvents Label31 As Label
-    Friend WithEvents gpbxPatronOmdbapi As GroupBox
-    Friend WithEvents tbOmdbapiUrl As TextBox
-    Friend WithEvents lblOmdbapiUrl As Label
 End Class
