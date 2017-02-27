@@ -18,81 +18,48 @@ Partial Public Class Form1
 
 #Region "Tv Treeview Routines"
     Public Sub tv_ViewReset()
-        btn_SaveTvShowOrEpisode.Enabled = True
-        Tv_TreeViewContext_RefreshShow.Enabled = False
-        Tv_TreeViewContext_RefreshShow.Visible = False
-        Tv_TreeViewContext_ShowMissEps.Enabled = False
-        Tv_TreeViewContext_ShowMissEps.Visible = False
-        Tv_TreeViewContext_DispByAiredDate.Enabled = False
-        Tv_TreeViewContext_DispByAiredDate.Visible = False
-        Tv_TreeViewContext_SearchNewEp.Enabled = False
-        Tv_TreeViewContext_SearchNewEp.Visible = False
-        Tv_TreeViewContext_FindMissArt.Enabled = False
-        Tv_TreeViewContext_FindMissArt.Visible = False
+        btn_SaveTvShowOrEpisode                 .Enabled = True
+        Tv_TreeViewContext_RefreshShow          .Enabled = False
+        Tv_TreeViewContext_RefreshShow          .Visible = False
+        Tv_TreeViewContext_ShowMissEps          .Enabled = False
+        Tv_TreeViewContext_ShowMissEps          .Visible = False
+        Tv_TreeViewContext_DispByAiredDate      .Enabled = False
+        Tv_TreeViewContext_DispByAiredDate      .Visible = False
+        Tv_TreeViewContext_SearchNewEp          .Enabled = False
+        Tv_TreeViewContext_SearchNewEp          .Visible = False
+        Tv_TreeViewContext_FindMissArt          .Enabled = False
+        Tv_TreeViewContext_FindMissArt          .Visible = False
 
-        Tv_TreeViewContext_ViewNfo.Enabled = False
-        ExpandSelectedShowToolStripMenuItem.Enabled = False
-        CollapseSelectedShowToolStripMenuItem.Enabled = False
-        ExpandAllToolStripMenuItem.Enabled = False
-        CollapseAllToolStripMenuItem.Enabled = False
-        Tv_TreeViewContext_ReloadFromCache.Enabled = False
-        Tv_TreeViewContext_OpenFolder.Enabled = False
+        Tv_TreeViewContext_ViewNfo              .Enabled = False
+        ExpandSelectedShowToolStripMenuItem     .Enabled = False
+        CollapseSelectedShowToolStripMenuItem   .Enabled = False
+        ExpandAllToolStripMenuItem              .Enabled = False
+        CollapseAllToolStripMenuItem            .Enabled = False
+        Tv_TreeViewContext_ReloadFromCache      .Enabled = False
+        Tv_TreeViewContext_OpenFolder           .Enabled = False
 
-        tb_ShPremiered.Text = ""
-        tb_ShGenre.Text = ""
-        tb_ShTvdbId.Text = ""
-        tb_ShImdbId.Text = ""
-        tb_ShRating.Text = ""
-        tb_ShVotes.Text = ""
-        tb_ShCert.Text = ""
-        tb_ShRunTime.Text = ""
-        tb_ShStudio.Text = ""
+        tb_Sh_Ep_Title.Text         = ""
+        tb_ShPremiered.Text         = ""
+        tb_ShGenre.Text             = ""
+        tb_ShPlot.Text              = ""
+        tb_ShTvdbId.Text            = ""
+        tb_ShImdbId.Text            = ""
+        tb_ShRating.Text            = ""
+        tb_ShVotes.Text             = ""
+        tb_ShCert.Text              = ""
+        tb_ShRunTime.Text           = ""
+        tb_ShStudio.Text            = ""
+        cmbx_shUserRating.Text      = "None"
         cbTvActorRole.Items.Clear()
-        cbTvActorRole.Text = ""
-
+        cbTvActorRole.Text          = ""
         cbTvActor.Items.Clear()
-        cbTvActor.Text = ""
-        PictureBox6.Image = Nothing
-
+        cbTvActor.Text              = ""
         tvdbposterlist.Clear()
-        PictureBox6.Image = Nothing
-        tv_PictureBoxLeft.Image = Nothing
-        tv_PictureBoxRight.Image = Nothing
-        tv_PictureBoxBottom.Image = Nothing
-        tb_ShPremiered.Text = ""
-        tb_ShGenre.Text = ""
-        tb_ShTvdbId.Text = ""
-        tb_ShImdbId.Text = ""
-        tb_ShRating.Text = ""
-        tb_ShVotes.Text = ""
-        tb_ShCert.Text = ""
-        tb_ShRunTime.Text = ""
-        tb_ShStudio.Text = ""
-        cbTvActorRole.Items.Clear()
-        cbTvActorRole.Text = ""
-        tb_ShPlot.Text = ""
-        cbTvActor.Items.Clear()
-        cbTvActor.Text = ""
-        cmbx_shUserRating.Text = "None"
-
-        tb_Sh_Ep_Title.Text = ""
-        tb_ShPremiered.Text = ""
-        tb_ShGenre.Text = ""
-        tb_ShTvdbId.Text = ""
-        tb_ShImdbId.Text = ""
-        tb_ShRating.Text = ""
-        tb_ShVotes.Text = ""
-        tb_ShCert.Text = ""
-        tb_ShRunTime.Text = ""
-        tb_ShStudio.Text = ""
-        cbTvActorRole.Items.Clear()
-        cbTvActorRole.Text = ""
-        tb_ShPlot.Text = ""
-        cbTvActor.Items.Clear()
-        cbTvActor.Text = ""
-
-        cbTvActor.Items.Clear()
-        cbTvActor.Text = ""
+        PictureBox6.Image           = Nothing
+        tv_PictureBoxLeft.Image     = Nothing
+        tv_PictureBoxRight.Image    = Nothing
+        tv_PictureBoxBottom.Image   = Nothing
+        
         For i = Panel13.Controls.Count - 1 To 0 Step -1
             Panel13.Controls.RemoveAt(i)
         Next

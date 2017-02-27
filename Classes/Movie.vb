@@ -1007,7 +1007,12 @@ Public Class Movie
 
         If PossibleImdb <> "" Then ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
         
-        ReportProgress(String.Format(" - Using '{0} {1}'", Title, PossibleYear) & " - Main body ")
+        If Not Pref.MovieChangeMovie Then
+            ReportProgress(String.Format(" - Using '{0} {1}'", Title, PossibleYear) & " - Main body ")
+        Else
+            ReportProgress(" - Change Movie in progress - Main body ")
+        End If
+        
 
         Return _imdbScraper.getimdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
     End Function
@@ -1015,7 +1020,7 @@ Public Class Movie
     Sub CheckImdbBodyScrape
         'Failed...
         If ImdbBody = "MIC" Then   
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Pref.imdbmirror & """" & vbCrLf & "IMDB may not be available or Movie Title is invalid" & vbCrLf )
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & SearchName & """, """ & PossibleYear & """, """ & PossibleImdb & """, """ & Pref.imdbmirror & """" & vbCrLf & "IMDB may not be available or Movie Title is invalid" & vbCrLf )
             AppendScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)
@@ -1032,16 +1037,20 @@ Public Class Movie
 
         If PossibleImdb <> "" Then ReportProgress( ,"Using TMDB : " & PossibleImdb & vbCrLf )
 
-        ReportProgress( String.Format(" - Using '{0}{1}'", title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
+        If Not Pref.MovieChangeMovie Then
+            ReportProgress( String.Format(" - Using '{0}{1}'", Title, If(String.IsNullOrEmpty(PossibleYear), "", " " & PossibleYear)) & " " )
+        Else
+            ReportProgress(" - Change Movie in progress - Main body ")
+        End If
 
-        ReportProgress( "- Main body " )
+        'ReportProgress( "- Main body " )
         
         Return _imdbScraper.gettmdbbody(Title, PossibleYear, PossibleImdb, Pref.googlecount)
     End Function
 
     Sub CheckTmdbBodyScrape()
         If ImdbBody.ToLower = "error" Then   'Failed...
-            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & Title & """, """ & PossibleYear & """" & vbCrLf & "TMDB may not be available or Movie Title is invalid" & vbCrLf )
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & SearchName & """, """ & PossibleYear & """" & vbCrLf & "TMDB may not be available or Movie Title is invalid" & vbCrLf )
             AppendScrapeFailedActions
         Else
             ReportProgress(MSG_OK,"!!! Movie Body Scraped OK" & vbCrLf)

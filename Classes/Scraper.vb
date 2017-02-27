@@ -274,7 +274,8 @@ Public Class Classimdb
             If result = "error" Then Return ""
             Dim adoc As New XmlDocument
             adoc.LoadXml(result)
-            If adoc("root").Attributes("Response").Value = "False" Then Return "Error"
+            If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return "Error"
+            If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return "Error"
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
                     Dim TmpValue As String = thisresult.Attributes("imdbID").Value
@@ -927,7 +928,8 @@ Public Class Classimdb
             If getresult = "error" Then Return ""
             Dim adoc As New XmlDocument
             adoc.LoadXml(getresult)
-            If adoc("root").Attributes("response").Value = "False" Then Return ""
+            If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return ""
+            If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return ""
             For each thisresult In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("metascore")) Then
                     Dim TmpValue As String = thisresult.Attributes("metascore").Value
