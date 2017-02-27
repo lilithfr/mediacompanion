@@ -461,6 +461,7 @@ Public Class frmXbmcExport
             root.AppendChild(ThisTvShow, "title"            , tvsh.Title.Value              )
             root.AppendChild(ThisTvShow, "showtitle"        , tvsh.Title.Value              )
             root.AppendChild(ThisTvShow, "rating"           , tvsh.Rating.Value             )
+            root.AppendChild(ThisTvShow, "userrating"       , tvsh.UserRating.Value         )
             root.AppendChild(ThisTvShow, "epbookmark"       , "0.000000"                    )
             root.AppendChild(ThisTvShow, "year"             , tvsh.Year.Value               )
             root.AppendChild(ThisTvShow, "top250"           , tvsh.Top250.Value             )

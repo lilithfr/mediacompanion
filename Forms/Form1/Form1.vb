@@ -7102,6 +7102,7 @@ Public Class Form1
 					tb_ShGenre.Font = newFont
 					tb_ShImdbId.Font = newFont
 					tb_ShCert.Font = newFont
+                    cmbx_shUserRating.Font = newFont
 
 					ratingtxt.Font = newFont
 					votestxt.Font = newFont
@@ -13804,6 +13805,7 @@ Public Class Form1
 				Show.TvdbId.Value = tb_ShTvdbId.Text
 				Show.Mpaa.Value = tb_ShCert.Text
 				Show.Genre.Value = tb_ShGenre.Text
+                Show.UserRating.Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
 				Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
 				nfoFunction.tvshow_NfoSave(Show, True)   'Show.Save()

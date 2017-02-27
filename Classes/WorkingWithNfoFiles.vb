@@ -810,6 +810,7 @@ Public Class WorkingWithNfoFiles
             root.AppendChild(doc, "status"              , tvshowtosave.Status.Value)
             root.AppendChild(doc, "runtime"             , FormatRunTime(tvshowtosave.Runtime.Value, "", False))
             root.AppendChild(doc, "rating"              , tvshowtosave.Rating.Value)
+            root.AppendChild(doc, "userrating"          , tvshowtosave.UserRating.Value)
             root.AppendChild(doc, "votes"               , CommaNoComma(tvshowtosave.Votes.Value, Pref.TvThousSeparator))
             root.AppendChild(doc, "year"                , tvshowtosave.Year.Value)
             root.AppendChild(doc, "premiered"           , tvshowtosave.Premiered.Value)
@@ -925,6 +926,8 @@ Public Class WorkingWithNfoFiles
                             If tmpstr.IndexOf("/10") <> -1 Then tmpstr.Replace("/10", "")
                             If tmpstr.IndexOf(" ") <> -1 Then tmpstr.Replace(" ", "")
                             newtvshow.Rating.Value = tmpstr
+                        Case "userrating"
+                            newtvshow.UserRating.Value = thisresult.InnerText
                         Case "votes"
                             newtvshow.Votes.Value = thisresult.InnerText
                         Case "year"

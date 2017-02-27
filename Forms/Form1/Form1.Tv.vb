@@ -483,6 +483,7 @@ Partial Public Class Form1
             tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
             tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
             tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
+            cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
             TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Pref.sortorder
@@ -726,6 +727,7 @@ Partial Public Class Form1
         tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
         tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
         tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
+        cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
         Panel_EpisodeInfo.Visible = False
         Panel_EpisodeActors.Visible = False
         lbl_sorttitle.Visible = True
