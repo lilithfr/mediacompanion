@@ -73,6 +73,7 @@ Partial Public Class Form1
         tb_ShPlot.Text = ""
         cbTvActor.Items.Clear()
         cbTvActor.Text = ""
+        cmbx_shUserRating.Text = "None"
 
         tb_Sh_Ep_Title.Text = ""
         tb_ShPremiered.Text = ""

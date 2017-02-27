@@ -72,6 +72,7 @@ Public Class TvShow
     Public Property TvShowActorSource As New ProtoProperty(Me, "tvshowactorsource")
     Public Property EpisodeActorSource As New ProtoProperty(Me, "episodeactorsource", CacheMode:=CacheMode.Both)
     Public Property Hidden As New ProtoProperty(Me, "hidden", CacheMode:=CacheMode.OnlyCache)       'Field for filtering out series from Treeview.
+    Public Property UserRating As New ProtoProperty(Me, "userrating", "0")
 
     Private Property _State As New ProtoProperty(Me, "state", CacheMode:=CacheMode.Both)
     Public Shadows Property State As Media_Companion.ShowState
@@ -248,6 +249,7 @@ Public Class TvShow
         Me.Url.Value = URLs.EpisodeGuide(Series.Id.Value, Series.Language.Value)
         Me.Url.Node.SetAttributeValue("cache", Series.Id.Value)
         Me.Hidden.Value = False.ToString
+        Me.UserRating.Value = "0"
 
     End Sub
 
