@@ -860,12 +860,13 @@ Partial Public Class Form1
             Next
         End If
 
-        Dim tempstring As String = ""
-        lb_EpDetails.Items.Clear()
+        'Dim tempstring As String = ""
+        'lb_EpDetails.Items.Clear()
 
         cmbxEpActor.Items.Clear()
-        tb_EpFilename.Text = Utilities.ReplaceNothing(Path.GetFileName(Episode.NfoFilePath))
-        tb_EpPath.Text = Utilities.ReplaceNothing(Episode.FolderPath)
+        tb_EpFilename.Text = Utilities.ReplaceNothing(Episode.NfoFilePath)
+        tb_EpImdbId.Text = Episode.ImdbId.Value
+        cmbx_EpUsrRating.Text = If(Episode.UserRating.Value = "0", "None", Episode.UserRating.Value)
         If Not File.Exists(Episode.NfoFilePath) Then
             tb_Sh_Ep_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
             Panel_EpisodeInfo.Visible = True
@@ -911,21 +912,21 @@ Partial Public Class Form1
 
         util_EpisodeSetWatched(Episode.PlayCount.Value)
 
-        Dim epdetails As String = ""
-        epdetails += "Video: " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Height.Value, "?")
-        epdetails += ", (" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Aspect.Value, "?") & ")"
-        lb_EpDetails.Items.Add(epdetails)
-        epdetails = " :- " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Codec.Value, "?")
-        epdetails += ", @ " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Bitrate.Value, "?")
-        lb_EpDetails.Items.Add(epdetails)
+        'Dim epdetails As String = ""
+        'epdetails += "Video: " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Height.Value, "?")
+        'epdetails += ", (" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Aspect.Value, "?") & ")"
+        'lb_EpDetails.Items.Add(epdetails)
+        'epdetails = " :- " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Codec.Value, "?")
+        'epdetails += ", @ " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Bitrate.Value, "?")
+        'lb_EpDetails.Items.Add(epdetails)
             
-        If Episode.StreamDetails.Audio.Count > 0 Then
-            epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Codec.Value, "?")
-            lb_EpDetails.Items.Add(epdetails)
-            epdetails = Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Bitrate.Value, "?")
-            epdetails += ", " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
-            lb_EpDetails.Items.Add(epdetails)
-        End If
+        'If Episode.StreamDetails.Audio.Count > 0 Then
+        '    epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Codec.Value, "?")
+        '    lb_EpDetails.Items.Add(epdetails)
+        '    epdetails = Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Bitrate.Value, "?")
+        '    epdetails += ", " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
+        '    lb_EpDetails.Items.Add(epdetails)
+        'End If
 
         Dim aActor As Boolean = False
             For Each actor In Episode.ListActors

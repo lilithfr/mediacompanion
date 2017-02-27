@@ -5621,9 +5621,7 @@ Public Class Form1
 								Dim fi As New FileInfo(items)
 								If Not File.Exists(newname) Then
 									fi.MoveTo(newname)
-									If items.ToLower = Path.Combine(tb_EpPath.Text, tb_EpFilename.Text).ToLower Then
-										tb_EpFilename.Text = Path.GetFileName(fi.FullName)
-									End If
+									If items.ToLower = tb_EpFilename.Text.ToLower Then tb_EpFilename.Text = fi.FullName.ToString
 									renamelog += "  ---Succeeded" & vbCrLf
 								Else
 									renamelog += " --! Not Renamed - Same" & vbCrLf
@@ -7090,7 +7088,7 @@ Public Class Form1
 					tb_EpPlot.Font = newFont
 					tb_EpAired.Font = newFont
 					tb_EpRating.Font = newFont
-					tb_EpPath.Font = newFont
+					tb_EpImdbId.Font = newFont
 					tb_EpFilename.Font = newFont
 					tb_ShPlot.Font = newFont
 					cbTvActor.Font = newFont
@@ -13832,6 +13830,7 @@ Public Class Form1
 						ep.Plot.Value = tb_EpPlot.Text
 						ep.Aired.Value = tb_EpAired.Text
 						ep.Rating.Value = tb_EpRating.Text
+                        ep.UserRating.Value = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
 						'ep.Votes.Value = tb_EpVotes.Text       'No, don't allow users to change votes.
 						ep.Credits.Value = tb_EpCredits.Text
 						ep.Director.Value = tb_EpDirector.Text

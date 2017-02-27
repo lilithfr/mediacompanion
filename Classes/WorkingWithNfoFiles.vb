@@ -384,6 +384,8 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.ImdbId.Value   = thisresult.InnerText
                             Case "epbookmark"
                                 newtvepisode.EpBookmark.Value = thisresult.InnerText
+                            Case "userrating"
+                                newtvepisode.UserRating.Value = thisresult.InnerText
                             Case "runtime"
                                 newtvepisode.Runtime.Value = thisresult.InnerText
                             Case "actor"
@@ -513,6 +515,8 @@ Public Class WorkingWithNfoFiles
                                             anotherepisode.ImdbId.Value = thisresult.ChildNodes(f).InnerText
                                         Case "epbookmark"
                                             anotherepisode.EpBookmark.Value = thisresult.ChildNodes(f).InnerText
+                                        Case "userrating"
+                                            anotherepisode.UserRating.Value = thisresult.ChildNodes(f).InnerText
                                         Case "actor"
                                             Dim actordetail As XmlNode = Nothing
                                             Dim newactor As New str_MovieActors(SetDefaults)
@@ -645,6 +649,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(doc, "runtime"       , ep.Runtime.Value      )
             xmlEpisode.AppendChild(doc, "epbookmark"    , ep.EpBookmark.Value   )
             xmlEpisode.AppendChild(doc, "videosource"   , ep.Source.Value       )
+            xmlEpisode.AppendChild(doc, "userrating"    , ep.UserRating.Value   )
             
             Dim actorstosave As Integer = ep.ListActors.Count
             If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors

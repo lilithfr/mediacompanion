@@ -613,6 +613,7 @@ Public Class frmXbmcExport
             root.AppendChild(ThisTvEp, "rating"             , tvep.Rating.Value                 )
             root.AppendChild(ThisTvEp, "votes"              , tvep.Votes.Value                  )
             root.AppendChild(ThisTvEp, "epbookmark"         , tvep.EpBookmark.Value             )
+            root.AppendChild(ThisTvEp, "userrating"         , tvep.UserRating.Value             )
             root.AppendChild(ThisTvEp, "year"               , tvep.Year.Value                   )
             root.AppendChild(ThisTvEp, "top250"             , sh.Top250.Value                   )
             root.AppendChild(ThisTvEp, "season"             , tvep.Season.Value                 )
