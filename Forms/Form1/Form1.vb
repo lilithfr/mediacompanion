@@ -13734,121 +13734,7 @@ Public Class Form1
 	End Sub
 
 	Private Sub btn_SaveTvShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_SaveTvShowOrEpisode.Click
-		Try
-			Dim Show As Media_Companion.TvShow = Nothing
-			Dim Season As Media_Companion.TvSeason = Nothing
-			Dim Episode As Media_Companion.TvEpisode = Nothing
-			If TvTreeview.SelectedNode IsNot Nothing Then
-				If TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvShow Then
-					Show = TvTreeview.SelectedNode.Tag
-				ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-					Episode = TvTreeview.SelectedNode.Tag
-				ElseIf TypeOf TvTreeview.SelectedNode.Tag Is Media_Companion.TvSeason Then
-					Exit Sub
-				Else
-					Exit Sub
-				End If
-			Else
-				Exit Sub
-			End If
-
-			Dim tempint As Integer = 0
-			Dim tempstring As String = ""
-			If Show IsNot Nothing Then
-				Dim changed As Integer = 0
-				If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then
-					changed += 1
-				End If
-				If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then
-					changed += 2
-				End If
-				If changed > 0 Then
-					If changed = 1 Then
-						tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes And art" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
-					ElseIf changed = 2 Then
-						tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
-					ElseIf changed = 3 Then
-						tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
-					End If
-				End If
-				'its a tvshow
-				Dim TmpTitle As String = ""
-				If tb_Sh_Ep_Title.Text.ToLower.IndexOf(", the") = tb_Sh_Ep_Title.Text.Length - 5 And tb_Sh_Ep_Title.Text.Length > 5 Then
-					TmpTitle = "The " & tb_Sh_Ep_Title.Text.Substring(0, tb_Sh_Ep_Title.Text.Length - 5)
-				Else
-					TmpTitle = tb_Sh_Ep_Title.Text
-				End If
-
-				If TmpTitle <> Show.Title.Value Then
-					Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
-					If TryTitle = MsgBoxResult.No Then
-						tb_Sh_Ep_Title.Text = Show.Title.Value  'Pref.RemoveIgnoredArticles(Show.Title.Value)
-						Exit Sub
-					End If
-					Show.Title.Value = TmpTitle
-				End If
-				Show.Plot.Value = tb_ShPlot.Text
-				Show.Runtime.Value = tb_ShRunTime.Text
-				Show.Premiered.Value = tb_ShPremiered.Text
-				Show.Studio.Value = tb_ShStudio.Text
-				Show.Rating.Value = tb_ShRating.Text
-				Show.ImdbId.Value = tb_ShImdbId.Text
-				Show.TvdbId.Value = tb_ShTvdbId.Text
-				Show.Mpaa.Value = tb_ShCert.Text
-				Show.Genre.Value = tb_ShGenre.Text
-                Show.UserRating.Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
-				Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
-
-				nfoFunction.tvshow_NfoSave(Show, True)   'Show.Save()
-				Show.UpdateTreenode()
-			Else
-				Dim trueseason As String = Utilities.PadNumber(Episode.Season.Value, 2)
-				Do While trueseason.Substring(0, 1) = "0" AndAlso trueseason.Length <> 1
-					trueseason = trueseason.Substring(1, trueseason.Length - 1)
-				Loop
-				Dim trueepisode As String = Utilities.PadNumber(Episode.Episode.Value, 2)
-				Do While trueepisode.Substring(0, 1) = "0" AndAlso trueepisode.Length <> 1
-					trueepisode = trueepisode.Substring(1, trueepisode.Length - 1)
-				Loop
-				Dim episodelist As New List(Of TvEpisode)
-				episodelist = WorkingWithNfoFiles.ep_NfoLoad(Episode.NfoFilePath)
-				For Each ep In episodelist
-					If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
-						If tb_Sh_Ep_Title.Text.Replace("'", "").ToLower <> ep.Title.Value.ToLower Then
-							Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
-							If TryTitle = MsgBoxResult.Yes Then
-								ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
-							End If
-						End If
-						ep.Plot.Value = tb_EpPlot.Text
-						ep.Aired.Value = tb_EpAired.Text
-						ep.Rating.Value = tb_EpRating.Text
-                        ep.UserRating.Value = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
-						'ep.Votes.Value = tb_EpVotes.Text       'No, don't allow users to change votes.
-						ep.Credits.Value = tb_EpCredits.Text
-						ep.Director.Value = tb_EpDirector.Text
-						If ep.Season.Value = "0" Then
-							ep.DisplayEpisode.Value = tb_EpAirEpisode.Text
-							ep.DisplaySeason.Value = tb_EpAirSeason.Text
-						End If
-						ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
-					End If
-				Next
-				WorkingWithNfoFiles.ep_NfoSave(episodelist, Episode.NfoFilePath)
-				ep_Load(Episode.EpisodeNode.Parent.Tag, Episode, True)
-			End If
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
+		SaveShowOrEpisode()
 	End Sub          'save button
 
 	Private Sub btn_TvShSortOrder_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_TvShSortOrder.Click
@@ -14019,6 +13905,28 @@ Public Class Form1
 
 		End Try
 	End Sub
+
+    Private Sub tb_EpImdbId_MouseDown(sender As Object, e As MouseEventArgs) Handles tb_EpImdbId.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            If Utilities.ValidImdbId(tb_EpImdbId.Text) Then
+                Dim m As MsgBoxResult = MsgBox("This episode has a valid IMDb Id" & vbCrLf & "Are you sure you wish to change this?", MsgBoxStyle.YesNo)
+                If m = MsgBoxResult.No OrElse m = MsgBoxResult.Cancel Then Exit Sub
+            End If
+
+            Dim newImdbId As String = InputBox("Enter IMDB Id for Episdoe: ", "Manual IMDBId")
+
+            If Utilities.ValidImdbId(newImdbId) Then
+                tb_EpImdbId.Text = newImdbId
+                SaveShowOrEpisode(True)
+            End If
+        End If
+    End Sub
+    
+    Private Sub cmbx_EpUsrRating_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbx_EpUsrRating.SelectedValueChanged, cmbx_shUserRating.SelectedValueChanged
+        If ShOrEploading Then Exit Sub
+        btn_SaveTvShowOrEpisode.PerformClick()
+    End Sub
+    
 
 #Region "Tv PictureBoxes"
 	Private Sub ReScrFanartToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ReScrFanartToolStripMenuItem.Click
@@ -16442,5 +16350,5 @@ Public Class Form1
 	Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
 		OpenUrl(TMDB_SET_URL & workingMovie.TmdbSetId)
 	End Sub
-    
+
 End Class

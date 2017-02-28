@@ -2709,6 +2709,12 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Try
     End Function
 
+    Public Shared Function ValidImdbId(ByVal id As String) As Boolean
+        Dim aok As Boolean = False
+        If Not String.IsNullOrEmpty(id) AndAlso id.StartsWith("tt") AndAlso id.Length = 9 Then aok = True
+        Return aok
+    End Function
+
 End Class
 
 Public Class langlib

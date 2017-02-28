@@ -2,7 +2,6 @@
 Public Class frmMessageBox
 
     Public Property Cancelled As Boolean
-    Public Property btn1site As String
     Public Property IsActive As Boolean
 
     Public Sub New(ByVal line1 As String, Optional ByVal line2 As String = "", Optional ByVal line3 As String = "")
