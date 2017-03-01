@@ -511,6 +511,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.cbMovAllowNonImdbIdAsId = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -4303,6 +4304,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.AutoScroll = true
         Me.tpMoviePreferences_Advanced.AutoScrollMinSize = New System.Drawing.Size(928, 370)
         Me.tpMoviePreferences_Advanced.BackColor = System.Drawing.SystemColors.Control
+        Me.tpMoviePreferences_Advanced.Controls.Add(Me.cbMovAllowNonImdbIdAsId)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbxMovieExcludeYearSearch)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.gpbx_MovTimerAutoScrape)
         Me.tpMoviePreferences_Advanced.Controls.Add(Me.grpbxMovieCustomPlaycountTag)
@@ -4312,7 +4314,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -4320,7 +4322,7 @@ Partial Class frmPreferences
         '
         Me.gpbxMovieExcludeYearSearch.Controls.Add(Me.cbMovieExcludeYearSearch)
         Me.gpbxMovieExcludeYearSearch.Controls.Add(Me.Label31)
-        Me.gpbxMovieExcludeYearSearch.Location = New System.Drawing.Point(10, 210)
+        Me.gpbxMovieExcludeYearSearch.Location = New System.Drawing.Point(10, 187)
         Me.gpbxMovieExcludeYearSearch.Name = "gpbxMovieExcludeYearSearch"
         Me.gpbxMovieExcludeYearSearch.Size = New System.Drawing.Size(389, 106)
         Me.gpbxMovieExcludeYearSearch.TabIndex = 79
@@ -4355,7 +4357,7 @@ Partial Class frmPreferences
         Me.gpbx_MovTimerAutoScrape.Controls.Add(Me.cbMovEnableAutoScrape)
         Me.gpbx_MovTimerAutoScrape.Location = New System.Drawing.Point(10, 7)
         Me.gpbx_MovTimerAutoScrape.Name = "gpbx_MovTimerAutoScrape"
-        Me.gpbx_MovTimerAutoScrape.Size = New System.Drawing.Size(389, 111)
+        Me.gpbx_MovTimerAutoScrape.Size = New System.Drawing.Size(389, 83)
         Me.gpbx_MovTimerAutoScrape.TabIndex = 78
         Me.gpbx_MovTimerAutoScrape.TabStop = false
         Me.gpbx_MovTimerAutoScrape.Text = "AutoScrape Timer"
@@ -4390,7 +4392,7 @@ Partial Class frmPreferences
         '
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.cbMovNfoWatchTag)
         Me.grpbxMovieCustomPlaycountTag.Controls.Add(Me.Label23)
-        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(10, 124)
+        Me.grpbxMovieCustomPlaycountTag.Location = New System.Drawing.Point(10, 96)
         Me.grpbxMovieCustomPlaycountTag.Name = "grpbxMovieCustomPlaycountTag"
         Me.grpbxMovieCustomPlaycountTag.Size = New System.Drawing.Size(389, 76)
         Me.grpbxMovieCustomPlaycountTag.TabIndex = 77
@@ -6143,6 +6145,19 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'cbMovAllowNonImdbIdAsId
+        '
+        Me.cbMovAllowNonImdbIdAsId.AutoSize = true
+        Me.cbMovAllowNonImdbIdAsId.Location = New System.Drawing.Point(21, 299)
+        Me.cbMovAllowNonImdbIdAsId.Name = "cbMovAllowNonImdbIdAsId"
+        Me.cbMovAllowNonImdbIdAsId.Size = New System.Drawing.Size(209, 34)
+        Me.cbMovAllowNonImdbIdAsId.TabIndex = 80
+        Me.cbMovAllowNonImdbIdAsId.Text = "Allow Non IMDB Id's as IMDB Id's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"(Must start with alpha character)"
+        Me.ToolTip1.SetToolTip(Me.cbMovAllowNonImdbIdAsId, "This option is explicitly for filtering of Actors/Directors"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from foreign scraped"& _ 
+        " movies.  ID's MUST start with"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Alpha character to differentiate from TMDB Id's."& _ 
+        ""&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ie: RB-1234 or IP8888")
+        Me.cbMovAllowNonImdbIdAsId.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6271,6 +6286,7 @@ Partial Class frmPreferences
         Me.grpbxMovieNameMode.ResumeLayout(false)
         Me.grpbxMovieNameMode.PerformLayout
         Me.tpMoviePreferences_Advanced.ResumeLayout(false)
+        Me.tpMoviePreferences_Advanced.PerformLayout
         Me.gpbxMovieExcludeYearSearch.ResumeLayout(false)
         Me.gpbxMovieExcludeYearSearch.PerformLayout
         Me.gpbx_MovTimerAutoScrape.ResumeLayout(false)
@@ -6810,4 +6826,5 @@ End Sub
     Friend WithEvents gpbxMovieExcludeYearSearch As GroupBox
     Friend WithEvents cbMovieExcludeYearSearch As CheckBox
     Friend WithEvents Label31 As Label
+    Friend WithEvents cbMovAllowNonImdbIdAsId As CheckBox
 End Class

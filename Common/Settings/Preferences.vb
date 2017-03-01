@@ -360,6 +360,7 @@ Public Class Pref
     Public Shared MovSetOverviewToNfo As Boolean
     Public Shared MovEnableAutoScrape As Boolean
     Public Shared MovAutoScrapeInterval As Integer
+    Public Shared MovAllowNonImdbIdAsId As Boolean
 
     Public Shared Property movieignorepart As Boolean
         Get
@@ -729,6 +730,7 @@ Public Class Pref
         MovSetOverviewToNfo = False
         MovEnableAutoScrape = False
         MovAutoScrapeInterval = 5
+        MovAllowNonImdbIdAsId = False
 
 
         'TV
@@ -1056,6 +1058,7 @@ Public Class Pref
         root.AppendChild(doc, "MovSetOverviewToNfo"         , MovSetOverviewToNfo       ) 'cbMovSetOverviewToNfo
         root.AppendChild(doc, "MovEnableAutoScrape"         , MovEnableAutoScrape       ) 'cbMovEnableAutoScrape
         root.AppendChild(doc, "MovAutoScrapeInterval"       , MovAutoScrapeInterval     ) 'tbMovAutoScrapeInterval
+        root.AppendChild(doc, "MovAllowNonImdbIdAsId"       , MovAllowNonImdbIdAsId     ) 'cbMovAllowNonImdbIdAsId
         
         If Not String.IsNullOrEmpty(font) Then
             root.AppendChild(doc, "font", font)                                 'Button96
@@ -1483,6 +1486,7 @@ Public Class Pref
                     Case "MovSetOverviewToNfo"                  : MovSetOverviewToNfo = thisresult.InnerXml
                     Case "MovEnableAutoScrape"                  : MovEnableAutoScrape = thisresult.InnerXml
                     Case "MovAutoScrapeInterval"                : MovAutoScrapeInterval = Convert.ToInt16(thisresult.InnerText)
+                    Case "MovAllowNonImdbIdAsId"                : MovAllowNonImdbIdAsId = thisresult.InnerXml
                     Case "startupcache"                         : startupCache = thisresult.InnerXml
                     Case "font"                                 : font = thisresult.InnerXml
                     Case "maxactors"                            : maxactors = Convert.ToInt32(thisresult.InnerXml)

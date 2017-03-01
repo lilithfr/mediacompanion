@@ -1473,10 +1473,16 @@ Public Class WorkingWithNfoFiles
                             Else
                                 If myresult.StartsWith("tt") Then
                                     newmovie.fullmoviebody.imdbid = myresult
+                                ElseIf Pref.MovAllowNonImdbIdAsId AndAlso Regex.IsMatch(myresult, "^[A-Z|a-z]") Then
+                                    newmovie.fullmoviebody.imdbid = myresult
                                 Else
                                     newmovie.fullmoviebody.tmdbid = myresult
                                     myresult = nothing
                                 End If
+                                'Else
+                                '    newmovie.fullmoviebody.tmdbid = myresult
+                                '    myresult = nothing
+                                'End If
                                 Dim testAttribute2 as XmlAttribute = CType(thisresult.Attributes.GetNamedItem("TMDB"),  XmlAttribute)
                                 If testAttribute2 IsNot Nothing Then
                                     newmovie.fullmoviebody.tmdbid = testAttribute2.InnerText

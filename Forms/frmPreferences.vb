@@ -361,6 +361,7 @@ Public Class frmPreferences
         cbMovSetOverviewToNfo               .Checked    = Pref.MovSetOverviewToNfo
         cbMovEnableAutoScrape               .Checked    = Pref.MovEnableAutoScrape
         tbMovAutoScrapeInterval             .Text       = Pref.MovAutoScrapeInterval.ToString
+        cbMovAllowNonImdbIdAsId             .Checked    = Pref.MovAllowNonImdbIdAsId
         cbIMDbOriginalTitle                 .Checked    = Pref.Original_Title
 
         'BasicSave Mode
@@ -1501,6 +1502,12 @@ Public Class frmPreferences
         Dim digitsOnly As Regex = New Regex("[^\d]")
         tbMovAutoScrapeInterval.Text = digitsOnly.Replace(tbMovAutoScrapeInterval.Text, "")
         Changes = True
+    End Sub
+
+    Private Sub cbMovAllowNonImdbIdAsId_CheckedChanged(sender As Object, e As EventArgs) Handles cbMovAllowNonImdbIdAsId.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovAllowNonImdbIdAsId = cbMovAllowNonImdbIdAsId.Checked
+        Changes = true
     End Sub
 
     Private Sub chkbOriginal_Title_CheckedChanged( sender As Object,  e As EventArgs) Handles cbIMDbOriginalTitle.CheckedChanged
