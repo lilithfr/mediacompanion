@@ -698,6 +698,24 @@ namespace WatTmdb.V3
         }
 
         /// <summary>
+        /// Get list of all the keywords that have been added to a particular movie.  Only English keywords exist currently.
+        /// (http://help.themoviedb.org/kb/api/movie-keywords)
+        /// </summary>
+        /// <param name="TvID">TMDB movie id</param>
+        /// <returns></returns>
+        public TmdbMovieKeywords GetTvKeywords(int TvID)
+        {
+            //return ProcessRequest<TmdbMovieKeywords>(BuildGetMovieKeywordsRequest(MovieID));
+            return ProcessRequest<TmdbMovieKeywords>(Generator.GetTvKeywords(TvID));
+        }
+
+        public string GetTvKeywordsETag(int TvID)
+        {
+            //return ProcessRequestETag(BuildGetMovieKeywordsRequest(MovieID));
+            return ProcessRequestETag(ETagGenerator.GetMovieKeywords(TvID));
+        }
+
+        /// <summary>
         /// Get the external ids stored for a TV series
         /// (http://docs.themoviedb.apiary.io/#get-%2F3%2Ftv%2F%7Bid%7D%2Fexternal_ids)
         /// </summary>

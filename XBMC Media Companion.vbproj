@@ -162,6 +162,7 @@
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\LockSpecificParams.vb" />
     <Compile Include="Classes\HmMovComboList.vb" />
+    <Compile Include="Classes\TVTMDb.vb" />
     <Compile Include="Classes\TmdbCustomSetName.vb" />
     <Compile Include="Classes\UserTmdbSetAdditions.vb" />
     <Compile Include="Classes\TmdbSetMissingMovie.vb" />

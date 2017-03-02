@@ -232,6 +232,14 @@ namespace WatTmdb.Utilities
                 .GetRequest();
         }
 
+        internal RestRequest GetTvKeywords(int TvID, object userState = null)
+        {
+            return GetBuilder(REQUEST_TV_KEYWORDS)
+                .SetUserState(userState)
+                .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvID)
+                .GetRequest();
+        }
+
         internal RestRequest GetTVExternal(int TvId, string language, object userState = null)
         {
             return GetBuilder(REQUEST_TV_EXTERNALIDS)
@@ -246,6 +254,14 @@ namespace WatTmdb.Utilities
             return GetBuilder(REQUEST_TV_IMAGES)
                 .SetUserState(userState)
                 .AddParameter(RequestBuilder.PARAMETER_LANGUAGE, language)
+                .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvId)
+                .GetRequest();
+        }
+
+        internal RestRequest GetTVKeywords(int TvId, object userState = null)
+        {
+            return GetBuilder(REQUEST_TV_KEYWORDS)
+                .SetUserState(userState)
                 .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvId)
                 .GetRequest();
         }

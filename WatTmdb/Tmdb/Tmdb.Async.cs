@@ -1060,6 +1060,24 @@ namespace WatTmdb.V3
         {
             ProcessAsyncRequest<TmdbTvEpisodeImages>(Generator.GetTvEpisodeImages(TvId, SeasonId, EpisodeId, language, UserState), callback);
         }
+
+        /// <summary>
+        /// Get list of all the keywords that have been added to a particular TvSeries.  Only English keywords exist currently.
+        /// </summary>
+        /// <param name="TmdbID">TMDB Tv id</param>
+        /// <param name="UserState">User object to include in callback</param>
+        /// <param name="callback"></param>
+        public void GetTvKeywords(int TmdbID, object UserState, Action<TmdbAsyncResult<TmdbMovieKeywords>> callback)
+        {
+            //ProcessAsyncRequest<TmdbMovieKeywords>(BuildGetMovieKeywordsRequest(MovieID, UserState), callback);
+            ProcessAsyncRequest<TmdbMovieKeywords>(Generator.GetTVKeywords(TmdbID, UserState), callback);
+        }
+
+        public void GetTvKeywordsETag(int MovieID, object UserState, Action<TmdbAsyncETagResult> callback)
+        {
+            //ProcessAsyncRequestETag(BuildGetMovieKeywordsRequest(MovieID, UserState), callback);
+            ProcessAsyncRequestETag(ETagGenerator.GetMovieKeywords(MovieID, UserState), callback);
+        }
         #endregion
 
 

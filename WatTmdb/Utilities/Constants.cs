@@ -61,6 +61,7 @@ namespace WatTmdb.Utilities
         public const string REQUEST_TV_CREDITS = "tv/{id}/credits";
         public const string REQUEST_TV_EXTERNALIDS = "tv/{id}/external_ids";
         public const string REQUEST_TV_IMAGES = "tv/{id}/images";
+        public const string REQUEST_TV_KEYWORDS = "tv/{id}/keywords";
 
         public const string REQUEST_TV_SEASON = "tv/{id}/season/{season}";
         public const string REQUEST_TV_SEASON_EXTERNALIDS = "tv/{id}/season/{season}/external_ids";
