@@ -947,12 +947,18 @@ Public Class Form1
 	End Sub
 
 	Private Sub Form1_KeyDown(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
-		If e.KeyCode = Keys.F6 Then mov_CacheLoad()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
 		If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
+	End Sub
+	Private Sub Form1_KeyUp(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyUp
+		If e.KeyCode = Keys.F6 Then  
+            mov_CacheLoad
+            DataGridViewMovies.ClearSelection
+            DataGridViewMovies.Rows(0).Selected= (DataGridViewMovies.Rows.Count>0 )
+            DisplayMovie
+        End If
 	End Sub
 
 #End Region
