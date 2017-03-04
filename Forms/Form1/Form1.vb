@@ -950,6 +950,7 @@ Public Class Form1
 
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
+		If e.KeyCode = Keys.F6 Then mov_CacheLoad()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
 		If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
 	End Sub
