@@ -956,7 +956,9 @@ Public Class Form1
 		If e.KeyCode = Keys.F6 Then  
             mov_CacheLoad
             DataGridViewMovies.ClearSelection
-            DataGridViewMovies.Rows(0).Selected= (DataGridViewMovies.Rows.Count>0 )
+            If DataGridViewMovies.Rows.Count>0 Then
+                DataGridViewMovies.Rows(0).Selected=True
+            End If
             DisplayMovie
         End If
 	End Sub
