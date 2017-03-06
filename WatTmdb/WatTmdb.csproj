@@ -67,6 +67,7 @@
     <Compile Include="Tmdb\Tmdb.cs" />
     <Compile Include="Tmdb\Tmdb.Sync.cs" />
     <Compile Include="V3\TmdbAccount.cs" />
+    <Compile Include="V3\TmdbFind.cs" />
     <Compile Include="V3\TmdbJobList.cs" />
     <Compile Include="V3\TmdbKeywords.cs" />
     <Compile Include="V3\TmdbList.cs" />
@@ -90,6 +91,8 @@
     <Compile Include="V3\TmdbMovieAlternateTitles.cs" />
     <Compile Include="V3\TmdbMovieCast.cs" />
     <Compile Include="V3\TmdbMovieImages.cs" />
+    <Compile Include="V3\TmdbTvReleases.cs" />
+    <Compile Include="V3\TmdbTvKeywords.cs" />
     <Compile Include="V3\TmdbMovieKeywords.cs" />
     <Compile Include="V3\TmdbMovieReleases.cs" />
     <Compile Include="V3\TmdbMovieReview.cs" />

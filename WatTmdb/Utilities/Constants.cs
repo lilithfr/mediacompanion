@@ -62,6 +62,7 @@ namespace WatTmdb.Utilities
         public const string REQUEST_TV_EXTERNALIDS = "tv/{id}/external_ids";
         public const string REQUEST_TV_IMAGES = "tv/{id}/images";
         public const string REQUEST_TV_KEYWORDS = "tv/{id}/keywords";
+        public const string REQUEST_TV_RELEASES = "tv/{id}/content_ratings";
 
         public const string REQUEST_TV_SEASON = "tv/{id}/season/{season}";
         public const string REQUEST_TV_SEASON_EXTERNALIDS = "tv/{id}/season/{season}/external_ids";
@@ -88,6 +89,8 @@ namespace WatTmdb.Utilities
 
         public const string REQUEST_JOB_LIST = "job/list";
 
+        public const string REQUEST_FIND_BY_ID = "find/{id}";
+
         #endregion
     
     }
@@ -104,6 +107,7 @@ namespace WatTmdb.Utilities
         public const string PARAMETER_ADULT = "include_adult";
         public const string PARAMETER_YEAR = "year";
         public const string PARAMETER_ID = "id";
+        public const string PARAMETER_EXTSOURCE = "external_source";
         public const string PARAMETER_COUNTRY = "country";
         public const string PARAMETER_STARTDATE = "start_date";
         public const string PARAMETER_ENDDATE = "end_date";

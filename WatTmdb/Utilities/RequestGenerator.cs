@@ -125,7 +125,7 @@ namespace WatTmdb.Utilities
         #endregion
 
 
-        #region Search Methods
+        #region Search & Find Methods
 
         internal RestRequest SearchMovie(string query, int page, string language, bool? includeAdult = null, int? year = null, object userState = null)
         {
@@ -187,6 +187,15 @@ namespace WatTmdb.Utilities
                 .GetRequest();
         }
 
+        internal RestRequest Find(string id, string idprovider, object userState = null)
+        {
+            return GetBuilder(REQUEST_FIND_BY_ID)
+                .SetUserState(userState)
+                .AddParameter(RequestBuilder.PARAMETER_EXTSOURCE, idprovider)
+                .AddUrlSegment(RequestBuilder.PARAMETER_ID, id)
+                .GetRequest();
+        }
+
         #endregion
 
 
@@ -232,10 +241,20 @@ namespace WatTmdb.Utilities
                 .GetRequest();
         }
 
-        internal RestRequest GetTvKeywords(int TvID, object userState = null)
+        internal RestRequest GetTvKeywords(int TvID, string language, object userState = null)
         {
             return GetBuilder(REQUEST_TV_KEYWORDS)
                 .SetUserState(userState)
+                .AddParameter(RequestBuilder.PARAMETER_LANGUAGE, language)
+                .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvID)
+                .GetRequest();
+        }
+
+        internal RestRequest GetTvReleases(int TvID, string language, object userState = null)
+        {
+            return GetBuilder(REQUEST_TV_RELEASES)
+                .SetUserState(userState)
+                .AddParameter(RequestBuilder.PARAMETER_LANGUAGE, language)
                 .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvID)
                 .GetRequest();
         }
@@ -258,10 +277,11 @@ namespace WatTmdb.Utilities
                 .GetRequest();
         }
 
-        internal RestRequest GetTVKeywords(int TvId, object userState = null)
+        internal RestRequest GetTVKeywords(int TvId, string language, object userState = null)
         {
             return GetBuilder(REQUEST_TV_KEYWORDS)
                 .SetUserState(userState)
+                .AddParameter(RequestBuilder.PARAMETER_LANGUAGE, language)
                 .AddUrlSegment(RequestBuilder.PARAMETER_ID, TvId)
                 .GetRequest();
         }

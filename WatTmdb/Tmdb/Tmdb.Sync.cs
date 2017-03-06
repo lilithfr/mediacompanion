@@ -312,6 +312,20 @@ namespace WatTmdb.V3
             return ProcessRequest<TmdbTvSearch>(Generator.SearchTV(query, page, language));
         }
 
+        /// <summary>
+        /// Find TMDB Id by external Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="idprovider"></param>
+        /// <returns></returns>
+        public TmdbFind Find(string id, string idprovider)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("Value required for query");
+
+            return ProcessRequest<TmdbFind>(Generator.Find(id, idprovider));
+        }
+
         #endregion
 
 
@@ -698,22 +712,25 @@ namespace WatTmdb.V3
         }
 
         /// <summary>
-        /// Get list of all the keywords that have been added to a particular movie.  Only English keywords exist currently.
-        /// (http://help.themoviedb.org/kb/api/movie-keywords)
+        /// Get list of all the keywords that have been added to a particular Tv Series.  Only English keywords exist currently.
         /// </summary>
-        /// <param name="TvID">TMDB movie id</param>
+        /// <param name="TvID">TMDB Tv Series id</param>
         /// <returns></returns>
-        public TmdbMovieKeywords GetTvKeywords(int TvID)
+        public TmdbTvKeywords GetTvKeywords(int TvID, string language = "")
         {
-            //return ProcessRequest<TmdbMovieKeywords>(BuildGetMovieKeywordsRequest(MovieID));
-            return ProcessRequest<TmdbMovieKeywords>(Generator.GetTvKeywords(TvID));
+            return ProcessRequest<TmdbTvKeywords>(Generator.GetTvKeywords(TvID, language));
         }
-
-        public string GetTvKeywordsETag(int TvID)
+        
+        /// <summary>
+        /// Get all the release and certification data in TMDB for a particular Tv Series
+        /// </summary>
+        /// <param name="TvID">TMDB Tv Series id</param>
+        /// <returns></returns>
+        public TmdbTvReleases GetTvReleases(int TvID, string language = "")
         {
-            //return ProcessRequestETag(BuildGetMovieKeywordsRequest(MovieID));
-            return ProcessRequestETag(ETagGenerator.GetMovieKeywords(TvID));
+            return ProcessRequest<TmdbTvReleases>(Generator.GetTvReleases(TvID, language));
         }
+        
 
         /// <summary>
         /// Get the external ids stored for a TV series

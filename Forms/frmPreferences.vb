@@ -314,7 +314,7 @@ Public Class frmPreferences
         For Each thisvalue In Pref.XbmcTmdbScraperCertCountryLB
             cmbxTMDBPreferredCertCountry.Items.Add(thisvalue)
         Next
-        cmbxTMDBPreferredCertCountry.Text = Pref.XbmcTmdbScraperCertCountry
+        cmbxTMDBPreferredCertCountry        .Text           = Pref.XbmcTmdbScraperCertCountry
         cbXbmcTmdbRename                    .Checked        = Pref.XbmcTmdbRenameMovie
         cbXbmcTmdbActorFromImdb             .Checked        = Pref.XbmcTmdbActorFromImdb
         cbMovActorFallbackIMDbtoTMDb        .Checked        = Pref.MovActorFallbackIMDbtoTMDb
@@ -339,7 +339,7 @@ Public Class frmPreferences
         ''Scraping Options
         'Preferred Language
         TMDbControlsIni()
-        cmbxTMDbSelectedLanguage        .Text = Pref.TMDbSelectedLanguageName
+        cmbxTMDbSelectedLanguage            .Text = Pref.TMDbSelectedLanguageName
         cbUseCustomLanguage                 .Checked = Pref.TMDbUseCustomLanguage
         tbCustomLanguageValue               .Text = Pref.TMDbCustomLanguageValue
         SetLanguageControlsState()

@@ -1854,7 +1854,11 @@ Partial Public Class Form1
                             searchTVDbID = TempSeries.Id.Value
                         End If
                     End If
-
+                    
+                    ''' tvtmdb test routine
+                    'TestTvTMDB
+                    ''' test routine end
+                    
                     If Not String.IsNullOrEmpty(searchTVDbID) Then
                         Dim tvdbstuff As New TVDBScraper
                         Dim SeriesInfo As Tvdb.ShowData = tvdbstuff.GetShow(searchTVDbID, searchLanguage, Utilities.SeriesXmlPath)
@@ -5421,5 +5425,18 @@ Partial Public Class Form1
         End Try
         Return thisarray
     End Function
-        
+    
+    Private Sub TestTvTMDB()
+        Dim tvtmdb As New TVTMDb
+        tvtmdb.TmdbId = "1622"
+        'tvtmdb.TvdbId = "74205"
+        'tvtmdb.ImdbId = "tt0185906"
+        If Not IsNothing(tvtmdb.TvShow) Then
+            Dim actors As List(Of str_MovieActors) = tvtmdb.cast
+            Dim Something As String = Nothing
+            If Not IsNothing(tvtmdb.Certification) Then
+                Dim somethingelse As String = Nothing
+            End If
+        End If
+    End Sub
 End Class

@@ -21,39 +21,41 @@ Public Class TVTMDb
 
     Private _languages          As List(Of String) = New List(Of String)
     Private _lookupLanguages    As List(Of String) = New List(Of String)
-    Private _tvdbid             As String
-    Private _imdb               As String
-    Private _tmdb               As String
+    Private _tmdbtranslations   As New WatTmdb.V3.TmdbTranslations
+    Private _tvdbid             As String = ""
+    Private _imdbid             As String = ""
+    Private _tmdbid             As String = ""
 
     #End Region
 
     #Region "Read-write Properties"
 
-    Public Property Tmdb As String
+    Public Property TmdbId As String
         Get
-            Return _tmdb
+            Return _tmdbid
         End Get
         Set(value As String)
-            If _tmdb <> value Then
-                _tmdb = value
+            If _tmdbid <> value Then
+                _tmdbid = value
+                _tmdbtranslations = GetTvTranslations()
                 _fetched = False
             End If
         End Set
     End Property
     
-    Public Property Imdb As String
+    Public Property ImdbId As String
         Get
-            Return _imdb 
+            Return _imdbid
         End Get
         Set(ByVal value As String)
-            If _imdb <> value Then
-                _imdb = value
+            If _imdbid <> value Then
+                _imdbid = value
                 _fetched = False
             End If
         End Set
     End Property
     
-    Public Property Tvdb As String
+    Public Property TvdbId As String
         Get
             Return _tvdbid 
         End Get
@@ -83,7 +85,7 @@ Public Class TVTMDb
     Public Property TvResults       As New List(Of WatTmdb.V3.TvResult)
     Public Property ValidBackDrops  As New List(Of WatTmdb.V3.Backdrop)
     Public Property ValidPosters    As New List(Of WatTmdb.V3.Poster  )
-    Public Property ValidKeyWords   As WatTmdb.V3.TmdbMovieKeywords
+    Public Property ValidKeyWords   As WatTmdb.V3.TmdbTvKeywords
     Public Property MaxGenres       As Integer = Media_Companion.Pref.maxmoviegenre
 
     #End Region 'Read-write properties
@@ -93,9 +95,10 @@ Public Class TVTMDb
     Private _api                    As WatTmdb.V3.Tmdb
     Private _config_images_base_url As String
     Private _tv                     As New WatTmdb.V3.TmdbTv
+    Private _tvfind                 As New WatTmdb.V3.TmdbFind
 
     Private _tvImages               As WatTmdb.V3.TmdbTvImages
-    Private _releases               As WatTmdb.V3.TmdbMovieReleases
+    Private _releases               As WatTmdb.V3.TmdbTvReleases
     Private _genrelist              As WatTmdb.V3.TmdbGenre 
     Private _mcPosters              As New List(Of McImage)
     Private _mcFanart               As New List(Of McImage)
@@ -242,22 +245,22 @@ Public Class TVTMDb
             Fetch
             FetchReleases
             Try
-                If IsNothing(_releases.countries) Then Return ""
-                For Each country In _releases.countries
-                    If country.iso_3166_1.ToLower = LookupLanguages.Item(0) then
-                        Return country.certification
+                If IsNothing(_releases.results) Then Return ""
+                For Each res In _releases.results
+                    If res.iso_3166_1.ToLower = LookupLanguages.Item(0) then
+                        Return res.rating
                     End If
                 Next
 
-                For Each country In _releases.countries
-                    If country.iso_3166_1.ToLower = Pref.XbmcTmdbScraperCertCountry Then
-                        Return country.certification
+                For Each res In _releases.results
+                    If res.iso_3166_1.ToLower = Pref.XbmcTmdbScraperCertCountry Then
+                        Return res.rating
                     End If
                 Next
 
-                For Each country In _releases.countries
-                    If country.certification <> "" then
-                        Return country.certification
+                For Each res In _releases.results
+                    If res.rating <> "" then
+                        Return res.rating
                     End If
                 Next
                 Return ""
@@ -266,6 +269,10 @@ Public Class TVTMDb
             End Try
         End Get 
     End Property
+
+    Function GetTvTranslations() As WatTmdb.V3.TmdbTranslations
+        Return _api.GetTvTranslations(Tmdbid)
+    End Function
 
     Function GetTvCast As Boolean
         _cast = _api.GetTVCredits(_tv.id, )
@@ -289,14 +296,14 @@ Public Class TVTMDb
         End If
     End Sub
 
-    Function GetMovieReleases As Boolean
-        _releases = _api.GetMovieReleases(_tv.id)
+    Function GetTvReleases As Boolean
+        _releases = _api.GetTvReleases(_tv.id)
         Return Not IsNothing(_releases)
     End Function
 
     Private Sub FetchReleases
         If IsNothing(_releases) then
-            If Not (new RetryHandler(AddressOf GetMovieReleases)).Execute Then Throw New Exception(TMDB_EXC_MSG)
+            If Not (new RetryHandler(AddressOf GetTvReleases)).Execute Then Throw New Exception(TMDB_EXC_MSG)
         End If
     End Sub
     
@@ -371,7 +378,7 @@ Public Class TVTMDb
         _api         = New WatTmdb.V3.Tmdb(Key)
         AssignConfig_images_base_url
         Languages    = LanguageCodes
-        Tmdb         = __tmdb
+        TmdbId       = __tmdb
     End Sub
 
     Public Shared Sub DeleteConfigFile
@@ -431,37 +438,46 @@ Public Class TVTMDb
     End Sub
     
     Function GetTvBy As Boolean
-        If Tmdb <> "" Then
+        If TmdbId <> "" Then
             Return GetTvByTMDB
-        ElseIf Tvdb <> "" Then
+        ElseIf TvdbId <> "" Then
             Return GetTvByTVDB
-        Else If Imdb <> "" Then
+        Else If ImdbId <> "" Then
             Return GetTvByIMDB
         End If
         Return False
     End Function
 
     Function GetTvByTMDB As Boolean
-        _tv  = _api.GetTVInfo(Tmdb, _lookupLanguages.Item(0))
+        _tv  = _api.GetTVInfo(TmdbId, _lookupLanguages.Item(0))
         '_tmdbId = _movie.id.ToString
         Return Not IsNothing(_tv)
     End Function
 
     Function GetTvByTVDB As Boolean
+        _tvfind = _api.Find(TvdbId, "tvdb_id")
+        If _tvfind.tv_results(0).id <> "" Then TmdbId = _tvfind.tv_results(0).id
+        Return GetTvByTMDB()
         '_movie  = _api.GetMovieByIMDB( Imdb, _lookupLanguages.Item(0) )
         '_tmdbId = _movie.id.ToString
-        Return False 'Not IsNothing(_movie)
+        'Return Not IsNothing(_tvfind)
     End Function
 
     Function GetTvByIMDB As Boolean
-        '_movie  = _api.GetMovieInfo(ToInt(TmdbId), _lookupLanguages.Item(0))
+        _tvfind = _api.Find(ImdbId, "imdb_id")
+        If _tvfind.tv_results(0).id <> "" Then TmdbId = _tvfind.tv_results(0).id
+        Return GetTvByTMDB()
         '_imdb   = _movie.imdb_id
-        Return False 'Not IsNothing(_movie)
+        'Return Not IsNothing(_tvfind)
     End Function
 
-
+    Function GetTvCredits As Boolean
+        _cast = _api.GetTVCredits(TmdbId)
+        Return Not IsNothing(_cast)
+    End Function
+    
     Function GetTvImages As Boolean
-        _tvImages = _api.GetTVImages(Tmdb) '  (_movie.id)
+        _tvImages = _api.GetTVImages(TmdbId) '  (_movie.id)
         Return Not IsNothing(_tvImages)
     End Function
 
@@ -591,8 +607,8 @@ Public Class TVTMDb
     End Sub
 
     Private Sub AssignKeywords
-        If IsNothing(ValidKeyWords.keywords) Then Exit Sub
-        For Each keywd In ValidKeyWords.keywords
+        If IsNothing(ValidKeyWords.results) Then Exit Sub
+        For Each keywd In ValidKeyWords.results
             _keywords.Add(keywd.ToString)
         Next
     End Sub

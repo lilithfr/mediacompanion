@@ -378,6 +378,21 @@ namespace WatTmdb.V3
             ProcessAsyncRequest<TmdbTvSearch>(Generator.SearchTV(query, page, language, userState), callback);
         }
 
+        /// <summary>
+        /// Find TMDB Id by external Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="provider">TVDb, IMDb </param>
+        /// <param name="userState"></param>
+        /// <param name="callback"></param>
+        public void Find(string id, string provider, object userState, Action<TmdbAsyncResult<TmdbFind>> callback)
+        {
+            if (CheckQuery(id, userState, callback) == false)
+                return;
+
+            ProcessAsyncRequest<TmdbFind>(Generator.Find(id, provider, userState), callback);
+        }
+
         #endregion
 
 
@@ -1062,22 +1077,51 @@ namespace WatTmdb.V3
         }
 
         /// <summary>
-        /// Get list of all the keywords that have been added to a particular TvSeries.  Only English keywords exist currently.
+        /// Get list of all the keywords that have been added to a particular Tv Series.  Only English keywords exist currently.
         /// </summary>
-        /// <param name="TmdbID">TMDB Tv id</param>
+        /// <param name="TmdbID">TMDB Tv Series id</param>
         /// <param name="UserState">User object to include in callback</param>
         /// <param name="callback"></param>
-        public void GetTvKeywords(int TmdbID, object UserState, Action<TmdbAsyncResult<TmdbMovieKeywords>> callback)
+        public void GetTvKeywords(int TmdbID, string language, object UserState, Action<TmdbAsyncResult<TmdbTvKeywords>> callback)
         {
-            //ProcessAsyncRequest<TmdbMovieKeywords>(BuildGetMovieKeywordsRequest(MovieID, UserState), callback);
-            ProcessAsyncRequest<TmdbMovieKeywords>(Generator.GetTVKeywords(TmdbID, UserState), callback);
+            ProcessAsyncRequest<TmdbTvKeywords>(Generator.GetTVKeywords(TmdbID, language, UserState), callback);
+        }
+        
+        /// <summary>
+        /// Get all the release and certification data in TMDB for a particular Tv Series
+        /// </summary>
+        /// <param name="TvID">TMDB Tv Series id</param>
+        /// <param name="UserState">User object to include in callback</param>
+        /// <param name="callback"></param>
+        public void GetTvReleases(int TvID, string language, object UserState, Action<TmdbAsyncResult<TmdbTvReleases>> callback)
+        {
+            ProcessAsyncRequest<TmdbTvReleases>(Generator.GetTvReleases(TvID, language, UserState), callback);
         }
 
-        public void GetTvKeywordsETag(int MovieID, object UserState, Action<TmdbAsyncETagResult> callback)
+        /// <summary>
+        /// Get list of all available translations for a specific Tv Series.
+        /// </summary>
+        /// <param name="TvID">TMDB Tv Series id</param>
+        /// <returns></returns>
+        /// <param name="UserState">User object to include in callback</param>
+        /// <param name="callback"></param>
+        public void GetTvTranslations(int TvID, object UserState, Action<TmdbAsyncResult<TmdbTranslations>> callback)
         {
-            //ProcessAsyncRequestETag(BuildGetMovieKeywordsRequest(MovieID, UserState), callback);
-            ProcessAsyncRequestETag(ETagGenerator.GetMovieKeywords(MovieID, UserState), callback);
+            //ProcessAsyncRequest<TmdbTranslations>(BuildGetMovieTranslationsRequest(MovieID, UserState), callback);
+            ProcessAsyncRequest<TmdbTranslations>(Generator.GetMovieTranslations(TvID, UserState), callback);
         }
+
+        /// <summary>
+        /// Get list of all available translations for a specific Tv Series.
+        /// </summary>
+        /// <param name="TvID">TMDB Tv Series id</param>
+        /// <returns></returns>
+        public TmdbTranslations GetTvTranslations(int TvID)
+        {
+            //return ProcessRequest<TmdbTranslations>(BuildGetMovieTranslationsRequest(MovieID));
+            return ProcessRequest<TmdbTranslations>(Generator.GetMovieTranslations(TvID));
+        }
+
         #endregion
 
 
