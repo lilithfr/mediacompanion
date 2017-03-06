@@ -1003,6 +1003,9 @@ Public Class Movie
     
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
+        'Discard junk possible years
+        If (PossibleYear<1900) Or (PossibleYear>DateAndTime.Now.Year+2) Then PossibleYear=Nothing
+
         If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
 
         If PossibleImdb <> "" Then ReportProgress( ,"Using IMDB : " & PossibleImdb & vbCrLf )
