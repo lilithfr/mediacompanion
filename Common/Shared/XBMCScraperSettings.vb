@@ -114,6 +114,7 @@ Public Class XBMCScraperSettings
         Dim MovieFanartURL As String = ""
         Dim SeasonPosters(0) As String
         Dim Seasonall As String = Nothing
+        Pref.XBMCTVDbLanguageLB.Clear()
         
         Try
             For Each m_node In m_nodelist
