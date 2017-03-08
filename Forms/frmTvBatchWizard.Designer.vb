@@ -22,6 +22,8 @@ Partial Class tv_batch_wizard
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(tv_batch_wizard))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cbshStatus = New System.Windows.Forms.CheckBox()
@@ -44,6 +46,7 @@ Partial Class tv_batch_wizard
         Me.cbshYear = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.cbepIMDBId = New System.Windows.Forms.CheckBox()
         Me.cbepTitle = New System.Windows.Forms.CheckBox()
         Me.cbepStreamDetails = New System.Windows.Forms.CheckBox()
         Me.cbepCreateScreenshot = New System.Windows.Forms.CheckBox()
@@ -57,12 +60,12 @@ Partial Class tv_batch_wizard
         Me.cbepPlot = New System.Windows.Forms.CheckBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.cbShSeries = New System.Windows.Forms.CheckBox()
+        Me.cbShSeriesXML = New System.Windows.Forms.CheckBox()
         Me.cbRewriteAllNfo = New System.Windows.Forms.CheckBox()
         Me.btn_TvBatchCancel = New System.Windows.Forms.Button()
         Me.btnTvBatchStart = New System.Windows.Forms.Button()
         Me.cbincludeLocked = New System.Windows.Forms.CheckBox()
-        Me.cbepIMDBId = New System.Windows.Forms.CheckBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
         Me.SplitContainer1.Panel1.SuspendLayout
         Me.SplitContainer1.Panel2.SuspendLayout
@@ -340,6 +343,16 @@ Partial Class tv_batch_wizard
         Me.GroupBox2.TabStop = false
         Me.GroupBox2.Text = "Select Tags to Rescrape"
         '
+        'cbepIMDBId
+        '
+        Me.cbepIMDBId.AutoSize = true
+        Me.cbepIMDBId.Location = New System.Drawing.Point(104, 68)
+        Me.cbepIMDBId.Name = "cbepIMDBId"
+        Me.cbepIMDBId.Size = New System.Drawing.Size(110, 17)
+        Me.cbepIMDBId.TabIndex = 11
+        Me.cbepIMDBId.Text = "Update IMDB Id's"
+        Me.cbepIMDBId.UseVisualStyleBackColor = true
+        '
         'cbepTitle
         '
         Me.cbepTitle.AutoSize = true
@@ -363,12 +376,12 @@ Partial Class tv_batch_wizard
         'cbepCreateScreenshot
         '
         Me.cbepCreateScreenshot.AutoSize = true
-        Me.cbepCreateScreenshot.Enabled = false
         Me.cbepCreateScreenshot.Location = New System.Drawing.Point(6, 114)
         Me.cbepCreateScreenshot.Name = "cbepCreateScreenshot"
-        Me.cbepCreateScreenshot.Size = New System.Drawing.Size(294, 17)
+        Me.cbepCreateScreenshot.Size = New System.Drawing.Size(209, 17)
         Me.cbepCreateScreenshot.TabIndex = 8
-        Me.cbepCreateScreenshot.Text = "Create Screenshot if no thumbnail available to download."
+        Me.cbepCreateScreenshot.Text = "Create Screenshot (If no Thumb exists)"
+        Me.ToolTip1.SetToolTip(Me.cbepCreateScreenshot, resources.GetString("cbepCreateScreenshot.ToolTip"))
         Me.cbepCreateScreenshot.UseVisualStyleBackColor = true
         '
         'cbepdlThumbnail
@@ -474,7 +487,7 @@ Partial Class tv_batch_wizard
         '
         'SplitContainer2.Panel2
         '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.cbShSeries)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.cbShSeriesXML)
         Me.SplitContainer2.Panel2.Controls.Add(Me.cbRewriteAllNfo)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btn_TvBatchCancel)
         Me.SplitContainer2.Panel2.Controls.Add(Me.btnTvBatchStart)
@@ -483,15 +496,15 @@ Partial Class tv_batch_wizard
         Me.SplitContainer2.SplitterDistance = 413
         Me.SplitContainer2.TabIndex = 1
         '
-        'cbShSeries
+        'cbShSeriesXML
         '
-        Me.cbShSeries.AutoSize = true
-        Me.cbShSeries.Location = New System.Drawing.Point(18, 41)
-        Me.cbShSeries.Name = "cbShSeries"
-        Me.cbShSeries.Size = New System.Drawing.Size(118, 17)
-        Me.cbShSeries.TabIndex = 15
-        Me.cbShSeries.Text = "Update Series XML"
-        Me.cbShSeries.UseVisualStyleBackColor = true
+        Me.cbShSeriesXML.AutoSize = true
+        Me.cbShSeriesXML.Location = New System.Drawing.Point(18, 41)
+        Me.cbShSeriesXML.Name = "cbShSeriesXML"
+        Me.cbShSeriesXML.Size = New System.Drawing.Size(118, 17)
+        Me.cbShSeriesXML.TabIndex = 15
+        Me.cbShSeriesXML.Text = "Update Series XML"
+        Me.cbShSeriesXML.UseVisualStyleBackColor = true
         '
         'cbRewriteAllNfo
         '
@@ -531,16 +544,6 @@ Partial Class tv_batch_wizard
         Me.cbincludeLocked.TabIndex = 0
         Me.cbincludeLocked.Text = "Include locked shows"
         Me.cbincludeLocked.UseVisualStyleBackColor = true
-        '
-        'cbepIMDBId
-        '
-        Me.cbepIMDBId.AutoSize = true
-        Me.cbepIMDBId.Location = New System.Drawing.Point(104, 68)
-        Me.cbepIMDBId.Name = "cbepIMDBId"
-        Me.cbepIMDBId.Size = New System.Drawing.Size(110, 17)
-        Me.cbepIMDBId.TabIndex = 11
-        Me.cbepIMDBId.Text = "Update IMDB Id's"
-        Me.cbepIMDBId.UseVisualStyleBackColor = true
         '
         'tv_batch_wizard
         '
@@ -615,6 +618,7 @@ End Sub
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents cbshStatus As CheckBox
     Friend WithEvents cbshBannerMain As CheckBox
-    Friend WithEvents cbShSeries As CheckBox
+    Friend WithEvents cbShSeriesXML As CheckBox
     Friend WithEvents cbepIMDBId As CheckBox
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

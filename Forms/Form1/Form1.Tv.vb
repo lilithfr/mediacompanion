@@ -1094,8 +1094,8 @@ Partial Public Class Form1
     Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
         tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
         WorkingWithNfoFiles.ep_NfoSave(alleps, path)
-        If Pref.TvDlEpisodeThumb Then
-            tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.autoepisodescreenshot) & vbcrlf
+        If Pref.TvDlEpisodeThumb OrElse Pref.autoepisodescreenshot Then
+            tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.TvDlEpisodeThumb, Pref.autoepisodescreenshot) & vbcrlf
         Else
             tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
         End If
@@ -2320,9 +2320,9 @@ Partial Public Class Form1
 		                                            End If
 	                                            End If
                                             End If
-                                            If tvBatchList.doEpisodeArt AndAlso tvBatchList.epdlThumbnail Then
+                                            If tvBatchList.doEpisodeArt AndAlso (tvBatchList.epdlThumbnail OrElse tvBatchList.epCreateScreenshot) Then
                                                 listofnewepisodes(h).Thumbnail.FileName = Episodedata.ThumbNail.Value
-                                                progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epCreateScreenshot).Replace("!!! ","")
+                                                progresstext = tv_EpisodeFanartGet(listofnewepisodes(h), tvBatchList.epdlThumbnail, tvBatchList.epCreateScreenshot).Replace("!!! ","")
                                             End If
                                         Catch ex As Exception
 #If SilentErrorScream Then
@@ -3288,8 +3288,8 @@ Partial Public Class Form1
         End If
         
         '''''Get Episode Fanart
-        If Pref.TvDlEpisodeThumb Then
-            tvScraperLog &= tv_EpisodeFanartGet(newepisode, Pref.autoepisodescreenshot) & vbcrlf
+        If Pref.TvDlEpisodeThumb OrElse Pref.autoepisodescreenshot Then
+            tvScraperLog &= tv_EpisodeFanartGet(newepisode, Pref.TvDlEpisodeThumb, Pref.autoepisodescreenshot) & vbcrlf
         Else
             tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
         End If
@@ -3418,7 +3418,7 @@ Partial Public Class Form1
 		fs_infos = Nothing
 	End Sub
 
-    Public Function tv_EpisodeFanartGet(ByVal episode As TvEpisode, ByVal doScreenShot As Boolean) As String
+    Public Function tv_EpisodeFanartGet(ByVal episode As TvEpisode, ByVal doDownloadThumb As Boolean, ByVal doScreenShot As Boolean) As String
         Dim result As String = "!!!  *** Unable to download Episode Thumb ***"
         Dim fpath As String = episode.NfoFilePath.Replace(".nfo", ".tbn")
         Dim paths As New List(Of String)
@@ -3427,22 +3427,24 @@ Partial Public Class Form1
         If Pref.FrodoEnabled AndAlso (Pref.overwritethumbs Or Not File.Exists(fpath)) Then paths.Add(fpath)
         If paths.Count > 0 Then
             Dim downloadok As Boolean = False
-            If episode.Thumbnail.FileName = Nothing Then
-                Dim tvdbstuff As New TVDBScraper
-                Dim tempepisode As Tvdb.Episode = tvdbstuff.getepisodefromxml(episode.ShowId.Value, episode.sortorder.Value, episode.Season.value, episode.Episode.Value, episode.ShowLang.Value, True)
-                If tempepisode.ThumbNail.Value <> Nothing Then episode.Thumbnail.FileName = tempepisode.ThumbNail.Value
-            End If
-            If episode.Thumbnail.FileName <> Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
-                Dim url As String = episode.Thumbnail.FileName
-                If Not url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then url = episode.Thumbnail.Url 
-                If url <> Nothing AndAlso url.IndexOf("http") = 0 AndAlso url.IndexOf(".jpg") <> -1 Then
-                    downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, , ,Pref.overwritethumbs)
+            If doDownloadThumb Then
+                If episode.Thumbnail.FileName = Nothing Then
+                    Dim tvdbstuff As New TVDBScraper
+                    Dim tempepisode As Tvdb.Episode = tvdbstuff.getepisodefromxml(episode.ShowId.Value, episode.sortorder.Value, episode.Season.value, episode.Episode.Value, episode.ShowLang.Value, True)
+                    If tempepisode.ThumbNail.Value <> Nothing Then episode.Thumbnail.FileName = tempepisode.ThumbNail.Value
+                End If
+                If episode.Thumbnail.FileName <> Nothing AndAlso episode.Thumbnail.FileName <> "http://www.thetvdb.com/banners/" Then
+                    Dim url As String = episode.Thumbnail.FileName
+                    If Not url.IndexOf("http") = 0 And url.IndexOf(".jpg") <> -1 Then url = episode.Thumbnail.Url 
+                    If url <> Nothing AndAlso url.IndexOf("http") = 0 AndAlso url.IndexOf(".jpg") <> -1 Then
+                        downloadok = DownloadCache.SaveImageToCacheAndPaths(url, paths, True, , ,Pref.overwritethumbs)
+                    Else
+                        result = "!!! No thumbnail to download"
+                    End If
+                    If downloadok Then result = "!!! Episode Thumb downloaded"
                 Else
                     result = "!!! No thumbnail to download"
                 End If
-                If downloadok Then result = "!!! Episode Thumb downloaded"
-            Else
-                result = "!!! No thumbnail to download"
             End If
             If Not downloadok AndAlso doScreenShot Then
                 Dim cachepathandfilename As String = Utilities.CreateScrnShotToCache(episode.VideoFilePath, paths(0), Pref.ScrShtDelay)

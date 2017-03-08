@@ -5862,7 +5862,7 @@ Public Class Form1
 				epdata.NfoFilePath = ep.NfoFilePath
 				epdata.VideoFilePath = ep.VideoFilePath
 				epdata.Thumbnail.Url = Episodedata.ThumbNail.Value
-				tv_EpisodeFanartGet(epdata, False)
+				tv_EpisodeFanartGet(epdata, True, False)
 			Next
 			messbox.Close()
 		Catch ex As Exception
