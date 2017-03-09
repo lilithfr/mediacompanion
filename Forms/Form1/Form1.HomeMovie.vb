@@ -749,7 +749,7 @@ Partial Public Class Form1
                 util_ImageLoad(pbx_HmFanartSht, WorkingHomeMovie.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
                 'Set Media overlay
-                Dim video_flags = Form1.VidMediaFlags(WorkingHomeMovie.filedetails)
+                Dim video_flags = VidMediaFlags(WorkingHomeMovie.filedetails)
                 movieGraphicInfo.OverlayInfo(pbx_HmFanart, "", video_flags)
 
                 If File.Exists(WorkingHomeMovie.fileinfo.posterpath) Then
