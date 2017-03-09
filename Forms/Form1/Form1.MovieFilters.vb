@@ -13,6 +13,10 @@ Partial Public Class Form1
     Friend WithEvents lblFilterLocked     As Label
     Friend WithEvents cbFilterLocked      As MC_UserControls.TriStateCheckedComboBox
 
+    Friend WithEvents lblFilterHdrMode    As Label
+    Friend WithEvents lblFilterHdr        As Label
+    Friend WithEvents cbFilterHdr         As MC_UserControls.TriStateCheckedComboBox
+
 
 	Public ReadOnly Property MovieFiltersPanel As Panel
 		Get
@@ -61,8 +65,9 @@ Partial Public Class Form1
 	 
     Sub IniMovieFilters
         CreateTriStateFilter("Locked", lblFilterLockedMode, lblFilterLocked, cbFilterLocked)
+        CreateTriStateFilter("HDR"   , lblFilterHdrMode   , lblFilterHdr   , cbFilterHdr   )
 
-		  AttachMovieFilterEventHandlers
+		AttachMovieFilterEventHandlers
     End Sub
    
 
@@ -169,6 +174,7 @@ Partial Public Class Form1
         If cbFilterRootFolder           .Visible Then cbFilterRootFolder            .UpdateItems( oMovies.RootFolderFilter              )
         If cbFilterUserRated            .Visible Then cbFilterUserRated             .UpdateItems( oMovies.UserRatedFilter               )
         If cbFilterLocked               .Visible Then cbFilterLocked                .UpdateItems( oMovies.LockedFilter                  )
+        If cbFilterHdr                  .Visible Then cbFilterHdr                   .UpdateItems( oMovies.HdrFilter                     )
                    
                  
                    

@@ -829,6 +829,18 @@ Public Class Movies
             Return lst
         End Get
     End Property 
+
+    Public ReadOnly Property HdrFilter As List(Of String)
+        Get
+            Dim lst = New List(Of String)
+
+            Dim q = From m In MovieCache Where m.IsHdr
+
+            lst.Add( "HDR (" & q.Count.ToString & ")" )
+
+            Return lst
+        End Get
+    End Property 
     
     Function LockedFieldCount(field As String) As String
 
@@ -1901,6 +1913,13 @@ Public Class Movies
                                 Case "LockedFields"         : newmovie.LockedFields        = detail.InnerText.Split(",").ToList()
                                 Case "VideoMissing"         : newmovie.VideoMissing        = detail.InnerXml
 
+                                Case "NumVideoBits" : 
+                                    Try
+                                        newmovie.NumVideoBits = detail.InnerText
+                                    Catch
+                                        newmovie.NumVideoBits = -1
+                                    End Try 
+
        
 
                             End Select
@@ -1996,7 +2015,7 @@ Public Class Movies
                 child.AppendChild(doc, "LockedFields", String.Join(",", movie.LockedFields.ToArray()))
             End If
             child.AppendChild(doc, "VideoMissing", movie.VideoMissing)
-
+            child.AppendChild(doc, "NumVideoBits", movie.NumVideoBits)
             root.AppendChild(child)
             
         Next
@@ -3358,7 +3377,27 @@ Public Class Movies
         Return recs
 
     End Function
+ 
+    Function ApplyHdrFilter(recs As IEnumerable(Of Data_GridViewMovie), ccb As TriStateCheckedComboBox)
+
+        Dim i As Integer = 0
+
+        For Each item As CCBoxItem In ccb.Items
+
+            Dim fieldName = item.Name.RemoveAfterMatch.ToLower
+
+            Select ccb.GetItemCheckState(i)
+                Case CheckState.Checked   : recs = recs.Where ( Function(x)     x.IsHdr )
+                Case CheckState.Unchecked : recs = recs.Where ( Function(x) Not x.IsHdr )
+            End Select
+            i += 1
+        Next
+        Return recs
+
+    End Function
+   
     
+     
     Function Filter(recs As IEnumerable(Of Data_GridViewMovie), leftOuterJoinTable As IEnumerable, fi As FilteredItems)
 
         If fi.Include.Count>0 Then

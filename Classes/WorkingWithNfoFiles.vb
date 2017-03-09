@@ -102,6 +102,7 @@ Public Class WorkingWithNfoFiles
         If Not String.IsNullOrEmpty(Video.CodecId.Value)           Then VideoElements.AppendChild(doc, "codecid"             , Video.codecid.Value)
         If Not String.IsNullOrEmpty(Video.CodecInfo.Value)         Then VideoElements.AppendChild(doc, "codecidinfo"         , Video.codecinfo.Value)
         If Not String.IsNullOrEmpty(Video.ScanType.Value)          Then VideoElements.AppendChild(doc, "scantype"            , Video.scantype.Value)
+        If Not Video.NumVideoBits > -1                             Then VideoElements.AppendChild(doc, "NumVideoBits"        , Video.NumVideoBits)
         Return VideoElements
     End Function
 
@@ -163,6 +164,8 @@ Public Class WorkingWithNfoFiles
                                     StreamDetails.Video.CodecInfo.Value = videodetails.InnerText
                                 Case "scantype"
                                     StreamDetails.Video.ScanType.Value = videodetails.InnerText
+                                Case "NumVideoBits"
+                                    StreamDetails.Video.NumVideoBits = videodetails.InnerText
                             End Select
                         Next
                     Case "audio"

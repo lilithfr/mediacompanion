@@ -2429,6 +2429,7 @@ Public Class Pref
             workingfiledetails.Video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
             workingfiledetails.Video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
             workingfiledetails.Video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
+            workingfiledetails.Video.NumVideoBits = MI.Get_(StreamKind.Visual, curVS, "BitDepth/String").RemoveAfterMatch(" ")
 
             If filename.ToLower.Contains("\bdmv\stream\") Then
                 workingfiledetails.Video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"

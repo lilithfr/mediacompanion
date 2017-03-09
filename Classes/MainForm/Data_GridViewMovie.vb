@@ -148,6 +148,7 @@ Public Class Data_GridViewMovie
         oMovies                 = movie.oMovies
         LockedFields            = movie.LockedFields
         NfoPath                 = movie.NfoPath
+        NumVideoBits            = movie.NumVideoBits
     End Sub
 
     Public Sub AssignAudio(From As List(Of AudioDetails))
@@ -208,6 +209,7 @@ Public Class Data_GridViewMovie
         convertedMovie.UserTmdbSetAddition  = Me.UserSetAddition
         convertedMovie.UnknownSetCount      = Me.MissingTmdbSetInfo
         convertedMovie.NfoPath              = Me.NfoPath
+        convertedMovie.NumVideoBits         = Me.NumVideoBits
 
         convertedMovie.FieldsLockEnabled = True
 
@@ -934,6 +936,14 @@ Public Class Data_GridViewMovie
         Set(value As String)
             _nfopath = value
         End Set
+    End Property
+
+    Property NumVideoBits As Integer = -1   '10+ = HDR
+
+    Public ReadOnly Property IsHdr As Boolean
+        Get
+            Return (NumVideoBits>8)
+        End Get
     End Property
 
 End Class

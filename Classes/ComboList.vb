@@ -106,8 +106,16 @@ Public Class ComboList
     Property _usrrated            As Integer = 0
     Property _metascore           As Integer = 0
     Property NfoPath              As String = ""
+    Property NumVideoBits         As Integer = -1   '10+ = HDR
 
     Property oMovies As Movies
+
+    Public ReadOnly Property IsHdr As Boolean
+        Get
+            Return (NumVideoBits>8)
+        End Get
+    End Property
+
 
     Public ReadOnly Property DisplayFolderSize As Double
         Get
@@ -559,6 +567,7 @@ Public Class ComboList
         Me.UnknownSetCount      = From.UnknownSetCount
         Me.LockedFields         = From.LockedFields
         Me.NfoPath              = From.NfoPath
+        Me.NumVideoBits         = From.NumVideoBits
 
         Me.FieldsLockEnabled = True
     End Sub

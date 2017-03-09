@@ -3,8 +3,6 @@
 Public Class VideoDetails
     Inherits ProtoPropertyGroup
 
-
-
     Public Property Codec As New ProtoProperty(Me, "codec", "")
     Public Property Aspect As New ProtoProperty(Me, "aspect", "")
     Public Property Width As New ProtoProperty(Me, "width", "")
@@ -18,7 +16,7 @@ Public Class VideoDetails
     Public Property CodecId As New ProtoProperty(Me, "codecid", "")
     Public Property CodecInfo As New ProtoProperty(Me, "codecinfo", "")
     Public Property ScanType As New ProtoProperty(Me, "scantype", "")
-
+    Property NumVideoBits As Integer = -1
 
     Public ReadOnly Property VideoResolution As Integer
         Get

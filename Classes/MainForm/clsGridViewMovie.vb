@@ -352,6 +352,7 @@ Public Class clsGridViewMovie
         If Form1.cbFilterRootFolder            .Visible Then b = Form1.oMovies.ApplyRootFolderFilter            ( b , Form1.cbFilterRootFolder            )
         If Form1.cbFilterUserRated             .Visible Then b = Form1.oMovies.ApplyUserRatedFilter             ( b , Form1.cbFilterUserRated             )
         If Form1.cbFilterLocked                .Visible Then b = Form1.oMovies.ApplyLockedFilter                ( b , Form1.cbFilterLocked                )
+        If Form1.cbFilterHdr                   .Visible Then b = Form1.oMovies.ApplyHdrFilter                   ( b , Form1.cbFilterHdr                   )
 
     
  

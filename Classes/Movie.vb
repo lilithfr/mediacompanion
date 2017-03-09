@@ -1283,11 +1283,12 @@ Public Class Movie
 
         _movieCache.foldername          = Utilities.GetLastFolder(nfopathandfilename)
 
-        If  Pref.EnableFolderSize AndAlso Not Pref.GetRootFolderCheck(nfopathandfilename) Then     'If in Root folder, do not get FolderSize.
+        If Pref.EnableFolderSize AndAlso Not Pref.GetRootFolderCheck(nfopathandfilename) Then     'If in Root folder, do not get FolderSize.
             _movieCache.FolderSize = Utilities.GetFolderSize(NfoPath)
         End If
 
-        _movieCache.MediaFileSize = Utilities.GetFileSize(mediapathandfilename)
+        _movieCache.NumVideoBits        = _scrapedMovie.filedetails.Video.NumVideoBits
+        _movieCache.MediaFileSize       = Utilities.GetFileSize(mediapathandfilename)
 
         _movieCache.title               = _scrapedMovie.fullmoviebody.title
         _movieCache.originaltitle       = _scrapedMovie.fullmoviebody.originaltitle
