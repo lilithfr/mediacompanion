@@ -5361,6 +5361,8 @@ Partial Public Class Form1
             flags.Add(New KeyValuePair(Of String, string)("aspect",     Utilities.GetStdAspectRatio(thisep.StreamDetails.Video.Aspect.Value)))
             flags.Add(New KeyValuePair(Of String, string)("codec",      Utilities.GetCodecCommonName(GetMasterCodec(thisep.StreamDetails.Video))))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.StreamDetails.Video.VideoResolution < 0, "", thisep.StreamDetails.Video.VideoResolution.ToString)))
+            flags.Add(New KeyValuePair(Of String, String)("folderSize", "-1"))
+            flags.Add(New KeyValuePair(Of String, String)("NumVideoBits", thisep.Streamdetails.Video.NumVideoBits))
 
             Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.StreamDetails.Subtitles, From x In thisep.StreamDetails.Subtitles Where x = thisep.StreamDetails.DefaultSubTrack))
 
@@ -5395,6 +5397,8 @@ Partial Public Class Form1
             flags.Add(New KeyValuePair(Of String, string)("aspect", Utilities.GetStdAspectRatio(thisep.StreamDetails.Video.Aspect.Value)))
             flags.Add(New KeyValuePair(Of String, string)("codec", Utilities.GetCodecCommonName(GetMasterCodec(thisep.StreamDetails.Video))))  'thisep.StreamDetails.Video.Codec.Value.RemoveWhitespace))
             flags.Add(New KeyValuePair(Of String, string)("resolution", If(thisep.StreamDetails.Video.VideoResolution < 0, "", thisep.StreamDetails.Video.VideoResolution.ToString)))
+            flags.Add(New KeyValuePair(Of String, String)("folderSize", "-1"))
+            flags.Add(New KeyValuePair(Of String, String)("NumVideoBits", thisep.Streamdetails.Video.NumVideoBits))
 
             Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, thisep.StreamDetails.Subtitles, From x In thisep.StreamDetails.Subtitles Where x = thisep.StreamDetails.DefaultSubTrack))
 

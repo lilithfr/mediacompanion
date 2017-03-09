@@ -9,8 +9,7 @@ Public Class GraphicInfo
     Public grFanart As Graphics
     Public iPadding As Integer = 2
 
-    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)), _
-                    Optional folderSize As Double=-1,Optional NumVideoBits As Integer=-1)
+    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)))
         'OVERLAY RATING STARS
         Dim iRating As Single
         Dim bmFanart As New Bitmap(picbxFanart.Image)
@@ -50,14 +49,18 @@ Public Class GraphicInfo
 
                         If item.Key = "lang" OrElse item.Key = "lang_notdefault" OrElse item.Key = "sublang" OrElse Not TrueAspect Then
                             flagPath = Path.Combine(Pref.applicationPath, "Resources\video_flags\" + item.Key + ".png")
+                        ElseIf item.Key = "folderSize" OrElse item.Key = "NumVideoBits" Then
+                            flagPath = Path.Combine(Pref.applicationPath, "Resources\video_flags\long_blank.png")
                         Else
                             flagName = String.Format("media_{0}_{1}.png", item.Key, item.Value )
                             flagPath = Path.Combine(Pref.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
                         End If
+                        
                         Dim bmflagStream As New IO.MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
                         Dim bmFlag       As New Bitmap(bmflagStream)
                         Dim rectFlag     As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
                         Dim recFanart    As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
+
                         If item.Key = "lang" OrElse item.Key = "lang_notdefault" OrElse Not TrueAspect Then
                             Dim sDisplayText As String = item.Value
                             If sDisplayText.ToLower = "error" Then Continue For
@@ -72,10 +75,9 @@ Public Class GraphicInfo
                             sf.Alignment = StringAlignment.Center
                             graphic.DrawString(sDisplayText, font, brush, rectFlag, sf)
                         End If
-                        If item.Key = "sublang" Then 'OrElse Not TrueAspect Then
+                        If item.Key = "sublang" Then
                             Dim sDisplayText As String = "sublang:" & vbCrLf & item.Value
                             If sDisplayText.ToLower.Contains("error") Then Continue For
-                            'sDisplayText = "sublan:" & vbCrLf & sDisplayText
                             Dim FontSize = 14
                             Dim font as new Font("Tahoma", FontSize)    'create a font to write the values in the bitmap
                             'use the bitmap to draw
@@ -87,42 +89,47 @@ Public Class GraphicInfo
                             sf.Alignment = StringAlignment.Center
                             graphic.DrawString(sDisplayText, font, brush, rectFlag, sf)
                         End If
+                        If item.Key = "NumVideoBits" OrElse item.Key = "folderSize" Then
+                            If item.Key = "NumVideoBits" AndAlso item.Value.ToInt < 9 Then Continue For
+                            If item.Key = "folderSize" AndAlso (Not Pref.DisplayMediaInfoFolderSize OrElse item.Value.ToInt < 0) Then Continue For
+                            Dim str As String = If(item.Key = "folderSize", String.Format("{0:00.0}GB",item.Value), String.Format("HDR{0}",item.Value))
+                            Dim offSet   = str.Length - 2
+                            Dim FontSize = 18 - ((offSet-4)*2)
+                            Dim font as new Font("Tahoma", FontSize)                    'create a font to write the values in the bitmap
+                            Dim origin as new PointF(0, offSet)                         'origin for the string
+                            Dim graphic = Graphics.FromImage(bmFlag)                    'use the bitmap to draw
+                            Dim gradient = 224
+                            Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
+                            graphic.DrawString(str, font, brush, origin)        'draw the string including the valu
+                        End If
                         grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
                         xPos += (bmFlag.Width + iPadding) * fanartRatio
                     End If
-                Catch ex As Exception
-                    'If the derived filname doesn't exist, we'll just ignore it (this will happen if aspect comes back as empty string).
+                Catch ex As Exception  'If the derived filname doesn't exist, we'll just ignore it (this will happen if aspect comes back as empty string).
                 End Try
             Next
-
-            If NumVideoBits > 8 Then
-                DisplayMediaInfo( String.Format("HDR{0}",NumVideoBits) )
-            End If
+            'If NumVideoBits > 8 Then DisplayMediaInfo( String.Format("HDR{0}",NumVideoBits) )
         End If
-
-        If Pref.DisplayMediaInfoFolderSize And folderSize > -1 Then
-            DisplayMediaInfo( String.Format("{0:00.0}GB",folderSize) )
-        End If
-
+        'If Pref.DisplayMediaInfoFolderSize And folderSize > -1 Then DisplayMediaInfo( String.Format("{0:00.0}GB",folderSize) )
         picbxFanart.Image = bmFanart
     End Sub
 
-    Public Sub DisplayMediaInfo(str As String)
-        Dim flagPath As String = Path.Combine(Pref.applicationPath, "Resources\video_flags\long_blank.png")
-        Dim bmflagStream As New IO.MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
-        Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
-        Dim offSet   = str.Length - 2
-        Dim FontSize = 18 - ((offSet-4)*2)
-        Dim font as new Font("Tahoma", FontSize)                    'create a font to write the values in the bitmap
-        Dim origin as new PointF(0, offSet)                         'origin for the string
-        Dim graphic = Graphics.FromImage(bmFlag)                    'use the bitmap to draw
-        Dim gradient = 224
-        Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
-        graphic.DrawString(str, font, brush, origin)        'draw the string including the value
-        Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
-        Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
-        grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
-        xPos += (bmFlag.Width + iPadding) * fanartRatio
-    End Sub
+    'Public Sub DisplayMediaInfo(str As String)
+    '    Dim flagPath As String = Path.Combine(Pref.applicationPath, "Resources\video_flags\long_blank.png")
+    '    Dim bmflagStream As New IO.MemoryStream(My.Computer.FileSystem.ReadAllBytes(flagPath))
+    '    Dim bmFlag As Bitmap = New Bitmap(bmflagStream)
+    '    Dim offSet   = str.Length - 2
+    '    Dim FontSize = 18 - ((offSet-4)*2)
+    '    Dim font as new Font("Tahoma", FontSize)                    'create a font to write the values in the bitmap
+    '    Dim origin as new PointF(0, offSet)                         'origin for the string
+    '    Dim graphic = Graphics.FromImage(bmFlag)                    'use the bitmap to draw
+    '    Dim gradient = 224
+    '    Dim brush as new SolidBrush( Color.FromArgb(gradient, gradient, gradient) )
+    '    graphic.DrawString(str, font, brush, origin)        'draw the string including the value
+    '    Dim rectFlag As New Rectangle(0, 0, bmFlag.Width, bmFlag.Height)
+    '    Dim recFanart As New Rectangle(xPos, yPos, bmFlag.Width * fanartRatio, bmFlag.Height * fanartRatio)
+    '    grFanart.DrawImage(bmFlag, recFanart, rectFlag, GraphicsUnit.Pixel)
+    '    xPos += (bmFlag.Width + iPadding) * fanartRatio
+    'End Sub
 
 End Class

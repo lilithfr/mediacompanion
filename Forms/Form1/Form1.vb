@@ -1857,8 +1857,8 @@ Public Class Form1
 				btnPlayMovie.Enabled = True
 				mov_SplitContainerAutoPosition
 
-				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 				MovPanel6Update()
 			End If
 		Else
@@ -4119,8 +4119,8 @@ Public Class Form1
 							Pref.savefanart = issavefanart
 							mov_DisplayFanart()
 							util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-							Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-							movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+							Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+							movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 
 							For Each paths In Pref.offlinefolders
 								Dim offlinepath As String = paths & "\"
@@ -8350,8 +8350,8 @@ Public Class Form1
 					If Not aok Then Throw New Exception("TMDB is offline")
 					util_ImageLoad(PbMovieFanArt, paths(0), Utilities.DefaultFanartPath)
 					util_ImageLoad(PictureBox2, paths(0), Utilities.DefaultFanartPath)
-					Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-					movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+					Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+					movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 				Else
 					Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
 					If MovSetFanartSavePath <> "" Then
@@ -10109,8 +10109,8 @@ Public Class Form1
 			If CurrentTab = TabPage1.Name Then   'Movies
 				mov_DisplayFanart()
 				util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 			ElseIf CurrentTab = TabPage2.Name Then  'TV Shows
 				TvTreeview_AfterSelect_Do()
 			End If
@@ -11583,8 +11583,8 @@ Public Class Form1
 				util_ImageLoad(PictureBox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 				mov_DisplayFanart()
 				util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+				movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 			End If
 		End If
 	End Sub
@@ -11641,8 +11641,8 @@ Public Class Form1
 						Pref.savefanart = issavefanart
 						mov_DisplayFanart()
 						util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
-						Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"))
-						movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags, workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+						Dim video_flags = VidMediaFlags(workingMovieDetails.filedetails, workingMovieDetails.fullmoviebody.title.ToLower.Contains("3d"), workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
+						movieGraphicInfo.OverlayInfo(PbMovieFanArt, ratingtxt.Text, video_flags) ', workingMovie.DisplayFolderSize, workingMovie.NumVideoBits)
 
 						For Each paths In Pref.offlinefolders
 							Dim offlinepath As String = paths & "\"
@@ -15970,7 +15970,7 @@ Public Class Form1
 #End Region 'ToolStrip Menus misc
 
 
-	Public Shared Function VidMediaFlags(ByVal Vidfiledetails As StreamDetails, Optional ByVal Is3d As Boolean = False) As List(Of KeyValuePair(Of String, String))
+	Public Shared Function VidMediaFlags(ByVal Vidfiledetails As StreamDetails, Optional ByVal Is3d As Boolean = False, Optional ByVal size As Integer = -1, Optional ByVal bits As Integer = -1) As List(Of KeyValuePair(Of String, String))
 		Dim flags As New List(Of KeyValuePair(Of String, String))
 		Try
 			Dim tracks = If(Pref.ShowAllAudioTracks, Vidfiledetails.Audio, From x In Vidfiledetails.Audio Where x = Vidfiledetails.DefaultAudioTrack)
@@ -15986,6 +15986,8 @@ Public Class Form1
 			flags.Add(New KeyValuePair(Of String, String)("codec", Utilities.GetCodecCommonName(GetMasterCodec(Vidfiledetails.Video))))  '.Codec.Value.RemoveWhitespace)))
 			flags.Add(New KeyValuePair(Of String, String)("resolution", If(Vidfiledetails.Video.VideoResolution < 0, "", Vidfiledetails.Video.VideoResolution.ToString)))
 			flags.Add(New KeyValuePair(Of String, String)("special", If(Is3d, "3d", "")))
+            flags.Add(New KeyValuePair(Of String, String)("folderSize", size.ToString))
+            flags.Add(New KeyValuePair(Of String, String)("NumVideoBits", bits.ToString))
 
 			Dim subtitles = If(Not Pref.DisplayDefaultSubtitleLang, Nothing, If(Pref.DisplayAllSubtitleLang, Vidfiledetails.Subtitles, From x In Vidfiledetails.Subtitles Where x = Vidfiledetails.DefaultSubTrack))
 

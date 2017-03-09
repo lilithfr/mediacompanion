@@ -707,6 +707,7 @@ Module General
                 FileInfoString &= AppendData("<codecid>"            , WorkingFileDetails.Video.CodecId.Value)
                 FileInfoString &= AppendData("<codecinfo>"          , WorkingFileDetails.Video.CodecInfo.Value)
                 FileInfoString &= AppendData("<scantype>"           , WorkingFileDetails.Video.ScanType.Value)
+                FileInfoString &= AppendData("<NumVideoBits>"       , WorkingFileDetails.Video.NumVideoBits)
                 FileInfoString &= "</video>" & vbLf
                 If WorkingFileDetails.Audio.Count > 0 Then
                     For Each item In WorkingFileDetails.Audio

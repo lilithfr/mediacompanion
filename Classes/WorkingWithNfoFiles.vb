@@ -102,7 +102,7 @@ Public Class WorkingWithNfoFiles
         If Not String.IsNullOrEmpty(Video.CodecId.Value)           Then VideoElements.AppendChild(doc, "codecid"             , Video.codecid.Value)
         If Not String.IsNullOrEmpty(Video.CodecInfo.Value)         Then VideoElements.AppendChild(doc, "codecidinfo"         , Video.codecinfo.Value)
         If Not String.IsNullOrEmpty(Video.ScanType.Value)          Then VideoElements.AppendChild(doc, "scantype"            , Video.scantype.Value)
-        If Not Video.NumVideoBits > -1                             Then VideoElements.AppendChild(doc, "NumVideoBits"        , Video.NumVideoBits)
+        If Not Video.NumVideoBits = -1                             Then VideoElements.AppendChild(doc, "NumVideoBits"        , Video.NumVideoBits)
         Return VideoElements
     End Function
 
@@ -1095,6 +1095,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.year = "1850"
                     newmovie.stars = ""
                     newmovie.usrrated = 0
+                    newmovie.NumVideoBits = -1
                     Return newmovie
                 End Try
 
@@ -1210,6 +1211,8 @@ Public Class WorkingWithNfoFiles
                                                                 gotHeight = True
                                                             Case "codec"
                                                                 newmovie.VideoCodec = videodetails.InnerText
+                                                            Case "NumVideoBits"
+                                                                newmovie.NumVideoBits = videodetails.InnerText.ToInt
                                                         End Select
                                                         If gotWidth And gotHeight Then
                                                             newmovie.Resolution = newfilenfo.Video.VideoResolution
