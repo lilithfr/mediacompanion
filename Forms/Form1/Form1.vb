@@ -950,10 +950,16 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
+        If e.KeyCode = Keys.F2 Then
+            If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
+                'tvAddNewSeries()
+            End If
+        End If
 		If e.Control And e.KeyCode = Keys.C Then AbortFileDownload()
 	End Sub
+
 	Private Sub Form1_KeyUp(sender As System.Object, e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyUp
-		If e.KeyCode = Keys.F6 Then  
+		If e.KeyCode = Keys.F6 AndAlso TabLevel1.SelectedTab.Name = TabPage1.Name Then
             mov_CacheLoad
             DataGridViewMovies.ClearSelection
             If DataGridViewMovies.Rows.Count>0 Then
