@@ -1499,7 +1499,7 @@ Public Class WorkingWithNfoFiles
                         Case "playcount"
                             newmovie.fullmoviebody.playcount = thisresult.InnerText
                         Case "watched"
-                            watched = thisresult.InnerXml
+                            watched = If(thisresult.InnerXml = "", False, thisresult.InnerXml)
                         Case "lastplayed"
                             newmovie.fullmoviebody.lastplayed = thisresult.InnerText
                         ''' to compensate for Kodi 17 exported nfo's

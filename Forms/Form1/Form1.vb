@@ -1752,7 +1752,7 @@ Public Class Form1
 					Next
 				End If
 				'Catch exception thrown when votes is an empty string
-				If workingMovieDetails.fullmoviebody.votes <> "" Then
+				If workingMovieDetails.fullmoviebody.votes <> "" AndAlso workingMovieDetails.fullmoviebody.votes <> "scraper error" Then
 					Dim votestext As String = workingMovieDetails.fullmoviebody.votes
 					votestext = votestext.RemoveWhitespace
 					votestxt.Text = Double.Parse(votestext.Replace(".", ",")).ToString("N0")
