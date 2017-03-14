@@ -523,7 +523,7 @@ Public Class Movie
     
     Public ReadOnly Property SearchName As String
         Get
-            Return Utilities.CleanFileName(Title, If(Pref.movies_useXBMC_Scraper, "tmdb", ""))
+            Return Utilities.CleanFileName(Title.Replace(SeparateMovie, ""), If(Pref.movies_useXBMC_Scraper, "tmdb", ""))
         End Get 
     End Property
 
