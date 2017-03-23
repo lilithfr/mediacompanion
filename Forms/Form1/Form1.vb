@@ -726,7 +726,7 @@ Public Class Form1
 
 			Common.Tasks.StartTaskEngine()
 			ForegroundWorkTimer.Start()
-
+            
 			BckWrkXbmcController.WorkerReportsProgress = True
 			' BckWrkXbmcController.WorkerSupportsCancellation = true
 
@@ -16368,5 +16368,5 @@ Public Class Form1
 	Private Sub tsmiMov_ViewMovieDbSetPage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ViewMovieDbSetPage.Click
 		OpenUrl(TMDB_SET_URL & workingMovie.TmdbSetId)
 	End Sub
-
+    
 End Class

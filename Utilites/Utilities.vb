@@ -4,6 +4,7 @@ Imports Alphaleonis.Win32.Filesystem
 Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports System.Drawing
+Imports System.Text
 Imports System.Security.Cryptography
 Imports Microsoft.Win32
 
@@ -2371,7 +2372,41 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Dim hashvalue() As Byte = hashAlg.ComputeHash(data)
         Return hashvalue
     End Function
+    
+    ''' <summary>
+    ''' Get MD5Hash value from 1st 64k and last 64k of video file
+    ''' for searching for correct subtitles from SubDB.
+    ''' </summary>
+    ''' <param name="source">path and filename</param>
+    ''' <returns></returns>
+    Public Shared Function GetMd5Hash(source As String) As String
+        Dim datasize As Int32 = 64*1024
+        Dim buffer() As Byte = New Byte(datasize-1) {}
+        Dim buffer2() As Byte = New Byte(datasize-1) {}
+        Using fs As New IO.FileStream(source, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.None)
+            fs.Read(buffer, 0, datasize)
+            Dim endbyte As Long = fs.Length - datasize
+            fs.Seek(endbyte, IO.SeekOrigin.Begin)
+            fs.Read(buffer2, 0, datasize)
+        End Using
+        Dim buffer3() As Byte = buffer.Concat(buffer2).ToArray
+        Return GetMd5Hash(buffer3)
+ 
+    End Function
 
+    Public Shared Function GetMd5Hash(bytes() As Byte) As String
+        Dim md5 As New MD5CryptoServiceProvider()
+        Return Bytes_To_HexString2(md5.ComputeHash(bytes))
+    End Function
+
+    Public Shared Function Bytes_To_HexString2(ByVal bytes_Input As Byte()) As String
+        Dim strTemp As New StringBuilder(bytes_Input.Length * 2)
+        For Each b As Byte In bytes_Input
+            strTemp.Append(Conversion.Hex(b))
+        Next
+        Return strTemp.ToString()
+    End Function
+ 
     Public Shared Function StrToByteArray(str As String) As Byte()
         Dim encoding As New System.Text.ASCIIEncoding()
         Return encoding.GetBytes(str)

@@ -52,7 +52,7 @@ Public Class GraphicInfo
                         ElseIf item.Key = "folderSize" OrElse item.Key = "NumVideoBits" Then
                             flagPath = Path.Combine(Pref.applicationPath, "Resources\video_flags\long_blank.png")
                         Else
-                            flagName = String.Format("media_{0}_{1}.png", item.Key, item.Value )
+                            flagName = String.Format("media_{0}_{1}{2}.png", item.Key, item.Value, If(item.Value = "MPEG-4","visual","") )
                             flagPath = Path.Combine(Pref.applicationPath, String.Format("Resources\video_flags\{0}", flagName.ToLower))
                         End If
                         
