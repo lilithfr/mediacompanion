@@ -106,11 +106,13 @@ Public Class TvEpisode
                                                                                           'time cache is loaded.
     Public Property ImdbId As New ProtoProperty(Me, "imdbid", "")
     Public Property TvdbId As New ProtoProperty(Me, "tvdbid")
+    Public Property TmdbId As New ProtoProperty(Me, "tmdbid")
     Public Property UniqueId As New ProtoProperty(Me, "uniqueid", CacheMode:=CacheMode.Both)
     Public Property ShowId As New ProtoProperty(Me, "ShowId", CacheMode:=CacheMode.Both)
     Public Property ShowLang As New ProtoProperty(Me, "ShowLang")
     Public Property Showtvdbid As New ProtoProperty(Me, "Showtvdbid")
     Public Property Showimdbid As New ProtoProperty(Me, "Showimdbid")
+    Public Property Showtmdbid As New ProtoProperty(Me, "Showtmdbid")
     Public Property ShowTitle As New ProtoProperty(Me, "ShowTitle")
     Public Property actorsource As New ProtoProperty(Me, "actorsource")
     Public Property ShowYear As New ProtoProperty(Me, "ShowYear")
@@ -146,6 +148,7 @@ Public Class TvEpisode
     Public Sub AbsorbTvdbEpisode(ByRef TvdbEpisode As Tvdb.Episode)
         Me.TvdbId.Value     = TvdbEpisode.Id.Value
         Me.ImdbId.Value     = TvdbEpisode.ImdbId.Value
+        Me.TmdbId.Value     = TvdbEpisode.TmdbId.Value
         Me.Title.Value      = TvdbEpisode.EpisodeName.Value
         Me.UniqueId.Value   = TvdbEpisode.Id.Value
         Me.Rating.Value     = TvdbEpisode.Rating.Value
@@ -166,6 +169,7 @@ Public Class TvEpisode
     Public Sub AbsorbTvEpisode(ByRef TvEp As TvEpisode)
         Me.TvdbId.Value     = TvEp.Id.Value
         Me.ImdbId.Value     = TvEp.ImdbId.Value
+        Me.TmdbId.Value     = TvEp.TmdbId.Value
         Me.Title.Value      = TvEp.Title.Value
         Me.UniqueId.Value   = TvEp.Id.Value
         Me.Rating.Value     = TvEp.Rating.Value

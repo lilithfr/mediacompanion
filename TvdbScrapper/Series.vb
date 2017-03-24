@@ -18,6 +18,7 @@ Namespace Tvdb
         Public Property FirstAired As New ProtoProperty(Me, "FirstAired")
         Public Property Genre As New ProtoProperty(Me, "Genre")
         Public Property ImdbId As New ProtoProperty(Me, "IMDB_ID")
+        Public Property TmdbId As New ProtoProperty(Me, "TMDB_ID")
         Public Property Language As New ProtoProperty(Me, "Language")
         Public Property Network As New ProtoProperty(Me, "Network")
         Public Property Overview As New ProtoProperty(Me, "Overview")

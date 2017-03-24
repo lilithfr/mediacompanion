@@ -27,6 +27,8 @@ Namespace Tvdb
         Public Property GuestStars As New ProtoProperty(Me, "GuestStars")
         '<IMDB_ID></IMDB_ID>
         Public Property ImdbId As New ProtoProperty(Me, "IMDB_ID")
+        '<TMDB_ID></TMDB_ID>
+        Public Property TmdbId As New ProtoProperty(Me, "TMDB_ID")
         '<Language>English</Language>
         Public Property Language As New ProtoProperty(Me, "Language")
         '<Overview>Chuck Bartowski is an average computer geek...</Overview>
