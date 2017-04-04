@@ -1721,25 +1721,25 @@ Public Class Form1
 				For Each title In workingMovieDetails.alternativetitles
 					titletxt.Items.Add(title)
 				Next
-				titletxt.Text = workingMovieDetails.fullmoviebody.title
-				TextBox3.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+				titletxt.Text           = workingMovieDetails.fullmoviebody.title
+				TextBox3.Text           = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
 				tbCurrentMoviePoster.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
 				Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
 				If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
-				TextBox34.Text = workingMovieDetails.fullmoviebody.sortorder
-				outlinetxt.Text = workingMovieDetails.fullmoviebody.outline
-				plottxt.Text = workingMovieDetails.fullmoviebody.plot
-				taglinetxt.Text = workingMovieDetails.fullmoviebody.tagline
-				txtStars.Text = workingMovieDetails.fullmoviebody.stars
-				genretxt.Text = workingMovieDetails.fullmoviebody.genre
-				premiertxt.Text = workingMovieDetails.fullmoviebody.premiered
-				creditstxt.Text = workingMovieDetails.fullmoviebody.credits
-				directortxt.Text = workingMovieDetails.fullmoviebody.director
-				studiotxt.Text = workingMovieDetails.fullmoviebody.studio
-				countrytxt.Text = workingMovieDetails.fullmoviebody.country
-				pathtxt.Text = workingMovie.fullpathandfilename
-				ratingtxt.Text = workingMovieDetails.fullmoviebody.rating.FormatRating
-				cbUsrRated.Text = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
+				TextBox34.Text          = workingMovieDetails.fullmoviebody.sortorder
+				outlinetxt.Text         = workingMovieDetails.fullmoviebody.outline
+				plottxt.Text            = workingMovieDetails.fullmoviebody.plot
+				taglinetxt.Text         = workingMovieDetails.fullmoviebody.tagline
+				txtStars.Text           = workingMovieDetails.fullmoviebody.stars
+				genretxt.Text           = workingMovieDetails.fullmoviebody.genre
+				premiertxt.Text         = workingMovieDetails.fullmoviebody.premiered
+				creditstxt.Text         = workingMovieDetails.fullmoviebody.credits
+				directortxt.Text        = workingMovieDetails.fullmoviebody.director
+				studiotxt.Text          = workingMovieDetails.fullmoviebody.studio
+				countrytxt.Text         = workingMovieDetails.fullmoviebody.country
+				pathtxt.Text            = workingMovie.fullpathandfilename
+				ratingtxt.Text          = workingMovieDetails.fullmoviebody.rating.FormatRating
+				cbUsrRated.Text         = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
 				SetTagTxtField
 				tagtxt.Text = ""
 				tb_tagtxt_changed = False
@@ -1755,22 +1755,13 @@ Public Class Form1
 				If workingMovieDetails.fullmoviebody.votes <> "" AndAlso workingMovieDetails.fullmoviebody.votes <> "scraper error" Then
 					Dim votestext As String = workingMovieDetails.fullmoviebody.votes
 					votestext = votestext.RemoveWhitespace
-					votestxt.Text = Double.Parse(votestext.Replace(".", ",")).ToString("N0")
+					votestxt.Text       = Double.Parse(votestext.Replace(".", ",")).ToString("N0")
 				Else
-					votestxt.Text = workingMovieDetails.fullmoviebody.votes
+					votestxt.Text       = workingMovieDetails.fullmoviebody.votes
 				End If
-				certtxt.Text = workingMovieDetails.fullmoviebody.mpaa
-				If lbl_movTop250.Text = "Top 250" Then
-					top250txt.Text = workingMovieDetails.fullmoviebody.top250
-				Else
-					top250txt.Text = workingMovieDetails.fullmoviebody.metascore
-				End If
-				'top250txt.Text = workingMovieDetails.fullmoviebody.top250
-				If Pref.movieRuntimeDisplay = "file" Then
-					displayRuntimeScraper = False
-				Else
-					displayRuntimeScraper = True
-				End If
+				certtxt.Text            = workingMovieDetails.fullmoviebody.mpaa
+                top250txt.Text          = If(lbl_movTop250.Text = "Top 250", workingMovieDetails.fullmoviebody.top250, workingMovieDetails.fullmoviebody.metascore)
+                displayRuntimeScraper   = If(Pref.movieRuntimeDisplay = "file", False, True)
 				Call mov_SwitchRuntime()
 
 				workingMovieDetails.fileinfo.fullpathandfilename = workingMovie.fullpathandfilename
@@ -1800,10 +1791,7 @@ Public Class Form1
 					lblCurrentLoadedPoster.Text = "Width: " & PictureBoxAssignedMoviePoster.Image.Width.ToString & "  Height: " & PictureBoxAssignedMoviePoster.Image.Height.ToString
 					lblMovPosterPages.Visible = False
 				End If
-				If workingMovieDetails.fileinfo.fanartpath <> Nothing Then
-					Dim workingfanart As String = workingMovieDetails.fileinfo.fanartpath
-					util_ImageLoad(PbMovieFanArt, workingfanart, Utilities.DefaultFanartPath)
-				End If
+				If workingMovieDetails.fileinfo.fanartpath <> Nothing Then util_ImageLoad(PbMovieFanArt, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 
 				If Yield(yieldIng) Then Return
 
@@ -1842,7 +1830,10 @@ Public Class Form1
 						End If
 					Next
                     Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
-                    If q.Count > 0 Then add = False
+                    If q.Count > 0 Then
+                        add = False
+                        'If workingMovieDetails.fullmoviebody.SetOverview = "" AndAlso q(0).MovieSetPlot <> "" Then workingMovieDetails.fullmoviebody.SetOverview = q(0).MovieSetPlot
+                    End If
 					If add Then
 						Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
 					End If
@@ -2245,20 +2236,10 @@ Public Class Form1
 	End Sub
 
 	Private Sub StartVideo(ByVal tempstring As String)
-		If Pref.videomode = 1 Then
-			Call util_VideoMode(1, tempstring)
-			Exit Sub
-		End If
-		If Pref.videomode = 2 OrElse Pref.videomode = 3 Then
-			Call util_VideoMode(2, tempstring)
-			Exit Sub
-		End If
-		If Pref.videomode >= 4 Then
-			If Pref.selectedvideoplayer <> Nothing Then
-				Call util_VideoMode(4, tempstring)
-			Else
-				Call util_VideoMode(1, tempstring)
-			End If
+		If Pref.videomode = 4 AndAlso String.IsNullOrEmpty(Pref.selectedvideoplayer) Then
+            Call util_VideoMode(1, tempstring)
+        Else
+            Call util_VideoMode(Pref.videomode, tempstring)
 		End If
 	End Sub
 
@@ -2572,6 +2553,9 @@ Public Class Form1
 				movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
                 movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 			End If
+            If movie.ScrapedMovie.fullmoviebody.SetName <> "-None" AndAlso movie.ScrapedMovie.fullmoviebody.SetOverview = "" Then
+                movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+            End If
 			movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
 			If TabControl2.SelectedTab.Name = tpMovTags.Name Then
 				For Each t In NewTagList
@@ -2977,11 +2961,16 @@ Public Class Form1
 			aok = Utilities.SafeDeleteFile(tempstring)
 		End If
 		If aok Then
-			Dim file As New IO.StreamWriter(tempstring, False, Encoding.GetEncoding(1252))
-			For Each part In plist
-				If part <> Nothing Then file.WriteLine(part)
-			Next
-			file.Close()
+            If plist.Count > 1 Then
+                Dim setencoding As Encoding = If((Not String.IsNullOrEmpty(Pref.selectedvideoplayer) AndAlso Pref.videomode > 2), Encoding.Utf8, Encoding.getencoding(1252))
+                Dim file As New IO.StreamWriter(tempstring, False, setencoding)
+			    For Each part In plist
+				    If part <> Nothing Then file.WriteLine(part)
+			    Next
+			    file.Close()
+            Else
+                tempstring = plist(0)
+            End If
 			ToolStripStatusLabel2.Text &= "............Launching Player."
 			StartVideo(tempstring)
 		Else
@@ -12373,6 +12362,7 @@ Public Class Form1
                             Dim ac As New MovieSetDatabase
                             ac.title    = Mov.title
                             ac.tmdbid   = Mov.tmdbid
+                            ac.year     = Mov.year.ToString
                             ac.present  = True
                             found       = True
                             MovCollectionList.Add(ac)

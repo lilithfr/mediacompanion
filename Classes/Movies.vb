@@ -1086,6 +1086,16 @@ Public Class Movies
             Next
         Next
     End Sub
+
+    Public Sub UpdateSetsWithOverview
+        For each m In MovieCache
+            If m.TmdbSetId = "" Then Continue For
+            Dim q = From x In MovieSetDB Where x.TmdbSetId = m.TmdbSetId
+            If Not q.Count = 0 Then
+                If q(0).MovieSetPlot <> "" Then m.MovieSet.MovieSetPlot = q(0).MovieSetPlot
+            End If
+        Next
+    End Sub
     
     Public ReadOnly Property UserSetAdditions As String
         Get
@@ -1782,7 +1792,8 @@ Public Class Movies
         RebuildUnknownSetCount()
         LoadTagCache()
         UpdateTmdbSetMissingMovies()
-'       UpdateUserTmdbSetAdditions()
+        UpdateSetsWithOverview()
+        'UpdateUserTmdbSetAdditions()
         Rebuild_Data_GridViewMovieCache()
     End Sub
 

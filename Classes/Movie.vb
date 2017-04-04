@@ -523,7 +523,7 @@ Public Class Movie
     
     Public ReadOnly Property SearchName As String
         Get
-            Return Utilities.CleanFileName(Title.Replace(SeparateMovie, ""), If(Pref.movies_useXBMC_Scraper, "tmdb", ""))
+            Return Utilities.CleanFileName(If(SeparateMovie <> "", Title.Replace(SeparateMovie, ""), Title), If(Pref.movies_useXBMC_Scraper, "tmdb", ""))
         End Get 
     End Property
 
@@ -1004,7 +1004,7 @@ Public Class Movie
     Function ImdbScrapeBody(Optional Title As String=Nothing, Optional PossibleYear As String=Nothing, Optional PossibleImdb  As String=Nothing) As String
 
         'Discard junk possible years
-        If (PossibleYear<1900) Or (PossibleYear>DateAndTime.Now.Year+2) Then PossibleYear=Nothing
+        If PossibleYear <> "" AndAlso ((PossibleYear<1900) Or (PossibleYear>DateAndTime.Now.Year+2)) Then PossibleYear=Nothing
 
         If Not IsNothing(Title) Then ReportProgress(, String.Format("!!! {0}!!! Scraping Title: {1}{0}", vbCrLf, Title))
 

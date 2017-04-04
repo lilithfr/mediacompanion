@@ -1602,9 +1602,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fileinfo.filenameandpath   = loadpath.Replace(".nfo", container)
                 End If
                 
-                If newmovie.fullmoviebody.SetName       = "" Then
-                    newmovie.fullmoviebody.SetName      = "-None-"
-                End If
+                If newmovie.fullmoviebody.SetName       = "" Then newmovie.fullmoviebody.SetName      = "-None-"
                 If newmovie.fullmoviebody.usrrated      = "" Then newmovie.fullmoviebody.usrrated = "0"
                 movie = Nothing
 
