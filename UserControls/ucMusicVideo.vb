@@ -296,7 +296,14 @@ Public Class ucMusicVideo
                     MessageBox.Show("Not a picture")
                 End If
             End If
-
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
+                Dim possibleurl As String = Clipboard.GetData(DataFormats.Text)
+                If possibleurl.StartsWith("http") AndAlso possibleurl.EndsWith(".jpg") Then
+                    Dim cachename As String = Utilities.Download2Cache(possibleurl)
+                    If cachename <> "" Then Form1.util_ImageLoad(picBox, cachename, Utilities.DefaultPosterPath)
+                    Return True
+                End If
+            End If
             If Clipboard.GetDataObject.GetDataPresent(DataFormats.Bitmap) Then
                 picBox.Image = Clipboard.GetDataObject().GetData(DataFormats.Bitmap)
                 Return True
