@@ -1255,13 +1255,7 @@ Public Class Movie
         _movieCache.fullpathandfilename = If(movRebuildCaches, ActualNfoPathAndFilename, NfoPathPrefName) 'ActualNfoPathAndFilename 
         _actualNfoPathAndFilename       = NfoPathPrefName 
         _movieCache.TmdbSetId           = _scrapedMovie.fullmoviebody.TmdbSetId
-
-        'If _movieCache.GotTmdbSetDetail Then
-        '    _movieCache.SetName = _movieCache.MovieSet.MovieSetDisplayName
-        'Else
-            _movieCache.SetName = _scrapedMovie.fullmoviebody.SetName
-        'End If
-
+        _movieCache.SetName             = _scrapedMovie.fullmoviebody.SetName
 
         _movieCache.source              = _scrapedMovie.fullmoviebody.source
         _movieCache.director            = _scrapedMovie.fullmoviebody.director

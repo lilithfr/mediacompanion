@@ -943,6 +943,7 @@ Public Class Pref
         'enginefront.Add("http://www.ask.com/web?qsrc=1&o=0&l=dir&q=")
         'engineend.Add("&qo=serpSearchTopBox")
     End Sub
+
     Public Shared Sub ConfigSave()
         
         Dim tempstring As String = String.Empty
@@ -2429,7 +2430,8 @@ Public Class Pref
             workingfiledetails.Video.Bitrate.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate/String")
             workingfiledetails.Video.BitrateMode.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Mode/String")
             workingfiledetails.Video.BitrateMax.Value = MI.Get_(StreamKind.Visual, curVS, "BitRate_Maximum/String")
-            workingfiledetails.Video.NumVideoBits = MI.Get_(StreamKind.Visual, curVS, "BitDepth/String").RemoveAfterMatch(" ")
+            Dim t1 As String = MI.Get_(StreamKind.Visual, curVS, "BitDepth/String").RemoveAfterMatch(" ")
+            workingfiledetails.Video.NumVideoBits = If(String.IsNullOrEmpty(t1), -1, t1)
 
             If filename.ToLower.Contains("\bdmv\stream\") Then
                 workingfiledetails.Video.Container.Value = ".bdmv"  '"If bluray, set as .bdmv extension"

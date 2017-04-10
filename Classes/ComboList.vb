@@ -46,7 +46,7 @@ Public Class ComboList
             End If
         End Set
     End Property
-    
+        
     Public ReadOnly Property countriesList As List(Of String)
         Get
             Dim splist() As String = countries.Split(" / ")
@@ -553,7 +553,7 @@ Public Class ComboList
         AssignSubtitleLang(From.SubLang)
 
         Me.SetName              = From.SetName
-        Me.TmdbSetId                = From.TmdbSetId
+        Me.TmdbSetId            = From.TmdbSetId
 
         Me.stars                = From.stars
         Me.Actorlist            = From.Actorlist 

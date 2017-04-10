@@ -49,6 +49,7 @@ Public Module ModuleExtensions
 
     <Extension()> _
     Public Function RemoveAfterMatch(ByVal s As String, Optional match As String=" (") As String
+        If String.IsNullOrEmpty(s) Then Return s
         Dim i As Integer = s.LastIndexOf(match)
 
         If i=-1 Then Return s

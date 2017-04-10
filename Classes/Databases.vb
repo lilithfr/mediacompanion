@@ -33,10 +33,10 @@ End Class
 
 Public Class MovieSetDatabase
 
-    Public tmdbid As String
-    Public title As String
-    Public year As String
-    Public present As Boolean
+    Public tmdbid   As String
+    Public title    As String
+    Public year     As String
+    Public present  As Boolean
     
     Sub New()
 

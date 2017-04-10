@@ -4,56 +4,56 @@ Imports System.Text.RegularExpressions
 Imports System.Linq
 
 Public Class Data_GridViewMovie
-    Dim _fullpathandfilename As String = ""
-    Property SetName              As String = ""
-    Property TmdbSetId                As String = ""
-    Dim _filename As String = ""
-    Dim _foldername As String = ""
-    Dim _title As String = ""
-    Dim _originaltitle As String = ""
-    Dim _titleandyear As String = ""
-    Dim _year As String = "0"
-    Dim _filedate As String = ""
-    Dim _id As String = ""
-    Dim _rating As Double=0
-    Dim _top250 As String = 0
-    Dim _genre As String = ""
-    Dim _playcount As String = ""
-    Dim _sortorder As String = ""
-    Dim _outline As String = ""
-    Dim _tagline As String = ""
-    Dim _runtime As String = ""
-    Dim _createdate As String = ""
-    Dim _missingdata1 As Byte=0
-    Dim _plot As String = ""
-    Dim _source As String = ""
-    Dim _director As String = ""
-    Dim _votes As Integer=0
-    Dim _TitleUcase As String = ""
-    Dim _IntRuntime As Integer=0
-    Dim _stars As String = ""
-    Dim _DisplayFileDate   As String
-    Dim _DisplayCreateDate As String
-    Dim _movietag As String = ""
-    Dim _container As String = ""
-    Dim _videomissing As Boolean
+    Dim _fullpathandfilename    As String = ""
+    Property SetName            As String = ""
+    Property TmdbSetId          As String = ""
+    Dim _filename               As String = ""
+    Dim _foldername             As String = ""
+    Dim _title                  As String = ""
+    Dim _originaltitle          As String = ""
+    Dim _titleandyear           As String = ""
+    Dim _year                   As String = "0"
+    Dim _filedate               As String = ""
+    Dim _id                     As String = ""
+    Dim _rating                 As Double = 0
+    Dim _top250                 As String = 0
+    Dim _genre                  As String = ""
+    Dim _playcount              As String = ""
+    Dim _sortorder              As String = ""
+    Dim _outline                As String = ""
+    Dim _tagline                As String = ""
+    Dim _runtime                As String = ""
+    Dim _createdate             As String = ""
+    Dim _missingdata1           As Byte = 0
+    Dim _plot                   As String = ""
+    Dim _source                 As String = ""
+    Dim _director               As String = ""
+    Dim _votes                  As Integer = 0
+    Dim _TitleUcase             As String = ""
+    Dim _IntRuntime             As Integer = 0
+    Dim _stars                  As String = ""
+    Dim _DisplayFileDate        As String
+    Dim _DisplayCreateDate      As String
+    Dim _movietag               As String = ""
+    Dim _container              As String = ""
+    Dim _videomissing           As Boolean
     Dim _rootfolder             As String = ""
-    Dim _usrrated               As Integer=0
-    Dim _metascore              As Integer=0
+    Dim _usrrated               As Integer = 0
+    Dim _metascore              As Integer = 0
     Dim _nfopath                As String = ""
     
 
    
-    Property VideoCodec           As String = ""
-    Property Audio                As New List(Of AudioDetails)
-    Property Premiered            As String
-    Property FrodoPosterExists    As Boolean
-    Property PreFrodoPosterExists As Boolean
-    Property FolderSize           As Long = -1
-    Property MediaFileSize        As Long = -1
-    Property tmdbid               As String = ""
-    Property UserSetAddition As Char = ""
-    Property oMovies As Movies
+    Property VideoCodec             As String = ""
+    Property Audio                  As New List(Of AudioDetails)
+    Property Premiered              As String
+    Property FrodoPosterExists      As Boolean
+    Property PreFrodoPosterExists   As Boolean
+    Property FolderSize             As Long = -1
+    Property MediaFileSize          As Long = -1
+    Property tmdbid                 As String = ""
+    Property UserSetAddition        As Char = ""
+    Property oMovies                As Movies
 
     Public ReadOnly Property MovieSet As MovieSetInfo 
         Get

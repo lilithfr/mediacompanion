@@ -1475,9 +1475,10 @@ Public Class Form1
 				Me.util_ConfigLoad()
 			End If
 		Next
-		For Each item In Pref.moviesets
-			cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
-		Next
+        MergePrefMovieSetToMovieSetDatabase()
+		'For Each item In Pref.moviesets
+		'	cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
+		'Next
 	End Sub
 
 	Private Sub util_ProfilesLoad()
@@ -1641,6 +1642,28 @@ Public Class Form1
 			ToolsToolStripMenuItem.DropDownItems.Add(com.title)
 		Next
 	End Sub
+
+    Private Sub MergePrefMovieSetToMovieSetDatabase()
+        ''' Merging User Sets into MovieSetDatabase
+        ''' So we can support Collection Plot
+        ''' with User Sets.
+        Dim removedSets As New List(Of String)
+        For each mset In Pref.moviesets
+            If mset.ToLower = "-none-" Then Continue For
+            Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName = mset
+            If q.Count = 0 Then
+                Dim NewSet As New MovieSetInfo
+                NewSet.MovieSetName = mset
+                NewSet.TmdbSetId = oMovies.setMovieSetID("", oMovies.MovieSetDB)
+                removedSets.Add(mset)
+                oMovies.AddUpdateMovieSetInCache(NewSet)
+            End If
+        Next
+        For each mset In removedSets
+            Pref.moviesets.Remove(mset)
+        Next
+
+    End Sub
 
 	Private Sub mov_ActorRebuild()
 		oMovies.RebuildMoviePeopleCaches
@@ -2550,7 +2573,8 @@ Public Class Form1
 			movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
 			If movie.ScrapedMovie.fullmoviebody.SetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) AndAlso cbMovieDisplay_MovieSet.SelectedIndex <> -1 Then
 				movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-				movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+                Dim setid As String = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+				If setid <> "" AndAlso Not setid.StartsWith("L") Then movie.ScrapedMovie.fullmoviebody.TmdbSetId = setid'oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
                 movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 			End If
             If movie.ScrapedMovie.fullmoviebody.SetName <> "-None" AndAlso movie.ScrapedMovie.fullmoviebody.SetOverview = "" Then
@@ -2653,7 +2677,9 @@ Public Class Form1
 					End If
 					If Not cbMovieDisplay_MovieSet.SelectedIndex < 1 Then
 						movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
-						movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+                        Dim setid As String = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
+				        If setid <> "" AndAlso Not setid.StartsWith("L") Then movie.ScrapedMovie.fullmoviebody.TmdbSetId = setid
+						'movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
                         movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 					End If
 					If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString 'text
@@ -9041,8 +9067,10 @@ Public Class Form1
 	End Sub
 
 	Public Sub util_ConfigLoad(ByVal Optional prefs As Boolean = False)
-		Pref.SetUpPreferences()
-		Pref.ConfigLoad()
+        If MainFormLoadedStatus Then
+            Pref.SetUpPreferences()
+		    Pref.ConfigLoad()
+        End If
 		Pref.MultiMonitoEnabled = convert.ToBoolean(multimonitor)
 
 		DataGridViewMovies.DataSource = Nothing
@@ -12298,8 +12326,13 @@ Public Class Form1
 
         '' Now add Movies from MovieSetCache.
         For each mset In oMovies.MovieSetDB
+            Dim custom As Boolean = False
+            If mset.TmdbSetId.StartsWith("L") Then
+                Dim p = From x In oMovies.MovieCache Where x.SetName = mset.MovieSetDisplayName
+                If Not p.Count = 0 Then custom = True
+            End If
             Dim q = From x In oMovies.MovieCache Where x.TmdbSetId = mset.TmdbSetId
-            If q.Count = 0 Then Continue For
+            If q.Count = 0 AndAlso Not custom Then Continue For
             Dim tmpmov As New TmdbCustomSetName(mset.TmdbSetId, "", mset.MovieSetDisplayName)
             Tmplist.Add(tmpmov)
         Next
@@ -12344,11 +12377,11 @@ Public Class Form1
         End Try
     End Sub
 
-    Private Sub dgvpopulate(ByVal MsetName As String)
+    Private Sub dgvpopulate(ByVal MsetName As String, Optional refresh As Boolean = False)
         Try
             Dim MovSet As MovieSetInfo = oMovies.FindMovieSetInfoBySetDisplayName(MsetName)
             Dim found As Boolean = False
-            If MsetName <> tbMovieSetTitle.Text OrElse dgvMovieSets.Rows.Count = 1 Then
+            If refresh OrElse MsetName <> tbMovieSetTitle.Text OrElse dgvMovieSets.Rows.Count = 1 Then
                 tb_MovieSetOverviewReset()
                 Dim CustomCollection As Boolean = False
                 Dim dirtycollection As Boolean = False
@@ -12375,7 +12408,6 @@ Public Class Form1
                         lbCollectionCount.BackColor = Color.Red
                         Exit Sub
                     End If
-
                 Else    'Belongs to a Collection and is in MovieSetDb
                     For Each mset In oMovies.MovieSetDB
                         If mset.TmdbSetId = MovSet.TmdbSetId Then
@@ -12388,9 +12420,23 @@ Public Class Form1
                                     ac.year     = collect.ReleaseYear
                                     MovCollectionList.Add(ac)
                                 Next
-                                Exit For
                             End If
+                            If mset.TmdbSetId.StartsWith("L") Then
+                                Dim q = From x In oMovies.MovieCache Where x.SetName = mset.MovieSetDisplayName
+                                If Not q.Count = 0 Then
+                                    For Each collect In q.Distinct()
+                                        CustomCollection = True
+                                        Dim ac As New MovieSetDatabase
+                                        ac.title    = collect.title
+                                        ac.tmdbid   = collect.tmdbid
+                                        ac.year     = collect.year.ToString
+                                        MovCollectionList.Add(ac)
+                                    Next
+                                End If
+                            End If
+                            Exit For
                         End If
+
                     Next
             
                     For Each x In MovCollectionList
@@ -12437,11 +12483,11 @@ Public Class Form1
                     lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
                     lbCollectionCount.BackColor = Color.Red
                 End If
-                If CustomCollection Then
-                    btn_MovSetOverviewEdit.Enabled = False
-                Else
-                    btn_MovSetOverviewEdit.Enabled = True
-                End If
+                'If CustomCollection Then
+                '    btn_MovSetOverviewEdit.Enabled = False
+                'Else
+                '    btn_MovSetOverviewEdit.Enabled = True
+                'End If
             End If
         Catch ex As Exception
 
@@ -12741,7 +12787,7 @@ Public Class Form1
             Dim McMovieSetInfo As MovieSetInfo = tmdb.MovieSet
             If IsNothing(McMovieSetInfo) Then Exit Sub
             oMovies.AddUpdateMovieSetInCache(McMovieSetInfo, True)
-            dgvpopulate(MovSet.MovieSetName)
+            dgvpopulate(MovSet.MovieSetName, True)
         Catch ex As Exception
 
         Finally

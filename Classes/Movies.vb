@@ -1092,7 +1092,7 @@ Public Class Movies
             If m.TmdbSetId = "" Then Continue For
             Dim q = From x In MovieSetDB Where x.TmdbSetId = m.TmdbSetId
             If Not q.Count = 0 Then
-                If q(0).MovieSetPlot <> "" Then m.MovieSet.MovieSetPlot = q(0).MovieSetPlot
+                If m.MovieSet.MovieSetPlot = "" AndAlso q(0).MovieSetPlot <> "" Then m.MovieSet.MovieSetPlot = q(0).MovieSetPlot
             End If
         Next
     End Sub
@@ -2739,7 +2739,7 @@ Public Class Movies
             child.SetAttributeNode(attr)
             
             child.AppendChild(doc   , "moviesetname"        , movieset.MovieSetName)
-            child.AppendChild(doc   , "id"                  , movieset.TmdbSetId)
+            child.AppendChild(doc   , "id"                  , If(movieset.TmdbSetId.StartsWith("L"), "", movieset.TmdbSetId))
             child.AppendChild(doc   , "plot"                , movieset.MovieSetPlot)
             child.AppendChild(doc   , "LastUpdatedTs"       , Format(movieset.LastUpdatedTs, Pref.datePattern).ToString) 'movieset.LastUpdatedTs.ToString)
             child.AppendChild(doc   , "DirtyData"           , movieset.Dirty)
