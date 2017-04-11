@@ -1224,6 +1224,19 @@ Public Class Movies
         End Get
     End Property
 
+    Public ReadOnly Property MovieSetsCustom As String()
+        Get
+           ' Dim c As String()
+            'Try
+                'Dim q = From x In MovieCache Where x.TmdbSetId = "" AndAlso x.SetName <> "-None-" Select ms = x.SetName Distinct
+                Dim q = From x In MovieSetDB Where x.TmdbSetId.StartsWith("L") Select ms = x.MovieSetName Distinct
+                Return q.ToArray
+
+            'Catch ex As Exception
+            '    'Return c
+            'End Try
+        End Get
+    End Property
     
     Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo, Optional ByVal Update As Boolean = False, Optional ByVal custom As Boolean = False)
 
@@ -1257,6 +1270,18 @@ Public Class Movies
         c.Assign(movieSetInfo)
     End Sub
 
+    Sub RemoveMovieSetInCache(s As String)
+        If String.IsNullOrEmpty(s) Then Return
+        Dim c As MovieSetInfo = Nothing
+        Try
+            c = FindMovieSetInfoBySetName(s)
+            If c.MovieSetName <> "" Then MovieSetDB.Remove(c)
+        Catch ex As Exception
+
+        End Try
+        'MovieSetDB.Remove(movieSetInfo)
+    End Sub
+
     Sub UpdateMovieCacheSetName(MovieSet As MovieSetInfo)
 
         Dim res = (From x In MovieCache Where x.TmdbSetId=MovieSet.TmdbSetId)
@@ -1282,9 +1307,10 @@ Public Class Movies
 
 			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
 
-			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x).ToArray
+			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x) '.ToArray
+            Dim res2 = res.Union(MovieSetsCustom).OrderBy(Function(x) x).ToArray
             
-			Return res
+			Return res2
 		End Get
 
 	End Property
