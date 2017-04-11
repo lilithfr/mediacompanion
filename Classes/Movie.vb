@@ -3423,10 +3423,11 @@ Public Class Movie
                         ''' Update set only if there was a Change.
                         ''' Need to improve this to support usernamed Sets that exist on TMDb 
                         If ChangedSet Then
+                            Dim custom As Boolean = (_scrapedMovie.fullmoviebody.SetName <> "-None-" And _scrapedMovie.fullmoviebody.TmdbSetId = "")
                             UpdateProperty(_rescrapedMovie.fullmoviebody.SetName    , _scrapedMovie.fullmoviebody.SetName       , , rl.EmptyMainTags)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.TmdbSetId  , _scrapedMovie.fullmoviebody.TmdbSetId     , , rl.EmptyMainTags)
                             UpdateProperty(_rescrapedMovie.fullmoviebody.SetOverview, _scrapedMovie.fullmoviebody.SetOverview   , , rl.EmptyMainTags)
-                            UpdateMovieSetCache(True)
+                            UpdateMovieSetCache(True, custom)
                             ''' Finally, check if old collection is still in custom collection list and remove if it is.
                             If Pref.moviesets.Contains(_scrapedMovie.fullmoviebody.SetName) Then
                                 Pref.moviesets.Remove(_scrapedMovie.fullmoviebody.SetName)
@@ -3540,16 +3541,10 @@ Public Class Movie
         If Pref.GetMovieSetFromTMDb Then UpdateMovieSetCache(False)
     End Sub
 
-    Sub UpdateMovieSetCache(ByVal clearusernameing As Boolean)
+    Sub UpdateMovieSetCache(ByVal clearusernameing As Boolean, Optional ByVal custom As Boolean = False)
         
         If _scrapedMovie.fullmoviebody.Locked("set") Then Return
         
-        ''' This data is set on Rescrape Specific routine.
-    '    If (Rescrape OrElse Pref.GetMovieSetFromTMDb) AndAlso Not IsNothing(tmdb.Movie.belongs_to_collection) Then
-				'_scrapedMovie.fullmoviebody.SetName   = tmdb.Movie.belongs_to_collection.name
-				'_scrapedMovie.fullmoviebody.TmdbSetId = tmdb.Movie.belongs_to_collection.id 
-    '    End If
-
         _movieCache.oMovies = _parent
 
         Dim ms As MovieSetInfo
@@ -3571,7 +3566,7 @@ Public Class Movie
             Return
         End If
 
-        _parent.AddUpdateMovieSetInCache(McMovieSetInfo)
+        _parent.AddUpdateMovieSetInCache(McMovieSetInfo, custom:= custom)
 
         ms = _parent.FindMovieSetInfoByTmdbSetId(_scrapedMovie.fullmoviebody.TmdbSetId)
         If Not ms Is Nothing Then

@@ -1657,6 +1657,8 @@ Public Class Form1
                 NewSet.TmdbSetId = oMovies.setMovieSetID("", oMovies.MovieSetDB)
                 removedSets.Add(mset)
                 oMovies.AddUpdateMovieSetInCache(NewSet)
+            Else
+                removedSets.Add(mset)
             End If
         Next
         For each mset In removedSets
@@ -6800,6 +6802,7 @@ Public Class Form1
 	Public Sub mov_RebuildMovieCaches
 		mov_PreferencesDisplay
 		RunBackgroundMovieScrape("RebuildCaches")
+        MergePrefMovieSetToMovieSetDatabase()
 	End Sub
 
 	Private Sub CheckRootsForToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckRootsForToolStripMenuItem.Click
@@ -12504,16 +12507,30 @@ Public Class Form1
     
 	Private Sub btnMovieSetAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMovieSetAdd.Click
 		Try
-			Dim newForm As New frmMovSetAdd()
-			If newForm.ShowDialog() <> DialogResult.OK Then
-			    Exit Sub
-            Else
-                If newForm.newset <> ""
-                    Pref.moviesets.Add(newForm.newset)
-                    Pref.moviesets.Sort()
+            Dim newsetname As String = ""
+            Using newForm As New frmMovSetAdd
+                If newForm.ShowDialog() <> DialogResult.OK Then
+			        Exit Sub
+                Else
+                    newsetname = newForm.newset
                 End If
-			End If
-            newForm = Nothing
+            End Using
+			'Dim newForm As New frmMovSetAdd()
+            If newsetname <> ""
+                Dim tmpmovset As New MovieSetInfo
+                tmpmovset.MovieSetName = newsetname
+                tmpmovset.TmdbSetId = oMovies.setMovieSetID("", oMovies.MovieSetDB)
+                Dim q = From x In oMovies.MovieSetDB Where x.MovieSetName = tmpmovset.MovieSetName
+                If q.Count = 0 Then
+                    oMovies.AddUpdateMovieSetInCache(tmpmovset)
+                Else
+                    MsgBox("Set already exists in Database", MsgBoxStyle.Critical, "Error")
+                    Exit Sub
+                End If
+                'Pref.moviesets.Add(newForm.newset)
+                'Pref.moviesets.Sort()
+            End If
+            'newForm = Nothing
 
 			MovSetDgvLoad()
             MovSetArtworkCheck()
@@ -12555,6 +12572,7 @@ Public Class Form1
 		Pref.moviesets.Clear()
 		Pref.moviesets.Add("-None-")
 		Pref.moviesets.AddRange(oMovies.MovieSetsNoSetId)
+        MergePrefMovieSetToMovieSetDatabase
 	End Sub 'btn_MovSetOverviewEdit
 
     Private Sub btn_MovSetOverviewEdit_Click(sender As System.Object, e As System.EventArgs) Handles btn_MovSetOverviewEdit.Click
@@ -12654,7 +12672,7 @@ Public Class Form1
         Dim MsetName As String = dgvMovieSets.Rows(RowIndexFromMouseDown).Cells(0).Value
         Dim MsetHasId As Boolean = False
         Dim SetId As String = dgvMovieSets.Rows(RowIndexFromMouseDown).Cells(1).Tag
-        If Not SetId.Contains("L") AndAlso SetId <> "" AndAlso SetId.ToLower <> "-none-" Then MsetHasId = True
+        If Not SetId.StartsWith("L") AndAlso SetId <> "" AndAlso SetId.ToLower <> "-none-" Then MsetHasId = True
 
         
         If ColIndexFromMouseDown = 0 Then
@@ -12667,14 +12685,14 @@ Public Class Form1
             tsmiMovSetName      .Text       = MsetName
             tsmiMovSetRebuild   .Visible    = False
             tsmiMovSetEditName  .Visible    = False
-            tsmiMovSetGetFanart .Visible    = True
+            tsmiMovSetGetFanart .Visible    = MsetHasId
             tsmiMovSetGetPoster .Visible    = False
         ElseIf ColIndexFromMouseDown = 3 Then
             tsmiMovSetName      .Text       = MsetName
             tsmiMovSetRebuild   .Visible    = False
             tsmiMovSetEditName  .Visible    = False
             tsmiMovSetGetFanart .Visible    = False
-            tsmiMovSetGetPoster .Visible    = True
+            tsmiMovSetGetPoster .Visible    = MsetHasId
         End If
     End Sub
 

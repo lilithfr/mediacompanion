@@ -980,23 +980,18 @@ Public Class Movies
     
     Function GetMovieSetCollectionCount(SetName As String) As String
 
-        If SetName="-None-" Then
-            Return ""
-        End If
+        If SetName="-None-" Then Return ""
 
         Dim movieSet = FindMovieSetInfoBySetDisplayName(SetName)
  
         Dim x = FindUserTmdbSetAdditions(SetName)
         Dim userAdditions = ""
-        If x.Count>0 Then
-            userAdditions = " *" & x.Count.ToString & " user*"
-        End If
+        If x.Count>0 Then userAdditions = " *" & x.Count.ToString & " user*"
 
         If IsNothing(movieSet) OrElse movieSet.MissingInfo Then
             Return " of unknown"
         Else
             Dim r = From m In movieSet.Collection Where IsDate(m.release_date) AndAlso (m.release_date < Date.Now) Select m
-
             Return " of " & (r.Count+x.Count) & userAdditions
         End If
     End Function
@@ -1032,6 +1027,14 @@ Public Class Movies
         End If
 
     End Function
+
+    
+    Function FindMovieSetInfoByTmdbSetId(TmdbSetId As String) As MovieSetInfo
+
+        Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
+
+    End Function
+    
 
     Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
         Return (From x In MovieCache Where x.SetName = SetName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
@@ -1221,6 +1224,126 @@ Public Class Movies
         End Get
     End Property
 
+    
+    Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo, Optional ByVal Update As Boolean = False, Optional ByVal custom As Boolean = False)
+
+        If IsNothing(movieSetInfo) Then Return
+
+        Dim c As MovieSetInfo = Nothing
+        Try
+            c = FindMovieSetInfoByTmdbSetId(movieSetInfo.TmdbSetId)
+        Catch ex As Exception
+        End Try
+
+        If IsNothing(c) AndAlso custom Then
+            Try
+                c = FindMovieSetInfoBySetName(movieSetInfo.MovieSetName)
+                If movieSetInfo.TmdbSetId <> "" AndAlso c.TmdbSetId.StartsWith("L") Then c.Dirty = True
+            Catch ex As Exception
+            End Try
+        End If
+
+        If IsNothing(c) Then
+            MoviesetDb.Add(movieSetInfo)
+            Return
+        End If
+        If Not IsNothing(c) Then
+            If c.Dirty OrElse Update Then
+                MovieSetDB.Remove(c)
+                MovieSetDB.Add(movieSetInfo)
+            End If
+        End If
+
+        c.Assign(movieSetInfo)
+    End Sub
+
+    Sub UpdateMovieCacheSetName(MovieSet As MovieSetInfo)
+
+        Dim res = (From x In MovieCache Where x.TmdbSetId=MovieSet.TmdbSetId)
+
+        For Each m In res
+            
+			Dim movie As Movie = LoadMovie(m.fullpathandfilename)
+
+            movie.ScrapedMovie.fullmoviebody.SetName        = m.SetName
+            movie.ScrapedMovie.fullmoviebody.TmdbSetId      = m.TmdbSetId
+            
+            movie.AssignMovieToCache
+            movie.UpdateMovieCache
+            movie.SaveNFO
+            
+        Next
+    End Sub
+    
+	Public ReadOnly Property UsedMovieSets As String()
+		Get
+'			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
+			Dim resTmdb = From x In MoviesSetsExNone
+
+			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
+
+			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x).ToArray
+            
+			Return res
+		End Get
+
+	End Property
+    
+    Public Function GetMovieSetIdFromName(mSetName As String) As String
+        For Each mset In MovieSetDB
+            If mset.MovieSetName = mSetName Then
+                Return mset.TmdbSetId
+            End If
+        Next
+        Return ""
+    End Function
+
+    Public Function GetMovieSetOverviewFromName(mSetName As String) As String
+        For Each mset In MovieSetDB
+            If mset.MovieSetName = mSetName Then
+                Return mset.MovieSetPlot
+            End If
+        Next
+        Return ""
+    End Function
+    
+    ''' <summary>
+    ''' Make sure no Movie Set has an empty ID. If we can't find an ID on tmdb, we still need to distinguish the set
+    ''' from other sets. Comparing movie names isn't the proper way, as users in Media Companion can choose to rename
+    ''' their movies manually not corresponding to online names so we rather check for an ID (online or local)
+    ''' 
+    ''' </summary>
+    ''' <param name="moviesetID"></param>
+    ''' <returns></returns>
+    Function setMovieSetID(moviesetID As String, setDb As List(Of MovieSetInfo)) As String
+        If moviesetID = String.Empty Then   ' if no TmdbID is found set it to a local ID to avoid empty ID's
+            Dim moviesetTemp As MovieSetInfo
+            Dim moviesetTempHighestID = 0
+            For Each moviesetTemp In setDb
+                If moviesetTemp.TmdbSetId.Chars(0) = "L" Then
+                    Dim moviesetTempID = moviesetTemp.TmdbSetId.Substring(1).ToInt()
+                    If moviesetTempID + 1 > moviesetTempHighestID Then
+                        moviesetTempHighestID = moviesetTempID + 1
+                    End If
+                End If
+            Next
+            moviesetID = "L" + moviesetTempHighestID.ToString().PadLeft(5 - moviesetTempHighestID.ToString().Length, "0")
+        End If
+        Return moviesetID
+    End Function
+    
+    Public Sub UpdateMovieSetDisplayNames
+
+        For Each m In MovieCache 
+            m.MovieSet.UpdateMovieSetDisplayName
+        Next 
+
+    End Sub
+
+    Public Sub UpdateUserMovieSetName
+
+    End Sub
+
     Public ReadOnly Property SubTitleLangFilter As List(Of String)
         Get
             Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select fullpathandfilename=m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
@@ -1281,34 +1404,6 @@ Public Class Movies
             Return _tagDb
         End Get
     End Property
-
-    Public Function GetMovieSetIdFromName(mSetName As String) As String
-        For Each mset In MovieSetDB
-            If mset.MovieSetName = mSetName Then
-                Return mset.TmdbSetId
-            End If
-        Next
-        'If Not mSetName.ToLower = "-none-" Then
-        '    Dim newmset As New MovieSetInfo
-        '    newmset.MovieSetName = mSetName
-        '    MovieSetDB.Add(newmset)
-        'End If
-        Return ""
-    End Function
-
-    Public Function GetMovieSetOverviewFromName(mSetName As String) As String
-        For Each mset In MovieSetDB
-            If mset.MovieSetName = mSetName Then
-                Return mset.MovieSetPlot
-            End If
-        Next
-        'If Not mSetName.ToLower = "-none-" Then
-        '    Dim newmset As New MovieSetInfo
-        '    newmset.MovieSetName = mSetName
-        '    MovieSetDB.Add(newmset)
-        'End If
-        Return ""
-    End Function
 
     Public ReadOnly Property Cancelled As Boolean
         Get
@@ -2633,31 +2728,6 @@ Public Class Movies
         Next
     End Sub
     
-    ''' <summary>
-    ''' Make sure no Movie Set has an empty ID. If we can't find an ID on tmdb, we still need to distinguish the set
-    ''' from other sets. Comparing movie names isn't the proper way, as users in Media Companion can choose to rename
-    ''' their movies manually not corresponding to online names so we rather check for an ID (online or local)
-    ''' 
-    ''' </summary>
-    ''' <param name="moviesetID"></param>
-    ''' <returns></returns>
-    Function setMovieSetID(moviesetID As String, setDb As List(Of MovieSetInfo)) As String
-        If moviesetID = String.Empty Then   ' if no TmdbID is found set it to a local ID to avoid empty ID's
-            Dim moviesetTemp As MovieSetInfo
-            Dim moviesetTempHighestID = 0
-            For Each moviesetTemp In setDb
-                If moviesetTemp.TmdbSetId.Chars(0) = "L" Then
-                    Dim moviesetTempID = moviesetTemp.TmdbSetId.Substring(1).ToInt()
-                    If moviesetTempID + 1 > moviesetTempHighestID Then
-                        moviesetTempHighestID = moviesetTempID + 1
-                    End If
-                End If
-            Next
-            moviesetID = "L" + moviesetTempHighestID.ToString().PadLeft(5 - moviesetTempHighestID.ToString().Length, "0")
-        End If
-        Return moviesetID
-    End Function
-    
     Sub SaveActorCache()
         SavePersonCache(ActorDb,"actor",Pref.workingProfile.actorcache)
     End Sub
@@ -2801,12 +2871,6 @@ Public Class Movies
 
     Public Sub RebuildMovieCache()
         If Pref.UseMultipleThreads Then
-            '_actorDB      .Clear()
-            '_directorDb   .Clear()
-            '_moviesetDb   .Clear()
-            '_tmpActorDb   .Clear()
-            '_tmpDirectorDb.Clear()
-            '_tmpMoviesetDb.Clear()
             MT_LoadMovieCacheFromNfos
         Else
             LoadMovieCacheFromNfos
@@ -2822,11 +2886,9 @@ Public Class Movies
         MovSetDbTmp     .AddRange(_moviesetDb)
         _actorDB        .Clear()
         _directorDb     .Clear()
-        '_moviesetDb     .Clear()
         _tagDb          .Clear()
         _tmpActorDb     .Clear()
         _tmpDirectorDb  .Clear()
-        '_tmpMoviesetDb .Clear()
         Dim i = 0
 
         For Each movie In MovieCache
@@ -2867,19 +2929,22 @@ Public Class Movies
                         If add Then
                             Dim e As CollectionMovie = New CollectionMovie(movie.title, movie.tmdbid, _release_date:=movie.Premiered)
                             c.Collection.Add(e)
+                            AddUpdateMovieSetInCache(c, True)
                         End If
                     End If
+                    If c.MovieSetName <> movie.SetName Then
+                        c.UserMovieSetName = movie.SetName
+                        AddUpdateMovieSetInCache(c, True)
+                    End If
+                End If
+            ElseIf movie.SetName <> "-None-" AndAlso movie.TmdbSetId = ""
+                Dim c As MovieSetInfo = Nothing
+                c = FindMovieSetInfoBySetName(movie.SetName)
+                If c.MovieSetName = "" Then
+                    Dim d As MovieSetInfo = New MovieSetInfo(movie.SetName, setMovieSetID("", MovieSetDB), "", New List(Of CollectionMovie), Date.Now(), _dirty:= False)
+                    AddUpdateMovieSetInCache(d)
                 End If
             End If
-            'If Not movRebuildCaches AndAlso movie.MovieSet.MovieSetName.ToLower <> "-none-" Then
-            '    If _tmpMoviesetDb.Count = 0 Then
-            '        _tmpMoviesetDb.Add(movie.MovieSet)
-            '    Else
-            '        Dim q = From item In _tmpMoviesetDb Where item.MovieSetName = movie.MovieSet.MovieSetName
-            '        If q.Count = 0 Then _tmpMoviesetDb.Add(movie.MovieSet)
-            '    End If
-            'End If
-
             Dim directors() As String = movie.director.Split("/")
             For Each d In directors
                 _directorDb.Add(New DirectorDatabase(d.Trim, movie.id))
@@ -2894,32 +2959,7 @@ Public Class Movies
         Next
 
         If Cancelled Then Exit Sub
-
-        'Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
-        'For Each item In q.Distinct()
-        '    _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-        'Next
-
-        'Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
-        'For Each item In q2.Distinct()
-        '    _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
-        'Next
-
-        'Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
-        'For Each item In q3.Distinct()
-        '    _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId))
-        'Next
-        'If Not _tmpMoviesetDb.Count = 0 AndAlso _tmpMoviesetDb(0).MovieSetName.ToLower = "-none-" Then _tmpMoviesetDb.RemoveAt(0)
-        'For each mset As MovieSetInfo In _tmpMoviesetDb
-        '    Dim q = From item In MovSetDbTmp Where item.MovieSetName = mset.MovieSetName
-        '    If q.Count <> 1 Then Continue For
-        '    Dim ac As New MovieSetInfo
-        '    ac = q.Single
-        '    mset.Collection = ac.Collection
-
-        'Next
-
-        '_moviesetDb.AddRange(_tmpMoviesetDb)
+        
         SaveActorCache()
         SaveDirectorCache()
         SaveMovieSetCache()
@@ -2986,14 +3026,6 @@ Public Class Movies
             Utilities.SafeDeleteFile(filet)
         Catch
         End Try
-    End Sub
-
-    Public Sub UpdateMovieSetDisplayNames
-
-        For Each m In MovieCache 
-            m.MovieSet.UpdateMovieSetDisplayName
-        Next 
-
     End Sub
 
 
@@ -3461,75 +3493,5 @@ Public Class Movies
     End Sub
 
 #End Region
-
-    Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo, Optional ByVal Update As Boolean = False)
-
-        If IsNothing(movieSetInfo) Then Return
-
-        Dim c As MovieSetInfo = Nothing
-        Try
-            c = FindMovieSetInfoByTmdbSetId(movieSetInfo.TmdbSetId)
-        Catch ex As Exception
-        End Try
-
-        If IsNothing(c) Then
-            MoviesetDb.Add(movieSetInfo)
-            Return
-        End If
-        If Not IsNothing(c) Then
-            If c.Dirty OrElse Update Then
-                MovieSetDB.Remove(c)
-                MovieSetDB.Add(movieSetInfo)
-            End If
-        End If
-
-        c.Assign(movieSetInfo)
-    End Sub
-
-    Function FindMovieSetInfoByTmdbSetId(TmdbSetId As String) As MovieSetInfo
-        Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
-    End Function
-    
-    Sub UpdateMovieCacheSetName(MovieSet As MovieSetInfo)
-
-        Dim res = (From x In MovieCache Where x.TmdbSetId=MovieSet.TmdbSetId)
-
-        For Each m In res
-            'm.SetName = MovieSet.MovieSetDisplayName
-
-				Dim movie As Movie = LoadMovie(m.fullpathandfilename)
-
-            movie.ScrapedMovie.fullmoviebody.SetName        = m.SetName
-            movie.ScrapedMovie.fullmoviebody.TmdbSetId      = m.TmdbSetId
-            'movie.ScrapedMovie.fullmoviebody.SetOverview    = m.SetOverview
-
-            movie.AssignMovieToCache
-            movie.UpdateMovieCache
-            movie.SaveNFO
-
-            'Dim fmd As FullMovieDetails = WorkingWithNfoFiles.mov_NfoLoadFull(m.fullpathandfilename)
-
-            'fmd.fullmoviebody.SetName   = m.SetName
-            'fmd.fullmoviebody.TmdbSetId = m.TmdbSetId
-
-            'Movie.SaveNFO(m.fullpathandfilename, fmd)
-
-        Next
-    End Sub
-    
-	Public ReadOnly Property UsedMovieSets As String()
-		Get
-'			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
-			Dim resTmdb = From x In MoviesSetsExNone
-
-			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
-
-			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x).ToArray
-
-
-			Return res
-		End Get
-
-	End Property
 
 End Class
