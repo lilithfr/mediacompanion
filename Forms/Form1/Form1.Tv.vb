@@ -1445,12 +1445,6 @@ Partial Public Class Form1
         tv_CacheRefresh(Show)
     End Sub
 
-    Public Function Tv_CacheSave() As Boolean
-        Cache.TvCache.TvCachePath = Pref.workingProfile.TvCache
-        Cache.TvCache.Save()
-        Return False
-    End Function
-
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         Dim nfoclass As New WorkingWithNfoFiles
         frmSplash2.Text = "Refresh TV Shows..."
@@ -1469,8 +1463,7 @@ Partial Public Class Form1
 
         Dim fulltvshowlist As New List(Of TvShow)
         Dim fullepisodelist As New List(Of TvEpisode)
-
-        'tv_RefreshLog("Starting TV Show Refresh" & vbCrLf & vbCrLf, , True)
+        
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
@@ -1627,6 +1620,11 @@ Partial Public Class Form1
         Next
         doc.AppendChild(root)
         WorkingWithNfoFiles.SaveXMLDoc(doc, tvcachepath)
+    End Sub
+    
+    Private Sub Tv_CacheSave()
+        Cache.TvCache.TvCachePath = Pref.workingProfile.TvCache
+        Cache.TvCache.Save()
     End Sub
 
     Private Function loadepisodes(ByVal newtvshownfo As TvShow, ByRef episodelist As List(Of TvEpisode))

@@ -795,7 +795,6 @@ Public Class WorkingWithNfoFiles
             Dim root As XmlElement
             Dim child As XmlElement
             root = doc.CreateElement("tvshow")
-            Dim thumbnailstring As String = ""
             stage = 2
             Dim thispref As XmlNode = Nothing
             Dim xmlproc As XmlDeclaration
@@ -994,6 +993,9 @@ Public Class WorkingWithNfoFiles
             ElseIf String.IsNullOrEmpty(newtvshow.Year.Value) Then
                 newtvshow.Year.Value = "0000"
             End If
+            ' catch bug where MC was setting sort order to Default, not to lowercase 'default' value.
+            If newtvshow.SortOrder.Value <> "" Then newtvshow.SortOrder.Value = newtvshow.SortOrder.Value.ToLower
+
             If newtvshow.TvShowActorSource.Value = Nothing Then
                 If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Then
                     newtvshow.TvShowActorSource.Value = "tvdb"

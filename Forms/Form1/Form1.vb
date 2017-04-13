@@ -125,6 +125,7 @@ Public Class Form1
 		ResizingSplitterPanel
 		MovieControlsDisabled
 		Other
+        Closing
 	End Enum
 
 	Shared Public ProgState As ProgramState = ProgramState.Other
@@ -819,24 +820,23 @@ Public Class Form1
 
 	Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
 
+        ' Set ProgState to Closing so we can terminate some routines that do not need to run on exiting of Media Companion
+        ProgState = ProgramState.Closing
+
 		BckWrkScnMovies_Cancel()
 		While BckWrkScnMovies.IsBusy
 			Application.DoEvents()
 		End While
-
+        
 		Try
 			oMovies.SaveCaches()
 
-			If Tv_CacheSave() Then
-				e.Cancel = True
-				Exit Sub
-			End If
+			Call Tv_CacheSave()
+
 			Call HomeMovieCacheSave()
 
 			Call UcMusicVideo1.MVCacheSave()
-
-			'if we say cancel to save nfo's & exit then we don't want to exit MC if e.cancel= true we abort the closing....
-
+            
 			'Todo: Code a better way to serialize the data
 
 			Pref.splt1 = SpltCntr_MovDisplay.SplitterDistance
@@ -885,13 +885,10 @@ Public Class Form1
 			Pref.ConfigSave()
 			SplashscreenWrite()
 			Call util_ProfileSave()
-			Dim errpath As String = Path.Combine(applicationPath, "tvrefresh.log")
 		Catch ex As Exception
 			MessageBox.Show(ex.ToString, "Exception")
 			Environment.Exit(1)
-			'ExceptionHandler.LogError(ex)
 		End Try
-
 	End Sub
 
 	Private Sub Form1_GotFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.GotFocus
@@ -906,6 +903,7 @@ Public Class Form1
 	End Sub
 
 	Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
+        If ProgState = ProgramState.Closing Then Exit Sub
 		Try
 			If Me.WindowState = FormWindowState.Maximized Then
 				mov_SplitContainerAutoPosition()
@@ -1847,23 +1845,23 @@ Public Class Form1
 
 				If Yield(yieldIng) Then Return
 
-				If workingMovieDetails.fullmoviebody.SetName <> "-None-" And workingMovieDetails.fullmoviebody.SetName <> "" Then
-					Dim add As Boolean = True
-					For Each item In Pref.moviesets
-						If item = workingMovieDetails.fullmoviebody.SetName Then
-							add = False
-							Exit For
-						End If
-					Next
-                    Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
-                    If q.Count > 0 Then
-                        add = False
-                        'If workingMovieDetails.fullmoviebody.SetOverview = "" AndAlso q(0).MovieSetPlot <> "" Then workingMovieDetails.fullmoviebody.SetOverview = q(0).MovieSetPlot
-                    End If
-					If add Then
-						Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
-					End If
-				End If
+				'If workingMovieDetails.fullmoviebody.SetName <> "-None-" And workingMovieDetails.fullmoviebody.SetName <> "" Then
+				'	Dim add As Boolean = True
+				'	For Each item In Pref.moviesets
+				'		If item = workingMovieDetails.fullmoviebody.SetName Then
+				'			add = False
+				'			Exit For
+				'		End If
+				'	Next
+    '                Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
+    '                If q.Count > 0 Then
+    '                    add = False
+    '                    'If workingMovieDetails.fullmoviebody.SetOverview = "" AndAlso q(0).MovieSetPlot <> "" Then workingMovieDetails.fullmoviebody.SetOverview = q(0).MovieSetPlot
+    '                End If
+				'	If add Then
+				'		Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
+				'	End If
+				'End If
 
 				cbMovieDisplay_MovieSet.SelectedItem = Nothing
 
@@ -10131,6 +10129,7 @@ Public Class Form1
 	End Sub
 
 	Sub doResizeRefresh
+        If ProgState = ProgramState.Closing Then Exit Sub
 		Try
 			Dim CurrentTab As String = TabLevel1.SelectedTab.Name
 			If CurrentTab = TabPage1.Name Then   'Movies
@@ -13842,7 +13841,7 @@ Public Class Form1
 			WorkingTvShow.SortOrder.Value = "dvd"
 			btn_TvShSortOrder.Text = "DVD"
 		Else
-			WorkingTvShow.SortOrder.Value = "Default"
+			WorkingTvShow.SortOrder.Value = "default"
 			btn_TvShSortOrder.Text = "Default"
 		End If
 		nfoFunction.tvshow_NfoSave(WorkingTvShow, True)
@@ -14128,6 +14127,7 @@ Public Class Form1
 
 	Private Sub _tv_SplitContainer_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles _tv_SplitContainer.SplitterMoved
 		If Not MainFormLoadedStatus Then Exit Sub
+        If ProgState = ProgramState.Closing Then Exit Sub
 		Pref.tvbannersplit = Math.Round(_tv_SplitContainer.SplitterDistance / _tv_SplitContainer.Height, 2)
 	End Sub
 
