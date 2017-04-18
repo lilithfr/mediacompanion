@@ -1079,6 +1079,7 @@ Partial Public Class Form1
                                     If sortorder = "dvd" Then seasonno = mirrorselection.InnerText
                                 Case "DVD_episodenumber"
                                     If sortorder = "dvd" Then episodeno = mirrorselection.InnerText.Substring(0, mirrorselection.InnerText.IndexOf("."))
+                                    episodestring = episodestring & "<dvd_episodenumber>" & mirrorselection.InnerXml & "</dvd_episodenumber>"
                             End Select
                         Next
                 End Select
@@ -2860,6 +2861,8 @@ Partial Public Class Form1
                                             Case "thumb"
                                                 stage = "22b5a11"
                                                 singleepisode.Thumbnail.FileName = thisresult.InnerText
+                                            Case "dvd_episodenumber"
+                                                singleepisode.DvdEpNumber.Value = thisresult.InnerText
                                             Case "actor"
                                                 stage = "22b5a12"
                                                 For Each actorl As XmlNode In thisresult.ChildNodes
@@ -3167,6 +3170,8 @@ Partial Public Class Form1
                         newepisode.DisplayEpisode.Value = thisresult.InnerXml
                     Case "uniqueid"
                         newepisode.UniqueId.Value = thisresult.InnerText 
+                    Case "DvdEpNumber"
+                        newepisode.DvdEpNumber.Value = thisresult.InnerText
                     Case "actor"
                         Dim actors As XmlNode = Nothing
                         For Each actorl In thisresult.ChildNodes

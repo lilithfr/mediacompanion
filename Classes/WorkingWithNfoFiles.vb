@@ -389,6 +389,8 @@ Public Class WorkingWithNfoFiles
                                 newtvepisode.EpBookmark.Value = thisresult.InnerText
                             Case "userrating"
                                 newtvepisode.UserRating.Value = thisresult.InnerText
+                            Case "dvdepnumber"
+                                newtvepisode.DvdEpNumber.Value = thisresult.InnerText
                             Case "runtime"
                                 newtvepisode.Runtime.Value = thisresult.InnerText
                             Case "actor"
@@ -653,6 +655,7 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(doc, "epbookmark"    , ep.EpBookmark.Value   )
             xmlEpisode.AppendChild(doc, "videosource"   , ep.Source.Value       )
             xmlEpisode.AppendChild(doc, "userrating"    , ep.UserRating.Value   )
+            xmlEpisode.AppendChild(doc, "dvdepnumber"   , ep.DvdEpNumber.Value  )
             
             Dim actorstosave As Integer = ep.ListActors.Count
             If actorstosave > Pref.maxactors Then actorstosave = Pref.maxactors

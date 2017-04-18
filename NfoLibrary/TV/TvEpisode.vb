@@ -128,6 +128,7 @@ Public Class TvEpisode
     Public Property ListActors As New ActorList(Me, "actor")
     Public Property Source As New ProtoProperty(Me, "videosource")
     Public Property UserRating As New ProtoProperty(Me, "UserRating", "0")
+    Public Property DvdEpNumber As New ProtoProperty(Me, "dvdepnumber", "")
 
     Public Property SeasonObj As TvSeason
     Private Property _showObj As TvShow
@@ -162,6 +163,7 @@ Public Class TvEpisode
         Me.Thumbnail.Url    = TvdbEpisode.ScreenShotUrl
         Me.Source.Value     = TvdbEpisode.Source.Value
         Me.UserRating.Value = "0"
+        Me.DvdEpNumber.Value= TvdbEpisode.DvdEpisodeNumber.Value
         Aired.Value         = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
         Me.UpdateTreenode()
     End Sub
@@ -189,6 +191,7 @@ Public Class TvEpisode
         Me.PlayCount.Value  = TvEp.PlayCount.Value
         Me.Runtime.Value    = TvEp.Runtime.Value
         Me.Source.Value     = TvEp.Source.Value 
+        Me.DvdEpNumber.Value = TvEp.DvdEpNumber.Value
         Me.UpdateTreenode()
     End Sub
 
