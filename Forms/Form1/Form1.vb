@@ -13171,7 +13171,7 @@ Public Class Form1
         ChangeMovieId = ""
         Dim RegexString As String = ""
 		If MovieSearchEngine = "imdb" Then RegexString = "(tt\d{7})"
-        If MovieSearchEngine = "tmdb" Then RegexString = "/(\d*)-"
+        If MovieSearchEngine = "tmdb" Then RegexString = "movie/(\d*)"
 
         If Not RegexString = "" Then
             Dim mat As Match = Regex.Match(WebBrowser1.Url.ToString, RegexString)
@@ -13184,6 +13184,9 @@ Public Class Form1
             If ChangeMovieId <> "" Then
                 If MessageBox.Show(messagestring, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
 		        RunBackgroundMovieScrape("ChangeMovie")
+            Else
+				MsgBox("Please Browse to a Movie page")
+				Exit Sub
             End If
         End If
 		TabControl2.SelectedIndex = 0
