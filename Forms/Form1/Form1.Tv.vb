@@ -379,13 +379,13 @@ Partial Public Class Form1
             Dim todo As Boolean = False
 
             If Show.State = Media_Companion.ShowState.Locked Then
-                btn_TvShState.Text = "Locked"
+                btn_TvShState.Text      = "Locked"
                 btn_TvShState.BackColor = Color.Red
             ElseIf Show.State = Media_Companion.ShowState.Open Then
-                btn_TvShState.Text = "Open"
+                btn_TvShState.Text      = "Open"
                 btn_TvShState.BackColor = Color.LawnGreen
             ElseIf Show.State = Media_Companion.ShowState.Unverified Then
-                btn_TvShState.Text = "Un-Verified"
+                btn_TvShState.Text      = "Un-Verified"
                 btn_TvShState.BackColor = Color.Yellow
             Else
                 btn_TvShState.Text = "Error"
@@ -394,24 +394,24 @@ Partial Public Class Form1
             btn_TvShState.Tag = Show
 
             If Show.Status.Value = "Ended" Then
-                bnt_TvSeriesStatus.Text = "Ended"
-                bnt_TvSeriesStatus.BackColor = Color.LightPink
+                bnt_TvSeriesStatus.Text         = "Ended"
+                bnt_TvSeriesStatus.BackColor    = Color.LightPink
             ElseIf Show.Status.Value = "Continuing" Then
-                bnt_TvSeriesStatus.Text = "Continuing"
-                bnt_TvSeriesStatus.BackColor = Color.LightSeaGreen
+                bnt_TvSeriesStatus.Text         = "Continuing"
+                bnt_TvSeriesStatus.BackColor    = Color.LightSeaGreen
             Else
-                bnt_TvSeriesStatus.Text = "Unknown"
-                bnt_TvSeriesStatus.BackColor = Color.LightYellow
+                bnt_TvSeriesStatus.Text         = "Unknown"
+                bnt_TvSeriesStatus.BackColor    = Color.LightYellow
             End If
-            Dim tvpbright As String = Utilities.DefaultTvPosterPath 
-            Dim tvpbbottom As String = Utilities.DefaultTvBannerPath
+            Dim tvpbright   As String = Utilities.DefaultTvPosterPath 
+            Dim tvpbbottom  As String = Utilities.DefaultTvBannerPath
 
             If Pref.EdenEnabled AndAlso Not Pref.FrodoEnabled Then
                 If Pref.postertype = "banner" Then
                     If Utilities.IsBanner(Show.FolderPath & "folder.jpg") Then
-                        tvpbbottom = Show.FolderPath & "folder.jpg"
+                        tvpbbottom  = Show.FolderPath & "folder.jpg"
                     Else
-                        tvpbright = Show.ImagePoster.path
+                        tvpbright   = Show.ImagePoster.path
                     End If
                 Else
                     tvpbright = Show.ImagePoster.path
@@ -420,46 +420,43 @@ Partial Public Class Form1
             If Pref.FrodoEnabled Then
                 Show.ImagePoster.FileName = "poster.jpg"
                 Show.ImageBanner.FileName = "banner.jpg"
-                tvpbbottom = Show.ImageBanner.Path
-                tvpbright = Show.ImagePoster.path
+                tvpbbottom  = Show.ImageBanner.Path
+                tvpbright   = Show.ImagePoster.path
             End If
             util_ImageLoad(tv_PictureBoxRight, tvpbright, Utilities.DefaultTvPosterPath)
             util_ImageLoad(tv_PictureBoxBottom, tvpbbottom, Utilities.DefaultTvBannerPath)
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultTvFanartPath)
 
-            Panel_EpisodeInfo.Visible = False
-            Panel_EpisodeActors.Visible = False
-            lbl_sorttitle.Visible = True
-            TextBox_Sorttitle.Visible = True
+            Panel_EpisodeInfo   .Visible = False
+            Panel_EpisodeActors .Visible = False
+            lbl_sorttitle       .Visible = True
+            TextBox_Sorttitle   .Visible = True
 
             tb_Sh_Ep_Title.BackColor = Color.White
-            If Show.Title.Value <> Nothing Then
-                tb_Sh_Ep_Title.Text = Show.Title.Value
-
-            End If
+            If Show.Title.Value <> Nothing Then tb_Sh_Ep_Title.Text = Show.Title.Value
 
             ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
-            If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
-            If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
+            If Show.State = ShowState.Unverified    Then tb_Sh_Ep_Title.BackColor = Color.Yellow
+            If Show.State = ShowState.Error         Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-            tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
-            tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
-            tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
-            tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
-            tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
-            tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
-            tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
-            tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
-            tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
-            tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
-            cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
-            TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
+            tb_ShPremiered      .Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+            tb_ShGenre          .Text = Utilities.ReplaceNothing(Show.Genre.Value)
+            tb_ShTvdbId         .Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+            tb_ShImdbId         .Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+            tb_ShRating         .Text = Utilities.ReplaceNothing(Show.Rating.Value)
+            tb_ShVotes          .Text = Utilities.ReplaceNothing(Show.Votes.Value)
+            tb_ShCert           .Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+            tb_ShRunTime        .Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+            tb_ShStudio         .Text = Utilities.ReplaceNothing(Show.Studio.Value)
+            tb_ShPlot           .Text = Utilities.ReplaceNothing(Show.Plot.Value)
+            cmbx_shUserRating   .Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
+            TextBox_Sorttitle   .Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Pref.sortorder
             If Show.SortOrder.Value = "dvd" Then
-                btn_TvShSortOrder.Text = "DVD"
+                btn_TvShSortOrder   .Text = "DVD"
             ElseIf Show.SortOrder.Value = "default" Then
-                btn_TvShSortOrder.Text = "Default"
+                btn_TvShSortOrder   .Text = "Default"
             End If
             '0	-	all from tvdb
             '1	-	all from imdb
@@ -613,10 +610,10 @@ Partial Public Class Form1
     Public Function TvCheckforExtraArt(ByVal Showpath As String) As Boolean
         Dim confirmedpresent As Boolean = False
         If Directory.Exists(Showpath) Then
-            If File.Exists(Showpath & "clearart.png") Then tvFanlistbox.Items.Add("ClearArt") : confirmedpresent = True
-            If File.Exists(Showpath & "logo.png") Then tvFanlistbox.Items.Add("Logo") : confirmedpresent = True
-            If File.Exists(Showpath & "landscape.jpg") Then tvFanlistbox.Items.Add("Landscape") : confirmedpresent = True
-            If File.Exists(Showpath & "character.png") Then tvFanlistbox.Items.Add("Character") : confirmedpresent = True
+            If File.Exists(Showpath & "clearart.png")   Then tvFanlistbox.Items.Add("ClearArt")     : confirmedpresent = True
+            If File.Exists(Showpath & "logo.png")       Then tvFanlistbox.Items.Add("Logo")         : confirmedpresent = True
+            If File.Exists(Showpath & "landscape.jpg")  Then tvFanlistbox.Items.Add("Landscape")    : confirmedpresent = True
+            If File.Exists(Showpath & "character.png")  Then tvFanlistbox.Items.Add("Character")    : confirmedpresent = True
         End If
         Return confirmedpresent 
     End Function
@@ -636,10 +633,9 @@ Partial Public Class Form1
         If IsNothing(tvFanlistbox.SelectedItem) Then Exit Sub
         item = tvFanlistbox.SelectedItem.ToString.ToLower
         If Not String.IsNullOrEmpty(item) Then
-                Dim tmpsh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-                imagepath = tmpsh.FolderPath 
-                Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
-                imagepath &= item & suffix
+            imagepath = tv_ShowSelectedCurrently(TvTreeview).FolderPath 
+            Dim suffix As String = If((item = "clearart" or item = "logo" or item = "character"),".png", ".jpg")
+            imagepath &= item & suffix
         End If
         If e.Button = Windows.Forms.MouseButtons.Left Then 
             pbtvfanarttv.Visible = True
@@ -672,58 +668,50 @@ Partial Public Class Form1
             Exit Sub
         End If
         tb_Sh_Ep_Title.BackColor = Color.White
-        If Show.Title.Value <> Nothing Then
-            If SelectedSeason.SeasonNumber = 0 Then
-                tb_Sh_Ep_Title.Text = Utilities.ReplaceNothing(Show.Title.Value) & " - Specials"
-            Else
-                tb_Sh_Ep_Title.Text = Utilities.ReplaceNothing(Show.Title.Value) & " - " & Utilities.ReplaceNothing(SelectedSeason.SeasonNode.Text)
-            End If
-        End If
-        If TabControl3.TabPages(1).Text = "Screenshot" Then
-            TabControl3.TabPages.RemoveAt(1)
-        End If
+        If Show.Title.Value <> Nothing Then tb_Sh_Ep_Title.Text = Utilities.ReplaceNothing(Show.Title.Value) & " - " & Utilities.ReplaceNothing(SelectedSeason.SeasonNode.Text)
+        If TabControl3.TabPages(1).Text = "Screenshot" Then TabControl3.TabPages.RemoveAt(1)
 
         ' changed indication of an issue, setting the title means that the title is saved to the nfo if the user exits. Yellow is the same colour as the unverified Button
-        If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
-        If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
+        If Show.State = ShowState.Unverified    Then tb_Sh_Ep_Title.BackColor = Color.Yellow
+        If Show.State = ShowState.Error         Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-        tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
-        tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
-        tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
-        tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
-        tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
-        tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
-        tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
-        tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
-        tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
-        tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
-        cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
-        Panel_EpisodeInfo.Visible = False
-        Panel_EpisodeActors.Visible = False
-        lbl_sorttitle.Visible = True
-        TextBox_Sorttitle.Visible = True
-        TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
-        ExpandSelectedShowToolStripMenuItem.Enabled = True
-        ExpandAllToolStripMenuItem.Enabled = True
-        CollapseAllToolStripMenuItem.Enabled = True
-        CollapseSelectedShowToolStripMenuItem.Enabled = True
-        Tv_TreeViewContext_RenameEp.Enabled = True
-        Tv_TreeViewContext_RenameEp.Visible = True
+        tb_ShPremiered      .Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+        tb_ShGenre          .Text = Utilities.ReplaceNothing(Show.Genre.Value)
+        tb_ShTvdbId         .Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+        tb_ShImdbId         .Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+        tb_ShRating         .Text = Utilities.ReplaceNothing(Show.Rating.Value)
+        tb_ShVotes          .Text = Utilities.ReplaceNothing(Show.Votes.Value)
+        tb_ShCert           .Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+        tb_ShRunTime        .Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+        tb_ShStudio         .Text = Utilities.ReplaceNothing(Show.Studio.Value)
+        tb_ShPlot           .Text = Utilities.ReplaceNothing(Show.Plot.Value)
+        cmbx_shUserRating   .Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
+        Panel_EpisodeInfo   .Visible = False
+        Panel_EpisodeActors .Visible = False
+        lbl_sorttitle       .Visible = True
+        TextBox_Sorttitle   .Visible = True
+        TextBox_Sorttitle   .Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value ), Show.Title.Value, Show.SortTitle.Value))
+        ExpandSelectedShowToolStripMenuItem     .Enabled = True
+        ExpandAllToolStripMenuItem              .Enabled = True
+        CollapseAllToolStripMenuItem            .Enabled = True
+        CollapseSelectedShowToolStripMenuItem   .Enabled = True
+        Tv_TreeViewContext_RenameEp             .Enabled = True
+        Tv_TreeViewContext_RenameEp             .Visible = True
 
         'MsgBox("Season")
-        Dim season As String = SelectedSeason.SeasonLabel
-        Dim trueseason As Integer = SelectedSeason.SeasonNumber
-        Dim PaddedSeason As String = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
-        Dim tvpbright As String = Utilities.DefaultTvPosterPath 
-        Dim tvpbbottom As String = Utilities.DefaultTvBannerPath 
+        Dim season          As String   = SelectedSeason.SeasonLabel
+        Dim trueseason      As Integer  = SelectedSeason.SeasonNumber
+        Dim PaddedSeason    As String   = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
+        Dim tvpbright       As String   = Utilities.DefaultTvPosterPath 
+        Dim tvpbbottom      As String   = Utilities.DefaultTvBannerPath 
         If trueseason = -1 Then
             If SelectedSeason.Poster.Image IsNot Nothing Then
-                tvpbright = SelectedSeason.Poster.Path 
+                tvpbright       = SelectedSeason.Poster.Path 
             Else
                 If Pref.postertype = "banner" Then
-                    tvpbright = Show.ImagePoster.Path 
+                    tvpbright   = Show.ImagePoster.Path 
                 Else
-                    tvpbbottom = Show.ImageBanner.Path 
+                    tvpbbottom  = Show.ImageBanner.Path 
                 End If
             End If
         ElseIf trueseason = 0 Then          'Specials
@@ -758,15 +746,15 @@ Partial Public Class Form1
                 TabControl3.Refresh()
             End If
         End If
-        Panel_EpisodeInfo.Visible = True
-        Panel_EpisodeActors.Visible = True   'set ep actor panel visible, we'll hide later if no actor's in episode.
-        cmbxEpActor.Items.Clear()
+        Panel_EpisodeInfo   .Visible = True
+        Panel_EpisodeActors .Visible = True   'set ep actor panel visible, we'll hide later if no actor's in episode.
+        cmbxEpActor.Items   .Clear()
         tbEpRole.Text = ""
 
-        Dim Show As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-        Dim season As Integer = SelectedEpisode.Season.Value
-        Dim episode As Integer = SelectedEpisode.Episode.Value
-        Dim SeasonObj As New Media_Companion.TvSeason
+        Dim Show        As TvShow   = tv_ShowSelectedCurrently(TvTreeview)
+        Dim season      As Integer  = SelectedEpisode.Season.Value
+        Dim episode     As Integer  = SelectedEpisode.Episode.Value
+        Dim SeasonObj   As New Media_Companion.TvSeason
         If SelectedEpisode.EpisodeNode.Parent IsNot Nothing Then
             SeasonObj = SelectedEpisode.EpisodeNode.Parent.Tag
             If season = -1 Then season = SeasonObj.SeasonLabel
@@ -774,15 +762,15 @@ Partial Public Class Form1
 
         Call ep_Load(SeasonObj, SelectedEpisode, Force)
 
-        lbl_sorttitle.Visible = False
-        TextBox_Sorttitle.Visible = false
-        Tv_TreeViewContext_ViewNfo.Enabled = True
-        ExpandSelectedShowToolStripMenuItem.Enabled = True
-        ExpandAllToolStripMenuItem.Enabled = True
-        CollapseAllToolStripMenuItem.Enabled = True
-        CollapseSelectedShowToolStripMenuItem.Enabled = True
-        Tv_TreeViewContext_ReloadFromCache.Enabled = True
-        Tv_TreeViewContext_OpenFolder.Enabled = True
+        lbl_sorttitle                           .Visible = False
+        TextBox_Sorttitle                       .Visible = False
+        Tv_TreeViewContext_ViewNfo              .Enabled = True
+        ExpandSelectedShowToolStripMenuItem     .Enabled = True
+        ExpandAllToolStripMenuItem              .Enabled = True
+        CollapseAllToolStripMenuItem            .Enabled = True
+        CollapseSelectedShowToolStripMenuItem   .Enabled = True
+        Tv_TreeViewContext_ReloadFromCache      .Enabled = True
+        Tv_TreeViewContext_OpenFolder           .Enabled = True
 
         If SelectedEpisode.ListActors.Count < 1 Then    'If episode actors, don't load show's actors. (save some time)
             If SeasonObj.ShowObj.ListActors.Count = 0 Then Show.Load()
@@ -838,28 +826,28 @@ Partial Public Class Form1
         'lb_EpDetails.Items.Clear()
 
         cmbxEpActor.Items.Clear()
-        tb_EpFilename.Text = Utilities.ReplaceNothing(Episode.NfoFilePath)
-        tb_EpImdbId.Text = Episode.ImdbId.Value
-        cmbx_EpUsrRating.Text = If(Episode.UserRating.Value = "0", "None", Episode.UserRating.Value)
+        tb_EpFilename       .Text = Utilities.ReplaceNothing(Episode.NfoFilePath)
+        tb_EpImdbId         .Text = Episode.ImdbId.Value
+        cmbx_EpUsrRating    .Text = If(Episode.UserRating.Value = "0", "None", Episode.UserRating.Value)
         If Not File.Exists(Episode.NfoFilePath) Then
-            tb_Sh_Ep_Title.Text = "Unable to find episode: " & Episode.NfoFilePath
-            Panel_EpisodeInfo.Visible = True
-            Panel_EpisodeActors.Visible = True
+            tb_Sh_Ep_Title  .Text = "Unable to find episode: " & Episode.NfoFilePath
+            tbEpRole        .Text = ""
+            Panel_EpisodeInfo   .Visible = True
+            Panel_EpisodeActors .Visible = True
             cmbxEpActor.Items.Clear()
-            tbEpRole.Text = ""
             Episode.EpisodeNode.BackColor = Color.Red
             Exit Sub
         Else
             Episode.EpisodeNode.BackColor = Color.Transparent   'i.e. back to normal
         End If
 
-        tb_Sh_Ep_Title.Text ="'" &  Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
-        tb_EpRating.Text = Utilities.ReplaceNothing(Episode.Rating.Value)
-        tb_EpVotes.Text = Utilities.ReplaceNothing(Episode.Votes.Value)
-        tb_EpPlot.Text = Utilities.ReplaceNothing(Episode.Plot.Value)
-        tb_EpDirector.Text = Utilities.ReplaceNothing(Episode.Director.Value)
-        tb_EpCredits.Text = Utilities.ReplaceNothing(Episode.Credits.Value)
-        tb_EpAired.Text = Utilities.ReplaceNothing(Episode.Aired.Value)
+        tb_Sh_Ep_Title  .Text ="'" &  Utilities.ReplaceNothing(Episode.Title.Value, "?") & "'"
+        tb_EpRating     .Text = Utilities.ReplaceNothing(Episode.Rating.Value)
+        tb_EpVotes      .Text = Utilities.ReplaceNothing(Episode.Votes.Value)
+        tb_EpPlot       .Text = Utilities.ReplaceNothing(Episode.Plot.Value)
+        tb_EpDirector   .Text = Utilities.ReplaceNothing(Episode.Director.Value)
+        tb_EpCredits    .Text = Utilities.ReplaceNothing(Episode.Credits.Value)
+        tb_EpAired      .Text = Utilities.ReplaceNothing(Episode.Aired.Value)
         For f = 0 To cbTvSource.Items.Count - 1
             If cbTvSource.Items(f) = Episode.Source.value Then
                 cbTvSource.SelectedIndex = f
@@ -867,41 +855,25 @@ Partial Public Class Form1
             End If
         Next
         If Episode.Season.Value = "0" Then
-            lbl_EpAirBefore.Visible = True 
-            lbl_EpAirSeason.Visible = True
+            lbl_EpAirBefore .Visible = True 
+            lbl_EpAirSeason .Visible = True
             lbl_EPAirEpisode.Visible = True
-            tb_EpAirEpisode.Visible = True
-            tb_EpAirSeason.Visible = True
-            tb_EpAirSeason.Text = Episode.DisplaySeason.Value
-            tb_EpAirEpisode.Text = Episode.DisplayEpisode.Value 
+            tb_EpAirEpisode .Visible = True
+            tb_EpAirSeason  .Visible = True
+            tb_EpAirSeason  .Text = Episode.DisplaySeason.Value
+            tb_EpAirEpisode .Text = Episode.DisplayEpisode.Value 
         Else
-            lbl_EpAirBefore.Visible = False
-            lbl_EpAirSeason.Visible = False
+            lbl_EpAirBefore .Visible = False
+            lbl_EpAirSeason .Visible = False
             lbl_EPAirEpisode.Visible = False
-            tb_EpAirEpisode.Visible = False
-            tb_EpAirSeason.Visible = False
-            tb_EpAirEpisode.Text = ""
-            tb_EpAirSeason.Text = ""
+            tb_EpAirEpisode .Visible = False
+            tb_EpAirSeason  .Visible = False
+            tb_EpAirEpisode .Text = ""
+            tb_EpAirSeason  .Text = ""
         End If
 
         util_EpisodeSetWatched(Episode.PlayCount.Value)
-
-        'Dim epdetails As String = ""
-        'epdetails += "Video: " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Width.Value, "?") & "x" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Height.Value, "?")
-        'epdetails += ", (" & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Aspect.Value, "?") & ")"
-        'lb_EpDetails.Items.Add(epdetails)
-        'epdetails = " :- " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Codec.Value, "?")
-        'epdetails += ", @ " & Utilities.ReplaceNothing(Episode.StreamDetails.Video.Bitrate.Value, "?")
-        'lb_EpDetails.Items.Add(epdetails)
-            
-        'If Episode.StreamDetails.Audio.Count > 0 Then
-        '    epdetails = "Audio: " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Codec.Value, "?")
-        '    lb_EpDetails.Items.Add(epdetails)
-        '    epdetails = Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Bitrate.Value, "?")
-        '    epdetails += ", " & Utilities.ReplaceNothing(Episode.StreamDetails.Audio(0).Channels.Value, "?") & " Ch"
-        '    lb_EpDetails.Items.Add(epdetails)
-        'End If
-
+        
         Dim aActor As Boolean = False
             For Each actor In Episode.ListActors
                 If Not String.IsNullOrEmpty(actor.actorname) Then
@@ -1041,9 +1013,7 @@ Partial Public Class Form1
                                 Case "GuestStars"
                                     Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
                                     For Each guest In gueststars
-                                        If Not String.IsNullOrEmpty(guest) Then
-                                            episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
-                                        End If
+                                        If Not String.IsNullOrEmpty(guest) Then episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
                                     Next
                                 Case "Director"
                                     Dim tempstring As String = mirrorselection.InnerXml
@@ -1102,15 +1072,12 @@ Partial Public Class Form1
         End If
         If Pref.autorenameepisodes = True Then
             Dim eps As New List(Of String)
-            eps.Clear()
             For Each ep In alleps
                 eps.Add(ep.Episode.Value)
             Next
             Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
 
-            If tempspath <> "false" Then
-                path = tempspath
-            End If
+            If tempspath <> "false" Then path = tempspath
         End If
         Return path
     End Function
@@ -1121,9 +1088,7 @@ Partial Public Class Form1
             Dim aok As Boolean = False
 
             '''If no Ep IMDB Id, try getting from TMDb first.
-            If String.IsNullOrEmpty(tvep.ImdbId.Value) Then
-                aok = gettmdbepid(tvep)
-            End If
+            If String.IsNullOrEmpty(tvep.ImdbId.Value) Then aok = gettmdbepid(tvep)
 
             '''Check if not still empty and if is IMDB Id
             If Not String.IsNullOrEmpty(tvep.ImdbId.Value) AndAlso tvep.ImdbId.Value.StartsWith("tt") Then aok = True
@@ -1220,19 +1185,17 @@ Partial Public Class Form1
             Dim reply As String = imdb.loadwebpage(Pref.proxysettings, url, True)
             If reply <> "error" Then
                 Dim m As Match = Regex.Match(reply, """id"":(.*?),""")
-                If m.Success Then
-                    Dim pie As String = m.Groups(1).Value.Trim
-                    url = String.Format("https://api.themoviedb.org/3/tv/{0}/season/{1}/episode/{2}/external_ids?api_key={3}&language=en-US", pie, ep.Season.Value, ep.Episode.Value, Utilities.TMDBAPI)
-                    Dim reply2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
-                    If reply2 <> "" Then
-                        Dim n As Match = Regex.Match(reply2, """imdb_id"":""(.*?)"",""")
-                        If n.Success Then
-                            Dim epimdbid As String = n.Groups(1).Value.Trim
-                            If epimdbid.StartsWith("tt") AndAlso epimdbid.Length = 9 Then
-                                ep.ImdbId.Value = epimdbid
-                                Return True
-                            End If
-                        End If
+                If Not m.Success Then Return False
+                Dim pie As String = m.Groups(1).Value.Trim
+                url = String.Format("https://api.themoviedb.org/3/tv/{0}/season/{1}/episode/{2}/external_ids?api_key={3}&language=en-US", pie, ep.Season.Value, ep.Episode.Value, Utilities.TMDBAPI)
+                Dim reply2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+                If reply2 = "" Then Return False
+                Dim n As Match = Regex.Match(reply2, """imdb_id"":""(.*?)"",""")
+                If n.Success Then
+                    Dim epimdbid As String = n.Groups(1).Value.Trim
+                    If epimdbid.StartsWith("tt") AndAlso epimdbid.Length = 9 Then
+                        ep.ImdbId.Value = epimdbid
+                        Return True
                     End If
                 End If
             End If
@@ -1289,19 +1252,13 @@ Partial Public Class Form1
 				If changed > 0 Then
 					If changed = 1 Then
 						tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes And art" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
+						If tempint = DialogResult.No Then Exit Sub
 					ElseIf changed = 2 Then
 						tempint = MessageBox.Show("It appears that you have changed the IMDB ID" & vbCrLf & "Media Companion depends on this ID for scraping actors from IMDB" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
+						If tempint = DialogResult.No Then Exit Sub
 					ElseIf changed = 3 Then
 						tempint = MessageBox.Show("It appears that you have changed the IMDB ID & TVDB ID" & vbCrLf & "Media Companion depends on these IDs being correct for a number of scraping operations" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-						If tempint = DialogResult.No Then
-							Exit Sub
-						End If
+						If tempint = DialogResult.No Then Exit Sub
 					End If
 				End If
 				'its a tvshow
@@ -1318,19 +1275,19 @@ Partial Public Class Form1
 						tb_Sh_Ep_Title.Text = Show.Title.Value  'Pref.RemoveIgnoredArticles(Show.Title.Value)
 						Exit Sub
 					End If
-					Show.Title.Value = TmpTitle
+					Show.Title  .Value = TmpTitle
 				End If
-				Show.Plot.Value = tb_ShPlot.Text
-				Show.Runtime.Value = tb_ShRunTime.Text
-				Show.Premiered.Value = tb_ShPremiered.Text
-				Show.Studio.Value = tb_ShStudio.Text
-				Show.Rating.Value = tb_ShRating.Text
-				Show.ImdbId.Value = tb_ShImdbId.Text
-				Show.TvdbId.Value = tb_ShTvdbId.Text
-				Show.Mpaa.Value = tb_ShCert.Text
-				Show.Genre.Value = tb_ShGenre.Text
-                Show.UserRating.Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
-				Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
+				Show.Plot       .Value = tb_ShPlot.Text
+				Show.Runtime    .Value = tb_ShRunTime.Text
+				Show.Premiered  .Value = tb_ShPremiered.Text
+				Show.Studio     .Value = tb_ShStudio.Text
+				Show.Rating     .Value = tb_ShRating.Text
+				Show.ImdbId     .Value = tb_ShImdbId.Text
+				Show.TvdbId     .Value = tb_ShTvdbId.Text
+				Show.Mpaa       .Value = tb_ShCert.Text
+				Show.Genre      .Value = tb_ShGenre.Text
+                Show.UserRating .Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
+				Show.SortTitle  .Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
 				nfoFunction.tvshow_NfoSave(Show, True)   'Show.Save()
 				Show.UpdateTreenode()
@@ -1349,20 +1306,18 @@ Partial Public Class Form1
 					If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
 						If tb_Sh_Ep_Title.Text.Replace("'", "").ToLower <> ep.Title.Value.ToLower Then
 							Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
-							If TryTitle = MsgBoxResult.Yes Then
-								ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
-							End If
+							If TryTitle = MsgBoxResult.Yes Then ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
 						End If
-						ep.Plot.Value = tb_EpPlot.Text
-						ep.Aired.Value = tb_EpAired.Text
-						ep.Rating.Value = tb_EpRating.Text
-                        ep.UserRating.Value = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
-						'ep.Votes.Value = tb_EpVotes.Text       'No, don't allow users to change votes.
-						ep.Credits.Value = tb_EpCredits.Text
-						ep.Director.Value = tb_EpDirector.Text
+						ep.Plot.Value               = tb_EpPlot.Text
+						ep.Aired.Value              = tb_EpAired.Text
+						ep.Rating.Value             = tb_EpRating.Text
+                        ep.UserRating.Value         = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
+						'ep.Votes.Value              = tb_EpVotes.Text       'No, don't allow users to change votes.
+						ep.Credits.Value            = tb_EpCredits.Text
+						ep.Director.Value           = tb_EpDirector.Text
 						If ep.Season.Value = "0" Then
 							ep.DisplayEpisode.Value = tb_EpAirEpisode.Text
-							ep.DisplaySeason.Value = tb_EpAirSeason.Text
+							ep.DisplaySeason.Value  = tb_EpAirSeason.Text
 						End If
                         If ChangeImdbId Then ep.ImdbId.Value = tb_EpImdbId.Text
 						ep.Source.Value = If(cbTvSource.SelectedIndex = 0, "", cbTvSource.Items(cbTvSource.SelectedIndex))
@@ -1711,14 +1666,14 @@ Partial Public Class Form1
                 Next
             Else
                 Dim lan As New str_PossibleShowList(SetDefaults)
-                lan.showid = "none"
-                lan.showtitle = "TVDB Search Returned Zero Results"
-                lan.showbanner = Nothing
+                lan.showid      = "none"
+                lan.showtitle   = "TVDB Search Returned Zero Results"
+                lan.showbanner  = Nothing
                 listOfShows.Add(lan)
 
-                lan.showid = "none"
-                lan.showtitle = "Adjust the TV Shows Title & search again"
-                lan.showbanner = Nothing
+                lan.showid      = "none"
+                lan.showtitle   = "Adjust the TV Shows Title & search again"
+                lan.showbanner  = Nothing
                 listOfShows.Add(lan)
             End If
             lb_tvChSeriesResults.Items.Clear()
@@ -3093,24 +3048,24 @@ Partial Public Class Form1
         messbox.Show()
         messbox.Refresh()
         Application.DoEvents()
-        Dim newepisode As New TvEpisode
-        Dim sortorder As String = WorkingTvShow.SortOrder.Value
-        Dim language As String = WorkingTvShow.Language.Value
+        Dim newepisode  As New TvEpisode
+        Dim sortorder   As String = WorkingTvShow.SortOrder.Value
+        Dim language    As String = WorkingTvShow.Language.Value
         Dim actorsource As String = WorkingTvShow.EpisodeActorSource.Value
-        Dim tvdbid As String = WorkingTvShow.TvdbId.Value
-        Dim imdbid As String = WorkingTvShow.ImdbId.Value
-        Dim seasonno As String = WorkingEpisode.Season.Value
-        Dim episodeno As String = WorkingEpisode.Episode.Value
+        Dim tvdbid      As String = WorkingTvShow.TvdbId.Value
+        Dim imdbid      As String = WorkingTvShow.ImdbId.Value
+        Dim seasonno    As String = WorkingEpisode.Season.Value
+        Dim episodeno   As String = WorkingEpisode.Episode.Value
 
-        newepisode.NfoFilePath = WorkingEpisode.NfoFilePath
-        newepisode.Season.Value = WorkingEpisode.Season.Value
-        newepisode.Episode.Value = WorkingEpisode.Episode.Value
-        newepisode.ShowId.Value = WorkingTvShow.TvdbId.Value
+        newepisode.NfoFilePath      = WorkingEpisode.NfoFilePath
+        newepisode.Season.Value     = WorkingEpisode.Season.Value
+        newepisode.Episode.Value    = WorkingEpisode.Episode.Value
+        newepisode.ShowId.Value     = WorkingTvShow.TvdbId.Value
 
         Dim episodescraper As New TVDBScraper
-        If sortorder = "" Then sortorder = "default"
-        If language = "" Then language = "en"
-        If actorsource = "" Then actorsource = "tvdb"
+        If sortorder    = "" Then sortorder = "default"
+        If language     = "" Then language = "en"
+        If actorsource  = "" Then actorsource = "tvdb"
         If tvdbid.IndexOf("tt").Equals(0) Then tv_IMDbID_detected = True
         Dim tempepisode As String = episodescraper.getepisode(tvdbid, sortorder, seasonno, episodeno, language, True)
 
@@ -3224,32 +3179,7 @@ Partial Public Class Form1
 		        Next
 	        End If
         End If
-            'If imdbid <> "" OrElse newepisode.ImdbId.Value <> "" Then
-            '    tvScraperLog = tvScraperLog & "Scraping actors from IMDB" & vbCrLf
-            '    Dim epid As String = ""
-            '    If newepisode.ImdbId.Value <> Nothing AndAlso newepisode.ImdbId.Value.Contains("tt") Then
-            '        epid = newepisode.ImdbId.Value
-            '    Else
-            '        epid = GetEpImdbId(imdbid, newepisode.Season.Value, newepisode.Episode.Value)
-            '    End If
-            '    If bckgroundscanepisodes.CancellationPending Then
-            '        tvScraperLog = tvScraperLog & vbCrLf & "Operation Cancelled by user" & vbCrLf
-            '        Exit Sub
-            '    End If
-            '    If epid.Contains("tt") Then
-            '        Dim scraperfunction As New Classimdb
-            '        Dim actorlist As List(Of str_MovieActors) = scraperfunction.GetImdbActorsList(Pref.imdbmirror, epid, Pref.maxactors)
-            '        If actorlist.Count > 0 Then
-            '            newepisode.ListActors.Clear()
-            '            For Each act In actorlist
-            '                newepisode.ListActors.Add(act)
-            '            Next
-            '        End If
-            '    Else
 
-            '    End If
-            'End If
-            
         If Pref.enablehdtags = True Then
             Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(WorkingEpisode.VideoFilePath))
             newepisode.StreamDetails.Video = fileStreamDetails.Video
@@ -3318,9 +3248,7 @@ Partial Public Class Form1
 				If ep_NfoValidate(filename_nfo) = False And Pref.renamenfofiles = True Then
 					Dim movefilename As String = filename_nfo.Replace(Path.GetExtension(filename_nfo), ".info")
 					Try
-						If File.Exists(movefilename) Then
-							Utilities.SafeDeleteFile(movefilename)
-						End If
+						If File.Exists(movefilename) Then Utilities.SafeDeleteFile(movefilename)
 						File.Move(filename_nfo, movefilename)
 					Catch ex As Exception
 						Utilities.SafeDeleteFile(movefilename)
@@ -3332,11 +3260,9 @@ Partial Public Class Form1
 				If pattern = ".vob" Then 'If a vob file is detected, check that it is not part of a dvd file structure
 					Dim name As String = filename_nfo
 					name = name.Replace(Path.GetFileName(name), "VIDEO_TS.IFO")
-					If File.Exists(name) Then
-						add = False
-					End If
+					If File.Exists(name) Then add = False
 				End If
-				If pattern = "*.rar" Then
+				If pattern = ".rar" Then
 					Dim tempmovie As String = String.Empty
 					Dim tempint2 As Integer = 0
 					Dim tempmovie2 As String = FilePath
@@ -3484,16 +3410,14 @@ Partial Public Class Form1
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
         If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = tree.SelectedNode.Tag
+            Show    = tree.SelectedNode.Tag
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = tree.SelectedNode.Tag
-            Show = Season.GetParentShow
+            Season  = tree.SelectedNode.Tag
+            Show    = Season.GetParentShow
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
-
-
             Episode = tree.SelectedNode.Tag
-            Season = Episode.SeasonObj
-            Show = Episode.ShowObj
+            Season  = Episode.SeasonObj
+            Show    = Episode.ShowObj
         End If
         
         Return Show
@@ -3507,14 +3431,14 @@ Partial Public Class Form1
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
         If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = tree.SelectedNode.Tag
+            Show    = tree.SelectedNode.Tag
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = tree.SelectedNode.Tag
-            Show = Season.GetParentShow
+            Season  = tree.SelectedNode.Tag
+            Show    = Season.GetParentShow
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
             Episode = tree.SelectedNode.Tag
-            Season = Episode.SeasonObj
-            Show = Episode.ShowObj
+            Season  = Episode.SeasonObj
+            Show    = Episode.ShowObj
         End If
 
         Return Season
@@ -3528,14 +3452,14 @@ Partial Public Class Form1
         Dim Episode As Media_Companion.TvEpisode = Nothing
 
         If TypeOf tree.SelectedNode.Tag Is Media_Companion.TvShow Then
-            Show = tree.SelectedNode.Tag
+            Show    = tree.SelectedNode.Tag
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvSeason Then
-            Season = tree.SelectedNode.Tag
-            Show = Season.GetParentShow
+            Season  = tree.SelectedNode.Tag
+            Show    = Season.GetParentShow
         ElseIf TypeOf tree.SelectedNode.Tag Is Media_Companion.TvEpisode Then
             Episode = tree.SelectedNode.Tag
-            Season = Episode.SeasonObj
-            Show = Episode.ShowObj
+            Season  = Episode.SeasonObj
+            Show    = Episode.ShowObj
         End If
 
         Return Episode
@@ -3987,39 +3911,26 @@ Partial Public Class Form1
             For Each Ep In newEpList
                 If File.Exists(Ep.NfoFilePath) Then
                     Dim missingEpNfoPath As String = Utilities.MissingPath & Ep.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
-                    If File.Exists(missingEpNfoPath) Then
-                        File.Delete(missingEpNfoPath)
-                        Dim Ep2Remove As New TvEpisode
-                        For Each epis As TvEpisode In Cache.TvCache.Episodes 
-                            If epis.TvdbId.Value = Ep.TvdbId.Value Then
-                                If epis.Season.Value = Ep.Season.Value AndAlso epis.Episode.Value = Ep.Episode.Value AndAlso epis.IsMissing = True Then
-                                    Ep2Remove = epis 
-                                    Removed = True
-                                    Exit For
-                                End If
+                    If Not File.Exists(missingEpNfoPath) Then Continue For
+                    File.Delete(missingEpNfoPath)
+                    Dim Ep2Remove As New TvEpisode
+                    For Each epis As TvEpisode In Cache.TvCache.Episodes 
+                        If epis.TvdbId.Value = Ep.TvdbId.Value Then
+                            If epis.Season.Value = Ep.Season.Value AndAlso epis.Episode.Value = Ep.Episode.Value AndAlso epis.IsMissing = True Then
+                                Ep2Remove = epis 
+                                Removed = True
+                                Exit For
                             End If
-                        Next
-                        If Removed Then Cache.TvCache.Remove(Ep2Remove)
-                    End If
+                        End If
+                    Next
+                    If Removed Then Cache.TvCache.Remove(Ep2Remove)
                 End If
             Next
         Catch
         End Try
         Return Removed
     End Function
-
-    'Public Sub tv_EpisodesMissingClean()
-    '    Dim dir_info As New DirectoryInfo(Utilities.MissingPath)
-    '    For Each File in dir_info.GetFiles(".nfo")
-    '        If File.Exists(File.Fullname) Then
-    '            Try
-    '                File.Delete(File.FullName)
-    '            Catch
-    '            End Try
-    '        End If
-    '    Next
-    'End Sub
-
+    
 #End Region
 
     Public Sub New()
@@ -4177,21 +4088,21 @@ Partial Public Class Form1
     Private Function TvGetArtwork(ByVal currentshow As TvShow, ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean, Optional ByVal langu As String = "", Optional ByVal force As Boolean = True) As Boolean
         Dim success As Boolean = False
         Try
-            Dim MaxSeasonNo As Integer = 1
-            Dim tvdbstuff As New TVDBScraper
-            Dim currentshowpath As String = currentshow.NfoFilePath.Replace("tvshow.nfo", "") 
-            Dim eden As Boolean = Pref.EdenEnabled
-            Dim frodo As Boolean = Pref.FrodoEnabled
-            Dim overwriteimage As Boolean = If(Pref.overwritethumbs OrElse Pref.TvChgShowOverwriteImgs, True, False)
-            If Not force then overwriteimage = False    'Over-ride overwrite if we force not to overwrite, ie: missing artwork
-            Dim doPoster As Boolean = If(Pref.tvdlposter OrElse Pref.TvChgShowDlPoster, True, False)
-            Dim doFanart As Boolean = If(Pref.tvdlfanart OrElse Pref.TvChgShowDlFanart, True, False)
-            Dim doSeason As Boolean = If(Pref.tvdlseasonthumbs OrElse Pref.TvChgShowDlSeasonthumbs, True, False)
-            Dim artlist As New List(Of TvBanners)
+            Dim MaxSeasonNo         As Integer = 1
+            Dim tvdbstuff           As New TVDBScraper
+            Dim currentshowpath     As String = currentshow.NfoFilePath.Replace("tvshow.nfo", "") 
+            Dim eden                As Boolean = Pref.EdenEnabled
+            Dim frodo               As Boolean = Pref.FrodoEnabled
+            Dim doPoster            As Boolean = If(Pref.tvdlposter OrElse Pref.TvChgShowDlPoster, True, False)
+            Dim doFanart            As Boolean = If(Pref.tvdlfanart OrElse Pref.TvChgShowDlFanart, True, False)
+            Dim doSeason            As Boolean = If(Pref.tvdlseasonthumbs OrElse Pref.TvChgShowDlSeasonthumbs, True, False)
+            Dim artlist             As New List(Of TvBanners)
             artlist.Clear()
-            Dim thumblist As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value, artlist)
-            Dim isposter As String = Pref.postertype
-            Dim isseasonall As String = Pref.seasonall
+            Dim thumblist           As String = tvdbstuff.GetPosterList(currentshow.TvdbId.Value, artlist)
+            Dim isposter            As String = Pref.postertype
+            Dim isseasonall         As String = Pref.seasonall
+            Dim overwriteimage      As Boolean = If(Pref.overwritethumbs OrElse Pref.TvChgShowOverwriteImgs, True, False)
+            If Not force then overwriteimage = False    'Over-ride overwrite if we force not to overwrite, ie: missing artwork
 
             Dim Langlist As New List(Of String)
             If Not langu = "" Then Langlist.Add(langu)
@@ -4371,6 +4282,7 @@ Partial Public Class Form1
             Utilities.EnsureFolderExists(workingpath)
         End If
         For Each NewAct In TvdbActors
+            If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(newact.actorthumb) Then Continue For
             Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId)
             Dim results As XmlNode = Nothing
             Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
@@ -4477,6 +4389,7 @@ Partial Public Class Form1
         Dim actcount As Integer = 0
         Dim totalactors As New List(Of str_MovieActors)
         For Each thisresult In actorlist
+            If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(thisresult.actorthumb) Then Continue For
             If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
                 If Pref.actorseasy And Not Pref.tvshowautoquick Then
                     Dim actorpaths As New List(Of String)
@@ -4651,8 +4564,7 @@ Partial Public Class Form1
                 Dim messbox As frmMessageBox = New frmMessageBox("ffmpeg is working to capture the desired screenshot", "", "Please Wait")
                 Dim tempstring2 As String = WorkingEpisode.VideoFilePath 
                 If File.Exists(tempstring2) Then
-                    Dim seconds As Integer = Pref.ScrShtDelay
-                    If Convert.ToInt32(TextBox35.Text) > 0 Then seconds = Convert.ToInt32(TextBox35.Text)
+                    Dim seconds As Integer = If(Convert.ToInt32(TextBox35.Text) > 0, Convert.ToInt32(TextBox35.Text), Pref.ScrShtDelay)
                     System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
                     messbox.Show()
                     messbox.Refresh()
@@ -5177,10 +5089,6 @@ Partial Public Class Form1
 
 #End Region
     
-    Private Sub Label136_AutoSizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Label136.AutoSizeChanged
-
-    End Sub
-
     Public Function tv_Showremovedfromlist(ByRef lstbox As Listbox, ByVal tvcache As Boolean, Optional ByVal nofolder As List(Of String) = Nothing, Optional ByVal lstboxscan As Boolean = False) As Boolean
         Dim remfolder As New List(Of String)
         Dim notvshownfo As New List(Of String)

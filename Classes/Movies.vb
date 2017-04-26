@@ -2175,16 +2175,7 @@ Public Class Movies
 
     Public Sub LoadMovieCacheFromNfos
         TmpMovieCache.Clear
-
-       ' 'If movRebuildCaches Then 
-       '     _actorDb        .Clear 
-       '     _tmpActorDb     .Clear
-       '     _directorDb     .Clear 
-       '     _tmpDirectorDb  .Clear
-       '     _moviesetDb     .Clear
-       '     _tmpMoviesetDb  .Clear
-       '' End If
-
+        
         Dim t As New List(Of String)
         For Each rtpath In Pref.movieFolders 
             If rtpath.selected Then
@@ -2204,32 +2195,7 @@ Public Class Movies
                 If movie.filename <> Nothing Then movie.filename = movie.filename.Replace(".nfo", "")
             Next
         End If
-
-        ''If movRebuildCaches Then
-        '    Dim q = From item In _tmpActorDb Select item.ActorName, item.MovieId
-
-        '    For Each item In q.Distinct()
-        '        _actorDb.Add(New ActorDatabase(item.ActorName, item.MovieId))
-        '    Next
-        '    SaveActorCache()
-
-
-        '    Dim q2 = From item In _tmpDirectorDb Select item.ActorName, item.MovieId
-
-        '    For Each item In q2.Distinct()
-        '        _directorDb.Add(New DirectorDatabase(item.ActorName, item.MovieId))
-        '    Next
-        '    SaveDirectorCache()
-
-        '    Dim q3 = From item In _tmpMoviesetDb Select item.MovieSetName, item.MovieSetId
-
-        '    For Each item In q3.Distinct()
-        '        _moviesetDb.Add(New MovieSetDatabase(item.MovieSetName, item.MovieSetId, New List(Of CollectionMovie)))
-        '    Next
-        '    SaveMovieSetCache()
-
-        ''End If
-
+        
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
         AssignUnknownUserTmdbSetAdditions()

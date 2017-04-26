@@ -8713,6 +8713,7 @@ Public Class Form1
 			If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
 				Statusstrip_Enable(False)
 			End If
+            SetcbBtnLink()
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try

@@ -1728,6 +1728,7 @@ Public Class Movie
         Dim actors2 As New List(Of str_MovieActors)
         For Each actor In actors
             Try
+                If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(actor.actorthumb) Then Continue For
                 If Not actor.SaveActor(ActorPath) Then
                     ReportProgress(MSG_ERROR,"!!! An error was encountered while trying to DL Actor image for: " & actor.actorname & vbCrLf & vbCrLf)
                 End If
@@ -1753,6 +1754,7 @@ Public Class Movie
             Dim count As Integer = 0
             For Each actor In actors
                 Try
+                    If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(actor.actorthumb) Then Continue For
                     If Not actor.SaveActor(ActorPath) Then
                         ReportProgress(MSG_ERROR,"!!! An error was encountered while trying to DL Actor image for: " & actor.actorname & vbCrLf & vbCrLf)
                     End If

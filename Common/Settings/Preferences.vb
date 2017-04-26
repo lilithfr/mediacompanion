@@ -159,6 +159,7 @@ Public Class Pref
     Public Shared startupCache As Boolean
     Public Shared renamenfofiles As Boolean
     Public Shared actorseasy As Boolean
+    Public Shared ExcludeActorNoThumb As Boolean
     Public Shared overwritethumbs As Boolean
     Public Shared LocalActorImage As Boolean = True
     Public Shared videomode As Integer
@@ -797,6 +798,7 @@ Public Class Pref
         intruntime = False
         RuntimePadding = False
         actorseasy = True
+        ExcludeActorNoThumb = False
         startuptab = 0
         font = "Microsoft Sans Serif, 9pt"
         actorsave = False
@@ -1020,6 +1022,7 @@ Public Class Pref
         root.AppendChild(doc, "startupcache"                , startupCache              ) 'chkbx_disablecache
         root.AppendChild(doc, "renamenfofiles"              , renamenfofiles            ) 'CheckBoxRenameNFOtoINFO
         root.AppendChild(doc, "actorseasy"                  , actorseasy                ) 'cb_actorseasy
+        root.AppendChild(doc, "ExcludeActorNoThumb"         , ExcludeActorNoThumb       ) 'cb_ExcludeActorNoThumb
         root.AppendChild(doc, "rarsize"                     , rarsize                   ) 'txtbx_minrarsize
         root.AppendChild(doc, "overwritethumbs"             , overwritethumbs           ) 'cbOverwriteArtwork
         root.AppendChild(doc, "LocalActorImage"             , LocalActorImage           ) 'cbDisplayLocalActor
@@ -1507,6 +1510,7 @@ Public Class Pref
                     Case "rarsize"                              : rarsize = Convert.ToInt32(thisresult.InnerXml)
                     Case "actorsave"                            : actorsave = thisresult.InnerXml
                     Case "actorseasy"                           : actorseasy = thisresult.InnerXml
+                    Case "ExcludeActorNoThumb"                  : ExcludeActorNoThumb = thisresult.InnerXml
                     Case "copytvactorthumbs"                    : copytvactorthumbs = thisresult.InnerXml
                     Case "tvdbIMDbRating"                       : tvdbIMDbRating = thisresult.InnerXml
                     Case "displayMissingEpisodes"               : displayMissingEpisodes = thisresult.InnerXml

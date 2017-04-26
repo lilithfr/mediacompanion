@@ -246,6 +246,8 @@ Public Class frmPreferences
         
         'Common - Actors Section
         cb_actorseasy               .Checked    = Pref.actorseasy 
+        cb_ExcludeActorNoThumb      .Checked    = Pref.ExcludeActorNoThumb
+
         Select Case Pref.maxactors
             Case 9999
                 cmbx_MovMaxActors.SelectedItem = "All Available"
@@ -1149,6 +1151,12 @@ Public Class frmPreferences
     Private Sub cb_actorseasy_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cb_actorseasy.CheckedChanged
         If prefsload Then Exit Sub
         Pref.actorseasy = cb_actorseasy.Checked
+        Changes = True
+    End Sub
+    
+    Private Sub cb_ExcludeActorNoThumb_CheckedChanged(sender As Object, e As EventArgs) Handles cb_ExcludeActorNoThumb.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.ExcludeActorNoThumb = cb_ExcludeActorNoThumb.Checked
         Changes = True
     End Sub
 
@@ -3804,5 +3812,5 @@ End Sub
         lstNameModeFiles.Sort()
         Return String.Join(vbCrLf, lstNameModeFiles)
     End Function
-    
+
 End Class

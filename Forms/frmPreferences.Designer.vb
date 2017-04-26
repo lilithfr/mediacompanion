@@ -105,6 +105,7 @@ Partial Class frmPreferences
         Me.cbSetIdAsCollectionnumber = New System.Windows.Forms.CheckBox()
         Me.cbtvDisplayNextAiredToolTip = New System.Windows.Forms.CheckBox()
         Me.cbEnableMovDeleteFolderTsmi = New System.Windows.Forms.CheckBox()
+        Me.cbMovAllowNonImdbIdAsId = New System.Windows.Forms.CheckBox()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -511,7 +512,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cbMovAllowNonImdbIdAsId = New System.Windows.Forms.CheckBox()
+        Me.cb_ExcludeActorNoThumb = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1520,6 +1521,19 @@ Partial Class frmPreferences
         ", deletes permanently.")
         Me.cbEnableMovDeleteFolderTsmi.UseVisualStyleBackColor = true
         '
+        'cbMovAllowNonImdbIdAsId
+        '
+        Me.cbMovAllowNonImdbIdAsId.AutoSize = true
+        Me.cbMovAllowNonImdbIdAsId.Location = New System.Drawing.Point(21, 299)
+        Me.cbMovAllowNonImdbIdAsId.Name = "cbMovAllowNonImdbIdAsId"
+        Me.cbMovAllowNonImdbIdAsId.Size = New System.Drawing.Size(209, 34)
+        Me.cbMovAllowNonImdbIdAsId.TabIndex = 80
+        Me.cbMovAllowNonImdbIdAsId.Text = "Allow Non IMDB Id's as IMDB Id's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"(Must start with alpha character)"
+        Me.ToolTip1.SetToolTip(Me.cbMovAllowNonImdbIdAsId, "This option is explicitly for filtering of Actors/Directors"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from foreign scraped"& _ 
+        " movies.  ID's MUST start with"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Alpha character to differentiate from TMDB Id's."& _ 
+        ""&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ie: RB-1234 or IP8888")
+        Me.cbMovAllowNonImdbIdAsId.UseVisualStyleBackColor = true
+        '
         'cbXbmcTmdbActorFromImdb
         '
         Me.cbXbmcTmdbActorFromImdb.AutoSize = true
@@ -2365,7 +2379,7 @@ Partial Class frmPreferences
         Me.GroupBox2.Controls.Add(Me.Label6)
         Me.GroupBox2.Controls.Add(Me.Label98)
         Me.GroupBox2.Controls.Add(Me.cmbx_MovMaxActors)
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 118)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 145)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(360, 92)
         Me.GroupBox2.TabIndex = 65
@@ -2394,11 +2408,12 @@ Partial Class frmPreferences
         '
         'GroupBox32
         '
+        Me.GroupBox32.Controls.Add(Me.cb_ExcludeActorNoThumb)
         Me.GroupBox32.Controls.Add(Me.Label137)
         Me.GroupBox32.Controls.Add(Me.cb_actorseasy)
         Me.GroupBox32.Location = New System.Drawing.Point(12, 33)
         Me.GroupBox32.Name = "GroupBox32"
-        Me.GroupBox32.Size = New System.Drawing.Size(406, 79)
+        Me.GroupBox32.Size = New System.Drawing.Size(406, 106)
         Me.GroupBox32.TabIndex = 48
         Me.GroupBox32.TabStop = false
         Me.GroupBox32.Text = "Actor Folder"
@@ -4314,7 +4329,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Advanced.Margin = New System.Windows.Forms.Padding(4)
         Me.tpMoviePreferences_Advanced.Name = "tpMoviePreferences_Advanced"
         Me.tpMoviePreferences_Advanced.Padding = New System.Windows.Forms.Padding(4)
-        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Advanced.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Advanced.TabIndex = 1
         Me.tpMoviePreferences_Advanced.Text = "Advanced"
         '
@@ -6145,18 +6160,15 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cbMovAllowNonImdbIdAsId
+        'cb_ExcludeActorNoThumb
         '
-        Me.cbMovAllowNonImdbIdAsId.AutoSize = true
-        Me.cbMovAllowNonImdbIdAsId.Location = New System.Drawing.Point(21, 299)
-        Me.cbMovAllowNonImdbIdAsId.Name = "cbMovAllowNonImdbIdAsId"
-        Me.cbMovAllowNonImdbIdAsId.Size = New System.Drawing.Size(209, 34)
-        Me.cbMovAllowNonImdbIdAsId.TabIndex = 80
-        Me.cbMovAllowNonImdbIdAsId.Text = "Allow Non IMDB Id's as IMDB Id's"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"(Must start with alpha character)"
-        Me.ToolTip1.SetToolTip(Me.cbMovAllowNonImdbIdAsId, "This option is explicitly for filtering of Actors/Directors"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"from foreign scraped"& _ 
-        " movies.  ID's MUST start with"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Alpha character to differentiate from TMDB Id's."& _ 
-        ""&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ie: RB-1234 or IP8888")
-        Me.cbMovAllowNonImdbIdAsId.UseVisualStyleBackColor = true
+        Me.cb_ExcludeActorNoThumb.AutoSize = true
+        Me.cb_ExcludeActorNoThumb.Location = New System.Drawing.Point(21, 75)
+        Me.cb_ExcludeActorNoThumb.Name = "cb_ExcludeActorNoThumb"
+        Me.cb_ExcludeActorNoThumb.Size = New System.Drawing.Size(219, 19)
+        Me.cb_ExcludeActorNoThumb.TabIndex = 39
+        Me.cb_ExcludeActorNoThumb.Text = "Exclude Actors without Thumbnails."
+        Me.cb_ExcludeActorNoThumb.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6827,4 +6839,5 @@ End Sub
     Friend WithEvents cbMovieExcludeYearSearch As CheckBox
     Friend WithEvents Label31 As Label
     Friend WithEvents cbMovAllowNonImdbIdAsId As CheckBox
+    Friend WithEvents cb_ExcludeActorNoThumb As CheckBox
 End Class
