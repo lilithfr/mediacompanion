@@ -8984,10 +8984,10 @@ Public Class Form1
 			Dim PathSubPath As String = workingProfile.config.Replace(Path.GetFileName(workingProfile.config), "pathsubstitution.xml")
 			Dim temptext As String = ""
 			temptext = "<relativepaths>" & TextBox45.Text & "</relativepaths>"
-			Dim doc As New XmlDocument
-			doc.LoadXml(temptext)
+			Dim loaddoc As New XmlDocument
+			loaddoc.LoadXml(temptext)
 			Dim thisresult As XmlElement
-			For Each thisresult In doc("relativepaths")
+			For Each thisresult In loaddoc("relativepaths")
 				Dim newfo As New str_RelativeFileList(SetDefaults)
 				For Each innerresult In thisresult
 					Select Case innerresult.Name
@@ -9008,15 +9008,15 @@ Public Class Form1
 				docs.AppendChild(xmlproc)
 				Dim root As XmlElement
 				Dim child As XmlElement
-				root = doc.CreateElement("relativepaths")
+				root = docs.CreateElement("relativepaths")
 				For Each item In relativeFolderList
-					child = doc.CreateElement("folder")
-					child.AppendChild(doc   , "mc"      , item.mc)
-					child.AppendChild(doc   , "xbmc"    , item.xbmc)
+					child = docs.CreateElement("folder")
+					child.AppendChild(docs   , "mc"      , item.mc)
+					child.AppendChild(docs   , "xbmc"    , item.xbmc)
 					root.AppendChild(child)
 				Next
-                doc.AppendChild(root)
-                WorkingWithNfoFiles.SaveXMLDoc(doc, PathSubPath)
+                docs.AppendChild(root)
+                WorkingWithNfoFiles.SaveXMLDoc(docs, PathSubPath)
 			End If
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
