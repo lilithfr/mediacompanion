@@ -3656,7 +3656,7 @@ Public Class Form1
 					End If
 				Next
 			End If
-			If String.IsNullOrEmpty(tb_MovFanartScrnShtTime.Text) Then tb_MovFanartScrnShtTime.Text = "50"
+			If String.IsNullOrEmpty(tb_MovFanartScrnShtTime.Text) Then tb_MovFanartScrnShtTime.Text = Pref.ScrShtDelay.ToString
 			GroupBoxFanartExtrathumbs.Enabled = Not isrootfolder 'Or usefoldernames Or allfolders ' Visible 'hide or show fanart/extrathumbs depending of if we are using foldenames or not (extrathumbs needs foldernames to be used)
 			UpdateMissingFanartNav()
 			If Panel2.Controls.Count = 0 Then
@@ -11617,14 +11617,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub tb_MovFanartScrnShtTime_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_MovFanartScrnShtTime.KeyPress
-		If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
-			If tb_MovFanartScrnShtTime.Text <> "" AndAlso Convert.ToInt32(tb_MovFanartScrnShtTime.Text) > 0 Then
-				TvEpThumbScreenShot()
-			End If
-		End If
-		If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then
-			e.Handled = True
-		End If
+		If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then TvEpThumbScreenShot(If(IsNumeric(tb_MovFanartScrnShtTime.Text), tb_MovFanartScrnShtTime.Text.ToInt, Pref.ScrShtDelay))
+		If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then e.Handled = True
 	End Sub
 
 	Private Sub tb_MovFanartScrnShtTime_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles tb_MovFanartScrnShtTime.Leave

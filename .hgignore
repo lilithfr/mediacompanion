@@ -23,7 +23,7 @@ syntax: glob
 *.scc
 [Bb]in
 obj/
-_ReSharper*/
+_ReSharp*/
 [Tt]est[Rr]esult*
 [Bb]uild[Ll]og.*
 *.[Pp]ublish.xml

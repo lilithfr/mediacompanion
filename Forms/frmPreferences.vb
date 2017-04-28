@@ -19,6 +19,7 @@ Public Class frmPreferences
     Dim videosourceprefchanged As Boolean = False
     Dim cleanfilenameprefchanged As Boolean = False
     Dim toggle As Boolean = False
+    Dim AutoScrnShtDelayChanged = False
 
     Private Const WM_USER As Integer = &H400
     Private Const BFFM_SETEXPANDED As Integer = WM_USER + 106
@@ -131,6 +132,7 @@ Public Class frmPreferences
         Pref.MovAutoScrapeInterval  = tbMovAutoScrapeInterval.Text.ToInt
         
         If cleanfilenameprefchanged OrElse videosourceprefchanged Then applyAdvancedLists()
+        If AutoScrnShtDelayChanged Then Form1.TextBox35.Text = Pref.ScrShtDelay.ToString
 
         Form1.SetTagTxtField
 
@@ -1077,6 +1079,7 @@ Public Class frmPreferences
             AutoScrnShtDelay.Text = "10"
             MsgBox("Please enter a numerical Value that is 1 or more")
         End If
+        AutoScrnShtDelayChanged = True
         Changes = True
     End Sub
 
