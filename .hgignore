@@ -1,6 +1,8 @@
 # use glob syntax
 syntax: glob
 
+*.suo
+*.user
 *.obj
 *.pdb
 *.user
