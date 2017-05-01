@@ -586,8 +586,8 @@ Module General
                                 Case "genre"
                                     If ExtraFields = False Then
                                         Dim sortorder As String = String.Empty
-                                        If Form1.RadioButton14.Checked Then sortorder = "dvd"
-                                        If Form1.RadioButton15.Checked Then sortorder = "default"
+                                        If Form1.rbTvShSelectOrderDVD.Checked Then sortorder = "dvd"
+                                        If Form1.rbTvShSelectOrderDefault.Checked Then sortorder = "default"
                                         FinalString &= "<top250>0</top250><season>-1</season><episode>-1</episode><displayseason>-1</displayseason><displayepisode>-1</displayepisode>" _
                                             & "<votes></votes><outline></outline><tagline></tagline><episodeactorsource>tvdb</episodeactorsource><tvshowactorsource>tvdb</tvshowactorsource>"
                                         FinalString &= "<sortorder>" & sortorder & "</sortorder><playcount>0</playcount><lastplayed></lastplayed><status></status>" _

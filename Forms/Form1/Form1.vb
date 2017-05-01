@@ -1475,9 +1475,6 @@ Public Class Form1
 			End If
 		Next
         MergePrefMovieSetToMovieSetDatabase()
-		'For Each item In Pref.moviesets
-		'	cbMovieDisplay_MovieSet.Items.Add(If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(item), item))
-		'Next
 	End Sub
 
 	Private Sub util_ProfilesLoad()
@@ -1714,30 +1711,30 @@ Public Class Form1
 			If Yield(yieldIng) Then Return
 
 			If IsNothing(workingMovieDetails) = False Then
-				If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = "0"
-				If workingMovieDetails.fullmoviebody.lastplayed = Nothing Then workingMovieDetails.fullmoviebody.lastplayed = ""
-				If workingMovieDetails.fullmoviebody.credits = Nothing Then workingMovieDetails.fullmoviebody.credits = ""
-				If workingMovieDetails.fullmoviebody.director = Nothing Then workingMovieDetails.fullmoviebody.director = ""
-				If workingMovieDetails.fullmoviebody.stars = Nothing Then workingMovieDetails.fullmoviebody.stars = ""
-				If workingMovieDetails.fullmoviebody.filename = Nothing Then workingMovieDetails.fullmoviebody.filename = ""
-				If workingMovieDetails.fullmoviebody.genre = Nothing Then workingMovieDetails.fullmoviebody.genre = ""
-				If workingMovieDetails.fullmoviebody.imdbid = Nothing Then workingMovieDetails.fullmoviebody.imdbid = ""
-				If workingMovieDetails.fullmoviebody.mpaa = Nothing Then workingMovieDetails.fullmoviebody.mpaa = ""
-				If workingMovieDetails.fullmoviebody.outline = Nothing Then workingMovieDetails.fullmoviebody.outline = ""
-				If workingMovieDetails.fullmoviebody.playcount = Nothing Then workingMovieDetails.fullmoviebody.playcount = ""
-				If workingMovieDetails.fullmoviebody.plot = Nothing Then workingMovieDetails.fullmoviebody.plot = ""
-				If workingMovieDetails.fullmoviebody.premiered = Nothing Then workingMovieDetails.fullmoviebody.premiered = ""
-				If workingMovieDetails.fullmoviebody.rating = Nothing Then workingMovieDetails.fullmoviebody.rating = ""
-				If workingMovieDetails.fullmoviebody.runtime = Nothing Then workingMovieDetails.fullmoviebody.runtime = ""
-				If workingMovieDetails.fullmoviebody.studio = Nothing Then workingMovieDetails.fullmoviebody.studio = ""
-				If workingMovieDetails.fullmoviebody.tagline = Nothing Then workingMovieDetails.fullmoviebody.tagline = ""
-				If workingMovieDetails.fullmoviebody.title = Nothing Then workingMovieDetails.fullmoviebody.title = ""
-				If workingMovieDetails.fullmoviebody.originaltitle = Nothing Then workingMovieDetails.fullmoviebody.originaltitle = ""
-				If workingMovieDetails.fullmoviebody.top250 = Nothing Then workingMovieDetails.fullmoviebody.top250 = ""
-				If workingMovieDetails.fullmoviebody.trailer = Nothing Then workingMovieDetails.fullmoviebody.trailer = ""
-				If workingMovieDetails.fullmoviebody.votes = Nothing Then workingMovieDetails.fullmoviebody.votes = ""
-				If workingMovieDetails.fullmoviebody.year = Nothing Then workingMovieDetails.fullmoviebody.year = ""
-				If workingMovieDetails.fullmoviebody.source = Nothing Then workingMovieDetails.fullmoviebody.source = ""
+				If workingMovieDetails.fullmoviebody.playcount      = Nothing Then workingMovieDetails.fullmoviebody.playcount      = "0"
+				If workingMovieDetails.fullmoviebody.lastplayed     = Nothing Then workingMovieDetails.fullmoviebody.lastplayed     = ""
+				If workingMovieDetails.fullmoviebody.credits        = Nothing Then workingMovieDetails.fullmoviebody.credits        = ""
+				If workingMovieDetails.fullmoviebody.director       = Nothing Then workingMovieDetails.fullmoviebody.director       = ""
+				If workingMovieDetails.fullmoviebody.stars          = Nothing Then workingMovieDetails.fullmoviebody.stars          = ""
+				If workingMovieDetails.fullmoviebody.filename       = Nothing Then workingMovieDetails.fullmoviebody.filename       = ""
+				If workingMovieDetails.fullmoviebody.genre          = Nothing Then workingMovieDetails.fullmoviebody.genre          = ""
+				If workingMovieDetails.fullmoviebody.imdbid         = Nothing Then workingMovieDetails.fullmoviebody.imdbid         = ""
+				If workingMovieDetails.fullmoviebody.mpaa           = Nothing Then workingMovieDetails.fullmoviebody.mpaa           = ""
+				If workingMovieDetails.fullmoviebody.outline        = Nothing Then workingMovieDetails.fullmoviebody.outline        = ""
+				If workingMovieDetails.fullmoviebody.playcount      = Nothing Then workingMovieDetails.fullmoviebody.playcount      = ""
+				If workingMovieDetails.fullmoviebody.plot           = Nothing Then workingMovieDetails.fullmoviebody.plot           = ""
+				If workingMovieDetails.fullmoviebody.premiered      = Nothing Then workingMovieDetails.fullmoviebody.premiered      = ""
+				If workingMovieDetails.fullmoviebody.rating         = Nothing Then workingMovieDetails.fullmoviebody.rating         = ""
+				If workingMovieDetails.fullmoviebody.runtime        = Nothing Then workingMovieDetails.fullmoviebody.runtime        = ""
+				If workingMovieDetails.fullmoviebody.studio         = Nothing Then workingMovieDetails.fullmoviebody.studio         = ""
+				If workingMovieDetails.fullmoviebody.tagline        = Nothing Then workingMovieDetails.fullmoviebody.tagline        = ""
+				If workingMovieDetails.fullmoviebody.title          = Nothing Then workingMovieDetails.fullmoviebody.title          = ""
+				If workingMovieDetails.fullmoviebody.originaltitle  = Nothing Then workingMovieDetails.fullmoviebody.originaltitle  = ""
+				If workingMovieDetails.fullmoviebody.top250         = Nothing Then workingMovieDetails.fullmoviebody.top250         = ""
+				If workingMovieDetails.fullmoviebody.trailer        = Nothing Then workingMovieDetails.fullmoviebody.trailer        = ""
+				If workingMovieDetails.fullmoviebody.votes          = Nothing Then workingMovieDetails.fullmoviebody.votes          = ""
+				If workingMovieDetails.fullmoviebody.year           = Nothing Then workingMovieDetails.fullmoviebody.year           = ""
+				If workingMovieDetails.fullmoviebody.source         = Nothing Then workingMovieDetails.fullmoviebody.source         = ""
 
 				titletxt.Items.Clear()
 
@@ -1746,26 +1743,26 @@ Public Class Form1
 					titletxt.Items.Add(title)
 				Next
 				titletxt.Text           = workingMovieDetails.fullmoviebody.title
-				TextBox3.Text           = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+				tb_MovFanartMovieTitle.Text           = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
 				tbCurrentMoviePoster.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
 				Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
 				If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
-				TextBox34.Text          = workingMovieDetails.fullmoviebody.sortorder
-				outlinetxt.Text         = workingMovieDetails.fullmoviebody.outline
-				plottxt.Text            = workingMovieDetails.fullmoviebody.plot
-				taglinetxt.Text         = workingMovieDetails.fullmoviebody.tagline
-				txtStars.Text           = workingMovieDetails.fullmoviebody.stars
-				genretxt.Text           = workingMovieDetails.fullmoviebody.genre
-				premiertxt.Text         = workingMovieDetails.fullmoviebody.premiered
-				creditstxt.Text         = workingMovieDetails.fullmoviebody.credits
-				directortxt.Text        = workingMovieDetails.fullmoviebody.director
-				studiotxt.Text          = workingMovieDetails.fullmoviebody.studio
-				countrytxt.Text         = workingMovieDetails.fullmoviebody.country
-				pathtxt.Text            = workingMovie.fullpathandfilename
-				ratingtxt.Text          = workingMovieDetails.fullmoviebody.rating.FormatRating
-				cbUsrRated.Text         = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
+				tb_MovSortOrder .Text = workingMovieDetails.fullmoviebody.sortorder
+				outlinetxt      .Text = workingMovieDetails.fullmoviebody.outline
+				plottxt         .Text = workingMovieDetails.fullmoviebody.plot
+				taglinetxt      .Text = workingMovieDetails.fullmoviebody.tagline
+				txtStars        .Text = workingMovieDetails.fullmoviebody.stars
+				genretxt        .Text = workingMovieDetails.fullmoviebody.genre
+				premiertxt      .Text = workingMovieDetails.fullmoviebody.premiered
+				creditstxt      .Text = workingMovieDetails.fullmoviebody.credits
+				directortxt     .Text = workingMovieDetails.fullmoviebody.director
+				studiotxt       .Text = workingMovieDetails.fullmoviebody.studio
+				countrytxt      .Text = workingMovieDetails.fullmoviebody.country
+				pathtxt         .Text = workingMovie.fullpathandfilename
+				ratingtxt       .Text = workingMovieDetails.fullmoviebody.rating.FormatRating
+				cbUsrRated      .Text = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
 				SetTagTxtField
-				tagtxt.Text = ""
+				tagtxt          .Text = ""
 				tb_tagtxt_changed = False
 				If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
 					Dim first As Boolean = True
@@ -1788,11 +1785,11 @@ Public Class Form1
                 displayRuntimeScraper   = If(Pref.movieRuntimeDisplay = "file", False, True)
 				Call mov_SwitchRuntime()
 
-				workingMovieDetails.fileinfo.fullpathandfilename = workingMovie.fullpathandfilename
-				workingMovieDetails.fileinfo.filename = Path.GetFileName(workingMovie.fullpathandfilename)
-				workingMovieDetails.fileinfo.path = Path.GetFullPath(workingMovie.fullpathandfilename)
-				workingMovieDetails.fileinfo.foldername = workingMovie.foldername
-				workingMovieDetails.fileinfo.trailerpath = pref.ActualTrailerPath(workingMovieDetails.fileinfo.path)
+				workingMovieDetails.fileinfo.fullpathandfilename    = workingMovie.fullpathandfilename
+				workingMovieDetails.fileinfo.filename               = Path.GetFileName(workingMovie.fullpathandfilename)
+				workingMovieDetails.fileinfo.path                   = Path.GetFullPath(workingMovie.fullpathandfilename)
+				workingMovieDetails.fileinfo.foldername             = workingMovie.foldername
+				workingMovieDetails.fileinfo.trailerpath            = pref.ActualTrailerPath(workingMovieDetails.fileinfo.path)
 				If Yield(yieldIng) Then Return
 				HandleTrailerBtn(workingMovieDetails)
 				If Yield(yieldIng) Then Return
@@ -1820,11 +1817,11 @@ Public Class Form1
 				If Yield(yieldIng) Then Return
 
 				If Convert.ToInt32(workingMovieDetails.fullmoviebody.playcount) > 0 Then
-					btnMovWatched.Text = "&Watched"
+					btnMovWatched.Text      = "&Watched"
 					btnMovWatched.BackColor = Color.LawnGreen
 					btnMovWatched.Refresh()
 				Else
-					btnMovWatched.Text = "Un&watched"
+					btnMovWatched.Text      = "Un&watched"
 					btnMovWatched.BackColor = Color.Red
 					btnMovWatched.Refresh()
 				End If
@@ -1844,25 +1841,7 @@ Public Class Form1
 				fi.SelectFirstMatch(cbMovieDisplay_Actor)
 
 				If Yield(yieldIng) Then Return
-
-				'If workingMovieDetails.fullmoviebody.SetName <> "-None-" And workingMovieDetails.fullmoviebody.SetName <> "" Then
-				'	Dim add As Boolean = True
-				'	For Each item In Pref.moviesets
-				'		If item = workingMovieDetails.fullmoviebody.SetName Then
-				'			add = False
-				'			Exit For
-				'		End If
-				'	Next
-    '                Dim q = From x In oMovies.MovieSetDB Where x.MovieSetDisplayName.ToLower = workingMovieDetails.fullmoviebody.SetName.ToLower
-    '                If q.Count > 0 Then
-    '                    add = False
-    '                    'If workingMovieDetails.fullmoviebody.SetOverview = "" AndAlso q(0).MovieSetPlot <> "" Then workingMovieDetails.fullmoviebody.SetOverview = q(0).MovieSetPlot
-    '                End If
-				'	If add Then
-				'		Pref.moviesets.Add(workingMovieDetails.fullmoviebody.SetName)
-				'	End If
-				'End If
-
+                
 				cbMovieDisplay_MovieSet.SelectedItem = Nothing
 
 				pop_cbMovieDisplay_MovieSet
@@ -1884,51 +1863,49 @@ Public Class Form1
 			End If
 		Else
 			cbMovieDisplay_Actor.Items.Clear()
-			PictureBoxActor.CancelAsync()
-			PictureBoxActor.Image = Nothing
-			PictureBoxActor.Refresh()
-
-			btnMoviePosterSaveCroppedImage.Enabled = False
-			btnMoviePosterResetImage.Enabled = False
-			cbMoviePosterSaveLoRes.Enabled = False
-			btnPosterTabs_SaveImage.Enabled = False
-			btnMovPosterNext.Visible = False
-			btnMovPosterPrev.Visible = False
-			lblMovPosterPages.Visible = False
-			titletxt.Text = ""
-			TextBox3.Text = ""
-			outlinetxt.Text = ""
-			plottxt.Text = ""
-			taglinetxt.Text = ""
-			txtStars.Text = ""
-			genretxt.Text = ""
-			premiertxt.Text = ""
-			creditstxt.Text = ""
-			directortxt.Text = ""
-			studiotxt.Text = ""
-			countrytxt.Text = ""
-			pathtxt.Text = ""
-			cbUsrRated.SelectedIndex = -1
-			ratingtxt.Text = ""
-			runtimetxt.Text = ""
-			votestxt.Text = ""
-			top250txt.Text = ""
-			certtxt.Text = ""
-			PbMovieFanArt.Image = Nothing
-			PictureBox2.Image = Nothing
-			PbMoviePoster.Image = Nothing
-			lblMovFanartWidth.Text = ""
-			lblMovFanartHeight.Text = ""
-			PictureBoxAssignedMoviePoster.Image = Nothing
-			lblCurrentLoadedPoster.Text = ""
-			TextBox34.Text = ""
-			titletxt.Text = ""
-			tagtxt.Text = "" : tb_tagtxt_changed = False
-			roletxt.Text = ""
-			PictureBoxActor.Image = Nothing
-			Panel6.Visible = False
+			PictureBoxActor                 .CancelAsync()
+			PictureBoxActor                 .Image = Nothing
+			PictureBoxActor                 .Refresh()
+			btnMoviePosterSaveCroppedImage  .Enabled = False
+			btnMoviePosterResetImage        .Enabled = False
+			cbMoviePosterSaveLoRes          .Enabled = False
+			btnPosterTabs_SaveImage         .Enabled = False
+			btnMovPosterNext                .Visible = False
+			btnMovPosterPrev                .Visible = False
+			lblMovPosterPages               .Visible = False
+			titletxt                        .Text = ""
+			tb_MovFanartMovieTitle          .Text = ""
+			outlinetxt                      .Text = ""
+			plottxt                         .Text = ""
+			taglinetxt                      .Text = ""
+			txtStars                        .Text = ""
+			genretxt                        .Text = ""
+			premiertxt                      .Text = ""
+			creditstxt                      .Text = ""
+			directortxt                     .Text = ""
+			studiotxt                       .Text = ""
+			countrytxt                      .Text = ""
+			pathtxt                         .Text = ""
+			cbUsrRated                      .SelectedIndex  = -1
+			ratingtxt                       .Text = ""
+			runtimetxt                      .Text = ""
+			votestxt                        .Text = ""
+			top250txt                       .Text = ""
+			certtxt                         .Text = ""
+			PbMovieFanArt                   .Image = Nothing
+			PictureBox2                     .Image = Nothing
+			PbMoviePoster                   .Image = Nothing
+			lblMovFanartWidth               .Text = ""
+			lblMovFanartHeight              .Text = ""
+			PictureBoxAssignedMoviePoster   .Image = Nothing
+			lblCurrentLoadedPoster          .Text = ""
+			tb_MovSortOrder                 .Text = ""
+			tagtxt                          .Text = "" : tb_tagtxt_changed = False
+			roletxt                         .Text = ""
+			PictureBoxActor                 .Image = Nothing
+			Panel6                          .Visible = False
 			FanTvArtList.Items.Clear()
-			btnPlayMovie.Enabled = False
+			btnPlayMovie                    .Enabled = False
 			Me.Refresh()
 			Application.DoEvents()
 		End If
@@ -1937,9 +1914,7 @@ Public Class Form1
 			workingMovieDetails.fullmoviebody.rating = ratingtxt.Text
 		End If
 
-		If ratingtxt.Text.Length > 3 Then
-			ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
-		End If
+		If ratingtxt.Text.Length > 3 Then ratingtxt.Text = ratingtxt.Text.Substring(0, 3).Trim
 
 		If Yield(yieldIng) Then Return
 		GC.Collect()
@@ -2571,7 +2546,7 @@ Public Class Form1
 			movie.ScrapedMovie.fullmoviebody.tagline = taglinetxt.Text
 			movie.ScrapedMovie.fullmoviebody.stars = txtStars.Text.ToString.Replace(", See full cast and crew", "")
 			movie.ScrapedMovie.fullmoviebody.mpaa = certtxt.Text
-			movie.ScrapedMovie.fullmoviebody.sortorder = TextBox34.Text
+			movie.ScrapedMovie.fullmoviebody.sortorder = tb_MovSortOrder.Text
 			If movie.ScrapedMovie.fullmoviebody.SetName <> cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex) AndAlso cbMovieDisplay_MovieSet.SelectedIndex <> -1 Then
 				movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                 Dim setid As String = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
@@ -3022,9 +2997,9 @@ Public Class Form1
 		workingMovie.year = Nothing
 		workingMovie.rootfolder = Nothing
 		titletxt.Text = ""
-		TextBox3.Text = ""
+		tb_MovFanartMovieTitle.Text = ""
 		outlinetxt.Text = ""
-		TextBox34.Text = ""
+		tb_MovSortOrder.Text = ""
 		plottxt.Text = ""
 		taglinetxt.Text = ""
 		txtStars.Text = ""
@@ -3204,7 +3179,7 @@ Public Class Form1
 			SpltCntr_MovPictures.Visible = True
 			Label128.Visible = False
 			Label75.Visible = True
-			TextBox34.Visible = True
+			tb_MovSortOrder.Visible = True
 
 			Dim query = From f In oMovies.Data_GridViewMovieCache Where f.fullpathandfilename = CType(selectedRows(0).DataBoundItem, Data_GridViewMovie).fullpathandfilename.ToString
 
@@ -3261,7 +3236,7 @@ Public Class Form1
 			SpltCntr_MovPictures.Visible = False
 			titletxt.Visible = False
 			Label75.Visible = False
-			TextBox34.Visible = False
+			tb_MovSortOrder.Visible = False
 			TextBoxMutisave.Visible = True
 			Panel6.Visible = False
 			FanTvArtList.Items.Clear()
@@ -4772,7 +4747,7 @@ Public Class Form1
 				Exit Sub
 			End If
 			If tab = tpTvSelector.Name Then         'Tv Show Change tba
-				If lb_tvChSeriesResults.Items.Count = 0 Then
+				If lbxTvShSelectResults.Items.Count = 0 Then
 					tvCurrentTabIndex = TabControl3.SelectedIndex
 					Call tv_ShowChangedRePopulate()
 				End If
@@ -4931,9 +4906,9 @@ Public Class Form1
 		For Each Lang As Tvdb.Language In LangList.Languages
 			languageList.Add(Lang)
 		Next
-		lb_TvChSeriesLanguages.Items.Clear()
+		lbxTvShSelectLang.Items.Clear()
 		For Each lan In languageList
-			lb_TvChSeriesLanguages.Items.Add(lan.Language.Value)
+			lbxTvShSelectLang.Items.Add(lan.Language.Value)
 		Next
         Return True
 	End Function
@@ -4941,10 +4916,10 @@ Public Class Form1
 	Private Sub tv_ShowChangedRePopulate()
 		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 		Try
-			TextBox26.Text = Utilities.GetLastFolder(WorkingTvShow.NfoFilePath)
+			tbTvShSelectSearchTitle.Text = Utilities.GetLastFolder(WorkingTvShow.NfoFilePath)
 			tb_TvShSelectSeriesPath.Enabled = True
 			tb_TvShSelectSeriesPath.Text = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "")
-			PictureBox9.Image = Nothing
+			pbTvShSelectPreviewImg.Image = Nothing
 			If languageList.Count = 0 Then
 				Dim aok As Boolean = util_LanguageListLoad()
                 If Not aok Then Throw New Exception("error loading languages")
@@ -4952,61 +4927,61 @@ Public Class Form1
 			If workingTvShow.language <> Nothing Then
 				For Each language In languageList
 					If language.Abbreviation.Value = WorkingTvShow.Language.Value Then
-						lb_TvChSeriesLanguages.SelectedItem = language.Language.Value
+						lbxTvShSelectLang.SelectedItem = language.Language.Value
 						Exit For
 					End If
 				Next
 			Else
-				lb_TvChSeriesLanguages.SelectedItem = Pref.TvdbLanguage
+				lbxTvShSelectLang.SelectedItem = Pref.TvdbLanguage
 			End If
 			Label55.Text = "Default Language for TV Shows is :- " & Pref.TvdbLanguage
 			Call tv_ShowListLoad()
 			Try
 				If Pref.sortorder <> Nothing Then
 					If Pref.sortorder = "dvd" Then
-						RadioButton14.Checked = True
+						rbTvShSelectOrderDVD.Checked = True
 					Else
-						RadioButton15.Checked = True
+						rbTvShSelectOrderDefault.Checked = True
 					End If
 				Else
-					RadioButton15.Checked = True
+					rbTvShSelectOrderDefault.Checked = True
 				End If
 			Catch ex As Exception
-				RadioButton15.Checked = True
+				rbTvShSelectOrderDefault.Checked = True
 			End Try
 
 			Select Case Pref.seasonall
 				Case "none"
-					RadioButton18.Checked = True
+					rbTvShSelectSAllNone.Checked = True
 				Case "poster"
-					RadioButton17.Checked = True
+					rbTvShSelectSAllPoster.Checked = True
 				Case "wide"
-					RadioButton16.Checked = True
+					rbTvShSelectSAllWide.Checked = True
 			End Select
 			'0 - Everything from TVDB
 			'1 - Everything from IMDB
 			'2 - TV show Nfo From IMDB, Episode nfo from TVDB
 			'3 - TV show Nfo From TVDB, Episode nfo from IMDB
 			If Pref.tvdbactorscrape = 0 Then
-				RadioButton13.Checked = True
-				RadioButton11.Checked = True
+				rbTvShSelectTvActorTvdb.Checked = True
+				rbTvShSelectEpActorTvdb.Checked = True
 			End If
 			If Pref.tvdbactorscrape = 1 Then
-				RadioButton12.Checked = True
-				RadioButton10.Checked = True
+				rbTvShSelectTvActorImdb.Checked = True
+				rbTvShSelectEpActorImdb.Checked = True
 			End If
 			If Pref.tvdbactorscrape = 2 Then
-				RadioButton12.Checked = True
-				RadioButton11.Checked = True
+				rbTvShSelectTvActorImdb.Checked = True
+				rbTvShSelectEpActorTvdb.Checked = True
 			End If
 			If Pref.tvdbactorscrape = 3 Then
-				RadioButton13.Checked = True
-				RadioButton10.Checked = True
+				rbTvShSelectTvActorTvdb.Checked = True
+				rbTvShSelectEpActorImdb.Checked = True
 			End If
 			If Pref.postertype = "poster" Then
-				RadioButton9.Checked = True
+				rbTvShSelectArtPoster.Checked = True
 			Else
-				RadioButton8.Checked = True
+				rbTvShSelectArtBanner.Checked = True
 			End If
 
 			cbTvChgShowDLFanart.Checked = Pref.tvdlfanart
@@ -5015,13 +4990,13 @@ Public Class Form1
 			cbTvChgShowDLFanartTvArt.Checked = Pref.TvDlFanartTvArt
 
 			If Pref.tvshow_useXBMC_Scraper = True Then
-				GroupBox2.Enabled = False
-				GroupBox3.Enabled = False
-				GroupBox5.Enabled = False
+				gpbx_TvActorSource.Enabled = False
+				gpbx_EpActorSource.Enabled = False
+				gpbx_SortOrder.Enabled = False
 			Else
-				GroupBox2.Enabled = True
-				GroupBox3.Enabled = True
-				GroupBox5.Enabled = True
+				gpbx_TvActorSource.Enabled = True
+				gpbx_EpActorSource.Enabled = True
+				gpbx_SortOrder.Enabled = True
 			End If
 			cbTvChgShowOverwriteImgs.CheckState = CheckState.Checked 'set overwrite images for changing shows.
 		Catch ex As Exception
@@ -5033,10 +5008,10 @@ Public Class Form1
 
 	Private Sub util_LanguageCheck()
 		Try
-			If lb_TvChSeriesLanguages.SelectedIndex < 0 Then lb_TvChSeriesLanguages.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Pref.TvdbLanguageCode)
-			If lb_tvChSeriesResults.SelectedIndex = -1 orElse listOfShows(lb_tvChSeriesResults.SelectedIndex).showid = "none" Then Exit Sub
-			Dim languagecode As String = languageList(lb_TvChSeriesLanguages.SelectedIndex).Abbreviation.Value
-			Dim url As String = "http://thetvdb.com/api/6E82FED600783400/series/" & listOfShows(lb_tvChSeriesResults.SelectedIndex).showid & "/" & languagecode & ".xml"
+			If lbxTvShSelectLang.SelectedIndex < 0 Then lbxTvShSelectLang.SelectedIndex = languageList.FindIndex(Function(index As Tvdb.Language) index.Abbreviation.Value = Pref.TvdbLanguageCode)
+			If lbxTvShSelectResults.SelectedIndex = -1 orElse listOfShows(lbxTvShSelectResults.SelectedIndex).showid = "none" Then Exit Sub
+			Dim languagecode As String = languageList(lbxTvShSelectLang.SelectedIndex).Abbreviation.Value
+			Dim url As String = "http://thetvdb.com/api/6E82FED600783400/series/" & listOfShows(lbxTvShSelectResults.SelectedIndex).showid & "/" & languagecode & ".xml"
 			Dim websource(10000)
 			Dim urllinecount As Integer = 0
 			Try
@@ -5069,10 +5044,10 @@ Public Class Form1
 					websource(f) = websource(f).Replace("  ", "")
 					If websource(f).ToLower <> languagecode Then
 						Label55.BackColor = Color.Red
-						Label55.Text = lb_tvChSeriesResults.SelectedItem.ToString & " is not available in " & lb_TvChSeriesLanguages.SelectedItem.ToString & ", Please try another language"
+						Label55.Text = lbxTvShSelectResults.SelectedItem.ToString & " is not available in " & lbxTvShSelectLang.SelectedItem.ToString & ", Please try another language"
 					Else
 						Label55.BackColor = Color.Transparent
-						Label55.Text = lb_tvChSeriesResults.SelectedItem.ToString & " is available in " & lb_TvChSeriesLanguages.SelectedItem.ToString
+						Label55.Text = lbxTvShSelectResults.SelectedItem.ToString & " is available in " & lbxTvShSelectLang.SelectedItem.ToString
 						Label55.Font = New Font(Label55.Font, FontStyle.Bold)
 					End If
 				End If
@@ -7109,7 +7084,7 @@ Public Class Form1
 					cbMovieDisplay_Actor.Font = newFont
 					roletxt.Font = newFont
 					pathtxt.Font = newFont
-					TextBox34.Font = newFont
+					tb_MovSortOrder.Font = newFont
 					DataGridViewMovies.Font = newFont
 					plottxt.Font = newFont
 					txtStars.Font = newFont
@@ -14994,7 +14969,7 @@ Public Class Form1
 
 #Region "Tv Show Selector Form"
 
-	Private Sub TextBox26_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox26.KeyDown
+	Private Sub tbTvShSelectSearchTitle_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbTvShSelectSearchTitle.KeyDown
 		Try
 			If e.KeyCode = Keys.Enter Then
 				Call tv_ShowListLoad()
@@ -15004,7 +14979,7 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub Button30_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button30.Click
+	Private Sub btnTvShSelectSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShSelectSearch.Click
 		Try
 			Call tv_ShowListLoad()
 		Catch ex As Exception
@@ -15012,40 +14987,40 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub lb_tvChSeriesResults_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles lb_tvChSeriesResults.SelectedIndexChanged
-		util_ImageLoad(PictureBox9, listOfShows(lb_tvChSeriesResults.SelectedIndex).showbanner, Utilities.DefaultBannerPath)
+	Private Sub lbxTvShSelectResults_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles lbxTvShSelectResults.SelectedIndexChanged
+		util_ImageLoad(pbTvShSelectPreviewImg, listOfShows(lbxTvShSelectResults.SelectedIndex).showbanner, Utilities.DefaultBannerPath)
 	End Sub
 
-	Private Sub lb_TvChSeriesLanguages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lb_TvChSeriesLanguages.SelectedIndexChanged
+	Private Sub lbxTvShSelectLang_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbxTvShSelectLang.SelectedIndexChanged
 		Call util_LanguageCheck()
 	End Sub
 
-	Private Sub RadioButton8_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton8.CheckedChanged
-		If RadioButton8.Checked = True Then
+	Private Sub rbTvShSelectArtBanner_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvShSelectArtBanner.CheckedChanged
+		If rbTvShSelectArtBanner.Checked = True Then
 			Pref.postertype = "banner"
 		Else
 			Pref.postertype = "poster"
 		End If
 	End Sub
 
-	Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
-		If RadioButton9.Checked = True Then
+	Private Sub rbTvShSelectArtPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvShSelectArtPoster.CheckedChanged
+		If rbTvShSelectArtPoster.Checked = True Then
 			Pref.postertype = "poster"
 		Else
 			Pref.postertype = "banner"
 		End If
 	End Sub
 
-	Private Sub RadioButton16_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton16.CheckedChanged
-		If RadioButton16.Checked = True Then Pref.seasonall = "wide"
+	Private Sub rbTvShSelectSAllWide_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvShSelectSAllWide.CheckedChanged
+		If rbTvShSelectSAllWide.Checked = True Then Pref.seasonall = "wide"
 	End Sub
 
-	Private Sub RadioButton17_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton17.CheckedChanged
-		If RadioButton17.Checked = True Then Pref.seasonall = "poster"
+	Private Sub rbTvShSelectSAllPoster_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvShSelectSAllPoster.CheckedChanged
+		If rbTvShSelectSAllPoster.Checked = True Then Pref.seasonall = "poster"
 	End Sub
 
-	Private Sub RadioButton18_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton18.CheckedChanged
-		If RadioButton18.Checked = True Then Pref.seasonall = "none"
+	Private Sub rbTvShSelectSAllNone_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbTvShSelectSAllNone.CheckedChanged
+		If rbTvShSelectSAllNone.Checked = True Then Pref.seasonall = "none"
 	End Sub
 
 	Private Sub cbTvChgShowDLSeason_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTvChgShowDLSeason.CheckedChanged
@@ -15068,7 +15043,7 @@ Public Class Form1
 		Pref.TvChgShowDlPoster = cbTvChgShowDLPoster.Checked
 	End Sub
 
-	Private Sub btnTvShowSelectorScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShowSelectorScrape.Click
+	Private Sub btnTvShSelectScrape_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvShSelectScrape.Click
 		Try
 			Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 			If listOfShows.Count = 1 And listOfShows(0).showtitle = "TVDB Search Returned Zero Results" Then
@@ -15087,14 +15062,14 @@ Public Class Form1
 			Application.DoEvents()
 
 			Dim LanCode As String
-			If lb_TvChSeriesLanguages.SelectedIndex = -1 Then
+			If lbxTvShSelectLang.SelectedIndex = -1 Then
 				LanCode = Pref.TvdbLanguageCode
 			Else
-				LanCode = languageList(lb_TvChSeriesLanguages.SelectedIndex).Abbreviation.Value
+				LanCode = languageList(lbxTvShSelectLang.SelectedIndex).Abbreviation.Value
 			End If
 			If Pref.tvshow_useXBMC_Scraper = True Then
 
-				Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(lb_tvChSeriesResults.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
+				Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", listOfShows(lbxTvShSelectResults.SelectedIndex).showid, LanCode, WorkingTvShow.NfoFilePath)
 				If TVShowNFOContent <> "error" Then CreateMovieNfo(WorkingTvShow.NfoFilePath, TVShowNFOContent)
 				Dim newshow As TvShow = nfoFunction.tvshow_NfoLoad(WorkingTvShow.NfoFilePath)
 				newshow.ListActors.Clear()
@@ -15120,7 +15095,7 @@ Public Class Form1
 				If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
 				Cache.TvCache.Remove(WorkingTvShow)
 				newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
-				Dim args As TvdbArgs = New TvdbArgs(listOfShows(lb_tvChSeriesResults.SelectedIndex).showid, LanCode)
+				Dim args As TvdbArgs = New TvdbArgs(listOfShows(lbxTvShSelectResults.SelectedIndex).showid, LanCode)
 				bckgrnd_tvshowscraper.RunWorkerAsync(args)
 				While bckgrnd_tvshowscraper.IsBusy
 					Application.DoEvents()

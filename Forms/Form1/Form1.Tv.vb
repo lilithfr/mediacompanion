@@ -374,8 +374,8 @@ Partial Public Class Form1
                 TabControl3.TabPages.RemoveAt(1)
             End If
             
-            lb_tvChSeriesResults.Items.Clear()
-            TextBox26.Text = ""
+            lbxTvShSelectResults.Items.Clear()
+            tbTvShSelectSearchTitle.Text = ""
             Dim todo As Boolean = False
 
             If Show.State = Media_Companion.ShowState.Locked Then
@@ -1617,7 +1617,7 @@ Partial Public Class Form1
 
     Private Sub tv_ShowListLoad()
         Try
-            If TextBox26.Text <> "" Then
+            If tbTvShSelectSearchTitle.Text <> "" Then
 
                 messbox = New frmMessageBox("Please wait,", "", "Getting possible TV Shows from TVDB")
                 System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -1627,7 +1627,7 @@ Partial Public Class Form1
                 Try
                     Dim tvdbstuff As New TVDBScraper
                     Dim mirror As List(Of String) = tvdbstuff.getmirrors()
-                    Dim showslist As String = tvdbstuff.findshows(TextBox26.Text, mirror(0))
+                    Dim showslist As String = tvdbstuff.findshows(tbTvShSelectSearchTitle.Text, mirror(0))
 
                     listOfShows.Clear()
                     If showslist = "error" Then
@@ -1674,17 +1674,17 @@ Partial Public Class Form1
                         lan.showbanner  = Nothing
                         listOfShows.Add(lan)
                     End If
-                    lb_tvChSeriesResults.Items.Clear()
+                    lbxTvShSelectResults.Items.Clear()
                     For Each item In listOfShows
-                        lb_tvChSeriesResults.Items.Add(item.showtitle)
+                        lbxTvShSelectResults.Items.Add(item.showtitle)
                     Next
 
-                    lb_tvChSeriesResults.SelectedIndex = 0
+                    lbxTvShSelectResults.SelectedIndex = 0
                     If listOfShows(0).showbanner <> Nothing Then
                         Try
-                            util_ImageLoad(PictureBox9, listOfShows(0).showbanner, Utilities.DefaultTvBannerPath)
+                            util_ImageLoad(pbTvShSelectPreviewImg, listOfShows(0).showbanner, Utilities.DefaultTvBannerPath)
                         Catch ex As Exception
-                            PictureBox9.Image = Nothing
+                            pbTvShSelectPreviewImg.Image = Nothing
                         End Try
                     End If
 
@@ -4607,7 +4607,7 @@ Partial Public Class Form1
                 If Not aok Then MsgBox("Could not create ScreenShot")
             Else
                 MsgBox("Please enter a numerical value into the textbox")
-                TextBox34.Focus()
+                tb_MovSortOrder.Focus()
                 Exit Sub
             End If
         Catch ex As Exception
