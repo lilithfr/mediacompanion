@@ -1447,8 +1447,7 @@ Public Class Movie
         If Pref.MusicVidScrape AndAlso Not Pref.MusicVidConcertScrape Then xmltype = "musicvideo"  'OrElse Pref.MusicVidConcertScrape 
 
         thumbstring.LoadXml(ImdbBody)
-        Dim thisresult As XmlElement = Nothing
-        For Each thisresult In thumbstring(xmltype)
+        For Each thisresult As XmlNode In thumbstring(xmltype)
             Select Case thisresult.Name
                 Case "title"
                     Dim sepmov As String = ""
@@ -2010,7 +2009,7 @@ Public Class Movie
         Try
             Dim xmlDoc As New XmlDocument
             xmlDoc.LoadXml("<thumblist>" & thumbs & "</thumblist>")
-            For Each thisresult In xmlDoc("thumblist")
+            For Each thisresult As XmlNode In xmlDoc("thumblist")
                 Select Case thisresult.Name
                     Case "thumb"
                         _scrapedMovie.listthumbs.Add(thisresult.InnerText)

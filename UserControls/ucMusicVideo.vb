@@ -183,13 +183,11 @@ Public Class ucMusicVideo
         Catch ex As Exception
             MsgBox("Error : pr25")
         End Try
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In musicvideocache("music_video_cache")
+        For Each thisresult As XmlNode In musicvideocache("music_video_cache")
             Select Case thisresult.Name
                 Case "musicvideo"
                     Dim newMV As New MVComboList
-                    Dim detail As XmlNode = Nothing
-                    For Each detail In thisresult.ChildNodes
+                    For Each detail As XmlNode In thisresult.ChildNodes
                         Select Case detail.Name
                             Case "fullpathandfilename"  : newMV.nfopathandfilename      = detail.InnerText
                             Case "tmdbid"               : newMV.tmdbid                  = detail.InnerText 

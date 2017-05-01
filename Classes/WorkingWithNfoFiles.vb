@@ -335,12 +335,11 @@ Public Class WorkingWithNfoFiles
 
                 Exit Function
             End Try
-
-            Dim thisresult As XmlNode = Nothing
+            
             Dim tempid As String = ""
             If tvshow.DocumentElement.Name = "episodedetails" Then
                 Dim newtvepisode As New TvEpisode
-                For Each thisresult In tvshow("episodedetails")
+                For Each thisresult As XmlNode In tvshow("episodedetails")
                     Try
                         newtvepisode.NfoFilePath = loadpath
                         Select Case thisresult.Name
@@ -455,7 +454,7 @@ Public Class WorkingWithNfoFiles
                 episodelist.Add(newtvepisode)
             ElseIf tvshow.DocumentElement.Name = "multiepisodenfo" Or tvshow.DocumentElement.Name = "xbmcmultiepisode" Then
                 Dim temp As String = tvshow.DocumentElement.Name
-                For Each thisresult In tvshow(temp)
+                For Each thisresult As XmlNode In tvshow(temp)
                     Dim sp As String = thisresult.InnerXml.ToString
                     If sp.Contains("<streamdetails><fileinfo>") Then
                         fixmulti = True
@@ -899,10 +898,9 @@ Public Class WorkingWithNfoFiles
                 Return blanktvshow(path)
                 Exit Function
             End Try
-            newtvshow.State = Media_Companion.ShowState.Unverified 
-            Dim thisresult As XmlNode = Nothing
+            newtvshow.State = Media_Companion.ShowState.Unverified
             Dim tempid As String = ""
-            For Each thisresult In tvshow("tvshow")
+            For Each thisresult As XmlNode In tvshow("tvshow")
                 Try
                     Select Case thisresult.Name
                         Case "id"
@@ -1103,9 +1101,8 @@ Public Class WorkingWithNfoFiles
                     newmovie.NumVideoBits = -1
                     Return newmovie
                 End Try
-
-                Dim thisresult As XmlNode = Nothing
-                For Each thisresult In movie("movie")
+                
+                For Each thisresult As XmlNode In movie("movie")
                     Try
                         Select Case thisresult.Name
                             Case "title"
@@ -1358,10 +1355,9 @@ Public Class WorkingWithNfoFiles
                     newmovie.fileinfo.createdate        = ""
                     Return newmovie
                 End Try
-                Dim thisresult As XmlNode = Nothing
                 Dim Flag4resave As Boolean = False
 
-                For Each thisresult In movie("movie")
+                For Each thisresult As XmlNode In movie("movie")
                     Select Case thisresult.Name
                         Case "alternativetitle"
                             newmovie.alternativetitles.Add(thisresult.InnerText)
@@ -1832,9 +1828,8 @@ Public Class WorkingWithNfoFiles
                     End If
                     Return (newmovie)
                 End Try
-
-                Dim thisresult As XmlNode = Nothing
-                For Each thisresult In movie("movie")
+                
+                For Each thisresult As XmlNode In movie("movie")
                     Try
                         Select Case thisresult.Name
                             Case "title"
@@ -2052,8 +2047,7 @@ Public Class WorkingWithNfoFiles
         Using tmpstrm As IO.StreamReader = File.OpenText(filepath)
             document.Load(tmpstrm)
         End Using
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In document("musicvideo")
+        For Each thisresult As XmlNode In document("musicvideo")
             Select Case thisresult.Name
                 Case "album"        : NewMusicVideo.fullmoviebody.album     = thisresult.InnerText
                 Case "tmdbid"       : NewMusicVideo.fullmoviebody.tmdbid    = thisresult.InnerText

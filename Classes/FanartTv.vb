@@ -137,22 +137,18 @@ Public Class FanartTv
 
     Private Sub Assignmovieartwork()
         Dim newdata As Boolean = False
-        Dim thisresult As XmlNode = Nothing
         Dim tempid As String = ""
-        For Each thisresult In _data("Document")
+        For Each thisresult As XmlNode In _data("Document")
             Select Case thisresult.Name
                 Case "Element"
-                    Dim detail1 As XmlNode = Nothing
-                    For Each detail1 In thisresult.ChildNodes
+                    For Each detail1 As XmlNode In thisresult.ChildNodes
                         Select Case detail1.Name
                             Case "hdmovieclearart"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim hdmovclearart As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         hdmovclearart.id = detail3.InnerText
@@ -170,13 +166,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "hdmovielogo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -194,13 +188,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "movielogo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -218,13 +210,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "movieart"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -242,13 +232,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "moviebackground"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -266,13 +254,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "moviedisc"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -292,13 +278,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "moviebanner"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -316,13 +300,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "moviethumb"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -340,13 +322,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "movieposter"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -372,22 +352,18 @@ Public Class FanartTv
 
     Private Sub Assigntvartwork()
         Dim newdata As Boolean = False
-        Dim thisresult As XmlNode = Nothing
         Dim tempid As String = ""
-        For Each thisresult In _data("Document")
+        For Each thisresult As XmlNode In _data("Document")
             Select Case thisresult.Name
                 Case "Element"
-                    Dim detail1 As XmlNode = Nothing
-                    For Each detail1 In thisresult.ChildNodes
+                    For Each detail1 As XmlNode In thisresult.ChildNodes
                         Select Case detail1.Name
                             Case "hdtvlogo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -405,13 +381,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "clearlogo"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -429,13 +403,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "clearart"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -453,13 +425,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "tvthumb"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -477,13 +447,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "characterart"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -501,13 +469,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "hdclearart"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -525,13 +491,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "seasonposter"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -551,13 +515,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "showbackground"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -577,13 +539,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "tvbanner"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -601,13 +561,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "seasonthumb"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -627,13 +585,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "tvposter"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText
@@ -651,13 +607,11 @@ Public Class FanartTv
                                     End Select
                                 Next
                             Case "seasonbanner"
-                                Dim detail2 As XmlNode = Nothing
-                                For Each detail2 in detail1.ChildNodes 
+                                For Each detail2 As XmlNode in detail1.ChildNodes 
                                     Select Case detail2.Name
                                         Case "Element"
                                             Dim artwork As New str_fanarttvart
-                                            Dim detail3 As XmlNode = Nothing
-                                            For each detail3 In detail2.ChildNodes
+                                            For each detail3 As XmlNode In detail2.ChildNodes
                                                 Select Case detail3.Name
                                                     Case "id"
                                                         artwork.id = detail3.InnerText

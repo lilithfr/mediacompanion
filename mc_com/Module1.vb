@@ -649,8 +649,7 @@ Module Module1
                                 Try
                                     ConsoleOrLog("Scraping body of episode: " & singleepisode.episodeno)
                                     scrapedepisode.LoadXml(tempepisode)
-                                    Dim thisresult As XmlNode = Nothing
-                                    For Each thisresult In scrapedepisode("episodedetails")
+                                    For Each thisresult As XmlNode In scrapedepisode("episodedetails")
                                         Select Case thisresult.Name
                                             Case "title"
                                                 singleepisode.title = thisresult.InnerText
@@ -679,7 +678,7 @@ Module Module1
                                             Case "thumb"
                                                 singleepisode.thumb = thisresult.InnerText
                                             Case "actor"
-                                                For Each actorl In thisresult.ChildNodes
+                                                For Each actorl As XmlNode In thisresult.ChildNodes
                                                     Select Case actorl.name
                                                         Case "name"
                                                             Dim newactor As New str_MovieActors
@@ -1181,16 +1180,14 @@ Module Module1
 
         Dim tvlist As New XmlDocument
         tvlist.Load(Pref.workingProfile.tvcache)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In tvlist("tvcache")
+        For Each thisresult As XmlNode In tvlist("tvcache")
             Select Case thisresult.Name
                 Case "tvshow"
                     Dim newtvshow As New basictvshownfo
                     If (thisresult.Attributes.Count > 0) Then
                         newtvshow.nfopathandfilename = thisresult.Attributes(0).Value
                         If File.Exists(newtvshow.nfopathandfilename) Then
-                            Dim detail As XmlNode = Nothing
-                            For Each detail In thisresult.ChildNodes
+                            For Each detail As XmlNode In thisresult.ChildNodes
                                 Select Case detail.Name
                                     Case "playcount"
                                         newtvshow.playcount = detail.InnerText
@@ -1225,12 +1222,11 @@ Module Module1
                 Case "episodedetails"
                     Dim newepisode As New episodeinfo
                     If (thisresult.Attributes.Count > 0) Then
-                        Dim episodenew As XMLNode = Nothing
                         newepisode.epnfopath = thisresult.Attributes(0).Value
                         'It seems that multiple <episodedetails> attributes are no longer used in tvcache, NfoPath is the only one - HueyHQ
                         'newepisode.pure = thisresult.Attributes(1).Value
                         'If DirectCast(thisresult, System.Xml.XmlElement).Attributes.Count = 3 Then newepisode.extension = thisresult.Attributes(2).Value
-                        For Each episodenew In thisresult.ChildNodes
+                        For Each episodenew As XmlNode In thisresult.ChildNodes
                             Select Case episodenew.Name
                                 Case "title"
                                     newepisode.title        = episodenew.InnerText
@@ -1266,7 +1262,7 @@ Module Module1
                     tvshowdata.Load(tmpstrm)
                 End Using
                 
-                For Each thisresult In tvshowdata("tvshow")
+                For Each thisresult As XmlNode In tvshowdata("tvshow")
                     Select Case thisresult.Name
                         Case "sortorder"
                             show.sortorder = thisresult.InnerText
@@ -1547,7 +1543,7 @@ Module Module1
      Private Function IMDbActors(ByVal actorlist As List(Of str_MovieActors), ByRef success As Boolean, ByVal workingpath As String) As List(Of str_MovieActors)
         Dim actcount As Integer = 0
         Dim totalactors As New List(Of str_MovieActors)
-        For Each thisresult In actorlist
+        For Each thisresult As str_MovieActors In actorlist
             If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
                 If Pref.actorseasy And Not Pref.tvshowautoquick Then
                     Dim actorpaths As New List(Of String)

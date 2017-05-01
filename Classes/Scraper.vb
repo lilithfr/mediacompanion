@@ -276,7 +276,7 @@ Public Class Classimdb
             adoc.LoadXml(result)
             If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return "Error"
             If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return "Error"
-            For each thisresult In adoc("root")
+            For each thisresult As XmlNode In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("imdbID")) Then
                     Dim TmpValue As String = thisresult.Attributes("imdbID").Value
                     If TmpValue <> "" AndAlso TmpValue <> "N/A" Then GOT_IMDBID = TmpValue
@@ -931,7 +931,7 @@ Public Class Classimdb
             adoc.LoadXml(getresult)
             If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return ""
             If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return ""
-            For each thisresult In adoc("root")
+            For each thisresult As XmlNode In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("metascore")) Then
                     Dim TmpValue As String = thisresult.Attributes("metascore").Value
                     If TmpValue <> "" AndAlso TmpValue <> "N/A" Then Return TmpValue
@@ -1515,8 +1515,7 @@ Public Class Classimdb
         If page <> "" AndAlso page.Replace("""", "").Contains("root response=True") Then 
             Dim adoc As New XmlDocument
             adoc.LoadXml(page)
-            Dim thisresult As XmlElement = Nothing
-            For each thisresult In adoc("root")
+            For each thisresult As XmlElement In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("tomatoUserReviews")) Then
                     Dim TmpValue As String = thisresult.Attributes("tomatoUserReviews").Value
                     If TmpValue <> "" AndAlso TmpValue <> "N/A" Then TotalInfo &= "<tomatoUserReviews>" & TmpValue & "</tomatoUserReviews>" & vbcrlf

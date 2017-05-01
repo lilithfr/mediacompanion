@@ -1492,52 +1492,52 @@ Public Class Form1
 				Dim profilelist As New XmlDocument
 				profilelist.Load(Propath)
 				If profilelist.DocumentElement.Name = "profile" Then
-					For Each thisresult In profilelist("profile")
+					For Each thisresult As XmlNode In profilelist("profile")
 						Select Case thisresult.Name
 							Case "default"
-								profileStruct.DefaultProfile = thisresult.innertext
+								profileStruct.DefaultProfile = thisresult.InnerText
 							Case "startup"
-								profileStruct.StartupProfile = thisresult.innertext
+								profileStruct.StartupProfile = thisresult.InnerText
 							Case "profiledetails"
 								Dim currentprofile As New ListOfProfiles
 								Dim result As XmlNode
 								For Each result In thisresult.childnodes
-									Dim t As Integer = result.innertext.ToString.ToLower.IndexOf("\s")
+									Dim t As Integer = result.InnerText.ToString.ToLower.IndexOf("\s")
 									If t > 0 Then notportable = True
 									Select Case result.name
 										Case "actorcache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.ActorCache = applicationPath & s
 										Case "directorcache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.DirectorCache = applicationPath & s
 										Case "config"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.Config = applicationPath & s
 										Case "moviecache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.MovieCache = applicationPath & s
 										Case "profilename"
-											currentprofile.ProfileName = result.innertext
+											currentprofile.ProfileName = result.InnerText
 										Case "regex"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.RegExList = applicationPath & s
 										Case "genres"
 											Dim s As String = ""
 											If result.innertext = "" Then
 												s = "\Settings\genres.txt"  'incase missing from existing profile.xml
 											Else
-												s = result.innertext.ToString.Substring(t)
+												s = result.InnerText.ToString.Substring(t)
 											End If
 											currentprofile.Genres = applicationPath & s
 										Case "tvcache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.TvCache = applicationPath & s
 										Case "musicvideocache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.MusicVideoCache = applicationPath & s
 										Case "moviesetcache"
-											Dim s As String = result.innertext.ToString.Substring(t)
+											Dim s As String = result.InnerText.ToString.Substring(t)
 											currentprofile.MovieSetCache = applicationPath & s
 										Case "customtvcache"
 											Dim s As String = result.InnerText.ToString.Substring(t)
@@ -4919,12 +4919,13 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Public Sub util_LanguageListLoad()
+	Public Function util_LanguageListLoad() As Boolean
 		languageList.Clear()
 		Application.DoEvents()
 		System.Threading.Thread.Sleep(500)
 		Dim XmlFile As String
 		XmlFile = Utilities.DownloadTextFiles("http://thetvdb.com/api/6E82FED600783400/languages.xml")
+        If XmlFile = "" Then Return False
 		Dim LangList As New Tvdb.Languages()
 		LangList.LoadXml(XmlFile)
 		For Each Lang As Tvdb.Language In LangList.Languages
@@ -4934,7 +4935,8 @@ Public Class Form1
 		For Each lan In languageList
 			lb_TvChSeriesLanguages.Items.Add(lan.Language.Value)
 		Next
-	End Sub
+        Return True
+	End Function
 
 	Private Sub tv_ShowChangedRePopulate()
 		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
@@ -4944,7 +4946,8 @@ Public Class Form1
 			tb_TvShSelectSeriesPath.Text = WorkingTvShow.NfoFilePath.Replace("tvshow.nfo", "")
 			PictureBox9.Image = Nothing
 			If languageList.Count = 0 Then
-				util_LanguageListLoad()
+				Dim aok As Boolean = util_LanguageListLoad()
+                If Not aok Then Throw New Exception("error loading languages")
 			End If
 			If workingTvShow.language <> Nothing Then
 				For Each language In languageList
@@ -5021,7 +5024,7 @@ Public Class Form1
 				GroupBox5.Enabled = True
 			End If
 			cbTvChgShowOverwriteImgs.CheckState = CheckState.Checked 'set overwrite images for changing shows.
-		Catch ex As WebException
+		Catch ex As Exception
 			MsgBox("There seems to be a problem with the tvdb website, please try again later")
 			tvCurrentTabIndex = 0
 			TabControl3.SelectedIndex = 0
@@ -5290,17 +5293,15 @@ Public Class Form1
 			Dim bannerslist As New XmlDocument
 			Dim bannerlist As String = "<banners>"
 			bannerslist.LoadXml(sLine)
-			Dim thisresult As XmlNode = Nothing
 			objReader.Close()
 			objStream.Close()
 			objReader = Nothing
 			objStream = Nothing
-			For Each thisresult In bannerslist("Banners")
+			For Each thisresult As XmlNode In bannerslist("Banners")
 				Select Case thisresult.Name
 					Case "Banner"
 						Dim fanart As New str_FanartList(SetDefaults)
-						Dim bannerselection As XmlNode = Nothing
-						For Each bannerselection In thisresult.ChildNodes
+						For Each bannerselection As XmlNode In thisresult.ChildNodes
 							Select Case bannerselection.Name
 								Case "BannerPath"
 									fanart.bigUrl = "http://thetvdb.com/banners/" & bannerselection.InnerXml
@@ -7302,7 +7303,7 @@ Public Class Form1
 
 		doc.AppendChild(root)
 
-		For Each thisresult In doc("movie_cache")
+		For Each thisresult As XmlNode In doc("movie_cache")
 			Select Case thisresult.Name
 				Case "movie"
 					Dim chi As XmlElement
@@ -7592,7 +7593,7 @@ Public Class Form1
 		End With
 
 		For f = 0 To tableview.Count - 1
-			For Each col In tableSets
+			For Each col As str_TableItems In tableSets
 				If col.index = f Then
 					Select Case col.title
 						Case "title"
@@ -8930,13 +8931,11 @@ Public Class Form1
 					prefs.Load(tempstring2)
 				Catch ex As Exception
 				End Try
-				Dim thisresult As XmlNode = Nothing
-				For Each thisresult In prefs("relativepaths")
+				For Each thisresult As XmlNode In prefs("relativepaths")
 					Select Case thisresult.Name
 						Case "folder"
 							Dim mc As New str_RelativeFileList(SetDefaults)
-							Dim it2 As XmlNode
-							For Each it2 In thisresult.ChildNodes
+							For Each it2 As XmlNode In thisresult.ChildNodes
 								Select Case it2.Name
 									Case "mc"
 										mc.mc = it2.InnerText
@@ -8986,10 +8985,9 @@ Public Class Form1
 			temptext = "<relativepaths>" & TextBox45.Text & "</relativepaths>"
 			Dim loaddoc As New XmlDocument
 			loaddoc.LoadXml(temptext)
-			Dim thisresult As XmlElement
-			For Each thisresult In loaddoc("relativepaths")
+			For Each thisresult As XmlNode In loaddoc("relativepaths")
 				Dim newfo As New str_RelativeFileList(SetDefaults)
-				For Each innerresult In thisresult
+				For Each innerresult As XmlNode In thisresult
 					Select Case innerresult.Name
 						Case "mc"
 							newfo.mc = innerresult.InnerText
@@ -11939,7 +11937,7 @@ Public Class Form1
 			Dim thumbstring As New XmlDocument
 			Try
 				thumbstring.LoadXml(testthumbs)
-				For Each thisresult In thumbstring("totalthumbs")
+				For Each thisresult As XmlNode In thumbstring("totalthumbs")
 					Select Case thisresult.Name
 						Case "thumb"
 							Dim newposters As New McImage

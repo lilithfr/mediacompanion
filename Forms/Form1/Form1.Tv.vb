@@ -999,8 +999,7 @@ Partial Public Class Form1
             episodestring = episodestring & "<url>" & If(IsNothing(aired), episodeurl, episodeurl2) & "</url>"
             Dim mirrorslist As New XmlDocument
             mirrorslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In mirrorslist("Data")
+            For Each thisresult As XmlNode In mirrorslist("Data")
                 Select Case thisresult.Name
                     Case "Episode"
                         Dim mirrorselection As XmlNode = Nothing
@@ -1141,8 +1140,7 @@ Partial Public Class Form1
             adoc.LoadXml(result)
             If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return False
             If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return False
-            Dim thisresult As XmlNode = Nothing
-            For each thisresult In adoc("root")
+            For each thisresult As XmlNode In adoc("root")
                 If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
                     Dim TmpValue As String = thisresult.Attributes("Episode").Value
                     If TmpValue <> "" AndAlso TmpValue = ep.Episode.Value Then
@@ -1163,7 +1161,7 @@ Partial Public Class Form1
         If bdoc("root").HasAttribute("response") AndAlso bdoc("root").Attributes("response").Value = "False" Then Return False
         If bdoc("root").HasAttribute("Response") AndAlso bdoc("root").Attributes("Response").Value = "False" Then Return False
 
-        For each thisresult In bdoc("root")
+        For each thisresult As XmlNode In bdoc("root")
             If Not IsNothing(thisresult.Attributes.ItemOf("imdbRating")) Then
                 Dim ratingVal As String = thisresult.Attributes("imdbRating").Value
                 If ratingVal.ToLower = "n/a" Then Return False
@@ -1618,87 +1616,92 @@ Partial Public Class Form1
     End Function
 
     Private Sub tv_ShowListLoad()
-        If TextBox26.Text <> "" Then
+        Try
+            If TextBox26.Text <> "" Then
 
-            messbox = New frmMessageBox("Please wait,", "", "Getting possible TV Shows from TVDB")
-            System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-            messbox.Show()
-            Me.Refresh()
-            messbox.Refresh()
-            Try
-            Dim tvdbstuff As New TVDBScraper
-            Dim mirror As List(Of String) = tvdbstuff.getmirrors()
-            Dim showslist As String = tvdbstuff.findshows(TextBox26.Text, mirror(0))
-
-            listOfShows.Clear()
-            If showslist = "error" Then
-                messbox.Close()
-                MsgBox("TVDB seems to have an error with the xml for this search")
-                Exit Sub
-            End If
-            If showslist <> "none" Then
-                Dim showlist As New XmlDocument
-                showlist.LoadXml(showslist)
-                For Each thisresult As XmlNode In showlist("allshows")
-                    Select Case thisresult.Name
-                        Case "show"
-                            Dim results As XmlNode = Nothing
-                            Dim lan As New str_PossibleShowList(SetDefaults)
-                            For Each results In thisresult.ChildNodes
-                                Select Case results.Name
-                                    Case "showid"
-                                        lan.showid = results.InnerText
-                                    Case "showtitle"
-                                        lan.showtitle = results.InnerText
-                                    Case "showbanner"
-                                        lan.showbanner = results.InnerText
-                                End Select
-                            Next
-                            Dim exists As Boolean = False
-                            For Each item In listOfShows
-                                If item.showid = lan.showid Then
-                                    exists = True
-                                    Exit For
-                                End If
-                            Next
-                            If exists = False Then listOfShows.Add(lan)
-                    End Select
-                Next
-            Else
-                Dim lan As New str_PossibleShowList(SetDefaults)
-                lan.showid      = "none"
-                lan.showtitle   = "TVDB Search Returned Zero Results"
-                lan.showbanner  = Nothing
-                listOfShows.Add(lan)
-
-                lan.showid      = "none"
-                lan.showtitle   = "Adjust the TV Shows Title & search again"
-                lan.showbanner  = Nothing
-                listOfShows.Add(lan)
-            End If
-            lb_tvChSeriesResults.Items.Clear()
-            For Each item In listOfShows
-                lb_tvChSeriesResults.Items.Add(item.showtitle)
-            Next
-
-            lb_tvChSeriesResults.SelectedIndex = 0
-            If listOfShows(0).showbanner <> Nothing Then
+                messbox = New frmMessageBox("Please wait,", "", "Getting possible TV Shows from TVDB")
+                System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+                messbox.Show()
+                Me.Refresh()
+                messbox.Refresh()
                 Try
-                    util_ImageLoad(PictureBox9, listOfShows(0).showbanner, Utilities.DefaultTvBannerPath)
-                Catch ex As Exception
-                    PictureBox9.Image = Nothing
-                End Try
-            End If
+                    Dim tvdbstuff As New TVDBScraper
+                    Dim mirror As List(Of String) = tvdbstuff.getmirrors()
+                    Dim showslist As String = tvdbstuff.findshows(TextBox26.Text, mirror(0))
 
-            Call util_LanguageCheck()
-            messbox.Close()
-            Catch
-                If Not IsNothing(messbox) Then messbox.Close()
-                Throw New Exception()
-            End Try
-        Else
-            MsgBox("Please Enter a Search Term")
-        End If
+                    listOfShows.Clear()
+                    If showslist = "error" Then
+                        messbox.Close()
+                        MsgBox("TVDB seems to have an error with the xml for this search")
+                        Exit Sub
+                    End If
+                    If showslist <> "none" Then
+                        Dim showlist As New XmlDocument
+                        showlist.LoadXml(showslist)
+                        For Each thisresult As XmlNode In showlist("allshows")
+                            Select Case thisresult.Name
+                                Case "show"
+                                    Dim lan As New str_PossibleShowList(SetDefaults)
+                                    For Each results As XmlNode In thisresult.ChildNodes
+                                        Select Case results.Name
+                                            Case "showid"
+                                                lan.showid = results.InnerText
+                                            Case "showtitle"
+                                                lan.showtitle = results.InnerText
+                                            Case "showbanner"
+                                                lan.showbanner = results.InnerText
+                                        End Select
+                                    Next
+                                    Dim exists As Boolean = False
+                                    For Each item In listOfShows
+                                        If item.showid = lan.showid Then
+                                            exists = True
+                                            Exit For
+                                        End If
+                                    Next
+                                    If exists = False Then listOfShows.Add(lan)
+                            End Select
+                        Next
+                    Else
+                        Dim lan As New str_PossibleShowList(SetDefaults)
+                        lan.showid      = "none"
+                        lan.showtitle   = "TVDB Search Returned Zero Results"
+                        lan.showbanner  = Nothing
+                        listOfShows.Add(lan)
+
+                        lan.showid      = "none"
+                        lan.showtitle   = "Adjust the TV Shows Title & search again"
+                        lan.showbanner  = Nothing
+                        listOfShows.Add(lan)
+                    End If
+                    lb_tvChSeriesResults.Items.Clear()
+                    For Each item In listOfShows
+                        lb_tvChSeriesResults.Items.Add(item.showtitle)
+                    Next
+
+                    lb_tvChSeriesResults.SelectedIndex = 0
+                    If listOfShows(0).showbanner <> Nothing Then
+                        Try
+                            util_ImageLoad(PictureBox9, listOfShows(0).showbanner, Utilities.DefaultTvBannerPath)
+                        Catch ex As Exception
+                            PictureBox9.Image = Nothing
+                        End Try
+                    End If
+
+                    Call util_LanguageCheck()
+                    messbox.Close()
+                Catch
+                    If Not IsNothing(messbox) Then messbox.Close()
+                    Throw New Exception()
+                End Try
+            Else
+                MsgBox("Please Enter a Search Term")
+            End If
+        Catch ex As Exception
+            MsgBox("There seems to be a problem with the tvdb website, please try again later")
+			tvCurrentTabIndex = 0
+			TabControl3.SelectedIndex = 0
+        End Try
     End Sub
 
     Private Sub Tv_CacheCheckDuplicates()
@@ -3090,8 +3093,7 @@ Partial Public Class Form1
         Dim scrapedepisode As New XmlDocument
         Try
             scrapedepisode.LoadXml(tempepisode)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In scrapedepisode("episodedetails")
+            For Each thisresult As XmlNode In scrapedepisode("episodedetails")
                 Select Case thisresult.Name
                     Case "title"
                         newepisode.Title.Value = thisresult.InnerText
@@ -4388,7 +4390,7 @@ Partial Public Class Form1
     Private Function IMDbActors(ByVal actorlist As List(Of str_MovieActors), ByRef success As Boolean, ByVal workingpath As String) As List(Of str_MovieActors)
         Dim actcount As Integer = 0
         Dim totalactors As New List(Of str_MovieActors)
-        For Each thisresult In actorlist
+        For Each thisresult As str_MovieActors In actorlist
             If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(thisresult.actorthumb) Then Continue For
             If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
                 If Pref.actorseasy And Not Pref.tvshowautoquick Then
@@ -4654,8 +4656,7 @@ Partial Public Class Form1
             Dim scrapedepisode As New XmlDocument
             scrapedepisode.LoadXml(tempepisode)
             Try
-                Dim thisresult As XmlNode = Nothing
-                For Each thisresult In scrapedepisode("episodedetails")
+                For Each thisresult As XmlNode In scrapedepisode("episodedetails")
                     Select Case thisresult.Name
                         Case "thumb"
                             thumburl = thisresult.InnerText

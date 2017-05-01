@@ -21,16 +21,15 @@ Public Class Profiles
             Dim xmlDoc As New XmlDocument
             xmlDoc.Load(profilepath)
             If xmlDoc.DocumentElement.Name = "profile" Then
-                For Each thisresult In xmlDoc("profile")
+                For Each thisresult As XmlNode In xmlDoc("profile")
                     Select Case thisresult.Name
                         Case "default"
-                            DefaultProfile = thisresult.innertext
+                            DefaultProfile = thisresult.InnerText
                         Case "startup"
-                            StartupProfile = thisresult.innertext
+                            StartupProfile = thisresult.InnerText
                         Case "profiledetails"
                             Dim currentprofile As New ListOfProfiles
-                            Dim result As xmlnode
-                            For Each result In thisresult.childnodes
+                            For Each result As XmlNode In thisresult.ChildNodes
                                 Dim t As Integer = result.InnerText.ToString.ToLower.IndexOf("\s")
                                 Select Case result.name
                                     Case "actorcache"

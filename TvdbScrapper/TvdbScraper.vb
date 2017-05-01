@@ -51,14 +51,12 @@ Public Class TVDBScrapper
             'Try
             Dim bannerlist As String = "<banners>"
             bannerslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In bannerslist("Banners")
+            For Each thisresult As XmlNode In bannerslist("Banners")
 
                 Select Case thisresult.Name
                     Case "Banner"
                         bannerlist = bannerlist & "<banner>"
-                        Dim bannerselection As XmlNode = Nothing
-                        For Each bannerselection In thisresult.ChildNodes
+                        For Each bannerselection As XmlNode In thisresult.ChildNodes
                             Select Case bannerselection.Name
                                 Case "BannerPath"
 
@@ -106,13 +104,11 @@ Public Class TVDBScrapper
             Dim mirrorslist As New XmlDocument
             'Try
             mirrorslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In mirrorslist("Mirrors")
+            For Each thisresult As XmlNode In mirrorslist("Mirrors")
 
                 Select Case thisresult.Name
                     Case "Mirror"
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "mirrorpath"
                                     If mirrorselection.InnerText <> Nothing Then
@@ -150,14 +146,12 @@ Public Class TVDBScrapper
         Dim showlist As New XmlDocument
         Try
             showlist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In showlist("Data")
+            For Each thisresult As XmlNode In showlist("Data")
 
                 Select Case thisresult.Name
                     Case "Series"
                         Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "seriesid"
                                     newshow.showid = mirrorselection.InnerXml
@@ -251,14 +245,12 @@ Public Class TVDBScrapper
             Dim showlist As New XmlDocument
             'Try
             showlist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In showlist("Data")
+            For Each thisresult As XmlNode In showlist("Data")
 
                 Select Case thisresult.Name
                     Case "Series"
                         Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "SeriesName"
                                     tvshowdetails = tvshowdetails & "<title>" & mirrorselection.InnerXml & "</title>"
@@ -303,15 +295,13 @@ Public Class TVDBScrapper
             Dim showlist2 As New XmlDocument
             'Try
             showlist2.LoadXml(xmlfile)
-            thisresult = Nothing
-            For Each thisresult In showlist2("Actors")
+            For Each thisresult As XmlNode In showlist2("Actors")
 
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
                         Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "id"
                                     tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
@@ -345,15 +335,13 @@ Public Class TVDBScrapper
             Dim showlist3 As New XmlDocument
             'Try
             showlist3.LoadXml(xmlfile)
-            thisresult = Nothing
-            For Each thisresult In showlist3("Actors")
+            For Each thisresult As XmlNode In showlist3("Actors")
 
                 Select Case thisresult.Name
                     Case "Actor"
                         tvshowdetails = tvshowdetails & "<actor>"
                         Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "id"
                                     tvshowdetails = tvshowdetails & "<actorid>" & mirrorselection.InnerXml & "</actorid>"
@@ -423,13 +411,11 @@ Public Class TVDBScrapper
             Dim mirrorslist As New XmlDocument
             'Try
             mirrorslist.LoadXml(xmlfile)
-            Dim thisresult As XmlNode = Nothing
-            For Each thisresult In mirrorslist("Data")
+            For Each thisresult As XmlNode In mirrorslist("Data")
 
                 Select Case thisresult.Name
                     Case "Episode"
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "EpisodeName"
                                     episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"

@@ -613,8 +613,7 @@ Partial Public Class Form1
         Else
             Return False
         End If
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In movielist("homemovie_cache")
+        For Each thisresult As XmlNode In movielist("homemovie_cache")
             Select Case thisresult.Name
                 Case "movie"
                     Dim newmovie As New HmMovComboList

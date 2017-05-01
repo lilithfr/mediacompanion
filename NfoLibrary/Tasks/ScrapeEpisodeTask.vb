@@ -670,13 +670,11 @@ Namespace Tasks
                     Dim mirrorslist As New XmlDocument
                     'Try
                     mirrorslist.LoadXml(xmlfile)
-                    Dim thisresult As XmlNode = Nothing
-                    For Each thisresult In mirrorslist("Data")
+                    For Each thisresult As XmlNode In mirrorslist("Data")
 
                         Select Case thisresult.Name
                             Case "Episode"
-                                Dim mirrorselection As XmlNode = Nothing
-                                For Each mirrorselection In thisresult.ChildNodes
+                                For Each mirrorselection As XmlNode In thisresult.ChildNodes
                                     Select Case mirrorselection.Name
                                         Case "EpisodeName"
                                             episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"

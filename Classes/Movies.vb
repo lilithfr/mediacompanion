@@ -1939,14 +1939,13 @@ Public Class Movies
         movielist.LoadXml(tempstring)
 
         Try
-            For Each thisresult In movielist("movie_cache")
+            For Each thisresult As XmlNode In movielist("movie_cache")
                 Select Case thisresult.Name
                     Case "movie"
                         Dim newmovie As New ComboList
                         newmovie.oMovies = Me
-
-                        Dim detail As XmlNode = Nothing
-                        For Each detail In thisresult.ChildNodes
+                        
+                        For Each detail As XmlNode In thisresult.ChildNodes
                             Select Case detail.Name
                                 Case "missingdata1"         : newmovie.missingdata1 = Convert.ToByte(detail.InnerText)
                                 Case "source"               : newmovie.source = detail.InnerText
@@ -2583,8 +2582,7 @@ Public Class Movies
         If Not File.Exists(fileName) Then Exit Sub
         Dim peopleList As New XmlDocument
         peopleList.Load(fileName)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In peopleList(typeName & "_cache")
+        For Each thisresult As XmlNode In peopleList(typeName & "_cache")
             Select Case thisresult.Name
                 Case typeName
                     Dim name = ""
@@ -2608,8 +2606,7 @@ Public Class Movies
         If Not File.Exists(fileName) Then Exit Sub
         Dim peopleList As New XmlDocument
         peopleList.Load(fileName)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In peopleList(typeName & "_cache")
+        For Each thisresult As XmlNode In peopleList(typeName & "_cache")
             Select Case thisresult.Name
                 Case typeName
                     Dim name = ""
@@ -2633,8 +2630,7 @@ Public Class Movies
         If Not File.Exists(fileName) Then Exit Sub
         Dim moviesetcache As New XmlDocument
         moviesetcache.Load(fileName)
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In moviesetcache(typeName & "_cache")
+        For Each thisresult As XmlNode In moviesetcache(typeName & "_cache")
             Select Case thisresult.Name
                 Case typeName
                     Dim movieset = ""
@@ -2699,8 +2695,7 @@ Public Class Movies
         If Not File.Exists(Utilities.applicationPath & "\settings\tagcache.xml") Then Exit Sub
         Dim peopleList As New XmlDocument
         peopleList.Load(Utilities.applicationPath & "\settings\tagcache.xml")
-        Dim thisresult As XmlNode = Nothing
-        For Each thisresult In peopleList("tag_cache")
+        For Each thisresult As XmlNode In peopleList("tag_cache")
             Select Case thisresult.Name
                 Case "Tag"
                     Dim TagTitle = ""

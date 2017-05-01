@@ -2562,12 +2562,12 @@ Public Class Pref
                 Dim tmpaud As String = ""
                 Dim MInform As New XmlDocument
                 MInform.LoadXml(possibleISO)
-                For Each thisresult In MInform("File")
+                For Each thisresult As XmlNode In MInform("File")
                     Select Case thisresult.name
                         Case "track"
                             Dim check As String = thisresult.outerxml.ToString
                             If check.Contains("""Video""") Then
-                                For Each result In thisresult
+                                For Each result As XmlNode In thisresult
                                     Select Case result.name
                                         Case "Format"
                                             workingfile.Video.Codec.Value = result.InnerText
@@ -2604,8 +2604,8 @@ Public Class Pref
                             If check.Contains("""Audio""") Then
                                 tmpaud = ""
                                 Dim audio As New AudioDetails
-                                For Each result In thisresult
-                                    Select Case result.name
+                                For Each result As XmlNode In thisresult
+                                    Select Case result.Name
                                         Case "Format"
                                             audio.Codec.Value = result.InnerText
                                         Case "Format_Info"
@@ -2639,8 +2639,8 @@ Public Class Pref
                                 
                             If check.Contains("""Text""") Then
                                 Dim SubTitle As New SubtitleDetails
-                                For each result In thisresult
-                                    Select Case result.name
+                                For each result As XmlNode In thisresult
+                                    Select Case result.Name
                                         Case "Language"
                                             SubTitle.Language.Value = Utilities.GetLangCode(result.InnerText)
                                     End Select
