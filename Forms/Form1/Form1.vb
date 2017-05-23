@@ -22,13 +22,14 @@ Imports XBMC.JsonRpc
 Public Class Form1
 
 	Const HOME_PAGE = "http://mediacompanion.codeplex.com"
+    Const SF_Home_Page = "https://sourceforge.net/projects/mediacompanion/"
 	Const TMDB_SITE = "www.themoviedb.org/"
 	Const TMDB_SET_URL = TMDB_SITE & "collection/"
 	Const TMDB_MOVIE_URL = TMDB_SITE & "movie/"
 	Const RELATIVE_SIZE_THRESHOLD = 0.63F
 	Const MIN_MEDIA_SIZE As Integer = 10000000
-
-	Public Const XBMC_Controller_full_log_file As String = "XBMC-Controller-full-log-file.txt"
+    
+    Public Const XBMC_Controller_full_log_file As String = "XBMC-Controller-full-log-file.txt"
 	Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt"
 	Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
 
@@ -44,6 +45,7 @@ Public Class Form1
 	Shared Public Property MC_Only_Movies As List(Of ComboList)
 	Public Shared Property MaxXbmcMovies As List(Of MaxXbmcMovie)
 	Shared Public MyCulture As New System.Globalization.CultureInfo("en-US")
+    Public Shared DecimalSeparator As String = Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator
 	Private Declare Function GetActiveWindow Lib "user32" Alias "GetActiveWindow" () As IntPtr
 
 	Public Property XBMC_Controller_LogLastShownDt As Date = Now
@@ -9013,8 +9015,7 @@ Public Class Form1
 
 	Private Sub MediaCompanionCodeplexSiteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionCodeplexSiteToolStripMenuItem.Click
 		Try
-			Dim webAddress As String = "http://mediacompanion.codeplex.com/"
-			OpenUrl(webAddress)
+			OpenUrl(HOME_PAGE)
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -16121,14 +16122,18 @@ Public Class Form1
 	Public Function CheckForNewVersion() As String
 
 		Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
+        Dim MCSF_Version_RegEx = "<tr title=""MC ([0-9]*\.?[0-9]+)"
 
 		Dim s As New Classimdb
 
 		Dim html As String = s.loadwebpage(Pref.proxysettings, HOME_PAGE, True, 10).ToString
+        'Dim html2 As String = s.loadwebpage(Pref.proxysettings, SF_Home_Page & "files/", True, 10).ToString
 
 		Dim m = Regex.Match(html, MC_Version_RegEx, RegexOptions.Singleline)
+        'Dim n = Regex.Match(html2, MCSF_Version_RegEx, RegexOptions.Singleline)
 
-		Dim displayVersion As String = m.Groups(1).Value.Trim
+        Dim displayVersion As String = m.Groups(1).Value.Trim
+		'Dim displayVersion As String = n.Groups(1).Value.Trim
 		Dim latestVersion As String = displayVersion.Replace(".", "")
 		Dim currVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".", "").Replace("Version=", "")
 

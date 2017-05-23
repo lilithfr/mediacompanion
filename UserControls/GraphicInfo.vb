@@ -9,7 +9,7 @@ Public Class GraphicInfo
     Public grFanart As Graphics
     Public iPadding As Integer = 2
 
-    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)))
+    Public Sub OverlayInfo(ByRef picbxFanart As PictureBox, ByVal sRating As String, ByVal flags As List(Of KeyValuePair(Of String, String)), Optional ByVal Series As Boolean = False)
         'OVERLAY RATING STARS
         Dim iRating As Single
         Dim bmFanart As New Bitmap(picbxFanart.Image)
@@ -19,6 +19,13 @@ Public Class GraphicInfo
         fanartRatio = bmFanart.Height / fanartHeight
 
         If Pref.DisplayRatingOverlay Then
+            If Not sRating.Contains(Form1.DecimalSeparator) Then
+                If Form1.DecimalSeparator = "," Then
+                    sRating = sRating.Replace(".", ",")
+                Else
+                    sRating = sRating.Replace(",", ".")
+                End If
+            End If
             If Not sRating = "" Or Single.TryParse(sRating, iRating) Then
             iRating = Math.Min(iRating, 10)
             sRating = sRating.FormatRating
@@ -38,7 +45,7 @@ Public Class GraphicInfo
         yPos = (fanartHeight - (32 + iPadding)) * fanartRatio
         
         'OVERLAY VIDEO FLAGS
-        If Pref.DisplayMediainfoOverlay Then
+        If Pref.DisplayMediainfoOverlay AndAlso Not Series Then
             For Each item In flags
                 Try
                     If Not String.IsNullOrEmpty(item.Value) Then    'Catch any empty values for selected flags

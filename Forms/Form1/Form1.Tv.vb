@@ -484,6 +484,9 @@ Partial Public Class Form1
             Button45.Text = Show.TvShowActorSource.Value.ToUpper
             Call tv_ActorsLoad(Show.ListActors)
         End If
+        Dim flags As New List(Of KeyValuePair(Of String, String))
+        movieGraphicInfo.OverlayInfo(tv_PictureBoxLeft, tb_ShRating.Text, flags, True)
+
         Panel_EpisodeInfo.Visible = False
         Panel_EpisodeActors.Visible = False
         ShOrEploading = False
