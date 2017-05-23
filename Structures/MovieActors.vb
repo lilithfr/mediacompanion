@@ -50,11 +50,15 @@ Public Structure str_MovieActors
             If Pref.actorseasy Then
                 Dim hg As New DirectoryInfo(ActorPath)
                 If Not hg.Exists Then Directory.CreateDirectory(ActorPath)
-                If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then
-                    newlydownloaded = True
-                    ActorSave(filename)
-                Else
-                    aok = False
+                If Not File.Exists(filename) OrElse Pref.overwritethumbs Then
+                    If Movie.SaveActorImageToCacheAndPath(actorthumb, filename) Then
+                        newlydownloaded = True
+                        ActorSave(filename)
+                    Else
+                        aok = False
+                    End If
+                Else 
+                    aok = True
                 End If
             End If
 

@@ -60,18 +60,22 @@ Public Class DownloadCache
 
         Dim CachePath = Path.Combine(CacheFolder, CacheFileName)
 
-        If IfNotValidImage_Delete(CachePath) Then
+        Try
+            If IfNotValidImage_Delete(CachePath) Then
 
-            'Resize cache image only if need to
-            If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
+                'Resize cache image only if need to
+                If Not (resizeWidth = 0 And resizeHeight = 0) Then CopyAndDownSizeImage(CachePath, CachePath, resizeWidth, resizeHeight)
 
-            For Each path In verifiedPaths
-                Utilities.EnsureFolderExists(path)
-                If Overwrite OrElse Not File.Exists(path) Then File.Copy(CachePath, path, Overwrite)
-            Next
-        Else
+                For Each path In verifiedPaths
+                    Utilities.EnsureFolderExists(path)
+                    If Overwrite OrElse Not File.Exists(path) Then File.Copy(CachePath, path, Overwrite)
+                Next
+            Else
+                Return False
+            End If
+        Catch
             Return False
-        End If
+        End Try
 
         Return True
     End Function
