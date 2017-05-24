@@ -441,6 +441,23 @@ Public Class TvShow
         Return Nothing
     End Function
 
+    Public Function Cachedata() As TvShow
+        Dim CacheSeries As New TvShow
+        CacheSeries.NfoFilePath                 = Me.NfoFilePath
+        CacheSeries.State                       = Me.State
+        CacheSeries.Title.Value                 = Me.Title.Value
+        CacheSeries.TvdbId.Value                = Me.TvdbId.Value
+        CacheSeries.Status.Value                = Me.Status.Value
+        CacheSeries.Plot.Value                  = Me.Plot.Value
+        CacheSeries.SortOrder.Value             = Me.SortOrder.Value
+        CacheSeries.Language.Value              = Me.Language.Value
+        CacheSeries.EpisodeActorSource.Value    = Me.EpisodeActorSource.Value
+        CacheSeries.ImdbId.Value                = Me.ImdbId.Value
+        CacheSeries.Playcount.Value             = Me.Playcount.Value
+        CacheSeries.Hidden.Value                = Me.Hidden.Value
+        Return cacheseries
+    End Function
+
 End Class
 
 Public Enum ShowState

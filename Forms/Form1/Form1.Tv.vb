@@ -1477,27 +1477,35 @@ Partial Public Class Form1
                     nfoclass.tvshow_NfoSave(newtvshownfo, True)
                 End If
             End If
-            fulltvshowlist.Add(newtvshownfo)
+            fulltvshowlist.Add(newtvshownfo.Cachedata)
             Dim episodelist As New List(Of TvEpisode)
             episodelist = loadepisodes(newtvshownfo, episodelist)
             For Each ep In episodelist
                 ep.ShowId.Value = newtvshownfo.TvdbId.Value
                 If Pref.displayMissingEpisodes Then
-                    For i = 0 to fullepisodelist.Count-1        'check to remove missing episode if valid episode now exists.
-                        Dim fulep = fullepisodelist.Item(i)
-                        If fulep.ShowObj Is Nothing Then
-                            fullepisodelist.RemoveAt(i)
-                            Exit For
-                        End If
-                        If fulep.ShowObj.Title.Value = ep.ShowObj.Title.Value AndAlso fulep.Season.Value = ep.Season.Value Then
-                            If fulep.Episode.Value = ep.Episode.Value Then
-                                fullepisodelist.RemoveAt(i)
-                                Exit For
-                            End If
-                        End If
-                    Next
+                    Dim q = From x In fullepisodelist Where x.IsMissing = True AndAlso x.UniqueId.Value = ep.UniqueId.Value
+                    If Not q.Count = 0 Then
+                        fullepisodelist.Remove(q(0))
+
+                        'For i = 0 to fullepisodelist.Count - 1        'check to remove missing episode if valid episode now exists.
+                        '    If Not fullepisodelist.Item(i).IsMissing Then Continue For
+                        '    Dim fulep = fullepisodelist.Item(i)
+                        '    Dim somethis As String = Nothing
+
+                        '    If fulep.ShowObj Is Nothing Then
+                        '        fullepisodelist.RemoveAt(i)
+                        '        Exit For
+                        '    End If
+                        '    If fulep.ShowObj.Title.Value = newtvshownfo.Title.Value AndAlso fulep.Season.Value = ep.Season.Value Then
+                        '        If fulep.Episode.Value = ep.Episode.Value Then
+                        '            fullepisodelist.RemoveAt(i)
+                        '            Exit For
+                        '        End If
+                        '    End If
+                        'Next
+                    End If
                 End If
-                fullepisodelist.Add(ep)
+                fullepisodelist.Add(ep.Cachedata)
             Next
         Next
 
@@ -1608,7 +1616,7 @@ Partial Public Class Form1
                             Ep.ShowObj = newtvshownfo
                             Dim missingNfoPath As String = missingeppath & newtvshownfo.TvdbId.Value & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
                             If File.Exists(missingNfoPath) Then Utilities.SafeDeleteFile(missingNfoPath)
-                            episodelist.Add(Ep)
+                            episodelist.Add(Ep.Cachedata)
                         Next
                         If need2resave Then ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
                     End If

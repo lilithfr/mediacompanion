@@ -287,5 +287,20 @@ Public Class TvEpisode
         End If
         Return s
     End Function
+
+    Public Function Cachedata() As TvEpisode
+        Dim CacheEp As New TvEpisode
+        CacheEp.NfoFilePath                 = Me.NfoFilePath
+        CacheEp.IsMissing                   = Me.IsMissing
+        CacheEp.Title.Value                 = Me.Title.Value
+        CacheEp.Season.Value                = Me.Season.Value
+        CacheEp.Episode.Value               = Me.Episode.Value
+        CacheEp.Aired.Value                 = Me.Aired.Value
+        CacheEp.ShowId.Value                = Me.ShowId.Value
+        CacheEp.UniqueId.Value              = Me.UniqueId.Value
+        CacheEp.EpExtn.Value                = Me.EpExtn.Value
+        CacheEp.Playcount.Value             = Me.Playcount.Value
+        Return CacheEp
+    End Function
 End Class
 
