@@ -1401,9 +1401,16 @@ Partial Public Class Form1
     Private Sub tv_CacheRefreshSelected(ByVal Show As TvShow)
         tv_CacheRefresh(Show)
     End Sub
-
+    
+    Public Sub TvCacheRefresh()
+        tv_CacheRefresh()
+    End Sub
+    
     Private Sub tv_CacheRefresh(Optional ByVal TvShowSelected As TvShow = Nothing) 'refresh = clear & recreate cache from nfo's
         Dim nfoclass As New WorkingWithNfoFiles
+        '      ToolStripStatusLabel5.Text = "Refresh TV Shows..., " & newTvFolders.Count & " remaining"
+        'ToolStripStatusLabel5.Visible = True
+        '      Statusstrip_Enable()
         frmSplash2.Text = "Refresh TV Shows..."
         frmSplash2.Label1.Text = "Searching TV Folders....."
         frmSplash2.Label1.Visible = True
@@ -1424,6 +1431,7 @@ Partial Public Class Form1
         TextBox_TotTVShowCount.Text = ""
         TextBox_TotEpisodeCount.Text = ""
         Me.Enabled = False
+        'TabControl3.Enabled = False
 
         Dim nofolder As New List(Of String)
         Dim prgCount As Integer = 0
@@ -1458,8 +1466,11 @@ Partial Public Class Form1
         End If
 
         For Each tvfolder In FolderList
+            'ToolStripStatusLabel5.Text = "Refresh TV Shows..., " & prgCount + 1 & "/" & Pref.tvFolders.Count & ") " & tvfolder
+            
             frmSplash2.Label2.Text = "(" & prgCount + 1 & "/" & Pref.tvFolders.Count & ") " & tvfolder
             frmSplash2.ProgressBar1.Value = prgCount
+
             If Not Directory.Exists(tvfolder) OrElse Not File.Exists(tvfolder & "\tvshow.nfo") Then 
                 nofolder.Add(tvfolder)
                 Continue For
@@ -1523,16 +1534,21 @@ Partial Public Class Form1
         End If
         frmSplash2.Label2.Visible = False
 
+        'ToolStripStatusLabel5.Text = "Saving Cache..."
         frmSplash2.Label1.Text = "Saving Cache..."
         Windows.Forms.Application.DoEvents()
         Tv_RefreshCacheSave(fulltvshowlist, fullepisodelist)    'save the cache file
 
+       ' ToolStripStatusLabel5.Text = "Loading Cache..."
         frmSplash2.Label1.Text = "Loading Cache..."
         Windows.Forms.Application.DoEvents()
         tv_CacheLoad()    'reload the cache file to update the treeview
         Me.Enabled = True
+                
         TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
         TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+        'ToolStripStatusLabel5.Visible = False
+        'Statusstrip_Enable(False)
         frmSplash2.Hide()
         If Not tv_IMDbID_warned And tv_IMDbID_detected Then
             MessageBox.Show(tv_IMDbID_detectedMsg, "TV Show ID", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1605,6 +1621,7 @@ Partial Public Class Form1
             Dim dir_info As New DirectoryInfo(folder)
             Dim fs_infos() As FileInfo = dir_info.GetFiles("*.NFO", IO.SearchOption.TopDirectoryOnly)
             For Each fs_info As FileInfo In fs_infos
+                Application.DoEvents()
                 If Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
                     Dim EpNfoPath As String = fs_info.FullName
                     If ep_NfoValidate(EpNfoPath) Then
@@ -1767,7 +1784,71 @@ Partial Public Class Form1
             MsgBox ("No Duplicates found")
         End If
     End Sub
+
 #End Region
+
+    Private Sub BckWrkTv_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkTv.DoWork
+        Try
+			CallSubByName(DirectCast(e.Argument, String))
+		Catch ex As Exception
+			ExceptionHandler.LogError(ex)
+		End Try
+    End Sub
+
+    Private Sub BckWrkTv_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkTv.ProgressChanged
+        
+		Dim oProgress As Progress = CType(e.UserState, Progress)
+		If e.ProgressPercentage <> -1 Then tsMultiMovieProgressBar.Value = e.ProgressPercentage
+
+		If oProgress.Command = Progress.Commands.Append Then
+			Dim msgtxt As String = ToolStripStatusLabel5.Text & oProgress.Message
+			If msgtxt.Length > 144 AndAlso oProgress.Message <> "-OK" Then
+				msgtxt = ToolStripStatusLabel5.Text.Substring(0, (ToolStripStatusLabel5.Text.ToLower.IndexOf("actors-ok") + 9)) ' & oProgress.Message
+				msgtxt &= oProgress.Message
+			End If
+			ToolStripStatusLabel5.Text = msgtxt '&= oProgress.Message
+		Else
+			ToolStripStatusLabel5.Text = oProgress.Message
+		End If
+    End Sub
+
+    Private Sub BckWrkTv_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkTv.RunWorkerCompleted
+        
+        ToolStripStatusLabel5.Visible = False
+		'tsMultiMovieProgressBar.Visible = False
+		tsLabelEscCancel.Visible = False
+		Statusstrip_Enable(False)
+		'ssFileDownload.Visible = False
+		'EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
+		GC.Collect()
+		Dim Displayed As Boolean = DisplayLogFile()
+		If Not Displayed Then BlinkTaskBar()
+    End Sub
+
+    Sub RunBackgroundTVScrape(action As String)
+        If Not BckWrkTv.IsBusy Then
+            ToolStripStatusLabel5.Visible = True
+			'scraperLog = ""
+			'tsStatusLabel.Text = ""
+			'tsMultiMovieProgressBar.Value = tsMultiMovieProgressBar.Minimum
+			'tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action)
+			'tsStatusLabel.Visible = True
+			tsLabelEscCancel.Visible = True
+			Statusstrip_Enable()
+			ssFileDownload.Visible = False
+			'tsProgressBarFileDownload_Resize()
+			'EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
+			'ScraperErrorDetected = False
+
+			BckWrkTv.RunWorkerAsync(action)
+			While BckWrkTv.IsBusy
+				Application.DoEvents()
+			End While
+		Else
+			MsgBox("The TV Scraper Is Already Running")
+		End If
+    End Sub
+
 
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
         Try

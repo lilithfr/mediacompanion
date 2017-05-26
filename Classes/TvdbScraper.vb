@@ -206,6 +206,16 @@ Public Class TVDBScraper
                 showlist.LoadXml(xmlfile)
             End If
         End If
+        If showlist.FailedLoad Then
+            Dim xmlfile As String
+            xmlfile = Utilities.DownloadTextFiles(mirrorsurl)
+            If String.IsNullOrEmpty(xmlfile) Then
+                showlist.FailedLoad = True
+            Else
+                showlist.FailedLoad = False
+                showlist.LoadXml(xmlfile)
+            End If
+        End If
         If Not showlist.FailedLoad Then
             Dim strsplt As New List(Of String)
             Try

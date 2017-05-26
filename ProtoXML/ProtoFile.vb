@@ -156,7 +156,7 @@ Public Class ProtoFile
                 End Using
                 
                 Me.Doc.DescendantNodes.OfType(Of XComment)().Remove()
-            Catch
+            Catch ex As Exception
                 FailedLoad = True
                 Exit Sub
             End Try

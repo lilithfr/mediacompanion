@@ -38,6 +38,7 @@ Public Class Form1
 	Public Dim WithEvents BckWrkXbmcController As BackgroundWorker = New BackgroundWorker
 	Public Dim WithEvents Bw As BackgroundWorker = New BackgroundWorker
 	Public Dim WithEvents ImgBw As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents BckWrkTv As BackgroundWorker = New BackgroundWorker
 	Property BWs As New List(Of BackgroundWorker)
 	Property NumActiveThreads As Integer
 	Shared Public XbmcControllerQ As PriorityQueue = New PriorityQueue
@@ -5528,6 +5529,12 @@ Public Class Form1
 			End If
 			renamelog += "!!! " & nfofilestorename.Count & " nfo's to rename..." & vbCrLf & vbCrLf
 			For Each renamefile In nfofilestorename
+                'check episode still exists as we retrieve episode info from cache
+                If Not File.Exists(renamefile) Then
+                    renamelog += "!!! *** " & renamefile & vbCrLf & "video file does not exist at cached location" & vbCrLf & "Please Refresh All to update cache"
+                    Continue For
+                End If
+                
 				Dim seasonno As String = ""
 				Dim episodetitle As String = ""
 				Dim showtitle As String = ""
@@ -16390,6 +16397,7 @@ Public Class Form1
 			StatusStrip1.Visible = True
 			tsStatusLabel1.Visible = False
 		Else
+            If CheckForRunningBackgroundworker Then Exit Sub
 			StatusStrip1.Visible = Not Pref.AutoHideStatusBar
 			StatusStrip1.BackColor = Color.LightGray
 			tsStatusLabel1.Visible = True
@@ -16427,5 +16435,9 @@ Public Class Form1
 		OpenUrl(TMDB_SET_URL & workingMovie.TmdbSetId)
 	End Sub
 
+    Public Function CheckForRunningBackgroundworker() As Boolean
+        Return BckWrkScnMovies.IsBusy OrElse bckepisodethumb.IsBusy OrElse Bckgrndfindmissingepisodes.IsBusy OrElse bckgrnd_tvshowscraper.IsBusy OrElse
+            bckgroundscanepisodes.IsBusy OrElse tvbckrescrapewizard.IsBusy OrElse ImgBw.IsBusy
+    End Function
     
 End Class
