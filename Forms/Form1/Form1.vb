@@ -1766,7 +1766,7 @@ Public Class Form1
 				cbUsrRated      .Text = If(workingMovieDetails.fullmoviebody.usrrated = "0", "None", workingMovieDetails.fullmoviebody.usrrated)
 				SetTagTxtField
 				tagtxt          .Text = ""
-				tb_tagtxt_changed = False
+				'tb_tagtxt_changed = False
 				If workingMovieDetails.fullmoviebody.tag.Count <> 0 Then
 					Dim first As Boolean = True
 					For Each t In workingMovieDetails.fullmoviebody.tag
@@ -1775,6 +1775,7 @@ Public Class Form1
 						first = False
 					Next
 				End If
+                tb_tagtxt_changed = False
 				'Catch exception thrown when votes is an empty string
 				If workingMovieDetails.fullmoviebody.votes <> "" AndAlso workingMovieDetails.fullmoviebody.votes <> "scraper error" Then
 					Dim votestext As String = workingMovieDetails.fullmoviebody.votes
@@ -1903,12 +1904,13 @@ Public Class Form1
 			PictureBoxAssignedMoviePoster   .Image = Nothing
 			lblCurrentLoadedPoster          .Text = ""
 			tb_MovSortOrder                 .Text = ""
-			tagtxt                          .Text = "" : tb_tagtxt_changed = False
+			tagtxt                          .Text = ""
 			roletxt                         .Text = ""
 			PictureBoxActor                 .Image = Nothing
 			Panel6                          .Visible = False
 			FanTvArtList.Items.Clear()
 			btnPlayMovie                    .Enabled = False
+            tb_tagtxt_changed = False
 			Me.Refresh()
 			Application.DoEvents()
 		End If
@@ -2051,10 +2053,10 @@ Public Class Form1
 
 		'First check, is it a video file!
 		extension = Path.GetExtension(fullpathandfilename)
-		Dim isvideofile As Boolean = False
-		For Each extn In Utilities.VideoExtensions
-			If extn = extension Then isvideofile = True
-		Next
+		Dim isvideofile As Boolean = Utilities.VideoExtensions.Contains(extension)
+		'For Each extn In Utilities.VideoExtensions
+		'	If extn = extension Then isvideofile = True
+		'Next
 		If Not isvideofile Then Return False
 
 		'if the file is a .vob then check it is not part of a dvd folder (Stop dvdfolders vobs getting seperate nfos)
@@ -2114,50 +2116,29 @@ Public Class Form1
 							rarname = fullpathandfilename.Replace(".nfo", ".rar")
 							If rarname.ToLower.IndexOf(".part1.rar") <> -1 Then
 								rarname = rarname.Replace(".part1.rar", ".nfo")
-								If File.Exists(rarname) Then
-									stackrarexists = True
-									tempmovie = rarname
-								Else
-									stackrarexists = False
-									tempmovie = rarname
-								End If
+                                tempmovie = rarname
+								stackrarexists = File.Exists(rarname)
 							End If
 							If rarname.ToLower.IndexOf(".part01.rar") <> -1 Then
 								rarname = rarname.Replace(".part01.rar", ".nfo")
-								If File.Exists(rarname) Then
-									stackrarexists = True
-									tempmovie = rarname
-								Else
-									stackrarexists = False
-									tempmovie = rarname
-								End If
+								tempmovie = rarname
+								stackrarexists = File.Exists(rarname)
 							End If
 							If rarname.ToLower.IndexOf(".part001.rar") <> -1 Then
 								rarname = rarname.Replace(".part001.rar", ".nfo")
-								If File.Exists(rarname) Then
-									tempmovie = rarname
-									stackrarexists = True
-								Else
-									stackrarexists = False
-									tempmovie = rarname
-								End If
+								tempmovie = rarname
+								stackrarexists = File.Exists(rarname)
 							End If
 							If rarname.ToLower.IndexOf(".part0001.rar") <> -1 Then
 								rarname = rarname.Replace(".part0001.rar", ".nfo")
-								If File.Exists(rarname) Then
-									tempmovie = rarname
-									stackrarexists = True
-								Else
-									stackrarexists = False
-									tempmovie = rarname
-								End If
+								tempmovie = rarname
+								stackrarexists = File.Exists(rarname)
 							End If
 							If stackrarexists = True Then
 								Dim allok As Boolean = False
 								Try
 									Using filechck As IO.StreamReader = File.OpenText(tempmovie)
 									    Do
-
 										    tempstring = filechck.ReadLine
 										    If tempstring = Nothing Then Exit Do
 
@@ -2173,9 +2154,7 @@ Public Class Form1
 #End If
 								Finally
 								End Try
-								If allok = True Then
-									validfile = False
-								End If
+								If allok Then validfile = False
 							End If
 						Else
 							validfile = False
@@ -2224,13 +2203,7 @@ Public Class Form1
 	End Function
 
 	Private Sub DeleteZeroLengthFile(ByVal fileName)
-
-		If File.Exists(fileName) Then
-			If (New FileInfo(fileName)).Length = 0 Then
-				Utilities.SafeDeleteFile(fileName)
-			End If
-		End If
-
+		If File.Exists(fileName) AndAlso (New FileInfo(fileName)).Length = 0 Then Utilities.SafeDeleteFile(fileName)
 	End Sub
 
 	Private Sub ReloadMovieCacheToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadMovieCacheToolStripMenuItem.Click
@@ -2280,7 +2253,6 @@ Public Class Form1
 	Private Sub util_ErrorLog(ByVal action As String, Optional ByVal errors As String = "")
 		Dim errpath As String = applicationPath & "\error.log"
 		Try
-
 			Dim objWriter As New IO.StreamWriter(errpath, True)
 			objWriter.WriteLine(errors)
 			objWriter.WriteLine(action)
@@ -2425,12 +2397,9 @@ Public Class Form1
 			tempstring = Utilities.GetFileName(pathtxt.Text)
 			If Path.GetFileName(tempstring).ToLower = "video_ts.ifo" Then
 				Dim temppath As String = tempstring.Replace(Path.GetFileName(tempstring), "VTS_01_0.IFO")
-				If File.Exists(temppath) Then
-					tempstring = temppath
-				End If
+				If File.Exists(temppath) Then tempstring = temppath
 			End If
-			Dim fileisiso As Boolean = (Path.GetExtension(tempstring).ToLower = ".iso")
-			If fileisiso Then
+			If Path.GetExtension(tempstring).ToLower = ".iso" Then
 				If applicationPath.IndexOf("/") <> -1 Then appPath = applicationPath & "/" & "mediainfo-rar.exe"
 				If applicationPath.IndexOf("\") <> -1 Then appPath = applicationPath & "\" & "mediainfo-rar.exe"
 				If Not File.Exists(appPath) Then
@@ -2459,9 +2428,7 @@ Public Class Form1
 				If applicationPath.IndexOf("/") <> -1 Then appPath = applicationPath & "/" & "MediaInfo.dll"
 				If applicationPath.IndexOf("\") <> -1 Then appPath = applicationPath & "\" & "MediaInfo.dll"
 				exists = File.Exists(appPath)
-				If exists = True Then
-					medianfoexists = True
-				End If
+				If exists = True Then medianfoexists = True
 				If medianfoexists = False Then
 					MsgBox("Unable to find th file ""MediaInfo.dll""" & vbCrLf & vbCrLf & "Please make sure this file is available in the programs root directory")
 					Exit Sub
@@ -2469,8 +2436,7 @@ Public Class Form1
 				Dim To_Display As String = ""
 				Dim tempstring5 As String
 
-				Dim MI As mediainfo
-				MI = New mediainfo
+				Dim MI As New mediainfo
 				tempstring5 = MI.Option_("Info_Version", "0.7.0.0;MediaInfoDLL_Example_MSVB;0.7.0.0")
 				If (tempstring5.Length() = 0) Then
 					TextBox1.Text = "MediaInfo.Dll: this version of the DLL is not compatible"
@@ -2484,8 +2450,6 @@ Public Class Form1
 					MI.Close()
 				End If
 			End If
-
-
 			TextBox8.Text = movieinfo
 		Catch
 		End Try
@@ -2506,9 +2470,7 @@ Public Class Form1
 		End If
 
 		Dim tempint = MessageBox.Show("Rescraping the movie will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-		If tempint = DialogResult.No Then
-			Exit Sub
-		End If
+		If tempint = DialogResult.No Then Exit Sub
 
 		RunBackgroundMovieScrape("RescrapeDisplayedMovie")
 
@@ -2564,13 +2526,9 @@ Public Class Form1
 				For Each t In NewTagList
 					Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
 					If t.Contains("- ") Then
-						If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-							movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-						End If
+						If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
 					ElseIf t.Contains("+ ") Then
-						If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-							movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-						End If
+						If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
 					End If
 				Next
 				If movie.ScrapedMovie.fullmoviebody.tag.Count <> 0 Then
@@ -2595,9 +2553,7 @@ Public Class Form1
 						wd = wd.Trim
 						If wd.Length = 0 Then Continue For
 						movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
-						If Not Pref.movietags.Contains(wd) Then
-							Pref.movietags.Add(wd)
-						End If
+						If Not Pref.movietags.Contains(wd) Then Pref.movietags.Add(wd)
 						If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
 					Next
 					ConfigSave()
@@ -2658,22 +2614,17 @@ Public Class Form1
 						movie.ScrapedMovie.fullmoviebody.SetName = cbMovieDisplay_MovieSet.Items(cbMovieDisplay_MovieSet.SelectedIndex)
                         Dim setid As String = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 				        If setid <> "" AndAlso Not setid.StartsWith("L") Then movie.ScrapedMovie.fullmoviebody.TmdbSetId = setid
-						'movie.ScrapedMovie.fullmoviebody.TmdbSetId = oMovies.GetMovieSetIdFromName(movie.ScrapedMovie.fullmoviebody.SetName)
                         movie.ScrapedMovie.fullmoviebody.SetOverview = oMovies.GetMovieSetOverviewFromName(movie.ScrapedMovie.fullmoviebody.SetName)
 					End If
-					If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString 'text
+					If cbUsrRated.SelectedIndex <> -1 Then movie.ScrapedMovie.fullmoviebody.usrrated = cbUsrRated.SelectedIndex.ToString
 					movie.ScrapedMovie.fullmoviebody.source = If(cbMovieDisplay_Source.SelectedIndex < 1, Nothing, cbMovieDisplay_Source.Items(cbMovieDisplay_Source.SelectedIndex))
 					If TabControl2.SelectedTab.Name = tpMovTags.Name Then
 						For Each t In NewTagList
 							Dim remtag As String = t.Replace("- ", "").Replace("+ ", "")
 							If t.Contains("- ") Then
-								If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-									movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
-								End If
+								If movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then movie.ScrapedMovie.fullmoviebody.tag.Remove(remtag)
 							ElseIf t.Contains("+ ") Then
-								If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then
-									movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
-								End If
+								If Not movie.ScrapedMovie.fullmoviebody.tag.Contains(remtag) Then movie.ScrapedMovie.fullmoviebody.tag.Add(remtag)
 							End If
 						Next
 					Else
@@ -2698,21 +2649,16 @@ Public Class Form1
 
 					If messbox.Cancelled Then Exit For
 				Next
-				If tb_tagtxt_changed Then tb_tagtxt_changed = False
-
+				tb_tagtxt_changed = False
 				DataGridViewMovies.ClearSelection
 				UpdateFilteredList
-
 				ProgState = ProgramState.Other
-                
 			Else
 				messbox.Close()
 				MsgBox("Must Select an Initial Movie" & vbCrLf & "Save Cancelled")
 				Exit Sub
 			End If
-            
 			messbox.Close()
-
 			If TabControl2.SelectedTab.Name = tpMovTags.Name Then TabControl2.SelectedIndex = 0
 		End If
 
@@ -2737,9 +2683,8 @@ Public Class Form1
 				oMovies.MovieCache.RemoveAt(f)
 
 				newfullmovie = nfoFunction.mov_NfoLoadBasic(workingMovieDetails.fileinfo.fullpathandfilename, "movielist", oMovies)
-				If workingMovie.title <> "ERROR" Then   'if there is a problem with the nfo being invalid we need to skip
-					oMovies.MovieCache.Add(newfullmovie)
-				End If
+                'if there is a problem with the nfo being invalid we need to skip
+				If workingMovie.title <> "ERROR" Then oMovies.MovieCache.Add(newfullmovie)
 				Exit For
 			End If
 		Next
@@ -2762,16 +2707,16 @@ Public Class Form1
                     Throw ex
 #End If
 				End Try
-				newfullmovie2.filename = workingMovieDetails.fileinfo.filename
-				newfullmovie2.foldername = workingMovieDetails.fileinfo.foldername
-				newfullmovie2.fullpathandfilename = workingMovieDetails.fileinfo.fullpathandfilename
-				newfullmovie2.genre = workingMovieDetails.fullmoviebody.genre
-				newfullmovie2.id = workingMovieDetails.fullmoviebody.imdbid
-				newfullmovie2.playcount = workingMovieDetails.fullmoviebody.playcount
-				newfullmovie2.lastplayed = workingMovieDetails.fullmoviebody.lastplayed
-				newfullmovie2.rating = workingMovieDetails.fullmoviebody.rating.ToRating
-				newfullmovie2.year = workingMovieDetails.fullmoviebody.year
-				newfullmovie2.rootfolder = workingMovieDetails.fileinfo.rootfolder
+				newfullmovie2.filename              = workingMovieDetails.fileinfo.filename
+				newfullmovie2.foldername            = workingMovieDetails.fileinfo.foldername
+				newfullmovie2.fullpathandfilename   = workingMovieDetails.fileinfo.fullpathandfilename
+				newfullmovie2.genre                 = workingMovieDetails.fullmoviebody.genre
+				newfullmovie2.id                    = workingMovieDetails.fullmoviebody.imdbid
+				newfullmovie2.playcount             = workingMovieDetails.fullmoviebody.playcount
+				newfullmovie2.lastplayed            = workingMovieDetails.fullmoviebody.lastplayed
+				newfullmovie2.rating                = workingMovieDetails.fullmoviebody.rating.ToRating
+				newfullmovie2.year                  = workingMovieDetails.fullmoviebody.year
+				newfullmovie2.rootfolder            = workingMovieDetails.fileinfo.rootfolder
 				filteredList.Add(newfullmovie2)
 				Exit For
 			End If
@@ -2789,61 +2734,60 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-		Try
-			filterOverride = True
-			Dim newlist As New List(Of ComboList)
-			newlist.Clear()
-			For Each movie In oMovies.MovieCache
-				If Not File.Exists(Pref.GetFanartPath(movie.fullpathandfilename)) Then
-					Dim movietoadd As New ComboList
+	'Private Sub ListMoviesWithoutFanartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+	'	Try
+	'		filterOverride = True
+	'		Dim newlist As New List(Of ComboList)
+	'		newlist.Clear()
+	'		For Each movie In oMovies.MovieCache
+	'			If Not File.Exists(Pref.GetFanartPath(movie.fullpathandfilename)) Then
+	'				Dim movietoadd As New ComboList
+	'				movietoadd.oMovies              = oMovies
+	'				movietoadd.fullpathandfilename  = movie.fullpathandfilename
+	'				movietoadd.filename             = movie.filename
+	'				movietoadd.year                 = movie.year
+	'				movietoadd.filedate             = movie.filedate
+	'				movietoadd.foldername           = movie.foldername
+	'				movietoadd.rating               = movie.rating
+	'				movietoadd.top250               = movie.top250
+	'				movietoadd.rootfolder           = movie.rootfolder
+	'				newlist.Add(movietoadd)
+	'			End If
+	'		Next
+	'		filteredList = newlist
+	'		mov_CacheLoad()
+	'		filterOverride = False
+	'	Catch ex As Exception
+	'		ExceptionHandler.LogError(ex)
+	'	End Try
+	'End Sub
 
-					movietoadd.oMovies = oMovies
-					movietoadd.fullpathandfilename = movie.fullpathandfilename
-					movietoadd.filename = movie.filename
-					movietoadd.year = movie.year
-					movietoadd.filedate = movie.filedate
-					movietoadd.foldername = movie.foldername
-					movietoadd.rating = movie.rating
-					movietoadd.top250 = movie.top250
-					movietoadd.rootfolder = movie.rootfolder
-					newlist.Add(movietoadd)
-				End If
-			Next
-			filteredList = newlist
-			mov_CacheLoad()
-			filterOverride = False
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
-
-	Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-		Try
-			filterOverride = True
-			Dim newlist As New List(Of ComboList)
-			newlist.Clear()
-			For Each movie In oMovies.MovieCache
-				If Not File.Exists(Pref.GetPosterPath(movie.fullpathandfilename)) Then
-					Dim movietoadd As New ComboList
-					movietoadd.fullpathandfilename = movie.fullpathandfilename
-					movietoadd.filename = movie.filename
-					movietoadd.year = movie.year
-					movietoadd.filedate = movie.filedate
-					movietoadd.foldername = movie.foldername
-					movietoadd.rating = movie.rating
-					movietoadd.top250 = movie.top250
-					movietoadd.rootfolder = movie.rootfolder
-					newlist.Add(movietoadd)
-				End If
-			Next
-			filteredList = newlist
-			mov_CacheLoad()
-			filterOverride = False
-		Catch ex As Exception
-			ExceptionHandler.LogError(ex)
-		End Try
-	End Sub
+	'Private Sub ListMoviesWithoutPostersToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+	'	Try
+	'		filterOverride = True
+	'		Dim newlist As New List(Of ComboList)
+	'		newlist.Clear()
+	'		For Each movie In oMovies.MovieCache
+	'			If Not File.Exists(Pref.GetPosterPath(movie.fullpathandfilename)) Then
+	'				Dim movietoadd As New ComboList
+	'				movietoadd.fullpathandfilename = movie.fullpathandfilename
+	'				movietoadd.filename = movie.filename
+	'				movietoadd.year = movie.year
+	'				movietoadd.filedate = movie.filedate
+	'				movietoadd.foldername = movie.foldername
+	'				movietoadd.rating = movie.rating
+	'				movietoadd.top250 = movie.top250
+	'				movietoadd.rootfolder = movie.rootfolder
+	'				newlist.Add(movietoadd)
+	'			End If
+	'		Next
+	'		filteredList = newlist
+	'		mov_CacheLoad()
+	'		filterOverride = False
+	'	Catch ex As Exception
+	'		ExceptionHandler.LogError(ex)
+	'	End Try
+	'End Sub
 
 	Private Sub BatchRescraperToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BatchRescraperToolStripMenuItem.Click
 
@@ -2853,9 +2797,7 @@ Public Class Form1
 		displaywizard.ShowDialog()
 
 		If rescrapeList.AnyEnabled Then
-
 			_rescrapeList.FullPathAndFilenames.Clear()
-
 			If DataGridViewMovies.SelectedRows.Count > 1 Then   'run batch wizard on multiple selected movies
 				For Each row As DataGridViewRow In DataGridViewMovies.SelectedRows
 					Dim fullpath As String = row.Cells("fullpathandfilename").Value.ToString
@@ -2865,7 +2807,6 @@ Public Class Form1
 				Next
 			Else                                                 'Otherwise run batch wizard on all movies.
 				For Each row As DataGridViewRow In DataGridViewMovies.Rows
-
 					Dim m As Data_GridViewMovie = row.DataBoundItem
 					Dim fullpath As String = m.fullpathandfilename.ToString
 					If Not File.Exists(fullpath) Then Continue For
@@ -2883,24 +2824,24 @@ Public Class Form1
 		If rescrapeList.AnyNonMainEnabled Then Return True
 		For each movie As ComboList In oMovies.MovieCache
 			If Not movie.fullpathandfilename = checkmovie Then Continue For
-			If rescrapeList.rating AndAlso movie.rating < 1 Then Return False
-			If rescrapeList.votes AndAlso movie.Votes = 0 Then Return False
-			If rescrapeList.mpaa AndAlso movie.Certificate = "" Then Return False
-			If rescrapeList.genre AndAlso movie.genre = "" Then Return False
-			If rescrapeList.year AndAlso movie.year < 1900 Then Return False
-			If rescrapeList.top250 AndAlso movie.top250 = "" Then Return False
-			If rescrapeList.outline AndAlso movie.outline = "" Then Return False
-			If rescrapeList.plot AndAlso movie.plot = "" Then Return False
-			If rescrapeList.tagline AndAlso movie.tagline = "" Then Return False
-			If rescrapeList.runtime AndAlso movie.runtime = "" Then Return False
-			If rescrapeList.director AndAlso movie.director = "" Then Return False
-			If rescrapeList.credits AndAlso movie.credits = "" Then Return False
-			If rescrapeList.title AndAlso movie.title = "" Then Return False
-			If rescrapeList.premiered AndAlso movie.Premiered = "" Then Return False
-			If rescrapeList.stars AndAlso movie.stars = "" Then Return False
-			If rescrapeList.studio AndAlso movie.studios = "" Then Return False
-			If rescrapeList.country AndAlso movie.countries = "" Then Return False
-			If rescrapeList.metascore AndAlso movie.metascore = 0 Then Return False
+			If rescrapeList.rating      AndAlso movie.rating < 1        Then Return False
+			If rescrapeList.votes       AndAlso movie.Votes = 0         Then Return False
+			If rescrapeList.mpaa        AndAlso movie.Certificate = ""  Then Return False
+			If rescrapeList.genre       AndAlso movie.genre = ""        Then Return False
+			If rescrapeList.year        AndAlso movie.year < 1900       Then Return False
+			If rescrapeList.top250      AndAlso movie.top250 = ""       Then Return False
+			If rescrapeList.outline     AndAlso movie.outline = ""      Then Return False
+			If rescrapeList.plot        AndAlso movie.plot = ""         Then Return False
+			If rescrapeList.tagline     AndAlso movie.tagline = ""      Then Return False
+			If rescrapeList.runtime     AndAlso movie.runtime = ""      Then Return False
+			If rescrapeList.director    AndAlso movie.director = ""     Then Return False
+			If rescrapeList.credits     AndAlso movie.credits = ""      Then Return False
+			If rescrapeList.title       AndAlso movie.title = ""        Then Return False
+			If rescrapeList.premiered   AndAlso movie.Premiered = ""    Then Return False
+			If rescrapeList.stars       AndAlso movie.stars = ""        Then Return False
+			If rescrapeList.studio      AndAlso movie.studios = ""      Then Return False
+			If rescrapeList.country     AndAlso movie.countries = ""    Then Return False
+			If rescrapeList.metascore   AndAlso movie.metascore = 0     Then Return False
 			Exit For
 		Next
 		Return True
@@ -2924,7 +2865,6 @@ Public Class Form1
 				Dim movie = oMovies.LoadMovie(fullpathandfilename)
 				If movie.TrailerExists Then playlist.Add(movie.ActualTrailerPath)
 			Case "HomeMovie"
-				'fullpathandfilename = CType(lb_HomeMovies.SelectedItem, ValueDescriptionPair).Value
 				fullpathandfilename = Utilities.GetFileName(WorkingHomeMovie.fileinfo.fullpathandfilename)
 				playlist = Utilities.GetMediaList(fullpathandfilename)
 		End Select
@@ -2962,9 +2902,7 @@ Public Class Form1
 		ToolStripStatusLabel2.Text = "Playing Movie...Creating m3u file:..." & tempstring
 		Application.DoEvents()
 		Dim aok As Boolean = True
-		If File.Exists(tempstring) Then
-			aok = Utilities.SafeDeleteFile(tempstring)
-		End If
+		If File.Exists(tempstring) Then aok = Utilities.SafeDeleteFile(tempstring)
 		If aok Then
             If plist.Count > 1 Then
                 Dim setencoding As Encoding = If((Not String.IsNullOrEmpty(Pref.selectedvideoplayer) AndAlso Pref.videomode > 2), Encoding.Utf8, Encoding.getencoding(1252))
@@ -3019,11 +2957,13 @@ Public Class Form1
 		votestxt.Text = ""
 		top250txt.Text = ""
 		certtxt.Text = ""
+        tagtxt.Text = ""
 		PbMovieFanArt.Image = Nothing
 		PbMoviePoster.Image = Nothing
 		roletxt.Text = ""
 		PictureBoxActor.Image = Nothing
 		btnPlayMovie.Enabled = False
+        tb_tagtxt_changed = False
 	End Sub
 
 	Public Sub genretxt_MouseClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles genretxt.MouseDown
@@ -3305,13 +3245,9 @@ Public Class Form1
 	Private Sub DataGridViewMovies_DoubleClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles DataGridViewMovies.DoubleClick
 		Try
 			Dim info = DataGridViewMovies.HitTest(e.X, e.Y)
-			If info.ColumnX = -1 Then
-				Return
-			End If
+			If info.ColumnX = -1 Then Return
 
-			If info.Type <> DataGridViewHitTestType.ColumnHeader Then
-				mov_Play("Movie")
-			End If
+			If info.Type <> DataGridViewHitTestType.ColumnHeader Then mov_Play("Movie")
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -3371,9 +3307,7 @@ Public Class Form1
 			End If
 		Next
 
-		If droppedItems.Count > 0 Then
-			DoScrapeDroppedFiles()
-		End If
+		If droppedItems.Count > 0 Then DoScrapeDroppedFiles()
 
 	End Sub
 
@@ -3408,8 +3342,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub DataGridViewMovies_MouseLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseLeave
-		TooltipGridViewMovies1.Visible = False
-		TimerToolTip.Enabled = False
+		TooltipGridViewMovies1  .Visible = False
+		TimerToolTip            .Enabled = False
 	End Sub
 
 	Private Sub DataGridViewMovies_MouseHover(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DataGridViewMovies.MouseHover
@@ -3463,9 +3397,7 @@ Public Class Form1
 		If e.Button = MouseButtons.Right Then
 			Dim multiselect As Boolean = False
 			'If more than one movie is selected, check if right-click is on the selection.
-			If DataGridViewMovies.SelectedRows.Count > 1 Then
-				multiselect = True
-			End If
+			If DataGridViewMovies.SelectedRows.Count > 1 Then multiselect = True
 			'Otherwise, bring up the context menu for a single movie
 
 			If multiselect Then
@@ -3787,16 +3719,7 @@ Public Class Form1
 		End If
 		MovFanartDisplay()
 	End Sub
-
-	Public Sub MovFanartClear()
-		Try
-			For i = Panel2.Controls.Count - 1 To 0 Step -1
-				Panel2.Controls.RemoveAt(i)
-			Next
-		Catch
-		End Try
-	End Sub
-
+    
 	Public Sub MovFanartDisplay(Optional ByVal TmdbSetId As String = "")
 
 		Me.Refresh()
@@ -4177,9 +4100,7 @@ Public Class Form1
 	Sub UpdateMissingFanartNav
 
 		'Default to selecting first row if non selected
-		If DataGridViewMovies.SelectedRows.Count = 0 And DataGridViewMovies.Rows.Count > 1 Then
-			DataGridViewMovies.Rows(0).Selected = True
-		End If
+		If DataGridViewMovies.SelectedRows.Count = 0 And DataGridViewMovies.Rows.Count > 1 Then DataGridViewMovies.Rows(0).Selected = True
 
 		UpdateMissingFanartNextBtn
 		UpdateMissingFanartPrevBtn
@@ -4192,9 +4113,7 @@ Public Class Form1
 
 		While i < DataGridViewMovies.Rows.Count
 			Dim row As Data_GridViewMovie = DataGridViewMovies.DataSource(i)
-
 			If row.MissingFanart Then x = x + 1
-
 			i = i + 1
 		End While
 
@@ -4359,19 +4278,13 @@ Public Class Form1
 		PictureBox2.Image = util_ImageCrop(PictureBox2.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone
 		PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
 	End Sub
-
-	Private Sub mov_PosterPanelClear()
-		For i = panelAvailableMoviePosters.Controls.Count - 1 To 0 Step -1
-			panelAvailableMoviePosters.Controls.RemoveAt(i)
-		Next
-	End Sub
-
+    
 	Private Sub mov_PosterInitialise()
 		pageCount = 0
 		currentPage = 1
 		cbMoviePosterSaveLoRes.Enabled = False
 		btnPosterTabs_SaveImage.Enabled = False
-		mov_PosterPanelClear()
+        panelAvailableMoviePosters.Controls.Clear()
 		If Pref.maximumthumbs < 1 Then
 		Else
 			Pref.maximumthumbs = 10
@@ -4537,7 +4450,7 @@ Public Class Form1
 
 	Private Sub mov_PosterSelectionDisplayPrev()
 		Try
-			mov_PosterPanelClear()
+            panelAvailableMoviePosters.Controls.Clear()
 			currentPage -= 1
 			If currentPage = 1 Then
 				btnMovPosterPrev.Enabled = False
@@ -4551,7 +4464,7 @@ Public Class Form1
 
 	Private Sub mov_PosterSelectionDisplayNext()
 		Try
-			mov_PosterPanelClear()
+            panelAvailableMoviePosters.Controls.Clear()
 			currentPage += 1
 			If currentPage = pageCount Then
 				btnMovPosterNext.Enabled = False
@@ -10142,7 +10055,7 @@ Public Class Form1
 			Dim SubTab As String = TabControl2.SelectedTab.Name
 			If SubTab = tpMovMain.Name Then mov_RebuildMovieCaches()
 			If SubTab = tpMovFanart.name Then
-				MovFanartClear()
+				Panel2.Controls.Clear()
 				MovFanartDisplay()
 			End If
 		End If
@@ -11739,13 +11652,13 @@ Public Class Form1
 		If MovFanartToggle Then
 			btnMovFanartToggle.Text = "Show MovieSet Fanart"
 			btnMovFanartToggle.BackColor = System.Drawing.Color.Lime
-			MovFanartClear()
+			Panel2.Controls.Clear()
 			util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
 			MovFanartDisplay()
 		Else
 			btnMovFanartToggle.Text = "Show Movie Fanart"
 			btnMovFanartToggle.BackColor = System.Drawing.Color.Aqua
-			MovFanartClear()
+			Panel2.Controls.Clear()
 			util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.movsetfanartpath, Utilities.DefaultFanartPath)
 			MovFanartDisplay(workingMovieDetails.fullmoviebody.TmdbSetId)
 		End If

@@ -131,7 +131,7 @@ Module Module1
         
         ConsoleOrLog("Loading Config")
         Pref.SetUpPreferences()
-        Call InitMediaFileExtensions()
+        'Call InitMediaFileExtensions()
         If Not Directory.Exists(Utilities.CacheFolderPath) Then Directory.CreateDirectory(Utilities.CacheFolderPath)
 
         If File.Exists(Pref.applicationPath & "\settings\profile.xml") = True Then
@@ -1596,15 +1596,16 @@ Module Module1
         Return totalactors
     End Function
     
-    Private Sub InitMediaFileExtensions()
-        For Each extn In Utilities.VideoExtensions
-            MediaFileExtensions.Add(extn)
-        Next
-    End Sub
+    'Private Sub InitMediaFileExtensions()
+    '    For Each extn In Utilities.VideoExtensions
+    '        MediaFileExtensions.Add(extn)
+    '    Next
+    'End Sub
 
     Private Function IsMediaExtension(ByVal fileinfo As FileInfo) As Boolean
-        Dim extension As String = fileinfo.Extension
-        Return MediaFileExtensions.Contains(extension.ToLower)
+        'Dim extension As String = fileinfo.Extension
+        'Return MediaFileExtensions.Contains(extension.ToLower)
+        Return Utilities.VideoExtensions.Contains(fileinfo.Extension)
     End Function
 
     Private Sub StartNewMovies()
