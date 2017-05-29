@@ -890,6 +890,7 @@ Public Class WorkingWithNfoFiles
         Try
             Dim newtvshow As New TvShow
             Dim tvshow As New XmlDocument
+            If Not File.Exists(path) Then Return blanktvshow(path)
             Try
                 Using tmpstrm As IO.StreamReader = File.OpenText(path)
                     tvshow.Load(tmpstrm)
