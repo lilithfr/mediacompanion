@@ -1090,7 +1090,7 @@ Partial Public Class Form1
         Dim ratingdone As Boolean = False
         If Pref.tvdbIMDbRating Then
             Dim aok As Boolean = False
-
+            
             '''If no Ep IMDB Id, try getting from TMDb first.
             If String.IsNullOrEmpty(tvep.ImdbId.Value) Then aok = gettmdbepid(tvep)
 
@@ -2936,7 +2936,7 @@ Partial Public Class Form1
                                     Dim rating As String    = singleepisode.Rating.Value
                                     Dim votes As String     = singleepisode.Votes.Value
                                     If Pref.tvdbIMDbRating Then
-                                        ratingdone = GetEpRating(singleepisode, rating, votes)  'epGetImdbRatingOmdbapi(singleepisode)
+                                        ratingdone = GetEpRating(singleepisode, rating, votes)
                                     End If
                                     If Not ratingdone Then
                                         singleepisode.Rating.Value  = rating
@@ -3239,7 +3239,7 @@ Partial Public Class Form1
             Dim rating As String    = newepisode.Rating.Value
             Dim votes As String     = newepisode.Votes.Value
             Dim ratingsdone As Boolean = False
-            If Pref.tvdbIMDbRating Then ratingsdone = GetEpRating(newepisode, rating, votes)  'epGetImdbRatingOmdbapi(newepisode)
+            If Pref.tvdbIMDbRating Then ratingsdone = GetEpRating(newepisode, rating, votes)
             If Not ratingsdone Then
                 newepisode.Rating.Value  = rating
                 newepisode.Votes.Value   = votes

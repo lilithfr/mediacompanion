@@ -75,11 +75,14 @@ Public Class frmPreferences
     End Sub
 
     Private Sub frmOptions_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If e.KeyCode = Keys.F3 Then btn_SettingsApplyClose.PerformClick()
+        If e.KeyCode = Keys.F4 Then btn_SettingsApplyOnly.PerformClick()
         If e.KeyCode = Keys.Escape Then Me.Close()
     End Sub
 
     Private Sub options_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Try
+            Me.Text = "Media Companion Preferences    -    press 'F3' to Apply & Close, 'F4' to Apply, 'Esc' key to Close"
             btn_SettingsClose2.Visible = False
             Pref.ConfigLoad()
             prefsload = True
@@ -103,9 +106,7 @@ Public Class frmPreferences
     End Sub
 
     Private Sub btn_SettingsApplyClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsApplyClose.Click
-        If Changes Then
-            Dim aok As Boolean = SaveSettings
-        End If
+        If Changes Then SaveSettings
         Me.Close()
     End Sub
 
@@ -114,8 +115,6 @@ Public Class frmPreferences
     End Sub
 
     Private Sub btn_SettingsClose_Click(sender As Object, e As EventArgs) Handles btn_SettingsClose.Click, btn_SettingsClose2.Click
-        'Changes = False
-        'Pref.ConfigLoad()
         Me.Close()
     End Sub
     
