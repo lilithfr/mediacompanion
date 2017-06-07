@@ -5544,17 +5544,27 @@ Public Class Form1
 								newnfofile = items.Replace(Path.GetFileName(items), newfilename) & Path.GetExtension(items)
 							End If
 							Dim newname As String = items.Replace(filenama, newfilename)
+                            Dim TempName As String = items.Replace(filenama, "TempFile")
 							Try
 								Dim pathsep As String = If(items.Contains("/"), "/", "\")
 								Dim origpath As String = items.Substring(0, items.LastIndexOf(pathsep) + 1)
 								renamelog += "!!! " & items.Replace(origpath, "") & "  -- to --  " & newname.Replace(origpath, "")
-								Dim fi As New FileInfo(items)
+                                Dim fi As New FileInfo(items)
 								If Not File.Exists(newname) Then
 									fi.MoveTo(newname)
 									If items.ToLower = tb_EpFilename.Text.ToLower Then tb_EpFilename.Text = fi.FullName.ToString
 									renamelog += "  ---Succeeded" & vbCrLf
 								Else
-									renamelog += " --! Not Renamed - Same" & vbCrLf
+                                    'If current and new filesname are the same, but there are mis-matched casing, rename to temp file first
+                                    'else they are the same.
+                                    If String.Compare(items, newname, False) Then
+                                        fi.MoveTo(TempName)
+                                        fi.MoveTo(newname)
+                                        If items.ToLower = tb_EpFilename.Text.ToLower Then tb_EpFilename.Text = fi.FullName.ToString
+									    renamelog += "  ---Succeeded" & vbCrLf
+                                    Else
+                                        renamelog += " --! Not Renamed - Same" & vbCrLf
+                                    End If
 								End If
 							Catch ex As Exception
 								renamelog += "!!! *** Not Succeeded - Please rename all files manually!" & vbCrLf & "!!! Reported Message: " & ex.Message.ToString & vbCrLf

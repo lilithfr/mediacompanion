@@ -101,7 +101,7 @@ Public Class TVShows
                 For Each ITEMS In listtorename
                     Dim newname As String = ITEMS.Replace(filenama, newfilename)
                     Dim fi As New FileInfo(ITEMS)
-                    If File.Exists(newname) Then
+                    If File.Exists(newname) AndAlso Not String.Compare(ITEMS, newname, False) Then ' if newname exists, but there is a mismatch of casings, still OK to rename.
                         RenameFailedFile = newname
                         StillOk = False
                     End If
@@ -111,10 +111,14 @@ Public Class TVShows
                     Dim FirstCount As Boolean = True
                     For Each ITEMS In listtorename
                         Dim newname As String = ITEMS.Replace(filenama, newfilename)
+                        Dim TempName As String = ITEMS.Replace(filenama, "TempFile")
                         done = newname.Replace(Path.GetExtension(newname), ".nfo")
                         If done.Contains("-thumb.") Then done = done.Replace("-thumb", "")
                         Try
                             Dim fi As New FileInfo(ITEMS)
+                            'If current and new filesname are the same, but there are mis-matched casing, rename to temp file first
+                            If ITEMS.ToLower = newname.ToLower AndAlso String.Compare(ITEMS, newname, False) Then fi.MoveTo(TempName)
+
                             fi.MoveTo(newname)
                             If FirstCount = True Then  'we only want to show the renamed mediafile in the brief view
                                 Pref.tvScraperLog &= "!!! Renamed to: " & newname & vbCrLf
