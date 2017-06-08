@@ -2,24 +2,14 @@
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Threading
-
+Imports TvDbSharper
 Imports System.Xml
 
 
 
 Public Class TVDBScraper
     Const SetDefaults = True
-    Private Structure str_possibleshowlist
-        Dim showtitle As String
-        Dim showid As String
-        Dim showbanner As String
-        Sub New(SetDefaults As Boolean) 'When called with new keyword & boolean constant SetDefault (either T or F), initialises all values to defaults to avoid having some variables left as 'nothing'
-            showtitle = ""
-            showid = ""
-            showbanner = ""
-        End Sub
-    End Structure
-
+    
     Public Function GetPosterList(ByVal TvdbId As String, ByVal ReturnPoster As Boolean) As Tvdb.Banners
         If Not ReturnPoster Then Return Nothing
 
@@ -127,9 +117,9 @@ Public Class TVDBScraper
         End Try
     End Function
 
-    Public Function findshows(ByVal title As String, Optional ByVal mirror As String = "http://thetvdb.com")
+    Public Function findshows(ByVal title As String, ByVal mirror As String, ByRef showslist As List(Of str_PossibleShowList)) As Boolean
         Monitor.Enter(Me)
-        Dim possibleshows As New List(Of str_possibleshowlist)
+        Dim possibleshows As New List(Of str_PossibleShowList)
         Dim xmlfile As String
         
         title = title.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
@@ -146,9 +136,8 @@ Public Class TVDBScraper
             For Each thisresult As XmlNode In showlist("Data")
                 Select Case thisresult.Name
                     Case "Series"
-                        Dim newshow As New str_possibleshowlist(SetDefaults)
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
+                        Dim newshow As New str_PossibleShowList(SetDefaults)
+                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
                             Select Case mirrorselection.Name
                                 Case "seriesid"
                                     newshow.showid = mirrorselection.InnerXml
@@ -161,28 +150,13 @@ Public Class TVDBScraper
                         possibleshows.Add(newshow)
                 End Select
             Next
-            Dim returnstring As String
-            Dim ok As Boolean = False
-            If possibleshows.Count > 0 Then
-                returnstring = "<allshows>"
-                For Each show In possibleshows
-                    If show.showid <> Nothing Then
-                        returnstring = returnstring & "<show>"
-                        returnstring = returnstring & "<showid>" & show.showid & "</showid>"
-                        ok = True
-                        If show.showtitle <> Nothing Then returnstring = returnstring & "<showtitle>" & show.showtitle & "</showtitle>"
-                        If show.showbanner <> Nothing Then returnstring = returnstring & "<showbanner>" & show.showbanner & "</showbanner>"
-                        returnstring = returnstring & "</show>"
-                    End If
-                Next
-                returnstring = returnstring & "</allshows>"
-            Else
-                returnstring = "none"
-            End If
-            If ok = False Then returnstring = "none"
-            Return returnstring
+
+            For Each show In possibleshows
+                If show.showid <> Nothing Then showslist.Add(show)
+            Next
+            Return True
         Catch EX As Exception
-            Return "error"
+            Return False
         Finally
             Monitor.Exit(Me)
         End Try

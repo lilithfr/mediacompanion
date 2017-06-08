@@ -1655,42 +1655,28 @@ Partial Public Class Form1
                 Me.Refresh()
                 messbox.Refresh()
                 Try
+                    Dim showlist As New List(Of str_PossibleShowList)
                     Dim tvdbstuff As New TVDBScraper
                     Dim mirror As List(Of String) = tvdbstuff.getmirrors()
-                    Dim showslist As String = tvdbstuff.findshows(tbTvShSelectSearchTitle.Text, mirror(0))
+                    Dim aok As Boolean = tvdbstuff.findshows(tbTvShSelectSearchTitle.Text, mirror(0), showlist)
 
                     listOfShows.Clear()
-                    If showslist = "error" Then
+
+                    If Not aok Then
                         messbox.Close()
                         MsgBox("TVDB seems to have an error with the xml for this search")
                         Exit Sub
                     End If
-                    If showslist <> "none" Then
-                        Dim showlist As New XmlDocument
-                        showlist.LoadXml(showslist)
-                        For Each thisresult As XmlNode In showlist("allshows")
-                            Select Case thisresult.Name
-                                Case "show"
-                                    Dim lan As New str_PossibleShowList(SetDefaults)
-                                    For Each results As XmlNode In thisresult.ChildNodes
-                                        Select Case results.Name
-                                            Case "showid"
-                                                lan.showid = results.InnerText
-                                            Case "showtitle"
-                                                lan.showtitle = results.InnerText
-                                            Case "showbanner"
-                                                lan.showbanner = results.InnerText
-                                        End Select
-                                    Next
-                                    Dim exists As Boolean = False
-                                    For Each item In listOfShows
-                                        If item.showid = lan.showid Then
-                                            exists = True
-                                            Exit For
-                                        End If
-                                    Next
-                                    If exists = False Then listOfShows.Add(lan)
-                            End Select
+                    If showlist.count > 0 Then
+                        For each foundshow In showlist
+                            Dim exists As Boolean = False
+                            For Each item In listOfShows
+                                If item.showid = foundshow.showid Then
+                                    exists = True
+                                    Exit For
+                                End If
+                            Next
+                            If Not exists Then listOfShows.Add(foundshow)
                         Next
                     Else
                         Dim lan As New str_PossibleShowList(SetDefaults)

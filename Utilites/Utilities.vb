@@ -88,6 +88,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
     Public Shared Property RARsize As Integer
     Private Shared _tmdbapi As String
+    Private Shared _tvdbapi As String
     Private Shared _ApplicationPath As String
     Private Shared _LanguageLibrary As New List(Of langlib)
     Private Shared _mcproxy As New List(Of String)
@@ -121,6 +122,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Get
         Set(value As String)
             _tmdbapi = value
+        End Set
+    End Property
+
+    Public Shared Property TVDBAPI As String
+        Get
+            Return If(String.IsNullOrEmpty(_tvdbapi), "ebe93edbc30735a0e702eb883fc855be", _tvdbapi)
+        End Get
+        Set(value As String)
+            _tvdbapi = value
         End Set
     End Property
 
