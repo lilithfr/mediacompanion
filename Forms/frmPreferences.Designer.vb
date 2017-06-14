@@ -186,6 +186,7 @@ Partial Class frmPreferences
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label98 = New System.Windows.Forms.Label()
         Me.GroupBox32 = New System.Windows.Forms.GroupBox()
+        Me.cb_ExcludeActorNoThumb = New System.Windows.Forms.CheckBox()
         Me.Label137 = New System.Windows.Forms.Label()
         Me.cb_actorseasy = New System.Windows.Forms.CheckBox()
         Me.TPMovPref = New System.Windows.Forms.TabPage()
@@ -394,7 +395,7 @@ Partial Class frmPreferences
         Me.cbTv_fixNFOid = New System.Windows.Forms.CheckBox()
         Me.GroupBox22 = New System.Windows.Forms.GroupBox()
         Me.cbtvdbIMDbRating = New System.Windows.Forms.CheckBox()
-        Me.Button91 = New System.Windows.Forms.Button()
+        Me.btnTVDBGetLanguages = New System.Windows.Forms.Button()
         Me.rbTvEpSortDefault = New System.Windows.Forms.RadioButton()
         Me.rbTvEpSortDVD = New System.Windows.Forms.RadioButton()
         Me.Label124 = New System.Windows.Forms.Label()
@@ -435,7 +436,7 @@ Partial Class frmPreferences
         Me.ComboBox_tv_EpisodeRename = New System.Windows.Forms.ComboBox()
         Me.cbTvEpEnableHDTags = New System.Windows.Forms.CheckBox()
         Me.cbTvDisableLogs = New System.Windows.Forms.CheckBox()
-        Me.ListBox12 = New System.Windows.Forms.ListBox()
+        Me.lbxTVDBLangs = New System.Windows.Forms.ListBox()
         Me.Label122 = New System.Windows.Forms.Label()
         Me.ComboBox8 = New System.Windows.Forms.ComboBox()
         Me.GroupBox_TVDB_Scraper_Preferences = New System.Windows.Forms.GroupBox()
@@ -512,7 +513,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.cb_ExcludeActorNoThumb = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -2417,6 +2417,16 @@ Partial Class frmPreferences
         Me.GroupBox32.TabIndex = 48
         Me.GroupBox32.TabStop = false
         Me.GroupBox32.Text = "Actor Folder"
+        '
+        'cb_ExcludeActorNoThumb
+        '
+        Me.cb_ExcludeActorNoThumb.AutoSize = true
+        Me.cb_ExcludeActorNoThumb.Location = New System.Drawing.Point(21, 75)
+        Me.cb_ExcludeActorNoThumb.Name = "cb_ExcludeActorNoThumb"
+        Me.cb_ExcludeActorNoThumb.Size = New System.Drawing.Size(219, 19)
+        Me.cb_ExcludeActorNoThumb.TabIndex = 39
+        Me.cb_ExcludeActorNoThumb.Text = "Exclude Actors without Thumbnails."
+        Me.cb_ExcludeActorNoThumb.UseVisualStyleBackColor = true
         '
         'Label137
         '
@@ -4641,7 +4651,7 @@ Partial Class frmPreferences
         Me.GroupBox17.Controls.Add(Me.GroupBox1)
         Me.GroupBox17.Controls.Add(Me.cbTvEpEnableHDTags)
         Me.GroupBox17.Controls.Add(Me.cbTvDisableLogs)
-        Me.GroupBox17.Controls.Add(Me.ListBox12)
+        Me.GroupBox17.Controls.Add(Me.lbxTVDBLangs)
         Me.GroupBox17.Controls.Add(Me.Label122)
         Me.GroupBox17.Controls.Add(Me.ComboBox8)
         Me.GroupBox17.Controls.Add(Me.GroupBox_TVDB_Scraper_Preferences)
@@ -4756,7 +4766,7 @@ Partial Class frmPreferences
         'GroupBox22
         '
         Me.GroupBox22.Controls.Add(Me.cbtvdbIMDbRating)
-        Me.GroupBox22.Controls.Add(Me.Button91)
+        Me.GroupBox22.Controls.Add(Me.btnTVDBGetLanguages)
         Me.GroupBox22.Controls.Add(Me.rbTvEpSortDefault)
         Me.GroupBox22.Controls.Add(Me.rbTvEpSortDVD)
         Me.GroupBox22.Controls.Add(Me.Label124)
@@ -4780,15 +4790,15 @@ Partial Class frmPreferences
         Me.cbtvdbIMDbRating.Text = "Series and Episode Rating and votes from IMDb (fallback to TVDb)"
         Me.cbtvdbIMDbRating.UseVisualStyleBackColor = true
         '
-        'Button91
+        'btnTVDBGetLanguages
         '
-        Me.Button91.Location = New System.Drawing.Point(8, 15)
-        Me.Button91.Margin = New System.Windows.Forms.Padding(4)
-        Me.Button91.Name = "Button91"
-        Me.Button91.Size = New System.Drawing.Size(208, 29)
-        Me.Button91.TabIndex = 1
-        Me.Button91.Text = "Get Languages From TVDB"
-        Me.Button91.UseVisualStyleBackColor = true
+        Me.btnTVDBGetLanguages.Location = New System.Drawing.Point(8, 15)
+        Me.btnTVDBGetLanguages.Margin = New System.Windows.Forms.Padding(4)
+        Me.btnTVDBGetLanguages.Name = "btnTVDBGetLanguages"
+        Me.btnTVDBGetLanguages.Size = New System.Drawing.Size(208, 29)
+        Me.btnTVDBGetLanguages.TabIndex = 1
+        Me.btnTVDBGetLanguages.Text = "Get Languages From TVDB"
+        Me.btnTVDBGetLanguages.UseVisualStyleBackColor = true
         '
         'rbTvEpSortDefault
         '
@@ -5274,16 +5284,16 @@ Partial Class frmPreferences
         Me.cbTvDisableLogs.Text = "Display log after scraping episodes"
         Me.cbTvDisableLogs.UseVisualStyleBackColor = true
         '
-        'ListBox12
+        'lbxTVDBLangs
         '
-        Me.ListBox12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.ListBox12.FormattingEnabled = true
-        Me.ListBox12.ItemHeight = 15
-        Me.ListBox12.Location = New System.Drawing.Point(12, 26)
-        Me.ListBox12.Margin = New System.Windows.Forms.Padding(4)
-        Me.ListBox12.Name = "ListBox12"
-        Me.ListBox12.Size = New System.Drawing.Size(103, 424)
-        Me.ListBox12.TabIndex = 11
+        Me.lbxTVDBLangs.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lbxTVDBLangs.FormattingEnabled = true
+        Me.lbxTVDBLangs.ItemHeight = 15
+        Me.lbxTVDBLangs.Location = New System.Drawing.Point(12, 26)
+        Me.lbxTVDBLangs.Margin = New System.Windows.Forms.Padding(4)
+        Me.lbxTVDBLangs.Name = "lbxTVDBLangs"
+        Me.lbxTVDBLangs.Size = New System.Drawing.Size(103, 424)
+        Me.lbxTVDBLangs.TabIndex = 11
         '
         'Label122
         '
@@ -6160,16 +6170,6 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'cb_ExcludeActorNoThumb
-        '
-        Me.cb_ExcludeActorNoThumb.AutoSize = true
-        Me.cb_ExcludeActorNoThumb.Location = New System.Drawing.Point(21, 75)
-        Me.cb_ExcludeActorNoThumb.Name = "cb_ExcludeActorNoThumb"
-        Me.cb_ExcludeActorNoThumb.Size = New System.Drawing.Size(219, 19)
-        Me.cb_ExcludeActorNoThumb.TabIndex = 39
-        Me.cb_ExcludeActorNoThumb.Text = "Exclude Actors without Thumbnails."
-        Me.cb_ExcludeActorNoThumb.UseVisualStyleBackColor = true
-        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6654,7 +6654,7 @@ End Sub
     Friend WithEvents Label111 As Label
     Friend WithEvents cbTv_fixNFOid As CheckBox
     Friend WithEvents GroupBox22 As GroupBox
-    Friend WithEvents Button91 As Button
+    Friend WithEvents btnTVDBGetLanguages As Button
     Friend WithEvents rbTvEpSortDefault As RadioButton
     Friend WithEvents rbTvEpSortDVD As RadioButton
     Friend WithEvents Label124 As Label
@@ -6690,7 +6690,7 @@ End Sub
     Friend WithEvents ComboBox_tv_EpisodeRename As ComboBox
     Friend WithEvents cbTvEpEnableHDTags As CheckBox
     Friend WithEvents cbTvDisableLogs As CheckBox
-    Friend WithEvents ListBox12 As ListBox
+    Friend WithEvents lbxTVDBLangs As ListBox
     Friend WithEvents Label122 As Label
     Friend WithEvents ComboBox8 As ComboBox
     Friend WithEvents TabPage31 As TabPage

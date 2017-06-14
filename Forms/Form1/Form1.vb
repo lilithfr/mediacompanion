@@ -253,7 +253,7 @@ Public Class Form1
     Private MovSetOverviewEdit As Boolean = False
     Private tb_MovieSetOverviewChanged As Boolean = False
     Private MovSetListAllSets As Boolean = False
-
+    
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
 	Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -952,6 +952,7 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
+        If e.KeyCode = Keys.F7 Then doTestTVDB()
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -6589,6 +6590,7 @@ Public Class Form1
         End If
     End Sub
 	Private Sub ep_Search()
+        
 		Dim ShowList As New List(Of TvShow)
 
 		If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
@@ -16363,4 +16365,13 @@ Public Class Form1
             bckgroundscanepisodes.IsBusy OrElse tvbckrescrapewizard.IsBusy OrElse ImgBw.IsBusy
     End Function
     
+    Public Sub doTestTvdb()
+        'Dim tvdb As New TheTvDB.TvdbAPI(Utilities.TVDBAPI, "en")
+        Dim tvdb As New TVDBScraper2()
+        tvdb.LookupLang = Pref.TvdbLanguageCode
+        tvdb.Title = "Vikings"
+        Dim Series As TheTvDB.TvdbSeries = tvdb.Series
+
+    End Sub
+
 End Class

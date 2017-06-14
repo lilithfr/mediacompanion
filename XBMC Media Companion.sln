@@ -59,6 +59,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "IMPA", "Scraper dll sources
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatTmdb", "WatTmdb\WatTmdb.csproj", "{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTVDBLibV2", "Scraper dll sources\TVDB V2\TheTVDBLibV2\TheTVDBLibV2.csproj", "{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,7 +221,6 @@ Global
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Debug|x64.Build.0 = Debug|x64
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65888A0F-2CF7-40DC-AAAC-A0EF1FD88D04}.Release|x64.ActiveCfg = Release|x64
@@ -281,8 +282,8 @@ Global
 		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x64.ActiveCfg = Release|Any CPU
-		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x64.Build.0 = Release|Any CPU
+		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x64.ActiveCfg = Release|x64
+		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x64.Build.0 = Release|x64
 		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x86.ActiveCfg = Release|Any CPU
 		{1597C9B5-C70D-404D-9CC2-2761D43278C6}.Release|x86.Build.0 = Release|Any CPU
 		{0EF49671-9C5E-40FE-A469-86ABBA142BBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -313,10 +314,24 @@ Global
 		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x64.ActiveCfg = Release|Any CPU
-		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x64.Build.0 = Release|Any CPU
+		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x64.ActiveCfg = Release|x64
+		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x64.Build.0 = Release|x64
 		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFC11645-FAB4-4C30-A498-29F5ECDF77E8}.Release|x86.Build.0 = Release|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|x64.ActiveCfg = Debug|x64
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|x64.Build.0 = Debug|x64
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|x64.ActiveCfg = Release|x64
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|x64.Build.0 = Release|x64
+		{CFE00A44-AEAA-4CAB-A448-B397F8B01BC5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

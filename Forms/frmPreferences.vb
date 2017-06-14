@@ -554,10 +554,10 @@ Public Class frmPreferences
 
     Private Sub TVSCraperInit()
         'Language box
-        ListBox12.Items.Clear()
-        ListBox12.Items.Add(Pref.TvdbLanguage)
-        If ListBox12.Items.Count <> 0 Then
-            ListBox12.SelectedIndex = 0
+        lbxTVDBLangs.Items.Clear()
+        lbxTVDBLangs.Items.Add(Pref.TvdbLanguage)
+        If lbxTVDBLangs.Items.Count <> 0 Then
+            lbxTVDBLangs.SelectedIndex = 0
         End If
 
         'XBMC TVBD Scraper
@@ -2606,17 +2606,17 @@ End Sub
 
 'Endof - XBMC TVDB Scraper options
 
-    Private Sub Button91_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button91.Click
+    Private Sub btnTVDBGetLanguages_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTVDBGetLanguages.Click
         Try
-            ListBox12.Items.Clear()
+            lbxTVDBLangs.Items.Clear()
             Form1.languageList.Clear()
             Form1.util_LanguageListLoad()
             For Each lan In Form1.languageList
-                ListBox12.Items.Add(lan.Language.Value)
+                lbxTVDBLangs.Items.Add(lan.Language.Value)
                 'ListBox1.Items.Add(lan.Language.Value)
             Next
             Try
-                ListBox12.SelectedItem = Pref.TvdbLanguage
+                lbxTVDBLangs.SelectedItem = Pref.TvdbLanguage
             Catch ex As Exception
 #If SilentErrorScream Then
             Throw ex
@@ -2627,11 +2627,11 @@ End Sub
         End Try
     End Sub
 
-    Private Sub ListBox12_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListBox12.SelectedIndexChanged
+    Private Sub lbxTVDBLangs_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbxTVDBLangs.SelectedIndexChanged
         If prefsload Then Exit Sub
         Try
             For Each lan In Form1.languageList
-                If lan.Language.Value = ListBox12.SelectedItem Then
+                If lan.Language.Value = lbxTVDBLangs.SelectedItem Then
                     Pref.TvdbLanguage = lan.Language.Value
                     Pref.TvdbLanguageCode = lan.Abbreviation.Value
                     Exit For

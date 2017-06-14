@@ -2,7 +2,6 @@
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Threading
-Imports TvDbSharper
 Imports System.Xml
 
 

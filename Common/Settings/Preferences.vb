@@ -54,6 +54,8 @@ End Module
 
 Public Class Pref 
 
+    Private Shared _tvdb
+
     'Shared Event PropertyChanged_MkvMergeGuiPath
 
     Public Const SetDefaults = True
@@ -603,6 +605,16 @@ Public Class Pref
         Get
             Return XBMC_Link And XBMC_TestsPassed
         End Get
+    End Property
+    
+    Public Shared Property TVDBApi As TheTvDB.TvdbAPI
+        Get
+            If IsNothing(_tvdb) Then _tvdb = New TheTvDB.TvdbAPI(Utilities.TVDBAPI)
+            Return _tvdb
+        End Get
+        Set(value As TheTvDB.TvdbAPI)
+            _tvdb = value
+        End Set
     End Property
 
     Public Shared Sub SetUpPreferences()

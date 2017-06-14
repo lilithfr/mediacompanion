@@ -4394,13 +4394,13 @@ Partial Public Class Form1
                     filename = filename & "_" & id
                     tempstring = networkpath & "\" & filename.Substring(0,1) & "\"
 
-                    Utilities.EnsureFolderExists(tempstring)
+                    Dim aok As Boolean = Utilities.EnsureFolderExists(tempstring)
                     workingpath2 = tempstring & filename 
                     Dim actorpaths As New List(Of String)
                     If Pref.FrodoEnabled Then actorpaths.Add(workingpath2 & ".jpg")
                     If Pref.EdenEnabled Then actorpaths.Add(workingpath2 & ".tbn")
                     Dim cachename As String = Utilities.Download2Cache(NewAct.actorthumb)
-                    If cachename <> "" Then
+                    If aok AndAlso cachename <> "" Then
                         For Each p In actorpaths
                             Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
                         Next

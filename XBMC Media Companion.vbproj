@@ -162,6 +162,7 @@
     <Compile Include="Basics\TaskingSupport.vb" />
     <Compile Include="Classes\LockSpecificParams.vb" />
     <Compile Include="Classes\HmMovComboList.vb" />
+    <Compile Include="Classes\TVDB.vb" />
     <Compile Include="Classes\TVTMDb.vb" />
     <Compile Include="Classes\TmdbCustomSetName.vb" />
     <Compile Include="Classes\UserTmdbSetAdditions.vb" />
@@ -1881,6 +1882,10 @@
     <ProjectReference Include="Scraper dll sources\IMPA\IMPA.vbproj">
       <Project>{0ef49671-9c5e-40fe-a469-86abba142bbe}</Project>
       <Name>IMPA</Name>
+    </ProjectReference>
+    <ProjectReference Include="Scraper dll sources\TVDB V2\TheTVDBLibV2\TheTVDBLibV2.csproj">
+      <Project>{cfe00a44-aeaa-4cab-a448-b397f8b01bc5}</Project>
+      <Name>TheTVDBLibV2</Name>
     </ProjectReference>
     <ProjectReference Include="Scraper dll sources\YouTubeUrlGrabber\YouTubeUrlGrabber.csproj">
       <Project>{1597c9b5-c70d-404d-9cc2-2761d43278c6}</Project>

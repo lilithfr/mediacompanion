@@ -172,6 +172,10 @@
       <Project>{2C089B91-EEEE-45EF-9C43-E1A703CA3287}</Project>
       <Name>ProtoXML</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scraper dll sources\TVDB V2\TheTVDBLibV2\TheTVDBLibV2.csproj">
+      <Project>{cfe00a44-aeaa-4cab-a448-b397f8b01bc5}</Project>
+      <Name>TheTVDBLibV2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilites\Utilites.vbproj">
       <Project>{0AF142A6-217A-4F1D-A67E-4A2F803E9B4D}</Project>
       <Name>Utilites</Name>

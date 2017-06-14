@@ -127,7 +127,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
 
     Public Shared Property TVDBAPI As String
         Get
-            Return If(String.IsNullOrEmpty(_tvdbapi), "ebe93edbc30735a0e702eb883fc855be", _tvdbapi)
+            Return If(String.IsNullOrEmpty(_tvdbapi), "A7613F5C1482A540", _tvdbapi)
         End Get
         Set(value As String)
             _tvdbapi = value
@@ -2358,6 +2358,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 Try
                     Directory.CreateDirectory(currentPath)
                 Catch
+                    Return False
                 End Try
             End If
         Next
