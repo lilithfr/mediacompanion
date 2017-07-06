@@ -829,28 +829,28 @@ Public Class Movie
     End Function
 
     Private Sub AppendScrapeSuccessActions
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie          , "Assign scraped movie"      ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache         , "Updating movie set cache"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                , "Assign HD Tags"            ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                 , "Get Keywords for tags"     ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFiles               , "Rename Files"              ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFolders             , "Rename Folders"            ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                   , "Actors scraper"            ) ) 'GetImdbActors
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl            , "Get trailer URL"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs        , "Getting extra Frodo Poster thumbs") )
-        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs        , "Getting extra Frodo Fanart thumbs") )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls            , "Get poster URLs"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                     , "Save Nfo"                  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster              , "Poster download"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart              , "Fanart download"           ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadMovieSetArt         , "MovieSet Art download"     ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFromFanartTv        , "Fanart.Tv download"        ) )  'Download images from Fanart.Tv site
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart         , "Extra Fanart download"     ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer             , "Trailer download"          ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache          , "Assigning movie to cache"  ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile           , "Handle offline file"       ) )
-        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                , "Updating caches"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedMovie            , "Assign scraped movie"      ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache           , "Updating movie set cache"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                  , "Assign HD Tags"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                   , "Get Keywords for tags"     ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFiles                 , "Rename Files"              ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFolders               , "Rename Folders"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetActors                     , "Actors scraper"            ) ) 'GetImdbActors
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl              , "Get trailer URL"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs          , "Getting extra Frodo Poster thumbs") )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs          , "Getting extra Frodo Fanart thumbs") )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls              , "Get poster URLs"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf TidyUpAnyUnscrapedFields      , "Tidy up unscraped fields"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveNFO                       , "Save Nfo"                  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadPoster                , "Poster download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadFanart                , "Fanart download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadMovieSetArt           , "MovieSet Art download"     ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadArtFromFanartTv       , "Fanart.Tv download"        ) )  'Download images from Fanart.Tv site
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadExtraFanart           , "Extra Fanart download"     ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer               , "Trailer download"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache            , "Assigning movie to cache"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile             , "Handle offline file"       ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                  , "Updating caches"           ) )
     End Sub
     
     Sub AppendMVScrapeSuccessActions    'Add only these actions when scraping Music Videos
@@ -2273,18 +2273,23 @@ Public Class Movie
         End If
     End Sub
 
-    Sub DownloadFromFanartTv(Optional rescrapelist As Boolean = False)
+    Sub DownloadArtFromFanartTv(Optional rescrapelist As Boolean = False)
         If Pref.MovieChangeMovie AndAlso Pref.MovieChangeKeepExistingArt Then Exit Sub
         If Pref.MovFanartTvscrape OrElse rescrapelist Then
-            DoDownloadFromFanartTv(rescrapelist)
+            Dim ID = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, If(_scrapedMovie.fullmoviebody.tmdbid<>"", _scrapedMovie.fullmoviebody.tmdbid,""))
+            DoDownloadFromFanartTv(ID, False, rescrapelist)
         Else
             ReportProgress(, "Scraping from Fanart.Tv, not selected" & vbCrLf)
             Exit Sub
         End If
     End Sub
 
-    Sub DoDownloadFromFanartTv(Optional isRescrapelist As Boolean = False)
+    Sub DoDownloadFromFanartTv(ByVal ID As String, ByVal SetArt As Boolean, Optional isRescrapelist As Boolean = False)
         Try
+            If ID = "" Then
+                ReportProgress(,"!!! Abort Fanart,Tv artwork, no IMDB or TMDBID Found" &vbCrLf)
+                Exit Sub
+            End If
             Dim fcount As Integer = 0
             If Not Pref.GetRootFolderCheck(ActualNfoPathAndFilename) Then
                 Dim clearartLD As String = Nothing : Dim logoLD As String = Nothing: Dim clearart As String = Nothing : Dim logo As String = Nothing
@@ -2306,11 +2311,8 @@ Public Class Movie
                 Else
                     DestPath = Path.GetDirectoryName(NfoPathAndFilename) & "\"
                 End If
-                Dim ID = If(_scrapedMovie.fullmoviebody.imdbid.Contains("tt"), _scrapedMovie.fullmoviebody.imdbid, If(_scrapedMovie.fullmoviebody.tmdbid<>"", _scrapedMovie.fullmoviebody.tmdbid,""))
-                If ID = "" Then
-                    ReportProgress(,"!!! Abort Fanart,Tv artwork, no IMDB or TMDBID Found" &vbCrLf)
-                    Exit Sub
-                End If
+                If SetArt Then DestPath = _scrapedMovie.fileinfo.movsetfanartpath.Replace("fanart.jpg", "")
+                
                 Dim newobj As New FanartTv
                 newobj.ID = ID
                 newobj.src = "movie"
@@ -2368,6 +2370,7 @@ Public Class Movie
                                 Exit For
                             End If
                         Next
+                        If IsNothing(fanart) AndAlso FanarttvMovielist.moviebackground.Count > 0 Then fanart = FanarttvMovielist.moviebackground(0).url
                     End If
                     If IsNothing(disc) Then
                         For Each Art In FanarttvMovielist.moviedisc 
@@ -2394,7 +2397,7 @@ Public Class Movie
                         Next
                     End If
                 Next
-                If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
+                If IsNothing(clearart) AndAlso Not IsNothing(clearartLD) Then clearart = clearartLD 
                 If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logoLD
                 If Pref.MovFanartTvDlAll OrElse Pref.MovFanartTvDlClearArt Then Utilities.DownloadImage(clearart, DestPath & "clearart.png", Overwrite)
                 If Pref.MovFanartTvDlAll OrElse Pref.MovFanartTvDlClearLogo Then Utilities.DownloadImage(logo, DestPath & "logo.png", Overwrite)
@@ -2484,6 +2487,9 @@ Public Class Movie
     Sub DownloadMovieSetArt()
         If Pref.dlMovSetArtwork AndAlso _scrapedMovie.fullmoviebody.TmdbSetId <> "" Then
             If Not File.Exists(_scrapedMovie.fileinfo.movsetfanartpath) Or Not File.Exists(_scrapedMovie.fileinfo.movsetposterpath) OrElse Pref.overwritethumbs Then
+                If Not Pref.MovSetArtScrapeTMDb Then
+                    DoDownloadFromFanartTv(_scrapedMovie.fullmoviebody.TmdbSetId, True)
+                End If
                 DoDownloadMovieSetArtwork()
             End If
         End If
@@ -2491,6 +2497,18 @@ Public Class Movie
 
     Sub DoDownloadMovieSetArtwork()
         If _scrapedMovie.fileinfo.movsetposterpath <> "" Then
+
+            'First check if we attempted to get Movie Set artwork from Fanart.TV
+            If Not Pref.MovSetArtScrapeTMDb Then
+                Dim found As Boolean = False
+                found = File.Exists(_scrapedMovie.fileinfo.movsetfanartpath)
+                found = File.Exists(_scrapedMovie.fileinfo.movsetposterpath)
+                
+                'If we got Fanart or Poster from Fanart.TV then exit.
+                If found Then Exit Sub
+                
+                'Only resume if failed to get from Fanart.Tv
+            End If
             Dim _api As New TMDb
 
             _api.SetId = _scrapedMovie.fullmoviebody.TmdbSetId
@@ -3365,7 +3383,7 @@ Public Class Movie
             If rl.dlxtraart Then DownloadExtraFanart()
             If Cancelled() Then Exit Sub
 
-            If rl.ArtFromFanartTv Then DownloadFromFanartTv(True)
+            If rl.ArtFromFanartTv Then DownloadArtFromFanartTv(True)
             If Cancelled() Then Exit Sub
 
             If _scrapedMovie.fullmoviebody.TmdbSetId="" And rl.missingmovsetart Then

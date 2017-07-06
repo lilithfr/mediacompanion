@@ -436,6 +436,8 @@ Public Class frmPreferences
         End If
 
         ''MovieSet Artwork
+        rbMovSetArtScrapeTMDb               .Checked        = Pref.MovSetArtScrapeTMDb
+        rbMovSetArtScrapeFanartTv           .Checked        = Not Pref.MovSetArtScrapeTMDb
         rbMovSetArtSetFolder                .Checked        = Pref.MovSetArtSetFolder
         rbMovSetFolder                      .Checked        = Not Pref.MovSetArtSetFolder 
         btnMovSetCentralFolderSelect        .Enabled        = Pref.MovSetArtSetFolder 
@@ -2016,6 +2018,12 @@ End Sub
     Private Sub cbMovSetArtScrape_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles cbMovSetArtScrape.CheckedChanged
         If prefsload Then Exit Sub
         Pref.dlMovSetArtwork = cbMovSetArtScrape.Checked 
+        Changes = True
+    End Sub
+
+    Private Sub rbMovSetArtScrapeTMDb_CheckedChanged( ByVal sender As Object, e As EventArgs) Handles rbMovSetArtScrapeTMDb.CheckedChanged, rbMovSetArtScrapeFanartTv.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.MovSetArtScrapeTMDb = rbMovSetArtScrapeTMDb.Checked
         Changes = True
     End Sub
 

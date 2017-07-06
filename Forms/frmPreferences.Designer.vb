@@ -513,6 +513,8 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
+        Me.rbMovSetArtScrapeTMDb = New System.Windows.Forms.RadioButton()
+        Me.rbMovSetArtScrapeFanartTv = New System.Windows.Forms.RadioButton()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -3223,7 +3225,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3364,7 +3366,7 @@ Partial Class frmPreferences
         Me.grpbxMoviePosterPriority.Controls.Add(Me.btnMovPosterPriorityDown)
         Me.grpbxMoviePosterPriority.Controls.Add(Me.btnMovPosterPriorityUp)
         Me.grpbxMoviePosterPriority.Controls.Add(Me.lbPosterSourcePriorities)
-        Me.grpbxMoviePosterPriority.Location = New System.Drawing.Point(9, 333)
+        Me.grpbxMoviePosterPriority.Location = New System.Drawing.Point(9, 365)
         Me.grpbxMoviePosterPriority.Margin = New System.Windows.Forms.Padding(4)
         Me.grpbxMoviePosterPriority.Name = "grpbxMoviePosterPriority"
         Me.grpbxMoviePosterPriority.Padding = New System.Windows.Forms.Padding(4)
@@ -3447,6 +3449,8 @@ Partial Class frmPreferences
         '
         'grpbxAutoScrapeArtwork
         '
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.rbMovSetArtScrapeFanartTv)
+        Me.grpbxAutoScrapeArtwork.Controls.Add(Me.rbMovSetArtScrapeTMDb)
         Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovCustPosterjpgNoDelete)
         Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovCustFolderjpgNoDelete)
         Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMovFanartNaming)
@@ -3459,14 +3463,14 @@ Partial Class frmPreferences
         Me.grpbxAutoScrapeArtwork.Controls.Add(Me.cbMoviePosterScrape)
         Me.grpbxAutoScrapeArtwork.Location = New System.Drawing.Point(9, 13)
         Me.grpbxAutoScrapeArtwork.Name = "grpbxAutoScrapeArtwork"
-        Me.grpbxAutoScrapeArtwork.Size = New System.Drawing.Size(327, 313)
+        Me.grpbxAutoScrapeArtwork.Size = New System.Drawing.Size(327, 345)
         Me.grpbxAutoScrapeArtwork.TabIndex = 60
         Me.grpbxAutoScrapeArtwork.TabStop = false
         Me.grpbxAutoScrapeArtwork.Text = "Autoscrape artwork"
         '
         'cbMovCustPosterjpgNoDelete
         '
-        Me.cbMovCustPosterjpgNoDelete.Location = New System.Drawing.Point(5, 270)
+        Me.cbMovCustPosterjpgNoDelete.Location = New System.Drawing.Point(5, 304)
         Me.cbMovCustPosterjpgNoDelete.Name = "cbMovCustPosterjpgNoDelete"
         Me.cbMovCustPosterjpgNoDelete.Size = New System.Drawing.Size(300, 35)
         Me.cbMovCustPosterjpgNoDelete.TabIndex = 50
@@ -3475,7 +3479,7 @@ Partial Class frmPreferences
         '
         'cbMovCustFolderjpgNoDelete
         '
-        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 228)
+        Me.cbMovCustFolderjpgNoDelete.Location = New System.Drawing.Point(5, 271)
         Me.cbMovCustFolderjpgNoDelete.Name = "cbMovCustFolderjpgNoDelete"
         Me.cbMovCustFolderjpgNoDelete.Size = New System.Drawing.Size(295, 36)
         Me.cbMovCustFolderjpgNoDelete.TabIndex = 49
@@ -6170,6 +6174,29 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
+        'rbMovSetArtScrapeTMDb
+        '
+        Me.rbMovSetArtScrapeTMDb.AutoSize = true
+        Me.rbMovSetArtScrapeTMDb.Location = New System.Drawing.Point(17, 224)
+        Me.rbMovSetArtScrapeTMDb.Name = "rbMovSetArtScrapeTMDb"
+        Me.rbMovSetArtScrapeTMDb.Size = New System.Drawing.Size(139, 19)
+        Me.rbMovSetArtScrapeTMDb.TabIndex = 51
+        Me.rbMovSetArtScrapeTMDb.TabStop = true
+        Me.rbMovSetArtScrapeTMDb.Text = "From TMDb (default)"
+        Me.rbMovSetArtScrapeTMDb.UseVisualStyleBackColor = true
+        '
+        'rbMovSetArtScrapeFanartTv
+        '
+        Me.rbMovSetArtScrapeFanartTv.AutoSize = true
+        Me.rbMovSetArtScrapeFanartTv.Location = New System.Drawing.Point(17, 246)
+        Me.rbMovSetArtScrapeFanartTv.Name = "rbMovSetArtScrapeFanartTv"
+        Me.rbMovSetArtScrapeFanartTv.Size = New System.Drawing.Size(216, 19)
+        Me.rbMovSetArtScrapeFanartTv.TabIndex = 52
+        Me.rbMovSetArtScrapeFanartTv.TabStop = true
+        Me.rbMovSetArtScrapeFanartTv.Text = "From Fanart.TV (Fallback to TMDb)"
+        Me.ToolTip1.SetToolTip(Me.rbMovSetArtScrapeFanartTv, "If no MovieSet artwork on Fanart.Tv"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"get Poster and Fanart from TMDb.")
+        Me.rbMovSetArtScrapeFanartTv.UseVisualStyleBackColor = true
+        '
         'frmPreferences
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -6840,4 +6867,6 @@ End Sub
     Friend WithEvents Label31 As Label
     Friend WithEvents cbMovAllowNonImdbIdAsId As CheckBox
     Friend WithEvents cb_ExcludeActorNoThumb As CheckBox
+    Friend WithEvents rbMovSetArtScrapeFanartTv As RadioButton
+    Friend WithEvents rbMovSetArtScrapeTMDb As RadioButton
 End Class
