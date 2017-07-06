@@ -246,7 +246,7 @@ Public Class Classimdb
 
             'www.imdb.com/title/tt0402022
             '''Try one of the search engines
-            If webpage.IndexOf("www.imdb.com/title/tt") <> -1 Then newimdbid = webpage.Substring(webpage.IndexOf("www.imdb.com/title/tt") + 19, 9)
+            If webpage.IndexOf("imdb.com/title/tt") <> -1 Then newimdbid = webpage.Substring(webpage.IndexOf("imdb.com/title/tt") + 15, 9)
             If newimdbid <> "" AndAlso newimdbid.StartsWith("tt") AndAlso newimdbid.Length = 9 Then Return newimdbid
             
             '''Next try IMDb itself
