@@ -106,6 +106,7 @@ Partial Class frmPreferences
         Me.cbtvDisplayNextAiredToolTip = New System.Windows.Forms.CheckBox()
         Me.cbEnableMovDeleteFolderTsmi = New System.Windows.Forms.CheckBox()
         Me.cbMovAllowNonImdbIdAsId = New System.Windows.Forms.CheckBox()
+        Me.rbMovSetArtScrapeFanartTv = New System.Windows.Forms.RadioButton()
         Me.cbXbmcTmdbActorFromImdb = New System.Windows.Forms.CheckBox()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -277,6 +278,7 @@ Partial Class frmPreferences
         Me.btnMovPosterPriorityUp = New System.Windows.Forms.Button()
         Me.lbPosterSourcePriorities = New System.Windows.Forms.ListBox()
         Me.grpbxAutoScrapeArtwork = New System.Windows.Forms.GroupBox()
+        Me.rbMovSetArtScrapeTMDb = New System.Windows.Forms.RadioButton()
         Me.cbMovCustPosterjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovCustFolderjpgNoDelete = New System.Windows.Forms.CheckBox()
         Me.cbMovFanartNaming = New System.Windows.Forms.CheckBox()
@@ -513,8 +515,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.rbMovSetArtScrapeTMDb = New System.Windows.Forms.RadioButton()
-        Me.rbMovSetArtScrapeFanartTv = New System.Windows.Forms.RadioButton()
+        Me.Label32 = New System.Windows.Forms.Label()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -1465,7 +1466,7 @@ Partial Class frmPreferences
         '
         Me.cmbxTvMaxGenres.FormattingEnabled = true
         Me.cmbxTvMaxGenres.Items.AddRange(New Object() {"All Available", "None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"})
-        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(157, 320)
+        Me.cmbxTvMaxGenres.Location = New System.Drawing.Point(150, 303)
         Me.cmbxTvMaxGenres.Margin = New System.Windows.Forms.Padding(4)
         Me.cmbxTvMaxGenres.MaxDropDownItems = 30
         Me.cmbxTvMaxGenres.Name = "cmbxTvMaxGenres"
@@ -1535,6 +1536,18 @@ Partial Class frmPreferences
         " movies.  ID's MUST start with"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Alpha character to differentiate from TMDB Id's."& _ 
         ""&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"ie: RB-1234 or IP8888")
         Me.cbMovAllowNonImdbIdAsId.UseVisualStyleBackColor = true
+        '
+        'rbMovSetArtScrapeFanartTv
+        '
+        Me.rbMovSetArtScrapeFanartTv.AutoSize = true
+        Me.rbMovSetArtScrapeFanartTv.Location = New System.Drawing.Point(17, 246)
+        Me.rbMovSetArtScrapeFanartTv.Name = "rbMovSetArtScrapeFanartTv"
+        Me.rbMovSetArtScrapeFanartTv.Size = New System.Drawing.Size(216, 19)
+        Me.rbMovSetArtScrapeFanartTv.TabIndex = 52
+        Me.rbMovSetArtScrapeFanartTv.TabStop = true
+        Me.rbMovSetArtScrapeFanartTv.Text = "From Fanart.TV (Fallback to TMDb)"
+        Me.ToolTip1.SetToolTip(Me.rbMovSetArtScrapeFanartTv, "If no MovieSet artwork on Fanart.Tv"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"get Poster and Fanart from TMDb.")
+        Me.rbMovSetArtScrapeFanartTv.UseVisualStyleBackColor = true
         '
         'cbXbmcTmdbActorFromImdb
         '
@@ -3225,7 +3238,7 @@ Partial Class frmPreferences
         Me.tpMoviePreferences_Artwork.Controls.Add(Me.grpbxAutoScrapeArtwork)
         Me.tpMoviePreferences_Artwork.Location = New System.Drawing.Point(4, 24)
         Me.tpMoviePreferences_Artwork.Name = "tpMoviePreferences_Artwork"
-        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(992, 567)
+        Me.tpMoviePreferences_Artwork.Size = New System.Drawing.Size(184, 46)
         Me.tpMoviePreferences_Artwork.TabIndex = 4
         Me.tpMoviePreferences_Artwork.Text = "Artwork"
         Me.tpMoviePreferences_Artwork.UseVisualStyleBackColor = true
@@ -3467,6 +3480,17 @@ Partial Class frmPreferences
         Me.grpbxAutoScrapeArtwork.TabIndex = 60
         Me.grpbxAutoScrapeArtwork.TabStop = false
         Me.grpbxAutoScrapeArtwork.Text = "Autoscrape artwork"
+        '
+        'rbMovSetArtScrapeTMDb
+        '
+        Me.rbMovSetArtScrapeTMDb.AutoSize = true
+        Me.rbMovSetArtScrapeTMDb.Location = New System.Drawing.Point(17, 224)
+        Me.rbMovSetArtScrapeTMDb.Name = "rbMovSetArtScrapeTMDb"
+        Me.rbMovSetArtScrapeTMDb.Size = New System.Drawing.Size(139, 19)
+        Me.rbMovSetArtScrapeTMDb.TabIndex = 51
+        Me.rbMovSetArtScrapeTMDb.TabStop = true
+        Me.rbMovSetArtScrapeTMDb.Text = "From TMDb (default)"
+        Me.rbMovSetArtScrapeTMDb.UseVisualStyleBackColor = true
         '
         'cbMovCustPosterjpgNoDelete
         '
@@ -4637,6 +4661,7 @@ Partial Class frmPreferences
         '
         'GroupBox17
         '
+        Me.GroupBox17.Controls.Add(Me.Label32)
         Me.GroupBox17.Controls.Add(Me.Label28)
         Me.GroupBox17.Controls.Add(Me.tbTvAutoScrapeInterval)
         Me.GroupBox17.Controls.Add(Me.cbTvEnableAutoScrape)
@@ -4709,12 +4734,11 @@ Partial Class frmPreferences
         '
         Me.cbTvScrShtTVDBResize.AutoSize = true
         Me.cbTvScrShtTVDBResize.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 478)
+        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 465)
         Me.cbTvScrShtTVDBResize.Name = "cbTvScrShtTVDBResize"
-        Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 49)
+        Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 19)
         Me.cbTvScrShtTVDBResize.TabIndex = 73
-        Me.cbTvScrShtTVDBResize.Text = "Save Screenshot in TVDB friendly size."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3"& _ 
-    " means saving at 400x300"
+        Me.cbTvScrShtTVDBResize.Text = "Save Screenshot in TVDB friendly size."
         Me.cbTvScrShtTVDBResize.TextAlign = System.Drawing.ContentAlignment.TopLeft
         Me.cbTvScrShtTVDBResize.UseVisualStyleBackColor = true
         '
@@ -4841,7 +4865,7 @@ Partial Class frmPreferences
         'Label123
         '
         Me.Label123.AutoSize = true
-        Me.Label123.Location = New System.Drawing.Point(15, 47)
+        Me.Label123.Location = New System.Drawing.Point(15, 52)
         Me.Label123.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label123.Name = "Label123"
         Me.Label123.Size = New System.Drawing.Size(194, 15)
@@ -4875,7 +4899,7 @@ Partial Class frmPreferences
         '
         Me.cbTvAutoScreenShot.AutoSize = true
         Me.cbTvAutoScreenShot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 458)
+        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 445)
         Me.cbTvAutoScreenShot.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvAutoScreenShot.Name = "cbTvAutoScreenShot"
         Me.cbTvAutoScreenShot.Size = New System.Drawing.Size(296, 19)
@@ -4897,16 +4921,15 @@ Partial Class frmPreferences
         '
         'Label139
         '
-        Me.Label139.AutoSize = true
-        Me.Label139.Font = New System.Drawing.Font("Microsoft Sans Serif", 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label139.Location = New System.Drawing.Point(417, 398)
+        Me.Label139.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label139.Location = New System.Drawing.Point(402, 398)
         Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label139.Name = "Label139"
-        Me.Label139.Size = New System.Drawing.Size(245, 52)
+        Me.Label139.Size = New System.Drawing.Size(306, 43)
         Me.Label139.TabIndex = 36
-        Me.Label139.Text = "Selecting 'Quick Add' will speed up the scraping of"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"New Series, by not downloadi"& _ 
-    "ng Artwork."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"All Series art can be scraped by using the"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TV context menu item 'D"& _ 
-    "ownload missing art'."
+        Me.Label139.Text = "Selecting 'Quick Add' will speed up the scraping of New Series, by not downloadin"& _ 
+    "g Artwork.  All Series art can be scraped by using the TV context menu item 'Dow"& _ 
+    "nload missing art'."
         '
         'GroupBox20
         '
@@ -4938,7 +4961,7 @@ Partial Class frmPreferences
         'cbTvDlEpisodeThumb
         '
         Me.cbTvDlEpisodeThumb.AutoSize = true
-        Me.cbTvDlEpisodeThumb.Location = New System.Drawing.Point(10, 91)
+        Me.cbTvDlEpisodeThumb.Location = New System.Drawing.Point(10, 79)
         Me.cbTvDlEpisodeThumb.Name = "cbTvDlEpisodeThumb"
         Me.cbTvDlEpisodeThumb.Size = New System.Drawing.Size(192, 19)
         Me.cbTvDlEpisodeThumb.TabIndex = 78
@@ -4949,7 +4972,7 @@ Partial Class frmPreferences
         '
         Me.Label24.AutoSize = true
         Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label24.Location = New System.Drawing.Point(15, 323)
+        Me.Label24.Location = New System.Drawing.Point(8, 306)
         Me.Label24.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(134, 15)
@@ -4959,7 +4982,7 @@ Partial Class frmPreferences
         'Label7
         '
         Me.Label7.AutoSize = true
-        Me.Label7.Location = New System.Drawing.Point(160, 118)
+        Me.Label7.Location = New System.Drawing.Point(157, 103)
         Me.Label7.Name = "Label7"
         Me.Label7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label7.Size = New System.Drawing.Size(82, 15)
@@ -4972,7 +4995,7 @@ Partial Class frmPreferences
         Me.cmbxTvXtraFanartQty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmbxTvXtraFanartQty.FormattingEnabled = true
         Me.cmbxTvXtraFanartQty.Items.AddRange(New Object() {"5", "10", "15", "20"})
-        Me.cmbxTvXtraFanartQty.Location = New System.Drawing.Point(245, 112)
+        Me.cmbxTvXtraFanartQty.Location = New System.Drawing.Point(244, 95)
         Me.cmbxTvXtraFanartQty.Name = "cmbxTvXtraFanartQty"
         Me.cmbxTvXtraFanartQty.Size = New System.Drawing.Size(55, 23)
         Me.cmbxTvXtraFanartQty.TabIndex = 74
@@ -4980,7 +5003,7 @@ Partial Class frmPreferences
         'cbTvFanartTvFirst
         '
         Me.cbTvFanartTvFirst.AutoSize = true
-        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(189, 133)
+        Me.cbTvFanartTvFirst.Location = New System.Drawing.Point(171, 121)
         Me.cbTvFanartTvFirst.Name = "cbTvFanartTvFirst"
         Me.cbTvFanartTvFirst.Size = New System.Drawing.Size(110, 34)
         Me.cbTvFanartTvFirst.TabIndex = 73
@@ -4990,7 +5013,7 @@ Partial Class frmPreferences
         'cbTvDlFanartTvArt
         '
         Me.cbTvDlFanartTvArt.AutoSize = true
-        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 141)
+        Me.cbTvDlFanartTvArt.Location = New System.Drawing.Point(10, 128)
         Me.cbTvDlFanartTvArt.Name = "cbTvDlFanartTvArt"
         Me.cbTvDlFanartTvArt.Size = New System.Drawing.Size(155, 19)
         Me.cbTvDlFanartTvArt.TabIndex = 72
@@ -5000,7 +5023,7 @@ Partial Class frmPreferences
         'cbSeasonFolderjpg
         '
         Me.cbSeasonFolderjpg.AutoSize = true
-        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 281)
+        Me.cbSeasonFolderjpg.Location = New System.Drawing.Point(10, 269)
         Me.cbSeasonFolderjpg.Name = "cbSeasonFolderjpg"
         Me.cbSeasonFolderjpg.Size = New System.Drawing.Size(237, 34)
         Me.cbSeasonFolderjpg.TabIndex = 71
@@ -5010,7 +5033,7 @@ Partial Class frmPreferences
         'cb_TvFolderJpg
         '
         Me.cb_TvFolderJpg.AutoSize = true
-        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 261)
+        Me.cb_TvFolderJpg.Location = New System.Drawing.Point(10, 250)
         Me.cb_TvFolderJpg.Name = "cb_TvFolderJpg"
         Me.cb_TvFolderJpg.Size = New System.Drawing.Size(221, 19)
         Me.cb_TvFolderJpg.TabIndex = 70
@@ -5020,7 +5043,7 @@ Partial Class frmPreferences
         'cbTvDlXtraFanart
         '
         Me.cbTvDlXtraFanart.AutoSize = true
-        Me.cbTvDlXtraFanart.Location = New System.Drawing.Point(10, 116)
+        Me.cbTvDlXtraFanart.Location = New System.Drawing.Point(10, 100)
         Me.cbTvDlXtraFanart.Name = "cbTvDlXtraFanart"
         Me.cbTvDlXtraFanart.Size = New System.Drawing.Size(148, 19)
         Me.cbTvDlXtraFanart.TabIndex = 69
@@ -5032,7 +5055,7 @@ Partial Class frmPreferences
         Me.GroupBox18.Controls.Add(Me.posterbtn)
         Me.GroupBox18.Controls.Add(Me.bannerbtn)
         Me.GroupBox18.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox18.Location = New System.Drawing.Point(10, 214)
+        Me.GroupBox18.Location = New System.Drawing.Point(10, 202)
         Me.GroupBox18.Name = "GroupBox18"
         Me.GroupBox18.Size = New System.Drawing.Size(290, 41)
         Me.GroupBox18.TabIndex = 68
@@ -5080,7 +5103,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDlSeasonArt.AutoSize = true
         Me.cbTvDlSeasonArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlSeasonArt.Location = New System.Drawing.Point(10, 68)
+        Me.cbTvDlSeasonArt.Location = New System.Drawing.Point(10, 58)
         Me.cbTvDlSeasonArt.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDlSeasonArt.Name = "cbTvDlSeasonArt"
         Me.cbTvDlSeasonArt.Size = New System.Drawing.Size(175, 19)
@@ -5092,7 +5115,7 @@ Partial Class frmPreferences
         '
         Me.cbTvDlFanart.AutoSize = true
         Me.cbTvDlFanart.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvDlFanart.Location = New System.Drawing.Point(10, 43)
+        Me.cbTvDlFanart.Location = New System.Drawing.Point(10, 38)
         Me.cbTvDlFanart.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvDlFanart.Name = "cbTvDlFanart"
         Me.cbTvDlFanart.Size = New System.Drawing.Size(171, 19)
@@ -5106,7 +5129,7 @@ Partial Class frmPreferences
         Me.GroupBox19.Controls.Add(Me.RadioButton40)
         Me.GroupBox19.Controls.Add(Me.RadioButton41)
         Me.GroupBox19.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.GroupBox19.Location = New System.Drawing.Point(10, 166)
+        Me.GroupBox19.Location = New System.Drawing.Point(10, 154)
         Me.GroupBox19.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox19.Name = "GroupBox19"
         Me.GroupBox19.Padding = New System.Windows.Forms.Padding(4)
@@ -5158,7 +5181,7 @@ Partial Class frmPreferences
         '
         Me.cbTvQuickAddShow.AutoSize = true
         Me.cbTvQuickAddShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 375)
+        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(413, 379)
         Me.cbTvQuickAddShow.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvQuickAddShow.Name = "cbTvQuickAddShow"
         Me.cbTvQuickAddShow.Size = New System.Drawing.Size(181, 19)
@@ -5445,7 +5468,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
+        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -6174,28 +6197,14 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'rbMovSetArtScrapeTMDb
+        'Label32
         '
-        Me.rbMovSetArtScrapeTMDb.AutoSize = true
-        Me.rbMovSetArtScrapeTMDb.Location = New System.Drawing.Point(17, 224)
-        Me.rbMovSetArtScrapeTMDb.Name = "rbMovSetArtScrapeTMDb"
-        Me.rbMovSetArtScrapeTMDb.Size = New System.Drawing.Size(139, 19)
-        Me.rbMovSetArtScrapeTMDb.TabIndex = 51
-        Me.rbMovSetArtScrapeTMDb.TabStop = true
-        Me.rbMovSetArtScrapeTMDb.Text = "From TMDb (default)"
-        Me.rbMovSetArtScrapeTMDb.UseVisualStyleBackColor = true
-        '
-        'rbMovSetArtScrapeFanartTv
-        '
-        Me.rbMovSetArtScrapeFanartTv.AutoSize = true
-        Me.rbMovSetArtScrapeFanartTv.Location = New System.Drawing.Point(17, 246)
-        Me.rbMovSetArtScrapeFanartTv.Name = "rbMovSetArtScrapeFanartTv"
-        Me.rbMovSetArtScrapeFanartTv.Size = New System.Drawing.Size(216, 19)
-        Me.rbMovSetArtScrapeFanartTv.TabIndex = 52
-        Me.rbMovSetArtScrapeFanartTv.TabStop = true
-        Me.rbMovSetArtScrapeFanartTv.Text = "From Fanart.TV (Fallback to TMDb)"
-        Me.ToolTip1.SetToolTip(Me.rbMovSetArtScrapeFanartTv, "If no MovieSet artwork on Fanart.Tv"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"get Poster and Fanart from TMDb.")
-        Me.rbMovSetArtScrapeFanartTv.UseVisualStyleBackColor = true
+        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label32.Location = New System.Drawing.Point(445, 484)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(179, 30)
+        Me.Label32.TabIndex = 79
+        Me.Label32.Text = "For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3 means saving at 400x300"
         '
         'frmPreferences
         '
@@ -6869,4 +6878,5 @@ End Sub
     Friend WithEvents cb_ExcludeActorNoThumb As CheckBox
     Friend WithEvents rbMovSetArtScrapeFanartTv As RadioButton
     Friend WithEvents rbMovSetArtScrapeTMDb As RadioButton
+    Friend WithEvents Label32 As Label
 End Class
