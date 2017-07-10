@@ -418,6 +418,7 @@ Public Class Pref
     Public Shared TvXtraFanartQty As Integer
     Public Shared tvfolderjpg As Boolean
     Public Shared seasonfolderjpg As Boolean
+    Public Shared TvEpSaveNfoEmpty As Boolean
     Public Shared enabletvhdtags As Boolean
     Public Shared disabletvlogs As Boolean
     Public Shared postertype As String
@@ -776,6 +777,7 @@ Public Class Pref
         TvXtraFanartQty = 5
         tvfolderjpg = False
         seasonfolderjpg = False
+        TvEpSaveNfoEmpty = False
         postertype = "poster"
         TvdbLanguage = "English"
         TvdbLanguageCode = "en"
@@ -1248,6 +1250,7 @@ Public Class Pref
         root.AppendChild(doc, "tvdbactorscrape",                    TvdbActorScrape)            'ComboBox8
         root.AppendChild(doc, "tvfolderjpg",                        tvfolderjpg)                'cb_TvFolderJpg
         root.AppendChild(doc, "seasonfolderjpg",                    seasonfolderjpg)            'cbseasonfolderjpg
+        root.AppendChild(doc, "TvEpSaveNfoEmpty",                   TvEpSaveNfoEmpty)           'cbTvEpSaveNfoEmpty
         root.AppendChild(doc, "downloadtvfanart",                   tvdlfanart)                 'cbTvDlFanart
         root.AppendChild(doc, "downloadtvposter",                   tvdlposter)                 'cbTvDlPosterArt
         root.AppendChild(doc, "downloadtvseasonthumbs",             tvdlseasonthumbs)           'cbTvDlSeasonArt
@@ -1567,6 +1570,7 @@ Public Class Pref
                     Case "downloadtvfanart"                     : tvdlfanart = thisresult.InnerXml
                     Case "tvfolderjpg"                          : tvfolderjpg = thisresult.InnerXml
                     Case "seasonfolderjpg"                      : seasonfolderjpg = thisresult.InnerXml
+                    Case "TvEpSaveNfoEmpty"                     : TvEpSaveNfoEmpty = thisresult.InnerXml
                     Case "autoepisodescreenshot"                : autoepisodescreenshot = thisresult.InnerXml
                     Case "tvscrnshtTVDBResize"                  : tvscrnshtTVDBResize = thisresult.InnerXml 
                     Case "ignorearticle"                        : ignorearticle = thisresult.InnerXml

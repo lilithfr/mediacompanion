@@ -613,6 +613,7 @@ Public Class frmPreferences
         'odd Art
         cb_TvFolderJpg                  .Checked    = Pref.tvfolderjpg
         cbSeasonFolderjpg               .Checked    = Pref.seasonfolderjpg
+        cbTvEpSaveNfoEmpty              .Checked    = Pref.TvEpSaveNfoEmpty
         Select Case Pref.TvMaxGenres
             Case 99
                 cmbxTvMaxGenres.SelectedItem = "All Available"
@@ -2826,6 +2827,12 @@ End Sub
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
+    End Sub
+
+    Private Sub cbTvEpSaveNfoEmpty_CheckedChanges(ByVal sender As System.Object, byval e As System.EventArgs) Handles cbTvEpSaveNfoEmpty.CheckedChanged
+        If prefsload Then Exit Sub
+        Pref.TvEpSaveNfoEmpty = cbTvEpSaveNfoEmpty.Checked
+        Changes = True
     End Sub
 
 'End Of - TvShow Auto Scrape Options

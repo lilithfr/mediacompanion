@@ -200,6 +200,15 @@ If these words are in the movie's title, then Media Companion will handle them a
 
 Media Companion will keep these it the Title, and in the Foldername.</value>
   </data>
+  <data name="cbTvEpSaveNfoEmpty.ToolTip" xml:space="preserve">
+    <value>This option will allow users to edit/add episodes if
+not on present on TheTVDb.  Episode will have
+SeriesId associated, but no UniqueID.
+
+It is Preferable to pay it forward and add missing
+episode data on TheTVDb so other users can 
+benefit.</value>
+  </data>
   <data name="Label141.Text" xml:space="preserve">
     <value>Use this Panel to Add Custom Commands to MC. It can be used to start
 an XBMC Update, or maybe just to launch an external program.

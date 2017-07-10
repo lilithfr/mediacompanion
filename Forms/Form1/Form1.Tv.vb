@@ -1066,7 +1066,7 @@ Partial Public Class Form1
         Return episodestring
     End Function
 
-    Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String)
+    Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String, ByVal scrapedok As Boolean)
         tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
         WorkingWithNfoFiles.ep_NfoSave(alleps, path)
         If Pref.TvDlEpisodeThumb OrElse Pref.autoepisodescreenshot Then
@@ -1074,6 +1074,9 @@ Partial Public Class Form1
         Else
             tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
         End If
+
+        If Not scrapedok AndAlso Pref.TvEpSaveNfoEmpty Then Return path
+
         If Pref.autorenameepisodes = True Then
             Dim eps As New List(Of String)
             For Each ep In alleps
@@ -3000,39 +3003,45 @@ Partial Public Class Form1
                                         End If
                                     End If
                                     stage = "22b5f"
-                                    If Pref.enabletvhdtags = True Then
-                                        progresstext &= " : HD Tags..."
-                                        bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                        stage = "22b5f1"
-                                        Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
-                                        stage = "22b5f2"
-                                        If Not IsNothing(fileStreamDetails) Then
-                                            singleepisode.StreamDetails.Video = fileStreamDetails.Video
-                                            stage = "22b5f3"
-                                            For Each audioStream In fileStreamDetails.Audio
-                                                singleepisode.StreamDetails.Audio.Add(audioStream)
-                                            Next
-                                            For Each substrm In fileStreamDetails.Subtitles
-                                                singleepisode.StreamDetails.Subtitles.Add(substrm)
-                                            Next
-                                            stage = "22b5f4"
-                                            If Not String.IsNullOrEmpty(singleepisode.StreamDetails.Video.DurationInSeconds.Value) Then
-                                                tempstring = singleepisode.StreamDetails.Video.DurationInSeconds.Value
-                                                If Pref.intruntime Then
-                                                    singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
-                                                Else
-                                                    singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
-                                                End If
-                                                progresstext &= "OK."
-                                                bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                            End If
-                                            stage = "22b5f5"
-                                        End If
-                                    End If
+                                    GetEpHDTags(singleepisode, progress, progresstext)
+                                    'If Pref.enabletvhdtags = True Then
+                                    '    progresstext &= " : HD Tags..."
+                                    '    bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                                    '    stage = "22b5f1"
+                                    '    Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+                                    '    stage = "22b5f2"
+                                    '    If Not IsNothing(fileStreamDetails) Then
+                                    '        singleepisode.StreamDetails.Video = fileStreamDetails.Video
+                                    '        stage = "22b5f3"
+                                    '        For Each audioStream In fileStreamDetails.Audio
+                                    '            singleepisode.StreamDetails.Audio.Add(audioStream)
+                                    '        Next
+                                    '        For Each substrm In fileStreamDetails.Subtitles
+                                    '            singleepisode.StreamDetails.Subtitles.Add(substrm)
+                                    '        Next
+                                    '        stage = "22b5f4"
+                                    '        If Not String.IsNullOrEmpty(singleepisode.StreamDetails.Video.DurationInSeconds.Value) Then
+                                    '            tempstring = singleepisode.StreamDetails.Video.DurationInSeconds.Value
+                                    '            If Pref.intruntime Then
+                                    '                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                                    '            Else
+                                    '                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                                    '            End If
+                                    '            progresstext &= "OK."
+                                    '            bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                                    '        End If
+                                    '        stage = "22b5f5"
+                                    '    End If
+                                    'End If
                                     stage = "22b5g"
                                 End If
                             Else
                                 Pref.tvScraperLog &= "!!! WARNING: Could not locate this episode on TVDB, or TVDB may be unavailable" & vbCrLf
+                                singleepisode.Title.Value = ""
+                                If Pref.TvEpSaveNfoEmpty Then
+                                    Pref.tvScraperLog &= "!!! Basic empty nfo created as per selected option." & vbCrLf
+                                    GetEpHDTags(singleepisode, progress, progresstext)
+                                End If
                                 scrapedok = False
                             End If
                         Else
@@ -3055,14 +3064,14 @@ Partial Public Class Form1
                     stage = "23"
                 End If
                 stage = "24"
-                If savepath <> "" And scrapedok = True Then
+                If savepath <> "" AndAlso (scrapedok = True OrElse Pref.TvEpSaveNfoEmpty) Then
                     If bckgroundscanepisodes.CancellationPending Then
                         Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf
                         Exit Sub
                     End If
                     Dim newnamepath As String = ""
                     stage = "24a"
-                    newnamepath = ep_add(episodearray, savepath, showtitle)
+                    newnamepath = ep_add(episodearray, savepath, showtitle, scrapedok)
                     stage = "24b"
                     For Each ep In episodearray
                         ep.NfoFilePath = newnamepath
@@ -3109,6 +3118,33 @@ Partial Public Class Form1
             stage = "stage: " & stage
             ExceptionHandler.LogError(ex, stage)
         End Try
+    End Sub
+    
+    Public Sub GetEpHDTags(ByRef singleepisode As TvEpisode, ByRef progress As Integer, ByRef progresstext As String)
+        If Pref.enabletvhdtags = True Then
+            progresstext &= " : HD Tags..."
+            bckgroundscanepisodes.ReportProgress(progress, progresstext)
+            Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
+            If Not IsNothing(fileStreamDetails) Then
+                singleepisode.StreamDetails.Video = fileStreamDetails.Video
+                For Each audioStream In fileStreamDetails.Audio
+                    singleepisode.StreamDetails.Audio.Add(audioStream)
+                Next
+                For Each substrm In fileStreamDetails.Subtitles
+                    singleepisode.StreamDetails.Subtitles.Add(substrm)
+                Next
+                If Not String.IsNullOrEmpty(singleepisode.StreamDetails.Video.DurationInSeconds.Value) Then
+                    Dim tempstring As String = singleepisode.StreamDetails.Video.DurationInSeconds.Value
+                    If Pref.intruntime Then
+                        singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
+                    Else
+                        singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
+                    End If
+                    progresstext &= "OK."
+                    bckgroundscanepisodes.ReportProgress(progress, progresstext)
+                End If
+            End If
+        End If
     End Sub
     
     Sub tv_Rescrape_Episode(ByRef WorkingTvShow As TVShow, ByRef WorkingEpisode As TvEpisode)
@@ -3550,6 +3586,7 @@ Partial Public Class Form1
     Private Sub tv_Filter()
         tv_Filter(Nothing)
     End Sub
+
     Private Sub tv_Filter(ByVal overrideShowIsMissing As String)
         Dim butt As String = ""
         Dim ThisDate As Date = If(Pref.TvMissingEpOffset, Now.AddDays(-1), Now)

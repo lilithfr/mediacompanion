@@ -385,6 +385,7 @@ Partial Class frmPreferences
         Me.TabControl6 = New System.Windows.Forms.TabControl()
         Me.TabPage30 = New System.Windows.Forms.TabPage()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
+        Me.Label32 = New System.Windows.Forms.Label()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.tbTvAutoScrapeInterval = New System.Windows.Forms.TextBox()
         Me.cbTvEnableAutoScrape = New System.Windows.Forms.CheckBox()
@@ -515,7 +516,7 @@ Partial Class frmPreferences
         Me.btn_SettingsClose = New System.Windows.Forms.Button()
         Me.btn_SettingsApplyClose = New System.Windows.Forms.Button()
         Me.btn_SettingsClose2 = New System.Windows.Forms.Button()
-        Me.Label32 = New System.Windows.Forms.Label()
+        Me.cbTvEpSaveNfoEmpty = New System.Windows.Forms.CheckBox()
         Me.GroupBox12.SuspendLayout
         Me.gbExcludeFolders.SuspendLayout
         Me.grpbxImdbCertPriority.SuspendLayout
@@ -4694,6 +4695,15 @@ Partial Class frmPreferences
         Me.GroupBox17.TabStop = false
         Me.GroupBox17.Text = "Default TV Scraper Settings"
         '
+        'Label32
+        '
+        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.Label32.Location = New System.Drawing.Point(444, 496)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(179, 30)
+        Me.Label32.TabIndex = 79
+        Me.Label32.Text = "For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3 means saving at 400x300"
+        '
         'Label28
         '
         Me.Label28.AutoSize = true
@@ -4734,7 +4744,7 @@ Partial Class frmPreferences
         '
         Me.cbTvScrShtTVDBResize.AutoSize = true
         Me.cbTvScrShtTVDBResize.CheckAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(412, 465)
+        Me.cbTvScrShtTVDBResize.Location = New System.Drawing.Point(411, 477)
         Me.cbTvScrShtTVDBResize.Name = "cbTvScrShtTVDBResize"
         Me.cbTvScrShtTVDBResize.Size = New System.Drawing.Size(235, 19)
         Me.cbTvScrShtTVDBResize.TabIndex = 73
@@ -4899,7 +4909,7 @@ Partial Class frmPreferences
         '
         Me.cbTvAutoScreenShot.AutoSize = true
         Me.cbTvAutoScreenShot.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(412, 445)
+        Me.cbTvAutoScreenShot.Location = New System.Drawing.Point(411, 457)
         Me.cbTvAutoScreenShot.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvAutoScreenShot.Name = "cbTvAutoScreenShot"
         Me.cbTvAutoScreenShot.Size = New System.Drawing.Size(296, 19)
@@ -4922,7 +4932,7 @@ Partial Class frmPreferences
         'Label139
         '
         Me.Label139.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label139.Location = New System.Drawing.Point(402, 398)
+        Me.Label139.Location = New System.Drawing.Point(401, 410)
         Me.Label139.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label139.Name = "Label139"
         Me.Label139.Size = New System.Drawing.Size(306, 43)
@@ -4933,6 +4943,7 @@ Partial Class frmPreferences
         '
         'GroupBox20
         '
+        Me.GroupBox20.Controls.Add(Me.cbTvEpSaveNfoEmpty)
         Me.GroupBox20.Controls.Add(Me.cbTvDlEpisodeThumb)
         Me.GroupBox20.Controls.Add(Me.Label24)
         Me.GroupBox20.Controls.Add(Me.cmbxTvMaxGenres)
@@ -4953,7 +4964,7 @@ Partial Class frmPreferences
         Me.GroupBox20.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox20.Name = "GroupBox20"
         Me.GroupBox20.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox20.Size = New System.Drawing.Size(306, 351)
+        Me.GroupBox20.Size = New System.Drawing.Size(306, 363)
         Me.GroupBox20.TabIndex = 35
         Me.GroupBox20.TabStop = false
         Me.GroupBox20.Text = "TV Show Selector / Auto Scraper Default settings"
@@ -5181,7 +5192,7 @@ Partial Class frmPreferences
         '
         Me.cbTvQuickAddShow.AutoSize = true
         Me.cbTvQuickAddShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(413, 379)
+        Me.cbTvQuickAddShow.Location = New System.Drawing.Point(412, 391)
         Me.cbTvQuickAddShow.Margin = New System.Windows.Forms.Padding(4)
         Me.cbTvQuickAddShow.Name = "cbTvQuickAddShow"
         Me.cbTvQuickAddShow.Size = New System.Drawing.Size(181, 19)
@@ -5468,7 +5479,7 @@ Partial Class frmPreferences
         Me.TabPage31.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage31.Name = "TabPage31"
         Me.TabPage31.Padding = New System.Windows.Forms.Padding(4)
-        Me.TabPage31.Size = New System.Drawing.Size(992, 567)
+        Me.TabPage31.Size = New System.Drawing.Size(184, 46)
         Me.TabPage31.TabIndex = 1
         Me.TabPage31.Text = "Regex"
         Me.TabPage31.UseVisualStyleBackColor = true
@@ -6197,14 +6208,16 @@ Partial Class frmPreferences
         Me.btn_SettingsClose2.Text = "Close"
         Me.btn_SettingsClose2.UseVisualStyleBackColor = true
         '
-        'Label32
+        'cbTvEpSaveNfoEmpty
         '
-        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 7!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
-        Me.Label32.Location = New System.Drawing.Point(445, 484)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(179, 30)
-        Me.Label32.TabIndex = 79
-        Me.Label32.Text = "For 16:9 means saving at 400x225"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"For 4:3 means saving at 400x300"
+        Me.cbTvEpSaveNfoEmpty.AutoSize = true
+        Me.cbTvEpSaveNfoEmpty.Location = New System.Drawing.Point(10, 331)
+        Me.cbTvEpSaveNfoEmpty.Name = "cbTvEpSaveNfoEmpty"
+        Me.cbTvEpSaveNfoEmpty.Size = New System.Drawing.Size(215, 19)
+        Me.cbTvEpSaveNfoEmpty.TabIndex = 79
+        Me.cbTvEpSaveNfoEmpty.Text = "Save basic nfo if episode not found"
+        Me.ToolTip1.SetToolTip(Me.cbTvEpSaveNfoEmpty, resources.GetString("cbTvEpSaveNfoEmpty.ToolTip"))
+        Me.cbTvEpSaveNfoEmpty.UseVisualStyleBackColor = true
         '
         'frmPreferences
         '
@@ -6879,4 +6892,5 @@ End Sub
     Friend WithEvents rbMovSetArtScrapeFanartTv As RadioButton
     Friend WithEvents rbMovSetArtScrapeTMDb As RadioButton
     Friend WithEvents Label32 As Label
+    Friend WithEvents cbTvEpSaveNfoEmpty As CheckBox
 End Class
