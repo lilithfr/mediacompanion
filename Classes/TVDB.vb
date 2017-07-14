@@ -244,8 +244,8 @@ Public Class TVDBScraper2
     End Property
     
     Function GetSeriesCast As Boolean
-        Dim reply As New Object
-        _cast = _api.GetSeriesActors(TvdbId, reply)   '_api.GetMovieCast(_movie.id)
+        'Dim reply As New Object
+        _cast = _api.GetSeriesActors(TvdbId, Nothing)   '_api.GetMovieCast(_movie.id)
         Return Not IsNothing(_cast)
     End Function
     
@@ -462,8 +462,13 @@ Public Class TVDBScraper2
     Function GetSeriesByTitle As Boolean
         Dim reply As Object = Nothing
         _searchresults  = _api.GetSeries(Title, reply)
-        _series         = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
-        _tvdbId         = _series.Identity
+        Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
+        _tvdbId         = tmpseries.Identity
+        Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing)
+        Dim something As String = Nothing
+        tvresults.Series.LoadAllData(_api, "en")
+        _series = tvresults.Series
+
         Return True
     End Function
 
@@ -594,10 +599,10 @@ Public Class TVDBScraper2
         Return Not IsNothing(_seriesImages)
     End Function
 
-    Function GetSeriesActors As Boolean
-        _actors = _api.GetSeriesActors(TvdbId, Nothing)
-        Return Not IsNothing(_actors)
-    End Function
+    'Function GetSeriesActors As Boolean
+    '    _actors = _api.GetSeriesActors(TvdbId, Nothing)
+    '    Return Not IsNothing(_actors)
+    'End Function
 
     Private Sub Fetch
         Try
@@ -609,7 +614,7 @@ Public Class TVDBScraper2
 
                 rhs.Add(New RetryHandler(AddressOf GetSeries        ))
                 rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
-                rhs.Add(New RetryHandler(AddressOf GetSeriesActors  ))
+                rhs.Add(New RetryHandler(AddressOf GetSeriesCast    ))
                 'rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 For Each rh In rhs
@@ -622,10 +627,11 @@ Public Class TVDBScraper2
                 'If IsNothing(_movieImages.posters  ) Then _movieImages.posters   = New List(Of WatTmdb.V3.Poster  )
 
                 'FixUpMovieImages()
+                'AssignActors()
                 AssignValidBackDrops()
                 AssignValidPosters()
-                AssignMcPosters()
-                AssignMcFanart()
+                'AssignMcPosters()
+                'AssignMcFanart()
                 AssignFrodoExtraPosterThumbs()
                 AssignFrodoExtraFanartThumbs()
                 'AssignKeywords()
@@ -634,6 +640,14 @@ Public Class TVDBScraper2
             Throw New Exception (ex.Message)
         End Try
 
+    End Sub
+
+    Private Sub AssignActors
+        '_series.Actors = New List(Of TheTvDB.TvdbActor)
+        If IsNothing(_cast) OrElse _cast.Actors.Count = 0 Then Exit Sub
+        For each c As TheTvDB.TvdbActor In _cast.Actors
+            _series.Actors.Add(c)
+        Next
     End Sub
     
     Private Sub AssignFrodoExtraPosterThumbs

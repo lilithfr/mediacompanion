@@ -16370,8 +16370,12 @@ Public Class Form1
         Dim tvdb As New TVDBScraper2()
         tvdb.LookupLang = Pref.TvdbLanguageCode
         tvdb.Title = "Vikings"
-        Dim Series As TheTvDB.TvdbSeries = tvdb.Series
-
+        Dim Series As New TheTvDB.TvdbSeries ' = tvdb.Series
+        Series = tvdb.Series
+        
+        Dim SeriesActors As New List(Of str_MovieActors)
+        SeriesActors = tvdb.Cast
+        Dim something As String = Nothing
     End Sub
 
 End Class

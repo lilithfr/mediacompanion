@@ -4,6 +4,7 @@ Imports System.Net
 Imports Alphaleonis.Win32.Filesystem
 Imports System.IO.Compression
 Imports System.Text
+Imports System.xml
 Imports System
 Imports System.Drawing
 
@@ -243,6 +244,9 @@ Public Class DownloadCache
                             File.WriteAllText(Fullpath, New IO.StreamReader(responseStreamData, Encoding.UTF8).ReadToEnd)
                         End Using
                     End Using
+                    Dim testxml As New XmlDocument
+                    testxml.Load(Fullpath)
+                    
                 Catch ex As WebException
                     If ex.Message.Contains("could not be resolved") Then Return False : Exit Try
                     Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
@@ -251,6 +255,9 @@ Public Class DownloadCache
                             returnCode = False
                         End Using
                     End Using
+                    returnCode = False
+                Catch ex As XmlException
+                    If File.Exists(Fullpath) Then File.Delete(Fullpath)
                     returnCode = False
                 End Try
             End If
