@@ -952,7 +952,7 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        If e.KeyCode = Keys.F7 Then doTestTVDB()
+        'If e.KeyCode = Keys.F7 Then doTestTVDB()
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -16368,13 +16368,12 @@ Public Class Form1
     Public Sub doTestTvdb()
         'Dim tvdb As New TheTvDB.TvdbAPI(Utilities.TVDBAPI, "en")
         Dim tvdb As New TVDBScraper2()
+        Dim NewSeries As New TvShow
         tvdb.LookupLang = Pref.TvdbLanguageCode
         tvdb.Title = "Vikings"
         Dim Series As New TheTvDB.TvdbSeries ' = tvdb.Series
         Series = tvdb.Series
         
-        Dim SeriesActors As New List(Of str_MovieActors)
-        SeriesActors = tvdb.Cast
         Dim something As String = Nothing
     End Sub
 

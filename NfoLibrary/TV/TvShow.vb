@@ -255,6 +255,32 @@ Public Class TvShow
 
     End Sub
 
+    Public Sub AbsorbTvdbSeries(ByVal Series As TheTvDB.TvdbSeries)
+        Me.TvdbId.Value     = Series.SeriesId
+        'Me.TvdbId.Value     = Series.TvdbId.Value
+        Me.Mpaa.Value       = Series.ContentRating
+        'Me.Genre.Value      = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
+        Me.ImdbId.Value     = Series.ImdbID
+        'Me.TmdbId.Value     = Series.TmdbId.Value
+        Dim tmp As String   = Series.Overview '.Overview.Value.ToString
+        tmp                 = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
+        Me.Plot.Value       = tmp 'Series.Overview.Value.Replace(vbCr, "")
+        Me.Title.Value      = If(Not String.IsNullOrEmpty(Series.SeriesName), Series.SeriesName, Me.Title.Value) 'not set up in ScrapeShowTask.vb
+        Me.Runtime.Value    = Series.Runtime
+        Me.Rating.Value     = Series.Rating
+        'Me.Votes.Value      = Series.RatingCount.value
+        Me.Premiered.Value  = Series.FirstAired
+        Me.Year.Value       = If(Not String.IsNullOrEmpty(Series.FirstAired), Series.FirstAired.Substring(0,4), "")
+        Me.Studio.Value     = Series.Network
+        Me.Status.Value     = Series.Status
+        Me.EpisodeGuideUrl.Value = ""
+        'Me.Url.Value        = URLs.EpisodeGuide(Series.Id.Value, Series.Language.Value)
+        'Me.Url.Node.SetAttributeValue("cache", Series.Id.Value)
+        Me.Hidden.Value     = False.ToString
+        Me.UserRating.Value = "0"
+
+    End Sub
+
 
     Public Sub SearchForEpisodesInFolder()
         Dim newlist As New List(Of String)

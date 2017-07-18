@@ -167,20 +167,36 @@ Public Class TVDBScraper2
             FetchCast
             Dim alist As New List(Of str_MovieActors)
             Try
-                Dim x = _cast.Actors.Count
-                If x < 1 Then Return alist
-                For i = 0 to Pref.maxactors-1
-                    If x = i Then Exit For
-                    Dim newact As New str_MovieActors
-                    newact.actorid      = _cast.Actors(i).Identity   '_cast.cast(i).id
-                    newact.actorname    = _cast.Actors(i).Name       '_cast.cast(i).name
-                    newact.actorrole    = _cast.Actors(i).Character  '_cast.cast(i).character
-                    newact.actorthumb   = If(String.IsNullOrEmpty(_cast.Actors(i).Image), "", "http://image.tmdb.org/t/p/original" & _cast.Actors(i).Image)
-                    'newact.actorthumb   = If(_cast.cast(i).profile_path = Nothing, "", "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path)
-                    newact.order        = _cast.Actors(i).SortOrder  '_cast.cast(i).order
-                    alist.Add(newact)
+                If Not IsNothing(_series.Actors) AndAlso _series.Actors.Count > 0 Then
+                    Dim i As Integer = 0
+                    For each c In _series.Actors
+                        If i = Pref.maxactors Then Exit For
+                        i = i + 1
+                        Dim newact As New str_MovieActors
+                        newact.actorid      = c.Identity.ToString
+                        newact.actorname    = c.Name
+                        newact.actorrole    = c.Character
+                        newact.actorthumb   = If(String.IsNullOrEmpty(c.Image), "", "http://image.tmdb.org/t/p/original" & c.Image)
+                        newact.order        = c.SortOrder  '_cast.cast(i).order
+                        alist.Add(newact)
+                    Next
+                Else
+                    Dim x = _cast.Actors.Count
+                    If x < 1 Then Return alist
+                    For i = 0 to Pref.maxactors-1
+                        If x = i Then Exit For
+                        Dim newact As New str_MovieActors
+                        newact.actorid      = _cast.Actors(i).Identity   '_cast.cast(i).id
+                        newact.actorname    = _cast.Actors(i).Name       '_cast.cast(i).name
+                        newact.actorrole    = _cast.Actors(i).Character  '_cast.cast(i).character
+                        newact.actorthumb   = If(String.IsNullOrEmpty(_cast.Actors(i).Image), "", "http://image.tmdb.org/t/p/original" & _cast.Actors(i).Image)
+                        'newact.actorthumb   = If(_cast.cast(i).profile_path = Nothing, "", "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path)
+                        newact.order        = _cast.Actors(i).SortOrder  '_cast.cast(i).order
+                        alist.Add(newact)
                     
-                Next
+                    Next
+                End If
+                
             Catch
             End Try
             Return alist
@@ -250,7 +266,7 @@ Public Class TVDBScraper2
     End Function
     
     Private Sub FetchCast
-        If IsNothing(_cast) then
+        If IsNothing(_cast) AndAlso IsNothing(_series.Actors) Then
             If Not (new RetryHandler(AddressOf GetSeriesCast)).Execute Then Throw New Exception(TVDB_EXC_MSG)
         End If
     End Sub
@@ -465,119 +481,12 @@ Public Class TVDBScraper2
         Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
         _tvdbId         = tmpseries.Identity
         Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing)
-        Dim something As String = Nothing
+        'Dim something As String = Nothing
         tvresults.Series.LoadAllData(_api, "en")
         _series = tvresults.Series
 
         Return True
     End Function
-
-    Public Function FindBestPossibleShow(ByVal ThisList As List(Of TheTvDB.TvdbSeries), ByVal FolderName As String, ByVal PreferedLang As String) As TheTvDB.TvdbSeries
-
-        FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
-
-        For Each Item In ThisList
-            'Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
-            'Item.Similarity = Tvdb.CompareString(Item.SeriesName.Value, FolderName)
-            Item.Similarity = CompareString(Item.SeriesName, FolderName)
-        Next
-
-        Dim Search = From Ser As TheTvDB.TvdbSeries In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending
-
-        If Search.Count > 0 Then
-            'For Each Item As TheTvDB.TvdbSeries In Search
-            '    If Item.Language.Value = PreferedLang Then
-            '        Return Item
-            '    End If
-            'Next
-
-            Dim Test As Thetvdb.TvdbSeries = Search.FirstOrDefault()
-            Return Test
-        End If
-
-        'Catch All
-        Return ThisList.Item(0)
-    End Function
-
-    Public Function CompareString(String1 As String, String2 As String) As Double
-        Dim intLength1
-        Dim intLength2
-        Dim x
-        Dim dblResult
-
-
-        If UCase(String1) = UCase(String2) Then
-            dblResult = 1
-        Else
-            intLength1 = Len(String1)
-            intLength2 = Len(String2)
-
-
-            If intLength1 = 0 Or intLength2 = 0 Then
-                dblResult = 0
-            Else
-                ReDim arrLetters1(intLength1 - 1)
-                ReDim arrLetters2(intLength2 - 1)
-
-                For x = LBound(arrLetters1) To UBound(arrLetters1)
-                    arrLetters1(x) = Asc(UCase(Mid(String1, x + 1, 1)))
-                Next
-
-                For x = LBound(arrLetters2) To UBound(arrLetters2)
-                    arrLetters2(x) = Asc(UCase(Mid(String2, x + 1, 1)))
-                Next
-
-                dblResult = SubSim(1, intLength1, 1, intLength2) / (intLength1 + intLength2) * 2
-            End If
-        End If
-
-        CompareString = dblResult
-    End Function
-
-    Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
-            Dim intMax As Integer = Integer.MinValue
-
-            Try
-                Dim y
-                Dim z
-                Dim ns1 As Integer
-                Dim ns2 As Integer
-                Dim i
-
-                If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
-                    Return 0
-                End If
-
-                For y = intStart1 To intEnd1
-                    For z = intStart1 To intEnd2
-                        i = 0
-
-                        Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
-                            i = i + 1
-
-                            If i > intMax Then
-                                ns1 = y
-                                ns2 = z
-                                intMax = i
-                            End If
-
-                            If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
-                                Exit Do
-                            End If
-                        Loop
-                    Next
-                Next
-
-                intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
-                intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
-            Catch ex As OverflowException
-                Return Nothing
-            Catch ex As StackOverflowException
-                Return Nothing
-            End Try
-
-            Return intMax
-        End Function
 
     Function GetSeriesImages As Boolean
         '_movieImage.Identity = TvdbId
@@ -598,12 +507,7 @@ Public Class TVDBScraper2
         '_seriesImages.addrange((_api.GetSeriesBanners(TvdbId, "season", Nothing).Banners.tolist))
         Return Not IsNothing(_seriesImages)
     End Function
-
-    'Function GetSeriesActors As Boolean
-    '    _actors = _api.GetSeriesActors(TvdbId, Nothing)
-    '    Return Not IsNothing(_actors)
-    'End Function
-
+    
     Private Sub Fetch
         Try
             If _series.SeriesId = 0 And Not _fetched Then
@@ -613,8 +517,8 @@ Public Class TVDBScraper2
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 
                 rhs.Add(New RetryHandler(AddressOf GetSeries        ))
-                rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
-                rhs.Add(New RetryHandler(AddressOf GetSeriesCast    ))
+                'rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
+                'rhs.Add(New RetryHandler(AddressOf GetSeriesCast    ))
                 'rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 For Each rh In rhs
@@ -627,7 +531,7 @@ Public Class TVDBScraper2
                 'If IsNothing(_movieImages.posters  ) Then _movieImages.posters   = New List(Of WatTmdb.V3.Poster  )
 
                 'FixUpMovieImages()
-                'AssignActors()
+                AssignActors()
                 AssignValidBackDrops()
                 AssignValidPosters()
                 'AssignMcPosters()
@@ -643,11 +547,7 @@ Public Class TVDBScraper2
     End Sub
 
     Private Sub AssignActors
-        '_series.Actors = New List(Of TheTvDB.TvdbActor)
-        If IsNothing(_cast) OrElse _cast.Actors.Count = 0 Then Exit Sub
-        For each c As TheTvDB.TvdbActor In _cast.Actors
-            _series.Actors.Add(c)
-        Next
+        If IsNothing(_series.Actors) Then GetSeriesCast
     End Sub
     
     Private Sub AssignFrodoExtraPosterThumbs
@@ -780,6 +680,115 @@ Public Class TVDBScraper2
         '''temp
         Return New wattmdb.v3.Backdrop
     End Function
+
+    
+    Public Function FindBestPossibleShow(ByVal ThisList As List(Of TheTvDB.TvdbSeries), ByVal FolderName As String, ByVal PreferedLang As String) As TheTvDB.TvdbSeries
+
+        FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
+
+        For Each Item In ThisList
+            'Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
+            'Item.Similarity = Tvdb.CompareString(Item.SeriesName.Value, FolderName)
+            Item.Similarity = CompareString(Item.SeriesName, FolderName)
+        Next
+
+        Dim Search = From Ser As TheTvDB.TvdbSeries In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending
+
+        If Search.Count > 0 Then
+            'For Each Item As TheTvDB.TvdbSeries In Search
+            '    If Item.Language.Value = PreferedLang Then
+            '        Return Item
+            '    End If
+            'Next
+
+            Dim Test As Thetvdb.TvdbSeries = Search.FirstOrDefault()
+            Return Test
+        End If
+
+        'Catch All
+        Return ThisList.Item(0)
+    End Function
+
+    Public Function CompareString(String1 As String, String2 As String) As Double
+        Dim intLength1
+        Dim intLength2
+        Dim x
+        Dim dblResult
+
+
+        If UCase(String1) = UCase(String2) Then
+            dblResult = 1
+        Else
+            intLength1 = Len(String1)
+            intLength2 = Len(String2)
+
+
+            If intLength1 = 0 Or intLength2 = 0 Then
+                dblResult = 0
+            Else
+                ReDim arrLetters1(intLength1 - 1)
+                ReDim arrLetters2(intLength2 - 1)
+
+                For x = LBound(arrLetters1) To UBound(arrLetters1)
+                    arrLetters1(x) = Asc(UCase(Mid(String1, x + 1, 1)))
+                Next
+
+                For x = LBound(arrLetters2) To UBound(arrLetters2)
+                    arrLetters2(x) = Asc(UCase(Mid(String2, x + 1, 1)))
+                Next
+
+                dblResult = SubSim(1, intLength1, 1, intLength2) / (intLength1 + intLength2) * 2
+            End If
+        End If
+
+        CompareString = dblResult
+    End Function
+
+    Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
+            Dim intMax As Integer = Integer.MinValue
+
+            Try
+                Dim y
+                Dim z
+                Dim ns1 As Integer
+                Dim ns2 As Integer
+                Dim i
+
+                If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
+                    Return 0
+                End If
+
+                For y = intStart1 To intEnd1
+                    For z = intStart1 To intEnd2
+                        i = 0
+
+                        Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
+                            i = i + 1
+
+                            If i > intMax Then
+                                ns1 = y
+                                ns2 = z
+                                intMax = i
+                            End If
+
+                            If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
+                                Exit Do
+                            End If
+                        Loop
+                    Next
+                Next
+
+                intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
+                intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+            Catch ex As OverflowException
+                Return Nothing
+            Catch ex As StackOverflowException
+                Return Nothing
+            End Try
+
+            Return intMax
+        End Function
+
     
     'Public Shared Sub DeleteConfigFile
     '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
