@@ -1,21 +1,21 @@
 ﻿'Imports System.IO
 Imports System.Net
 Imports System.Threading
-Imports System.Xml 
+Imports System.Xml
 
 
 Public Class Fanarttv
     Public MCProxy As WebProxy
 
-    Public Function get_fanart_list(ByVal ID As String, Optional ByVal s As String = "movie")
+    Public Function get_fanart_list(ByVal ID As String, ByVal apikey As String, Optional ByVal s As String = "movie")
         Monitor.Enter(Me)
         Try
             Dim fanarttvxml As String
             Dim fanarturl2 As String = ""
             If s = "movie" Then
-                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/movies/{0}?api_key=ed4b784f97227358b31ca4dd966a04f1", ID)
+                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/movies/{0}?api_key={1}", ID, apikey) 'ed4b784f97227358b31ca4dd966a04f1", ID)
             ElseIf s = "tv" Then
-                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/tv/{0}?api_key=ed4b784f97227358b31ca4dd966a04f1", ID)
+                fanarturl2 = String.Format("http://webservice.fanart.tv/v3/tv/{0}?api_key={1}", ID, apikey) 'ed4b784f97227358b31ca4dd966a04f1", ID)
             ElseIf s <> "movie" and s <> "tv" Then
                 Return Nothing
             End If

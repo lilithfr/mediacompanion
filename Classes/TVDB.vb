@@ -105,6 +105,7 @@ Public Class TVDBScraper2
     Private _config_images_base_url     As String
     Private _series                     As New TheTvDB.TvdbSeries
     Private _searchresults              As New TheTvDB.TvdbSeriesSearchResult
+    Private _notfound                   As Boolean = False
     Private _episode                    As New TheTvDB.TvdbEpisode
 
     Private _seriesImages               As TheTvDB.TvdbBannersResult
@@ -140,6 +141,12 @@ Public Class TVDBScraper2
     '        Return _lookupLanguages
     '    End Get 
     'End Property
+
+    Public Readonly Property SeriesNotFound As Boolean
+        Get
+            Return _notfound
+        End Get
+    End Property
 
     Public ReadOnly Property Config_images_base_url As String
         Get
@@ -478,10 +485,15 @@ Public Class TVDBScraper2
     Function GetSeriesByTitle As Boolean
         Dim reply As Object = Nothing
         _searchresults  = _api.GetSeries(Title, reply)
+        If IsNothing(_searchresults) Then
+            _notfound = True
+            Return True
+        End If
+
         Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
         _tvdbId         = tmpseries.Identity
+
         Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing)
-        'Dim something As String = Nothing
         tvresults.Series.LoadAllData(_api, "en")
         _series = tvresults.Series
 
@@ -525,7 +537,7 @@ Public Class TVDBScraper2
                     If Not rh.Execute Then Throw New Exception(TVDB_EXC_MSG)
                 Next
                 
-
+                If _notfound Then Exit Sub
                 'If movie isn't found -> Create empty child objects
                 'If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
                 'If IsNothing(_movieImages.posters  ) Then _movieImages.posters   = New List(Of WatTmdb.V3.Poster  )
@@ -695,12 +707,7 @@ Public Class TVDBScraper2
         Dim Search = From Ser As TheTvDB.TvdbSeries In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending
 
         If Search.Count > 0 Then
-            'For Each Item As TheTvDB.TvdbSeries In Search
-            '    If Item.Language.Value = PreferedLang Then
-            '        Return Item
-            '    End If
-            'Next
-
+            
             Dim Test As Thetvdb.TvdbSeries = Search.FirstOrDefault()
             Return Test
         End If

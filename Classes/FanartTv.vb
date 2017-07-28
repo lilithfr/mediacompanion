@@ -98,7 +98,7 @@ Public Class FanartTv
     Function GetFanartTvData As Boolean
         Dim newobject As New class_fanart_tv.Fanarttv
         newobject.MCProxy = Utilities.MyProxy 
-        _data = newobject.get_fanart_list(ID, src)  'ID)
+        _data = newobject.get_fanart_list(ID, Utilities.FANARTTVAPI, src)  'ID)
         Return Not IsNothing(_data)
     End Function
 

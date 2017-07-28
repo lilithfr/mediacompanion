@@ -84,14 +84,15 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
     Public Shared Property MissingPath As String
     Public Shared Property SeriesXmlPath As String
 
-    Public Shared Property ignoreParts As Boolean = False
-    Public Shared Property userCleanTags As String = "UNRATED|LIMITED|YIFY|3D|SBS"
-    Public Shared Property RARsize As Integer
-    Private Shared _tmdbapi As String
-    Private Shared _tvdbapi As String
-    Private Shared _ApplicationPath As String
-    Private Shared _LanguageLibrary As New List(Of langlib)
-    Private Shared _mcproxy As New List(Of String)
+    Public Shared Property ignoreParts      As Boolean = False
+    Public Shared Property userCleanTags    As String = "UNRATED|LIMITED|YIFY|3D|SBS"
+    Public Shared Property RARsize          As Integer
+    Private Shared _tmdbapi                 As String
+    Private Shared _tvdbapi                 As String
+    Private Shared _fanarttvapi             As String
+    Private Shared _ApplicationPath         As String
+    Private Shared _LanguageLibrary         As New List(Of langlib)
+    Private Shared _mcproxy                 As New List(Of String)
 
     Public Shared Function GetFrameworkVersions() As List(Of String)
         Dim installedFrameworks As New List(Of String)
@@ -131,6 +132,23 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         End Get
         Set(value As String)
             _tvdbapi = value
+        End Set
+    End Property
+    
+    
+    '''  Media Companions own FanartTv Project API Key. 
+    '''  Signed for under account belonging to vbat99@gmail.com
+    '''  Note:  API Key V3   28405cbbd8cf53dd2f01739ccb0066a3
+    '''  
+    '''  API is for Media Companion Read-Only access of Fanart.TV.
+    '''
+
+    Public Shared Property FANARTTVAPI As String
+        Get
+            Return If(String.IsNullOrEmpty(_fanarttvapi), "28405cbbd8cf53dd2f01739ccb0066a3", _fanarttvapi)
+        End Get
+        Set(value As String)
+            _fanarttvapi = value
         End Set
     End Property
 

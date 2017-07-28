@@ -158,6 +158,12 @@ namespace TheTvDB
         [DataMember(Name = "siteRating")]
         public decimal Rating { get; set; }
 
+        ///// <summary>
+        ///// Get or set the Series similarity
+        ///// </summary>
+        //[DataMember(Name = "Similarity")]
+        //public double Similarity { get; set; }
+
         /// <summary>
         /// Get or set the first air date.
         /// </summary>

@@ -952,7 +952,7 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        'If e.KeyCode = Keys.F7 Then doTestTVDB()
+        If e.KeyCode = Keys.F7 Then doTestTVDB()
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -16226,7 +16226,7 @@ Public Class Form1
 			totalcount += 1
 			ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
 			If NumActiveThreads > 2 Then
-				Do Until NumActiveThreads < 2
+				Do Until NumActiveThreads < 1
 					If ImgBwCancelled Then
 						Exit Do
 					End If
@@ -16366,15 +16366,27 @@ Public Class Form1
     End Function
     
     Public Sub doTestTvdb()
+        'newTvFolders.Add("U:\zMedia\zTV2\Vikings")
         'Dim tvdb As New TheTvDB.TvdbAPI(Utilities.TVDBAPI, "en")
         Dim tvdb As New TVDBScraper2()
         Dim NewSeries As New TvShow
         tvdb.LookupLang = Pref.TvdbLanguageCode
         tvdb.Title = "Vikings"
+        'tvdb.Title = "divorking"
         Dim Series As New TheTvDB.TvdbSeries ' = tvdb.Series
         Series = tvdb.Series
-        
+        NewSeries.State = Media_Companion.ShowState.Unverified
+        NewSeries.AbsorbTvdbSeries(Series)
+        If Series.Similarity > 0.9 Then NewSeries.State = Media_Companion.ShowState.Open
+        NewSeries.Language.Value = Pref.TvdbLanguageCode
+        For each a In tvdb.cast
+            NewSeries.ListActors.Add(a)
+        Next
         Dim something As String = Nothing
+        If tvdb.SeriesNotFound Then
+            Dim stuff As String = Nothing
+        End If
+
     End Sub
 
 End Class

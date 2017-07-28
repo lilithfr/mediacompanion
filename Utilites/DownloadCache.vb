@@ -179,7 +179,9 @@ Public Class DownloadCache
                     webReq.AllowAutoRedirect = True
                     webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
                     'webReq.Timeout = 5000       
-
+                    'Dim myWebClient As New WebClient()
+                    'myWebClient.DownloadFile(URL, CachePath)
+                    'Return true
                     Using webResp As HttpWebResponse = webReq.GetResponse()
                         Using responseStreamData As IO.Stream = webResp.GetResponseStream()
                             'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
