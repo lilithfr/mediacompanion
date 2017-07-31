@@ -1,12 +1,12 @@
-﻿Imports System.Security.Cryptography
-Imports System.Net
-'Imports System.IO
-Imports Alphaleonis.Win32.Filesystem
+﻿Imports System
+Imports System.Drawing
 Imports System.IO.Compression
+Imports System.Net
+Imports System.Security.Cryptography
 Imports System.Text
 Imports System.xml
-Imports System
-Imports System.Drawing
+'Imports System.IO
+Imports Alphaleonis.Win32.Filesystem
 
 Public Class DownloadCache
 
@@ -46,8 +46,7 @@ Public Class DownloadCache
         End If
         Return True
     End Function
-
-
+    
     Public Shared Function SaveImageToCacheAndPaths(ByVal URL As String, Paths As List(Of String), Optional ByVal ForceDownload As Boolean = False, _
                                            Optional ByVal resizeWidth As Integer = 0, Optional ByVal resizeHeight As Integer = 0, _
                                            Optional ByVal Overwrite As Boolean = True) As Boolean
@@ -148,7 +147,7 @@ Public Class DownloadCache
         DownloadFileAndCache = returnCode
         Return returncode
     End Function
-
+    
     Public Shared Function SaveImageToCache(ByVal URL As String, ByVal SavePath As String, ByVal ForceDownload As Boolean, ByRef CacheFileName As String) As Boolean
         Dim returnCode As Boolean = True
         Dim CachePath As String = ""
@@ -160,13 +159,10 @@ Public Class DownloadCache
             CachePath = Path.Combine(CacheFolder, CacheFileName)
 
             If Not File.Exists(CachePath) OrElse ForceDownload Then
-
                 'Check to see if URL is actually a local file
                 If Not URL.Contains("://") AndAlso File.Exists(URL) Then
                     If CachePath <> URL Then
-                        If Utilities.SafeDeleteFile(CachePath) Then
-                            File.Copy(URL, CachePath)
-                        End If
+                        If Utilities.SafeDeleteFile(CachePath) Then File.Copy(URL, CachePath)
                     End If
                     Return True
                 End If
@@ -177,11 +173,11 @@ Public Class DownloadCache
                     Dim webReq As HttpWebRequest = DirectCast(WebRequest.Create(URL), HttpWebRequest)
                     webReq.Proxy = Utilities.MyProxy
                     webReq.AllowAutoRedirect = True
-                    webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
-                    'webReq.Timeout = 5000       
-                    'Dim myWebClient As New WebClient()
-                    'myWebClient.DownloadFile(URL, CachePath)
-                    'Return true
+                    If Not URL.Contains("assets.fanart.tv") Then
+                        webReq.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate")
+                        webReq.AutomaticDecompression = DecompressionMethods.GZip Or DecompressionMethods.Deflate
+                    End If
+
                     Using webResp As HttpWebResponse = webReq.GetResponse()
                         Using responseStreamData As IO.Stream = webResp.GetResponseStream()
                             'got a response - should probably put a Try...Catch in here for filesystem stuff, but I'll wing it for now.
@@ -210,10 +206,7 @@ Public Class DownloadCache
                     Using errorResp As HttpWebResponse = DirectCast(ex.Response, HttpWebResponse)
                         Using errorRespStream As IO.Stream = errorResp.GetResponseStream()
                             Dim errorText As String = New IO.StreamReader(errorRespStream).ReadToEnd()
-
-                            'Writing to TvLog! -> Poo -> To do anyone -> Raise event?
                             returnCode = False
-                            'Utilities.tvScraperLog &= String.Format("**** Scraper Error: Code {0} ****{3}     {2}{3}", errorResp.StatusCode, vbCrLf)
                         End Using
                     End Using
                     returnCode = False
@@ -269,7 +262,7 @@ Public Class DownloadCache
         End Try
         Return returnCode
     End Function
-
+    
 End Class
 
 

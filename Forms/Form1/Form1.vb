@@ -16224,7 +16224,7 @@ Public Class Form1
 
 			bw.RunWorkerAsync(item)
 			totalcount += 1
-			ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
+			
 			If NumActiveThreads > 2 Then
 				Do Until NumActiveThreads < 1
 					If ImgBwCancelled Then
@@ -16232,6 +16232,7 @@ Public Class Form1
 					End If
 				Loop
 			End If
+            ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
 			If ImgBwCancelled Then
 				Exit For
 			End If
@@ -16244,6 +16245,7 @@ Public Class Form1
 
 	Sub ImgBw_RunWorkerComplete(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBw.RunWorkerCompleted
 		Imageloading = True
+        tsStatusLabel.Text = ""
 		ToolStripStatusLabel2.Text = "TV Show Episode Scan In Progress"
 		ToolStripStatusLabel2.Visible = False
 		Statusstrip_Enable(False)
