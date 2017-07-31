@@ -2549,12 +2549,14 @@ Public Class Form1
 			Else
 				If Pref.AllowUserTags AndAlso tb_tagtxt_changed Then
 					tb_tagtxt_changed = False
+                    Dim tmplst As New List(Of String)
+                    tmplst.AddRange(movie.ScrapedMovie.fullmoviebody.tag)
 					movie.ScrapedMovie.fullmoviebody.tag.Clear()
 					For Each wd In tagtxt.Text.Split(",")
 						wd = wd.Trim
 						If wd.Length = 0 Then Continue For
 						movie.ScrapedMovie.fullmoviebody.tag.Add(wd)
-						If Not Pref.movietags.Contains(wd) Then Pref.movietags.Add(wd)
+						If Not Pref.movietags.Contains(wd) AndAlso Not tmplst.Contains(wd) Then Pref.movietags.Add(wd)
 						If movie.ScrapedMovie.fullmoviebody.tag.Count >= Pref.keywordlimit Then Exit For
 					Next
 					ConfigSave()
@@ -12783,18 +12785,18 @@ Public Class Form1
 				Dim q = From t In oMovies.TagDB Where t.TagName = mtag
 				If q.Count = 0 Then
 					TagListBox.Items.Add(mtag)
-				Else
-					ToRemove.Add(mtag)
+				'Else
+					'ToRemove.Add(mtag)
 				End If
 			End If
 		Next
 
 		''If any duplicate tags, remove them from Pref.MovieTags
-		If ToRemove.Count > 0 Then
-			For each t In ToRemove
-				Pref.movietags.Remove(t)
-			Next
-		End If
+		'If ToRemove.Count > 0 Then
+		'	For each t In ToRemove
+		'		Pref.movietags.Remove(t)
+		'	Next
+		'End If
 		TagsPopulate()
 	End Sub
 
@@ -12872,10 +12874,11 @@ Public Class Form1
 			For x = 0 To oMovies.MovieCache.Count - 1
 				Dim movtag As List(Of String) = oMovies.MovieCache(x).movietag
 				For Each mtag In movtag
+                    If mtag = "" Then Continue For
 					If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
 				Next
 			Next
-			Pref.movietags.Clear()
+			'Pref.movietags.Clear()
 			For Each mtag In Pref.movietags
 				If Not TagListBox.Items.Contains(mtag) Then TagListBox.Items.Add(mtag)
 			Next

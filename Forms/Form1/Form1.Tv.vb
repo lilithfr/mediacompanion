@@ -1103,8 +1103,9 @@ Partial Public Class Form1
             '''Try IMDb Direct if we have the IMDB Id
             If aok Then ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
 
+            '' Disable Omdbapi to get episode ratings till we get a API key, or site becomes free again.
             ''If no success, try Omdbapi (Omdbapi is much slower)
-            If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
+            'If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
         End If
 
         ''' Fallback to TVDb if nothing from IMDb

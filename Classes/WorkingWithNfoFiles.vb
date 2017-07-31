@@ -1470,7 +1470,7 @@ Public Class WorkingWithNfoFiles
                             End If
                         Case "tag", "tags"
                             If thisresult.Name = "tags" Then Flag4resave = True
-                            newmovie.fullmoviebody.tag.Add(thisresult.InnerText)
+                            If Not thisresult.InnerText = "" Then newmovie.fullmoviebody.tag.Add(thisresult.InnerText)
                         Case "id"
                             Dim myresult As String = thisresult.InnerText
                             Dim testAttribute as XmlAttribute = CType(thisresult.Attributes.GetNamedItem("moviedb"),  XmlAttribute)
