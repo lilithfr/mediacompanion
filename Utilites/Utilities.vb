@@ -372,6 +372,7 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
                 End If
             End If
         End If
+        If Ratio.Length > 4 Then Ratio = Ratio.Substring(0,4)
         Return Ratio
     End Function
     

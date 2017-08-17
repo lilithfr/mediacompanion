@@ -2973,7 +2973,12 @@ Partial Public Class Form1
                                                 progresstext &= "OK."
                                                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                                             Else
-                                                Pref.tvScraperLog &= "!!! WARNING: Actors not available to scraped from IMDB" & vbCrLf
+                                                If String.IsNullOrEmpty(singleepisode.ImdbId.Value) OrElse Not singleepisode.ImdbId.Value.Contains("tt") Then
+                                                    Pref.tvScraperLog &= "!!! WARNING: No Episode IMDB Id, Actors not able to be scraped from IMDB" & vbCrLf
+                                                Else
+                                                    Pref.tvScraperLog &= "!!! WARNING: Actors not available to scraped from IMDB" & vbCrLf
+                                                End If
+                                                'Pref.tvScraperLog &= "!!! WARNING: Actors not available to scraped from IMDB" & vbCrLf
                                             End If
                                             If bckgroundscanepisodes.CancellationPending Then
                                                 Pref.tvScraperLog &= vbCrLf & "!!! Operation Cancelled by user" & vbCrLf

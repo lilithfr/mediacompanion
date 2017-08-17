@@ -9,11 +9,29 @@ Imports XBMC.JsonRpc
 
 Module Ext
     <System.Runtime.CompilerServices.Extension()> _
-    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String, Optional alt As String = "")
+    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String)
 
         Dim child As XmlElement = doc.CreateElement(name)
 
-        If String.IsNullOrEmpty(value) Then value = alt
+        If String.IsNullOrEmpty(value) Then value = ""
+        child.InnerText = value
+        root.AppendChild(child)
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Sub AppendChild(root As XmlElement, doc As XmlDocument, name As String, value As String, type As String, Optional def As Boolean = False)
+
+        Dim child As XmlElement = doc.CreateElement(name)
+        Dim attr As XmlAttribute = doc.CreateAttribute("type")
+        attr.Value = type
+        child.SetAttributeNode(attr)
+        If def Then
+            Dim attr2 As XmlAttribute = doc.CreateAttribute("default")
+            attr2.Value = "true"
+            child.SetAttributeNode(attr2)
+        End If
+
+        If String.IsNullOrEmpty(value) Then value = ""
         child.InnerText = value
         root.AppendChild(child)
     End Sub
