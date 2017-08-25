@@ -90,10 +90,10 @@ Public Class TVDBScraper2
     'End Property
 
 
-    Public Property ValidBackDrops      As New List(Of TheTvDB.TvdbBanner)
-    Public Property ValidSetBackDrops   As New List(of TheTvDB.TvdbBanner)
-    
+    Public Property ValidFanart         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidPosters        As New List(Of TheTvDB.TvdbBanner)
+    Public Property ValidSeason         As New List(Of TheTvDB.TvdbBanner)
+    Public Property ValidSeasonWide     As New List(Of TheTvDB.TvdbBanner)
     
     Public Property MaxGenres           As Integer = Media_Companion.Pref.maxmoviegenre
 
@@ -102,32 +102,25 @@ Public Class TVDBScraper2
     #Region "Read-only Properties"
 
     Private _api                        As TheTvDB.TvdbAPI = Pref.TVDbapi
-    Private _config_images_base_url     As String
+    Private _config_images_base_url     As String = "http://thetvdb.com/banners/"
     Private _series                     As New TheTvDB.TvdbSeries
     Private _searchresults              As New TheTvDB.TvdbSeriesSearchResult
     Private _notfound                   As Boolean = False
     Private _episode                    As New TheTvDB.TvdbEpisode
-
-    Private _seriesImages               As TheTvDB.TvdbBannersResult
+    Private _seriesImages               As New List(Of TheTvDB.TvdbBanner)
     Private _seriesImage                As TheTvDB.TvdbImageSummaryResult
-
     Private _actors                     As TheTvDB.TvdbActorsResult
     Private _actor                      As TheTvDB.TvdbActor
-
-    
-    'Private _releases                   As WatTmdb.V3.TmdbMovieReleases
-    'Private _genrelist                  As WatTmdb.V3.TmdbGenre 
-    
-    Private _mcPosters                  As New List(Of TheTvDB.TvdbBanner) 'List(Of McImage)
-    Private _mcFanart                   As New List(Of TheTvDB.TvdbBanner) 'List(Of McImage)
-    Private _mcSeason                   As New List(Of TheTvDB.TvdbBanner)
-    Private _mcSeasonWide               As New List(Of TheTvDB.TvdbBanner)
+    Private _mcPosters                  As New List(Of McImage)
+    Private _mcFanart                   As New List(Of McImage)
+    Private _mcSeason                   As New List(Of McImage)
+    Private _mcSeasonWide               As New List(Of McImage)
     Private _cast                       As TheTvDB.TvdbActorsResult
     Private _frodoPosterThumbs          As New List(Of FrodoPosterThumb)
     Private _frodoFanartThumbs          As New FrodoFanartThumbs
 
+    Private _PossibleShowList           As List(Of TheTvDB.TvdbSeries)
     Private _fetched                    As Boolean = False
-    Private _setFetched                 As Boolean = False
 
  
     Shared Public ReadOnly Property AvailableLanguages As XDocument
@@ -183,7 +176,7 @@ Public Class TVDBScraper2
                         newact.actorid      = c.Identity.ToString
                         newact.actorname    = c.Name
                         newact.actorrole    = c.Character
-                        newact.actorthumb   = If(String.IsNullOrEmpty(c.Image), "", "http://image.tmdb.org/t/p/original" & c.Image)
+                        newact.actorthumb   = If(String.IsNullOrEmpty(c.Image), "", "http://thetvdb.com/banners/_cache/" & c.Image)
                         newact.order        = c.SortOrder  '_cast.cast(i).order
                         alist.Add(newact)
                     Next
@@ -196,7 +189,7 @@ Public Class TVDBScraper2
                         newact.actorid      = _cast.Actors(i).Identity   '_cast.cast(i).id
                         newact.actorname    = _cast.Actors(i).Name       '_cast.cast(i).name
                         newact.actorrole    = _cast.Actors(i).Character  '_cast.cast(i).character
-                        newact.actorthumb   = If(String.IsNullOrEmpty(_cast.Actors(i).Image), "", "http://image.tmdb.org/t/p/original" & _cast.Actors(i).Image)
+                        newact.actorthumb   = If(String.IsNullOrEmpty(_cast.Actors(i).Image), "", "http://thetvdb.com/banners/_cache/" & _cast.Actors(i).Image)
                         'newact.actorthumb   = If(_cast.cast(i).profile_path = Nothing, "", "http://image.tmdb.org/t/p/original" &_cast.cast(i).profile_path)
                         newact.order        = _cast.Actors(i).SortOrder  '_cast.cast(i).order
                         alist.Add(newact)
@@ -266,6 +259,17 @@ Public Class TVDBScraper2
         End Get 
     End Property
     
+    Public Property PossibleShowList As List(Of TheTvDB.TvdbSeries)
+        Get
+            If _PossibleShowList Is Nothing Then Me.GetPossibleShows()
+
+            Return _PossibleShowList
+        End Get
+        Set(ByVal value As List(Of TheTvDB.TvdbSeries))
+            _PossibleShowList = value
+        End Set
+    End Property
+
     Function GetSeriesCast As Boolean
         'Dim reply As New Object
         _cast = _api.GetSeriesActors(TvdbId, Nothing)   '_api.GetMovieCast(_movie.id)
@@ -278,19 +282,33 @@ Public Class TVDBScraper2
         End If
     End Sub
 
-    'Public ReadOnly Property McPosters As List(Of McImage)
-    '    Get
-    '        Fetch
-    '        Return _mcPosters
-    '    End Get 
-    'End Property
+    Public ReadOnly Property McPosters As List(Of McImage)
+        Get
+            Fetch
+            Return _mcPosters
+        End Get
+    End Property
 
-    'Public ReadOnly Property McFanart As List(Of McImage) 
-    '    Get
-    '        Fetch
-    '        Return _mcFanart
-    '    End Get 
-    'End Property
+    Public ReadOnly Property McFanart As List(Of McImage)
+        Get
+            Fetch
+            Return _mcFanart
+        End Get
+    End Property
+
+    Public ReadOnly Property McSeason As List(Of McImage)
+        Get
+            Fetch
+            Return _mcSeason
+        End Get
+    End Property
+
+    Public ReadOnly Property McSeasonWide As List(Of McImage)
+        Get
+            Fetch
+            Return _mcSeasonWide
+        End Get
+    End Property
 
     Public ReadOnly Property FirstOriginalPosterUrl As String
         Get
@@ -306,7 +324,7 @@ Public Class TVDBScraper2
 
     Public ReadOnly Property HdPath As String
         Get
-            Return _config_images_base_url + "original"
+            Return _config_images_base_url
         End Get 
     End Property
 
@@ -483,40 +501,27 @@ Public Class TVDBScraper2
     End Function
 
     Function GetSeriesByTitle As Boolean
-        Dim reply As Object = Nothing
-        _searchresults  = _api.GetSeries(Title, reply)
-        If IsNothing(_searchresults) Then
-            _notfound = True
-            Return True
-        End If
+        'Dim reply As Object = Nothing
+        '_searchresults  = _api.GetSeries(Title, reply)
+        'If IsNothing(_searchresults) Then
+        '    _notfound = True
+        '    Return True
+        'End If
 
-        Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
-        _tvdbId         = tmpseries.Identity
+        'Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
+        '_tvdbId         = tmpseries.Identity
 
-        Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing)
-        tvresults.Series.LoadAllData(_api, "en")
+        Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing, LookupLang)
+        tvresults.Series.LoadDetails(_api, LookupLang)
         _series = tvresults.Series
+        '_series.Similarity = tmpseries.Similarity
 
         Return True
     End Function
 
     Function GetSeriesImages As Boolean
-        '_movieImage.Identity = TvdbId
-        '_api.LogResponse = True
-        _seriesImage = _api.GetSeriesImageSummary(TvdbId, Nothing)
-        _seriesImages = _api.GetSeriesBanners(TvdbId, 9, Nothing)
-        AssignMcSeasonWide
-        _seriesImages = _api.GetSeriesBanners(TvdbId, 7, Nothing)
-        AssignMcSeason
-        _seriesImages = _api.GetSeriesBanners(TvdbId, 2, Nothing)
-        AssignMcFanart
-        _seriesImages = _api.GetSeriesBanners(TvdbId, 1, Nothing)
-        AssignMcPosters
-        
-        
-        '_seriesImages.AddRange((_api.GetSeriesBanners(TvdbId, 1, Nothing).Banners)) '   = _api.GetSeriesImageSummary(TvdbId, Nothing)
-        '_seriesImages.addrange((_api.GetSeriesBanners(TvdbId, "fanart", Nothing).Banners.tolist))
-        '_seriesImages.addrange((_api.GetSeriesBanners(TvdbId, "season", Nothing).Banners.tolist))
+        _series.LoadBanners(_api)
+        _seriesImages = _series.Banners.ToList
         Return Not IsNothing(_seriesImages)
     End Function
     
@@ -529,8 +534,7 @@ Public Class TVDBScraper2
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
 
                 rhs.Add(New RetryHandler(AddressOf GetSeries        ))
-                'rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
-                'rhs.Add(New RetryHandler(AddressOf GetSeriesCast    ))
+                rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
                 'rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 For Each rh In rhs
@@ -538,28 +542,23 @@ Public Class TVDBScraper2
                 Next
                 
                 If _notfound Then Exit Sub
-                'If movie isn't found -> Create empty child objects
-                'If IsNothing(_movieImages.backdrops) Then _movieImages.backdrops = New List(Of WatTmdb.V3.Backdrop)
-                'If IsNothing(_movieImages.posters  ) Then _movieImages.posters   = New List(Of WatTmdb.V3.Poster  )
 
-                'FixUpMovieImages()
-                AssignActors()
-                AssignValidBackDrops()
+                AssignValidFanart()
                 AssignValidPosters()
-                'AssignMcPosters()
-                'AssignMcFanart()
-                AssignFrodoExtraPosterThumbs()
-                AssignFrodoExtraFanartThumbs()
+                AssignValidSeason()
+                AssignValidSeasonWide()
+                AssignMcPosters()
+                AssignMcFanart()
+                AssignMcSeason()
+                AssignMcSeasonWide()
+                'AssignFrodoExtraPosterThumbs()
+                'AssignFrodoExtraFanartThumbs()
                 'AssignKeywords()
             End If
         Catch ex As Exception
             Throw New Exception (ex.Message)
         End Try
 
-    End Sub
-
-    Private Sub AssignActors
-        If IsNothing(_series.Actors) Then GetSeriesCast
     End Sub
     
     Private Sub AssignFrodoExtraPosterThumbs
@@ -589,56 +588,56 @@ Public Class TVDBScraper2
         Next
     End Sub
 
-    Private Sub AssignValidBackDrops
-        'Dim q = From b In _movieImages.backdrops Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.vote_average Descending    
-                                                                                                                                        
-        'For each item In q
-        '    ValidBackDrops.AddIfNew(item)
-        'Next
+#Region "Series Images"
+
+    Private Sub AssignValidFanart
+        Dim q = From b In _seriesImages Where b.KeyType = "fanart"
+        For each item In q
+            ValidFanart.AddIfNew(item)
+        Next
     End Sub
     
     Private Sub AssignValidPosters
-        'Dim q = From b In _movieImages.posters Where _lookupLanguages.IndexOf(b.iso_639_1.ToLower) > -1 Order By _lookupLanguages.IndexOf(b.iso_639_1.ToLower) Ascending, b.vote_average Descending    
+        Dim q = From b In _seriesImages Where b.KeyType = "poster"
+        For each item In q
+            ValidPosters.AddIfNew(item)
+        Next
+    End Sub
 
-        'For each item In q
-        '    ValidPosters.AddIfNew(item)
-        'Next
+    Private Sub AssignValidSeason
+        Dim q = From b In _seriesImages Where b.KeyType = "season"
+        For each item In q
+            ValidSeason.AddIfNew(item)
+        Next
+    End Sub
+
+    Private Sub AssignValidSeasonWide
+        Dim q = From b In _seriesImages Where b.KeyType = "seasonwide"
+        For each item In q
+            ValidSeasonWide.AddIfNew(item)
+        Next
     End Sub
     
     Private Sub AssignMcPosters
-        If IsNothing(_seriesImages) OrElse _seriesImages.Banners.Count = 0 Then Exit Sub
-        For each item As TheTvDB.TvdbBanner in _seriesImages.banners
-            _mcPosters.Add(item)
-        Next
-        'AssignMcPosters(ValidPosters,_mcPosters)
+        AssignMcPosters(ValidPosters,_mcPosters)
     End Sub
     
     Private Sub AssignMcFanart
-        If IsNothing(_seriesImages) OrElse _seriesImages.Banners.Count = 0 Then Exit Sub
-        For each item As TheTvDB.TvdbBanner in _seriesImages.banners
-            _mcFanart.Add(item)
-        Next
-        'AssignMcFanart(ValidBackDrops,_mcFanart)
+        AssignMcPosters(ValidFanart,_mcFanart)
     End Sub
     
     Private Sub AssignMcSeason
-        If IsNothing(_seriesImages) OrElse _seriesImages.Banners.Count = 0 Then Exit Sub
-        For each item As TheTvDB.TvdbBanner in _seriesImages.banners
-            _mcSeason.Add(item)
-        Next
+        AssignMcPosters(ValidSeason, _mcSeason)
     End Sub
 
     Private Sub AssignMcSeasonWide
-        If IsNothing(_seriesImages) OrElse _seriesImages.Banners.Count = 0 Then Exit Sub
-        For each item As TheTvDB.TvdbBanner in _seriesImages.banners
-            _mcSeasonWide.Add(item)
-        Next
+        AssignMcPosters(ValidSeasonWide, _mcSeasonWide)
     End Sub
 
     Private Sub AssignMcPosters( tmDbImages As Object, mcImages As List(Of McImage))
         Dim tmpimages As New List(Of McImage)
         For Each item In tmDbImages
-            tmpimages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
+            tmpimages.Add( McImage.GetFromTvDbBackDrop(item, HdPath))
             'mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdPosterPath) )
         Next
         If Not tmpimages.Count = 0 Then
@@ -647,18 +646,6 @@ Public Class TVDBScraper2
         End If
     End Sub
  
-    Private Sub AssignMcFanart( tmDbImages As Object, mcImages As List(Of McImage))
-        Dim tmpimages As New List(Of McImage)
-        For Each item In tmDbImages
-            tmpimages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
-            'mcImages.Add( McImage.GetFromTmDbBackDrop(item,HdPath,LdBackDropPath) )
-        Next
-        If Not tmpimages.Count = 0 Then
-            Dim q = From x In tmpimages Order By x.votes Descending
-            mcImages.AddRange(q.ToList)
-        End If
-    End Sub
-
     Function getyear(ifdate As String) As String
         Dim isyear As String = ""
         Try
@@ -692,12 +679,11 @@ Public Class TVDBScraper2
         '''temp
         Return New wattmdb.v3.Backdrop
     End Function
-
     
+#End Region
+
     Public Function FindBestPossibleShow(ByVal ThisList As List(Of TheTvDB.TvdbSeries), ByVal FolderName As String, ByVal PreferedLang As String) As TheTvDB.TvdbSeries
-
         FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
-
         For Each Item In ThisList
             'Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
             'Item.Similarity = Tvdb.CompareString(Item.SeriesName.Value, FolderName)
@@ -707,7 +693,6 @@ Public Class TVDBScraper2
         Dim Search = From Ser As TheTvDB.TvdbSeries In ThisList Order By Ser.Similarity Descending ', Ser.FirstAired Descending
 
         If Search.Count > 0 Then
-            
             Dim Test As Thetvdb.TvdbSeries = Search.FirstOrDefault()
             Return Test
         End If
@@ -796,6 +781,15 @@ Public Class TVDBScraper2
             Return intMax
         End Function
 
+    Private Sub GetPossibleShows()
+        Dim reply As Object = Nothing
+        _searchresults  = _api.GetSeries(Title, reply)
+        '_PossibleShowList.AddRange(_searchresults.Series)
+        If _searchresults.Series.Count > 0 Then _PossibleShowList = New List(Of TheTvDB.TvdbSeries)
+        For each show In _searchresults.series
+            _PossibleShowList.Add(show)
+        Next
+    End Sub
     
     'Public Shared Sub DeleteConfigFile
     '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)

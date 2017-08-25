@@ -652,7 +652,7 @@ Module Module1
                                     For Each thisresult As XmlNode In scrapedepisode("episodedetails")
                                         Select Case thisresult.Name
                                             Case "title"
-                                                singleepisode.title = thisresult.InnerText
+                                                singleepisode.title = thisresult.InnerText.TrimEnd
                                             Case "premiered"
                                                 singleepisode.aired = thisresult.InnerText
                                             Case "plot"

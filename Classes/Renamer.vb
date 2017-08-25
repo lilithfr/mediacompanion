@@ -180,6 +180,7 @@ Public Class Renamer
         Else
             episodetitle = ""
         End If
+        episodetitle = episodetitle.TrimEnd
 
         If rename.seasNoLen = 1 Then
             Do While seasonno.Length > 1 And seasonno.Substring(0, 1) = "0"

@@ -9,73 +9,58 @@ Imports Media_Companion
 Public Class TvShow
     Inherits ProtoFile
 
-    'Public Property Id As New ProtoProperty(Me, "id")
-    'Id contains the TvdbId, XBMC doesn't recognize the tvdbid tag... TvdbId is included for clarity and possible future use.
-    '--- corrected --- Public Property TvdbId As New ProtoProperty(Me, "tvdbid") 'Changed TvdbId to a ProtoProperty like the rest; the TvdbId As String doesn't appear to do anything, anyway.
-    Public Property TvdbId As New ProtoProperty(Me, "id", CacheMode:=CacheMode.Both)
-    '    Get
-    '        Return Id.Value
-    '    End Get
-    '    Set(ByVal value As String)
-    '        Id.Value = value
-    '    End Set
-    'End Property
-    Public Property IdTagCatch As New ProtoProperty(Me, "tvdbid")
+    Dim _PossibleShowList               As List(Of Tvdb.Series)
+    Private Property _State             As New ProtoProperty(Me, "state", CacheMode:=CacheMode.Both)
+    Private _Visible                    As Boolean
 
-    Public Property Title As New ProtoProperty(Me, "title", CacheMode:=CacheMode.Both)
-    Public Property SortTitle As New ProtoProperty(Me, "sorttitle")                         'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
-    Public Property Rating As New ProtoProperty(Me, "rating", "")
-    Public Property Year As New ProtoProperty(Me, "year")
-    Public Property Top250 As New ProtoProperty(Me, "top250")                               'from XBMC created tvshow.nfo
+    Public Property TvdbId              As New ProtoProperty(Me, "id"                   , CacheMode:=CacheMode.Both)
+    Public Property Title               As New ProtoProperty(Me, "title"                , CacheMode:=CacheMode.Both)
+    Public Property SortTitle           As New ProtoProperty(Me, "sorttitle")                           'Not sure if needs be in cache , CacheMode:= CacheMode.Both)
+    Public Property Rating              As New ProtoProperty(Me, "rating"   , "")
+    Public Property Year                As New ProtoProperty(Me, "year")
+    Public Property Top250              As New ProtoProperty(Me, "top250")                              'from XBMC created tvshow.nfo
+    Public Property Season              As New ProtoProperty(Me, "season")                              'from XBMC created tvshow.nfo
+    Public Property EpisodeCount        As New ProtoProperty(Me, "episode")                             'from XBMC created tvshow.nfo
+    Public Property DisplaySeason       As New ProtoProperty(Me, "displayseason")                       'from XBMC created tvshow.nfo
+    Public Property DisplayEpisode      As New ProtoProperty(Me, "displayepisode")                      'from XBMC created tvshow.nfo
+    Public Property Votes               As New ProtoProperty(Me, "votes"    , "")                       'from XBMC created tvshow.nfo
+    Public Property Plot                As New ProtoProperty(Me, "plot"                 , CacheMode:= CacheMode.Both)
+    'Public Property Outline             As New ProtoProperty(Me, "outline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
+    'Public Property TagLine             As New ProtoProperty(Me, "tagline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property Runtime             As New ProtoProperty(Me, "runtime")
+    Public Property Mpaa                As New ProtoProperty(Me, "mpaa")
+    Public Property Playcount           As New ProtoProperty(Me, "playcount", "1"       , CacheMode:= CacheMode.Both)
+    Public Property Genre               As New ProtoProperty(Me, "genre"    , "")
+    Public Property Credits             As New ProtoProperty(Me, "credits")
+    'Public Property [Set]               As New ProtoProperty(Me, "set")                                 'XBMC uses same nfo structure for movie as for tvshow nfo file
+    Public Property Director            As New ProtoProperty(Me, "director")
+    Public Property Premiered           As New ProtoProperty(Me, "premiered")
+    Public Property Status              As New ProtoProperty(Me, "status"               , CacheMode:=CacheMode.Both)
+    Public Property Aired               As New ProtoProperty(Me, "aired") '
+    Public Property Studio              As New ProtoProperty(Me, "studio")
+    'Public Property Trailer             As New ProtoProperty(Me, "trailer")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
+    'Public Property Artist              As New ProtoProperty(Me, "Artist")                              'Possible hold over from Music?
+    Public Property EpisodeGuideUrl     As New ProtoProperty(Me, "episodeguide")
+    Public Property Url                 As New ProtoProperty(EpisodeGuideUrl, "url")
+    Public Property ListActors          As New ActorList(Me, "actor")
 
-    Public Property Season As New ProtoProperty(Me, "season")                               'from XBMC created tvshow.nfo
-    Public Property EpisodeCount As New ProtoProperty(Me, "episode")                        'from XBMC created tvshow.nfo
-    Public Property DisplaySeason As New ProtoProperty(Me, "displayseason")                 'from XBMC created tvshow.nfo
-    Public Property DisplayEpisode As New ProtoProperty(Me, "displayepisode")               'from XBMC created tvshow.nfo
-    Public Property Votes As New ProtoProperty(Me, "votes", "")                             'from XBMC created tvshow.nfo
-    Public Property Plot As New ProtoProperty(Me, "plot", CacheMode:= CacheMode.Both)
-    Public Property Outline As New ProtoProperty(Me, "outline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property TagLine As New ProtoProperty(Me, "tagline")                             'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property Runtime As New ProtoProperty(Me, "runtime")
-    Public Property Mpaa As New ProtoProperty(Me, "mpaa")
-    Public Property LastPlayed As New ProtoProperty(Me, "lastplayed")                       'obsolete
-    Public Property Playcount As New ProtoProperty(Me, "playcount", "1", CacheMode:= CacheMode.Both)
-    Public Property Genre As New ProtoProperty(Me, "genre", "")
-    Public Property Credits As New ProtoProperty(Me, "credits")
-    Public Property [Set] As New ProtoProperty(Me, "set")                                       'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property Director As New ProtoProperty(Me, "director")
-    Public Property Premiered As New ProtoProperty(Me, "premiered")
-    Public Property Status As New ProtoProperty(Me, "status", CacheMode:=CacheMode.Both)        'Series Status, ie: Ended, Continuing.
-    Public Property Code As New ProtoProperty(Me, "code")                                       'No clue what this does
-    Public Property Aired As New ProtoProperty(Me, "aired") '
-    Public Property Studio As New ProtoProperty(Me, "studio")
-    Public Property Trailer As New ProtoProperty(Me, "trailer")                                 'XBMC uses same nfo structure for movie as for tvshow nfo file
-    Public Property Artist As New ProtoProperty(Me, "Artist")                                   'Possible hold over from Music?
-
-    Public Property EpisodeGuideUrl As New ProtoProperty(Me, "episodeguide")
-    Public Property Url As New ProtoProperty(EpisodeGuideUrl, "url")
-
-    Public Property ListActors As New ActorList(Me, "actor")
-
-    Public Property ImageFanart As New ProtoImage(Me, "fanart", Utilities.DefaultFanartPath) With {.FileName = "fanart.jpg"}
-    Public Property ImagePoster As New ProtoImage(Me, "poster", Utilities.DefaultPosterPath) With {.FileName = "poster.jpg"}
-    Public Property ImageBanner As New ProtoImage(Me, "banner", Utilities.DefaultBannerPath) With {.FileName = "banner.jpg"}
-    Public Property ImageAllSeasons As New ProtoImage(Me, "allseasons", Utilities.DefaultPosterPath) With {.FileName = "season" & If(Pref.FrodoEnabled, "-all-poster.jpg", "-all.tbn")}
-    Public Property ImageClearArt As New ProtoImage(Me, "clearart", Utilities.DefaultBannerPath) With {.FileName = "clearart.png"}
-    Public Property ImageLogo As New ProtoImage(Me, "logo", Utilities.DefaultBannerPath) With {.FileName = "logo.png"}
+    Public Property ImageFanart         As New ProtoImage(Me, "fanart"      , Utilities.DefaultFanartPath) With {.FileName = "fanart.jpg"}
+    Public Property ImagePoster         As New ProtoImage(Me, "poster"      , Utilities.DefaultPosterPath) With {.FileName = "poster.jpg"}
+    Public Property ImageBanner         As New ProtoImage(Me, "banner"      , Utilities.DefaultBannerPath) With {.FileName = "banner.jpg"}
+    Public Property ImageAllSeasons     As New ProtoImage(Me, "allseasons"  , Utilities.DefaultPosterPath) With {.FileName = "season" & If(Pref.FrodoEnabled, "-all-poster.jpg", "-all.tbn")}
+    Public Property ImageClearArt       As New ProtoImage(Me, "clearart"    , Utilities.DefaultBannerPath) With {.FileName = "clearart.png"}
+    Public Property ImageLogo           As New ProtoImage(Me, "logo"        , Utilities.DefaultBannerPath) With {.FileName = "logo.png"}
 
     'Media Companion Specific
-
-    Public Property ImdbId As New ProtoProperty(Me, "imdbid", CacheMode:=CacheMode.Both)    'MC uses to locate artwork on IMDB & PosterDB sites
-    Public Property TmdbId As New ProtoProperty(Me, "tmdbid", CacheMode:=CacheMode.Both)    'MC to use for TheMovieDb Series & episode scraping.
-    Public Property SortOrder As New ProtoProperty(Me, "sortorder", CacheMode:=CacheMode.Both)
-    Public Property Language As New ProtoProperty(Me, "language", CacheMode:=CacheMode.Both)
-    Public Property TvShowActorSource As New ProtoProperty(Me, "tvshowactorsource")
-    Public Property EpisodeActorSource As New ProtoProperty(Me, "episodeactorsource", CacheMode:=CacheMode.Both)
-    Public Property Hidden As New ProtoProperty(Me, "hidden", CacheMode:=CacheMode.OnlyCache)       'Field for filtering out series from Treeview.
-    Public Property UserRating As New ProtoProperty(Me, "userrating", "0")
-
-    Private Property _State As New ProtoProperty(Me, "state", CacheMode:=CacheMode.Both)
+    Public Property ImdbId              As New ProtoProperty(Me, "imdbid"               , CacheMode:=CacheMode.Both)        'MC uses to locate artwork on IMDB & PosterDB sites
+    Public Property TmdbId              As New ProtoProperty(Me, "tmdbid"               , CacheMode:=CacheMode.Both)        'MC to use for TheMovieDb Series & episode scraping.
+    Public Property SortOrder           As New ProtoProperty(Me, "sortorder"            , CacheMode:=CacheMode.Both)
+    Public Property Language            As New ProtoProperty(Me, "language"             , CacheMode:=CacheMode.Both)
+    Public Property TvShowActorSource   As New ProtoProperty(Me, "tvshowactorsource")
+    Public Property EpisodeActorSource  As New ProtoProperty(Me, "episodeactorsource"   , CacheMode:=CacheMode.Both)
+    Public Property Hidden              As New ProtoProperty(Me, "hidden"               , CacheMode:=CacheMode.OnlyCache)   'Field for filtering out series from Treeview.
+    Public Property UserRating          As New ProtoProperty(Me, "userrating"           , "0")
+    
     Public Shadows Property State As Media_Companion.ShowState
         Get
             Select Case _State.Value
@@ -119,45 +104,11 @@ Public Class TvShow
     End Property
 
     'Non-xml properties
-    Public Property Seasons As New Dictionary(Of String, TvSeason)
-    Public Property Episodes As New List(Of TvEpisode)
+    Public Property Seasons     As New Dictionary(Of String, TvSeason)
+    Public Property Episodes    As New List(Of TvEpisode)
+    Public Property posters     As New List(Of String)
+    Public Property fanart      As New List(Of String)
 
-    Public ReadOnly Property MissingEpisodes As List(Of TvEpisode)
-        Get
-            Return (From e In Me.Episodes Where e.IsMissing).ToList()
-        End Get
-    End Property
-
-    Public Property posters As New List(Of String)
-    Public Property fanart As New List(Of String)
-
-    
-
-    Sub New()
-        MyBase.New("tvshow")
-
-
-    End Sub
-
-    Protected Overrides Sub LoadDoc()
-        MyBase.LoadDoc()
-
-        If Me.IdTagCatch.Value IsNot Nothing Then
-            If Me.TvdbId.Value Is Nothing Then
-                Me.TvdbId.Value = Me.IdTagCatch.Value
-                Me.IdTagCatch.Value = Nothing
-            End If
-        End If
-    End Sub
-
-
-    Public ReadOnly Property TitleAndYear As String
-        Get
-            Return Title.Value & " " & Year.Value
-        End Get
-    End Property
-
-    Dim _PossibleShowList As List(Of Tvdb.Series)
     Public Property PossibleShowList As List(Of Tvdb.Series)
         Get
             If _PossibleShowList Is Nothing Then Me.GetPossibleShows()
@@ -169,6 +120,70 @@ Public Class TvShow
         End Set
     End Property
 
+    Public Property Visible As Boolean
+        Get
+            If _Visible Then
+                ShowNode.ForeColor = Drawing.Color.Black
+            Else
+                ShowNode.ForeColor = Drawing.Color.LightGray
+            End If
+            Return _Visible
+        End Get
+        Set(ByVal value As Boolean)
+            _Visible = value
+            If _Visible Then
+                ShowNode.ForeColor = Drawing.Color.Black
+            Else
+                ShowNode.ForeColor = Drawing.Color.LightGray
+            End If
+        End Set
+    End Property
+
+    Public ReadOnly Property MissingEpisodes As List(Of TvEpisode)
+        Get
+            Return (From e In Me.Episodes Where e.IsMissing).ToList()
+        End Get
+    End Property
+
+    Public ReadOnly Property TitleAndYear As String
+        Get
+            Return Title.Value & " " & Year.Value
+        End Get
+    End Property
+
+    Public ReadOnly Property VisibleEpisodeCount As Integer
+        Get
+            Dim Count As Integer = 0
+            For Each Ep As TvEpisode In Episodes
+                If Ep.Visible Then
+                    Count += 1
+                End If
+            Next
+            Return Count
+        End Get
+    End Property
+
+    Public ReadOnly Property VisibleSeasonCount As Integer
+        Get
+            Dim Count As Integer = 0
+            For Each Ep As TvSeason In Seasons.Values
+                If Ep.Visible Then
+                    Count += 1
+                End If
+            Next
+            Return Count
+        End Get
+    End Property
+
+
+    Sub New()
+        MyBase.New("tvshow")
+    End Sub
+
+    Protected Overrides Sub LoadDoc()
+        MyBase.LoadDoc()
+    End Sub
+    
     Public Sub clearActors()
         MyBase.DeleteElement("actor")
         Me.ListActors.Clear()
@@ -256,13 +271,14 @@ Public Class TvShow
     End Sub
 
     Public Sub AbsorbTvdbSeries(ByVal Series As TheTvDB.TvdbSeries)
-        Me.TvdbId.Value     = Series.SeriesId
+        Me.TvdbId.Value     = Series.Identity
         'Me.TvdbId.Value     = Series.TvdbId.Value
         Me.Mpaa.Value       = Series.ContentRating
         'Me.Genre.Value      = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
         Me.ImdbId.Value     = Series.ImdbID
         'Me.TmdbId.Value     = Series.TmdbId.Value
         Dim tmp As String   = Series.Overview '.Overview.Value.ToString
+        If String.IsNullOrEmpty(tmp) Then tmp = ""
         tmp                 = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
         Me.Plot.Value       = tmp 'Series.Overview.Value.Replace(vbCr, "")
         Me.Title.Value      = If(Not String.IsNullOrEmpty(Series.SeriesName), Series.SeriesName, Me.Title.Value) 'not set up in ScrapeShowTask.vb
@@ -280,8 +296,7 @@ Public Class TvShow
         Me.UserRating.Value = "0"
 
     End Sub
-
-
+    
     Public Sub SearchForEpisodesInFolder()
         Dim newlist As New List(Of String)
         newlist.Clear()
@@ -306,8 +321,7 @@ Public Class TvShow
             Next fs_info
         Next
     End Sub
-
-
+    
     Public Sub AddEpisode(ByRef Episode As TvEpisode)
         If Not Cache.TvCache.Contains(Episode) Then
             Cache.TvCache.Add(Episode)
@@ -392,53 +406,7 @@ Public Class TvShow
             'End If
         End If
     End Sub
-
-    Private _Visible As Boolean
-    Public Property Visible As Boolean
-        Get
-            If _Visible Then
-                ShowNode.ForeColor = Drawing.Color.Black
-            Else
-                ShowNode.ForeColor = Drawing.Color.LightGray
-            End If
-            Return _Visible
-        End Get
-        Set(ByVal value As Boolean)
-            _Visible = value
-            If _Visible Then
-                ShowNode.ForeColor = Drawing.Color.Black
-            Else
-                ShowNode.ForeColor = Drawing.Color.LightGray
-            End If
-        End Set
-    End Property
-
-
-    Public ReadOnly Property VisibleEpisodeCount As Integer
-        Get
-            Dim Count As Integer = 0
-            For Each Ep As TvEpisode In Episodes
-                If Ep.Visible Then
-                    Count += 1
-                End If
-            Next
-            Return Count
-        End Get
-    End Property
-    Public ReadOnly Property VisibleSeasonCount As Integer
-        Get
-            Dim Count As Integer = 0
-            For Each Ep As TvSeason In Seasons.Values
-                If Ep.Visible Then
-                    Count += 1
-                End If
-            Next
-            Return Count
-        End Get
-    End Property
-
-
-
+    
     Public Sub SearchForNewEpisodes()
         'Enumerate Files in this shows folder
         '   Does it have an nfo file?

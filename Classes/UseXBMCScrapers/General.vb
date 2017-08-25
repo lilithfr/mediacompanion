@@ -812,7 +812,7 @@ Module General
                         TempXMLEpisode1.Thumbnail.FileName = NodeChild.InnerText
                         TempXMLEpisode1.Thumbnail.Url = NodeChild.InnerText 
                     Case "title"
-                        TempXMLEpisode1.Title.Value = NodeChild.InnerText
+                        TempXMLEpisode1.Title.Value = NodeChild.InnerText.TrimEnd
                     Case "season"
                         TempXMLEpisode1.Season.Value = NodeChild.InnerText
                     Case "episode"

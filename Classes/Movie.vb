@@ -78,18 +78,17 @@ Public Class Movie
     Shared Private _availableHeightResolutions As List(Of Integer)
 
     #Region "Read-write properties"
-    Property tmdb                 As TMDb 
-    Property mediapathandfilename As String = ""
-    Property TimingsLog           As String = ""
-    Property ScrapeTimingsLogThreshold As Integer = Pref.ScrapeTimingsLogThreshold
-    Property LogScrapeTimes            As Boolean = Pref.LogScrapeTimes
-'   Property TrailerUrl           As String = ""
-    Property PosterUrl            As String = ""
-    Property SeparateMovie As String = ""
-    Property ThreeDKeep As String = ""
-    Property Actions As New ScrapeActions
-'    Property nfopathandfilename As String = ""
-    Property RenamedBaseName As String = ""
+    Property tmdb                       As TMDb 
+    Property mediapathandfilename       As String = ""
+    Property TimingsLog                 As String = ""
+    Property ScrapeTimingsLogThreshold  As Integer = Pref.ScrapeTimingsLogThreshold
+    Property LogScrapeTimes             As Boolean = Pref.LogScrapeTimes
+    Property PosterUrl                  As String = ""
+    Property SeparateMovie              As String = ""
+    Property ThreeDKeep                 As String = ""
+    Property Actions                    As New ScrapeActions
+    Property RenamedBaseName            As String = ""
+    Property GetTrailerUrlAlreadyRun As Boolean = False
 
     Property TrailerUrl As String
         Get
@@ -106,9 +105,7 @@ Public Class Movie
             _trailerUrl = Value
         End Set
     End Property
-
-    Property GetTrailerUrlAlreadyRun As Boolean = False
-
+    
     Property Rescrape As Boolean
         Get
             Return _rescrape
@@ -817,6 +814,7 @@ Public Class Movie
         _actualNfoPathAndFilename = NfoName
         mediapathandfilename      = Utilities.GetFileName(NfoName,True)
     End Sub
+
     #End Region 'Constructors
 
 

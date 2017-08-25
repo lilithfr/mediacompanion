@@ -200,6 +200,7 @@ namespace TheTvDB
             WebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/login");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+            httpWebRequest.Proxy = null;
 
             using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {

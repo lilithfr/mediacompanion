@@ -253,6 +253,7 @@ Public Class Form1
     Private MovSetOverviewEdit As Boolean = False
     Private tb_MovieSetOverviewChanged As Boolean = False
     Private MovSetListAllSets As Boolean = False
+    Public tvtrial As Boolean = False
     
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -5143,223 +5144,7 @@ Public Class Form1
 			ExceptionHandler.LogError(ex)
 		End Try
 	End Sub
-
-	Private Sub tv_Fanart_Load()
-		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-		Me.Panel13.Controls.Clear()
-		listOfTvFanarts.Clear()
-		btnTvFanartResetImage.Visible = False
-		btnTvFanartSaveCropped.Visible = False
-		If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-			If Not tv_PictureBoxLeft.Image Is Nothing Then
-				util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-			Else
-				PictureBox10.Image = Nothing
-			End If
-		Else
-			util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-		End If
-		Try
-			Label58.Text = PictureBox10.Image.Height.ToString
-			Label59.Text = PictureBox10.Image.Width.ToString
-		Catch ex As Exception
-		End Try
-		TextBox28.Text = WorkingTvShow.Title.Value
-		messbox = New frmMessageBox("Please wait,", "", "Querying TVDB for fanart list")
-		System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-		messbox.Show()
-		Me.Refresh()
-		messbox.Refresh()
-		Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId.Value & "/banners.xml"
-		Dim apple2(4000) As String
-		Dim fanartlinecount As Integer = 0
-		Dim tmplistOfTvFanarts As New List(Of str_FanartList)
-		Try
-			Dim wrGETURL As WebRequest
-			wrGETURL = WebRequest.Create(fanarturl)
-			wrGETURL.Proxy = Utilities.MyProxy
-			Dim objStream As IO.Stream
-			objStream = wrGETURL.GetResponse.GetResponseStream()
-			Dim objReader As New IO.StreamReader(objStream)
-			Dim sLine As String = ""
-			fanartlinecount = 0
-			sLine = objReader.ReadToEnd
-			Dim bannerslist As New XmlDocument
-			Dim bannerlist As String = "<banners>"
-			bannerslist.LoadXml(sLine)
-			objReader.Close()
-			objStream.Close()
-			objReader = Nothing
-			objStream = Nothing
-			For Each thisresult As XmlNode In bannerslist("Banners")
-				Select Case thisresult.Name
-					Case "Banner"
-						Dim fanart As New str_FanartList(SetDefaults)
-						For Each bannerselection As XmlNode In thisresult.ChildNodes
-							Select Case bannerselection.Name
-								Case "BannerPath"
-									fanart.bigUrl = "http://thetvdb.com/banners/" & bannerselection.InnerXml
-									fanart.smallUrl = "http://thetvdb.com/banners/_cache/" & bannerselection.InnerXml
-								Case "BannerType"
-									fanart.type = bannerselection.InnerXml
-								Case "BannerType2"
-									fanart.resolution = bannerselection.InnerXml
-								Case "Rating"
-									fanart.rating = bannerselection.InnerXml.ToRating
-							End Select
-						Next
-						If fanart.type = "fanart" Then
-							tmplistOfTvFanarts.Add(fanart)
-							'listOfTvFanarts.Add(fanart)
-						End If
-				End Select
-			Next
-		Catch ex As WebException
-			Dim webmsg As String = ex.Message
-			MsgBox("TVDB appears to be down at the moment, please try again later")
-		End Try
-		If tmplistOfTvFanarts.Count > 1 Then
-			Dim q = From x In tmplistOfTvFanarts Order By x.rating Descending
-			listOfTvFanarts.AddRange(q.ToList)
-		End If
-
-		If listOfTvFanarts.Count > 0 Then
-			Dim MovFanartPicBox As New List(Of FanartPicBox)
-			Dim location As Integer = 0
-			Dim itemcounter As Integer = 0
-			For Each item In listOfTvFanarts
-				Dim thispicbox As New FanartPicBox
-				tvFanartBoxes() = New PictureBox()
-				With tvFanartBoxes
-					.Location = New Point(0, location)
-					If listOfTvFanarts.Count > 2 Then
-						.Width = 400
-						.Height = 225
-					Else
-						.Width = 415
-						.Height = 225
-					End If
-					.SizeMode = PictureBoxSizeMode.Zoom
-					.Visible = True
-					.BorderStyle = BorderStyle.Fixed3D
-					.Name = "tvfanart" & itemcounter.ToString
-					AddHandler tvFanartBoxes.DoubleClick, AddressOf util_ZoomImage2
-				End With
-				thispicbox.pbox = tvFanartBoxes
-				thispicbox.imagepath = item.smallUrl
-				MovFanartPicBox.Add(thispicbox)
-				Application.DoEvents()
-
-				tvFanartCheckBoxes() = New RadioButton()
-				With tvFanartCheckBoxes
-					.BringToFront()
-					.Location = New Point(199, location + 225)
-					.Name = "checkbox" & itemcounter.ToString
-				End With
-
-				resolutionLabels() = New Label
-				With resolutionLabels
-					.BringToFront()
-					.Location = New Point(10, location + 225)
-					.Name = item.resolution
-					.Text = item.resolution
-				End With
-				itemcounter += 1
-				location += 250
-				Me.Panel13.Controls.Add(tvFanartBoxes())
-				Me.Panel13.Controls.Add(tvFanartCheckBoxes())
-				Me.Panel13.Controls.Add(resolutionLabels())
-				Application.DoEvents()
-			Next
-			Me.Panel13.Refresh()
-			Me.Refresh()
-			If MovFanartPicBox.Count > 0 Then
-				messbox.Close()
-				If Not ImgBw.IsBusy Then
-					ToolStripStatusLabel2.Text = "Starting Download of Images..."
-					ToolStripStatusLabel2.Visible = True
-					ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel13})
-				End If
-			End If
-			Me.Panel13.Refresh()
-			Me.Refresh()
-			EnableTvFanartScrolling
-		Else
-			Dim mainlabel2 As Label
-			mainlabel2 = New Label
-			With mainlabel2
-				.Location = New Point(0, 100)
-				.Width = 700
-				.Height = 100
-				.Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
-				.Text = "No Fanart Was Found At TVDB For This Movie"
-			End With
-			Me.Panel13.Controls.Add(mainlabel2)
-		End If
-		System.Windows.Forms.Cursor.Current = Cursors.Default
-		messbox.Close()
-	End Sub
-
-	'Set focus on the first checkbox to enable mouse wheel scrolling 
-	Sub EnableTvFanartScrolling
-		Try
-			Dim rb As RadioButton = Panel13.Controls("checkbox0")
-
-			rb.Select                       'Causes RadioButtons checked state to toggle
-			rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
-		Catch
-		End Try
-	End Sub
-
-	Sub EnableTvBannerScrolling
-		Try
-			Panel16.Focus()
-		Catch
-		End Try
-	End Sub
-
-	Private Sub Tv_FanartDisplay()
-		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
-		If IsNothing(WorkingTvShow) Then Exit Sub
-		If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
-			If Not tv_PictureBoxLeft.Image Is Nothing Then
-				util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-			Else
-				PictureBox10.Image = Nothing
-			End If
-		Else
-			util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
-		End If
-	End Sub
-
-	Private Sub tv_FanartCropTop()
-		Dim imagewidth As Integer = PictureBox10.Image.Width
-		Dim imageheight As Integer = PictureBox10.Image.Height
-		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone
-		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
-	End Sub
-
-	Private Sub tv_FanartCropBottom()
-		Dim imagewidth As Integer = PictureBox10.Image.Width
-		Dim imageheight As Integer = PictureBox10.Image.Height
-		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone
-		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
-	End Sub
-
-	Private Sub tv_FanartCropLeft()
-		Dim imagewidth As Integer = PictureBox10.Image.Width
-		Dim imageheight As Integer = PictureBox10.Image.Height
-		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone
-		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
-	End Sub
-
-	Private Sub tv_FanartCropRight()
-		Dim imagewidth As Integer = PictureBox10.Image.Width
-		Dim imageheight As Integer = PictureBox10.Image.Height
-		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone
-		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
-	End Sub
-
+    
 	Sub tv_Rescrape() 'Panel9 visibility indicates which is selected - a tvshow or an episode
 		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 		Dim WorkingEpisode As TvEpisode = ep_SelectedCurrently(TvTreeview)
@@ -5498,6 +5283,7 @@ Public Class Form1
 								newfilename = newfilename.Replace(" ", "_")
 							End If
 						End If
+                        newfilename = newfilename.TrimEnd
 						Dim listtorename As New List(Of String)
 						listtorename.Clear()
 						listtorename.Add(renamefile)
@@ -14192,6 +13978,223 @@ Public Class Form1
 		End If
 	End Sub
 
+    Private Sub tv_Fanart_Load()
+		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+		Me.Panel13.Controls.Clear()
+		listOfTvFanarts.Clear()
+		btnTvFanartResetImage.Visible = False
+		btnTvFanartSaveCropped.Visible = False
+		If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+			If Not tv_PictureBoxLeft.Image Is Nothing Then
+				util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
+			Else
+				PictureBox10.Image = Nothing
+			End If
+		Else
+			util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
+		End If
+		Try
+			Label58.Text = PictureBox10.Image.Height.ToString
+			Label59.Text = PictureBox10.Image.Width.ToString
+		Catch ex As Exception
+		End Try
+		TextBox28.Text = WorkingTvShow.Title.Value
+		messbox = New frmMessageBox("Please wait,", "", "Querying TVDB for fanart list")
+		System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+		messbox.Show()
+		Me.Refresh()
+		messbox.Refresh()
+		Dim fanarturl As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & WorkingTvShow.TvdbId.Value & "/banners.xml"
+		Dim apple2(4000) As String
+		Dim fanartlinecount As Integer = 0
+		Dim tmplistOfTvFanarts As New List(Of str_FanartList)
+		Try
+			Dim wrGETURL As WebRequest
+			wrGETURL = WebRequest.Create(fanarturl)
+			wrGETURL.Proxy = Utilities.MyProxy
+			Dim objStream As IO.Stream
+			objStream = wrGETURL.GetResponse.GetResponseStream()
+			Dim objReader As New IO.StreamReader(objStream)
+			Dim sLine As String = ""
+			fanartlinecount = 0
+			sLine = objReader.ReadToEnd
+			Dim bannerslist As New XmlDocument
+			Dim bannerlist As String = "<banners>"
+			bannerslist.LoadXml(sLine)
+			objReader.Close()
+			objStream.Close()
+			objReader = Nothing
+			objStream = Nothing
+			For Each thisresult As XmlNode In bannerslist("Banners")
+				Select Case thisresult.Name
+					Case "Banner"
+						Dim fanart As New str_FanartList(SetDefaults)
+						For Each bannerselection As XmlNode In thisresult.ChildNodes
+							Select Case bannerselection.Name
+								Case "BannerPath"
+									fanart.bigUrl = "http://thetvdb.com/banners/" & bannerselection.InnerXml
+									fanart.smallUrl = "http://thetvdb.com/banners/_cache/" & bannerselection.InnerXml
+								Case "BannerType"
+									fanart.type = bannerselection.InnerXml
+								Case "BannerType2"
+									fanart.resolution = bannerselection.InnerXml
+								Case "Rating"
+									fanart.rating = bannerselection.InnerXml.ToRating
+							End Select
+						Next
+						If fanart.type = "fanart" Then
+							tmplistOfTvFanarts.Add(fanart)
+							'listOfTvFanarts.Add(fanart)
+						End If
+				End Select
+			Next
+		Catch ex As WebException
+			Dim webmsg As String = ex.Message
+			MsgBox("TVDB appears to be down at the moment, please try again later")
+		End Try
+		If tmplistOfTvFanarts.Count > 1 Then
+			Dim q = From x In tmplistOfTvFanarts Order By x.rating Descending
+			listOfTvFanarts.AddRange(q.ToList)
+		End If
+
+		If listOfTvFanarts.Count > 0 Then
+			Dim MovFanartPicBox As New List(Of FanartPicBox)
+			Dim location As Integer = 0
+			Dim itemcounter As Integer = 0
+			For Each item In listOfTvFanarts
+				Dim thispicbox As New FanartPicBox
+				tvFanartBoxes() = New PictureBox()
+				With tvFanartBoxes
+					.Location = New Point(0, location)
+					If listOfTvFanarts.Count > 2 Then
+						.Width = 400
+						.Height = 225
+					Else
+						.Width = 415
+						.Height = 225
+					End If
+					.SizeMode = PictureBoxSizeMode.Zoom
+					.Visible = True
+					.BorderStyle = BorderStyle.Fixed3D
+					.Name = "tvfanart" & itemcounter.ToString
+					AddHandler tvFanartBoxes.DoubleClick, AddressOf util_ZoomImage2
+				End With
+				thispicbox.pbox = tvFanartBoxes
+				thispicbox.imagepath = item.smallUrl
+				MovFanartPicBox.Add(thispicbox)
+				Application.DoEvents()
+
+				tvFanartCheckBoxes() = New RadioButton()
+				With tvFanartCheckBoxes
+					.BringToFront()
+					.Location = New Point(199, location + 225)
+					.Name = "checkbox" & itemcounter.ToString
+				End With
+
+				resolutionLabels() = New Label
+				With resolutionLabels
+					.BringToFront()
+					.Location = New Point(10, location + 225)
+					.Name = item.resolution
+					.Text = item.resolution
+				End With
+				itemcounter += 1
+				location += 250
+				Me.Panel13.Controls.Add(tvFanartBoxes())
+				Me.Panel13.Controls.Add(tvFanartCheckBoxes())
+				Me.Panel13.Controls.Add(resolutionLabels())
+				Application.DoEvents()
+			Next
+			Me.Panel13.Refresh()
+			Me.Refresh()
+			If MovFanartPicBox.Count > 0 Then
+				messbox.Close()
+				If Not ImgBw.IsBusy Then
+					ToolStripStatusLabel2.Text = "Starting Download of Images..."
+					ToolStripStatusLabel2.Visible = True
+					ImgBw.RunWorkerAsync({MovFanartPicBox, 0, MovFanartPicBox.Count, Me.Panel13})
+				End If
+			End If
+			Me.Panel13.Refresh()
+			Me.Refresh()
+			EnableTvFanartScrolling
+		Else
+			Dim mainlabel2 As Label
+			mainlabel2 = New Label
+			With mainlabel2
+				.Location = New Point(0, 100)
+				.Width = 700
+				.Height = 100
+				.Font = New System.Drawing.Font("Arial", 15, FontStyle.Bold)
+				.Text = "No Fanart Was Found At TVDB For This Movie"
+			End With
+			Me.Panel13.Controls.Add(mainlabel2)
+		End If
+		System.Windows.Forms.Cursor.Current = Cursors.Default
+		messbox.Close()
+	End Sub
+
+	'Set focus on the first checkbox to enable mouse wheel scrolling 
+	Sub EnableTvFanartScrolling
+		Try
+			Dim rb As RadioButton = Panel13.Controls("checkbox0")
+
+			rb.Select                       'Causes RadioButtons checked state to toggle
+			rb.Checked = Not rb.Checked     'Undo unwanted checked state toggling
+		Catch
+		End Try
+	End Sub
+
+	Sub EnableTvBannerScrolling
+		Try
+			Panel16.Focus()
+		Catch
+		End Try
+	End Sub
+
+	Private Sub Tv_FanartDisplay()
+		Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+		If IsNothing(WorkingTvShow) Then Exit Sub
+		If TvTreeview.SelectedNode.Name.ToLower.IndexOf("tvshow.nfo") <> -1 Or TvTreeview.SelectedNode.Name = "" Then
+			If Not tv_PictureBoxLeft.Image Is Nothing Then
+				util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
+			Else
+				PictureBox10.Image = Nothing
+			End If
+		Else
+			util_ImageLoad(PictureBox10, WorkingTvShow.FolderPath & "fanart.jpg", Utilities.DefaultTvFanartPath)
+		End If
+	End Sub
+
+	Private Sub tv_FanartCropTop()
+		Dim imagewidth As Integer = PictureBox10.Image.Width
+		Dim imageheight As Integer = PictureBox10.Image.Height
+		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth, imageheight - 1), New Point(0, 1)).Clone
+		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
+	End Sub
+
+	Private Sub tv_FanartCropBottom()
+		Dim imagewidth As Integer = PictureBox10.Image.Width
+		Dim imageheight As Integer = PictureBox10.Image.Height
+		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth, imageheight - 1), New Point(0, 0)).Clone
+		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
+	End Sub
+
+	Private Sub tv_FanartCropLeft()
+		Dim imagewidth As Integer = PictureBox10.Image.Width
+		Dim imageheight As Integer = PictureBox10.Image.Height
+		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth - 1, imageheight), New Point(1, 0)).Clone
+		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
+	End Sub
+
+	Private Sub tv_FanartCropRight()
+		Dim imagewidth As Integer = PictureBox10.Image.Width
+		Dim imageheight As Integer = PictureBox10.Image.Height
+		PictureBox10.Image = util_ImageCrop(PictureBox10.Image, New Size(imagewidth - 1, imageheight), New Point(0, 0)).Clone
+		PictureBox10.SizeMode = PictureBoxSizeMode.Zoom
+	End Sub
+
+
 	Private Sub btnTvFanartSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnTvFanartSave.Click
 		If ImgBw.IsBusy Then
 			ImgBw.CancelAsync()
@@ -16380,6 +16383,10 @@ Public Class Form1
         'tvdb.Title = "divorking"
         Dim Series As New TheTvDB.TvdbSeries ' = tvdb.Series
         Series = tvdb.Series
+        If tvdb.SeriesNotFound Then
+            NewSeries.State = Media_Companion.ShowState.Error
+            Exit Sub
+        End If
         NewSeries.State = Media_Companion.ShowState.Unverified
         NewSeries.AbsorbTvdbSeries(Series)
         If Series.Similarity > 0.9 Then NewSeries.State = Media_Companion.ShowState.Open
@@ -16388,9 +16395,9 @@ Public Class Form1
             NewSeries.ListActors.Add(a)
         Next
         Dim something As String = Nothing
-        If tvdb.SeriesNotFound Then
-            Dim stuff As String = Nothing
-        End If
+        'If tvdb.SeriesNotFound Then
+        '    Dim stuff As String = Nothing
+        'End If
 
     End Sub
 
