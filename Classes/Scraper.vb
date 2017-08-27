@@ -15,6 +15,7 @@ Imports System.Linq
 
 
 Public Class MovieRegExs
+    Public Const quote                      = """"
     Public Const REGEX_HREF_PATTERN         = "<a.*?href=[""'](?<url>.*?)[""'].*?>(?<name>.*?)</a>"
     Public Const REGEX_RELEASE_DATE         = ">Release Date:</h4>(?<date>.*?)<span"
     Public Const REGEX_STARS                = "Stars:</h4>(.*?)</div>"
@@ -1209,17 +1210,19 @@ Public Class Classimdb
                     webpage = loadwebpage(Pref.proxysettings, tempstring, False)
                     For f = 0 To webpage.Count - 1
                         'mpaa
-                        If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
-                            tempstring = webpage(f + 2)
+                        'If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
+                        If webpage(f).IndexOf(" id="& MovieRegExs.quote & "mpaa-rating" & MovieRegExs.quote &">") <> -1 Then
+                            tempstring = webpage(f + 2).StripTagsLeaveContent
                             If tempstring.IndexOf("<") = -1 Then
                                 For g = 0 To 33
                                     If mpaaresults(g, 0) = "MPAA" Then
-                                        mpaaresults(g, 1) = tempstring
+                                        mpaaresults(g, 1) = tempstring.Trim
                                         Exit For
                                     End If
                                 Next
                             End If
                         End If
+                        Dim webpage2 As String = String.Join(vbcrlf, webpage.ToArray())
                         'cert
                         If f > 1 Then
                             For g = 0 To 33

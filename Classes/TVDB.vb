@@ -8,27 +8,41 @@ Public Class TVDBScraper2
 
     Public Key          = Utilities.TVDBAPI
     Public Const TVDB_EXC_MSG = "TVDb is unavailable!"
-
-    Public Shared LanguagesFile               = Pref.applicationPath & "\classes\tmdb_languages.xml"
-    'Public Const  TMDbConfigImagesBaseUrlFile = "tmdb_config_images_base_url.txt"
-    'Public Const  TMDbConfigFileMaxAgeInDays  = 14
-    
+        
     #Region "Private Properties"
-
-    'Private _languages          As List(Of String) = New List(Of String)
-    'Private _lookupLanguages    As List(Of String) = New List(Of String)
+    
     Private _language           As String
     Private _tvdbId             As String
     Private _imdb               As String
     Private _title              As String
     Dim arrLetters1
     Dim arrLetters2
+    Private _api                        As TheTvDB.TvdbAPI = Pref.TVDbapi
+    Private _tvdblanguages              As TheTvDB.TvdbLanguagesResult
+    Private _config_images_base_url     As String = "http://thetvdb.com/banners/"
+    Private _series                     As New TheTvDB.TvdbSeries
+    Private _searchresults              As New TheTvDB.TvdbSeriesSearchResult
+    Private _notfound                   As Boolean = False
+    Private _episode                    As New TheTvDB.TvdbEpisode
+    Private _seriesImages               As New List(Of TheTvDB.TvdbBanner)
+    Private _seriesImage                As TheTvDB.TvdbImageSummaryResult
+    Private _actors                     As TheTvDB.TvdbActorsResult
+    Private _actor                      As TheTvDB.TvdbActor
+    Private _mcPosters                  As New List(Of McImage)
+    Private _mcFanart                   As New List(Of McImage)
+    Private _mcSeason                   As New List(Of McImage)
+    Private _mcSeasonWide               As New List(Of McImage)
+    Private _cast                       As TheTvDB.TvdbActorsResult
+    Private _frodoPosterThumbs          As New List(Of FrodoPosterThumb)
+    Private _frodoFanartThumbs          As New FrodoFanartThumbs
+
+    Private _PossibleShowList           As List(Of TheTvDB.TvdbSeries)
+    Private _fetched                    As Boolean = False
 
     #End Region
 
     #Region "Read-write Properties"
-
-
+    
     Public Property Imdb As String
         Get
             Return _imdb 
@@ -73,68 +87,17 @@ Public Class TVDBScraper2
             _language = value   
         End Set
     End Property
-
-    'Public Property Languages As List(Of String)
-    '    Get
-    '        Return _languages
-    '    End Get 
-    '    Set
-    '        _languages.Clear
-    '        _languages.AddRange(Value)
-
-    '        _lookupLanguages.Clear
-    '        For Each language In _languages
-    '            _lookupLanguages.Add( language.ToLower.Replace("no language","xx").Replace("language not set","?") )
-    '        Next
-    '    End Set
-    'End Property
-
-
+    
     Public Property ValidFanart         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidPosters        As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeason         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeasonWide     As New List(Of TheTvDB.TvdbBanner)
-    
     Public Property MaxGenres           As Integer = Media_Companion.Pref.maxmoviegenre
 
     #End Region 'Read-write properties
 
     #Region "Read-only Properties"
-
-    Private _api                        As TheTvDB.TvdbAPI = Pref.TVDbapi
-    Private _config_images_base_url     As String = "http://thetvdb.com/banners/"
-    Private _series                     As New TheTvDB.TvdbSeries
-    Private _searchresults              As New TheTvDB.TvdbSeriesSearchResult
-    Private _notfound                   As Boolean = False
-    Private _episode                    As New TheTvDB.TvdbEpisode
-    Private _seriesImages               As New List(Of TheTvDB.TvdbBanner)
-    Private _seriesImage                As TheTvDB.TvdbImageSummaryResult
-    Private _actors                     As TheTvDB.TvdbActorsResult
-    Private _actor                      As TheTvDB.TvdbActor
-    Private _mcPosters                  As New List(Of McImage)
-    Private _mcFanart                   As New List(Of McImage)
-    Private _mcSeason                   As New List(Of McImage)
-    Private _mcSeasonWide               As New List(Of McImage)
-    Private _cast                       As TheTvDB.TvdbActorsResult
-    Private _frodoPosterThumbs          As New List(Of FrodoPosterThumb)
-    Private _frodoFanartThumbs          As New FrodoFanartThumbs
-
-    Private _PossibleShowList           As List(Of TheTvDB.TvdbSeries)
-    Private _fetched                    As Boolean = False
-
- 
-    Shared Public ReadOnly Property AvailableLanguages As XDocument
-        Get
-            Return XDocument.Load(LanguagesFile)
-        End Get 
-    End Property
-
-    'Public ReadOnly Property LookupLanguages As List(Of String)
-    '    Get
-    '        Return _lookupLanguages
-    '    End Get 
-    'End Property
-
+    
     Public Readonly Property SeriesNotFound As Boolean
         Get
             Return _notfound
@@ -270,18 +233,6 @@ Public Class TVDBScraper2
         End Set
     End Property
 
-    Function GetSeriesCast As Boolean
-        'Dim reply As New Object
-        _cast = _api.GetSeriesActors(TvdbId, Nothing)   '_api.GetMovieCast(_movie.id)
-        Return Not IsNothing(_cast)
-    End Function
-    
-    Private Sub FetchCast
-        If IsNothing(_cast) AndAlso IsNothing(_series.Actors) Then
-            If Not (new RetryHandler(AddressOf GetSeriesCast)).Execute Then Throw New Exception(TVDB_EXC_MSG)
-        End If
-    End Sub
-
     Public ReadOnly Property McPosters As List(Of McImage)
         Get
             Fetch
@@ -318,7 +269,7 @@ Public Class TVDBScraper2
                 Return ""
             End If
 
-            Return "" 'Me.HdPath + ValidPosters(0).file_path
+            Return ""
         End Get 
     End Property
 
@@ -339,22 +290,6 @@ Public Class TVDBScraper2
             Return _config_images_base_url + "w500"
         End Get 
     End Property
-    
-    'Shared Public ReadOnly Property LanguageCodes As List(Of String)
-    '    Get
-    '        If Media_Companion.Pref.TMDbUseCustomLanguage and Media_Companion.Pref.TMDbCustomLanguageValue<>"" then        
-    '            Return Media_Companion.Pref.TMDbCustomLanguageValue.Split(",").ToList
-    '        Else
-    '            Return GetLanguageCodes(Media_Companion.Pref.TMDbSelectedLanguageName)
-    '        End If
-    '    End Get
-    'End Property
-    
-    'Public ReadOnly Property Api As WatTmdb.V3.Tmdb
-    '    Get
-    '        Return _api
-    '    End Get 
-    'End Property
     
     'Public ReadOnly Property Genrelist As List(Of String)
     '    Get
@@ -448,21 +383,7 @@ Public Class TVDBScraper2
     '        Return _movieImages
     '    End Get 
     'End Property
-
-    'Public ReadOnly Property McSetPosters As List(Of McImage)
-    '    Get
-    '        FetchSet
-    '        Return _mcSetPosters
-    '    End Get 
-    'End Property
     
-    'Public ReadOnly Property McSetFanart As List(Of McImage) 
-    '    Get
-    '        FetchSet
-    '        Return _mcSetFanart
-    '    End Get 
-    'End Property
-
     'Public ReadOnly Property Thumbs As List(Of String)
     '    Get
     '        Fetch
@@ -486,13 +407,24 @@ Public Class TVDBScraper2
 
     #End Region  'Read-only properties
 
-    Sub new( Optional __tvdb As String=Nothing )
+    Sub new( Optional __tvdb As String=Nothing, Optional _lang As String = "en")
         '_api         = New TheTvDB.TvdbAPI(Key)
         'AssignConfig_images_base_url
-       ' Languages    = LanguageCodes
+        LookupLang    = _lang
         TvdbId        = __tvdb
     End Sub
-
+    
+    Function GetSeriesCast As Boolean
+        _cast = _api.GetSeriesActors(TvdbId, Nothing)
+        Return Not IsNothing(_cast)
+    End Function
+    
+    Private Sub FetchCast
+        If IsNothing(_cast) AndAlso IsNothing(_series.Actors) Then
+            If Not (new RetryHandler(AddressOf GetSeriesCast)).Execute Then Throw New Exception(TVDB_EXC_MSG)
+        End If
+    End Sub
+    
     Function GetSeries As Boolean
         If Title <> "" Then
             Return GetSeriesByTitle
@@ -514,8 +446,6 @@ Public Class TVDBScraper2
         Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing, LookupLang)
         tvresults.Series.LoadDetails(_api, LookupLang)
         _series = tvresults.Series
-        '_series.Similarity = tmpseries.Similarity
-
         Return True
     End Function
 
@@ -525,24 +455,23 @@ Public Class TVDBScraper2
         Return Not IsNothing(_seriesImages)
     End Function
     
+    Function GetTvdbLanguages As TheTvDB.TvdbLanguagesResult
+        Return _api.GetTvdbLanguages(Nothing)
+    End Function
+
     Private Sub Fetch
         Try
             If _series.SeriesId = 0 And Not _fetched Then
-                
                 _fetched = True
-
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
-
                 rhs.Add(New RetryHandler(AddressOf GetSeries        ))
                 rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
-                'rhs.Add(New RetryHandler(AddressOf GetMovieKeywords))
 
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TVDB_EXC_MSG)
                 Next
                 
                 If _notfound Then Exit Sub
-
                 AssignValidFanart()
                 AssignValidPosters()
                 AssignValidSeason()
@@ -551,8 +480,6 @@ Public Class TVDBScraper2
                 AssignMcFanart()
                 AssignMcSeason()
                 AssignMcSeasonWide()
-                'AssignFrodoExtraPosterThumbs()
-                'AssignFrodoExtraFanartThumbs()
                 'AssignKeywords()
             End If
         Catch ex As Exception
@@ -561,33 +488,6 @@ Public Class TVDBScraper2
 
     End Sub
     
-    Private Sub AssignFrodoExtraPosterThumbs
-
-        'For Each item In ValidPosters
-        '    _frodoPosterThumbs.Add(New FrodoPosterThumb("poster",HdPath + item.file_path))
-        'Next
-    End Sub
-
-    Private Sub AssignFrodoExtraFanartThumbs
-        'For Each item In ValidBackDrops
-        '    _frodoFanartThumbs.Thumbs.Add(New FrodoFanartThumb( LdBackDropPath+item.file_path ,HdPath+item.file_path))
-        'Next
-    End Sub
-    
-    Private Sub FixUpSeriesImages
-        'FixUnassigned_iso_639_1(_movieImages.backdrops)
-        'FixUnassigned_iso_639_1(_movieImages.posters)
-    End Sub
-    
-    Private Sub FixUnassigned_iso_639_1( images )
-        If IsNothing(images) Then Exit Sub
-        For Each item In images
-            If IsNothing(item.iso_639_1) then
-                item.iso_639_1 = "?"
-            End If
-        Next
-    End Sub
-
 #Region "Series Images"
 
     Private Sub AssignValidFanart
@@ -682,6 +582,15 @@ Public Class TVDBScraper2
     
 #End Region
 
+    Private Sub GetPossibleShows()
+        Dim reply As Object = Nothing
+        _searchresults  = _api.GetSeries(Title, reply)
+        If _searchresults.Series.Count > 0 Then _PossibleShowList = New List(Of TheTvDB.TvdbSeries)
+        For each show In _searchresults.series
+            _PossibleShowList.Add(show)
+        Next
+
+    End Sub
     Public Function FindBestPossibleShow(ByVal ThisList As List(Of TheTvDB.TvdbSeries), ByVal FolderName As String, ByVal PreferedLang As String) As TheTvDB.TvdbSeries
         FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
         For Each Item In ThisList
@@ -780,158 +689,5 @@ Public Class TVDBScraper2
 
             Return intMax
         End Function
-
-    Private Sub GetPossibleShows()
-        Dim reply As Object = Nothing
-        _searchresults  = _api.GetSeries(Title, reply)
-        '_PossibleShowList.AddRange(_searchresults.Series)
-        If _searchresults.Series.Count > 0 Then _PossibleShowList = New List(Of TheTvDB.TvdbSeries)
-        For each show In _searchresults.series
-            _PossibleShowList.Add(show)
-        Next
-    End Sub
     
-    'Public Shared Sub DeleteConfigFile
-    '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
-
-    '    If fi.Exists then
-    '        fi.Delete
-    '    End If
-    'End Sub
-    
-    'Function GetConfiguration As Boolean
-    '    _config_images_base_url = _api.GetConfiguration().images.base_url
-    '    Return Not IsNothing(_config_images_base_url)
-    'End Function
-
-    'Private Sub AssignConfig_images_base_url
-
-    '    Dim fi As IO.FileInfo = New IO.FileInfo(TMDbConfigImagesBaseUrlFile)
-
-    '    Dim expired As Boolean = True
-
-    '    _config_images_base_url = Nothing
-
-    '    Try
-    '        If fi.Exists then
-    '            expired = (DateTime.Now-fi.LastWriteTime).TotalDays>TMDbConfigFileMaxAgeInDays
-
-    '            If Not expired then
-    '                _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
-    '                Return  
-    '            End If
-    '        End If
-    '    Catch
-    '    End Try
- 
-
-    '    Dim Ok As Boolean = (new RetryHandler(AddressOf GetConfiguration)).Execute
-
-    '    If Ok Then
-    '        Try
-    '            If fi.Exists then fi.Delete
-    '            File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
-    '            Return
-    '        Catch
-    '        End Try
-    '    End If
-        
-       
-    '    'Fallback on expired file
-    '    Try
-    '        If fi.Exists Then _config_images_base_url = File.ReadAllText(TMDbConfigImagesBaseUrlFile)
-    '        Return
-    '    Catch
-    '    End Try
-
-
-    '    'If all else fails -> Write a default one
-    '    Try
-    '        _config_images_base_url = "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/"
-
-    '        If fi.Exists then fi.Delete
-    '        File.WriteAllText(TMDbConfigImagesBaseUrlFile, _config_images_base_url)
-    '    Catch
-    '        Throw New Exception("AssignConfig_images_base_url failed")
-    '    End Try
-    'End Sub
-    
-    'Private Sub SafeAssignSetId
-    '    If Not IsNothing(_movie.belongs_to_collection) Then
-    '        SetId = _movie.belongs_to_collection.id.ToString
-    '    End If
-    'End Sub
-    
-    
-
-    'Function GetMovieKeywords As Boolean
-    '    ValidKeyWords = _api.GetMovieKeywords(_movie.id)
-    '    Return Not IsNothing(ValidKeyWords)
-    'End Function
-
-    'Function GetBackDropUrl( Optional resolution As Resolution=Resolution.FullHD ) As String
-    '    Fetch
-    '    Dim BackDrop As WatTmdb.V3.Backdrop = SelectBackDrop( CInt(resolution) )
-
-    '    If IsNothing(BackDrop) then
-    '        Return Nothing
-    '    End If
-
-    '    If resolution=Resolution.FullHD then
-    '        Return HdPath         + BackDrop.file_path
-    '    Else
-    '        Return LdBackDropPath + BackDrop.file_path
-    '    End if
-    'End Function
-
-    'Function SaveBackDrop( destination As String, Optional resolution As Resolution=Resolution.FullHD ) As Boolean
-    '    Dim url As String=GetBackDropUrl(resolution)
-
-    '    If IsNothing(url) then
-    '        Return False
-    '    End If
-
-    '    Using wc As New System.Net.WebClient()
-    '        wc.DownloadFile(url, destination)
-    '    End Using
- 
-    '    Return True
-    'End Function
-
-    'Function GetTrailerUrl(FailedUrls As List(Of String), Optional resolution As String="1080" ) As String
-    '    Fetch
-            
-    '    Dim q = From t In _trailers.youtube Where t.size=resolution+"p" And Not FailedUrls.Contains(t.source)
-
-    '    If q.Count = 0 then
-    '        q = From t In _trailers.youtube Where Not FailedUrls.Contains(t.source) Order By t.size Descending
-    '    End If
-
-    '    If q.Count = 0 then
-    '        return ""
-    '    End If
-
-    '    Return q.First.source
-    'End Function
-
-    'Shared Sub LoadLanguages(ByRef cb As ComboBox)
-    '    cb.Items.Clear
-        
-    '    Dim q = From x In AvailableLanguages.Descendants("language")
-    '                        Select name = x.Attribute("name").Value
-    '                        Order By name
-                    
-    '    For Each element In q
-    '        cb.Items.Add(element)
-    '    Next
-    'End Sub
-    
-    'Shared Function GetLanguageCodes(name As String) As List(Of String)
-    '    Dim q = From x In AvailableLanguages.Descendants("language")
-    '                        Select value   = x.Attribute("value").Value, 
-    '                               attName = x.Attribute("name" ).Value
-    '                        Where attName = name 
-
-    '    Return q.Single().value.Split(",").ToList
-    'End Function
 End Class

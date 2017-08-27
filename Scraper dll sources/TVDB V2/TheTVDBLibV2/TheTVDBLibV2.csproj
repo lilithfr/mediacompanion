@@ -72,6 +72,7 @@
     <Compile Include="TvdbImageSummary.cs" />
     <Compile Include="TvdbBannerRatingsInfo.cs" />
     <Compile Include="TvdbPageLink.cs" />
+    <Compile Include="TvdbLanguages.cs" />
     <Compile Include="TvdbSeriesEpisodesResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TvdbActor.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="TvdbEpisode.cs" />
     <Compile Include="TvdbSeries.cs" />
     <Compile Include="TvdbSeriesInfoResult.cs" />
+    <Compile Include="TvdbLanguagesResult.cs" />
     <Compile Include="TvdbSeriesSearchResult.cs" />
     <Compile Include="TvdbUtils.cs" />
   </ItemGroup>

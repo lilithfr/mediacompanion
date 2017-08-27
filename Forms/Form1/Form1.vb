@@ -16377,28 +16377,11 @@ Public Class Form1
         'newTvFolders.Add("U:\zMedia\zTV2\Vikings")
         'Dim tvdb As New TheTvDB.TvdbAPI(Utilities.TVDBAPI, "en")
         Dim tvdb As New TVDBScraper2()
+        Dim languages As TheTvDB.TvdbLanguagesResult = tvdb.GetTvdbLanguages
         Dim NewSeries As New TvShow
         tvdb.LookupLang = Pref.TvdbLanguageCode
         tvdb.Title = "Vikings"
-        'tvdb.Title = "divorking"
-        Dim Series As New TheTvDB.TvdbSeries ' = tvdb.Series
-        Series = tvdb.Series
-        If tvdb.SeriesNotFound Then
-            NewSeries.State = Media_Companion.ShowState.Error
-            Exit Sub
-        End If
-        NewSeries.State = Media_Companion.ShowState.Unverified
-        NewSeries.AbsorbTvdbSeries(Series)
-        If Series.Similarity > 0.9 Then NewSeries.State = Media_Companion.ShowState.Open
-        NewSeries.Language.Value = Pref.TvdbLanguageCode
-        For each a In tvdb.cast
-            NewSeries.ListActors.Add(a)
-        Next
-        Dim something As String = Nothing
-        'If tvdb.SeriesNotFound Then
-        '    Dim stuff As String = Nothing
-        'End If
-
+       
     End Sub
 
 End Class

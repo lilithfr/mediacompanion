@@ -139,22 +139,23 @@ namespace TheTvDB
         /// <returns>The object created from the JSON deserialization.</returns>
         public delegate object ProcessJsonString(string jsonString);
 
-        private const string getSeriesUrl = "https://api.thetvdb.com/search/series?name={0}";
-        private const string getSeriesDetailsUrl = "https://api.thetvdb.com/series/{0}";
-        private const string getSeriesBannersUrl = "https://api.thetvdb.com/series/{0}/images/query?keyType={1}";
-        private const string getSeriesActorsUrl = "https://api.thetvdb.com/series/{0}/actors";
-        private const string getSeriesEpisodesUrl = "https://api.thetvdb.com/series/{0}/episodes?page={1}";
-        private const string getEpisodeActorsUrl = "https://api.thetvdb.com/episodes/{0}/actors";
+        private const string getSeriesUrl           = "https://api.thetvdb.com/search/series?name={0}";
+        private const string getSeriesDetailsUrl    = "https://api.thetvdb.com/series/{0}";
+        private const string getSeriesBannersUrl    = "https://api.thetvdb.com/series/{0}/images/query?keyType={1}";
+        private const string getSeriesActorsUrl     = "https://api.thetvdb.com/series/{0}/actors";
+        private const string getSeriesEpisodesUrl   = "https://api.thetvdb.com/series/{0}/episodes?page={1}";
+        private const string getEpisodeActorsUrl    = "https://api.thetvdb.com/episodes/{0}/actors";
         private const string getSeriesImageSummaryUrl = "https://api.thetvdb.com/series/{0}/images";
-        private const string getEpisodeDetailsUrl = "https://api.thetvdb.com/episodes/{0}";
+        private const string getEpisodeDetailsUrl   = "https://api.thetvdb.com/episodes/{0}";
 
-        private const string bannerImageUrl = "http://www.thetvdb.com/banners/{0}";
-        private const string posterImageUrl = "http://www.thetvdb.com/banners/{0}";
-        private const string smallPosterImageUrl = "http://www.thetvdb.com/banners/_cache/{0}";
-        private const string fanArtImageUrl = "http://www.thetvdb.com/banners/{0}";
-        private const string smallFanArtImageUrl = "http://www.thetvdb.com/banners/_cache/{0}";
-        private const string actorImageUrl = "http://www.thetvdb.com/banners/{0}";
-        private const string smallActorImageUrl = "http://www.thetvdb.com/banners/_cache/{0}";
+        private const string bannerImageUrl         = "http://www.thetvdb.com/banners/{0}";
+        private const string posterImageUrl         = "http://www.thetvdb.com/banners/{0}";
+        private const string smallPosterImageUrl    = "http://www.thetvdb.com/banners/_cache/{0}";
+        private const string fanArtImageUrl         = "http://www.thetvdb.com/banners/{0}";
+        private const string smallFanArtImageUrl    = "http://www.thetvdb.com/banners/_cache/{0}";
+        private const string actorImageUrl          = "http://www.thetvdb.com/banners/{0}";
+        private const string smallActorImageUrl     = "http://www.thetvdb.com/banners/_cache/{0}";
+        private const string tvdblanguages          = "https://api.thetvdb.com/languages";
 
         /// <summary>
         /// Get or set the flag that determines if responses are logged or not.
@@ -261,6 +262,31 @@ namespace TheTvDB
             MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(responseString));
 
             return serializer.ReadObject(stream) as TvdbSeriesSearchResult;
+        }
+
+        /// <summary>
+        /// Gets list of available languages from TVDb
+        /// </summary>
+        /// <param name="completionHandler">The async completion handler. May be null.</param>
+        /// <returns></returns>
+        public TvdbLanguagesResult GetTvdbLanguages(TvdbAsyncHandler completionHandler)
+        {
+            initializeFunction();
+            string url = string.Format(tvdblanguages);
+            TvdbAsyncHandler asyncHandler = completionHandler;
+            ProcessJsonString processString = new ProcessJsonString(LanguageSearchResponse);
+
+            return (TvdbLanguagesResult)getData(url, "en", new TvdbDelegates(asyncHandler, processString));
+        }
+
+        private object LanguageSearchResponse(string responseString)
+        {
+            logResponse("Language Search", responseString);
+
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(TvdbLanguagesResult));
+            MemoryStream stream = new MemoryStream(Encoding.Unicode.GetBytes(responseString));
+
+            return serializer.ReadObject(stream) as TvdbLanguagesResult;
         }
 
         /// <summary>
