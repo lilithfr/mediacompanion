@@ -246,14 +246,13 @@ Public Class TvShow
 
     Public Sub AbsorbTvdbSeries(ByVal Series As Tvdb.Series)
         Me.TvdbId.Value     = Series.Id.Value
-        'Me.TvdbId.Value     = Series.TvdbId.Value
         Me.Mpaa.Value       = Series.ContentRating.Value
         Me.Genre.Value      = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
         Me.ImdbId.Value     = Series.ImdbId.Value
         Me.TmdbId.Value     = Series.TmdbId.Value
         Dim tmp As String   = Series.Overview.Value.ToString
         tmp                 = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
-        Me.Plot.Value       = tmp 'Series.Overview.Value.Replace(vbCr, "")
+        Me.Plot.Value       = tmp
         Me.Title.Value      = If(Not String.IsNullOrEmpty(Series.SeriesName.Value), Series.SeriesName.Value, Me.Title.Value) 'not set up in ScrapeShowTask.vb
         Me.Runtime.Value    = Series.RunTime.Value
         Me.Rating.Value     = Series.Rating.Value
@@ -272,19 +271,17 @@ Public Class TvShow
 
     Public Sub AbsorbTvdbSeries(ByVal Series As TheTvDB.TvdbSeries)
         Me.TvdbId.Value     = Series.Identity
-        'Me.TvdbId.Value     = Series.TvdbId.Value
         Me.Mpaa.Value       = Series.ContentRating
-        'Me.Genre.Value      = Series.Genre.Value.Trim("|"c).Replace("|", " / ")
+        Me.Genre.Value      = Series.GenresDisplayString.Replace(", ", " / ")
         Me.ImdbId.Value     = Series.ImdbID
-        'Me.TmdbId.Value     = Series.TmdbId.Value
-        Dim tmp As String   = Series.Overview '.Overview.Value.ToString
+        Dim tmp As String   = Series.Overview
         If String.IsNullOrEmpty(tmp) Then tmp = ""
         tmp                 = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
-        Me.Plot.Value       = tmp 'Series.Overview.Value.Replace(vbCr, "")
+        Me.Plot.Value       = tmp
         Me.Title.Value      = If(Not String.IsNullOrEmpty(Series.SeriesName), Series.SeriesName, Me.Title.Value) 'not set up in ScrapeShowTask.vb
         Me.Runtime.Value    = Series.Runtime
         Me.Rating.Value     = Series.Rating
-        'Me.Votes.Value      = Series.RatingCount.value
+        Me.Votes.Value      = Series.Votes
         Me.Premiered.Value  = Series.FirstAired
         Me.Year.Value       = If(Not String.IsNullOrEmpty(Series.FirstAired), Series.FirstAired.Substring(0,4), "")
         Me.Studio.Value     = Series.Network

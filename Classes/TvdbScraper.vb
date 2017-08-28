@@ -1,14 +1,47 @@
 ﻿'Imports System.IO
+Imports System.ComponentModel
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
 Imports System.Threading
 Imports System.Xml
+Imports Media_Companion
 
 
 
 Public Class TVDBScraper
     Const SetDefaults = True
+    'Public Property TvBw                As BackgroundWorker = Nothing
+    'Public Property PercentDone         As Integer = 0
     
+    'Public ReadOnly Property Cancelled As Boolean
+    '    Get
+    '        Application.DoEvents()
+
+    '        If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerSupportsCancellation AndAlso _TvBw.CancellationPending Then
+    '            ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
+    '            Return True
+    '        End If
+    '        Return False
+    '    End Get
+    'End Property
+
+    'Sub New(Optional bw As BackgroundWorker = Nothing)
+    '    _TvBw = bw
+    'End Sub
+
+    'Sub ReportProgress(Optional progressText As String = Nothing, Optional log As String = Nothing, Optional command As Progress.Commands = Progress.Commands.SetIt)
+    '    ReportProgress(New Progress(progressText, log, command))
+    'End Sub
+
+    'Sub ReportProgress(ByVal oProgress As Progress)
+    '    If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) And String.IsNullOrEmpty(oProgress.Message)) Then
+    '        Try
+    '            _TvBw.ReportProgress(PercentDone, oProgress)
+    '        Catch
+    '        End Try
+    '    End If
+    'End Sub
+
     Public Function GetPosterList(ByVal TvdbId As String, ByVal ReturnPoster As Boolean) As Tvdb.Banners
         If Not ReturnPoster Then Return Nothing
 

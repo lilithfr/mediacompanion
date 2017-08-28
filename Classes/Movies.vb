@@ -117,6 +117,13 @@ Public Class Movies
             RaiseEvent XbmcOnlyMoviesChanged
         End Set
     End Property
+    
+    Property ActorsFilter_AlsoInclude           As New List(Of String)
+    Property TagsFilter_AlsoInclude             As New List(Of String)
+    Property DirectorsFilter_AlsoInclude        As New List(Of String)
+    Property SetsFilter_AlsoInclude             As New List(Of String)
+
+#Region "Public ReadOnly Properties"
 
     Public ReadOnly Property CertificateMappings As CertificateMappings
         Get
@@ -177,15 +184,6 @@ Public Class Movies
     
     Public ReadOnly Property CountriesFilter As List(Of String)
         Get
-            'Dim q = From x In MovieCache Select ms=x.countriesList
-             
-            'Dim lst = q.SelectMany(Function(m) m).ToList
-
-            'Dim q2 = From x In lst
-            '            Group By xx=x.Trim Into Num=Count
-            '            Order By xx
-            '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
-
             Dim q = From x In MovieCache Select ms=x.countries.Split("/")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
@@ -210,15 +208,6 @@ Public Class Movies
     
     Public ReadOnly Property StudiosFilter As List(Of String)
         Get
-            'Dim q = From x In MovieCache Select ms=x.studioslist
-             
-            'Dim lst = q.SelectMany(Function(m) m).ToList
-
-            'Dim q2 = From x In lst
-            '            Group By xx=x.Trim Into Num=Count
-            '            Order By xx
-            '            Select xx.IfBlankMissing & " (" & Num.ToString & ")" 
-
             Dim q = From x In MovieCache Select ms=x.studios.Split("/")
              
             Dim lst = q.SelectMany(Function(m) m).ToList
@@ -291,8 +280,6 @@ Public Class Movies
     
     Public ReadOnly Property ListFolderSizes As List(Of Double)
         Get
-'            Dim q = From m In MovieCache Select CInt( m.FolderSize /(1024*1024*1024) )
-
             Dim q = From m In MovieCache Select m.DisplayFolderSize
            
             Return q.AsEnumerable.ToList
@@ -358,7 +345,6 @@ Public Class Movies
             lst.Add( ScrapeError                )
             lst.Add( Duplicates                 )
             If Not Pref.DisableNotMatchingRenamePattern Then lst.Add( NotMatchingRenamePattern )
-            'lst.Add( IncompleteMovieSetInfo    )
             lst.Add( MissingFromSetReleased     )
             lst.Add( MissingFromSetUnreleased   )
             lst.Add( UserSetAdditions           )
@@ -681,14 +667,6 @@ Public Class Movies
         End Get
     End Property    
 
-    Property ActorsFilter_AlsoInclude As New List(Of String)
-
-    Sub ActorsFilter_AddIfMissing(value As String)
-        If Not ActorsFilter.Any(Function(x) x.StartsWith(value)) Then
-            ActorsFilter_AlsoInclude.Add(value)
-        End If
-    End Sub
-    
     Public ReadOnly Property TagsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In TagDb 
@@ -724,15 +702,7 @@ Public Class Movies
             Return From x In q Select x.TagName & " (" & x.NumFilms.ToString & ")"
         End Get
     End Property    
-
-    Property TagsFilter_AlsoInclude As New List(Of String)
-
-    Sub TagsFilter_AddIfMissing(value As String)
-        If Not TagsFilter.Any(Function(x) x.StartsWith(value)) Then
-            TagsFilter_AlsoInclude.Add(value)
-        End If
-    End Sub
-
+    
     Public ReadOnly Property DirectorsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In DirectorDb 
@@ -769,14 +739,6 @@ Public Class Movies
             Return From x In q Select x.ActorName & " (" & x.NumFilms.ToString & ")"
         End Get
     End Property  
-
-    Property DirectorsFilter_AlsoInclude As New List(Of String)
-
-    Sub DirectorsFilter_AddIfMissing(value As String)
-        If Not DirectorsFilter.Any(Function(x) x.StartsWith(value)) Then
-            DirectorsFilter_AlsoInclude.Add(value)
-        End If
-    End Sub
     
     Public ReadOnly Property TagFilter As List(Of String)
         Get
@@ -860,13 +822,6 @@ Public Class Movies
         End Get
     End Property 
     
-    Function LockedFieldCount(field As String) As String
-
-         Dim q = From m In MovieCache Where m.LockedFields.Contains(field.ToLower) 
-
-         Return field & " (" & q.Count.ToString & ")"
-    End Function  
-    
     Public ReadOnly Property AudioLanguagesFilter As List(Of String)
         Get
             Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.Audio Select fullpathandfilename=m.fullpathandfilename, field=If(a.Language.Value="","Unknown",a.Language.Value)
@@ -912,27 +867,7 @@ Public Class Movies
             Return QryMovieCache(leftOuterJoinTable)
         End Get
     End Property    
-
-    Private Function QryMovieCache(leftOuterJoinTable As IEnumerable) As List(Of String)
-        Dim q = From m In MovieCache
-                    Group Join 
-                        a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
-                    Into
-                        ResultList = Group
-                    From
-                        result In ResultList.DefaultIfEmpty
-                    Select 
-                        field=If( result Is Nothing, "Unassigned", result.field )
-                    Group By 
-                        field Into Num=Count
-                    Order By 
-                        field
-                    Select 
-                        aString = field & " (" & Num.ToString & ")"
-
-        Return q.Cast(Of String)().ToList
-    End Function
-
+    
     Public ReadOnly Property SetsFilter_Extras As IEnumerable(Of String)
         Get
             Dim q = From x In MovieCache_NoDups 
@@ -944,34 +879,7 @@ Public Class Movies
             Return From x In q Select x.SetName & " (" & x.NumFilms.ToString  & " of " & GetMovieSetCollectionCount(x.SetName) & ")"
         End Get
     End Property    
-
-    Property SetsFilter_AlsoInclude As New List(Of String)
-
-    Sub SetsFilter_AddIfMissing(name As String)
-
-        If Not SetsFilter.Any(Function(x) x.StartsWith(name)) Then
-            SetsFilter_AlsoInclude.Add(name)
-        End If
-    End Sub
-
-    'Public ReadOnly Property TagsFilter_Preferences As IEnumerable(Of String)
-    '    Get
-    '        Dim q = From x In MovieCache 
-    '            Group By 
-    '                x.movietag Into NumFilms=Count
-    '            Where 
-    '                NumFilms>=Pref.MinTagsInFilter 
-
-    '        If Pref.MovFiltersTagsOrder = 0 Then 
-    '            q = From x In q Order by x.NumFilms Descending, x.movietag Ascending
-    '        Else
-    '            q = From x In q Order by x.movietag Ascending , x.NumFilms Descending
-    '        End If
-
-    '        Return From x In q Select x.movietag & " (" & x.NumFilms.ToString & GetMovieSetCollectionCount(x.MovieSetDisplayName) & ")" Take Pref.MaxTagsInFilter 
-    '    End Get
-    'End Property
-
+    
     Public ReadOnly Property SetsFilter_Preferences As IEnumerable(Of String)
         Get
             Dim q = From x In MovieCache_NoDups 
@@ -996,24 +904,6 @@ Public Class Movies
         End Get
     End Property
     
-    Function GetMovieSetCollectionCount(SetName As String) As String
-
-        If SetName="-None-" Then Return ""
-
-        Dim movieSet = FindMovieSetInfoBySetDisplayName(SetName)
- 
-        Dim x = FindUserTmdbSetAdditions(SetName)
-        Dim userAdditions = ""
-        If x.Count>0 Then userAdditions = " *" & x.Count.ToString & " user*"
-
-        If IsNothing(movieSet) OrElse movieSet.MissingInfo Then
-            Return " of unknown"
-        Else
-            Dim r = From m In movieSet.Collection Where IsDate(m.release_date) AndAlso (m.release_date < Date.Now) Select m
-            Return " of " & (r.Count+x.Count) & userAdditions
-        End If
-    End Function
-    
     Public ReadOnly Property MovieCache_NoDups As IEnumerable(Of ComboList)
         Get
 		    Dim q = MovieCache.GroupBy(Function(x) x.id).Select(Function(grp) grp.First)
@@ -1021,42 +911,6 @@ Public Class Movies
 		    Return q.ToList()  
         End Get
     End Property 
-
-    Function FindMovieSetInfoBySetDisplayName(SetName As String) As MovieSetInfo
-        
-        Dim res = (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
-
-        If IsNothing(res) Then
-            Return New MovieSetInfo
-        Else
-            Return res
-        End If
-
-    End Function
-
-    Function FindMovieSetInfoBySetName(SetName As String) As MovieSetInfo
-        
-        Dim res = (From x In MovieSetDB Where x.MovieSetName = SetName Select x).FirstOrDefault
-
-        If IsNothing(res) Then
-            Return New MovieSetInfo
-        Else
-            Return res
-        End If
-
-    End Function
-
-    
-    Function FindMovieSetInfoByTmdbSetId(TmdbSetId As String) As MovieSetInfo
-
-        Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
-
-    End Function
-    
-
-    Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
-        Return (From x In MovieCache Where x.SetName = SetName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
-    End Function
     
     Public ReadOnly Property TmDbMovieSetIds As List(Of Integer)
         Get
@@ -1082,6 +936,278 @@ Public Class Movies
         End Get
     End Property
     
+    Public ReadOnly Property UserSetAdditions As String
+        Get
+            Return "User set additions (" & (From x In MovieCache Where x.UserTmdbSetAddition="Y").Count & ")"
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingTmdbSetInfo As String
+        Get
+            Dim q = From x In MovieCache Where x.UnknownSetCount="Y"
+            Return "Missing Tmdb set info (" & q.Count & ")"
+        End Get
+    End Property
+    
+    Public ReadOnly Property MissingFromSetReleased As String
+        Get
+            Return "Missing from set released (" & TmdbMissingFromSetReleased.Count & ")"
+        End Get
+    End Property
+
+    Public ReadOnly Property MissingFromSetUnreleased As String
+        Get
+            Return "Missing from set unreleased (" & TmdbMissingFromSetUnreleased.Count & ")"
+        End Get
+    End Property
+    
+    Public ReadOnly Property TmdbMissingFromSetReleased As List(Of TmdbSetMissingMovie)
+        Get
+            Dim q = From x In TmdbSetMissingMovies
+                        Where
+                            IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now)
+                        Select 
+                            x
+
+            Return q.ToList
+        End Get
+    End Property
+    
+    Public ReadOnly Property TmdbMissingFromSetUnreleased As List(Of TmdbSetMissingMovie)
+        Get
+            Dim q = From x In TmdbSetMissingMovies
+                        Where
+                            Not (IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now))
+                        Select 
+                            x
+            Return q.ToList
+        End Get
+    End Property
+    
+    Public ReadOnly Property MoviesSetsIncNone As List(Of String)
+        Get
+            Try
+                Dim q = From x In MovieCache Select ms = x.SetName Distinct 
+
+                Return q.ToList
+            Catch
+                Return New List(Of String)
+            End Try
+        End Get
+    End Property
+
+    Public ReadOnly Property MoviesSetsExNone As List(Of String)
+        Get
+            Dim x = MoviesSetsIncNone
+
+            x.Remove("")
+            x.Remove("-None-")
+
+            Return x
+        End Get
+    End Property
+
+    Public ReadOnly Property MovieSetsNoSetId As List(Of String)
+        Get
+            Try
+                Dim q = From x In MovieCache Where x.TmdbSetId = "" AndAlso x.SetName <> "-None-" Select ms = x.SetName Distinct
+                Return q.tolist
+
+            Catch ex As Exception
+                Return New List(Of String)
+            End Try
+        End Get
+    End Property
+
+    Public ReadOnly Property MovieSetsCustom As String()
+        Get
+            Dim q = From x In MovieSetDB Where x.TmdbSetId.StartsWith("L") Select ms = x.MovieSetName Distinct
+            Return q.ToArray
+        End Get
+    End Property
+    
+	Public ReadOnly Property UsedMovieSets As String()
+		Get
+			Dim resTmdb = From x In MoviesSetsExNone
+
+			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
+
+			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x) '.ToArray
+            Dim res2 = res.Union(MovieSetsCustom).OrderBy(Function(x) x).ToArray
+            
+			Return res2
+		End Get
+
+	End Property
+    
+    Public ReadOnly Property SubTitleLangFilter As List(Of String)
+        Get
+            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select fullpathandfilename=m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
+
+            Return QryMovieCache(leftOuterJoinTable)
+        End Get
+    End Property
+
+    Public ReadOnly Property RootFolderFilter As List(Of String)
+        Get
+            Dim q = From x In MovieCache
+                    Group By x.rootfolder Into NumFilms = Count
+                    Order By rootfolder Ascending
+
+            Dim r = (From x In q Select x.rootfolder & " (" & x.NumFilms.ToString & ")").ToList
+
+            Return r
+        End Get
+    End Property
+    
+    Public ReadOnly Property ActorDb As List(Of Databases)
+        Get
+            Return _actorDb
+        End Get
+    End Property
+
+    Public ReadOnly Property DirectorDb As List(Of DirectorDatabase)
+        Get
+            Return _directorDb
+        End Get
+    End Property
+
+    Public ReadOnly Property MovieSetDB As List(Of MovieSetInfo)
+        Get
+            Return _moviesetDb
+        End Get
+    End Property
+    
+    Public ReadOnly Property TmdbSetMissingMovies As List(Of TmdbSetMissingMovie)
+        Get
+            Return _tmdbSetMissingMovies
+        End Get
+    End Property
+    
+    Public ReadOnly Property TagDB As List(Of TagDatabase)
+        Get
+            Return _tagDb
+        End Get
+    End Property
+
+    Public ReadOnly Property Cancelled As Boolean
+        Get
+            Application.DoEvents()
+
+            If Not IsNothing(_Bw) AndAlso _Bw.WorkerSupportsCancellation AndAlso _Bw.CancellationPending Then
+                ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
+                Return True
+            End If
+            Return False
+        End Get
+    End Property
+#End Region
+
+    Function LockedFieldCount(field As String) As String
+
+         Dim q = From m In MovieCache Where m.LockedFields.Contains(field.ToLower) 
+
+         Return field & " (" & q.Count.ToString & ")"
+    End Function  
+    
+    Private Function QryMovieCache(leftOuterJoinTable As IEnumerable) As List(Of String)
+        Dim q = From m In MovieCache
+                    Group Join 
+                        a In leftOuterJoinTable On a.fullpathandfilename Equals m.fullpathandfilename
+                    Into
+                        ResultList = Group
+                    From
+                        result In ResultList.DefaultIfEmpty
+                    Select 
+                        field=If( result Is Nothing, "Unassigned", result.field )
+                    Group By 
+                        field Into Num=Count
+                    Order By 
+                        field
+                    Select 
+                        aString = field & " (" & Num.ToString & ")"
+
+        Return q.Cast(Of String)().ToList
+    End Function
+    
+    Function GetMovieSetCollectionCount(SetName As String) As String
+
+        If SetName="-None-" Then Return ""
+
+        Dim movieSet = FindMovieSetInfoBySetDisplayName(SetName)
+ 
+        Dim x = FindUserTmdbSetAdditions(SetName)
+        Dim userAdditions = ""
+        If x.Count>0 Then userAdditions = " *" & x.Count.ToString & " user*"
+
+        If IsNothing(movieSet) OrElse movieSet.MissingInfo Then
+            Return " of unknown"
+        Else
+            Dim r = From m In movieSet.Collection Where IsDate(m.release_date) AndAlso (m.release_date < Date.Now) Select m
+            Return " of " & (r.Count+x.Count) & userAdditions
+        End If
+    End Function
+    
+    Function FindMovieSetInfoBySetDisplayName(SetName As String) As MovieSetInfo
+        
+        Dim res = (From x In MovieSetDB Where x.MovieSetDisplayName = SetName Select x).FirstOrDefault
+
+        If IsNothing(res) Then
+            Return New MovieSetInfo
+        Else
+            Return res
+        End If
+
+    End Function
+
+    Function FindMovieSetInfoBySetName(SetName As String) As MovieSetInfo
+        
+        Dim res = (From x In MovieSetDB Where x.MovieSetName = SetName Select x).FirstOrDefault
+
+        If IsNothing(res) Then
+            Return New MovieSetInfo
+        Else
+            Return res
+        End If
+
+    End Function
+    
+    Function FindMovieSetInfoByTmdbSetId(TmdbSetId As String) As MovieSetInfo
+
+        Return (From x In MovieSetDB Where x.TmdbSetId=TmdbSetId).FirstOrDefault
+
+    End Function
+    
+    Function FindUserTmdbSetAdditions(SetName As String) As IEnumerable(Of MovieSetInfo)
+        Return (From x In MovieCache Where x.SetName = SetName and x.UserTmdbSetAddition="Y" Select x.MovieSet)
+    End Function
+    
+    
+    Sub ActorsFilter_AddIfMissing(value As String)
+        If Not ActorsFilter.Any(Function(x) x.StartsWith(value)) Then
+            ActorsFilter_AlsoInclude.Add(value)
+        End If
+    End Sub
+
+    Sub DirectorsFilter_AddIfMissing(value As String)
+        If Not DirectorsFilter.Any(Function(x) x.StartsWith(value)) Then
+            DirectorsFilter_AlsoInclude.Add(value)
+        End If
+    End Sub
+
+    Sub SetsFilter_AddIfMissing(name As String)
+
+        If Not SetsFilter.Any(Function(x) x.StartsWith(name)) Then
+            SetsFilter_AlsoInclude.Add(name)
+        End If
+    End Sub
+
+    Sub TagsFilter_AddIfMissing(value As String)
+        If Not TagsFilter.Any(Function(x) x.StartsWith(value)) Then
+            TagsFilter_AlsoInclude.Add(value)
+        End If
+    End Sub
+
     'Movies missing from a Set
     '-------------------------
     'From list Of movies
@@ -1117,20 +1243,6 @@ Public Class Movies
             End If
         Next
     End Sub
-    
-    Public ReadOnly Property UserSetAdditions As String
-        Get
-           'Return "User set additions (" & UserTmdbSetAdditions.Count & ")"
-            Return "User set additions (" & (From x In MovieCache Where x.UserTmdbSetAddition="Y").Count & ")"
-        End Get
-    End Property
-
-    Public ReadOnly Property MissingTmdbSetInfo As String
-        Get
-            Dim q = From x In MovieCache Where x.UnknownSetCount="Y"
-            Return "Missing Tmdb set info (" & q.Count & ")"
-        End Get
-    End Property
     
     Public Sub AssignUnknownUserTmdbSetAdditions
 
@@ -1168,93 +1280,6 @@ Public Class Movies
             End If
         Next
     End Sub
-    
-    Public ReadOnly Property MissingFromSetReleased As String
-        Get
-            Return "Missing from set released (" & TmdbMissingFromSetReleased.Count & ")"
-        End Get
-    End Property
-
-    Public ReadOnly Property MissingFromSetUnreleased As String
-        Get
-            Return "Missing from set unreleased (" & TmdbMissingFromSetUnreleased.Count & ")"
-        End Get
-    End Property
-    
-    Public ReadOnly Property TmdbMissingFromSetReleased As List(Of TmdbSetMissingMovie)
-        Get
-            Dim q = From x In TmdbSetMissingMovies
-                        Where
-                            IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now)
-                        Select 
-                            x
-
-            Return q.ToList
-        End Get
-    End Property
-    
-    Public ReadOnly Property TmdbMissingFromSetUnreleased As List(Of TmdbSetMissingMovie)
-        Get
-            'Dim q = TmdbSetMissingMovies.Where( Function(x) Not TmdbMissingFromSetReleased.Contains(x) )
-
-            Dim q = From x In TmdbSetMissingMovies
-                        Where
-                            Not (IsDate(x.movie.release_date) AndAlso (x.movie.release_date < Date.Now))
-                        Select 
-                            x
-            Return q.ToList
-        End Get
-    End Property
-    
-    Public ReadOnly Property MoviesSetsIncNone As List(Of String)
-        Get
-            Try
-                Dim q = From x In MovieCache Select ms = x.SetName Distinct     ' ??? x.SetName.Split("^~")  ???
-
-   '            Return q.SelectMany(Function(m) m).Distinct.OrderBy(Function(m) m).ToList   ????
-                Return q.ToList
-            Catch
-                Return New List(Of String)
-            End Try
-        End Get
-    End Property
-
-    Public ReadOnly Property MoviesSetsExNone As List(Of String)
-        Get
-            Dim x = MoviesSetsIncNone
-
-            x.Remove("")
-            x.Remove("-None-")
-
-            Return x
-        End Get
-    End Property
-
-    Public ReadOnly Property MovieSetsNoSetId As List(Of String)
-        Get
-            Try
-                Dim q = From x In MovieCache Where x.TmdbSetId = "" AndAlso x.SetName <> "-None-" Select ms = x.SetName Distinct
-                Return q.tolist
-
-            Catch ex As Exception
-                Return New List(Of String)
-            End Try
-        End Get
-    End Property
-
-    Public ReadOnly Property MovieSetsCustom As String()
-        Get
-           ' Dim c As String()
-            'Try
-                'Dim q = From x In MovieCache Where x.TmdbSetId = "" AndAlso x.SetName <> "-None-" Select ms = x.SetName Distinct
-                Dim q = From x In MovieSetDB Where x.TmdbSetId.StartsWith("L") Select ms = x.MovieSetName Distinct
-                Return q.ToArray
-
-            'Catch ex As Exception
-            '    'Return c
-            'End Try
-        End Get
-    End Property
     
     Sub AddUpdateMovieSetInCache(movieSetInfo As MovieSetInfo, Optional ByVal Update As Boolean = False, Optional ByVal custom As Boolean = False)
 
@@ -1318,21 +1343,6 @@ Public Class Movies
         Next
     End Sub
     
-	Public ReadOnly Property UsedMovieSets As String()
-		Get
-'			Dim resTmdb = From x In MovieSetDB Select name = x.MovieSetDisplayName  
-			Dim resTmdb = From x In MoviesSetsExNone
-
-			Dim resUser = From x In Pref.moviesets Where x <> "-None-" Select name = If(Pref.MovSetTitleIgnArticle, Pref.RemoveIgnoredArticles(x),x)
-
-			Dim res = resTmdb.Union(resUser).OrderBy(Function(x) x) '.ToArray
-            Dim res2 = res.Union(MovieSetsCustom).OrderBy(Function(x) x).ToArray
-            
-			Return res2
-		End Get
-
-	End Property
-    
     Public Function GetMovieSetIdFromName(mSetName As String) As String
         For Each mset In MovieSetDB
             If mset.MovieSetName = mSetName Then
@@ -1388,26 +1398,6 @@ Public Class Movies
 
     End Sub
 
-    Public ReadOnly Property SubTitleLangFilter As List(Of String)
-        Get
-            Dim leftOuterJoinTable As IEnumerable = From m In MovieCache From a In m.SubLang Select fullpathandfilename=m.fullpathandfilename, field = If(a.Language.Value = "", "Unknown", a.Language.Value)
-
-            Return QryMovieCache(leftOuterJoinTable)
-        End Get
-    End Property
-
-    Public ReadOnly Property RootFolderFilter As List(Of String)
-        Get
-            Dim q = From x In MovieCache
-                    Group By x.rootfolder Into NumFilms = Count
-                    Order By rootfolder Ascending
-
-            Dim r = (From x In q Select x.rootfolder & " (" & x.NumFilms.ToString & ")").ToList
-
-            Return r
-        End Get
-    End Property
-
     Public Sub Rebuild_Data_GridViewMovieCache()
 
 '       UpdateUserTmdbSetAdditions()        
@@ -1418,48 +1408,6 @@ Public Class Movies
             _data_GridViewMovieCache.Add(New Data_GridViewMovie(item))
         Next
     End Sub
-
-    Public ReadOnly Property ActorDb As List(Of Databases)
-        Get
-            Return _actorDb
-        End Get
-    End Property
-
-    Public ReadOnly Property DirectorDb As List(Of DirectorDatabase)
-        Get
-            Return _directorDb
-        End Get
-    End Property
-
-    Public ReadOnly Property MovieSetDB As List(Of MovieSetInfo)
-        Get
-            Return _moviesetDb
-        End Get
-    End Property
-    
-    Public ReadOnly Property TmdbSetMissingMovies As List(Of TmdbSetMissingMovie)
-        Get
-            Return _tmdbSetMissingMovies
-        End Get
-    End Property
-    
-    Public ReadOnly Property TagDB As List(Of TagDatabase)
-        Get
-            Return _tagDb
-        End Get
-    End Property
-
-    Public ReadOnly Property Cancelled As Boolean
-        Get
-            Application.DoEvents()
-
-            If Not IsNothing(_Bw) AndAlso _Bw.WorkerSupportsCancellation AndAlso _Bw.CancellationPending Then
-                ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
-                Return True
-            End If
-            Return False
-        End Get
-    End Property
 
     Sub New(Optional bw As BackgroundWorker = Nothing)
         _Bw = bw
@@ -1610,7 +1558,6 @@ Public Class Movies
                 ReportProgress(, "Found Offline Folder: " & dirInfo.FullName.ToString & vbCrLf & "Checking for subfolders" & vbCrLf)
 
                 For Each subfolder In Utilities.EnumerateFolders(moviefolder, 0)
-                    '                    ReportProgress(,"Subfolder added :- " & subfolder.ToString & vbCrLf)
 
                     Dim DummyFileName As String = Utilities.GetLastFolder(subfolder & "\whatever") & ".avi"
                     Dim DummyFullName As String = Path.Combine(subfolder, DummyFileName)
@@ -1867,7 +1814,7 @@ Public Class Movies
         movie.Rescrape = True
 
         Dim imdbid As String = movie.PossibleImdb
-        If Pref.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then  'AndAlso tmdbid <> "" 
+        If Pref.movies_useXBMC_Scraper AndAlso tmdbid <> "" Then
             imdbid = tmdbid
         End If
         movie.DeleteScrapedFiles(False)
@@ -1914,9 +1861,7 @@ Public Class Movies
         Using filechck As IO.StreamReader = File.OpenText(fullPathandFilename)
             tempstring = filechck.ReadToEnd.ToLower
         End Using
-        If tempstring = Nothing Then
-            Return False
-        End If
+        If tempstring = Nothing Then Return False
         If tempstring.IndexOf("<musicvideo>") <> -1 And tempstring.IndexOf("</musicvideo>") <> -1 And tempstring.IndexOf("<title>") <> -1 And tempstring.IndexOf("</title>") <> -1 Then
             Return True
             Exit Function
@@ -2187,7 +2132,6 @@ Public Class Movies
             End If
         Next
         MV_NfoLoad(t)
-        'loadMVDV1()
     End Sub
 
     Public Sub LoadMovieCacheFromNfos
@@ -2245,7 +2189,6 @@ Public Class Movies
                     RootMovieFolders.Add(rtpath.rpath)
                 End If
             Next
-        'RootMovieFolders.AddRange(Pref.movieFolders)
         RootMovieFolders.AddRange(Pref.offlinefolders)
 
         ReportProgress("Searching movie folders...")
@@ -2292,7 +2235,6 @@ Public Class Movies
         End While
       
         If Cancelled Then Exit Sub
-        'RebuildMoviePeopleCaches
 
         MovieCache.Clear
         MovieCache.AddRange(TmpMovieCache)
@@ -2415,10 +2357,7 @@ Public Class Movies
             If Not incmissing AndAlso movie.mediapathandfilename = "none" Then Continue For
        
             movie.LoadNFO(False)
-
-            'If Not Pref.moviesets.Contains(movie.ScrapedMovie.fullmoviebody.SetName) Then
-            '    Pref.moviesets.Add(movie.ScrapedMovie.fullmoviebody.SetName)
-            'End If
+            
             Cache.Add(movie.Cache)
         Next
     End Sub
@@ -2665,13 +2604,10 @@ Public Class Movies
 
                             Case "moviesetname"
                                 movieset = detail.InnerText
-
                             Case "id"
                                 moviesetId = setMovieSetID(detail.InnerText, setDb)
-
                             Case "plot"
                                 moviesetplot = detail.InnerText
-
                             Case "LastUpdatedTs"
                                 Dim tmpdate As String = detail.InnerText
                                 If IsNumeric(tmpdate) Then
@@ -2680,14 +2616,10 @@ Public Class Movies
                                     tmpdate = tmpdate.Replace("a.m.", "AM").Replace("p.m.", "PM")
                                     LastUpdatedTs = tmpdate
                                 End If
-                                'LastUpdatedTs = detail.InnerText
-
                             Case "UserMovieSetName"
                                 UserMovieSetName = detail.InnerText
-
                             Case "DirtyData"
                                 Dirty = detail.InnerXml
-
                             Case "collection"
                                 Dim ac As New CollectionMovie
                                 Dim detail2 As XmlNode = Nothing
@@ -2728,7 +2660,6 @@ Public Class Movies
                         End Select
                     Next
                     _tagDb.Add(New TagDatabase(TagTitle, movieId))
-                    '_tagDb.Add(thisresult.InnerText)
             End Select
         Next
     End Sub

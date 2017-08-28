@@ -31,22 +31,22 @@ Public Class Form1
     
     Public Const XBMC_Controller_full_log_file As String = "XBMC-Controller-full-log-file.txt"
 	Public Const XBMC_Controller_brief_log_file As String = "XBMC-Controller-brief-log-file.txt"
-	Public Const MCToolsCommands As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
+	Public Const MCToolsCommands        As Integer = 5          ' increment when adding MC functions to ToolsToolStripMenuItem
 
 	Public Dim WithEvents BckWrkScnMovies As BackgroundWorker = New BackgroundWorker
 	Public Dim WithEvents BckWrkCheckNewVersion As BackgroundWorker = New BackgroundWorker
 	Public Dim WithEvents BckWrkXbmcController As BackgroundWorker = New BackgroundWorker
-	Public Dim WithEvents Bw As BackgroundWorker = New BackgroundWorker
-	Public Dim WithEvents ImgBw As BackgroundWorker = New BackgroundWorker
-    Public Dim WithEvents BckWrkTv As BackgroundWorker = New BackgroundWorker
-	Property BWs As New List(Of BackgroundWorker)
-	Property NumActiveThreads As Integer
-	Shared Public XbmcControllerQ As PriorityQueue = New PriorityQueue
+	Public Dim WithEvents Bw            As BackgroundWorker = New BackgroundWorker
+	Public Dim WithEvents ImgBw         As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents BckWrkTv      As BackgroundWorker = New BackgroundWorker
+	Property BWs                        As New List(Of BackgroundWorker)
+	Property NumActiveThreads           As Integer
+	Shared Public XbmcControllerQ       As PriorityQueue = New PriorityQueue
 	Shared Public XbmcControllerBufferQ As PriorityQueue = New PriorityQueue
 	Shared Public Property MC_Only_Movies As List(Of ComboList)
 	Public Shared Property MaxXbmcMovies As List(Of MaxXbmcMovie)
-	Shared Public MyCulture As New System.Globalization.CultureInfo("en-US")
-    Public Shared DecimalSeparator As String = Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator
+	Shared Public MyCulture             As New System.Globalization.CultureInfo("en-US")
+    Public Shared DecimalSeparator      As String = Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencyDecimalSeparator
 	Private Declare Function GetActiveWindow Lib "user32" Alias "GetActiveWindow" () As IntPtr
 
 	Public Property XBMC_Controller_LogLastShownDt As Date = Now
@@ -56,10 +56,10 @@ Public Class Form1
 
 	Declare Function AttachConsole Lib "kernel32.dll" (ByVal dwProcessId As Int32) As Boolean
 
-	Private WithEvents Tmr As New Windows.Forms.Timer With {.Interval = 200}
-	Private fb As New FolderBrowserDialog
-	Private Const WM_USER As Integer = &H400
-	Private Const BFFM_SETEXPANDED As Integer = WM_USER + 106
+	Private WithEvents Tmr              As New Windows.Forms.Timer With {.Interval = 200}
+	Private fb                          As New FolderBrowserDialog
+	Private Const WM_USER               As Integer = &H400
+	Private Const BFFM_SETEXPANDED      As Integer = WM_USER + 106
 
 	<DllImport("user32.dll", EntryPoint:="SendMessageW")> _
 	Private Shared Function SendMessageW(ByVal hWnd As IntPtr, ByVal msg As UInteger, ByVal wParam As Integer, <MarshalAs(UnmanagedType.LPWStr)> ByVal lParam As String) As IntPtr
@@ -101,23 +101,22 @@ Public Class Form1
 		End Get
 	End Property
 
-	Property frmXBMC_Progress As frmXBMC_Progress = New frmXBMC_Progress
+	Property frmXBMC_Progress           As frmXBMC_Progress = New frmXBMC_Progress
 
 #Region "Movie scraping related objects"
-	Public WithEvents oMovies As New Movies
+	Public WithEvents oMovies           As New Movies
+	Public filteredList                 As New List(Of ComboList)
+	Public rescrapeList                 As New RescrapeList
+	Public workingMovieDetails          As FullMovieDetails
+	Public _rescrapeList                As New RescrapeSpecificParams
+	Public _lockList                    As New LockSpecificParams
+	Public ChangeMovieId                As String = ""
+	Public droppedItems                 As New List(Of String)
+	Public CtrlsToDisableMovieScrape    As IEnumerable(Of Control)
 
-	Public filteredList As New List(Of ComboList)
-	Public rescrapeList As New RescrapeList
-	Public workingMovieDetails As FullMovieDetails
-	Public _rescrapeList As New RescrapeSpecificParams
-	Public _lockList As New LockSpecificParams
-	Public ChangeMovieId As String = ""
-	Public droppedItems As New List(Of String)
-	Public ControlsToDisableDuringMovieScrape As IEnumerable(Of Control)
-
-	Public Shared blnAbortFileDownload As Boolean
-	Public Shared ReadOnly countLock = New Object
-	Public ScraperErrorDetected As Boolean
+	Public Shared blnAbortFileDownload  As Boolean
+	Public Shared ReadOnly countLock    = New Object
+	Public ScraperErrorDetected         As Boolean
 
 #End Region 'Movie scraping objects
 
@@ -131,29 +130,29 @@ Public Class Form1
         Closing
 	End Enum
 
-	Shared Public ProgState As ProgramState = ProgramState.Other
-	Public StateBefore As ProgramState = ProgramState.Other
+	Shared Public ProgState             As ProgramState = ProgramState.Other
+	Public StateBefore                  As ProgramState = ProgramState.Other
 
-	Public DataDirty As Boolean
-	Public _yield As Boolean
-	Public lastNfo As String = ""
-    Private lastTvNfo As String = ""
-	Public MainFormLoadedStatus As Boolean = False
-    Private tvfiltertrip As Boolean = False
-	Public messbox As New frmMessageBox("blank", "", "")
-	Public startup As Boolean = True
-	Public scraperFunction2 As New ScraperFunctions
-	Public nfoFunction As New WorkingWithNfoFiles
-	Public mediaInfoExp As New MediaInfoExport
-	Shared Public langarray(300, 3) As String
-	Public screen As Screen
-	Public Shared genrelist As New List(Of String)
+	Public DataDirty                    As Boolean
+	Public _yield                       As Boolean
+	Public lastNfo                      As String = ""
+    Private lastTvNfo                   As String = ""
+	Public MainFormLoadedStatus         As Boolean = False
+    Private tvfiltertrip                As Boolean = False
+	Public messbox                      As New frmMessageBox("blank", "", "")
+	Public startup                      As Boolean = True
+	Public scraperFunction2             As New ScraperFunctions
+	Public nfoFunction                  As New WorkingWithNfoFiles
+	Public mediaInfoExp                 As New MediaInfoExport
+	Shared Public langarray(300, 3)     As String
+	Public screen                       As Screen
+	Public Shared genrelist             As New List(Of String)
 
-	Public Data_GridViewMovie As Data_GridViewMovie
-	Public DataGridViewBindingSource As New BindingSource
+	Public Data_GridViewMovie           As Data_GridViewMovie
+	Public DataGridViewBindingSource    As New BindingSource
     
-	Public workingMovie As New ComboList
-	Public tvBatchList As New str_TvShowBatchWizard(SetDefaults)
+	Public workingMovie                 As New ComboList
+	Public tvBatchList                  As New str_TvShowBatchWizard(SetDefaults)
 
 	Public moviefolderschanged          As Boolean = False
 	Public tvfolderschanged             As Boolean = False
@@ -174,86 +173,85 @@ Public Class Form1
 	Private MovieKeyPress               As String = ""
 	Public cropMode                     As String = "movieposter"
 
-	Dim WithEvents bigPictureBox As PictureBox
-	Dim WithEvents fanartBoxes As PictureBox
-	Dim WithEvents fanartCheckBoxes As RadioButton
-	Dim WithEvents posterPicBoxes As PictureBox
-	Dim WithEvents posterCheckBoxes As RadioButton
-	Dim WithEvents posterLabels As Label
-	Dim WithEvents resLabel As Label
-	Dim WithEvents tvFanartBoxes As PictureBox
-	Dim WithEvents tvFanartCheckBoxes As RadioButton
-	Dim WithEvents resolutionLabels As Label
-	Dim newTvFolders As New List(Of String)
-	Dim tvprogresstxt As String = ""
-    Dim tooltiptv As New Tooltip
-	Dim MovpictureList As New List(Of PictureBox)
-	Dim tvpictureList As New List(Of PictureBox)
-	Dim screenshotTab As TabPage
-	Dim filterOverride As Boolean = False
-	Dim bigPanel As Panel
-	Public Shared profileStruct As New Profiles
-	Dim frmSplash As New frmSplashscreen
-	Dim frmSplash2 As New frmProgressScreen
-	Public Shared multimonitor As Boolean = False
-	Dim scrapeAndQuit As Boolean = False
-	Dim refreshAndQuit As Boolean = False
-	Dim sandq As Integer = 0
-	Dim mouseDelta As Integer = 0
-	Dim resLabels As Label
-	Dim votelabels As Label
-	Dim fanartArray As New List(Of McImage)
-	Dim cropString As String
-	Dim posterArray As New List(Of McImage)
-	Dim pageCount As Integer = 0
-	Dim currentPage As Integer = 0
-	Dim actorflag As Boolean = False
-	Dim listOfTvFanarts As New List(Of str_FanartList)
-	Dim tableSets As New List(Of str_TableItems)
-	Dim relativeFolderList As New List(Of str_RelativeFileList)
+	Dim WithEvents bigPictureBox        As PictureBox
+	Dim WithEvents fanartBoxes          As PictureBox
+	Dim WithEvents fanartCheckBoxes     As RadioButton
+	Dim WithEvents posterPicBoxes       As PictureBox
+	Dim WithEvents posterCheckBoxes     As RadioButton
+	Dim WithEvents posterLabels         As Label
+	Dim WithEvents resLabel             As Label
+	Dim WithEvents tvFanartBoxes        As PictureBox
+	Dim WithEvents tvFanartCheckBoxes   As RadioButton
+	Dim WithEvents resolutionLabels     As Label
+	Dim newTvFolders                    As New List(Of String)
+	Dim tvprogresstxt                   As String = ""
+    Dim tooltiptv                       As New Tooltip
+	Dim MovpictureList                  As New List(Of PictureBox)
+	Dim tvpictureList                   As New List(Of PictureBox)
+	Dim screenshotTab                   As TabPage
+	Dim filterOverride                  As Boolean = False
+	Dim bigPanel                        As Panel
+	Public Shared profileStruct         As New Profiles
+	Dim frmSplash                       As New frmSplashscreen
+	Dim frmSplash2                      As New frmProgressScreen
+	Public Shared multimonitor          As Boolean = False
+	Dim scrapeAndQuit                   As Boolean = False
+	Dim refreshAndQuit                  As Boolean = False
+	Dim sandq                           As Integer = 0
+	Dim mouseDelta                      As Integer = 0
+	Dim resLabels                       As Label
+	Dim votelabels                      As Label
+	Dim fanartArray                     As New List(Of McImage)
+	Dim cropString                      As String
+	Dim posterArray                     As New List(Of McImage)
+	Dim pageCount                       As Integer = 0
+	Dim currentPage                     As Integer = 0
+	Dim actorflag                       As Boolean = False
+	Dim listOfTvFanarts                 As New List(Of str_FanartList)
+	Dim tableSets                       As New List(Of str_TableItems)
+	Dim relativeFolderList              As New List(Of str_RelativeFileList)
 	'Dim templanguage As String
-	Dim WithEvents tvposterpicboxes As PictureBox
-	Dim WithEvents tvpostercheckboxes As RadioButton
-	Dim WithEvents tvposterlabels As Label
-	Dim WithEvents tvreslabel As Label
-	Dim tvposterpage As Integer = 1
-	Public Shared WallPicWidth As Integer = 165
-	Public Shared WallPicHeight As Integer = Math.Floor((WallPicWidth / 3) * 4)
-	Dim MovMaxWallCount As Integer = 0
-	Dim tvMaxWallCount As Integer = 0
-	Dim moviecount_bak As Integer = 0
-    Dim MovieRefresh As Boolean = False
-	Dim tvCount_bak As Integer = 0
-	Dim lastSort As String = ""
-	Dim lastinvert As String = ""
-	Public displayRuntimeScraper As Boolean = True
-	Dim tv_IMDbID_detected As Boolean = False
-	Dim tv_IMDbID_warned As Boolean = False
-	Dim tv_IMDbID_detectedMsg As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
+	Dim WithEvents tvposterpicboxes     As PictureBox
+	Dim WithEvents tvpostercheckboxes   As RadioButton
+	Dim WithEvents tvposterlabels       As Label
+	Dim WithEvents tvreslabel           As Label
+	Dim tvposterpage                    As Integer = 1
+	Public Shared WallPicWidth          As Integer = 165
+	Public Shared WallPicHeight         As Integer = Math.Floor((WallPicWidth / 3) * 4)
+	Dim MovMaxWallCount                 As Integer = 0
+	Dim tvMaxWallCount                  As Integer = 0
+	Dim moviecount_bak                  As Integer = 0
+    Dim MovieRefresh                    As Boolean = False
+	Dim tvCount_bak                     As Integer = 0
+	Dim lastSort                        As String = ""
+	Dim lastinvert                      As String = ""
+	Public displayRuntimeScraper        As Boolean = True
+	Dim tv_IMDbID_detected              As Boolean = False
+	Dim tv_IMDbID_warned                As Boolean = False
+	Dim tv_IMDbID_detectedMsg           As String = String.Format("Media Companion has detected one or more TV Shows has an incorrect ID.{0}", vbCrLf) & _
 									String.Format("To rectify, please select the following:{0}", vbCrLf) & _
 									String.Format("  1. TV Preferences -> Fix NFO id during cache refresh{0}", vbCrLf) & _
 									String.Format("  2. TV Shows -> Refresh Shows{0}", vbCrLf) & _
 									String.Format("(This will only be reported once per session)", vbCrLf)
-	Dim TVSearchALL As Boolean = False
-	Private ClickedControl As String
-	Private tvCurrentTabIndex As Integer = 0
-	Private currentTabIndex As Integer = 0
-	Private homeTabIndex As Integer = 0
-	Private CustTvIndex As Integer = 0
-	Public totalfilesize As Long = 0
-	Public listoffilestomove As New List(Of String)
-	Dim currenttitle As String
-	Public singleshow As Boolean = False
-	Public showslist As Object
-	Public DGVMoviesColName As String = ""
-	Dim CloseMC As Boolean = False
-	Public Imageloading As Boolean = False
-	Dim MoviesFiltersResizeCalled As Boolean = False
-	Private tb_tagtxt_changed As Boolean = False
-    Private MovSetOverviewEdit As Boolean = False
-    Private tb_MovieSetOverviewChanged As Boolean = False
-    Private MovSetListAllSets As Boolean = False
-    Public tvtrial As Boolean = False
+	Private TVSearchALL                 As Boolean = False
+	Private ClickedControl              As String
+	Private tvCurrentTabIndex           As Integer = 0
+	Private currentTabIndex             As Integer = 0
+	Private homeTabIndex                As Integer = 0
+	Private CustTvIndex                 As Integer = 0
+	Public totalfilesize                As Long = 0
+	Public listoffilestomove            As New List(Of String)
+	Private currenttitle                As String
+	Public singleshow                   As Boolean = False
+	Public DGVMoviesColName             As String = ""
+	Private CloseMC                     As Boolean = False
+	Public Imageloading                 As Boolean = False
+	Private MoviesFiltersResizeCalled   As Boolean = False
+	Private tb_tagtxt_changed           As Boolean = False
+    Private MovSetOverviewEdit          As Boolean = False
+    Private tb_MovieSetOverviewChanged  As Boolean = False
+    Private MovSetListAllSets           As Boolean = False
+    Public tvtrial                      As Boolean = False
     
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
@@ -953,7 +951,7 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        If e.KeyCode = Keys.F7 Then doTestTVDB()
+        If e.KeyCode = Keys.F7 Then CheckRootsForToolStripMenuItem.PerformClick()
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -9597,10 +9595,10 @@ Public Class Form1
 			cbBtnLink.Checked = cbBtnLink_Checked
 			ProgState = StateBefore
 		End If
-		If IsNothing(ControlsToDisableDuringMovieScrape) Then
-			ControlsToDisableDuringMovieScrape = (From c As Control In GetAllMatchingControls("M")).ToList
+		If IsNothing(CtrlsToDisableMovieScrape) Then
+			CtrlsToDisableMovieScrape = (From c As Control In GetAllMatchingControls("M")).ToList
 		End If
-		For Each c In ControlsToDisableDuringMovieScrape
+		For Each c In CtrlsToDisableMovieScrape
 			c.Enabled = _state
 		Next
 

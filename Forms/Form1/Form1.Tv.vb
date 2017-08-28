@@ -1839,7 +1839,7 @@ Partial Public Class Form1
 		End If
     End Sub
 
-
+#Region "Tv Series Scraper"
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork
         Try
             Statusstrip_Enable()
@@ -2083,6 +2083,9 @@ Partial Public Class Form1
         End Try
     End Sub
 
+#End Region
+
+#Region "Tv Rescraper"
     Private Sub tvbckrescrapewizard_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles tvbckrescrapewizard.DoWork
         Try
             Dim showprocesscount As Integer = 0
@@ -2092,7 +2095,7 @@ Partial Public Class Form1
             Dim shcachecount As Integer = Cache.TvCache.Shows.Count
             Dim done As Integer = 0
             If singleshow Then
-                showslist = tv_ShowSelectedCurrently(TvTreeview)
+                Dim showslist As TvShow = tv_ShowSelectedCurrently(TvTreeview)
                 For x = Cache.TvCache.Shows.Count - 1 To 0 Step -1
                     If Cache.TvCache.Shows(x).Title.Value = showslist.Title.Value Then
                         shcachecount = x + 1
@@ -2464,6 +2467,8 @@ Partial Public Class Form1
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
+#End Region
 
     Private Sub TV_EpisodeScraper(ByVal ListOfShows As List(Of TvShow), ByVal manual As Boolean)
         Dim stage As String = "0"

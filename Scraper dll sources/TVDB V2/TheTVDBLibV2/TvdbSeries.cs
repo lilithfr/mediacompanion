@@ -158,6 +158,12 @@ namespace TheTvDB
         [DataMember(Name = "siteRating")]
         public decimal Rating { get; set; }
 
+        /// <summary>
+        /// Get or set the user Vote count.
+        /// </summary>
+        [DataMember(Name = "siteRatingCount")]
+        public int Votes { get; set; }
+
         ///// <summary>
         ///// Get or set the Series similarity
         ///// </summary>
@@ -315,6 +321,7 @@ namespace TheTvDB
                 AddedDate = seriesInfo.Series.AddedDate;
                 AddedBy = seriesInfo.Series.AddedBy;
                 Rating = seriesInfo.Series.Rating;
+                Votes = seriesInfo.Series.Votes;
 
                 detailsLoaded = true;
                 languageCodeLoaded = languageCode;

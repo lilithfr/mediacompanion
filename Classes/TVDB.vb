@@ -461,16 +461,16 @@ Public Class TVDBScraper2
 
     Private Sub Fetch
         Try
-            If _series.SeriesId = 0 And Not _fetched Then
+            If _series.Identity = 0 And Not _fetched Then
                 _fetched = True
                 Dim rhs As List(Of RetryHandler) = New List(Of RetryHandler)
-                rhs.Add(New RetryHandler(AddressOf GetSeries        ))
-                rhs.Add(New RetryHandler(AddressOf GetSeriesImages  ))
+                rhs.Add(New RetryHandler(AddressOf GetSeries))
+                rhs.Add(New RetryHandler(AddressOf GetSeriesImages))
 
                 For Each rh In rhs
                     If Not rh.Execute Then Throw New Exception(TVDB_EXC_MSG)
                 Next
-                
+
                 If _notfound Then Exit Sub
                 AssignValidFanart()
                 AssignValidPosters()
