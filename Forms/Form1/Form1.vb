@@ -233,6 +233,8 @@ Public Class Form1
 									String.Format("  1. TV Preferences -> Fix NFO id during cache refresh{0}", vbCrLf) & _
 									String.Format("  2. TV Shows -> Refresh Shows{0}", vbCrLf) & _
 									String.Format("(This will only be reported once per session)", vbCrLf)
+    Public WithEvents oTV               As New TVDBScraper
+    Public tvargs                       As TvdbArgs
 	Private TVSearchALL                 As Boolean = False
 	Private ClickedControl              As String
 	Private tvCurrentTabIndex           As Integer = 0
@@ -256,6 +258,8 @@ Public Class Form1
 	'TODO: (Form1_Load) Need to refactor
 #Region "Form1 Events"
 	Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ServicePointManager.UseNagleAlgorithm = False
+        ServicePointManager.DefaultConnectionLimit = 20
         'Application.CurrentCulture = New Globalization.CultureInfo("de-de")
 		PictureBoxAssignedMoviePoster.AllowDrop = True
 
@@ -263,11 +267,14 @@ Public Class Form1
 			Pref.movie_filters.FilterPanel = MovieFiltersPanel
 			Label73.Text = ""
 
-			BckWrkScnMovies.WorkerReportsProgress = True
-			BckWrkScnMovies.WorkerSupportsCancellation = True
-			ImgBw.WorkerReportsProgress = True
-			ImgBw.WorkerSupportsCancellation = True
-			oMovies.Bw = BckWrkScnMovies
+			BckWrkScnMovies.WorkerReportsProgress       = True
+			BckWrkScnMovies.WorkerSupportsCancellation  = True
+            BckWrkTv.WorkerReportsProgress              = True
+            BckWrkTv.WorkerSupportsCancellation         = True
+			ImgBw.WorkerReportsProgress                 = True
+			ImgBw.WorkerSupportsCancellation            = True
+			oMovies.Bw                                  = BckWrkScnMovies
+            oTV.TvBw                                    = BckWrkTv
 
 			For I = 0 To 20
 				Common.Tasks.Add(New Tasks.BlankTask())
@@ -951,7 +958,10 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        If e.KeyCode = Keys.F7 Then CheckRootsForToolStripMenuItem.PerformClick()
+        If e.KeyCode = Keys.F7 Then 'CheckRootsForToolStripMenuItem.PerformClick()
+            newTvFolders.Add("U:\zMedia\zTV2\Vikings")
+            RunBackgroundTVScrape("TVSeriesSearchForNew")
+        End If
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -6514,34 +6524,6 @@ Public Class Form1
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
-	End Sub
-
-	Public Sub tv_ShowFind(ByVal rootfolders As List(Of str_RootPaths), Optional ByVal skiptvfolderschk As Boolean = False)
-		Dim Folders As List(Of String)
-		newTvFolders.Clear()
-		For Each folder In rootfolders
-			If Not folder.selected Then Continue For
-			Folders = Utilities.EnumerateFolders(folder.rpath, 0)
-			For Each strfolder2 As String In Folders
-				If skiptvfolderschk Then
-					If Not lb_tvSeriesFolders.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then newTvFolders.Add(strfolder2)
-				ElseIf Not Pref.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
-					If Not lb_tvSeriesFolders.Items.Contains(strfolder2) Then newTvFolders.Add(strfolder2)
-				End If
-			Next
-		Next
-	End Sub
-
-	Public Sub tv_ShowScrape()
-		If Not bckgrnd_tvshowscraper.IsBusy Then
-			If newTvFolders.Count > 0 Then
-				ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
-				ToolStripStatusLabel5.Visible = True
-			End If
-			Dim selectedLang As String = If(Pref.tvshow_useXBMC_Scraper, Pref.XBMCTVDbLanguage, Pref.TvdbLanguageCode)
-			Dim args As TvdbArgs = New TvdbArgs("", selectedLang)
-			bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
-		End If
 	End Sub
 
 	Public Function util_RegexValidate(ByVal regexs As String)

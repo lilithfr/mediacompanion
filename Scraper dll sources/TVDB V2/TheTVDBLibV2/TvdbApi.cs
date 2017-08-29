@@ -198,9 +198,10 @@ namespace TheTvDB
 
         private string getToken(string apiKey)
         {
-            WebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/login");
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.thetvdb.com/login");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+            httpWebRequest.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
 
             using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {

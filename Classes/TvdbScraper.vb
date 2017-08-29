@@ -1,4 +1,4 @@
-﻿'Imports System.IO
+﻿Imports System.Text.RegularExpressions
 Imports System.ComponentModel
 Imports Alphaleonis.Win32.Filesystem
 Imports System.Net
@@ -9,38 +9,445 @@ Imports Media_Companion
 
 
 Public Class TVDBScraper
-    Const SetDefaults = True
-    'Public Property TvBw                As BackgroundWorker = Nothing
-    'Public Property PercentDone         As Integer = 0
+    Const SetDefaults               = True
+    Const MSG_PREFIX                = ""
+    Public Const MSG_ERROR          = "-ERROR! "
+    Const MSG_OK                    = "-OK "
+    Dim nfoFunction As New WorkingWithNfoFiles
+    Private _possibleTvdb           As String           = String.Empty
+    Private _folder                 As String
+    Private _lang                   As String
+    Private _isepisodes             As String
+    Public NewShow                  As New TvShow
+    Public Property TvBw            As BackgroundWorker = Nothing
+    Public Property PercentDone     As Integer          = 0
+    Property tvdb                   As TVDBScraper2
+    Property Actions                As New ScrapeActions
+    Property Scraped                As Boolean          = False
+    Property TimingsLog             As String = ""
+    Property TimingsLogThreshold    As Integer = Pref.ScrapeTimingsLogThreshold
+    Property LogScrapeTimes         As Boolean = Pref.LogScrapeTimes
     
-    'Public ReadOnly Property Cancelled As Boolean
-    '    Get
-    '        Application.DoEvents()
+    Public ReadOnly Property PossibleTVdb As String
+        Get
+            Return _possibleTvdb
+        End Get
+    End Property
 
-    '        If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerSupportsCancellation AndAlso _TvBw.CancellationPending Then
-    '            ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
-    '            Return True
-    '        End If
-    '        Return False
-    '    End Get
-    'End Property
+    Public Delegate Sub ActionDelegate()
 
-    'Sub New(Optional bw As BackgroundWorker = Nothing)
-    '    _TvBw = bw
-    'End Sub
+    Class ScrapeActions
+        Property Items As New List(Of ScrapeAction)
+    End Class
+    
+    Class ScrapeAction
+        Property Action     As ActionDelegate
+        Property ActionName As String
+        Property Time       As New Times
 
-    'Sub ReportProgress(Optional progressText As String = Nothing, Optional log As String = Nothing, Optional command As Progress.Commands = Progress.Commands.SetIt)
-    '    ReportProgress(New Progress(progressText, log, command))
-    'End Sub
+        Sub New(ByVal action As ActionDelegate, actionName As String)
+            Me.Action     = action
+            Me.ActionName = actionName
+        End Sub
 
-    'Sub ReportProgress(ByVal oProgress As Progress)
-    '    If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) And String.IsNullOrEmpty(oProgress.Message)) Then
-    '        Try
-    '            _TvBw.ReportProgress(PercentDone, oProgress)
-    '        Catch
-    '        End Try
-    '    End If
-    'End Sub
+        Sub Run
+            Time.StartTm = DateTime.Now
+            _action
+            Time.EndTm   = DateTime.Now
+        End Sub
+    End Class
+
+    Public ReadOnly Property Cancelled As Boolean
+        Get
+            Application.DoEvents()
+
+            If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerSupportsCancellation AndAlso _TvBw.CancellationPending Then
+                ReportProgress("Cancelled!", vbCrLf & "!!! Operation cancelled by user")
+                Return True
+            End If
+            Return False
+        End Get
+    End Property
+
+    Sub New(Optional tvbw As BackgroundWorker = Nothing)
+        _TvBw = tvbw
+    End Sub
+
+    Sub ReportProgress(Optional progressText As String = Nothing, Optional log As String = Nothing, Optional command As Progress.Commands = Progress.Commands.SetIt)
+        ReportProgress(New Progress(progressText, log, command))
+    End Sub
+
+    Sub ReportProgress(ByVal oProgress As Progress)
+        If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerReportsProgress AndAlso Not (String.IsNullOrEmpty(oProgress.Log) And String.IsNullOrEmpty(oProgress.Message)) Then
+            Try
+                _TvBw.ReportProgress(PercentDone, oProgress)
+            Catch
+            End Try
+        End If
+    End Sub
+
+    Private Sub AppendSeriesScrapeSuccessActions
+        Actions.Items.Add( New ScrapeAction(AddressOf AssignScrapedSeries           , "Assign scraped movie"      ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DoRenameTVFolders             , "Rename Folders"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf GetTVActors                   , "Actors scraper"            ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveTVNFO                     , "Save Nfo"                  ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTVPoster              , "Poster download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTVFanart              , "Fanart download"           ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTVArtFromFanartTv     , "Fanart.Tv download"        ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf DownloadTVExtraFanart         , "Extra Fanart download"     ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache"  ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                 , "Assign HD Tags"            ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                  , "Get Keywords for tags"     ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFiles                , "Rename Files"              ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl             , "Get trailer URL"           ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs         , "Getting extra Frodo Poster thumbs") )
+        'Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs         , "Getting extra Frodo Fanart thumbs") )
+        'Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls             , "Get poster URLs"           ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer              , "Trailer download"          ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache           , "Assigning movie to cache"  ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile            , "Handle offline file"       ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                 , "Updating caches"           ) )
+    End Sub
+
+    Sub AppendScrapeSeriesFailedActions
+        Actions.Items.Add( New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields    , "Tidy up unscraped fields"    ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SaveTVNFO                     , "Save Nfo"                    ) )
+        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                 , "Updating caches"             ) )
+    End Sub
+
+    Sub AppendScraperSeriesSpecific
+        Actions.Items.Add( New ScrapeAction(AddressOf SeriesScraper_GetBody         , "Scrape TVDb Series Main Body"          ) )
+        Actions.Items.Add( New ScrapeAction(AddressOf SeriesCheckTVDbBodyScrape     , "Checking TVDb Series Main body scrape" ) ) 
+    End Sub
+
+    Sub IniTVdb
+        IniTVdb(PossibleTVdb)
+    End Sub
+    
+    Sub IniTVdb( tvdbid As String )
+        tvdb = New TVDBScraper2(tvdbid)
+    End Sub
+
+    Sub Scrape(args As TvdbArgs) ' As String)
+        _possibleTvdb   = args.tvdbid
+        _folder         = args.folder
+        _isepisodes     = args.episode
+        _lang           = args.lang
+        Scrape
+    End Sub
+
+    Sub Scrape
+        If Not Scraped then
+            Scraped  = True
+            'General
+            Actions.Items.Add( New ScrapeAction(AddressOf IniTVdb             , "Initialising TMDb"              ) )
+            
+            If _isepisodes Then
+                'AppendScraperEpisodesSpecific
+            Else
+                AppendScraperSeriesSpecific
+            End If
+            RunScrapeActions
+        End if
+    End Sub
+
+    Sub RunScrapeActions
+        While Actions.Items.Count>0
+            Dim action = Actions.Items(0)
+            Try
+                action.Run
+
+                If LogScrapeTimes And action.Time.ElapsedTimeMs > TimingsLogThreshold then
+                    TimingsLog &= vbCrLf & "[" & action.ActionName & "] took " & action.Time.ElapsedTimeMs & "ms to run"
+                End if
+
+                Actions.Items.RemoveAt(0)
+
+                If Cancelled then Exit Sub
+            Catch ex As Exception
+                If ex.Message.ToString.ToLower.Contains("offline") Then
+                    ReportProgress(,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)
+                    Actions.Items.RemoveAt(0)
+                Else
+                    ReportProgress(MSG_ERROR,"!!! Error - Running action [" & action.ActionName & "] threw [" & ex.Message.ToString & "]" & vbCrLf)                
+                Actions.Items.Clear
+                End If
+            End Try
+        End While
+    End Sub
+
+    Sub AssignScrapedSeries
+
+    End Sub
+
+    Sub DoRenameTVFolders
+
+    End Sub
+
+    Sub GetTVActors
+        If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
+            NewShow.TvShowActorSource.Value = "tvdb"
+            ReportProgress("TVDb Actors")
+            TvGetActorTvdb()
+        End If
+        If (Pref.TvdbActorScrape = 1 Or Pref.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
+            NewShow.TvShowActorSource.Value = "imdb"
+            ReportProgress("IMDB Actors")
+            'success = TvGetActorImdb(NewShow)
+
+        End If
+    End Sub
+
+    Function TvGetActorTvdb()
+        Dim success As Boolean = True
+        Dim actors As List(Of str_MovieActors) = tvdb.cast
+        Dim actorpaths As New List(Of String)
+        Dim workingpath As String = ""
+        Dim tempstring As String = ""
+        If Pref.actorseasy AndAlso Not Pref.tvshowautoquick Then
+            workingpath = NewShow.NfoFilePath.Replace(Path.GetFileName(NewShow.NfoFilePath), "") & ".actors\"
+            Utilities.EnsureFolderExists(workingpath)
+        End If
+        For Each NewAct In actors
+            actorpaths.Clear()
+            If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(newact.actorthumb) Then Continue For
+            Dim id As String = If(NewAct.ActorId = Nothing, "", NewAct.ActorId)
+            Dim results As XmlNode = Nothing
+            Dim filename As String = Utilities.cleanFilenameIllegalChars(NewAct.actorname)
+            filename = filename.Replace(" ", "_")
+            If Not String.IsNullOrEmpty(NewAct.actorthumb) And NewAct.actorthumb <> "http://thetvdb.com/banners/" Then
+                Dim actorurl As String = NewAct.actorthumb
+                'Save to .actor folder
+                If Pref.actorseasy = True And Pref.tvshowautoquick = False Then
+                    If NewShow.TvShowActorSource.Value <> "imdb" Or NewShow.ImdbId = Nothing Then
+                        Dim ActorFilename As String = Path.Combine(workingpath, filename)
+                        If Pref.FrodoEnabled Then actorpaths.Add(ActorFilename & ".jpg")
+                        If Pref.EdenEnabled Then actorpaths.Add(ActorFilename & ".tbn")
+                    End If
+                End If
+
+                'Save to Local actor folder
+                If Pref.actorsave = True And id <> "" Then 'Allow Local folder save, separate from .actor folder saving 
+                    Dim workingpath2 As String = ""
+                    Dim networkpath As String = Pref.actorsavepath
+                    filename = filename & "_" & id
+                    workingpath2 = networkpath & "\" & filename.Substring(0,1) & "\" & filename
+                    If Pref.FrodoEnabled Then actorpaths.Add(workingpath2 & ".jpg")
+                    If Pref.EdenEnabled Then actorpaths.Add(workingpath2 & ".tbn")
+                    NewAct.actorthumb = actorpaths(0)
+                    If Pref.actornetworkpath.IndexOf("/") <> -1 Then
+                        NewAct.actorthumb = actorpaths(0).Replace(networkpath, Pref.actornetworkpath).Replace("\","/")
+                    ElseIf Pref.actornetworkpath.IndexOf("\") <> -1 
+                        NewAct.actorthumb = actorpaths(0).Replace(networkpath, Pref.actornetworkpath).Replace("/","\")
+                    End If
+                    DoDownloadActorImage(actorurl, actorpaths)
+                End If
+            End If
+            Dim exists As Boolean = False
+            NewShow.ListActors.Add(NewAct)
+        Next
+        Return success
+    End Function
+
+    Function TvGetActorImdb() As Boolean
+        Dim imdbscraper As New Classimdb
+        Dim success As Boolean = False
+        If String.IsNullOrEmpty(NewShow.ImdbId.Value) Then Return success
+        Dim actorlist As List(Of str_MovieActors) = imdbscraper.GetImdbActorsList(Pref.imdbmirror, NewShow.ImdbId.Value, Pref.maxactors)
+        Dim workingpath As String = ""
+        If Pref.actorseasy And Not Pref.tvshowautoquick Then
+            workingpath = NewShow.NfoFilePath.Replace(Path.GetFileName(NewShow.NfoFilePath), "")
+            workingpath = workingpath & ".actors\"
+            Utilities.EnsureFolderExists(workingpath)
+        End If
+
+        Dim listofactors As List(Of str_MovieActors) = IMDbActors(actorlist, success, workingpath)
+        
+        Dim i As Integer = 0
+        For each listact In listofactors
+            i += 1
+            NewShow.ListActors.Add(listact)
+            If i > Pref.maxactors Then Exit For
+        Next
+        Return success
+    End Function
+
+    Private Function IMDbActors(ByVal actorlist As List(Of str_MovieActors), ByRef success As Boolean, ByVal workingpath As String) As List(Of str_MovieActors)
+        Dim actcount As Integer = 0
+        Dim totalactors As New List(Of str_MovieActors)
+        Dim actorpaths As New List(Of String)
+        For Each thisresult As str_MovieActors In actorlist
+            actorpaths.Clear()
+            Dim actorimageurl As String = thisresult.actorthumb
+            If Pref.ExcludeActorNoThumb AndAlso String.IsNullOrEmpty(thisresult.actorthumb) Then Continue For
+            If Not String.IsNullOrEmpty(thisresult.actorthumb) AndAlso Not String.IsNullOrEmpty(thisresult.actorid) AndAlso actcount < (Pref.maxactors + 1) Then
+                If Pref.actorseasy And Not Pref.tvshowautoquick Then
+                    Dim filename As String = Utilities.cleanFilenameIllegalChars(thisresult.actorname)
+                    filename = Path.Combine(workingpath, filename.Replace(" ", "_"))
+                    If Pref.FrodoEnabled Then actorpaths.Add(filename & ".jpg")
+                    If Pref.EdenEnabled Then actorpaths.Add(filename & ".tbn")
+                    'Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
+                    'If cachename <> "" Then
+                    '    For Each p In actorpaths
+                    '        Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
+                    '    Next
+                    'End If
+                End If
+                If Pref.actorsave AndAlso Not Pref.tvshowautoquick Then
+                    Dim tempstring As String = Pref.actorsavepath
+                    Dim workingpath2 As String = ""
+                    If Pref.actorsavealpha Then
+                        Dim actorfilename As String = thisresult.actorname.Replace(" ", "_") & "_" & If(Pref.LocalActorSaveNoId, "", thisresult.actorid) ' & ".tbn"
+                        tempstring = tempstring & "\" & actorfilename.Substring(0,1) & "\"
+                        workingpath2 = tempstring & actorfilename
+                    Else
+                        tempstring = tempstring & "\" & thisresult.actorid.Substring(thisresult.actorid.Length - 2, 2) & "\"
+                        workingpath2 = tempstring & thisresult.actorid ' & ".tbn"
+                    End If
+                    If Pref.FrodoEnabled Then actorpaths.Add(workingpath2 & ".jpg")
+                    If Pref.EdenEnabled Then actorpaths.Add(workingpath2 & ".tbn")
+                    'Utilities.EnsureFolderExists(tempstring)
+                    'Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
+                    'If cachename <> "" Then
+                    '    For Each p In actorpaths
+                    '        Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
+                    '    Next
+                    'End If
+                    If Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
+                        If Pref.actornetworkpath.IndexOf("/") <> -1 Then
+                            thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("\", "/")
+                        Else
+                            thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("/", "\")
+                        End If
+                    End If
+                End If
+                DoDownloadActorImage(actorimageurl, actorpaths)
+            End If
+            totalactors.Add(thisresult)
+            success = True
+            actcount += 1
+        Next
+        Return totalactors
+    End Function
+
+    Sub DoDownloadActorImage(ByVal url As String, actorpaths As List(Of String))
+        If actorpaths.Count = 0 Then Exit Sub
+        Dim cachename As String = Utilities.Download2Cache(url)
+        If cachename <> "" Then
+            For Each p In actorpaths
+                Utilities.EnsureFolderExists(p)
+                Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
+            Next
+        End If
+
+    End Sub
+
+    Sub TVTidyUpAnyUnscrapedFields
+
+    End Sub
+
+    Sub SaveTVNFO
+
+    End Sub
+
+    Sub DownloadTVPoster
+
+    End Sub
+
+    Sub DownloadTVFanart
+
+    End Sub
+
+    Sub DownloadTVArtFromFanartTv
+
+    End Sub
+
+    Sub DownloadTVExtraFanart
+
+    End Sub
+
+    Sub SeriesScraper_GetBody
+        Dim tvprogresstxt As String = ""
+        Dim haveTVDbID As Boolean = Not String.IsNullOrEmpty(_possibleTvdb)
+        NewShow.NfoFilePath = Path.Combine(_folder, "tvshow.nfo")
+        NewShow.TvdbId.Value = _possibleTvdb
+        NewShow.State = Media_Companion.ShowState.Unverified
+        tvprogresstxt = ""
+        If Not haveTVDbID And NewShow.FileContainsReadableXml Then
+            Dim validcheck As Boolean = nfoFunction.tv_NfoLoadCheck(NewShow.NfoFilePath)
+            If validcheck Then
+                NewShow = nfoFunction.tvshow_NfoLoad(NewShow.NfoFilePath)
+            End If
+        Else
+            If haveTVDbID Then
+                NewShow.State = Media_Companion.ShowState.Open
+            Else
+                'Resolve show name from folder
+                Dim FolderName As String = Utilities.GetLastFolder(_folder & "\")
+                If FolderName.ToLower.Contains(Pref.excludefromshowfoldername.ToLower) Then
+                    Dim indx As Integer = FolderName.ToLower.IndexOf(Pref.excludefromshowfoldername.ToLower)
+                    Dim excludearticle As String = FolderName.Substring(indx-1, Pref.excludefromshowfoldername.Length+1)
+                    FolderName = FolderName.Replace(excludearticle, "")
+                End If
+                FolderName = FolderName.Replace(Pref.excludefromshowfoldername, "")
+                Dim M As Match
+                M = Regex.Match(FolderName, "\s*[\(\{\[](?<date>[\d]{4})[\)\}\]]")
+                If M.Success = True Then
+                    FolderName = String.Format("{0} ({1})", FolderName.Substring(0, M.Index), M.Groups("date").Value)
+                End If
+                NewShow.Title.Value = FolderName
+                ReportProgress(" possibly - " & FolderName, , Progress.Commands.Append)
+                'tvprogresstxt &= "possibly - " & foldername
+                'bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+
+                tvdb.LookupLang = _lang
+                tvdb.Title = FolderName
+                If tvdb.PossibleShowList IsNot Nothing Then
+                    Dim tempseries As New TheTvDB.TvdbSeries
+                    tempseries = tvdb.FindBestPossibleShow(tvdb.PossibleShowList, FolderName, _lang)
+                    If tempseries.Similarity > .9 Then
+                        NewShow.State = Media_Companion.ShowState.Open
+                    End If
+                    _possibleTvdb = tempseries.Identity
+                    tempseries = Nothing
+                End If
+            End If
+            If Not String.IsNullOrEmpty(_possibleTvdb) Then
+                Dim Series As New TheTvDB.TvdbSeries
+                tvdb.TvdbId = _possibleTvdb
+                Series = tvdb.series
+                If tvdb.SeriesNotFound Then
+                    NewShow.FailedLoad = True
+                    ReportProgress(MSG_ERROR, "Please adjust the TV Show title And try again for: " & tvdb.Title & "' - No Show Returned", Progress.Commands.SetIt)
+                    Exit Sub
+                    'MsgBox("Please adjust the TV Show title And try again", MsgBoxStyle.OkOnly, "'" & NewShow.Title.Value & "' - No Show Returned")
+                    'bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
+                    'newTvFolders.RemoveAt(0)
+                    'Continue Do
+                End If
+                'tvprogresstxt = "Scraping Show " & i.ToString & " of " & x & " : "
+                tvprogresstxt &= "Show Title: " & Series.SeriesName & " "
+                'bckgrnd_tvshowscraper.ReportProgress(0, tvprogresstxt)
+                ReportProgress("Show Title: " & Series.SeriesName & " ", ,Progress.Commands.Append)
+                NewShow.AbsorbTvdbSeries(Series)
+                NewShow.Language.Value = _lang
+            End If
+        End If
+    End Sub
+
+    Sub SeriesCheckTVDbBodyScrape
+        'Failed...
+        If NewShow.FailedLoad Then   
+            ReportProgress(MSG_ERROR,"!!! Unable to scrape body with refs """ & _folder & vbCrLf & "TVDB may not be available or Series Title is invalid" & vbCrLf )
+            AppendScrapeSeriesFailedActions
+        Else
+            ReportProgress(MSG_OK,"!!! Series Body Scraped OK" & vbCrLf)
+            AppendSeriesScrapeSuccessActions
+        End If
+    End Sub
+
+#Region "original routines"
 
     Public Function GetPosterList(ByVal TvdbId As String, ByVal ReturnPoster As Boolean) As Tvdb.Banners
         If Not ReturnPoster Then Return Nothing
@@ -480,5 +887,5 @@ Public Class TVDBScraper
         End Try
         Return thisepisode 
     End Function
-
+#End Region
 End Class

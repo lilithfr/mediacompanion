@@ -340,6 +340,34 @@ Partial Public Class Form1
         messbox.Close()
         TabControl3.SelectedIndex = 0
     End Sub
+    
+	Public Sub tv_ShowFind(ByVal rootfolders As List(Of str_RootPaths), Optional ByVal skiptvfolderschk As Boolean = False)
+		Dim Folders As List(Of String)
+		newTvFolders.Clear()
+		For Each folder In rootfolders
+			If Not folder.selected Then Continue For
+			Folders = Utilities.EnumerateFolders(folder.rpath, 0)
+			For Each strfolder2 As String In Folders
+				If skiptvfolderschk Then
+					If Not lb_tvSeriesFolders.Items.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then newTvFolders.Add(strfolder2)
+				ElseIf Not Pref.tvFolders.Contains(strfolder2) AndAlso Utilities.ValidMovieDir(strfolder2) Then
+					If Not lb_tvSeriesFolders.Items.Contains(strfolder2) Then newTvFolders.Add(strfolder2)
+				End If
+			Next
+		Next
+	End Sub
+
+	Public Sub tv_ShowScrape()
+		If Not bckgrnd_tvshowscraper.IsBusy Then
+			If newTvFolders.Count > 0 Then
+				ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
+				ToolStripStatusLabel5.Visible = True
+			End If
+			Dim selectedLang As String = If(Pref.tvshow_useXBMC_Scraper, Pref.XBMCTVDbLanguage, Pref.TvdbLanguageCode)
+			Dim args As TvdbArgs = New TvdbArgs("", selectedLang)
+			bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+		End If
+	End Sub
 
 
     Private Sub tv_ShowLoad(ByVal Show As Media_Companion.TvShow)
@@ -1779,7 +1807,7 @@ Partial Public Class Form1
 
     Private Sub BckWrkTv_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkTv.DoWork
         Try
-			CallSubByName(DirectCast(e.Argument, String))
+			CallTVSubByName(DirectCast(e.Argument, String))
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try
@@ -1815,15 +1843,77 @@ Partial Public Class Form1
 		If Not Displayed Then BlinkTaskBar()
     End Sub
 
+    Function GetTV_MultiMovieProgressBar_Visiblity(action As String)
+
+		Select Case action
+            Case "TVSeriesSearchForNew"         : Return True
+            Case "TVSeriesChange"               : Return False
+            Case "TVSeriesScrapeDropped"        : Return droppedItems.Count > 1
+            Case "TVSeriesRescrape"             : Return False
+            Case "TvEpisodesSearchforNew"       : Return True
+            Case "TVEpisodeRescrape"            : Return False
+			Case "TVBatchRescrape"              : Return False '_rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
+            'Case "RescrapeAll"                 : Return _rescrapeList.FullPathAndFilenames.Count > 1
+            'Case "RescrapeSpecific"            : Return _rescrapeList.FullPathAndFilenames.Count > 1
+			'Case "LockSpecific"                : Return _lockList.FullPathAndFilenames.Count > 1
+			'Case "RebuildCaches"               : Return True
+		End Select
+
+		MsgBox("Unrecognised scrape action : [" + action + "]!", MsgBoxStyle.Exclamation, "Programming Error!")
+		Return False
+	End Function
+
+    Public Sub CallTVSubByName(SubName As String)
+		Me.GetType.GetMethod(SubName).Invoke(Me, Nothing)
+	End Sub
+
+    Public Sub TVSeriesSearchForNew()
+        For each tvseries In newTvFolders
+            Dim args As New TvdbArgs("", tvseries, False, Pref.TvdbLanguageCode)
+            TVDoScrape(args)
+        Next
+        newTvFolders.Clear()
+    End Sub
+
+    Public Sub TVSeriesChange()
+
+    End Sub
+
+    Public Sub TVSeriesScrapeDropped()
+        
+    End Sub
+
+    Public Sub TVSeriesRescrape()
+
+    End Sub
+
+    Public Sub TvEpisodesSearchforNew()
+
+    End Sub
+    
+    Public Sub TVEpisodeRescrape()
+
+    End Sub
+
+    Public Sub TVBatchRescrape()
+
+    End Sub
+
+    Public Sub TVDoScrape(args As TvdbArgs)
+        oTV.Scraped = False
+        oTV.Scrape(args)
+    End Sub
+
+
     Sub RunBackgroundTVScrape(action As String)
         If Not BckWrkTv.IsBusy Then
             ToolStripStatusLabel5.Visible = True
-			'scraperLog = ""
-			'tsStatusLabel.Text = ""
-			'tsMultiMovieProgressBar.Value = tsMultiMovieProgressBar.Minimum
-			'tsMultiMovieProgressBar.Visible = Get_MultiMovieProgressBar_Visiblity(action)
-			'tsStatusLabel.Visible = True
-			tsLabelEscCancel.Visible = True
+            'scraperLog = ""
+            'tsStatusLabel.Text = ""
+            tsMultiMovieProgressBar.Value = tsMultiMovieProgressBar.Minimum
+            tsMultiMovieProgressBar.Visible = GetTV_MultiMovieProgressBar_Visiblity(action)
+            'tsStatusLabel.Visible = True
+            tsLabelEscCancel.Visible = True
 			Statusstrip_Enable()
 			ssFileDownload.Visible = False
 			'tsProgressBarFileDownload_Resize()
