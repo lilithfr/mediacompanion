@@ -20,12 +20,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Runtime.Serialization;
 
 namespace TheTvDB
 {
+    /// <summary>
+    /// Helper attributes
+    /// </summary>
+    public static class CollectionHelpers
+    {
+        /// <summary>
+        /// Add range of collection to new or existing collection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="destination"></param>
+        /// <param name="source"></param>
+        public static void AddRange<T>(this ICollection<T> destination,
+                                       IEnumerable<T> source)
+        {
+            foreach (T item in source)
+            {
+                destination.Add(item);
+            }
+        }
+    }
+
     /// <summary>
     /// The class that describes a series.
     /// </summary>
@@ -275,6 +297,7 @@ namespace TheTvDB
         private bool actorsLoaded;
         private bool bannersLoaded;
         private string languageCodeLoaded;
+        private Collection<TvdbBanner> BannersTemp { get; set; }
 
         /// <summary>
         /// Initialize a new instance of the TvdbSeries class.
@@ -408,25 +431,68 @@ namespace TheTvDB
         /// Load the series banners.
         /// </summary>
         /// <param name="instance">An API instance.</param>
-        public void LoadBanners(TvdbAPI instance)
+        /// <param name="languageCode">The language code.</param>
+        public void LoadBanners(TvdbAPI instance, string languageCode = null)
         {
             if (bannersLoaded)
                 return;
 
             Banners = new Collection<TvdbBanner>();
+            BannersTemp = new Collection<TvdbBanner>();
 
-            loadBanners(instance, Banners, TvdbAPI.ImageType.Poster);
-            loadBanners(instance, Banners, TvdbAPI.ImageType.FanArt);
-            loadBanners(instance, Banners, TvdbAPI.ImageType.Season);
+            loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Poster, languageCode);
+            {
+                if (BannersTemp.Count == 0) {
+                    loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Poster, null);
+                }
+                Banners.AddRange(BannersTemp);
+                BannersTemp.Clear();
+            }
+            loadBanners(instance, BannersTemp, TvdbAPI.ImageType.FanArt, languageCode);
+            {
+                if (BannersTemp.Count == 0)
+                {
+                    loadBanners(instance, BannersTemp, TvdbAPI.ImageType.FanArt, null);
+                }
+                Banners.AddRange(BannersTemp);
+                BannersTemp.Clear();
+            }
+            loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Season, languageCode);
+            {
+                if (BannersTemp.Count == 0)
+                {
+                    loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Season, null);
+                }
+                Banners.AddRange(BannersTemp);
+                BannersTemp.Clear();
+            }
+            loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Series, languageCode);
+            {
+                if (BannersTemp.Count == 0)
+                {
+                    loadBanners(instance, BannersTemp, TvdbAPI.ImageType.Series, null);
+                }
+                Banners.AddRange(BannersTemp);
+                BannersTemp.Clear();
+            }
+            loadBanners(instance, BannersTemp, TvdbAPI.ImageType.SeasonWide, languageCode);
+            {
+                if (BannersTemp.Count == 0)
+                {
+                    loadBanners(instance, BannersTemp, TvdbAPI.ImageType.SeasonWide, null);
+                }
+                Banners.AddRange(BannersTemp);
+                BannersTemp.Clear();
+            }
 
             bannersLoaded = true;
         }
 
-        private void loadBanners(TvdbAPI instance, Collection<TvdbBanner> banners, TvdbAPI.ImageType imageType)
+        private void loadBanners(TvdbAPI instance, Collection<TvdbBanner> banners, TvdbAPI.ImageType imageType, string languageCode)
         {
             try
             {
-                TvdbBannersResult bannersResult = instance.GetSeriesBanners(Identity, imageType, null);
+                TvdbBannersResult bannersResult = instance.GetSeriesBanners(Identity, imageType, null, languageCode);
                 if (bannersResult == null || bannersResult.Banners == null)
                     return;
 
@@ -476,7 +542,7 @@ namespace TheTvDB
             LoadDetails(instance, languageCode);
             LoadEpisodes(instance, languageCode);
             LoadActors(instance);
-            LoadBanners(instance);
+            LoadBanners(instance, languageCode);
         }
 
         /// <summary>
@@ -532,10 +598,11 @@ namespace TheTvDB
         /// </summary>
         /// <param name="instance">An API instance.</param>
         /// <param name="fileName">The name of the output file.</param>
+        /// <param name="languageCode">The language code.</param>
         /// <returns>True if the image was downloaded; false otherwise.</returns>
-        public bool GetSmallPosterImage(TvdbAPI instance, string fileName)
+        public bool GetSmallPosterImage(TvdbAPI instance, string fileName, string languageCode = null)
         {
-            TvdbBanner selectedBanner = findBanner(instance, TvdbAPI.ImageType.Poster, true);
+            TvdbBanner selectedBanner = findBanner(instance, TvdbAPI.ImageType.Poster, true, languageCode);
             if (selectedBanner == null)
                 return false;
 
@@ -622,10 +689,11 @@ namespace TheTvDB
         /// <param name="instance">The API instance.</param>
         /// <param name="index">The index of the image.</param>
         /// <param name="fileName">The name of the output file.</param>
+        /// <param name="languageCode">The language code.</param>
         /// <returns>True if the banner was downloaded; false otherwise.</returns>
-        public bool GetBannerImage(TvdbAPI instance, int index, string fileName)
+        public bool GetBannerImage(TvdbAPI instance, int index, string fileName, string languageCode = null)
         {
-            LoadBanners(instance);
+            LoadBanners(instance, languageCode);
 
             if (Banners == null || Banners.Count == 0 || index == -1 || index >= Banners.Count)
                 return false;
@@ -636,9 +704,9 @@ namespace TheTvDB
             return instance.GetImage(TvdbAPI.ImageType.Banner, Banners[index].FileName, 0, fileName);            
         }
 
-        private TvdbBanner findBanner(TvdbAPI instance, TvdbAPI.ImageType imageType, bool thumbnail)
+        private TvdbBanner findBanner(TvdbAPI instance, TvdbAPI.ImageType imageType, bool thumbnail, string languageCode = null)
         {
-            LoadBanners(instance);
+            LoadBanners(instance, languageCode);
 
             if (Banners == null || Banners.Count == 0)
                 return null;

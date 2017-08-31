@@ -9,6 +9,7 @@ Public Class McImage
     Public Property votes       As Integer  = 0
     Public Property type        As String = ""
     Public Property Season      As String = ""
+    Public Property Id          As String = ""
 
     Shared Function GetFromTmDbBackDrop( backdrop As Object, Optional hdUrlPrefix As String="", Optional ldUrlPrefix As String="" )
 
@@ -44,6 +45,7 @@ Public Class McImage
         result.ldwidth  = "1280"
         result.ldheight = "720"
         result.type     = backdrop.KeyType
+        result.Id       = backdrop.Identity
         If IsNumeric(backdrop.SubKey) Then
             result.Season   = backdrop.SubKey
         End If

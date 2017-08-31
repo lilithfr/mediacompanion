@@ -123,7 +123,11 @@ namespace TheTvDB
             /// <summary>
             /// Image type is season wide
             /// </summary>
-            SeasonWide
+            SeasonWide,
+            /// <summary>
+            /// Image type is series
+            /// </summary>
+            Series
         }
 
         /// <summary>
@@ -437,8 +441,9 @@ namespace TheTvDB
         /// <param name="identity">The series identity.</param>
         /// <param name="imageType">The type of image to get.</param>
         /// <param name="completionHandler">The async completion handler. May be null.</param>
+        /// <param name="languageCode">The language code.</param>
         /// <returns>The results object.</returns>
-        public TvdbBannersResult GetSeriesBanners(int identity, ImageType imageType, TvdbAsyncHandler completionHandler)
+        public TvdbBannersResult GetSeriesBanners(int identity, ImageType imageType, TvdbAsyncHandler completionHandler, String languageCode)
         {
             initializeFunction();
 
@@ -446,7 +451,7 @@ namespace TheTvDB
             TvdbAsyncHandler asyncHandler = completionHandler;
             ProcessJsonString processString = new ProcessJsonString(seriesBannersResponse);
 
-            return (TvdbBannersResult)getData(url, null, new TvdbDelegates(asyncHandler, processString));
+            return (TvdbBannersResult)getData(url, languageCode, new TvdbDelegates(asyncHandler, processString));
         }
 
         private object seriesBannersResponse(string responseString)

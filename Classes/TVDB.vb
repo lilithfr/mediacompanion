@@ -32,6 +32,7 @@ Public Class TVDBScraper2
     Private _mcFanart                   As New List(Of McImage)
     Private _mcSeason                   As New List(Of McImage)
     Private _mcSeasonWide               As New List(Of McImage)
+    Private _mcSeries                   As New List(Of McImage)
     Private _cast                       As TheTvDB.TvdbActorsResult
     Private _frodoPosterThumbs          As New List(Of FrodoPosterThumb)
     Private _frodoFanartThumbs          As New FrodoFanartThumbs
@@ -79,19 +80,31 @@ Public Class TVDBScraper2
         End Set
     End Property
 
-    Public Property LookupLang
+    Public Property LookupLang As String
         Get
             Return _language
         End Get
-        Set(value)
+        Set(ByVal value As String)
             _language = value   
         End Set
     End Property
     
+    Public Property PossibleShowList As List(Of TheTvDB.TvdbSeries)
+        Get
+            If _PossibleShowList Is Nothing Then Me.GetPossibleShows()
+
+            Return _PossibleShowList
+        End Get
+        Set(ByVal value As List(Of TheTvDB.TvdbSeries))
+            _PossibleShowList = value
+        End Set
+    End Property
+
     Public Property ValidFanart         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidPosters        As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeason         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeasonWide     As New List(Of TheTvDB.TvdbBanner)
+    Public Property ValidSeries         As New List(Of TheTvDB.TvdbBanner)
     Public Property MaxGenres           As Integer = Media_Companion.Pref.maxmoviegenre
 
     #End Region 'Read-write properties
@@ -221,16 +234,19 @@ Public Class TVDBScraper2
             Return ""
         End Get 
     End Property
-    
-    Public Property PossibleShowList As List(Of TheTvDB.TvdbSeries)
-        Get
-            If _PossibleShowList Is Nothing Then Me.GetPossibleShows()
 
-            Return _PossibleShowList
+    Public ReadOnly Property Rating As String
+        Get
+            If IsNothing(_series.Rating) Then Return ""
+            Return _series.rating
         End Get
-        Set(ByVal value As List(Of TheTvDB.TvdbSeries))
-            _PossibleShowList = value
-        End Set
+    End Property
+    
+    Public ReadOnly Property Votes As String
+        Get
+            If IsNothing(_series.Votes) Then Return ""
+            Return _series.Votes
+        End Get
     End Property
 
     Public ReadOnly Property McPosters As List(Of McImage)
@@ -258,6 +274,13 @@ Public Class TVDBScraper2
         Get
             Fetch
             Return _mcSeasonWide
+        End Get
+    End Property
+
+    Public ReadOnly Property McSeries As List(Of McImage)
+        Get
+            Fetch
+            Return _mcseries
         End Get
     End Property
 
@@ -450,7 +473,7 @@ Public Class TVDBScraper2
     End Function
 
     Function GetSeriesImages As Boolean
-        _series.LoadBanners(_api)
+        _series.LoadBanners(_api, LookupLang)
         _seriesImages = _series.Banners.ToList
         Return Not IsNothing(_seriesImages)
     End Function
@@ -476,10 +499,12 @@ Public Class TVDBScraper2
                 AssignValidPosters()
                 AssignValidSeason()
                 AssignValidSeasonWide()
+                AssignValidSeries()
                 AssignMcPosters()
                 AssignMcFanart()
                 AssignMcSeason()
                 AssignMcSeasonWide()
+                AssingMcSeries()
                 'AssignKeywords()
             End If
         Catch ex As Exception
@@ -517,6 +542,13 @@ Public Class TVDBScraper2
             ValidSeasonWide.AddIfNew(item)
         Next
     End Sub
+
+    Private Sub AssignValidSeries
+        Dim q = From b In _seriesImages Where b.KeyType = "series"
+        For each item In q
+            ValidSeries.AddIfNew(item)
+        Next
+    End Sub
     
     Private Sub AssignMcPosters
         AssignMcPosters(ValidPosters,_mcPosters)
@@ -533,6 +565,11 @@ Public Class TVDBScraper2
     Private Sub AssignMcSeasonWide
         AssignMcPosters(ValidSeasonWide, _mcSeasonWide)
     End Sub
+
+    Private Sub AssingMcSeries
+        AssignMcPosters(ValidSeries, _mcSeries)
+    End Sub
+    
 
     Private Sub AssignMcPosters( tmDbImages As Object, mcImages As List(Of McImage))
         Dim tmpimages As New List(Of McImage)

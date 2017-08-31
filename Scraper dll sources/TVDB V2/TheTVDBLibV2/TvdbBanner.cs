@@ -93,6 +93,8 @@ namespace TheTvDB
                     return KeyType == "season";
                 case TvdbAPI.ImageType.SeasonWide:
                     return KeyType == "seasonwide";
+                case TvdbAPI.ImageType.Series:
+                    return KeyType == "series";
                 default:
                     return false;
             }

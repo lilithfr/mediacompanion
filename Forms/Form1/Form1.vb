@@ -216,8 +216,8 @@ Public Class Form1
 	Dim WithEvents tvposterlabels       As Label
 	Dim WithEvents tvreslabel           As Label
 	Dim tvposterpage                    As Integer = 1
-	Public Shared WallPicWidth          As Integer = 165
-	Public Shared WallPicHeight         As Integer = Math.Floor((WallPicWidth / 3) * 4)
+	Public Const WallPicWidth           As Integer = 165
+	Public Const WallPicHeight          As Integer = 220
 	Dim MovMaxWallCount                 As Integer = 0
 	Dim tvMaxWallCount                  As Integer = 0
 	Dim moviecount_bak                  As Integer = 0
@@ -960,6 +960,7 @@ Public Class Form1
 		If e.KeyCode = Keys.F3 Then doSearchNew()
         If e.KeyCode = Keys.F7 Then 'CheckRootsForToolStripMenuItem.PerformClick()
             newTvFolders.Add("U:\zMedia\zTV2\Vikings")
+            'newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
             RunBackgroundTVScrape("TVSeriesSearchForNew")
         End If
         If e.KeyCode = Keys.F2 Then
@@ -1130,7 +1131,7 @@ Public Class Form1
 
     Private Sub TvAutoScrapeTimer_Elapsed()
         Do Until TvAutoScrapeTimerTripped
-            If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy Then
+            If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkTv.IsBusy Then
                 TvAutoScrapeTimerTripped = True
 			    ep_SearchInvoke()
 		    End If
@@ -2297,6 +2298,10 @@ Public Class Form1
 				busy = True
 				ImgBw.CancelAsync()
 			End If
+            If BckWrkTv.IsBusy Then
+                busy = True
+                BckWrkTv.CancelAsync()
+            End If
 
 			Dim exitnowok As Boolean = False
 			If busy = True Then
@@ -2307,7 +2312,7 @@ Public Class Form1
 				messbox.Visible = True
 			End If
 			Do Until busy = False
-				If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy And Not BWs.Count > 0 And Not ImgBw.IsBusy Then
+				If Not bckepisodethumb.IsBusy And Not bckgroundscanepisodes.IsBusy And Not BckWrkScnMovies.IsBusy And Not BWs.Count > 0 And Not ImgBw.IsBusy And Not BckWrkTv.IsBusy Then
 					busy = False
 					Exit Do
 				End If
@@ -6389,7 +6394,7 @@ Public Class Form1
         
 		Dim ShowList As New List(Of TvShow)
 
-		If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
+		If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy And Not BckWrkTv.IsBusy Then
 			btnTvSearchNew.Text = "Cancel  "
 			For Each item In Cache.TvCache.Shows
 				If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And ((item.State = Media_Companion.ShowState.Open) Or TVSearchALL = True) Then
@@ -6401,6 +6406,8 @@ Public Class Form1
 			MsgBox("This Episode Scraper is already running")
 		ElseIf Bckgrndfindmissingepisodes.IsBusy Then
 			MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while the episode scraper is running")
+        Else If BckWrkTv.IsBusy Then
+            MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while scraper is running")
 		End If
 	End Sub
 
@@ -6431,7 +6438,7 @@ Public Class Form1
 				End If
 			End If
 
-			If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy Then
+			If Not bckgroundscanepisodes.IsBusy And Not Bckgrndfindmissingepisodes.IsBusy And Not BckWrkTv.IsBusy Then
 				btnTvSearchNew.Text = "Cancel  "
 
 				bckgroundscanepisodes.RunWorkerAsync({ShowList, OverrideLock})
@@ -6439,8 +6446,10 @@ Public Class Form1
 				MsgBox("This Episode Scraper is already running")
 			ElseIf Bckgrndfindmissingepisodes.IsBusy Then
 				MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while the episode scraper is running")
+            Else If BckWrkTv.IsBusy Then
+                MsgBox("The missing episode search cannot be performed" & vbCrLf & "    while scraper is running")
 			End If
-			Do Until Not bckgroundscanepisodes.IsBusy
+			Do Until Not bckgroundscanepisodes.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkTv.IsBusy
 				Application.DoEvents()
 			Loop
 			TvTreeview.SelectedNode = TvTreeview.Nodes(selectednode)
@@ -8388,7 +8397,8 @@ Public Class Form1
             Else If Not Pref.MovEnableAutoScrape AndAlso MovAutoScrapeTimer.Enabled Then
                 MovAutoScrapeTimer.Stop()
             End If
-			If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+			'If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+            If Not CheckForRunningBackgroundworker Then
 				Statusstrip_Enable(False)
 			End If
             SetcbBtnLink()
@@ -8399,7 +8409,7 @@ Public Class Form1
 
 	Private Sub SearchForMissingEpisodesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SearchForMissingEpisodesToolStripMenuItem.Click
 		Try
-			If Not Bckgrndfindmissingepisodes.IsBusy And bckgroundscanepisodes.IsBusy = False Then
+			If Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not BckWrkTv.IsBusy Then
 				Pref.displayMissingEpisodes = SearchForMissingEpisodesToolStripMenuItem.Checked
 				Pref.ConfigSave()
 				If Pref.displayMissingEpisodes = False
@@ -9782,7 +9792,10 @@ Public Class Form1
 		If ImgBw.IsBusy Then ImgBw.CancelAsync()
 		Dim CurrentTab As String = TabLevel1.SelectedTab.Name
 		If CurrentTab = TabPage1.Name Then BckWrkScnMovies_Cancel
-		If CurrentTab = TabPage2.Name Then bckgroundscanepisodes.CancelAsync()
+		If CurrentTab = TabPage2.Name Then
+            BckWrkTv.CancelAsync()
+		    bckgroundscanepisodes.CancelAsync()
+		End If
 	End Sub
 
 	Sub BckWrkScnMovies_Cancel
@@ -15014,7 +15027,7 @@ Public Class Form1
 				If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
 				Cache.TvCache.Remove(WorkingTvShow)
 				newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
-				Dim args As TvdbArgs = New TvdbArgs(listOfShows(lbxTvShSelectResults.SelectedIndex).showid, LanCode)
+				Dim args As TvdbArgs = New TvdbArgs(listOfShows(lbxTvShSelectResults.SelectedIndex).showid, , False, LanCode)
 				bckgrnd_tvshowscraper.RunWorkerAsync(args)
 				While bckgrnd_tvshowscraper.IsBusy
 					Application.DoEvents()
@@ -15895,7 +15908,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub tsmicacheclean_Click(sender As Object, e As EventArgs) Handles tsmicacheclean.Click
-		If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+		'If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+        If Not CheckForRunningBackgroundworker Then
 			messbox = New frmMessageBox("Emptying Cache & Series Folders", , "   Please Wait.   ")
 			messbox.Show()
 			messbox.Refresh()
@@ -15906,7 +15920,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub tsmiCleanCacheOnly_Click(sender As Object, e As EventArgs) Handles tsmiCleanCacheOnly.Click
-		If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+		'If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+        If Not CheckForRunningBackgroundworker Then
 			messbox = New frmMessageBox("Emptying Cache Folders", , "   Please Wait.   ")
 			messbox.Show()
 			messbox.Refresh()
@@ -15917,7 +15932,8 @@ Public Class Form1
 	End Sub
 
 	Private Sub tsmiCleanSeriesonly_Click(sender As Object, e As EventArgs) Handles tsmiCleanSeriesonly.Click
-		If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+		'If Not tvbckrescrapewizard.IsBusy AndAlso Not bckgroundscanepisodes.IsBusy AndAlso Not bckgrnd_tvshowscraper.IsBusy AndAlso Not Bckgrndfindmissingepisodes.IsBusy AndAlso Not BckWrkScnMovies.IsBusy Then
+        If Not CheckForRunningBackgroundworker Then
 			messbox = New frmMessageBox("Emptying Series Folder", , "   Please Wait.   ")
 			messbox.Show()
 			messbox.Refresh()
@@ -16350,7 +16366,7 @@ Public Class Form1
 
     Public Function CheckForRunningBackgroundworker() As Boolean
         Return BckWrkScnMovies.IsBusy OrElse bckepisodethumb.IsBusy OrElse Bckgrndfindmissingepisodes.IsBusy OrElse bckgrnd_tvshowscraper.IsBusy OrElse
-            bckgroundscanepisodes.IsBusy OrElse tvbckrescrapewizard.IsBusy OrElse ImgBw.IsBusy
+            bckgroundscanepisodes.IsBusy OrElse tvbckrescrapewizard.IsBusy OrElse ImgBw.IsBusy OrElse BckWrkTv.IsBusy
     End Function
     
     Public Sub doTestTvdb()
