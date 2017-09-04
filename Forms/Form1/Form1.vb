@@ -960,7 +960,7 @@ Public Class Form1
 		If e.KeyCode = Keys.F3 Then doSearchNew()
         If e.KeyCode = Keys.F7 Then 'CheckRootsForToolStripMenuItem.PerformClick()
             newTvFolders.Add("U:\zMedia\zTV2\Vikings")
-            'newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
+            newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
             RunBackgroundTVScrape("TVSeriesSearchForNew")
         End If
         If e.KeyCode = Keys.F2 Then
@@ -12051,7 +12051,15 @@ Public Class Form1
 			End If
 		Next
         AddHandler dgvMovieSets.CellEnter, AddressOf dgvMovieSets_CellEnter
-        If Tmplist.Count > 0 Then dgvpopulate(dgvMovieSets.Rows(dgvMovieSets.CurrentRow.Index).Cells(0).Value)
+        If Tmplist.Count > 0 AndAlso Not IsNothing(dgvMovieSets.CurrentRow) Then
+            dgvpopulate(dgvMovieSets.Rows(dgvMovieSets.CurrentRow.Index).Cells(0).Value)
+        Else If IsNothing(dgvMovieSets.CurrentRow) Then
+            DataGridViewSelectedMovieSet.Rows.Clear()
+            tb_MovieSetOverview.Text = ""
+            tb_MovieSetOverviewReset
+            lbCollectionCount.Text  = ""
+            tbMovieSetTitle.Text    = ""
+        End If
 	End Sub
 
 	
@@ -12143,7 +12151,6 @@ Public Class Form1
                 If Not found Then
                     Dim message As String = MovCollectionList.Count & " Movie(s) in:  " & """" & MovSet.MovieSetName & """" & vbCrLf  & "But no matching movies found in MediaCompanion." & vbCrLf
                     message &= "Recommend Rescrape Wizard to populate Movie Collection data." & vbCrLf
-                    'message &= "Select to rescrape ""TMDb set info""" & vbCrLf & "is sufficient to populate Collection info."
                     tbMovSetWarn.Visible = True
                     tbMovSetWarn.Text = message
                 End If
@@ -12183,11 +12190,6 @@ Public Class Form1
                     lbCollectionCount.Text = "Warning, possible incomplete collection Data!"
                     lbCollectionCount.BackColor = Color.Red
                 End If
-                'If CustomCollection Then
-                '    btn_MovSetOverviewEdit.Enabled = False
-                'Else
-                '    btn_MovSetOverviewEdit.Enabled = True
-                'End If
             End If
         Catch ex As Exception
 

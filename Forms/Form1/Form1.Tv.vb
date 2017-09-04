@@ -1816,15 +1816,18 @@ Partial Public Class Form1
     Private Sub BckWrkTv_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkTv.ProgressChanged
         
 		Dim oProgress As Progress = CType(e.UserState, Progress)
-		If e.ProgressPercentage <> -1 Then tsMultiMovieProgressBar.Value = e.ProgressPercentage
+		If e.ProgressPercentage <> -1 Then
+		    tsMultiMovieProgressBar.Value = e.ProgressPercentage
+            If IsNothing(oProgress) Then Exit Sub
+		End If
 
 		If oProgress.Command = Progress.Commands.Append Then
 			Dim msgtxt As String = tsStatusLabel.Text & oProgress.Message
 			If msgtxt.Length > 144 AndAlso oProgress.Message <> "-OK" Then
-				msgtxt = tsStatusLabel.Text.Substring(0, (tsStatusLabel.Text.ToLower.IndexOf("actors-ok") + 9)) ' & oProgress.Message
+				msgtxt = tsStatusLabel.Text.Substring(0, (tsStatusLabel.Text.ToLower.IndexOf("actors-ok") + 9))
 				msgtxt &= oProgress.Message
 			End If
-			tsStatusLabel.Text = msgtxt '&= oProgress.Message
+			tsStatusLabel.Text = msgtxt
 		Else
 			tsStatusLabel.Text = oProgress.Message
 		End If
@@ -1837,7 +1840,7 @@ Partial Public Class Form1
     Private Sub BckWrkTv_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkTv.RunWorkerCompleted
         
         ToolStripStatusLabel5.Visible = False
-		'tsMultiMovieProgressBar.Visible = False
+		tsMultiMovieProgressBar.Visible = False
 		tsLabelEscCancel.Visible = False
 		Statusstrip_Enable(False)
 		'ssFileDownload.Visible = False
@@ -1850,7 +1853,7 @@ Partial Public Class Form1
     Function GetTV_MultiMovieProgressBar_Visiblity(action As String)
 
 		Select Case action
-            Case "TVSeriesSearchForNew"         : Return False
+            Case "TVSeriesSearchForNew"         : Return newTvFolders.Count > 1
             Case "TVSeriesChange"               : Return False
             Case "TVSeriesScrapeDropped"        : Return droppedItems.Count > 1
             Case "TVSeriesRescrape"             : Return False
@@ -1874,10 +1877,13 @@ Partial Public Class Form1
     Public Sub TVSeriesSearchForNew()
         Dim x As String = newTvFolders.Count.ToString
         If x = 0 Then Exit Sub
+        Dim ismulti As Boolean = x > 1
+        Dim PercentDone As Integer = 0
         Dim i As Integer = 0
         oTV.ReportProgress(, "Found Folders:" & vbCrLf & String.Join(vbcrlf, newTvFolders.ToArray()) & vbCrLf & vbcrlf)
         For each tvseries In newTvFolders
             i += 1
+            If ismulti Then oTV.PercentDone = CalcPercentDone(i, x)
             oTV.ProgressStart = String.Format("Scraping Show {0} of {1} : ", i.ToString, x)
             Dim args As New TvdbArgs("", tvseries, False, Pref.TvdbLanguageCode)
             TVDoScrape(args)
@@ -1939,6 +1945,15 @@ Partial Public Class Form1
 			MsgBox("The TV Scraper Is Already Running")
 		End If
     End Sub
+
+    Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
+        Try
+            If total = 0 Then total = onNumber
+            Return Math.Min((100 / total) * onNumber, 100)
+        Catch
+            Return 1
+        End Try
+    End Function
 
 #Region "Tv Series Scraper"
     Private Sub bckgrnd_tvshowscraper_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles bckgrnd_tvshowscraper.DoWork

@@ -1630,10 +1630,12 @@ Public Class Classimdb
         Dim webpage As New List(Of String)
         Monitor.Enter(Me)
         Try
-            Dim wrGETURL As WebRequest = WebRequest.Create(Url)
+            Dim wrGETURL As HttpWebRequest = HttpWebRequest.Create(Url)
             wrGETURL.Proxy = Utilities.MyProxy
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
+            'Dim myWebHeaderCollection As WebHeaderCollection = wrGETURL.Headers
+            wrGETURL.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2"
             Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
             Dim objReader As New IO.StreamReader(objStream)
@@ -1727,6 +1729,7 @@ Public Class Classimdb
             Dim request = TryCast(System.Net.WebRequest.Create(url), System.Net.HttpWebRequest)
             request.Method = "GET"
             request.Proxy = Utilities.MyProxy
+            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2"
             Dim responseContent As String
             Using response = TryCast(request.GetResponse(), System.Net.HttpWebResponse)
               Using reader = New IO.StreamReader(response.GetResponseStream())

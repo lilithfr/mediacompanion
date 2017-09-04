@@ -126,6 +126,7 @@ Public Class CacheManager
                 TMDBRequest.Accept = "application/json"
                 TMDBRequest.ContentType = "application/json"
                 TMDBRequest.Credentials = CredentialCache.DefaultCredentials
+                TMDBRequest.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2"
                 Dim TMDBResponse As HttpWebResponse = CType(TMDBRequest.GetResponse(), HttpWebResponse)
                 Dim dataStream As IO.Stream = TMDBResponse.GetResponseStream()
                 Dim reader As New IO.StreamReader(dataStream)

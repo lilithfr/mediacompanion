@@ -90,16 +90,16 @@ Public Class TVDBScraper
     End Sub
 
     Private Sub AppendSeriesScrapeSuccessActions
-        Actions.Items.Add(New ScrapeAction(AddressOf AssignScrapedSeries, "Assign scraped movie"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DoRenameTVFolders, "Rename Folders"))
-        Actions.Items.Add(New ScrapeAction(AddressOf GetTVActors, "Actors scraper"))
-        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields, "Tidy up unscraped fields"))
-        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO, "Save Nfo"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTvArt, "Download Series Art"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVPoster, "Poster download"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVFanart, "Fanart download"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVArtFromFanartTv, "Fanart.Tv download"))
-        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVExtraFanart, "Extra Fanart download"))
+        Actions.Items.Add(New ScrapeAction(AddressOf AssignScrapedSeries        , "Assign scraped movie"    ))
+        Actions.Items.Add(New ScrapeAction(AddressOf DoRenameTVFolders          , "Rename Folders"          ))
+        Actions.Items.Add(New ScrapeAction(AddressOf GetTVActors                , "Actors scraper"          ))
+        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields , "Tidy up unscraped fields"))
+        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO                  , "Save Nfo"                ))
+        Actions.Items.Add(New ScrapeAction(AddressOf DownloadTvArt              , "Download Series Art"     ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVPoster           , "Poster download"         ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVFanart           , "Fanart download"         ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVArtFromFanartTv  , "Fanart.Tv download"      ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVExtraFanart      , "Extra Fanart download"   ))
         'Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache"  ) )
         'Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                 , "Assign HD Tags"            ) )
         'Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                  , "Get Keywords for tags"     ) )
@@ -115,14 +115,14 @@ Public Class TVDBScraper
     End Sub
 
     Sub AppendScrapeSeriesFailedActions
-        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields, "Tidy up unscraped fields"))
-        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO, "Save Nfo"))
+        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields , "Tidy up unscraped fields"                ))
+        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO                  , "Save Nfo"                                ))
         'Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                 , "Updating caches"             ) )
     End Sub
 
     Sub AppendScraperSeriesSpecific
-        Actions.Items.Add(New ScrapeAction(AddressOf SeriesScraper_GetBody, "Scrape TVDb Series Main Body"))
-        Actions.Items.Add(New ScrapeAction(AddressOf SeriesCheckTVDbBodyScrape, "Checking TVDb Series Main body scrape"))
+        Actions.Items.Add(New ScrapeAction(AddressOf SeriesScraper_GetBody      , "Scrape TVDb Series Main Body"            ))
+        Actions.Items.Add(New ScrapeAction(AddressOf SeriesCheckTVDbBodyScrape  , "Checking TVDb Series Main body scrape"   ))
     End Sub
 
     Sub IniTVdb
@@ -361,7 +361,7 @@ Public Class TVDBScraper
     Sub SaveTVNFO
         ReportProgress("Saving tvshow.nfo", "Saving tvshow.nfo ", msg_append)
         nfoFunction.tvshow_NfoSave(NewShow, True)
-        ReportProgress(, MSG_OK & vbCrLf)
+        ReportProgress(MSG_OK, MSG_OK & vbCrLf, msg_append)
     End Sub
 
     Sub GetRatings()
@@ -391,15 +391,16 @@ Public Class TVDBScraper
         If Pref.TvFanartTvFirst Then
             If Pref.TvDlFanartTvArt OrElse Pref.TvChgShowDlFanartTvArt Then
                 ReportProgress(" - Getting FanartTv Artwork", "Getting artwork from FanartTv", msg_append)
-                'TvFanartTvArt(NewShow, False)
+                TvFanartTvArt(False)
+                ReportProgress(": OK!", ": OK!", msg_append)
             End If
             If Pref.tvdlfanart Or Pref.tvdlposter Or Pref.tvdlseasonthumbs Then
                 ReportProgress(" - Getting TVDB artwork", "Getting artwork from TVDb", msg_append)
                 success = TvGetArtwork(True, True, True, Pref.dlTVxtrafanart)
                 If success Then
-                    ReportProgress(": OK!",, msg_append)
+                    ReportProgress(": OK!", ": OK!", msg_append)
                 Else
-                    ReportProgress(": error!!", ,msg_append)
+                    ReportProgress(": error!!", ": error!!", msg_append)
                 End If
             End If
         Else
@@ -407,14 +408,15 @@ Public Class TVDBScraper
                 ReportProgress(" - Getting TVDB artwork", "Getting artwork from TVDb", msg_append)
                 success = TvGetArtwork(True, True, True, Pref.dlTVxtrafanart)
                 If success Then
-                    ReportProgress(": OK!", ": OK!",msg_append)
+                    ReportProgress(": OK!", ": OK!", msg_append)
                 Else
-                    ReportProgress(": error!!", ": error!!",msg_append)
+                    ReportProgress(": error!!", ": error!!", msg_append)
                 End If
             End If
             If Pref.TvDlFanartTvArt OrElse Pref.TvChgShowDlFanartTvArt Then
                 ReportProgress(" - Getting FanartTv Artwork", "Getting artwork from FanartTv", msg_append)
-                'TvFanartTvArt(NewShow, Pref.TvChgShowDlFanartTvArt)
+                TvFanartTvArt(Pref.TvChgShowDlFanartTvArt)
+                ReportProgress(": OK!", ": OK!", msg_append)
             End If
         End If
     End Sub
@@ -534,10 +536,7 @@ Public Class TVDBScraper
             Dim doFanart As Boolean = If(Pref.tvdlfanart OrElse Pref.TvChgShowDlFanart, True, False)
             Dim doSeason As Boolean = If(Pref.tvdlseasonthumbs OrElse Pref.TvChgShowDlSeasonthumbs, True, False)
             Dim artlist As New List(Of McImage)
-            Dim artlist2 As New List(Of TvBanners)
             artlist.Clear()
-            'artlist.AddRange(tvdb)
-            'Dim thumblist           As String   = tvdbstuff.GetPosterList(currentshow.TvdbId.Value, artlist)
             Dim isposter As String = Pref.postertype
             Dim isseasonall As String = Pref.seasonall
 
@@ -547,8 +546,8 @@ Public Class TVDBScraper
             Dim Langlist As New List(Of String)
             If Not _lang = "" Then Langlist.Add(_lang)
             Langlist.Add(NewShow.Language.Value)
-            If Not Langlist.Contains("en") Then Langlist.Add("en")
-            If Not Langlist.Contains(Pref.TvdbLanguageCode) Then Langlist.Add(Pref.TvdbLanguageCode)
+            Langlist.AddIfNew("en")
+            Langlist.AddifNew(Pref.TvdbLanguageCode)
             Langlist.Add("")
             If tvdb.McPosters.Count = 0 AndAlso tvdb.McFanart.Count = 0 AndAlso tvdb.McSeason.Count = 0 Then Return success
 
@@ -574,8 +573,6 @@ Public Class TVDBScraper
                         If frodo AndAlso isseasonall <> "none" Then imgpaths.Add(currentshowpath & "season-all-poster.jpg")
                         If eden AndAlso isseasonall = "poster" Then imgpaths.Add(currentshowpath & "season-all.tbn")
                         success = DownloadCache.SaveImageToCacheAndPaths(mainposter, imgpaths, False, , , overwriteimage)
-                        'Dim popath As String = Utilities.save2postercache(NewShow.NfoFilePath, NewShow.ImagePoster.Path, Form1.WallPicWidth, Form1.WallPicHeight)
-                        'updateTvPosterWall(popath, currentshow.NfoFilePath)
                     End If
                 End If
                 artlist.Clear()
@@ -613,15 +610,6 @@ Public Class TVDBScraper
                             Dim tmpimg As McImage = q(0)
                             seasonXXposter = tmpimg.hdUrl
                         End If
-                        'For Each lang In Langlist
-                        '    For Each Image In artlist2
-                        '        If Image.Season = f.ToString AndAlso (Image.Language = lang Or lang = "") Then
-                        '            seasonXXposter = Image.Url
-                        '            Exit For
-                        '        End If
-                        '    Next
-                        '    If Not IsNothing(seasonXXposter) Then Exit For
-                        'Next
                         If Not IsNothing(seasonXXposter) Then
                             Dim tempstring As String = ""
                             If f < 10 Then
@@ -645,15 +633,6 @@ Public Class TVDBScraper
                             Dim tmpimg As McImage = q(0)
                             seasonXXbanner = tmpimg.hdUrl
                         End If
-                        'For Each lang In Langlist
-                        '    For Each Image In artlist2
-                        '        If Image.Season = f.ToString AndAlso (Image.Language = lang Or lang = "") AndAlso Image.Resolution = "seasonwide" Then
-                        '            seasonXXbanner = Image.Url
-                        '            Exit For
-                        '        End If
-                        '    Next
-                        '    If Not IsNothing(seasonXXbanner) Then Exit For
-                        'Next
                         If Not IsNothing(seasonXXbanner) Then
                             Dim tempstring As String = ""
                             If f < 10 Then
@@ -730,6 +709,228 @@ Public Class TVDBScraper
                         Utilities.SafeCopyFile(NewShow.FolderPath & seasonfile, Seas.FolderPath & "folder.jpg", False)
                     End If
                 End If
+            Next
+        End If
+    End Sub
+
+    Sub TvFanartTvArt (ByVal force As Boolean)
+        Dim clearartLD As String = Nothing  : Dim logoLD As String = Nothing    : Dim clearart As String = Nothing  : Dim logo As String = Nothing
+        Dim poster As String = Nothing      : Dim fanart As String = Nothing    : Dim banner As String = Nothing    : Dim landscape As String = Nothing
+        Dim character As String = Nothing
+        Dim currentshowpath As String = NewShow.FolderPath
+        Dim DestImg As String = ""
+        Dim aok As Boolean = True
+        Dim frodo As Boolean = Pref.FrodoEnabled
+        Dim eden As Boolean = Pref.EdenEnabled
+        Dim ID As String = NewShow.TvdbId.Value
+        Dim TvFanartlist As New FanartTvTvList
+        Dim newobj As New FanartTv
+        newobj.ID = ID
+        newobj.src = "tv"
+        Try
+            TvFanartlist = newobj.FanarttvTvresults
+        Catch ex As Exception
+            aok = False
+        End Try
+        If Not aok Then Exit Sub
+        Dim lang As New List(Of String)
+        If Not _lang = "" Then lang.AddIfNew(_lang)
+        lang.AddIfNew(Pref.TvdbLanguageCode)
+        lang.AddIfNew("en")
+        lang.Add("00")
+        For Each lan In lang
+            If IsNothing(clearart) Then
+                For Each Art In TvFanartlist.hdclearart 
+                    If Art.lang = lan Then clearart = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(clearartLD) Then
+                For Each Art In TvFanartlist.clearart 
+                    If Art.lang = lan Then clearartLD = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(logo) Then
+                For Each Art In TvFanartlist.hdtvlogo
+                    If Art.lang = lan Then logo = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(logoLD) Then
+                For Each Art In TvFanartlist.clearlogo
+                    If Art.lang = lan Then logoLD = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(poster) Then
+                For Each Art In TvFanartlist.tvposter 
+                    If Art.lang = lan Then poster = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(fanart) Then
+                For Each Art In TvFanartlist.showbackground  
+                    If Art.lang = lan Then fanart = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(banner) Then
+                For Each Art In TvFanartlist.tvbanner 
+                    If Art.lang = lan Then banner = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(landscape) Then
+                For Each Art In TvFanartlist.tvthumb  
+                    If Art.lang = lan Then landscape = Art.url : Exit For
+                Next
+            End If
+            If IsNothing(character) Then
+                For Each Art In TvFanartlist.characterart   
+                    If Art.lang = lan Then character = Art.url : Exit For
+                Next
+            End If
+        Next
+        If IsNothing(clearart) AndAlso Not IsNothing(clearartld) Then clearart = clearartLD 
+        If IsNothing(logo) AndAlso Not IsNothing(logold) Then logo = logold
+            DestImg = currentshowpath & "clearart.png"
+        If Not IsNothing(clearart) Then Utilities.DownloadFile(clearart, DestImg, force)
+            DestImg = currentshowpath & "logo.png"
+        If Not IsNothing(logo) Then Utilities.DownloadFile(logo, DestImg, force)
+        DestImg = currentshowpath & "character.png"
+        If Not IsNothing(character) Then Utilities.DownloadFile(character, DestImg, force)
+        If Not IsNothing(poster) Then
+            Dim destpaths As New List(Of String)
+            If frodo Then
+                destpaths.Add(currentshowpath & "poster.jpg")
+                destpaths.Add(currentshowpath & "season-all-poster.jpg")
+            End If
+            If eden then
+                destpaths.Add(currentshowpath & "poster.jpg")
+                destpaths.Add(currentshowpath & "season-all.tbn")
+            End If
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(poster, destpaths, False, , , force)
+        End If
+        If Not IsNothing(fanart) Then
+            Dim Destpaths As New List(Of String)
+            If frodo Then
+                Destpaths.Add(currentshowpath & "fanart.jpg")
+                Destpaths.Add(currentshowpath & "season-all-fanart.jpg")
+            End If
+            If eden Then Destpaths.Add(currentshowpath & "fanart.jpg")
+            Dim success As Boolean = DownloadCache.SaveImageToCacheAndPaths(fanart, Destpaths, False, , , force)
+        End If
+        DestImg = currentshowpath & "landscape.jpg"
+        If Not IsNothing(landscape) Then Utilities.DownloadFile(landscape, DestImg, force)
+        DestImg = currentshowpath & "banner.jpg"
+        If Not IsNothing(banner) Then
+            Utilities.DownloadFile(banner, DestImg, force)
+            If frodo Then
+                DestImg = currentshowpath & "season-all-banner.jpg"
+                Utilities.DownloadFile(banner, DestImg, force)
+            End If
+        End If
+
+        Dim firstseason As Integer = 1
+        Dim lastseason As Integer = -1
+        For Each item In TvFanartlist.seasonposter
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonposter
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-poster.jpg"
+                        If Pref.FrodoEnabled Then savepaths.Add(destimg)
+                        If Pref.EdenEnabled Then
+                            destimg = destimg.Replace("-poster.jpg", ".tbn")
+                            savepaths.Add(destimg)
+                        End If
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
+            Next
+        End If
+
+        firstseason = 1
+        lastseason = -1
+        For Each item In TvFanartlist.seasonbanner 
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason AndAlso frodo Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonbanner
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-banner.jpg"
+                        If Pref.FrodoEnabled Then savepaths.Add(destimg)
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
+            Next
+        End If
+
+        firstseason = 1
+        lastseason = -1
+        For Each item In TvFanartlist.seasonthumb  
+            Dim itemseason As Integer = item.season.ToInt
+            If itemseason > lastseason Then lastseason = itemseason
+            If itemseason < firstseason Then firstseason = itemseason
+        Next
+        If lastseason >= firstseason AndAlso frodo Then
+            For i = firstseason to lastseason 
+                Dim savepaths As New List(Of String)
+                Dim seasonurl As String = Nothing
+                For Each lan In lang
+                    For Each item In TvFanartlist.seasonthumb
+                        If item.lang = lan AndAlso item.season = i.ToString Then
+                            seasonurl = item.url
+                            Exit For
+                        End If
+                    Next
+                    If Not IsNothing(seasonurl) Then Exit for
+                Next
+                If Not IsNothing(seasonurl) Then
+                    Dim seasonno As String = i.ToString
+                    If seasonno <> "" Then
+                        If seasonno.Length = 1 Then seasonno = "0" & seasonno
+                        If seasonno = "00" Then
+                            seasonno = "-specials"
+                        End If
+                        destimg = currentshowpath &  "season" & seasonno & "-landscape.jpg"
+                        If Pref.FrodoEnabled Then savepaths.Add(destimg)
+                    End If
+                End If
+                If savepaths.Count > 0 Then DownloadCache.SaveImageToCacheAndPaths(seasonurl, savepaths, False, , , force)
             Next
         End If
     End Sub
