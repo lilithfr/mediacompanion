@@ -771,7 +771,7 @@ Public Class Form1
 			AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
 			AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
 
-			BckWrkXbmcController.RunWorkerAsync(Me)
+			'BckWrkXbmcController.RunWorkerAsync(Me)
 
             If Pref.TvEnableAutoScrape AndAlso Not TvAutoScrapeTimer.Enabled Then
                 TvAutoScrapeTimer.Start()
@@ -958,10 +958,12 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        If e.KeyCode = Keys.F7 Then 'CheckRootsForToolStripMenuItem.PerformClick()
-            newTvFolders.Add("U:\zMedia\zTV2\Vikings")
-            newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
-            RunBackgroundTVScrape("TVSeriesSearchForNew")
+        If e.KeyCode = Keys.F7 Then
+            tvtrial = True
+            CheckRootsForToolStripMenuItem.PerformClick()
+            'newTvFolders.Add("U:\zMedia\zTV2\Vikings")
+            'newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
+            'RunBackgroundTVScrape("TVSeriesSearchForNew")
         End If
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
@@ -16155,7 +16157,7 @@ Public Class Form1
 	End Sub
 
 	Private Sub DataGridViewMovies_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewMovies.SelectionChanged
-		Dim something As String = ""
+
 	End Sub
 
 	Private Sub Tmr_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Tmr.Tick

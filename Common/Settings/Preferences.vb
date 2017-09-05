@@ -2685,7 +2685,7 @@ Public Class Pref
     End Function
 
     Public Shared Function Get_ISO_HDTags(ByVal filename As String) As String
-        Dim something As String = ""
+        Dim textresult As String = ""
         Dim tempstring As String = String.Empty 
         If applicationPath.IndexOf("/") <> -1 Then tempstring = applicationPath & "/" & "mediainfo-rar.exe"
         If applicationPath.IndexOf("\") <> -1 Then tempstring = applicationPath & "\" & "mediainfo-rar.exe"
@@ -2705,11 +2705,11 @@ Public Class Pref
         End With
         Dim To_Display As String = ""
         NewProcess.Start()
-        something = NewProcess.StandardOutput.ReadToEnd
+        textresult = NewProcess.StandardOutput.ReadToEnd
         Catch ex As Exception 
         End Try
 
-        Return something
+        Return textresult
     End Function
     Shared Sub OpenFileInAppPath(file As String)
         OpenFile( Path.Combine(AppPath,file) )

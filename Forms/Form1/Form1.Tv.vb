@@ -358,14 +358,18 @@ Partial Public Class Form1
 	End Sub
 
 	Public Sub tv_ShowScrape()
-		If Not bckgrnd_tvshowscraper.IsBusy Then
-			If newTvFolders.Count > 0 Then
+		If Not bckgrnd_tvshowscraper.IsBusy AndAlso Not BckWrkTv.IsBusy Then
+			If newTvFolders.Count > 0 AndAlso Not tvtrial Then
 				ToolStripStatusLabel5.Text = "Scraping TV Shows, " & newTvFolders.Count & " remaining"
 				ToolStripStatusLabel5.Visible = True
 			End If
 			Dim selectedLang As String = If(Pref.tvshow_useXBMC_Scraper, Pref.XBMCTVDbLanguage, Pref.TvdbLanguageCode)
 			Dim args As TvdbArgs = New TvdbArgs("", , False, selectedLang)
-			bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+            If Not tvtrial Then
+			    bckgrnd_tvshowscraper.RunWorkerAsync(args) ' Even if no shows scraped, saves tvcache and updates treeview in RunWorkerComplete
+            Else
+                RunBackgroundTVScrape("TVSeriesSearchForNew")
+            End If
 		End If
 	End Sub
 
@@ -1807,6 +1811,7 @@ Partial Public Class Form1
 
     Private Sub BckWrkTv_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles BckWrkTv.DoWork
         Try
+            e.Result = e.Argument
 			CallTVSubByName(DirectCast(e.Argument, String))
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
@@ -1815,6 +1820,16 @@ Partial Public Class Form1
 
     Private Sub BckWrkTv_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkTv.ProgressChanged
         
+        If e.ProgressPercentage = 9999 Then
+            Dim NewTvShow As TvShow = e.UserState
+            Cache.TvCache.Add(NewTvShow)
+            TvTreeview.Nodes.Add(NewTvShow.ShowNode)
+            NewTvShow.UpdateTreenode()
+
+            TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+            TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+            Exit Sub
+        End If
 		Dim oProgress As Progress = CType(e.UserState, Progress)
 		If e.ProgressPercentage <> -1 Then
 		    tsMultiMovieProgressBar.Value = e.ProgressPercentage
@@ -1839,10 +1854,16 @@ Partial Public Class Form1
 
     Private Sub BckWrkTv_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkTv.RunWorkerCompleted
         
-        ToolStripStatusLabel5.Visible = False
+        tsStatusLabel.Visible = False
 		tsMultiMovieProgressBar.Visible = False
 		tsLabelEscCancel.Visible = False
 		Statusstrip_Enable(False)
+        If e.Result = "TVSeriesSearchForNew" Then
+            Dim Something As String = nothing
+        End If
+        Tv_CacheSave()
+        tv_CacheLoad()
+        tv_Filter()
 		'ssFileDownload.Visible = False
 		'EnableDisableByTag("M", True)       'Re-enable disabled UI options that couldn't be run while scraper was running
 		GC.Collect()
@@ -1887,6 +1908,7 @@ Partial Public Class Form1
             oTV.ProgressStart = String.Format("Scraping Show {0} of {1} : ", i.ToString, x)
             Dim args As New TvdbArgs("", tvseries, False, Pref.TvdbLanguageCode)
             TVDoScrape(args)
+            Pref.tvFolders.AddIfNew(tvseries)
         Next
         newTvFolders.Clear()
     End Sub
@@ -1934,6 +1956,7 @@ Partial Public Class Form1
 			Statusstrip_Enable()
 			ssFileDownload.Visible = False
 			tsProgressBarFileDownload_Resize()
+            Application.DoEvents()
 			'EnableDisableByTag("M", False)       'Disable all UI options that can't be run while scraper is running   
 			'ScraperErrorDetected = False
 
@@ -1944,6 +1967,7 @@ Partial Public Class Form1
 		Else
 			MsgBox("The TV Scraper Is Already Running")
 		End If
+        tvtrial = False
     End Sub
 
     Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
@@ -2154,27 +2178,10 @@ Partial Public Class Form1
                 Else                            'If failed, save nfo so users can change Series.
                     'nfoFunction.tvshow_NfoSave(NewShow, True)
                 End If
-                If newTvFolders.Count > 0 AndAlso Not Pref.tvFolders.Contains(newTvFolders(0)) Then
-                    Pref.tvFolders.Add(newTvFolders(0))
-                End If
+                If newTvFolders.Count > 0 AndAlso Not Pref.tvFolders.Contains(newTvFolders(0)) Then Pref.tvFolders.Add(newTvFolders(0))
                 bckgrnd_tvshowscraper.ReportProgress(1, NewShow)
                 If newTvFolders.Count > 0 Then newTvFolders.RemoveAt(0)
             Loop
-        Catch ex As Exception
-            ExceptionHandler.LogError(ex)
-        End Try
-    End Sub
-
-    Private Sub bckgrnd_tvshowscraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bckgrnd_tvshowscraper.RunWorkerCompleted
-        Try
-            ToolStripStatusLabel5.Text = "Saving data"
-            Tv_CacheSave()
-            tv_CacheLoad()
-            tv_Filter()
-            ToolStripStatusLabel5.Visible = False
-            Statusstrip_Enable(False)
-            BlinkTaskBar
-            GC.Collect()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -2196,6 +2203,21 @@ Partial Public Class Form1
                 TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
                 TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
             End If
+        Catch ex As Exception
+            ExceptionHandler.LogError(ex)
+        End Try
+    End Sub
+    
+    Private Sub bckgrnd_tvshowscraper_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bckgrnd_tvshowscraper.RunWorkerCompleted
+        Try
+            ToolStripStatusLabel5.Text = "Saving data"
+            Tv_CacheSave()
+            tv_CacheLoad()
+            tv_Filter()
+            ToolStripStatusLabel5.Visible = False
+            Statusstrip_Enable(False)
+            BlinkTaskBar
+            GC.Collect()
         Catch ex As Exception
             ExceptionHandler.LogError(ex)
         End Try
@@ -5618,17 +5640,4 @@ Partial Public Class Form1
         Return thisarray
     End Function
     
-    Private Sub TestTvTMDB()
-        Dim tvtmdb As New TVTMDb
-        tvtmdb.TmdbId = "1622"
-        'tvtmdb.TvdbId = "74205"
-        'tvtmdb.ImdbId = "tt0185906"
-        If Not IsNothing(tvtmdb.TvShow) Then
-            Dim actors As List(Of str_MovieActors) = tvtmdb.cast
-            Dim Something As String = Nothing
-            If Not IsNothing(tvtmdb.Certification) Then
-                Dim somethingelse As String = Nothing
-            End If
-        End If
-    End Sub
 End Class

@@ -213,51 +213,55 @@ Public Class TvEpisode
     End Sub
     
     Public Sub AbsorbTvdbEpisode(ByRef TvdbEpisode As Tvdb.Episode)
-        Me.TvdbId.Value     = TvdbEpisode.Id.Value
-        Me.ImdbId.Value     = TvdbEpisode.ImdbId.Value
-        Me.TmdbId.Value     = TvdbEpisode.TmdbId.Value
-        Me.Title.Value      = TvdbEpisode.EpisodeName.Value
-        Me.UniqueId.Value   = TvdbEpisode.Id.Value
-        Me.Rating.Value     = TvdbEpisode.Rating.Value
-        Me.Votes.Value      = TvdbEpisode.Votes.Value
-        Me.Plot.Value       = TvdbEpisode.Overview.Value
-        Me.Director.Value   = cleanvalue(TvdbEpisode.Director.Value)
-        Me.Credits.Value    = cleanvalue(TvdbEpisode.Credits.Value)
-        Me.MpaaCert.Value   = TvdbEpisode.ProductionCode.Value
-        Me.Season.Value     = TvdbEpisode.SeasonNumber.Value
-        Me.Episode.Value    = TvdbEpisode.EpisodeNumber.Value
-        Me.Thumbnail.Url    = TvdbEpisode.ScreenShotUrl
-        Me.Source.Value     = TvdbEpisode.Source.Value
-        Me.UserRating.Value = "0"
-        Me.DvdEpNumber.Value= TvdbEpisode.DvdEpisodeNumber.Value
-        Aired.Value         = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
+        Me.TvdbId.Value         = TvdbEpisode.Id.Value
+        Me.ImdbId.Value         = TvdbEpisode.ImdbId.Value
+        Me.TmdbId.Value         = TvdbEpisode.TmdbId.Value
+        Me.Title.Value          = TvdbEpisode.EpisodeName.Value
+        Me.UniqueId.Value       = TvdbEpisode.Id.Value
+        Me.Rating.Value         = TvdbEpisode.Rating.Value
+        Me.Votes.Value          = TvdbEpisode.Votes.Value
+        Me.Plot.Value           = TvdbEpisode.Overview.Value
+        Me.Director.Value       = cleanvalue(TvdbEpisode.Director.Value)
+        Me.Credits.Value        = cleanvalue(TvdbEpisode.Credits.Value)
+        Me.MpaaCert.Value       = TvdbEpisode.ProductionCode.Value
+        Me.Season.Value         = TvdbEpisode.SeasonNumber.Value
+        Me.Episode.Value        = TvdbEpisode.EpisodeNumber.Value
+        Me.Thumbnail.Url        = TvdbEpisode.ScreenShotUrl
+        Me.Source.Value         = TvdbEpisode.Source.Value
+        Me.DisplayEpisode.Value = TvdbEpisode.AirsBeforeEpsisode.Value
+        Me.DisplaySeason.Value  = TvdbEpisode.AirsBeforeEpsisode.Value
+        Me.UserRating.Value     = "0"
+        Me.DvdEpNumber.Value    = TvdbEpisode.DvdEpisodeNumber.Value
+        Aired.Value             = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
         Me.UpdateTreenode()
     End Sub
 
     Public Sub AbsorbTvEpisode(ByRef TvEp As TvEpisode)
-        Me.TvdbId.Value     = TvEp.Id.Value
-        Me.ImdbId.Value     = TvEp.ImdbId.Value
-        Me.TmdbId.Value     = TvEp.TmdbId.Value
-        Me.Title.Value      = TvEp.Title.Value
-        Me.UniqueId.Value   = TvEp.Id.Value
-        Me.Rating.Value     = TvEp.Rating.Value
-        Me.Votes.Value      = TvEp.Votes.Value
-        Me.Plot.Value       = TvEp.Plot.Value
-        Me.Director.Value   = cleanvalue(TvEp.Director.Value)
-        Me.Credits.Value    = cleanvalue(TvEp.Credits.Value)
-        Me.MpaaCert.Value   = TvEp.MpaaCert.Value
-        Me.Season.Value     = TvEp.Season.Value
-        Me.Episode.Value    = TvEp.Episode.Value
-        Me.Source.Value     = TvEp.Source.Value
-        Me.Aired.Value      = TvEp.Aired.Value ' Phyonics - Fix for issue #208
-        Me.ListActors       = TvEp.ListActors
-        Me.StreamDetails    = TvEp.StreamDetails 
-        Me.EpBookmark.Value = TvEp.EpBookmark.Value 
-        Me.UserRating.Value = TvEp.UserRating.Value
-        Me.PlayCount.Value  = TvEp.PlayCount.Value
-        Me.Runtime.Value    = TvEp.Runtime.Value
-        Me.Source.Value     = TvEp.Source.Value 
-        Me.DvdEpNumber.Value = TvEp.DvdEpNumber.Value
+        Me.TvdbId.Value         = TvEp.Id.Value
+        Me.ImdbId.Value         = TvEp.ImdbId.Value
+        Me.TmdbId.Value         = TvEp.TmdbId.Value
+        Me.Title.Value          = TvEp.Title.Value
+        Me.UniqueId.Value       = TvEp.Id.Value
+        Me.Rating.Value         = TvEp.Rating.Value
+        Me.Votes.Value          = TvEp.Votes.Value
+        Me.Plot.Value           = TvEp.Plot.Value
+        Me.Director.Value       = cleanvalue(TvEp.Director.Value)
+        Me.Credits.Value        = cleanvalue(TvEp.Credits.Value)
+        Me.MpaaCert.Value       = TvEp.MpaaCert.Value
+        Me.Season.Value         = TvEp.Season.Value
+        Me.Episode.Value        = TvEp.Episode.Value
+        Me.Source.Value         = TvEp.Source.Value
+        Me.Aired.Value          = TvEp.Aired.Value ' Phyonics - Fix for issue #208
+        Me.ListActors           = TvEp.ListActors
+        Me.StreamDetails        = TvEp.StreamDetails 
+        Me.EpBookmark.Value     = TvEp.EpBookmark.Value 
+        Me.UserRating.Value     = TvEp.UserRating.Value
+        Me.PlayCount.Value      = TvEp.PlayCount.Value
+        Me.Runtime.Value        = TvEp.Runtime.Value
+        Me.Source.Value         = TvEp.Source.Value 
+        Me.DisplayEpisode.Value = TvEp.DisplayEpisode.Value
+        Me.DisplaySeason.Value  = TvEp.DisplaySeason.Value
+        Me.DvdEpNumber.Value    = TvEp.DvdEpNumber.Value
         Me.UpdateTreenode()
     End Sub
 

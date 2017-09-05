@@ -1650,21 +1650,27 @@ Public Class WorkingWithNfoFiles
                 filedetailschild = doc.CreateElement("video")
                 If Pref.enablehdtags = True Then
                     stage = 4
+                    If Pref.MovRuntimeAsDuration AndAlso movietosave.fullmoviebody.runtime <> "" Then
+                        Dim tempduration As Integer = movietosave.fullmoviebody.runtime.Replace("min","").ToInt
+                        If tempduration > 1 Then tempduration = tempduration * 60
+                        movietosave.filedetails.Video.DurationInSeconds.Value = tempduration
+                    End If
+                    stage = 6
                     anotherchild.AppendChild(AppendVideo(doc, movietosave.filedetails.Video))
 
-                    stage = 5
+                    stage = 7
                     For Each item In movietosave.filedetails.Audio
                         anotherchild.AppendChild(AppendAudio(doc, item))
                     Next
-                    stage = 6
+                    stage = 8
                     For Each entry In movietosave.filedetails.Subtitles
                         If Not String.IsNullOrEmpty(entry.Language.Value) Then
                             anotherchild.AppendChild(AppendSub(doc, entry))
                         End If
                     Next
-                    stage = 7
+                    'stage = 7
                 Else
-                    stage = 8
+                    stage = 9
                     Dim container As String = movietosave.filedetails.Video.Container.Value
                     filedetailschild.AppendChild(doc, "container", If(String.IsNullOrEmpty(container), "", container))
                     anotherchild.AppendChild(filedetailschild)

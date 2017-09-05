@@ -89,41 +89,60 @@ Public Class TVDBScraper
         End If
     End Sub
 
+    Sub Reportprogress(ByVal tvshow As TvShow)
+        If Not IsNothing(_TvBw) AndAlso _TvBw.WorkerReportsProgress AndAlso Not IsNothing(NewShow) Then
+            Try
+                _TvBw.ReportProgress(9999, NewShow)
+            Catch ex As Exception
+
+            End Try
+        End If
+    End Sub
+
+#Region "Episode Actions"
+    Private Sub AppendEpisodeScrapeSuccessActions()
+
+    End Sub
+
+    Private Sub AppendEpisodeScrapeFailedActions()
+
+    End Sub
+
+    Private Sub AppendEpisodeScrapeSpecific()
+        'Actions.Items.Add(New ScrapeAction(AddressOf SeriesScraper_GetBody      , "Scrape TVDb Series Main Body"            ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf SeriesCheckTVDbBodyScrape  , "Checking TVDb Series Main body scrape"   ))
+    End Sub
+
+#End Region
+
+#Region "Series Actions"
     Private Sub AppendSeriesScrapeSuccessActions
-        Actions.Items.Add(New ScrapeAction(AddressOf AssignScrapedSeries        , "Assign scraped movie"    ))
         Actions.Items.Add(New ScrapeAction(AddressOf DoRenameTVFolders          , "Rename Folders"          ))
         Actions.Items.Add(New ScrapeAction(AddressOf GetTVActors                , "Actors scraper"          ))
         Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields , "Tidy up unscraped fields"))
         Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO                  , "Save Nfo"                ))
         Actions.Items.Add(New ScrapeAction(AddressOf DownloadTvArt              , "Download Series Art"     ))
-        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVPoster           , "Poster download"         ))
-        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVFanart           , "Fanart download"         ))
-        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVArtFromFanartTv  , "Fanart.Tv download"      ))
-        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVExtraFanart      , "Extra Fanart download"   ))
-        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateMovieSetCache          , "Updating movie set cache"  ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags                 , "Assign HD Tags"            ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords                  , "Get Keywords for tags"     ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFiles                , "Rename Files"              ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf AssignTrailerUrl             , "Get trailer URL"           ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoPosterThumbs         , "Getting extra Frodo Poster thumbs") )
-        'Actions.Items.Add( New ScrapeAction(AddressOf GetFrodoFanartThumbs         , "Getting extra Frodo Fanart thumbs") )
-        'Actions.Items.Add( New ScrapeAction(AddressOf AssignPosterUrls             , "Get poster URLs"           ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf DownloadTrailer              , "Trailer download"          ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf AssignMovieToCache           , "Assigning movie to cache"  ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf HandleOfflineFile            , "Handle offline file"       ) )
-        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                 , "Updating caches"           ) )
+        Actions.Items.Add(New ScrapeAction(AddressOf TvAddToCache               , "Updating caches"         ))
+        Actions.Items.Add(New ScrapeAction(AddressOf TvLoadExistingEpisodes     , "Load Existing Episodes"  ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVFanart           , "Fanart download"          ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVArtFromFanartTv  , "Fanart.Tv download"       ))
+        'Actions.Items.Add(New ScrapeAction(AddressOf DownloadTVExtraFanart      , "Extra Fanart download"    ))
+        'Actions.Items.Add( New ScrapeAction(AddressOf AssignHdTags              , "Assign HD Tags"            ))
+        'Actions.Items.Add( New ScrapeAction(AddressOf GetKeyWords               , "Get Keywords for tags"     ))
+        'Actions.Items.Add( New ScrapeAction(AddressOf DoRenameFiles             , "Rename Files"              ))
     End Sub
 
-    Sub AppendScrapeSeriesFailedActions
-        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields , "Tidy up unscraped fields"                ))
-        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO                  , "Save Nfo"                                ))
-        'Actions.Items.Add( New ScrapeAction(AddressOf UpdateCaches                 , "Updating caches"             ) )
+    Sub AppendSeriesScrapeFailedActions
+        Actions.Items.Add(New ScrapeAction(AddressOf TVTidyUpAnyUnscrapedFields , "Tidy up unscraped fields"    ))
+        Actions.Items.Add(New ScrapeAction(AddressOf SaveTVNFO                  , "Save Nfo"                    ))
+        Actions.Items.Add(New ScrapeAction(AddressOf TvAddToCache               , "Updating caches"             ))
     End Sub
 
-    Sub AppendScraperSeriesSpecific
+    Sub AppendSeriesScraperSpecific
         Actions.Items.Add(New ScrapeAction(AddressOf SeriesScraper_GetBody      , "Scrape TVDb Series Main Body"            ))
         Actions.Items.Add(New ScrapeAction(AddressOf SeriesCheckTVDbBodyScrape  , "Checking TVDb Series Main body scrape"   ))
     End Sub
+#End Region
 
     Sub IniTVdb
         IniTVdb(PossibleTVdb)
@@ -148,9 +167,9 @@ Public Class TVDBScraper
             Actions.Items.Add(New ScrapeAction(AddressOf IniTVdb, "Initialising TMDb"))
 
             If _isepisodes Then
-                'AppendScraperEpisodesSpecific
+                AppendEpisodeScrapeSpecific
             Else
-                AppendScraperSeriesSpecific
+                AppendSeriesScraperSpecific
             End If
             RunScrapeActions
         End If
@@ -181,13 +200,9 @@ Public Class TVDBScraper
         End While
         ReportProgress(, vbCrLf & vbCrLf)
     End Sub
-
-    Sub AssignScrapedSeries
-
-    End Sub
-
+    
     Sub DoRenameTVFolders
-
+        'Not assigned code yet.
     End Sub
 
     Sub GetTVActors
@@ -420,20 +435,25 @@ Public Class TVDBScraper
             End If
         End If
     End Sub
-    Sub DownloadTVPoster
 
+    Sub DownloadTVPoster
+        'Not Assigned yet.
     End Sub
 
     Sub DownloadTVFanart
-
+        'Not Assigned yet.
     End Sub
 
     Sub DownloadTVArtFromFanartTv
-
+        'Not Assigned yet.
     End Sub
 
     Sub DownloadTVExtraFanart
+        'Not Assigned yet.
+    End Sub
 
+    Sub TvAddToCache
+        Reportprogress(NewShow)
     End Sub
 
     Sub SeriesScraper_GetBody
@@ -450,6 +470,8 @@ Public Class TVDBScraper
                 NewShow = nfoFunction.tvshow_NfoLoad(NewShow.NfoFilePath)
                 ReportProgress("Series '" & NewShow.Title.Value & "' found with existing tvshow.nfo", "Series '" & NewShow.Title.Value & "' found with existing tvshow.nfo - Added", msg_append)
                 Actions.Items.RemoveAt(1)
+                Actions.Items.Add(New ScrapeAction(AddressOf TvAddToCache               , "Updating caches"         ))
+                Actions.Items.Add(New ScrapeAction(AddressOf TvLoadExistingEpisodes     , "Load Existing Episodes"  ))
             End If
         Else
             If haveTVDbID Then
@@ -503,13 +525,20 @@ Public Class TVDBScraper
         'Failed...
         If NewShow.FailedLoad Then
             ReportProgress(MSG_ERROR, "!!! Unable to scrape body with refs """ & _folder & vbCrLf & "TVDB may not be available or Series Title is invalid" & vbCrLf, msg_append)
-            AppendScrapeSeriesFailedActions
+            AppendSeriesScrapeFailedActions
         Else
             ReportProgress(MSG_OK, "!!! Series Body Scraped OK" & vbCrLf, msg_append)
             AppendSeriesScrapeSuccessActions
         End If
     End Sub
 
+    ''' <summary>
+    ''' Get TV or Episode ratings and Votes from IMDb
+    ''' </summary>
+    ''' <param name="IMDbId">Tv or Episode IMDB Id</param>
+    ''' <param name="rating">current rating if one allocated</param>
+    ''' <param name="votes">current votes if allocated</param>
+    ''' <returns></returns>
     Function ep_getIMDbRating(ByVal IMDbId As String, ByRef rating As String, ByRef votes As String) As Boolean
         Dim aok As Boolean = True
         If String.IsNullOrEmpty(IMDbId) Then Return False
@@ -523,6 +552,126 @@ Public Class TVDBScraper
         If n.Success Then votes = n.Groups(1).Value
         Return rating <> ""
     End Function
+
+    Sub TvLoadExistingEpisodes
+        Dim episodelist As New List(Of TvEpisode)
+        episodelist = loadepisodes()
+        For Each ep In episodelist
+            NewShow.AddEpisode(ep)
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Scan folders in a series folder for existing episode nfo's and return
+    ''' </summary>
+    ''' <returns>List (of TvEpisode)</returns>
+    Function loadepisodes() As List(Of TvEpisode)
+        Dim episodelist As New List(Of TvEpisode)
+        Dim missingeppath As String = Utilities.MissingPath
+        Dim newlist As New List(Of String)
+        newlist.Clear()
+        newlist = Utilities.EnumerateFolders(NewShow.FolderPath) 'TODO: Restore loging functions
+        newlist.Add(NewShow.FolderPath)
+        For Each folder In newlist
+            If folder = "long_path" Then Continue For
+            Dim dir_info As New DirectoryInfo(folder)
+            Dim fs_infos() As FileInfo = dir_info.GetFiles("*.NFO", IO.SearchOption.TopDirectoryOnly)
+            For Each fs_info As FileInfo In fs_infos
+                Application.DoEvents()
+                If Path.GetFileName(fs_info.FullName.ToLower) <> "tvshow.nfo" And fs_info.ToString.Substring(0, 2) <> "._" Then
+                    Dim EpNfoPath As String = fs_info.FullName
+                    If ep_NfoValidate(EpNfoPath) Then
+                        Dim multiepisodelist As New List(Of TvEpisode)
+                        Dim need2resave As Boolean = False
+                        multiepisodelist = WorkingWithNfoFiles.ep_NfoLoad(EpNfoPath)
+                        For Each Ep In multiepisodelist
+                            If Ep.ShowId.Value <> PossibleTVdb Then need2resave = True
+                            Ep.ShowObj = NewShow
+                            Dim missingNfoPath As String = missingeppath & PossibleTVdb & "." & Ep.Season.Value & "." & Ep.Episode.Value & ".nfo"
+                            If File.Exists(missingNfoPath) Then Utilities.SafeDeleteFile(missingNfoPath)
+                            episodelist.Add(Ep.Cachedata)
+                        Next
+                        If need2resave Then WorkingWithNfoFiles.ep_NfoSave(multiepisodelist, EpNfoPath)    'If new ShowID stored, resave episode nfo.
+                    End If
+                End If
+            Next fs_info
+        Next
+        Return episodelist
+    End Function
+
+    ''' <summary>
+    ''' Valididate if episode nfo file is valid XBMC/Kodi nfo
+    ''' </summary>
+    ''' <param name="nfopath"></param>
+    ''' <returns>True if XBMC/Kodi compliant nfo</returns>
+    Function ep_NfoValidate(ByVal nfopath As String) As Boolean
+        ep_NfoValidate = True
+		If File.Exists(nfopath) Then
+			Dim tvshow As New XmlDocument
+			Try
+                Using tmpstrm As IO.StreamReader = File.OpenText(nfopath)
+                    tvshow.Load(tmpstrm)
+                End Using
+				
+			Catch ex As Exception
+				If ex.Message.ToLower.Contains("multiple root elements") Then
+					ep_NfoValidate = chkxbmcmultinfo(nfopath)
+				Else
+					ep_NfoValidate = False
+				End If
+			End Try
+			If ep_NfoValidate = True Then
+				Try
+					Dim tempstring As String
+					Using filechck As IO.StreamReader = File.OpenText(nfopath)
+					    tempstring = filechck.ReadToEnd.ToLower
+					End Using
+					If tempstring = Nothing Then ep_NfoValidate = False
+					Try
+						Dim seasonno As String = tempstring.Substring(tempstring.IndexOf("<season>") + 8, tempstring.IndexOf("</season>") - tempstring.IndexOf("<season>") - 8)
+						If Not IsNumeric(seasonno) Then ep_NfoValidate = False
+					Catch ex As Exception
+						ep_NfoValidate = False
+					End Try
+					Try
+						Dim episodeno As String = tempstring.Substring(tempstring.IndexOf("<episode>") + 9, tempstring.IndexOf("</episode>") - tempstring.IndexOf("<episode>") - 9)
+						If Not IsNumeric(episodeno) Then ep_NfoValidate = False
+					Catch ex As Exception
+						ep_NfoValidate = False
+					End Try
+				Catch ex As Exception
+				End Try
+			End If
+			Return ep_NfoValidate
+		End If
+		Return False
+	End Function
+
+    ''' <summary>
+    ''' Check if nfo file is XBMC/Kodi multiepisode nfo and convert to MediaCompanion format.
+    ''' </summary>
+    ''' <param name="xmlpath">nfo full path and filename</param>
+    ''' <returns>True if resaved nfo is Valid XBMC/Kodi nfo</returns>
+    Function chkxbmcmultinfo(ByVal xmlpath As String) As Boolean
+		Try
+			Dim testxml() As String = File.ReadAllLines(xmlpath)
+			Dim first As Boolean = True
+			Dim finalxml As String = ""
+			For Each line In testxml
+				If line.Contains("<episodedetails>") AndAlso first Then finalxml &= "<multiepisodenfo>"
+				finalxml &= line
+				If line.Contains("</episodedetails>") Then first = False
+			Next
+			finalxml &= "</multiepisodenfo>"
+			Dim Finaldoc As New XmlDocument
+			Finaldoc.LoadXml(finalxml)
+			Finaldoc.Save(xmlpath)
+			Return ep_NfoValidate(xmlpath)
+		Catch
+			Return False
+		End Try
+		Return False
+	End Function
 
     Function TvGetArtwork(ByVal shFanart As Boolean, ByVal shPosters As Boolean, ByVal shSeason As Boolean, ByVal shXtraFanart As Boolean, Optional ByVal force As Boolean = True) As Boolean
         Dim success As Boolean = False
