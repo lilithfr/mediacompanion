@@ -1,4 +1,5 @@
 ﻿Imports System.Linq
+Imports Media_Companion
 Imports System.Collections.Generic
 'Imports System.IO
 Imports Alphaleonis.Win32.Filesystem
@@ -39,6 +40,7 @@ Public Class TVDBScraper2
 
     Private _PossibleShowList           As List(Of TheTvDB.TvdbSeries)
     Private _fetched                    As Boolean = False
+    Private _episodes                   As List(Of TheTvDB.TvdbEpisode) 'TheTvDB.TvdbSeriesEpisodesResult
 
     #End Region
 
@@ -105,11 +107,12 @@ Public Class TVDBScraper2
     Public Property ValidSeason         As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeasonWide     As New List(Of TheTvDB.TvdbBanner)
     Public Property ValidSeries         As New List(Of TheTvDB.TvdbBanner)
-    Public Property MaxGenres           As Integer = Media_Companion.Pref.maxmoviegenre
+    Public Property MaxGenres           As Integer  = Media_Companion.Pref.maxmoviegenre
+    Public Property AllEpDetails        As Boolean  = False
 
     #End Region 'Read-write properties
 
-    #Region "Read-only Properties"
+#Region "Read-only Properties"
     
     Public Readonly Property SeriesNotFound As Boolean
         Get
@@ -283,19 +286,7 @@ Public Class TVDBScraper2
             Return _mcseries
         End Get
     End Property
-
-    Public ReadOnly Property FirstOriginalPosterUrl As String
-        Get
-            Fetch
-
-            If ValidPosters.Count=0 then
-                Return ""
-            End If
-
-            Return ""
-        End Get 
-    End Property
-
+    
     Public ReadOnly Property HdPath As String
         Get
             Return _config_images_base_url
@@ -314,127 +305,25 @@ Public Class TVDBScraper2
         End Get 
     End Property
     
-    'Public ReadOnly Property Genrelist As List(Of String)
+    'Public ReadOnly Property Episodes As List(Of TvEpisode)
     '    Get
     '        Fetch
-    '        'FetchGenreList
-    '        Dim genres As New List(Of String)
-    '        For Each g In _genrelist.genres 
-    '            genres.Add(g.ToString)
-    '        Next
-    '        Return genres
+    '        Return ConvertEpisodelist(_api.GetSeriesEpisodes(TvdbId, Nothing))
     '    End Get
     'End Property
 
-    'Public ReadOnly Property Certification As String
-    '    Get
-    '        Fetch
-    '        'FetchReleases
-    '        Try
-    '            If IsNothing(_releases.countries) Then Return ""
-    '            For Each country In _releases.countries
-    '                If country.iso_3166_1.ToLower = LookupLanguages.Item(0) then
-    '                    Return country.certification
-    '                End If
-    '            Next
-
-    '            For Each country In _releases.countries
-    '                If country.iso_3166_1.ToLower = Pref.XbmcTmdbScraperCertCountry Then
-    '                    Return country.certification
-    '                End If
-    '            Next
-
-    '            For Each country In _releases.countries
-    '                If country.certification <> "" then
-    '                    Return country.certification
-    '                End If
-    '            Next
-    '            Return ""
-    '        Catch
-    '            Return ""
-    '        End Try
-    '    End Get 
-    'End Property
-
-    'Function GetGenreList As Boolean
-    '    _genrelist = _api.GetGenreList(LookupLanguages.Item(0))
-    '    Return Not IsNothing(_genrelist)
-    'End Function
-
-    'Private Sub FetchGenreList
-    '    If IsNothing(_genrelist) Then
-    '        If Not (New RetryHandler(AddressOf GetGenreList)).Execute Then Throw New Exception(TVDB_EXC_MSG)
-    '    End If
-    'End Sub
+    Public ReadOnly Property Episodes As List(Of TheTvDB.TvdbEpisode)
+        Get
+            FetchEpisodes
+            Return _episodes
+        End Get
+    End Property
     
-    'Function GetMovieReleases As Boolean
-    '    _releases = _api.GetMovieReleases(_movie.id)
-    '    Return Not IsNothing(_releases)
-    'End Function
+#End Region  'Read-only properties
 
-    'Private Sub FetchReleases
-    '    If IsNothing(_releases) then
-    '        If Not (new RetryHandler(AddressOf GetMovieReleases)).Execute Then Throw New Exception(TVDB_EXC_MSG)
-    '    End If
-    'End Sub
-    
-    'Function GetMovieAlternateTitles As Boolean
-    '    _alternateTitles = _api.GetMovieAlternateTitles(Movie.id,LookupLanguages.Item(0))
-    '    Return Not IsNothing(_alternateTitles)
-    'End Function
-
-    'Public ReadOnly Property AlternateTitles As List(Of String)
-    '    Get
-    '        Fetch
-    '        If IsNothing(_alternateTitles) then 
-    '            If Not (new RetryHandler(AddressOf GetMovieAlternateTitles)).Execute Then Throw New Exception(TVDB_EXC_MSG)
-    '        End If
-
-    '        _mcAlternateTitles.Clear
-
-    '        For Each item In _alternateTitles.titles
-    '            _mcAlternateTitles.Add(item.title)
-    '        Next
-
-    '        Return _mcAlternateTitles
-    '    End Get 
-    'End Property
-    
-    'Public ReadOnly Property MovieImages As WatTmdb.V3.TmdbMovieImages
-    '    Get
-    '        Fetch
-    '        Return _movieImages
-    '    End Get 
-    'End Property
-    
-    'Public ReadOnly Property Thumbs As List(Of String)
-    '    Get
-    '        Fetch
-    '        Return _thumbs
-    '    End Get 
-    'End Property
-
-    'Public ReadOnly Property Trailers As WatTmdb.V3.TmdbMovieTrailers
-    '    Get
-    '        Fetch
-    '        Return _trailers
-    '    End Get 
-    'End Property
-
-    'Public ReadOnly Property Keywords As List(Of String)
-    '    Get
-    '        Fetch
-    '        Return _keywords 
-    '    End Get
-    'End Property
-
-    #End Region  'Read-only properties
-
-    Sub new( Optional __tvdb As String=Nothing, Optional _lang As String = "en")
-        '_api         = New TheTvDB.TvdbAPI(Key)
-        'AssignConfig_images_base_url
-        LookupLang    = _lang
-        TvdbId        = __tvdb
+    Sub New( Optional __tvdb As String=Nothing, Optional _lang As String = "en")
+        LookupLang      = _lang
+        TvdbId          = __tvdb
     End Sub
     
     Function GetSeriesCast As Boolean
@@ -451,25 +340,22 @@ Public Class TVDBScraper2
     Function GetSeries As Boolean
         If Title <> "" Then
             Return GetSeriesByTitle
+        ElseIf TvdbId <> "" Then
+            Return GetSeriesByTitle
         End If
         Return False
     End Function
 
     Function GetSeriesByTitle As Boolean
-        'Dim reply As Object = Nothing
-        '_searchresults  = _api.GetSeries(Title, reply)
-        'If IsNothing(_searchresults) Then
-        '    _notfound = True
-        '    Return True
-        'End If
-
-        'Dim tmpseries As TheTvDB.TvdbSeries = FindBestPossibleShow(_searchresults.series.ToList, Title, LookupLang)
-        '_tvdbId         = tmpseries.Identity
-
         Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing, LookupLang)
         tvresults.Series.LoadDetails(_api, LookupLang)
+        'tvresults.Series.LoadEpisodes(_api, LookupLang)
         _series = tvresults.Series
         Return True
+    End Function
+
+    Function GetSeriesById As Boolean
+        Return False
     End Function
 
     Function GetSeriesImages As Boolean
@@ -505,7 +391,6 @@ Public Class TVDBScraper2
                 AssignMcSeason()
                 AssignMcSeasonWide()
                 AssingMcSeries()
-                'AssignKeywords()
             End If
         Catch ex As Exception
             Throw New Exception (ex.Message)
@@ -513,6 +398,14 @@ Public Class TVDBScraper2
 
     End Sub
     
+    Function ConvertEpisodelist(ByVal listofepisodes As TheTvDB.TvdbSeriesEpisodesResult) As List(Of TvEpisode)
+        Dim Episodelist As New List(Of TvEpisode)
+        For each result As TheTvDB.TvdbEpisode in listofepisodes.Episodes
+            Dim something As String = Nothing
+        Next
+
+        Return Episodelist
+    End Function
 #Region "Series Images"
 
     Private Sub AssignValidFanart
@@ -618,6 +511,23 @@ Public Class TVDBScraper2
     End Function
     
 #End Region
+    
+    Private Sub FetchEpisodes
+        If IsNothing(_episodes) Then
+            If Not (new RetryHandler(AddressOf GetSeriesEpisodes)).Execute Then Throw New Exception(TVDB_EXC_MSG)
+        End If
+    End Sub
+
+    Private Function GetSeriesEpisodes() As Boolean
+        _episodes = _api.GetSeriesAllEpisodes(TvdbId, LookupLang, Nothing, _api, AllEpDetails).ToList
+        Return Not IsNothing(_episodes)
+    End Function
+
+    Public Function LoadEpisodeDetails(ByVal Id As String, ByVal Lang As String) As TheTvDB.TvdbEpisode
+        Dim _ep As TheTvDB.TvdbEpisodeInfoResult = _api.GetEpisodeDetails(Id, Nothing, Lang)
+        _ep.Episode.LoadDetails(_api, lang)
+        Return _ep.Episode
+    End Function
 
     Private Sub GetPossibleShows()
         Dim reply As Object = Nothing
@@ -628,11 +538,10 @@ Public Class TVDBScraper2
         Next
 
     End Sub
+
     Public Function FindBestPossibleShow(ByVal ThisList As List(Of TheTvDB.TvdbSeries), ByVal FolderName As String, ByVal PreferedLang As String) As TheTvDB.TvdbSeries
         FolderName = FolderName.Replace(".", " ") ' we remove periods to find the title, we should also do it here to compare
         For Each Item In ThisList
-            'Item.Similarity = Item.SeriesName.Value.CompareString(FolderName)
-            'Item.Similarity = Tvdb.CompareString(Item.SeriesName.Value, FolderName)
             Item.Similarity = CompareString(Item.SeriesName, FolderName)
         Next
 
@@ -652,79 +561,62 @@ Public Class TVDBScraper2
         Dim intLength2
         Dim x
         Dim dblResult
-
-
         If UCase(String1) = UCase(String2) Then
             dblResult = 1
         Else
             intLength1 = Len(String1)
             intLength2 = Len(String2)
-
-
             If intLength1 = 0 Or intLength2 = 0 Then
                 dblResult = 0
             Else
                 ReDim arrLetters1(intLength1 - 1)
                 ReDim arrLetters2(intLength2 - 1)
-
                 For x = LBound(arrLetters1) To UBound(arrLetters1)
                     arrLetters1(x) = Asc(UCase(Mid(String1, x + 1, 1)))
                 Next
-
                 For x = LBound(arrLetters2) To UBound(arrLetters2)
                     arrLetters2(x) = Asc(UCase(Mid(String2, x + 1, 1)))
                 Next
-
                 dblResult = SubSim(1, intLength1, 1, intLength2) / (intLength1 + intLength2) * 2
             End If
         End If
-
         CompareString = dblResult
     End Function
 
     Private Function SubSim(intStart1, intEnd1, intStart2, intEnd2) As Double
-            Dim intMax As Integer = Integer.MinValue
+        Dim intMax As Integer = Integer.MinValue
+        Try
+            Dim y
+            Dim z
+            Dim ns1 As Integer
+            Dim ns2 As Integer
+            Dim i
 
-            Try
-                Dim y
-                Dim z
-                Dim ns1 As Integer
-                Dim ns2 As Integer
-                Dim i
+            If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then Return 0
 
-                If (intStart1 > intEnd1) Or (intStart2 > intEnd2) Or (intStart1 <= 0) Or (intStart2 <= 0) Then
-                    Return 0
-                End If
-
-                For y = intStart1 To intEnd1
-                    For z = intStart1 To intEnd2
-                        i = 0
-
-                        Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
-                            i = i + 1
-
-                            If i > intMax Then
-                                ns1 = y
-                                ns2 = z
-                                intMax = i
-                            End If
-
-                            If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then
-                                Exit Do
-                            End If
-                        Loop
-                    Next
+            For y = intStart1 To intEnd1
+                For z = intStart1 To intEnd2
+                    i = 0
+                    Do Until arrLetters1(y - 1 + i) <> arrLetters2(z - 1 + i)
+                        i = i + 1
+                        If i > intMax Then
+                            ns1 = y
+                            ns2 = z
+                            intMax = i
+                        End If
+                        If ((y + i) > intEnd1) Or ((z + i) > intEnd2) Then Exit Do
+                    Loop
                 Next
+            Next
+            intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
+            intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
+        Catch ex As OverflowException
+            Return Nothing
+        Catch ex As StackOverflowException
+            Return Nothing
+        End Try
 
-                intMax = intMax + SubSim(ns1 + intMax, intEnd1, ns2 + intMax, intEnd2)
-                intMax = intMax + SubSim(intStart1, ns1 - 1, intStart2, ns2 - 1)
-            Catch ex As OverflowException
-                Return Nothing
-            Catch ex As StackOverflowException
-                Return Nothing
-            End Try
-
-            Return intMax
-        End Function
+        Return intMax
+    End Function
     
 End Class

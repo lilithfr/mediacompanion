@@ -980,9 +980,7 @@ Partial Public Class Form1
         
         If Not gotseriesxml then
             xmlfile = Utilities.DownloadTextFiles(episodeurl)
-            If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
-                xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-            End If
+            If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
         Else
             SeriesInfo.Load(xmlfile2)
             Dim gotEpxml As Boolean = False
@@ -1021,9 +1019,7 @@ Partial Public Class Form1
             ' Finally, if not in seriesxml file, go old-school
             If Not gotEpxml Then
                 xmlfile = Utilities.DownloadTextFiles(episodeurl)
-                If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
-                    xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-                End If
+                If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
             End If
         End If
         
@@ -1819,37 +1815,53 @@ Partial Public Class Form1
     End Sub
 
     Private Sub BckWrkTv_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles BckWrkTv.ProgressChanged
-        
-        If e.ProgressPercentage = 9999 Then
-            Dim NewTvShow As TvShow = e.UserState
-            Cache.TvCache.Add(NewTvShow)
-            TvTreeview.Nodes.Add(NewTvShow.ShowNode)
-            NewTvShow.UpdateTreenode()
+        Try
+            If e.ProgressPercentage = 9999 Then
+                Dim NewTvShow As TvShow = e.UserState
+                Cache.TvCache.Add(NewTvShow)
+                TvTreeview.Nodes.Add(NewTvShow.ShowNode)
+                NewTvShow.UpdateTreenode()
 
-            TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
-            TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
-            Exit Sub
-        End If
-		Dim oProgress As Progress = CType(e.UserState, Progress)
-		If e.ProgressPercentage <> -1 Then
-		    tsMultiMovieProgressBar.Value = e.ProgressPercentage
-            If IsNothing(oProgress) Then Exit Sub
-		End If
+                TextBox_TotTVShowCount.Text = Cache.TvCache.Shows.Count
+                TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+                Exit Sub
+            End If
+            If e.ProgressPercentage = 999 Then
+                Dim TempEpisode As TvEpisode = CType(e.UserState, TvEpisode)
+                TempEpisode.ShowObj.AddEpisode(TempEpisode)
+			    TempEpisode.SeasonObj.UpdateTreenode()
+			    TempEpisode.UpdateTreenode(True)
+			    'This bit updates the Epsiode Count on the fly when the progress is updated. It has to be done here to avoid thread issues. (GUI wouldn't update properly) 
+			    TextBox_TotEpisodeCount.Text = Cache.TvCache.Episodes.Count
+                Exit Sub
+            End If
 
-		If oProgress.Command = Progress.Commands.Append Then
-			Dim msgtxt As String = tsStatusLabel.Text & oProgress.Message
-			If msgtxt.Length > 144 AndAlso oProgress.Message <> "-OK" Then
-				msgtxt = tsStatusLabel.Text.Substring(0, (tsStatusLabel.Text.ToLower.IndexOf("actors-ok") + 9))
-				msgtxt &= oProgress.Message
-			End If
-			tsStatusLabel.Text = msgtxt
-		Else
-			tsStatusLabel.Text = oProgress.Message
-		End If
+		    Dim oProgress As Progress = CType(e.UserState, Progress)
+		    If e.ProgressPercentage <> -1 Then
+		        tsMultiMovieProgressBar.Value = e.ProgressPercentage
+                If IsNothing(oProgress) Then Exit Sub
+		    End If
 
-		If oProgress.Message = Movie.MSG_ERROR Then ScraperErrorDetected = True
+            If oProgress.Message <> Nothing Then
+		        If oProgress.Command = Progress.Commands.Append Then
+			        Dim msgtxt As String = tsStatusLabel.Text & oProgress.Message
+			        If msgtxt.Length > 144 AndAlso oProgress.Message <> "-OK" Then
+				        msgtxt = tsStatusLabel.Text.Substring(0, (tsStatusLabel.Text.ToLower.IndexOf("actors-ok") + 9))
+				        msgtxt &= oProgress.Message
+			        End If
+			        tsStatusLabel.Text = msgtxt
+		        Else
+			        tsStatusLabel.Text = oProgress.Message
+		        End If
+            End If
 
-		If Not IsNothing(oProgress.Log) Then scraperLog += oProgress.Log
+		    If oProgress.Message = Movie.MSG_ERROR Then ScraperErrorDetected = True
+
+		    If Not IsNothing(oProgress.Log) Then scraperLog += oProgress.Log
+
+        Catch ex As Exception
+			ExceptionHandler.LogError(ex)
+		End Try
     End Sub
 
     Private Sub BckWrkTv_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BckWrkTv.RunWorkerCompleted
@@ -1874,11 +1886,11 @@ Partial Public Class Form1
     Function GetTV_MultiMovieProgressBar_Visiblity(action As String)
 
 		Select Case action
-            Case "TVSeriesSearchForNew"         : Return newTvFolders.Count > 1
+            Case "TVSeriesSearchForNew"         : Return False 'newTvFolders.Count > 1
             Case "TVSeriesChange"               : Return False
             Case "TVSeriesScrapeDropped"        : Return droppedItems.Count > 1
             Case "TVSeriesRescrape"             : Return False
-            Case "TvEpisodesSearchforNew"       : Return True
+            Case "TvEpisodesSearchforNew"       : Return False
             Case "TVEpisodeRescrape"            : Return False
 			Case "TVBatchRescrape"              : Return False '_rescrapeList.FullPathAndFilenames.Count > 1               ' filteredList.Count > 1
             'Case "RescrapeAll"                 : Return _rescrapeList.FullPathAndFilenames.Count > 1
@@ -1899,12 +1911,12 @@ Partial Public Class Form1
         Dim x As String = newTvFolders.Count.ToString
         If x = 0 Then Exit Sub
         Dim ismulti As Boolean = x > 1
-        Dim PercentDone As Integer = 0
+        'Dim PercentDone As Integer = 0
         Dim i As Integer = 0
         oTV.ReportProgress(, "Found Folders:" & vbCrLf & String.Join(vbcrlf, newTvFolders.ToArray()) & vbCrLf & vbcrlf)
         For each tvseries In newTvFolders
             i += 1
-            If ismulti Then oTV.PercentDone = CalcPercentDone(i, x)
+            'If ismulti Then oTV.PercentDone = CalcPercentDone(i, x)
             oTV.ProgressStart = String.Format("Scraping Show {0} of {1} : ", i.ToString, x)
             Dim args As New TvdbArgs("", tvseries, False, Pref.TvdbLanguageCode)
             TVDoScrape(args)
@@ -1926,7 +1938,15 @@ Partial Public Class Form1
     End Sub
 
     Public Sub TvEpisodesSearchforNew()
-
+        Dim ShowList As New List(Of TvShow)
+        For Each item In Cache.TvCache.Shows
+			If (item.NfoFilePath.ToLower.IndexOf("tvshow.nfo") <> -1) And ((item.State = Media_Companion.ShowState.Open) Or TVSearchALL = True) Then
+				ShowList.Add(item)
+			End If
+		Next
+        Dim args As New TvdbArgs("", "", True, Pref.TvdbLanguageCode)
+        oTV.ListOfShows = ShowList
+        TVDoScrape(args)
     End Sub
     
     Public Sub TVEpisodeRescrape()
@@ -1941,7 +1961,6 @@ Partial Public Class Form1
         oTV.Scraped = False
         oTV.Scrape(args)
     End Sub
-
 
     Sub RunBackgroundTVScrape(action As String)
         If Not BckWrkTv.IsBusy Then
@@ -2625,7 +2644,7 @@ Partial Public Class Form1
             Dim ShowsScanned As Integer = 0
             Dim FoldersScanned As Integer = 0
             Dim ShowsLocked As Integer = 0
-            Dim dirpath As String = String.Empty
+            'Dim dirpath As String = String.Empty
             Dim moviepattern As String = String.Empty
             If bckgroundscanepisodes.CancellationPending Then
                 Pref.tvScraperLog &= vbCrLf & "!!! Operation cancelled by user"
@@ -2684,7 +2703,7 @@ Partial Public Class Form1
                 progresstext = String.Concat("Stage 2 of 3 : Found " & newEpisodeList.Count & " : Searching for New Episodes in Folders " & g + 1 & " of " & newtvfolders.Count & " - '" & newtvfolders(g) & "'")
                 bckgroundscanepisodes.ReportProgress(progress, progresstext)
                 For Each f In Utilities.VideoExtensions
-                    dirpath = newtvfolders(g)
+                    Dim dirpath As String = newtvfolders(g)
                     Dim dir_info As New DirectoryInfo(dirpath)
                     tv_NewFind(dirpath, f)
                 Next f
@@ -3179,35 +3198,6 @@ Partial Public Class Form1
                                     End If
                                     stage = "22b5f"
                                     GetEpHDTags(singleepisode, progress, progresstext)
-                                    'If Pref.enabletvhdtags = True Then
-                                    '    progresstext &= " : HD Tags..."
-                                    '    bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                    '    stage = "22b5f1"
-                                    '    Dim fileStreamDetails As StreamDetails = Pref.Get_HdTags(Utilities.GetFileName(singleepisode.VideoFilePath))
-                                    '    stage = "22b5f2"
-                                    '    If Not IsNothing(fileStreamDetails) Then
-                                    '        singleepisode.StreamDetails.Video = fileStreamDetails.Video
-                                    '        stage = "22b5f3"
-                                    '        For Each audioStream In fileStreamDetails.Audio
-                                    '            singleepisode.StreamDetails.Audio.Add(audioStream)
-                                    '        Next
-                                    '        For Each substrm In fileStreamDetails.Subtitles
-                                    '            singleepisode.StreamDetails.Subtitles.Add(substrm)
-                                    '        Next
-                                    '        stage = "22b5f4"
-                                    '        If Not String.IsNullOrEmpty(singleepisode.StreamDetails.Video.DurationInSeconds.Value) Then
-                                    '            tempstring = singleepisode.StreamDetails.Video.DurationInSeconds.Value
-                                    '            If Pref.intruntime Then
-                                    '                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString
-                                    '            Else
-                                    '                singleepisode.Runtime.Value = Math.Round(tempstring / 60).ToString & " min"
-                                    '            End If
-                                    '            progresstext &= "OK."
-                                    '            bckgroundscanepisodes.ReportProgress(progress, progresstext)
-                                    '        End If
-                                    '        stage = "22b5f5"
-                                    '    End If
-                                    'End If
                                     stage = "22b5g"
                                 End If
                             Else
@@ -5640,4 +5630,18 @@ Partial Public Class Form1
         Return thisarray
     End Function
     
+    Private Sub TestTvTMDB()
+        Dim tvtmdb As New TVTMDb
+        tvtmdb.TmdbId = "1622"
+        'tvtmdb.TvdbId = "74205"
+        'tvtmdb.ImdbId = "tt0185906"
+        If Not IsNothing(tvtmdb.TvShow) Then
+            Dim actors As List(Of str_MovieActors) = tvtmdb.cast
+            Dim Something As String = Nothing
+            If Not IsNothing(tvtmdb.Certification) Then
+                Dim somethingelse As String = Nothing
+            End If
+        End If
+    End Sub
+
 End Class

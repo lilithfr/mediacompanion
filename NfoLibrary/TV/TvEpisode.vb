@@ -265,6 +265,30 @@ Public Class TvEpisode
         Me.UpdateTreenode()
     End Sub
 
+    Public Sub AbsorbTvdbEpisode(ByRef TvdbEpisode As TheTvDB.TvdbEpisode)
+        Me.TvdbId.Value         = TvdbEpisode.Identity
+        Me.ImdbId.Value         = TvdbEpisode.ImdbId
+        Me.TmdbId.Value         = ""
+        Me.Title.Value          = TvdbEpisode.EpisodeName
+        Me.UniqueId.Value       = TvdbEpisode.Identity
+        Me.Rating.Value         = TvdbEpisode.Rating
+        'Me.Votes.Value          = TvdbEpisode.Votes
+        Me.Plot.Value           = TvdbEpisode.Overview
+        Me.Director.Value       = cleanvalue(TvdbEpisode.Directors)
+        Me.Credits.Value        = cleanvalue(TvdbEpisode.WritersDisplayString)
+        Me.MpaaCert.Value       = TvdbEpisode.ProductionCode
+        Me.Season.Value         = TvdbEpisode.SeasonNumber
+        Me.Episode.Value        = TvdbEpisode.EpisodeNumber
+        'Me.Thumbnail.Url        = TvdbEpisode.ScreenShotUrl
+        'Me.Source.Value         = TvdbEpisode.Source.Value
+        Me.DisplayEpisode.Value = TvdbEpisode.AirsBeforeEpisode
+        Me.DisplaySeason.Value  = TvdbEpisode.AirsBeforeSeason
+        Me.UserRating.Value     = "0"
+        Me.DvdEpNumber.Value    = TvdbEpisode.DVDEpisodeNumber
+        Aired.Value             = TvdbEpisode.FirstAired ' Phyonics - Fix for issue #208
+        Me.UpdateTreenode()
+    End Sub
+
     Public Overrides Function ToString() As String
         Return Me.Title.Value
     End Function

@@ -771,7 +771,7 @@ Public Class Form1
 			AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
 			AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
 
-			'BckWrkXbmcController.RunWorkerAsync(Me)
+			BckWrkXbmcController.RunWorkerAsync(Me)
 
             If Pref.TvEnableAutoScrape AndAlso Not TvAutoScrapeTimer.Enabled Then
                 TvAutoScrapeTimer.Start()
@@ -958,13 +958,16 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        If e.KeyCode = Keys.F7 Then
-            tvtrial = True
-            CheckRootsForToolStripMenuItem.PerformClick()
-            'newTvFolders.Add("U:\zMedia\zTV2\Vikings")
-            'newTvFolders.Add("U:\zMedia\zTV2\KillJoys")
-            'RunBackgroundTVScrape("TVSeriesSearchForNew")
-        End If
+        'If e.KeyCode = Keys.F7 Then
+        '    tvtrial = True
+        '    CheckRootsForToolStripMenuItem.PerformClick()
+        'End If
+        'If e.KeyCode = Keys.F8 Then 
+        '    tvtrial = True
+        '    RunBackgroundTVScrape("TvEpisodesSearchforNew")
+        '    'doTestTvdb
+        'End If
+        
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -16374,12 +16377,15 @@ Public Class Form1
     End Function
     
     Public Sub doTestTvdb()
-        'newTvFolders.Add("U:\zMedia\zTV2\Vikings")
-        'Dim tvdb As New TheTvDB.TvdbAPI(Utilities.TVDBAPI, "en")
         Dim tvdb As New TVDBScraper2()
-        Dim languages As TheTvDB.TvdbLanguagesResult = tvdb.GetTvdbLanguages
-        Dim NewSeries As New TvShow
+        'Dim languages As TheTvDB.TvdbLanguagesResult = tvdb.GetTvdbLanguages
+        Dim episodes As New List(Of TheTvDB.TvdbEpisode)
         tvdb.LookupLang = Pref.TvdbLanguageCode
+        tvdb.TvdbId = "78874" '"281534" '"72546" 
+        tvdb.AllEpDetails = False
+        episodes = tvdb.Episodes
+        'Dim episode1 As TheTvdb.TvdbEpisode = tvdb.LoadEpisodeDetails(episodes(2).Identity, "en")
+        
         tvdb.Title = "Vikings"
        
     End Sub

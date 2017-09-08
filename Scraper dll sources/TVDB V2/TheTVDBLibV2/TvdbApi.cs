@@ -332,6 +332,10 @@ namespace TheTvDB
             return serializer.ReadObject(stream) as TvdbSeriesInfoResult;            
         }
 
+
+
+
+
         /// <summary>
         /// Get the first page of episodes for a series.
         /// </summary>
@@ -385,6 +389,77 @@ namespace TheTvDB
 
             return (TvdbSeriesEpisodesResult)getData(url, languageCode, new TvdbDelegates(asyncHandler, processString));
         }
+
+        /// <summary>
+        ///  Get all episodes for a series for a language code.
+        /// </summary>
+        /// <param name="identity">The identity of the series.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="completionHandler">The async completion handler. May be null.</param>
+        /// <param name="instance"></param>
+        /// <param name="alldetails">If True, populate all episode data</param>
+        /// <returns>The results object.</returns>
+        public Collection<TvdbEpisode> GetSeriesAllEpisodes(int identity, string languageCode, TvdbAsyncHandler completionHandler, TvdbAPI instance, bool alldetails = false)
+        {
+            Collection<TvdbEpisode> allepisodes = new Collection<TvdbEpisode>();
+            TvdbSeriesEpisodesResult episodesinfo;
+
+            if (languageCode == null)
+                episodesinfo = GetSeriesEpisodes(identity, null);
+            else
+                episodesinfo = GetSeriesEpisodes(identity, null, languageCode);
+
+            foreach (TvdbEpisode episode in episodesinfo.Episodes)
+            {
+                if (alldetails == true)
+                {
+                    episode.LoadDetails(instance, languageCode);
+                }
+                addEpisode(episode, allepisodes);
+            }
+
+            while (episodesinfo.PageLinks.NextPageNumber != -1)
+            {
+                if (languageCode == null)
+                    episodesinfo = GetSeriesEpisodes(identity, episodesinfo.PageLinks.NextPageNumber, null);
+                else
+                    episodesinfo = GetSeriesEpisodes(identity, episodesinfo.PageLinks.NextPageNumber, null, languageCode);
+
+                foreach (TvdbEpisode episode in episodesinfo.Episodes)
+                {
+                    if (alldetails == true)
+                    {
+                        episode.LoadDetails(instance, languageCode);
+                    }
+                    addEpisode(episode, allepisodes);
+                }
+            }
+            return allepisodes;
+        }
+
+        private void addEpisode(TvdbEpisode newEpisode, Collection<TvdbEpisode> episodes)
+        {
+            foreach (TvdbEpisode oldEpisode in episodes)
+            {
+                if (oldEpisode.SeasonNumber > newEpisode.SeasonNumber)
+                {
+                    episodes.Insert(episodes.IndexOf(oldEpisode), newEpisode);
+                    return;
+                }
+                else
+                {
+                    if (oldEpisode.EpisodeNumber > newEpisode.EpisodeNumber)
+                    {
+                        episodes.Insert(episodes.IndexOf(oldEpisode), newEpisode);
+                        return;
+                    }
+                }
+            }
+
+            episodes.Add(newEpisode);
+        }
+
+
 
         private object seriesEpisodesResponse(string responseString)
         {
