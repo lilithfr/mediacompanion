@@ -39,6 +39,7 @@ Public Class Form1
 	Public Dim WithEvents Bw            As BackgroundWorker = New BackgroundWorker
 	Public Dim WithEvents ImgBw         As BackgroundWorker = New BackgroundWorker
     Public Dim WithEvents BckWrkTv      As BackgroundWorker = New BackgroundWorker
+    Public Dim WithEvents bckWrkSeries  As BackgroundWorker = New BackgroundWorker
 	Property BWs                        As New List(Of BackgroundWorker)
 	Property NumActiveThreads           As Integer
 	Shared Public XbmcControllerQ       As PriorityQueue = New PriorityQueue
@@ -172,6 +173,7 @@ Public Class Form1
     Private MovAutoScrapeTimerTripped   As Boolean = False
 	Private MovieKeyPress               As String = ""
 	Public cropMode                     As String = "movieposter"
+    Public tvseriestoget                As New List(Of TvSeriesData)
 
 	Dim WithEvents bigPictureBox        As PictureBox
 	Dim WithEvents fanartBoxes          As PictureBox
@@ -271,6 +273,8 @@ Public Class Form1
 			BckWrkScnMovies.WorkerSupportsCancellation  = True
             BckWrkTv.WorkerReportsProgress              = True
             BckWrkTv.WorkerSupportsCancellation         = True
+            bckWrkSeries.WorkerReportsProgress          = True
+            bckWrkSeries.WorkerSupportsCancellation     = True
 			ImgBw.WorkerReportsProgress                 = True
 			ImgBw.WorkerSupportsCancellation            = True
 			oMovies.Bw                                  = BckWrkScnMovies
@@ -771,7 +775,7 @@ Public Class Form1
 			AddHandler BckWrkXbmcController.ProgressChanged, AddressOf BckWrkXbmcController_ReportProgress
 			AddHandler BckWrkXbmcController.DoWork, AddressOf BckWrkXbmcController_DoWork
 
-			BckWrkXbmcController.RunWorkerAsync(Me)
+			'BckWrkXbmcController.RunWorkerAsync(Me)
 
             If Pref.TvEnableAutoScrape AndAlso Not TvAutoScrapeTimer.Enabled Then
                 TvAutoScrapeTimer.Start()
@@ -958,16 +962,12 @@ Public Class Form1
 		If e.KeyCode = Keys.Escape Then bckgrndcancel()
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
-        'If e.KeyCode = Keys.F7 Then
-        '    tvtrial = True
-        '    CheckRootsForToolStripMenuItem.PerformClick()
-        'End If
-        'If e.KeyCode = Keys.F8 Then 
-        '    tvtrial = True
-        '    RunBackgroundTVScrape("TvEpisodesSearchforNew")
-        '    'doTestTvdb
-        'End If
-        
+        If e.KeyCode = Keys.F7 AndAlso TabLevel1.SelectedTab.Text = "TV Shows" Then CheckRootsForToolStripMenuItem.PerformClick()
+        If e.KeyCode = Keys.F8 AndAlso TabLevel1.SelectedTab.Text = "TV Shows" Then
+            tvtrial = True
+            RunBackgroundTVScrape("TvEpisodesSearchforNew")
+        End If
+        'If e.KeyCode = Keys.F9 Then doTestTvdb
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -16377,17 +16377,35 @@ Public Class Form1
     End Function
     
     Public Sub doTestTvdb()
-        Dim tvdb As New TVDBScraper2()
+        'tvseriestoget = New List(Of str_TVSeries)
+        tvseriestoget.Add(New TvSeriesData("281534", "en"))
+        tvseriestoget.Add(New TvSeriesData("72546", "en"))
+        Call GetSeriesData()
+
+        'Dim tvdb As New TVDBScraper2("281534", "en")
         'Dim languages As TheTvDB.TvdbLanguagesResult = tvdb.GetTvdbLanguages
-        Dim episodes As New List(Of TheTvDB.TvdbEpisode)
-        tvdb.LookupLang = Pref.TvdbLanguageCode
-        tvdb.TvdbId = "78874" '"281534" '"72546" 
-        tvdb.AllEpDetails = False
-        episodes = tvdb.Episodes
+        'Dim episodes As New List(Of TheTvDB.TvdbEpisode)
+        'Dim alldata As New TheTvDB.TvdbSeries
+        'alldata = tvdb.ReturnSeriesandEpisodes
+        'nfoFunction.SeriesXMLSave(alldata, "c:\Temp\Test.xml")
+        'Dim Series As New Tvdb.Series
+        'Series.AbsorbTvSeries(alldata)
+        'Dim episodes As New List(Of Tvdb.Episode)
+        'For each epi In alldata.Episodes
+        '    Dim episode As New Tvdb.Episode
+        '    episode.AbsorbEpisode(epi)
+        '    episodes.Add(episode)
+        'Next
+        'Dim doc As New XmlDocument
+        'Dim xmlProc As XmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+        ' tvdb.LookupLang = Pref.TvdbLanguageCode
+        ' tvdb.TvdbId = "78874" '"281534" '"72546" 
+        'tvdb.AllEpDetails = False
+        'episodes = tvdb.Episodes
         'Dim episode1 As TheTvdb.TvdbEpisode = tvdb.LoadEpisodeDetails(episodes(2).Identity, "en")
         
-        tvdb.Title = "Vikings"
-       
+        'tvdb.Title = "Vikings"
+        
     End Sub
 
 End Class

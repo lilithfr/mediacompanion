@@ -157,6 +157,12 @@ namespace TheTvDB
         public string ImdbID { get; set; }
 
         /// <summary>
+        /// Get or set series scraped language
+        /// </summary>
+        [DataMember(Name = "language")]
+        public string Language { get; set; }
+
+        /// <summary>
         /// Get or set the series name.
         /// </summary>
         [DataMember(Name = "zap2itId")]
@@ -248,7 +254,20 @@ namespace TheTvDB
         /// <summary>
         /// Get a comma separated string of genres.
         /// </summary>
-        public string GenresDisplayString { get { return TvdbUtils.CollectionToString(Genres); } }
+        public string GenresDisplayString
+        {
+            get
+            {
+                return TvdbUtils.CollectionToString(Genres);
+            }
+            set
+            {
+                Collection<string> collection = TvdbUtils.StringToCollection(value);
+                Genres.Clear();
+                foreach (string item in collection)
+                    Genres.Add(item.Trim());
+            }
+        }
 
         /// <summary>
         /// Get or set the collection of actors.
@@ -340,6 +359,7 @@ namespace TheTvDB
                 AirsTime = seriesInfo.Series.AirsTime;
                 ContentRating = seriesInfo.Series.ContentRating;
                 ImdbID = seriesInfo.Series.ImdbID;
+                Language = languageCode;
                 Zap2ItID = seriesInfo.Series.Zap2ItID;
                 AddedDate = seriesInfo.Series.AddedDate;
                 AddedBy = seriesInfo.Series.AddedBy;
@@ -363,7 +383,8 @@ namespace TheTvDB
         /// </summary>
         /// <param name="instance">The API instance.</param>
         /// <param name="languageCode">The language code.</param>
-        public void LoadEpisodes(TvdbAPI instance, string languageCode)
+        /// <param name="alldetails">True load complete episode details</param>
+        public void LoadEpisodes(TvdbAPI instance, string languageCode, bool alldetails = false)
         {
             if (episodesLoaded && languageCodeLoaded == languageCode)
                 return;
@@ -380,7 +401,13 @@ namespace TheTvDB
                     episodesInfo = instance.GetSeriesEpisodes(Identity, null, languageCode);
 
                 foreach (TvdbEpisode episode in episodesInfo.Episodes)
+                {
+                    if (alldetails == true)
+                    {
+                        episode.LoadDetails(instance, languageCode);
+                    }
                     addEpisode(episode, Episodes);
+                }
 
                 while (episodesInfo.PageLinks.NextPageNumber != -1)
                 {
@@ -390,7 +417,13 @@ namespace TheTvDB
                         episodesInfo = instance.GetSeriesEpisodes(Identity, episodesInfo.PageLinks.NextPageNumber, null, languageCode);
 
                     foreach (TvdbEpisode episode in episodesInfo.Episodes)
+                    {
+                        if (alldetails == true)
+                        {
+                            episode.LoadDetails(instance, languageCode);
+                        }
                         addEpisode(episode, Episodes);
+                    }
                 }
 
                 episodesLoaded = true;

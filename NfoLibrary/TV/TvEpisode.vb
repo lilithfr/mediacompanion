@@ -233,6 +233,16 @@ Public Class TvEpisode
         Me.UserRating.Value     = "0"
         Me.DvdEpNumber.Value    = TvdbEpisode.DvdEpisodeNumber.Value
         Aired.Value             = TvdbEpisode.FirstAired.Value ' Phyonics - Fix for issue #208
+        If TvdbEpisode.GuestStars.Value <> "" Then
+            Me.ListActors.Clear()
+            Dim guests() As String = TvdbEpisode.GuestStars.Value.Split("|")
+            For each guest In guests
+                If guest = "" Then Continue For
+                Dim newactor As New Actor
+                newactor.actorname = guest.trim
+                Me.ListActors.Add(newactor)
+            Next
+        End If
         Me.UpdateTreenode()
     End Sub
 
@@ -272,20 +282,28 @@ Public Class TvEpisode
         Me.Title.Value          = TvdbEpisode.EpisodeName
         Me.UniqueId.Value       = TvdbEpisode.Identity
         Me.Rating.Value         = TvdbEpisode.Rating
-        'Me.Votes.Value          = TvdbEpisode.Votes
+        Me.Votes.Value          = TvdbEpisode.Votes
         Me.Plot.Value           = TvdbEpisode.Overview
-        Me.Director.Value       = cleanvalue(TvdbEpisode.Directors)
+        Me.Director.Value       = cleanvalue(TvdbEpisode.DirectorsDisplayString)
         Me.Credits.Value        = cleanvalue(TvdbEpisode.WritersDisplayString)
         Me.MpaaCert.Value       = TvdbEpisode.ProductionCode
         Me.Season.Value         = TvdbEpisode.SeasonNumber
         Me.Episode.Value        = TvdbEpisode.EpisodeNumber
-        'Me.Thumbnail.Url        = TvdbEpisode.ScreenShotUrl
+        Me.Thumbnail.Url        = "http://www.thetvdb.com/banners/" & TvdbEpisode.Image
         'Me.Source.Value         = TvdbEpisode.Source.Value
+        Me.Aired.Value          = TvdbEpisode.FirstAired ' Phyonics - Fix for issue #208
         Me.DisplayEpisode.Value = TvdbEpisode.AirsBeforeEpisode
         Me.DisplaySeason.Value  = TvdbEpisode.AirsBeforeSeason
         Me.UserRating.Value     = "0"
         Me.DvdEpNumber.Value    = TvdbEpisode.DVDEpisodeNumber
-        Aired.Value             = TvdbEpisode.FirstAired ' Phyonics - Fix for issue #208
+        If TvdbEpisode.GuestStars.Count > 0 Then
+            Me.ListActors.Clear()
+            For each guest In TvdbEpisode.GuestStars
+                Dim newactor As New Actor
+                newactor.actorname = guest
+                Me.ListActors.Add(newactor)
+            Next
+        End If
         Me.UpdateTreenode()
     End Sub
 

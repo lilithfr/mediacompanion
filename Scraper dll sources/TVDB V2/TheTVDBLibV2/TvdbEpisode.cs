@@ -213,6 +213,12 @@ namespace TheTvDB
         public decimal Rating { get; set; }
 
         /// <summary>
+        /// Get or set the user votes
+        /// </summary>
+        [DataMember(Name = "siteRatingCount")]
+        public int Votes { get; set; }
+
+        /// <summary>
         /// Get the first air date. Returns null if not present or invalid.
         /// </summary>
         public DateTime? FirstAiredDate { get { return TvdbUtils.StringToDate(FirstAired); } }
@@ -230,12 +236,38 @@ namespace TheTvDB
         /// <summary>
         /// Get a comma separated string of guest stars.
         /// </summary>
-        public string GuestStarsDisplayString { get { return TvdbUtils.CollectionToString(GuestStars); } }
+        public string GuestStarsDisplayString
+        {
+            get
+            {
+                return TvdbUtils.CollectionToString(GuestStars);
+            }
+            set
+            {
+                Collection<string> collection = TvdbUtils.StringToCollection(value);
+                GuestStars.Clear();
+                foreach (string item in collection)
+                    GuestStars.Add(item.Trim());
+            }
+        }
 
         /// <summary>
         /// Get a comma separated string of writers.
         /// </summary>
-        public string WritersDisplayString { get { return TvdbUtils.CollectionToString(Writers); } }
+        public string WritersDisplayString
+        {
+            get
+            {
+                return TvdbUtils.CollectionToString(Writers);
+            }
+            set
+            {
+                Collection<string> collection = TvdbUtils.StringToCollection(value);
+                Writers.Clear();
+                foreach (string item in collection)
+                    Writers.Add(item.Trim());
+            }
+        }
 
         /// <summary>
         /// Get the collection of director names.
@@ -273,7 +305,20 @@ namespace TheTvDB
         /// <summary>
         /// Get a comma separated string of directors.
         /// </summary>
-        public string DirectorsDisplayString { get { return TvdbUtils.CollectionToString(DirectorsNames); } }
+        public string DirectorsDisplayString
+        {
+            get
+            {
+                return TvdbUtils.CollectionToString(DirectorsNames);
+            }
+            set
+            {
+                Collection<string> collection = TvdbUtils.StringToCollection(value);
+                DirectorsNames.Clear();
+                foreach (string item in collection)
+                    DirectorsNames.Add(item.Trim());
+            }
+        }
 
         /// <summary>
         /// Get or set the collection of actors.

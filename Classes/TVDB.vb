@@ -319,6 +319,10 @@ Public Class TVDBScraper2
         End Get
     End Property
     
+    Public Function GetEpisode(ByVal epidentity As Integer) As TheTvDB.TvdbEpisode
+        Dim _episode As TheTvDB.TvdbEpisode = _api.GetEpisodeDetails(epidentity, Nothing, LookupLang).Episode
+        Return _episode
+    End Function
 #End Region  'Read-only properties
 
     Sub New( Optional __tvdb As String=Nothing, Optional _lang As String = "en")
@@ -337,25 +341,49 @@ Public Class TVDBScraper2
         End If
     End Sub
     
-    Function GetSeries As Boolean
-        If Title <> "" Then
-            Return GetSeriesByTitle
-        ElseIf TvdbId <> "" Then
-            Return GetSeriesByTitle
-        End If
-        Return False
-    End Function
+    'Function GetSeries As Boolean
+    '    If Title <> "" Then
+    '        Return GetSeriesByTitle
+    '    ElseIf TvdbId <> "" Then
+    '        Return GetSeriesByTitle
+    '    End If
+    '    Return False
+    'End Function
 
-    Function GetSeriesByTitle As Boolean
+    ''' <summary>
+    ''' Get Series info by Series ID, and episode details if AllEpDetails = True
+    ''' </summary>
+    ''' <returns>_series as TvdbSeries</returns>
+    Function GetSeries As Boolean
         Dim tvresults As TheTvDB.TvdbSeriesInfoResult  = _api.GetSeriesDetails(_tvdbid, Nothing, LookupLang)
         tvresults.Series.LoadDetails(_api, LookupLang)
-        'tvresults.Series.LoadEpisodes(_api, LookupLang)
+        If AllEpDetails Then
+            tvresults.Series.LoadEpisodes(_api, LookupLang, AllEpDetails)
+        End If
         _series = tvresults.Series
-        Return True
+        Return Not IsNothing(_series)
     End Function
 
-    Function GetSeriesById As Boolean
-        Return False
+    ''' <summary>
+    ''' Return only the series info excluding artwork
+    ''' </summary>
+    ''' <returns>TheTvDB.TvdbSeries</returns>
+    Function GetSeriesById As TheTvDB.TvdbSeries
+        _series = New TheTvDB.TvdbSeries
+        If Not (new RetryHandler(AddressOf GetSeries)).Execute Then Throw New Exception(TVDB_EXC_MSG)
+        Return _series
+    End Function
+
+    ''' <summary>
+    ''' Return complete series details including complete episode details
+    ''' </summary>
+    ''' <returns>TheTvDB.TvdbSeries</returns>
+    Function ReturnSeriesandEpisodes As TheTvDB.TvdbSeries
+        _series = New TheTvDB.TvdbSeries
+        AllEpDetails = True
+        If Not (new RetryHandler(AddressOf GetSeries)).Execute Then Throw New Exception(TVDB_EXC_MSG)
+        AllEpDetails = False
+        Return _series
     End Function
 
     Function GetSeriesImages As Boolean

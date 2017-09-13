@@ -1,4 +1,5 @@
 ﻿Imports ProtoXML
+Imports TheTvDB
 Namespace Tvdb
     Public Class Episode
         Inherits ProtoPropertyGroup
@@ -6,6 +7,8 @@ Namespace Tvdb
         '<id>332179</id>
         Public Property Id As New ProtoProperty(Me, "id")
         '<DVD_chapter></DVD_chapter>
+        Public Property CombinedEpisodeNumber As New ProtoProperty(Me, "Combined_episodenumber")
+        Public Property CombinedSeason As New ProtoProperty(Me, "Combined_season")
         Public Property DvdChapter As New ProtoProperty(Me, "DVD_chapter")
         '<DVD_discid></DVD_discid>
         Public Property DvdDiscId As New ProtoProperty(Me, "DVD_discid")
@@ -15,8 +18,6 @@ Namespace Tvdb
         Public Property DvdSeason As New ProtoProperty(Me, "DVD_season")
         '<Director>|Joseph McGinty Nichol|</Director>
         Public Property Director As New ProtoProperty(Me, "Director")
-        '<Credits>Bob Geldof</Credits>
-        Public Property Credits As New ProtoProperty(Me, "Credits")
         '<EpisodeName>Chuck Versus the World</EpisodeName>
         Public Property EpisodeName As New ProtoProperty(Me, "EpisodeName")
         '<EpisodeNumber>1</EpisodeNumber>
@@ -25,6 +26,8 @@ Namespace Tvdb
         Public Property FirstAired As New ProtoProperty(Me, "FirstAired")
         '<GuestStars>|Julia Ling|Vik Sahay|Mieko Hillman|</GuestStars>
         Public Property GuestStars As New ProtoProperty(Me, "GuestStars")
+        '<Credits>Bob Geldof</Credits>
+        Public Property Credits As New ProtoProperty(Me, "Credits")
         '<IMDB_ID></IMDB_ID>
         Public Property ImdbId As New ProtoProperty(Me, "IMDB_ID")
         '<TMDB_ID></TMDB_ID>
@@ -66,7 +69,8 @@ Namespace Tvdb
 
         Public ReadOnly Property ScreenShotUrl As String
             Get
-                Return "http://thetvdb.com/banners/_cache/" & Me.ThumbNail.Value
+                If Me.ThumbNail.Value.Contains("http://") Then Return Me.ThumbNail.Value
+                Return "http://thetvdb.com/banners/" & Me.ThumbNail.Value
             End Get
         End Property
 
@@ -74,5 +78,39 @@ Namespace Tvdb
         Public Overrides Function CreateNew() As ProtoXML.IProtoXChild
             Return New Episode
         End Function
+
+        'Public Sub AbsorbEpisode(ByVal NewEpisode As TvdbEpisode)
+        '    Me.Id.Value                     = NewEpisode.Identity
+        '    Me.CombinedEpisodeNumber.Value  = NewEpisode.DVDEpisode
+        '    Me.CombinedSeason.Value         = NewEpisode.DVDSeason
+        '    Me.DvdChapter.Value             = NewEpisode.DVDChapter
+        '    Me.DvdDiscId.Value              = NewEpisode.DVDDiscID
+        '    Me.DvdEpisodeNumber.Value       = NewEpisode.DVDEpisodeNumber
+        '    Me.DvdSeason.Value              = NewEpisode.DVDSeasonNumber
+        '    Me.Director.Value               = NewEpisode.DirectorsDisplayString.Replace(", ","|")
+        '    Me.EpisodeName.Value            = NewEpisode.EpisodeName
+        '    Me.EpisodeNumber.Value          = NewEpisode.EpisodeNumber
+        '    Me.FirstAired.Value             = NewEpisode.FirstAired
+        '    Me.GuestStars.Value             = NewEpisode.GuestStarsDisplayString.Replace(", ","|")
+        '    Me.Credits.Value                = ""
+        '    Me.ImdbId.Value                 = NewEpisode.ImdbId
+        '    Me.TmdbId.Value                 = ""
+        '    Me.Language.Value               = NewEpisode.Language.ToString
+        '    Me.Overview.Value               = NewEpisode.Overview
+        '    Me.ProductionCode.Value         = NewEpisode.ProductionCode
+        '    Me.Rating.Value                 = NewEpisode.Rating
+        '    Me.Votes.Value                  = NewEpisode.Votes
+        '    Me.SeasonNumber.Value           = NewEpisode.SeasonNumber
+        '    Me.Writer.Value                 = NewEpisode.WritersDisplayString.Replace(", ","|")
+        '    Me.AbsoluteNumber.Value         = NewEpisode.AbsoluteNumber
+        '    Me.AirsAfterSeason.Value        = NewEpisode.AirsAfterSeason
+        '    Me.AirsBeforeEpsisode.Value     = NewEpisode.AirsBeforeEpisode
+        '    Me.AirsBeforeSeason.Value       = NewEpisode.AirsBeforeSeason
+        '    Me.ThumbNail.Value              = NewEpisode.Image
+        '    Me.LastUpdated.Value            = NewEpisode.LastUpdated
+        '    Me.SeasonId.Value               = ""
+        '    Me.SeriesId.Value               = NewEpisode.SeriesId
+        '    Me.Source.Value                 = ""
+        'End Sub
     End Class
 End Namespace

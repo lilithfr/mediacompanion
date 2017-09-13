@@ -227,13 +227,20 @@ Public Class TVDBScraper
         If Pref.TvdbActorScrape = 0 Or Pref.TvdbActorScrape = 3 Or NewShow.ImdbId.Value = Nothing Then
             NewShow.TvShowActorSource.Value = "tvdb"
             ReportProgress("TVDb Actors ", "Scraping actors from TVDb" & vbCrLf, msg_append)
-            TvGetActorTvdb()
+            If TvGetActorTvdb() Then
+                Reportprogress(MSG_OK, MSG_OK & vbCrLf, msg_append)
+            Else
+                Reportprogress("-failed ", "-failed" & vbCrLf, msg_append)
+            End If
         End If
         If (Pref.TvdbActorScrape = 1 Or Pref.TvdbActorScrape = 2) And NewShow.ImdbId.Value <> Nothing Then
             NewShow.TvShowActorSource.Value = "imdb"
             ReportProgress("IMDB Actors ", "Scraping actors from IMDb" & vbCrLf, msg_append)
-            'success = TvGetActorImdb(NewShow)
-
+            If TvGetActorImdb() Then
+                Reportprogress(MSG_OK, MSG_OK & vbCrLf, msg_append)
+            Else
+                Reportprogress("-failed ", "-failed" & vbCrLf, msg_append)
+            End If
         End If
     End Sub
 
@@ -325,12 +332,6 @@ Public Class TVDBScraper
                     filename = Path.Combine(workingpath, filename.Replace(" ", "_"))
                     If Pref.FrodoEnabled Then actorpaths.Add(filename & ".jpg")
                     If Pref.EdenEnabled Then actorpaths.Add(filename & ".tbn")
-                    'Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
-                    'If cachename <> "" Then
-                    '    For Each p In actorpaths
-                    '        Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
-                    '    Next
-                    'End If
                 End If
                 If Pref.actorsave AndAlso Not Pref.tvshowautoquick Then
                     Dim tempstring As String = Pref.actorsavepath
@@ -345,13 +346,6 @@ Public Class TVDBScraper
                     End If
                     If Pref.FrodoEnabled Then actorpaths.Add(workingpath2 & ".jpg")
                     If Pref.EdenEnabled Then actorpaths.Add(workingpath2 & ".tbn")
-                    'Utilities.EnsureFolderExists(tempstring)
-                    'Dim cachename As String = Utilities.Download2Cache(thisresult.actorthumb)
-                    'If cachename <> "" Then
-                    '    For Each p In actorpaths
-                    '        Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
-                    '    Next
-                    'End If
                     If Not String.IsNullOrEmpty(Pref.actornetworkpath) Then
                         If Pref.actornetworkpath.IndexOf("/") <> -1 Then
                             thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("\", "/")
@@ -359,8 +353,8 @@ Public Class TVDBScraper
                             thisresult.actorthumb = actorpaths(0).Replace(Pref.actorsavepath, Pref.actornetworkpath).Replace("/", "\")
                         End If
                     End If
+                    DoDownloadActorImage(actorimageurl, actorpaths)
                 End If
-                DoDownloadActorImage(actorimageurl, actorpaths)
             End If
             totalactors.Add(thisresult)
             success = True
@@ -378,7 +372,6 @@ Public Class TVDBScraper
                 Utilities.SafeCopyFile(cachename, p, Pref.overwritethumbs)
             Next
         End If
-
     End Sub
 
     Sub TVTidyUpAnyUnscrapedFields
@@ -1380,20 +1373,20 @@ Public Class TVDBScraper
                         ReportProgress(progresstext, "", msg_append)
                         Dim tmpaok As Boolean = True
                         If tmpaok Then
-                            ReportProgress(, "Scraping body of episode: " & singleepisode.Episode.Value & vbCrLf)
+                            ReportProgress(, "Scraping body of episode: " & singleepisode.Episode.Value)
                             Dim tempepisode As String = ep_Get(singleepisode, tvdbid, tempsortorder, language)
                             'stage = "22b4"
                             scrapedok = True
                             If tempepisode = Nothing Or tempepisode = "Error" Then
                                 scrapedok = False
                                 singleepisode.Title.Value = tempepisode
-                                ReportProgress(, "!!! WARNING: This episode: " & singleepisode.Episode.Value & " - could not be found on TVDB" & vbCrLf)
+                                ReportProgress(, vbCrLf & "!!! WARNING: This episode: " & singleepisode.Episode.Value & " - could not be found on TVDB" & vbCrLf)
                             ElseIf tempepisode.Contains("Could not connect") Then     'If TVDB unavailable, advise user to try again later
                                 scrapedok = False
-                                ReportProgress(, "!!! Issue at TheTVDb, Episode could not be retrieve. Try again later" & vbCrLf)
+                                ReportProgress(, vbCrLf & "!!! Issue at TheTVDb, Episode could not be retrieve. Try again later" & vbCrLf)
                             ElseIf tempepisode.Contains("No Results from SP") Then
                                 scrapedok = False
-                                ReportProgress(, "!!! Scraping using AirDate found in Filename failed.  Check Episode Filename AiredDate is correct." & vbCrLf)
+                                ReportProgress(, vbCrLf & "!!! Scraping using AirDate found in Filename failed.  Check Episode Filename AiredDate is correct." & vbCrLf)
                             End If
                             'stage = "22b5"
                             If scrapedok Then
@@ -1420,7 +1413,7 @@ Public Class TVDBScraper
                                         End If
                                     Next
                                 End If
-                                ReportProgress(, "Scrape body of episode: " & singleepisode.Episode.Value & " - OK" & vbCrLf)
+                                'ReportProgress(, "Scrape body of episode: " & singleepisode.Episode.Value & " - OK" & vbCrLf)
                                 progresstext &= " : Scraped Title - '" & singleepisode.Title.Value & "'"
                                 ReportProgress(progresstext)
                                 If actorsource = "imdb" And (imdbid <> "" OrElse singleepisode.ImdbId.Value <> "") Then
@@ -1541,7 +1534,8 @@ Public Class TVDBScraper
         Dim episodeno       As String = singleepisode.Episode.Value
         Dim q = From b In episodes Where b.SeasonNumber = seasonsno AndAlso b.EpisodeNumber = episodeno
         If q.Count = 1 Then
-            Dim foundepisode As TheTvDB.TvdbEpisode = q(0)
+            Dim epidentity As Integer = q(0).Identity
+            Dim foundepisode As TheTvDB.TvdbEpisode = tvdb.GetEpisode(epidentity)
             singleepisode.AbsorbTvdbEpisode(foundepisode)
             result = "ok"
         End If
@@ -1959,6 +1953,15 @@ Public Class TVDBScraper
         Return success
     End Function
 
+#End Region
+
+#Region "Misc Routines"
+
+    Sub GetSeriesDataComplete(ByVal seriesid As String)
+        Dim tvdbseries As New TheTvDB.TvdbSeries
+        Dim tvdb2 As New TVDBScraper2(seriesid, _lang)
+        tvdbseries = tvdb2.ReturnSeriesandEpisodes
+    End Sub
 #End Region
 
 #Region "original routines"

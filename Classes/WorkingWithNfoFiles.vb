@@ -1017,6 +1017,175 @@ Public Class WorkingWithNfoFiles
         blanktvshow.State = Media_Companion.ShowState.Locked
         Return blanktvshow
     End Function
+
+    Public Sub SeriesXMLSave(ByVal Series As TheTvDB.TvdbSeries, ByVal filenameandpath As String, Optional ByVal overwrite As Boolean = True)
+        Monitor.Enter(Me)
+        Try
+            If File.Exists(filenameandpath) AndAlso Not overwrite Then Exit Sub
+            Dim doc As New XmlDocument
+            Dim xmlproc As XmlDeclaration
+            xmlproc = doc.CreateXmlDeclaration("1.0", "UTF-8", "yes")
+            doc.AppendChild(xmlproc)
+            Dim root As XmlElement
+            Dim child As XmlElement
+            root = doc.CreateElement("Data")
+            child = doc.CreateElement("Series")
+            child.AppendChild(doc,  "id"                , Series.Identity)
+            'child.AppendChild(doc,  "Actors"            , Series.Actors)
+            child.AppendChild(doc,  "Airs_DayOfWeek"    , Series.AirsDayOfWeek)
+            child.AppendChild(doc,  "Airs_Time"         , Series.AirsTime)
+            child.AppendChild(doc,  "ContentRating"     , Series.ContentRating)
+            child.AppendChild(doc,  "FirstAired"        , Series.FirstAired)
+            child.AppendChild(doc,  "Genre"             , Series.GenresDisplayString)
+            child.AppendChild(doc,  "IMDB_ID"           , Series.ImdbID)
+            child.AppendChild(doc,  "Language"          , Series.Language)
+            child.AppendChild(doc,  "Network"           , Series.Network)
+            child.AppendChild(doc,  "NetworkID"         , Series.NetworkId)
+            child.AppendChild(doc,  "Overview"          , Series.Overview)
+            child.AppendChild(doc,  "Rating"            , Series.Rating)
+            child.AppendChild(doc,  "RatingCount"       , Series.Votes)
+            child.AppendChild(doc,  "Runtime"           , Series.Runtime)
+            child.AppendChild(doc,  "SeriesID"          , Series.SeriesId)
+            child.AppendChild(doc,  "SeriesName"        , Series.SeriesName)
+            child.AppendChild(doc,  "Status"            , Series.Status)
+            child.AppendChild(doc,  "added"             , Series.AddedDate)
+            child.AppendChild(doc,  "addedby"           , Series.AddedBy)
+            child.AppendChild(doc,  "banner"            , Series.Banner)
+            child.AppendChild(doc,  "fanart"            , "")
+            child.AppendChild(doc,  "lastupdated"       , Series.LastUpdated)
+            child.AppendChild(doc,  "poster"            , "")
+            child.AppendChild(doc,  "zap2it_id"         , Series.Zap2ItID)
+            root.AppendChild(child)
+            For each ep In Series.Episodes
+                child = doc.CreateElement("Episode")
+                child.AppendChild(doc,  "id"                    , ep.Identity)
+                child.AppendChild(doc,  "DVD_chapter"           , ep.DVDChapter)
+                child.AppendChild(doc,  "DVD_discid"            , ep.DVDDiscID)
+                child.AppendChild(doc,  "DVD_episodenumber"     , ep.DVDEpisodeNumber)
+                child.AppendChild(doc,  "DVD_season"            , ep.DVDSeasonNumber)
+                child.AppendChild(doc,  "Director"              , ep.DirectorsDisplayString)
+                child.AppendChild(doc,  "EpisodeName"           , ep.EpisodeName)
+                child.AppendChild(doc,  "EpisodeNumber"         , ep.EpisodeNumber)
+                child.AppendChild(doc,  "FirstAired"            , ep.FirstAired)
+                child.AppendChild(doc,  "GuestStart"            , ep.GuestStarsDisplayString)
+                child.AppendChild(doc,  "IMDB_ID"               , ep.ImdbId)
+                child.AppendChild(doc,  "Language"              , ep.Language.episodeName)
+                child.AppendChild(doc,  "Overview"              , ep.Overview)
+                child.AppendChild(doc,  "ProductionCode"        , ep.ProductionCode)
+                child.AppendChild(doc,  "Rating"                , ep.Rating)
+                child.AppendChild(doc,  "RatingCount"           , ep.Votes)
+                child.AppendChild(doc,  "SeasonNumber"          , ep.SeasonNumber)
+                child.AppendChild(doc,  "Writer"                , ep.WritersDisplayString)
+                child.AppendChild(doc,  "absolute_number"       , ep.AbsoluteNumber)
+                child.AppendChild(doc,  "airsafter_season"      , ep.AirsAfterSeason)
+                child.AppendChild(doc,  "airsbefore_episode"    , ep.AirsBeforeEpisode)
+                child.AppendChild(doc,  "airsbefore_season"     , ep.AirsBeforeSeason)
+                child.AppendChild(doc,  "filename"              , ep.Image)
+                child.AppendChild(doc,  "is_movie"              , 0)
+                child.AppendChild(doc,  "lastupdated"           , ep.LastUpdated)
+                child.AppendChild(doc,  "thumb_added"           , ep.ThumbAdded)
+                child.AppendChild(doc,  "thumb_height"          , ep.ThumbHeight)
+                child.AppendChild(doc,  "thumb_width"           , ep.ThumbWidth)
+                root.AppendChild(child)
+            Next
+            doc.AppendChild(root)
+            SaveXMLDoc(doc, filenameandpath)
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Get full series and episode info from series.xml
+    ''' </summary>
+    ''' <param name="filenameandpath">Full path and filename.  Returns "error" if file not found</param>
+    ''' <returns>TvdbSeries orelse Nothing if file not found</returns>
+    Public Function SeriesXMLLoad(ByRef filenameandpath As String) As TheTvDB.TvdbSeries
+        If Not File.Exists(filenameandpath) Then 
+            filenameandpath = "error"
+            Return Nothing
+        End If
+        Dim newSeries As New TheTvDB.TvdbSeries
+        Dim tvshow As New XmlDocument
+        Try
+            Using tmpstrm As IO.StreamReader = File.OpenText(filenameandpath)
+                tvshow.Load(tmpstrm)
+            End Using
+        Catch ex As Exception
+            filenameandpath = "error"
+            Return Nothing
+        End Try
+        For Each thisresult As XmlNode In tvshow("Data")
+            Select Case thisresult.Name
+                Case "Series"
+                    Dim result As XmlNode
+					For Each result In thisresult.childnodes
+                        Select Case result.Name
+                            Case "id"               : newSeries.Identity            = result.InnerText
+                            Case "Airs_DayOfWeek"   : newSeries.AirsDayOfWeek       = result.InnerText
+                            Case "Airs_Time"        : newSeries.AirsTime            = result.InnerText
+                            Case "Airs_Time"        : newSeries.AirsTime			= result.InnerText
+                            Case "ContentRating"    : newSeries.ContentRating		= result.InnerText
+                            Case "FirstAired"       : newSeries.FirstAired			= result.InnerText
+                            Case "Genre"            : newSeries.GenresDisplayString = result.InnerText
+                            Case "IMDB_ID"          : newSeries.ImdbID				= result.InnerText
+                            Case "Language"         : newSeries.Language			= result.InnerText
+                            Case "Network"          : newSeries.Network				= result.InnerText
+                            Case "NetworkID"        : newSeries.NetworkId			= result.InnerText
+                            Case "Overview"         : newSeries.Overview			= result.InnerText
+                            Case "Rating"           : newSeries.Rating				= result.InnerText
+                            Case "RatingCount"      : newSeries.Votes				= result.InnerText
+                            Case "Runtime"          : newSeries.Runtime             = result.InnerText	
+                            Case "SeriesID"         : newSeries.SeriesId			= result.InnerText
+                            Case "SeriesName"       : newSeries.SeriesName			= result.InnerText	
+                            Case "Status"           : newSeries.Status				= result.InnerText
+                            Case "added"            : newSeries.AddedDate			= result.InnerText
+                            Case "addedby"          : newSeries.AddedBy				= result.InnerText
+                            Case "banner"           : newSeries.Banner				= result.InnerText
+                            Case "lastupdated"      : newSeries.LastUpdated			= result.InnerText
+                            Case "zap2it_id"        : newSeries.Zap2ItID			= result.InnerText
+                        End Select
+					Next
+                Case "Episode"
+                    Dim newEpisode As New TheTvDB.TvdbEpisode
+                    For Each result In thisresult.childnodes
+                        Select Case result.Name
+                            Case "id"                    : newEpisode.Identity                  = result.InnerText
+                            Case "DVD_chapter"           : newEpisode.DVDChapter                = result.InnerText
+                            Case "DVD_discid"            : newEpisode.DVDDiscID                 = result.InnerText
+                            Case "DVD_episodenumber"     : newEpisode.DVDEpisode                = result.InnerText
+                            Case "DVD_season"            : newEpisode.DVDSeason                 = result.InnerText
+                            Case "Director"              : newEpisode.DirectorsDisplayString    = result.InnerText
+                            Case "EpisodeName"           : newEpisode.EpisodeName               = result.InnerText
+                            Case "EpisodeNumber"         : newEpisode.EpisodeNumber             = result.InnerText
+                            Case "FirstAired"            : newEpisode.FirstAired                = result.InnerText
+                            Case "GuestStart"            : newEpisode.GuestStarsDisplayString   = result.InnerText
+                            Case "IMDB_ID"               : newEpisode.ImdbId                    = result.InnerText
+                            Case "Language"              : newEpisode.Language.episodeName      = result.InnerText
+                            Case "Overview"              : newEpisode.Overview                  = result.InnerText
+                            Case "ProductionCode"        : newEpisode.ProductionCode            = result.InnerText
+                            Case "Rating"                : newEpisode.Rating                    = result.InnerText
+                            Case "RatingCount"           : newEpisode.Votes                     = result.InnerText
+                            Case "SeasonNumber"          : newEpisode.SeasonNumber              = result.InnerText
+                            Case "Writer"                : newEpisode.WritersDisplayString      = result.InnerText
+                            Case "absolute_number"       : newEpisode.AbsoluteNumber            = result.InnerText
+                            Case "airsafter_season"      : newEpisode.AirsAfterSeason           = result.InnerText
+                            Case "airsbefore_episode"    : newEpisode.AirsBeforeEpisode         = result.InnerText
+                            Case "airsbefore_season"     : newEpisode.AirsBeforeSeason          = result.InnerText
+                            Case "filename"              : newEpisode.Image                     = result.InnerText
+                            Case "lastupdated"           : newEpisode.LastUpdated               = result.InnerText
+                            Case "thumb_added"           : newEpisode.ThumbAdded                = result.InnerText
+                            Case "thumb_height"          : newEpisode.ThumbHeight               = result.InnerText
+                            Case "thumb_width"           : newEpisode.ThumbWidth                = result.InnerText 
+                        End Select
+                    Next
+                    newSeries.Episodes.Add(newEpisode)
+            End Select
+        Next
+        Return newseries
+    End Function
+    
 #End Region
 
 #Region " Obsolete "
@@ -1333,7 +1502,7 @@ Public Class WorkingWithNfoFiles
                     newmovie.fullmoviebody.imdbid       = ""
                     newmovie.fullmoviebody.tmdbid       = ""
                     newmovie.fullmoviebody.mpaa         = ""
-                    newmovie.fullmoviebody.outline      = "This nfo file could not be loaded"
+                    newmovie.fullmoviebody.outline      = "This nfo file could Not be loaded"
                     newmovie.fullmoviebody.playcount    = "0"
                     newmovie.fullmoviebody.lastplayed   = ""
                     newmovie.fullmoviebody.plot         = errorstring

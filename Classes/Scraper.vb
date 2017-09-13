@@ -1208,9 +1208,9 @@ Public Class Classimdb
                     tempstring = Pref.imdbmirror & "title/" & imdbid & "/parentalguide#certification"
                     webpage.Clear()
                     webpage = loadwebpage(Pref.proxysettings, tempstring, False)
+                    'Dim webpage2 As String = String.Join(vbcrlf, webpage.ToArray())
                     For f = 0 To webpage.Count - 1
                         'mpaa
-                        'If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
                         If webpage(f).IndexOf(" id="& MovieRegExs.quote & "mpaa-rating" & MovieRegExs.quote &">") <> -1 Then
                             tempstring = webpage(f + 2).StripTagsLeaveContent
                             If tempstring.IndexOf("<") = -1 Then
@@ -1222,11 +1222,13 @@ Public Class Classimdb
                                 Next
                             End If
                         End If
-                        Dim webpage2 As String = String.Join(vbcrlf, webpage.ToArray())
                         'cert
                         If f > 1 Then
                             For g = 0 To 33
-                                tempstring = """>" & mpaaresults(g, 0) & ":"
+                                Dim mpaares As String = mpaaresults(g, 0)
+                                If mpaares = "USA" Then mpaares = "United States"
+                                If mpaares = "UK" Then mpaares = "United Kingdom"
+                                tempstring = """>" & mpaares & ":"
                                 If webpage(f).IndexOf("certificates=") <> -1 And webpage(f).IndexOf(tempstring) <> -1 Then
                                     tempstring = webpage(f).Substring(webpage(f).IndexOf(tempstring), webpage(f).Length - webpage(f).IndexOf(tempstring))
                                     tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
@@ -1454,12 +1456,12 @@ Public Class Classimdb
                     Dim tempstring As String = ""
                     For f = 0 To webpage.Count - 1
                         'mpaa
-                        If webpage(f).IndexOf("<a href=""/mpaa") <> -1 Then
-                            tempstring = webpage(f + 2)
+                        If webpage(f).IndexOf(" id="& MovieRegExs.quote & "mpaa-rating" & MovieRegExs.quote &">") <> -1 Then
+                            tempstring = webpage(f + 2).StripTagsLeaveContent
                             If tempstring.IndexOf("<") = -1 Then
                                 For g = 0 To 33
                                     If mpaaresults(g, 0) = "MPAA" Then
-                                        mpaaresults(g, 1) = tempstring
+                                        mpaaresults(g, 1) = tempstring.Trim
                                         Exit For
                                     End If
                                 Next
@@ -1468,7 +1470,10 @@ Public Class Classimdb
                         'cert
                         If f > 1 Then
                             For g = 0 To 33
-                                tempstring = """>" & mpaaresults(g, 0) & ":"
+                                Dim mpaares As String = mpaaresults(g, 0)
+                                If mpaares = "USA" Then mpaares = "United States"
+                                If mpaares = "UK" Then mpaares = "United Kingdom"
+                                tempstring = """>" & mpaares & ":"
                                 If webpage(f).IndexOf("certificates=") <> -1 And webpage(f).IndexOf(tempstring) <> -1 Then
                                     tempstring = webpage(f).Substring(webpage(f).IndexOf(tempstring), webpage(f).Length - webpage(f).IndexOf(tempstring))
                                     tempstring = tempstring.Substring(tempstring.IndexOf(">") + 1, tempstring.IndexOf("</a>") - tempstring.IndexOf(">") - 1)
@@ -1634,7 +1639,6 @@ Public Class Classimdb
             wrGETURL.Proxy = Utilities.MyProxy
             If TimeoutInSecs > -1 Then wrGETURL.Timeout = TimeoutInSecs * 1000
             wrGETURL.Headers.Add("Accept-Language", TMDb.LanguageCodes(0))
-            'Dim myWebHeaderCollection As WebHeaderCollection = wrGETURL.Headers
             wrGETURL.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2"
             Dim objStream As IO.Stream
             objStream = wrGETURL.GetResponse.GetResponseStream()
@@ -1672,7 +1676,7 @@ Public Class Classimdb
             Monitor.Exit(Me)
         End Try
     End Function
-
+    
     Function GetGenres( ByVal webPage As String )
         Dim genres As New List(Of String)
         Dim genre As String
@@ -1682,8 +1686,8 @@ Public Class Classimdb
         Next
         Return genres
     End Function
-
-    Public Function GetImdbKeyWords(ByVal keylimit As Integer, ByVal imdbmirror As String, Optional ByVal imdbid As String = "") As List(Of String)
+    
+    Public Function GetImdbKeyWords(ByVal keylimit As Integer, ByVal imdbmirror As String, ByVal imdbid As String) As List(Of String)
         Dim keywd As New List(Of String)
         Dim tempstring As String = ""
         Dim webpage As New List(Of String)
@@ -1737,7 +1741,7 @@ Public Class Classimdb
               End Using
             End Using
             If responseContent <> "" Then
-                '{"id":584,"keywords":[{"id":830,"name":"car race"},{"id":999,"name":"sports car"},{"id":261,"name":"los angeles "},{"id":416,"name":"miami"}]}
+                'example: {"id":584,"keywords":[{"id":830,"name":"car race"},{"id":999,"name":"sports car"},{"id":261,"name":"los angeles "},{"id":416,"name":"miami"}]}
                 Dim newkey As New List(Of String)
                 Dim RegExPattern = "name"":""(?<keyword>.*?)"""
                 For Each m As Match In Regex.Matches(responseContent, RegExPattern, RegexOptions.Singleline)

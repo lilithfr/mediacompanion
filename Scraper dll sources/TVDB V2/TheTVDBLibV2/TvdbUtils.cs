@@ -118,5 +118,14 @@ namespace TheTvDB
 
             return stringList.ToString();
         }
+        internal static Collection<string> StringToCollection(string thisstring)
+        {
+            if (string.IsNullOrEmpty(thisstring))
+                return new Collection<string>();
+            string[] tmp = thisstring.Split(',');
+            Collection<string> newlist = new Collection<string>(tmp);
+            return newlist;
+        }
+
     }
 }

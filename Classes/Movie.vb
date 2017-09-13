@@ -1605,12 +1605,6 @@ Public Class Movie
 
         ' Assign certificate
         If Certificates.Count > 0 Then
-        'If Certificates.Count = 0 Then
-        '    Dim tmdb2 As New TMDb
-        '    tmdb2.Imdb = _scrapedMovie.fullmoviebody.imdbid
-        '    tmdb2.TmdbId = _scrapedMovie.fullmoviebody.tmdbid
-        '    _scrapedMovie.fullmoviebody.mpaa = tmdb2.Certification
-        'Else
             Dim done As Boolean = False
             For g = 0 To UBound(Pref.certificatepriority)
                 For Each cert In Certificates
@@ -3918,6 +3912,11 @@ Public Class Movie
                         UpdateMovieCache
                     End If
                  Next
+
+                'Special check if user has <moviename>.jpg as custom poster and wishes name changed to Kodi Poster format.
+                If Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(subName1 & ".jpg") Then
+                    File.Move(subName1 & ".jpg", targetMovieFile & "-poster.jpg")
+                End If
 
                 '
                 'PART 4 - And then rename trailer

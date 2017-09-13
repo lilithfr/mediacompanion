@@ -28,6 +28,15 @@ Public Class SeasonEpisodeComparer
     End Function
 End Class
 
+Public Class TvSeriesData
+    Public Property SeriesId    As String
+    Public Property SeriesLan   As String
+
+    Sub New(Optional ByVal _seriesId As String = "", Optional ByVal _lang As String = "")
+        SeriesId    = _seriesId
+        SeriesLan   = _lang
+    End Sub
+End Class
 Public Class TVShows
 
     Public Shared Function episodeRename(ByVal eppath As String, ByVal seasonno As String, ByVal episodeno As List(Of String), ByVal showtitle As String, ByVal episodetitle As String, ByVal EpSpaces As Boolean, ByVal IsDot As Boolean)
