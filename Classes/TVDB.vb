@@ -561,9 +561,10 @@ Public Class TVDBScraper2
         Dim reply As Object = Nothing
         _searchresults  = _api.GetSeries(Title, reply)
         If _searchresults.Series.Count > 0 Then _PossibleShowList = New List(Of TheTvDB.TvdbSeries)
-        For each show In _searchresults.series
-            _PossibleShowList.Add(show)
-        Next
+        SortPossibleshows()
+        'For each show In _searchresults.series
+        '    _PossibleShowList.Add(show)
+        'Next
 
     End Sub
 
@@ -583,6 +584,17 @@ Public Class TVDBScraper2
         'Catch All
         Return ThisList.Item(0)
     End Function
+
+    Sub SortPossibleshows()
+        If _searchresults.Series.Count > 0 Then
+            _PossibleShowList = New List(Of TheTvDB.TvdbSeries)
+            For each item In _searchresults.Series
+                item.Similarity = CompareString(item.SeriesName, Title)
+            Next
+            Dim Search = From Ser As TheTvDB.TvdbSeries In _searchresults.Series Order By Ser.Similarity Descending
+            _PossibleShowList = Search.ToList
+        End If
+    End Sub
 
     Public Function CompareString(String1 As String, String2 As String) As Double
         Dim intLength1

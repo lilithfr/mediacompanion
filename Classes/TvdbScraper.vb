@@ -469,12 +469,12 @@ Public Class TVDBScraper
 
     Sub SeriesScraper_GetBody
         NewShow = New TvShow
-        Dim tvprogresstxt As String = ""
+       ' Dim tvprogresstxt As String = ""
         Dim haveTVDbID As Boolean = Not String.IsNullOrEmpty(_possibleTvdb)
         NewShow.NfoFilePath = Path.Combine(_folder, "tvshow.nfo")
         NewShow.TvdbId.Value = _possibleTvdb
         NewShow.State = Media_Companion.ShowState.Unverified
-        tvprogresstxt = ""
+        'tvprogresstxt = ""
         If Not haveTVDbID And NewShow.FileContainsReadableXml Then
             Dim validcheck As Boolean = nfoFunction.tv_NfoLoadCheck(NewShow.NfoFilePath)
             If validcheck Then
@@ -1093,6 +1093,28 @@ Public Class TVDBScraper
             Next
         End If
     End Sub
+    
+    Public Function findshows(ByVal title As String, ByRef showslist As List(Of str_PossibleShowList)) As Boolean
+        Monitor.Enter(Me)
+        Try
+            IniTVdb("")
+            tvdb.Title = title
+            Dim SeriesList As New List(Of TheTvDB.TvdbSeries)
+            SeriesList = tvdb.PossibleShowList
+            For each result In SeriesList
+                Dim newshow As New str_PossibleShowList(SetDefaults)
+                newshow.showtitle = result.SeriesName
+                newshow.showid = result.Identity
+                newshow.showbanner = "http://www.thetvdb.com/banners/" & result.Banner
+                showslist.Add(newshow)
+            Next
+            Return True
+        Catch EX As Exception
+            Return False
+        Finally
+            Monitor.Exit(Me)
+        End Try
+    End Function
 
 #End Region
 
@@ -2068,51 +2090,6 @@ Public Class TVDBScraper
 
         Catch EX As Exception
             Return EX.ToString
-        Finally
-            Monitor.Exit(Me)
-        End Try
-    End Function
-
-    Public Function findshows(ByVal title As String, ByVal mirror As String, ByRef showslist As List(Of str_PossibleShowList)) As Boolean
-        Monitor.Enter(Me)
-        Dim possibleshows As New List(Of str_PossibleShowList)
-        Dim xmlfile As String
-
-        title = title.Replace(".", " ")  'Replace periods in foldernames with spaces (linux OS support)
-        Dim mirrorsurl As String = "http://www.thetvdb.com/api/GetSeries.php?seriesname=" & title & "&language=all"
-        Dim wrGETURL As WebRequest = WebRequest.Create(mirrorsurl)
-        wrGETURL.Proxy = Utilities.MyProxy
-        Dim objStream As IO.Stream
-        objStream = wrGETURL.GetResponse.GetResponseStream()
-        Dim objReader As New IO.StreamReader(objStream)
-        xmlfile = objReader.ReadToEnd
-        Dim showlist As New XmlDocument
-        Try
-            showlist.LoadXml(xmlfile)
-            For Each thisresult As XmlNode In showlist("Data")
-                Select Case thisresult.Name
-                    Case "Series"
-                        Dim newshow As New str_PossibleShowList(SetDefaults)
-                        For Each mirrorselection As XmlNode In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "seriesid"
-                                    newshow.showid = mirrorselection.InnerXml
-                                Case "SeriesName"
-                                    newshow.showtitle = mirrorselection.InnerXml
-                                Case "banner"
-                                    newshow.showbanner = "http://www.thetvdb.com/banners/" & mirrorselection.InnerXml
-                            End Select
-                        Next
-                        possibleshows.Add(newshow)
-                End Select
-            Next
-
-            For Each show In possibleshows
-                If show.showid <> Nothing Then showslist.Add(show)
-            Next
-            Return True
-        Catch EX As Exception
-            Return False
         Finally
             Monitor.Exit(Me)
         End Try

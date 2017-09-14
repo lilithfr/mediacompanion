@@ -967,7 +967,7 @@ Public Class Form1
             tvtrial = True
             RunBackgroundTVScrape("TvEpisodesSearchforNew")
         End If
-        'If e.KeyCode = Keys.F9 Then doTestTvdb
+        If e.KeyCode = Keys.F9 Then doTestTvdb
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
                 'tvAddNewSeries()
@@ -4903,38 +4903,36 @@ Public Class Form1
 			If Pref.tvdbactorscrape = 0 Then
 				rbTvShSelectTvActorTvdb.Checked = True
 				rbTvShSelectEpActorTvdb.Checked = True
-			End If
-			If Pref.tvdbactorscrape = 1 Then
+			ElseIf Pref.tvdbactorscrape = 1 Then
 				rbTvShSelectTvActorImdb.Checked = True
 				rbTvShSelectEpActorImdb.Checked = True
-			End If
-			If Pref.tvdbactorscrape = 2 Then
+			ElseIf Pref.tvdbactorscrape = 2 Then
 				rbTvShSelectTvActorImdb.Checked = True
 				rbTvShSelectEpActorTvdb.Checked = True
-			End If
-			If Pref.tvdbactorscrape = 3 Then
+			ElseIf Pref.tvdbactorscrape = 3 Then
 				rbTvShSelectTvActorTvdb.Checked = True
 				rbTvShSelectEpActorImdb.Checked = True
 			End If
+
 			If Pref.postertype = "poster" Then
 				rbTvShSelectArtPoster.Checked = True
 			Else
 				rbTvShSelectArtBanner.Checked = True
 			End If
 
-			cbTvChgShowDLFanart.Checked = Pref.tvdlfanart
-			cbTvChgShowDLPoster.Checked = Pref.tvdlposter
-			cbTvChgShowDLSeason.Checked = Pref.tvdlseasonthumbs
-			cbTvChgShowDLFanartTvArt.Checked = Pref.TvDlFanartTvArt
+			cbTvChgShowDLFanart         .Checked = Pref.tvdlfanart
+			cbTvChgShowDLPoster         .Checked = Pref.tvdlposter
+			cbTvChgShowDLSeason         .Checked = Pref.tvdlseasonthumbs
+			cbTvChgShowDLFanartTvArt    .Checked = Pref.TvDlFanartTvArt
 
 			If Pref.tvshow_useXBMC_Scraper = True Then
-				gpbx_TvActorSource.Enabled = False
-				gpbx_EpActorSource.Enabled = False
-				gpbx_SortOrder.Enabled = False
+				gpbx_TvActorSource  .Enabled = False
+				gpbx_EpActorSource  .Enabled = False
+				gpbx_SortOrder      .Enabled = False
 			Else
-				gpbx_TvActorSource.Enabled = True
-				gpbx_EpActorSource.Enabled = True
-				gpbx_SortOrder.Enabled = True
+				gpbx_TvActorSource  .Enabled = True
+				gpbx_EpActorSource  .Enabled = True
+				gpbx_SortOrder      .Enabled = True
 			End If
 			cbTvChgShowOverwriteImgs.CheckState = CheckState.Checked 'set overwrite images for changing shows.
 		Catch ex As Exception
@@ -9031,8 +9029,8 @@ Public Class Form1
 		msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
 		msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
 		msgstring &= vbCrLf & "Are your sure you wish to continue?"
-		Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
-		If x = MsgBoxResult.Cancel Then Exit Sub
+		Dim x = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
+		If x = MsgBoxResult.No OrElse MsgBoxResult.Cancel Then Exit Sub
 		Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 		Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
 		Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
@@ -9088,7 +9086,7 @@ Public Class Form1
 		Debug.Print(Me.Controls.Count)
 	End Sub
 
-	Private Sub TvDelShowNfoArt(Show As TvShow, ByVal Ignore As Boolean, Optional ByVal NoDelArt As Boolean = False)
+	Private Sub TvDelShowNfoArt(Show As TvShow, ByVal Ignore As Boolean, ByVal NoDelArt As Boolean, Optional SeriesChange As Boolean = False)
 		Try
 			If Not Ignore Then
 				Dim msgstring As String = "Warning:  This will Remove the selected Tv Show's nfo" & If(Not NoDelArt, " and artwork", "")
@@ -9096,15 +9094,15 @@ Public Class Form1
 				msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
 				msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
 				msgstring &= vbCrLf & "Are your sure you wish to continue?"
-				Dim x = MsgBox(msgstring, MsgBoxStyle.OkCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
-				If x = MsgBoxResult.Cancel Then Exit Sub
+				Dim x = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
+				If x = MsgBoxResult.No OrElse MsgBoxResult.Cancel Then Exit Sub
 			End If
 			If Not NoDelArt Then TvDeleteShowArt(show)
 			Dim showpath As String = Show.FolderPath
 			Utilities.SafeDeleteFile(showpath & "tvshow.nfo")
 			showpath = showpath.Substring(0, showpath.Length - 1)
 			If lb_tvSeriesFolders.items.Contains(showpath) Then lb_tvSeriesFolders.Items.Remove(showpath)
-			If Pref.tvFolders.Contains(showpath) Then Pref.tvFolders.Remove(showpath)
+			If Pref.tvFolders.Contains(showpath) AndAlso Not SeriesChange Then Pref.tvFolders.Remove(showpath)
 			TvTreeview.Nodes.Remove(show.ShowNode)
 			Cache.TvCache.Remove(show)
 			Tv_CacheSave()
@@ -14994,12 +14992,18 @@ Public Class Form1
 				MsgBox("Please select a language that is available for this show")
 				Exit Sub
 			End If
-			messbox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
-			System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
-			messbox.Show()
-			messbox.Refresh()
+            If WorkingTvShow.Episodes.Count > 0 Then
+                Dim reply As MsgBoxResult = MsgBox("Warning!!!" & vbCrLf & "Episode nfo's found" & vbCrLf & "Continuing will delete all episode nfo", MsgBoxStyle.YesNo)
+                If reply = MsgBoxResult.No Then Exit Sub
+                TvDelEpNfoAst(workingtvshow, Nothing, Nothing, True, Pref.TvChgShowOverwriteImgs)
+            End If
+			'messbox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
+			'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
+			'messbox.Show()
+			'messbox.Refresh()
 			Application.DoEvents()
-
+            Dim lbxindex As Integer = lbxTvShSelectResults.SelectedIndex
+            TvDelShowNfoArt(workingtvshow, True, Pref.TvChgShowOverwriteImgs, True)
 			Dim LanCode As String
 			If lbxTvShSelectLang.SelectedIndex = -1 Then
 				LanCode = Pref.TvdbLanguageCode
@@ -15031,16 +15035,27 @@ Public Class Form1
 				messbox.Close()
 				TabControl3.SelectedIndex = 0
 			Else
-				If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
-				Cache.TvCache.Remove(WorkingTvShow)
+				'If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
+				'Cache.TvCache.Remove(WorkingTvShow)
 				newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
-				Dim args As TvdbArgs = New TvdbArgs(listOfShows(lbxTvShSelectResults.SelectedIndex).showid, , False, LanCode)
-				bckgrnd_tvshowscraper.RunWorkerAsync(args)
-				While bckgrnd_tvshowscraper.IsBusy
-					Application.DoEvents()
-				End While
-				TabControl3.SelectedIndex = 0
+                Dim newshow As New str_PossibleShowList
+                newshow.showid      = listOfShows(lbxindex).showid
+                newshow.showbanner  = listOfShows(lbxindex).showbanner
+                newshow.showtitle   = listOfShows(lbxindex).showtitle
+                newshow.langcode    = LanCode
+                listOfShows.Clear()
+                listOfShows.Add(newshow)
+                TabControl3.SelectedIndex = 0
 				messbox.Close()
+                'listOfShows(lbxindex).langcode = LanCode
+				'Dim args As TvdbArgs = New TvdbArgs(listOfShows(lbxTvShSelectResults.SelectedIndex).showid, , False, LanCode)
+                RunBackgroundTVScrape("TVSeriesChange")
+				'bckgrnd_tvshowscraper.RunWorkerAsync(args)
+				'While bckgrnd_tvshowscraper.IsBusy
+				'	Application.DoEvents()
+				'End While
+				'TabControl3.SelectedIndex = 0
+				'messbox.Close()
 			End If
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
@@ -16378,15 +16393,16 @@ Public Class Form1
     
     Public Sub doTestTvdb()
         'tvseriestoget = New List(Of str_TVSeries)
-        tvseriestoget.Add(New TvSeriesData("281534", "en"))
-        tvseriestoget.Add(New TvSeriesData("72546", "en"))
-        Call GetSeriesData()
+        'tvseriestoget.Add(New TvSeriesData("281534", "en"))
+        'tvseriestoget.Add(New TvSeriesData("72546", "en"))
+        'Call GetSeriesData()
 
-        'Dim tvdb As New TVDBScraper2("281534", "en")
+        Dim tvdb As New TVDBScraper2("72546", "en")
         'Dim languages As TheTvDB.TvdbLanguagesResult = tvdb.GetTvdbLanguages
-        'Dim episodes As New List(Of TheTvDB.TvdbEpisode)
-        'Dim alldata As New TheTvDB.TvdbSeries
-        'alldata = tvdb.ReturnSeriesandEpisodes
+        Dim episodes As New List(Of TheTvDB.TvdbEpisode)
+        Dim alldata As New TheTvDB.TvdbSeries
+        alldata = tvdb.Series
+        alldata = tvdb.ReturnSeriesandEpisodes
         'nfoFunction.SeriesXMLSave(alldata, "c:\Temp\Test.xml")
         'Dim Series As New Tvdb.Series
         'Series.AbsorbTvSeries(alldata)
@@ -16404,7 +16420,7 @@ Public Class Form1
         'episodes = tvdb.Episodes
         'Dim episode1 As TheTvdb.TvdbEpisode = tvdb.LoadEpisodeDetails(episodes(2).Identity, "en")
         
-        'tvdb.Title = "Vikings"
+        tvdb.Title = "Vikings"
         
     End Sub
 
