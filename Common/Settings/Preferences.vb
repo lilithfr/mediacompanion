@@ -55,6 +55,9 @@ End Module
 Public Class Pref 
 
     Private Shared _tvdb
+    
+    'Set to True till TheTVDB completely changes over to API V2
+    Public Const tvdbapiv1 As Boolean = True
 
     'Shared Event PropertyChanged_MkvMergeGuiPath
 

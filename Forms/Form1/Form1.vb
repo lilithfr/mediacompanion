@@ -9050,12 +9050,15 @@ Public Class Form1
 	Private Sub Tv_TreeViewContext_RescrapeShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeShowOrEpisode.Click
 		tv_Rescrape()
 	End Sub
+
 	Private Sub Tv_TreeViewContext_WatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_WatchedShowOrEpisode.Click
 		Tv_MarkAs_Watched_UnWatched("1")
 	End Sub
+
 	Private Sub Tv_TreeViewContext_UnWatchedShowOrEpisode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_UnWatchedShowOrEpisode.Click
 		Tv_MarkAs_Watched_UnWatched("0")
 	End Sub
+
 	Private Sub Tv_TreeViewContext_Play_Episode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Tv_TreeViewContext_Play_Episode.Click
 		Try
 			Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)

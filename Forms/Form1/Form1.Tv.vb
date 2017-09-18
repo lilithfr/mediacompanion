@@ -288,17 +288,13 @@ Partial Public Class Form1
 #End Region
 
     Sub tv_Rescrape_Show(ByVal WorkingTvShow)
-        Dim tempint As Integer = 0
-        Dim tempstring As String = ""
-        tempint = MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
-        If tempint = DialogResult.No Then Exit Sub
+        If MessageBox.Show("Rescraping the TV Show will Overwrite all the current details" & vbCrLf & "Do you wish to continue?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.No Then Exit Sub
         'Dim messbox As frmMessageBox = New frmMessageBox("The Selected TV Show is being Rescraped", "", "Please Wait")
         'System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
         'messbox.Show()
         'messbox.Refresh()
         Application.DoEvents()
-        Dim selectedLang As String = WorkingTvShow.Language.Value
-        If selectedLang = "" Then selectedLang = "en"
+        Dim selectedLang As String = If(WorkingTvShow.Language.Value = "", "en", WorkingTvShow.Language.Value)
 
         If Pref.tvshow_useXBMC_Scraper = True Then
             Dim TVShowNFOContent As String = XBMCScrape_TVShow_General_Info("metadata.tvdb.com", WorkingTvShow.TvdbId.Value, selectedLang, WorkingTvShow.NfoFilePath)
@@ -321,15 +317,15 @@ Partial Public Class Form1
             nfoFunction.tvshow_NfoSave(newshow, True)
             Call tv_ShowLoad(WorkingTvShow)
         Else
-            For Each episode In WorkingTvShow.Episodes
-                If Pref.displayMissingEpisodes AndAlso episode.IsMissing = True Then
-                    Cache.TvCache.Remove(episode)
-                Else
-                    Cache.TvCache.Remove(episode)
-                End If
-            Next
-            Cache.TvCache.Remove(WorkingTvShow)
-            newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
+            'For Each episode In WorkingTvShow.Episodes
+            '    If Pref.displayMissingEpisodes AndAlso episode.IsMissing = True Then
+            '        Cache.TvCache.Remove(episode)
+            '    Else
+            '        Cache.TvCache.Remove(episode)
+            '    End If
+            'Next
+            'Cache.TvCache.Remove(WorkingTvShow)
+            'newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
             TabControl3.SelectedIndex = 0
             RunBackgroundTVScrape("TVSeriesRescrape")
             'Dim args As TvdbArgs = New TvdbArgs(WorkingTvShow.TvdbId.Value, , False, selectedLang)
@@ -1934,7 +1930,20 @@ Partial Public Class Form1
     End Sub
     
     Public Sub TVSeriesRescrape()
-
+        Dim WorkingTvShow As TvShow = tv_ShowSelectedCurrently(TvTreeview)
+        For Each episode In WorkingTvShow.Episodes
+            If Pref.displayMissingEpisodes AndAlso episode.IsMissing = True Then
+                Cache.TvCache.Remove(episode)
+            Else
+                Cache.TvCache.Remove(episode)
+            End If
+        Next
+        oTV.ReportProgress(, "Rescraping Series: " & WorkingTvShow.Title.Value & vbCrLf)
+        Cache.TvCache.Remove(WorkingTvShow)
+        newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
+        Dim args As New TvdbArgs(WorkingTvShow.TvdbId.Value, newTvFolders(0), False, WorkingTvShow.Language.Value)
+        oTV.ProgressStart = String.Format("Rescraping Show: {0} : ", WorkingTvShow.Title.Value)
+        TVDoScrape(args)
     End Sub
 
     Public Sub TvEpisodesSearchforNew()

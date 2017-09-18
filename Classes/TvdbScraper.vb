@@ -469,12 +469,10 @@ Public Class TVDBScraper
 
     Sub SeriesScraper_GetBody
         NewShow = New TvShow
-       ' Dim tvprogresstxt As String = ""
         Dim haveTVDbID As Boolean = Not String.IsNullOrEmpty(_possibleTvdb)
         NewShow.NfoFilePath = Path.Combine(_folder, "tvshow.nfo")
         NewShow.TvdbId.Value = _possibleTvdb
         NewShow.State = Media_Companion.ShowState.Unverified
-        'tvprogresstxt = ""
         If Not haveTVDbID And NewShow.FileContainsReadableXml Then
             Dim validcheck As Boolean = nfoFunction.tv_NfoLoadCheck(NewShow.NfoFilePath)
             If validcheck Then
@@ -1180,19 +1178,19 @@ Public Class TVDBScraper
                     If Shows.ImdbId.Value Is Nothing OrElse String.IsNullOrEmpty(Shows.Premiered.Value) Then
                         Shows = nfoFunction.tvshow_NfoLoad(Shows.NfoFilePath)
                     End If
-                    newepisode.ShowLang.Value = Shows.Language.Value
-                    newepisode.sortorder.Value = Shows.SortOrder.Value
+                    newepisode.ShowLang.Value   = Shows.Language.Value
+                    newepisode.sortorder.Value  = Shows.SortOrder.Value
                     newepisode.Showtvdbid.Value = Shows.TvdbId.Value
                     newepisode.Showimdbid.Value = Shows.ImdbId.Value
-                    newepisode.ShowTitle.Value = Shows.Title.Value
-                    newepisode.ShowYear.Value = Shows.Year.Value
-                    newepisode.ShowObj = Shows
+                    newepisode.ShowTitle.Value  = Shows.Title.Value
+                    newepisode.ShowYear.Value   = Shows.Year.Value
+                    newepisode.ShowObj          = Shows
                     If String.IsNullOrEmpty(newepisode.ShowYear.Value) AndAlso Not String.IsNullOrEmpty(Shows.Premiered.Value) Then
                         Dim yr As String = Shows.Premiered.Value.Substring(0,4)
                         If yr.Length = 4 Then newepisode.ShowYear.Value = yr
                     End If
                     newepisode.actorsource.Value = Shows.EpisodeActorSource.Value
-                    newepisode.ImdbId.Value = ""    ' Fix for Episode getting Show's IMDb Id number, not the Episode IMDb Id number.
+                    newepisode.ImdbId.Value      = ""    ' Fix for Episode getting Show's IMDb Id number, not the Episode IMDb Id number.
                     Exit For
                 End If
             Next
@@ -1263,7 +1261,6 @@ Public Class TVDBScraper
         Else
             Reportprogress("No new episodes found, exiting scraper.", "!!! No new episodes found, exiting scraper." & vbCrLf)
         End If
-         'Threading.Thread.Sleep(5000)
     End Sub
 
     Sub EPScrape()
@@ -1342,17 +1339,14 @@ Public Class TVDBScraper
                         Try
                             S = S.Substring(M2.Groups(3).Index + M2.Groups(3).Value.Length, S.Length - (M2.Groups(3).Index + M2.Groups(3).Value.Length))
                         Catch ex As Exception
-    #If SilentErrorScream Then
-                                Throw ex
-    #End If
                         End Try
                     End If
                     If Cancelled Then Exit Sub
                 Loop Until M2.Success = False
-                Dim language As String = eps.ShowLang.Value
-                Dim sortorder As String = eps.sortorder.Value
-                Dim tvdbid As String = eps.Showtvdbid.Value
-                Dim imdbid As String = eps.Showimdbid.Value
+                Dim language    As String = eps.ShowLang.Value
+                Dim sortorder   As String = eps.sortorder.Value
+                Dim tvdbid      As String = eps.Showtvdbid.Value
+                Dim imdbid      As String = eps.Showimdbid.Value
                 Dim actorsource As String = eps.actorsource.Value
                 savepath = episodearray(0).NfoFilePath
                 If episodearray.Count > 1 Then
@@ -1374,30 +1368,25 @@ Public Class TVDBScraper
                         Do Until singleepisode.Season.Value.IndexOf("0") <> 0 Or singleepisode.Season.Value.Length = 1
                             singleepisode.Season.Value = singleepisode.Season.Value.Substring(1, singleepisode.Season.Value.Length - 1)
                         Loop
-                        If singleepisode.Episode.Value = "00" Then
-                            singleepisode.Episode.Value = "0"
-                        End If
+                        If singleepisode.Episode.Value = "00" Then singleepisode.Episode.Value = "0"
                         If singleepisode.Episode.Value <> "0" Then
                             Do Until singleepisode.Episode.Value.IndexOf("0") <> 0
                                 singleepisode.Episode.Value = singleepisode.Episode.Value.Substring(1, singleepisode.Episode.Value.Length - 1)
                             Loop
                         End If
                     End If
-                    'Dim episodescraper As New TVDBScraper
                     If sortorder = "" Then sortorder = "default"
                     Dim tempsortorder As String = sortorder
                     If language = "" Then language = "en"
                     If actorsource = "" Then actorsource = "tvdb"
                     ReportProgress(, "Using Settings: TVdbID: " & tvdbid & " SortOrder: " & sortorder & " Language: " & language & " Actor Source: " & actorsource & vbCrLf)
-                    'stage = "22"
                     If tvdbid <> "" Then
                         progresstext &= " - Scraping..."
                         ReportProgress(progresstext, "", msg_append)
                         Dim tmpaok As Boolean = True
                         If tmpaok Then
                             ReportProgress(, "Scraping body of episode: " & singleepisode.Episode.Value)
-                            Dim tempepisode As String = ep_Get(singleepisode, tvdbid, tempsortorder, language)
-                            'stage = "22b4"
+                            Dim tempepisode As String = ep_Get(singleepisode, tempsortorder, language)
                             scrapedok = True
                             If tempepisode = Nothing Or tempepisode = "Error" Then
                                 scrapedok = False
@@ -1410,7 +1399,6 @@ Public Class TVDBScraper
                                 scrapedok = False
                                 ReportProgress(, vbCrLf & "!!! Scraping using AirDate found in Filename failed.  Check Episode Filename AiredDate is correct." & vbCrLf)
                             End If
-                            'stage = "22b5"
                             If scrapedok Then
                                 progresstext &= "OK."
                                 ReportProgress(progresstext, MSG_OK & vbCrLf)
@@ -1442,7 +1430,6 @@ Public Class TVDBScraper
                                     ReportProgress(, "Scraping actors from IMDB" & vbCrLf)
                                     progresstext &= " : Actors..."
                                     ReportProgress(progresstext)
-                                    'stage = "22b5e1"
                                     Dim epid As String = ""
                                     If singleepisode.ImdbId.Value <> "" Then
                                         epid = singleepisode.ImdbId.Value 
@@ -1541,9 +1528,15 @@ Public Class TVDBScraper
         'bckgroundscanepisodes.ReportProgress(0, progresstext)
     End Sub
 
-    Private Function ep_Get(ByRef singleepisode As TvEpisode, ByVal tvdbid As String, ByVal sortorder As String, ByVal Lang As String) As String
-        Dim episodes As New List(Of TheTvDB.TvdbEpisode)
-        Dim result As String = "error"
+    Private Function ep_Get(ByRef singleepisode As TvEpisode, ByVal sortorder As String, ByVal Lang As String) As String
+
+        'Get episode info from XML via API V1 if still active via Pref.tvdbapiv1 boolean
+        If Pref.tvdbapiv1 AndAlso ep_GetXML(singleepisode, sortorder, Lang) Then Return "ok"
+
+        'Else load episodes against series from API V2, and populate Episode information.
+        Dim tvdbid      As String   = singleepisode.Showtvdbid.Value
+        Dim result      As String   = "error"
+        Dim episodes    As New List(Of TheTvDB.TvdbEpisode)
         If Previoustvdbid <> tvdbid Then
             Previoustvdbid = tvdbid
             tvdb = New TVDBScraper2(tvdbid, Lang)
@@ -1561,6 +1554,69 @@ Public Class TVDBScraper
             singleepisode.AbsorbTvdbEpisode(foundepisode)
             result = "ok"
         End If
+        Return result
+    End Function
+
+    Private Function ep_GetXML(ByRef singleepisode As TvEpisode, ByVal sortorder As String, ByVal language As String) As Boolean
+        Dim result As Boolean = False
+        If language.ToLower.IndexOf(".xml") = -1 Then language = language & ".xml"
+
+        'First try seriesxml data - 'check if present, download if not
+        Dim gotseriesxml    As Boolean  = False
+        Dim tvdbid          As String   = singleepisode.Showtvdbid.Value
+        Dim aired           As String   = singleepisode.Aired.Value
+        Dim seasonno        As String   = singleepisode.Season.Value
+        Dim episodeno       As String   = singleepisode.Episode.Value
+        Dim xmlfile         As String   = Utilities.SeriesXmlPath & tvdbid & ".xml"
+        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
+        If Not File.Exists(Utilities.SeriesXmlPath & tvdbid & ".xml") Then
+            gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
+        Else
+            'Check series xml isn't older than Five days.  If so, re-download it.
+            Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile)
+            Dim datenow As DateTime = Date.Now()
+            Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
+            If dif > If(aired <> Nothing, 1, 5) Then
+                gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
+            Else
+                gotseriesxml = True
+            End If
+        End If
+
+        'Check and get episode if present in seriesxml file.
+        If gotseriesxml Then
+            Dim SeriesInfo As New Tvdb.ShowData
+            SeriesInfo.Load(xmlfile)
+            If aired <> Nothing Then
+                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                    If NewEpisode.FirstAired.Value = aired Then
+                        singleepisode.AbsorbTvdbEpisode(NewEpisode)
+                        result = True
+                        Exit For
+                    End If
+                Next
+            End If
+            If Not result AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
+                If sortorder = "default" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+                            singleepisode.AbsorbTvdbEpisode(NewEpisode)
+                            result = True
+                            Exit For
+                        End If
+                    Next
+                ElseIf sortorder = "dvd" Then
+                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+                        If NewEpisode.DvdEpisodeNumber.value = (episodeno & ".0") AndAlso NewEpisode.DvdSeason.Value = seasonno Then
+                            singleepisode.AbsorbTvdbEpisode(NewEpisode)
+                            result = True
+                            Exit For
+                        End If
+                    Next
+                End If
+            End If
+        End If
+        
         Return result
     End Function
 
