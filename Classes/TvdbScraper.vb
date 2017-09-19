@@ -1125,6 +1125,23 @@ Public Class TVDBScraper
         Dim FoldersScanned  As Integer  = 0
         Dim ShowsLocked     As Integer  = 0
         newEpisodeList.Clear()
+
+        'Check if Episode Rescrape
+        If _possibleTvdb <> "" AndAlso _folder <> "" Then
+            Dim filename_video  = _folder
+            Dim filename_nfo    = filename_video.Replace(Path.GetExtension(filename_video), ".nfo")
+            Dim truefilename As String = Utilities.GetFileNameFromPath(filename_video)
+			If Not truefilename.Substring(0, 2) = "._" Then
+				Dim newep As New TvEpisode
+                newep.UniqueId.Value    = _possibleTvdb
+				newep.NfoFilePath       = filename_nfo
+				newep.VideoFilePath     = filename_video
+				newep.MediaExtension    = Path.GetExtension(filename_video)
+				newEpisodeList.Add(newep)
+                Exit Sub
+			End If
+        End If
+
         ReportProgress(, "---Using MC TVDB api V2 Scraper---" & vbCrLf)
         For Each TvShow As Media_Companion.TvShow In ListOfShows
             Dim TvFolder As String = Path.GetDirectoryName(TvShow.FolderPath)
@@ -1293,7 +1310,12 @@ Public Class TVDBScraper
             'Else
             '    WhichScraper = "MC TVDB"
             'End If
-            progresstext = String.Concat("Stage 3 of 3 : Scraping New Episodes : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & Path.GetFileName(eps.VideoFilePath) & "'")
+            If eps.UniqueId.Value = Nothing Then
+                progresstext = String.Concat("Stage 3 of 3 : Scraping New Episodes : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & Path.GetFileName(eps.VideoFilePath) & "'")
+            Else
+                progresstext = String.Concat("Rescraping episode - '" & Path.GetFileName(eps.VideoFilePath) & "'")
+            End If
+            'progresstext = String.Concat("Stage 3 of 3 : Scraping New Episodes : Scraping " & epscount & " of " & newEpisodeList.Count & " - '" & Path.GetFileName(eps.VideoFilePath) & "'")
             ReportProgress(progresstext)
             Dim removal As String = ""
             If (eps.Season.Value = "-1" Or eps.Episode.Value = "-1") AndAlso eps.Aired.Value = Nothing Then
@@ -1363,7 +1385,7 @@ Public Class TVDBScraper
                 End If
                 Dim Firstep As Boolean = True
                 For Each singleepisode In episodearray
-                     If Cancelled Then Exit Sub
+                    If Cancelled Then Exit Sub
                     If singleepisode.Season.Value.Length > 0 Or singleepisode.Season.Value.IndexOf("0") = 0 Then
                         Do Until singleepisode.Season.Value.IndexOf("0") <> 0 Or singleepisode.Season.Value.Length = 1
                             singleepisode.Season.Value = singleepisode.Season.Value.Substring(1, singleepisode.Season.Value.Length - 1)
@@ -1568,8 +1590,9 @@ Public Class TVDBScraper
         Dim seasonno        As String   = singleepisode.Season.Value
         Dim episodeno       As String   = singleepisode.Episode.Value
         Dim xmlfile         As String   = Utilities.SeriesXmlPath & tvdbid & ".xml"
+        Dim ForceRenew      As Boolean  = singleepisode.UniqueId.Value <> Nothing
         Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
-        If Not File.Exists(Utilities.SeriesXmlPath & tvdbid & ".xml") Then
+        If Not File.Exists(Utilities.SeriesXmlPath & tvdbid & ".xml") OrElse ForceRenew Then
             gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
         Else
             'Check series xml isn't older than Five days.  If so, re-download it.
