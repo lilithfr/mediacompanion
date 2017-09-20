@@ -963,10 +963,6 @@ Public Class Form1
 		If e.KeyCode = Keys.F5 Then doRefresh()
 		If e.KeyCode = Keys.F3 Then doSearchNew()
         If e.KeyCode = Keys.F7 AndAlso TabLevel1.SelectedTab.Text = "TV Shows" Then CheckRootsForToolStripMenuItem.PerformClick()
-        If e.KeyCode = Keys.F8 AndAlso TabLevel1.SelectedTab.Text = "TV Shows" Then
-            tvtrial = True
-            RunBackgroundTVScrape("TvEpisodesSearchforNew")
-        End If
         If e.KeyCode = Keys.F9 Then doTestTvdb
         If e.KeyCode = Keys.F2 Then
             If TabLevel1.SelectedTab.Name = TabPage2.Name AndAlso TabControl3.SelectedTab.Name = tpTvMainBrowser.Name Then
@@ -5425,12 +5421,16 @@ Public Class Form1
 
 	Private Sub Tv_TreeViewContext_RescrapeWizard_Click(sender As System.Object, e As System.EventArgs) Handles Tv_TreeViewContext_RescrapeWizard.Click
 		Try
-			singleshow = True
+			oTV.SingleShow = True
+            oTV.SingleShowid = tv_ShowSelectedCurrently(TvTreeview).TvdbId.Value
+            singleshow = True
 			TV_BatchRescrapeWizardToolStripMenuItem.PerformClick()
-			While tvbckrescrapewizard.IsBusy
+			While BckWrkTv.IsBusy OrElse tvbckrescrapewizard.IsBusy
 				Application.DoEvents()
 			End While
-			singleshow = False
+            singleshow = False
+			oTV.SingleShow = False
+            oTV.SingleShowid = Nothing
 		Catch ex As Exception
 		End Try
 	End Sub
@@ -8540,12 +8540,14 @@ Public Class Form1
 				displaywizard.ShowDialog()
 
 				If tvBatchList.activate = True Then
-					Statusstrip_Enable()
-					ToolStripStatusLabel8.Text = "Starting TV Batch Scrape"
-					ToolStripStatusLabel8.Visible = True
-					ToolStripProgressBar7.Value = 0
-					ToolStripProgressBar7.Visible = True
-					tvbckrescrapewizard.RunWorkerAsync()
+                    oTV.tvBatchList = tvBatchList
+                    RunBackgroundTVScrape("TVBatchRescrape")
+					'Statusstrip_Enable()
+					'ToolStripStatusLabel8.Text = "Starting TV Batch Scrape"
+					'ToolStripStatusLabel8.Visible = True
+					'ToolStripProgressBar7.Value = 0
+					'ToolStripProgressBar7.Visible = True
+					'tvbckrescrapewizard.RunWorkerAsync()
 				End If
 			Else
 				MsgBox("The update Wizard is Already Running")
@@ -15024,6 +15026,7 @@ Public Class Form1
 			Else
 				LanCode = languageList(lbxTvShSelectLang.SelectedIndex).Abbreviation.Value
 			End If
+            '#discontine
 			If Pref.tvshow_useXBMC_Scraper = True Then
                 messbox = New frmMessageBox("The Selected TV Show is being Scraped", "", "Please Wait")
                 System.Windows.Forms.Cursor.Current = Cursors.WaitCursor
@@ -15053,7 +15056,6 @@ Public Class Form1
 				TabControl3.SelectedIndex = 0
 			Else
 				If Pref.TvChgShowOverwriteImgs Then TvDeleteShowArt(WorkingTvShow)
-				'Cache.TvCache.Remove(WorkingTvShow)
 				newTvFolders.Add(WorkingTvShow.FolderPath.Substring(0, WorkingTvShow.FolderPath.LastIndexOf("\")))
                 Dim newshow As New str_PossibleShowList
                 newshow.showid      = listOfShows(lbxindex).showid

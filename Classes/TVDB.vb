@@ -8,7 +8,8 @@ Imports Alphaleonis.Win32.Filesystem
 Public Class TVDBScraper2
 
     Public Key          = Utilities.TVDBAPI
-    Public Const TVDB_EXC_MSG = "TVDb is unavailable!"
+    Public Const TVDB_EXC_MSG   = "TVDb is unavailable!"
+    Public Const TVDB_TV_EP     = "Episode not Found"
         
     #Region "Private Properties"
     
@@ -24,6 +25,7 @@ Public Class TVDBScraper2
     Private _series                     As New TheTvDB.TvdbSeries
     Private _searchresults              As New TheTvDB.TvdbSeriesSearchResult
     Private _notfound                   As Boolean = False
+    Private _epnotfound                 As Boolean = False
     Private _episode                    As New TheTvDB.TvdbEpisode
     Private _seriesImages               As New List(Of TheTvDB.TvdbBanner)
     Private _seriesImage                As TheTvDB.TvdbImageSummaryResult
@@ -117,6 +119,12 @@ Public Class TVDBScraper2
     Public Readonly Property SeriesNotFound As Boolean
         Get
             Return _notfound
+        End Get
+    End Property
+
+    Public Readonly Property EpNotFound As Boolean
+        Get
+            Return _epnotfound
         End Get
     End Property
 
@@ -320,7 +328,13 @@ Public Class TVDBScraper2
     End Property
     
     Public Function GetEpisode(ByVal epidentity As Integer) As TheTvDB.TvdbEpisode
-        Dim _episode As TheTvDB.TvdbEpisode = _api.GetEpisodeDetails(epidentity, Nothing, LookupLang).Episode
+        Dim _episode As New TheTvDB.TvdbEpisode
+        Try
+            _epnotfound = False
+            _episode = _api.GetEpisodeDetails(epidentity, Nothing, LookupLang).Episode
+        Catch
+            _epnotfound = True
+        End Try
         Return _episode
     End Function
 #End Region  'Read-only properties

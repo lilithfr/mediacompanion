@@ -274,10 +274,7 @@ Public Class TvShow
         Me.Mpaa.Value       = Series.ContentRating
         Me.Genre.Value      = Series.GenresDisplayString.Replace(", ", " / ")
         Me.ImdbId.Value     = Series.ImdbID
-        Dim tmp As String   = Series.Overview
-        If String.IsNullOrEmpty(tmp) Then tmp = ""
-        tmp                 = string.Join("  ", tmp.Split(Environment.NewLine.ToCharArray()))
-        Me.Plot.Value       = tmp
+        Me.Plot.Value       = Series.Overview
         Me.Title.Value      = If(Not String.IsNullOrEmpty(Series.SeriesName), Series.SeriesName, Me.Title.Value) 'not set up in ScrapeShowTask.vb
         Me.Runtime.Value    = Series.Runtime
         Me.Rating.Value     = Series.Rating

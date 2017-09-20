@@ -227,6 +227,7 @@ Public Class TvEpisode
         Me.Season.Value         = TvdbEpisode.SeasonNumber.Value
         Me.Episode.Value        = TvdbEpisode.EpisodeNumber.Value
         Me.Thumbnail.Url        = TvdbEpisode.ScreenShotUrl
+        Me.Thumbnail.FileName   = TvdbEpisode.ScreenShotUrl 'ThumbNail.Value
         Me.Source.Value         = TvdbEpisode.Source.Value
         Me.DisplayEpisode.Value = TvdbEpisode.AirsBeforeEpsisode.Value
         Me.DisplaySeason.Value  = TvdbEpisode.AirsBeforeEpsisode.Value
