@@ -15777,7 +15777,8 @@ Public Class Form1
 
 		If answer = MsgBoxResult.Yes Then
 			CloseMC = True
-			OpenUrl(HOME_PAGE)
+            OpenUrl(SF_Home_Page & "files/")
+			'OpenUrl(HOME_PAGE)
 		End If
 	End Sub
 
@@ -16084,19 +16085,19 @@ Public Class Form1
 
 	Public Function CheckForNewVersion() As String
 
-		Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
-        Dim MCSF_Version_RegEx = "<tr title=""MC ([0-9]*\.?[0-9]+)"
+		'Dim MC_Version_RegEx = "<th><span class=""rating_header"">current</span></th>.*?<td>[\s]+.*?([0-9]*\.?[0-9]+).*?[\s]+</td>"
+        Dim MCSF_Version_RegEx = "title=""MC ([0-9]*\.?[0-9]+)"
 
 		Dim s As New Classimdb
+        Dim HOME_PAGE2 As String = "https://sourceforge.net/projects/mediacompanion/files/"
+		'Dim html As String = s.loadwebpage(Pref.proxysettings, HOME_PAGE, True, 10).ToString
+        Dim html As String = s.loadwebpage(Pref.proxysettings, SF_Home_Page & "files/", True, 10).ToString
 
-		Dim html As String = s.loadwebpage(Pref.proxysettings, HOME_PAGE, True, 10).ToString
-        'Dim html2 As String = s.loadwebpage(Pref.proxysettings, SF_Home_Page & "files/", True, 10).ToString
+		'Dim m = Regex.Match(html, MC_Version_RegEx, RegexOptions.Singleline)
+        Dim n = Regex.Match(html, MCSF_Version_RegEx, RegexOptions.Singleline)
 
-		Dim m = Regex.Match(html, MC_Version_RegEx, RegexOptions.Singleline)
-        'Dim n = Regex.Match(html2, MCSF_Version_RegEx, RegexOptions.Singleline)
-
-        Dim displayVersion As String = m.Groups(1).Value.Trim
-		'Dim displayVersion As String = n.Groups(1).Value.Trim
+        'Dim displayVersion As String = m.Groups(1).Value.Trim
+		Dim displayVersion As String = n.Groups(1).Value.Trim
 		Dim latestVersion As String = displayVersion.Replace(".", "")
 		Dim currVersion As String = Trim(System.Reflection.Assembly.GetExecutingAssembly.FullName.Split(",")(1)).Replace(".", "").Replace("Version=", "")
 
