@@ -433,10 +433,10 @@ Partial Public Class Form1
             util_ImageLoad(tv_PictureBoxBottom, tvpbbottom, Utilities.DefaultTvBannerPath)
             util_ImageLoad(tv_PictureBoxLeft, Show.ImageFanart.Path, Utilities.DefaultTvFanartPath)
 
-            Panel_EpisodeInfo.Visible = False
-            Panel_EpisodeActors.Visible = False
-            lbl_sorttitle.Visible = True
-            TextBox_Sorttitle.Visible = True
+            Panel_EpisodeInfo   .Visible = False
+            Panel_EpisodeActors .Visible = False
+            lbl_sorttitle       .Visible = True
+            TextBox_Sorttitle   .Visible = True
 
             tb_Sh_Ep_Title.BackColor = Color.White
             If Show.Title.Value <> Nothing Then tb_Sh_Ep_Title.Text = Show.Title.Value
@@ -445,18 +445,18 @@ Partial Public Class Form1
             If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
             If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-            tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
-            tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
-            tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
-            tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
-            tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
-            tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
-            tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
-            tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
-            tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
-            tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
-            cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
-            TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value), Show.Title.Value, Show.SortTitle.Value))
+            tb_ShPremiered      .Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+            tb_ShGenre          .Text = Utilities.ReplaceNothing(Show.Genre.Value)
+            tb_ShTvdbId         .Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+            tb_ShImdbId         .Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+            tb_ShRating         .Text = Utilities.ReplaceNothing(Show.Rating.Value)
+            tb_ShVotes          .Text = Utilities.ReplaceNothing(Show.Votes.Value)
+            tb_ShCert           .Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+            tb_ShRunTime        .Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+            tb_ShStudio         .Text = Utilities.ReplaceNothing(Show.Studio.Value)
+            tb_ShPlot           .Text = Utilities.ReplaceNothing(Show.Plot.Value)
+            cmbx_shUserRating   .Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
+            TextBox_Sorttitle   .Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value), Show.Title.Value, Show.SortTitle.Value))
 
             If String.IsNullOrEmpty(Show.SortOrder.Value) Then Show.SortOrder.Value = Pref.sortorder
             If Show.SortOrder.Value = "dvd" Then
@@ -470,20 +470,22 @@ Partial Public Class Form1
             '3	-	tv TVDB, eps IMDB
 
             If String.IsNullOrEmpty(Show.EpisodeActorSource.Value) Then
-                If Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "2" Then
-                    Show.EpisodeActorSource.Value = "tvdb"
-                Else
-                    Show.EpisodeActorSource.Value = "imdb"
-                End If
+                Show.EpisodeActorSource.Value = If((Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "2"), "tvdb", "imdb")
+                'If Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "2" Then
+                '    Show.EpisodeActorSource.Value = "tvdb"
+                'Else
+                '    Show.EpisodeActorSource.Value = "imdb"
+                'End If
             End If
 
             Button46.Text = Show.EpisodeActorSource.Value.ToUpper
             If String.IsNullOrEmpty(Show.TvShowActorSource.Value) Then
-                If Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "3" Then
-                    Show.TvShowActorSource.Value = "tvdb"
-                Else
-                    Show.TvShowActorSource.Value = "imdb"
-                End If
+                Show.TvShowActorSource.Value = If((Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "3"), "tvdb", "imdb")
+                'If Pref.TvdbActorScrape = "0" Or Pref.TvdbActorScrape = "3" Then
+                '    Show.TvShowActorSource.Value = "tvdb"
+                'Else
+                '    Show.TvShowActorSource.Value = "imdb"
+                'End If
             End If
 
             TvPanel7Update(Show.FolderPath)
@@ -686,35 +688,35 @@ Partial Public Class Form1
         If Show.State = ShowState.Unverified Then tb_Sh_Ep_Title.BackColor = Color.Yellow
         If Show.State = ShowState.Error Then tb_Sh_Ep_Title.BackColor = Color.Red
 
-        tb_ShPremiered.Text = Utilities.ReplaceNothing(Show.Premiered.Value)
-        tb_ShGenre.Text = Utilities.ReplaceNothing(Show.Genre.Value)
-        tb_ShTvdbId.Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
-        tb_ShImdbId.Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
-        tb_ShRating.Text = Utilities.ReplaceNothing(Show.Rating.Value)
-        tb_ShVotes.Text = Utilities.ReplaceNothing(Show.Votes.Value)
-        tb_ShCert.Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
-        tb_ShRunTime.Text = Utilities.ReplaceNothing(Show.Runtime.Value)
-        tb_ShStudio.Text = Utilities.ReplaceNothing(Show.Studio.Value)
-        tb_ShPlot.Text = Utilities.ReplaceNothing(Show.Plot.Value)
-        cmbx_shUserRating.Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
-        Panel_EpisodeInfo.Visible = False
-        Panel_EpisodeActors.Visible = False
-        lbl_sorttitle.Visible = True
-        TextBox_Sorttitle.Visible = True
-        TextBox_Sorttitle.Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value), Show.Title.Value, Show.SortTitle.Value))
-        ExpandSelectedShowToolStripMenuItem.Enabled = True
-        ExpandAllToolStripMenuItem.Enabled = True
-        CollapseAllToolStripMenuItem.Enabled = True
-        CollapseSelectedShowToolStripMenuItem.Enabled = True
-        Tv_TreeViewContext_RenameEp.Enabled = True
-        Tv_TreeViewContext_RenameEp.Visible = True
+        tb_ShPremiered      .Text = Utilities.ReplaceNothing(Show.Premiered.Value)
+        tb_ShGenre          .Text = Utilities.ReplaceNothing(Show.Genre.Value)
+        tb_ShTvdbId         .Text = Utilities.ReplaceNothing(Show.TvdbId.Value)
+        tb_ShImdbId         .Text = Utilities.ReplaceNothing(Show.ImdbId.Value)
+        tb_ShRating         .Text = Utilities.ReplaceNothing(Show.Rating.Value)
+        tb_ShVotes          .Text = Utilities.ReplaceNothing(Show.Votes.Value)
+        tb_ShCert           .Text = Utilities.ReplaceNothing(Show.Mpaa.Value)
+        tb_ShRunTime        .Text = Utilities.ReplaceNothing(Show.Runtime.Value)
+        tb_ShStudio         .Text = Utilities.ReplaceNothing(Show.Studio.Value)
+        tb_ShPlot           .Text = Utilities.ReplaceNothing(Show.Plot.Value)
+        cmbx_shUserRating   .Text = If(Show.UserRating.Value = "0", "None", Show.UserRating.Value)
+        Panel_EpisodeInfo   .Visible = False
+        Panel_EpisodeActors .Visible = False
+        lbl_sorttitle       .Visible = True
+        TextBox_Sorttitle   .Visible = True
+        TextBox_Sorttitle   .Text = Utilities.ReplaceNothing(If(String.IsNullOrEmpty(Show.SortTitle.Value), Show.Title.Value, Show.SortTitle.Value))
+        ExpandSelectedShowToolStripMenuItem     .Enabled = True
+        ExpandAllToolStripMenuItem              .Enabled = True
+        CollapseAllToolStripMenuItem            .Enabled = True
+        CollapseSelectedShowToolStripMenuItem   .Enabled = True
+        Tv_TreeViewContext_RenameEp             .Enabled = True
+        Tv_TreeViewContext_RenameEp             .Visible = True
 
         'MsgBox("Season")
-        Dim season As String = SelectedSeason.SeasonLabel
-        Dim trueseason As Integer = SelectedSeason.SeasonNumber
-        Dim PaddedSeason As String = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
-        Dim tvpbright As String = Utilities.DefaultTvPosterPath
-        Dim tvpbbottom As String = Utilities.DefaultTvBannerPath
+        Dim season          As String   = SelectedSeason.SeasonLabel
+        Dim trueseason      As Integer  = SelectedSeason.SeasonNumber
+        Dim PaddedSeason    As String   = Utilities.PadNumber(SelectedSeason.SeasonNumber, 2)
+        Dim tvpbright       As String   = Utilities.DefaultTvPosterPath
+        Dim tvpbbottom      As String   = Utilities.DefaultTvBannerPath
         If trueseason = -1 Then
             If SelectedSeason.Poster.Image IsNot Nothing Then
                 tvpbright = SelectedSeason.Poster.Path
@@ -918,207 +920,7 @@ Partial Public Class Form1
         Panel_EpisodeInfo.Visible = True
         ShOrEploading = False
     End Sub
-
-    Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByRef seasonno As String, ByRef episodeno As String, ByVal language As String, ByVal aired As String)
-        Dim episodestring As String = ""
-        Dim episodeurl As String = ""
-        Dim episodeurl2 As String = ""
-        Dim xmlfile As String = ""
-
-        If language.ToLower.IndexOf(".xml") = -1 Then
-            language = language & ".xml"
-        End If
-        episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
-        If aired = Nothing Then
-            episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
-        Else
-            episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, aired, language)
-        End If
-        'First try seriesxml data
-        'check if present, download if not
-        Dim gotseriesxml As Boolean = False
-        Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
-        Dim xmlfile2 As String = Utilities.SeriesXmlPath & tvdbid & ".xml"
-        Dim SeriesInfo As New Tvdb.ShowData
-        If Not File.Exists(Utilities.SeriesXmlPath & tvdbid & ".xml") Then
-            gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
-        Else
-            'Check series xml isn't older than Five days.  If so, re-download it.
-            Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2)
-            Dim datenow As DateTime = Date.Now()
-            Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
-            If dif > If(aired <> Nothing, 1, 5) Then
-                gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
-            Else
-                gotseriesxml = True
-            End If
-        End If
-
-        If Not gotseriesxml then
-            xmlfile = Utilities.DownloadTextFiles(episodeurl)
-            If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-        Else
-            SeriesInfo.Load(xmlfile2)
-            Dim gotEpxml As Boolean = False
-            'check episode is present in seriesxml file, else, re-download it (update to latest)
-            If aired <> Nothing Then
-                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                    If NewEpisode.FirstAired.Value = aired Then
-                        xmlfile = NewEpisode.Node.ToString
-                        xmlfile = "<Data>" & xmlfile & "</Data>"
-                        gotEpxml = True
-                        Exit For
-                    End If
-                Next
-            End If
-            If Not gotEpxml AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
-                If sortorder = "default" Then
-                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                        If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
-                            xmlfile = NewEpisode.Node.ToString
-                            xmlfile = "<Data>" & xmlfile & "</Data>"
-                            gotEpxml = True
-                            Exit For
-                        End If
-                    Next
-                ElseIf sortorder = "dvd" Then
-                    For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
-                        If NewEpisode.DvdEpisodeNumber.value = (episodeno & ".0") AndAlso NewEpisode.DvdSeason.Value = seasonno Then
-                            xmlfile = NewEpisode.Node.ToString
-                            xmlfile = "<Data>" & xmlfile & "</Data>"
-                            gotEpxml = True
-                            Exit For
-                        End If
-                    Next
-                End If
-            End If
-            ' Finally, if not in seriesxml file, go old-school
-            If Not gotEpxml Then
-                xmlfile = Utilities.DownloadTextFiles(episodeurl)
-                If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
-            End If
-        End If
-
-        If xmlfile.Contains("Could not connect") OrElse xmlfile.Contains("No Results from SP") Then Return xmlfile               ' Added check if TVDB is unavailable.
-        Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
-        If xmlOK Then
-            episodestring = "<episodedetails>"
-            episodestring = episodestring & "<url>" & If(IsNothing(aired), episodeurl, episodeurl2) & "</url>"
-            Dim mirrorslist As New XmlDocument
-            mirrorslist.LoadXml(xmlfile)
-            For Each thisresult As XmlNode In mirrorslist("Data")
-                Select Case thisresult.Name
-                    Case "Episode"
-                        Dim mirrorselection As XmlNode = Nothing
-                        For Each mirrorselection In thisresult.ChildNodes
-                            Select Case mirrorselection.Name
-                                Case "EpisodeName"
-                                    episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
-                                Case "FirstAired"
-                                    episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
-                                Case "GuestStars"
-                                    Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
-                                    For Each guest In gueststars
-                                        If Not String.IsNullOrEmpty(guest) Then episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
-                                    Next
-                                Case "Director"
-                                    Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.Trim("|")
-                                    episodestring = episodestring & "<director>" & tempstring & "</director>"
-                                Case "Writer"
-                                    Dim tempstring As String = mirrorselection.InnerXml
-                                    tempstring = tempstring.Trim("|")
-                                    episodestring = episodestring & "<credits>" & tempstring & "</credits>"
-                                Case "Overview"
-                                    episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
-                                Case "Rating"
-                                    episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
-                                Case "RatingCount"
-                                    episodestring = episodestring & "<ratingcount>" & mirrorselection.InnerXml & "</ratingcount>"
-                                Case "IMDB_ID"
-                                    episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
-                                Case "id"
-                                    episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
-                                Case "seriesid"
-                                    episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
-                                Case "filename"
-                                    episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
-                                Case "airsbefore_episode"
-                                    episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
-                                Case "airsbefore_season"
-                                    episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
-                                Case "SeasonNumber"
-                                    If sortorder = "default" Then seasonno = mirrorselection.InnerText
-                                Case "EpisodeNumber"
-                                    If sortorder = "default" Then episodeno = mirrorselection.InnerText
-                                Case "DVD_season"
-                                    If sortorder = "dvd" Then seasonno = mirrorselection.InnerText
-                                Case "DVD_episodenumber"
-                                    If sortorder = "dvd" Then episodeno = mirrorselection.InnerText.Substring(0, mirrorselection.InnerText.IndexOf("."))
-                                    episodestring = episodestring & "<dvd_episodenumber>" & mirrorselection.InnerXml & "</dvd_episodenumber>"
-                            End Select
-                        Next
-                End Select
-            Next
-            episodestring = episodestring & "</episodedetails>"
-        Else
-            If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
-            episodestring = "Error"
-        End If
-        Return episodestring
-    End Function
-
-    Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String, ByVal scrapedok As Boolean)
-        tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
-        WorkingWithNfoFiles.ep_NfoSave(alleps, path)
-        If Pref.TvDlEpisodeThumb OrElse Pref.autoepisodescreenshot Then
-            tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.TvDlEpisodeThumb, Pref.autoepisodescreenshot) & vbcrlf
-        Else
-            tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
-        End If
-
-        If Not scrapedok AndAlso Pref.TvEpSaveNfoEmpty Then Return path
-
-        If Pref.autorenameepisodes = True Then
-            Dim eps As New List(Of String)
-            For Each ep In alleps
-                eps.Add(ep.Episode.Value)
-            Next
-            Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
-
-            If tempspath <> "false" Then path = tempspath
-        End If
-        Return path
-    End Function
-
-    Private Function GetEpRating(ByRef tvep As TvEpisode, ByVal Rating As String, ByVal Votes As String) As Boolean
-        Dim ratingdone As Boolean = False
-        If Pref.tvdbIMDbRating Then
-            Dim aok As Boolean = False
-
-            '''If no Ep IMDB Id, try getting from TMDb first.
-            If String.IsNullOrEmpty(tvep.ImdbId.Value) Then aok = gettmdbepid(tvep)
-
-            '''Check if not still empty and if is IMDB Id
-            If Not String.IsNullOrEmpty(tvep.ImdbId.Value) AndAlso tvep.ImdbId.Value.StartsWith("tt") Then aok = True
-
-            '''Try IMDb Direct if we have the IMDB Id
-            If aok Then ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
-
-            '' Disable Omdbapi to get episode ratings till we get a API key, or site becomes free again.
-            ''If no success, try Omdbapi (Omdbapi is much slower)
-            'If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
-        End If
-
-        ''' Fallback to TVDb if nothing from IMDb
-        If Not ratingdone Then
-            tvep.Rating.Value = Rating
-            tvep.Votes.Value = Votes
-            ratingdone = True
-        End If
-        Return ratingdone
-    End Function
-
+    
     Private Function ep_getIMDbRating(ByVal epid As String, ByRef rating As String, ByRef votes As String) As Boolean
         Dim aok As Boolean = True
         If String.IsNullOrEmpty(epid) Then Return False
@@ -1133,85 +935,285 @@ Partial Public Class Form1
         Return rating <> ""
     End Function
 
-    Private Function epGetImdbRatingOmdbapi(ByRef ep As TvEpisode) As Boolean
-        Dim GotEpImdbId As Boolean = False
-        If (String.IsNullOrEmpty(ep.Showimdbid.Value) OrElse ep.Showimdbid.Value = "0") AndAlso String.IsNullOrEmpty(ep.ImdbId.Value) Then Return False
-        If Not ep.Showimdbid.Value.StartsWith("tt") AndAlso (String.IsNullOrEmpty(ep.Season.Value) AndAlso String.IsNullOrEmpty(ep.Episode.Value)) Then Return False
-        Dim url As String = Nothing
+    'Public Function ep_Get(ByVal tvdbid As String, ByVal sortorder As String, ByRef seasonno As String, ByRef episodeno As String, ByVal language As String, ByVal aired As String)
+    '    Dim episodestring As String = ""
+    '    Dim episodeurl As String = ""
+    '    Dim episodeurl2 As String = ""
+    '    Dim xmlfile As String = ""
 
-        If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then GotEpImdbId = True
+    '    If language.ToLower.IndexOf(".xml") = -1 Then
+    '        language = language & ".xml"
+    '    End If
+    '    episodeurl2 = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+    '    If aired = Nothing Then
+    '        episodeurl = "http://thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/" & sortorder & "/" & seasonno & "/" & episodeno & "/" & language
+    '    Else
+    '        episodeurl = String.Format("http://thetvdb.com/api/GetEpisodeByAirDate.php?apikey=6E82FED600783400&seriesid={0}&airdate={1}&language={2}", tvdbid, aired, language)
+    '    End If
+    '    'First try seriesxml data
+    '    'check if present, download if not
+    '    Dim gotseriesxml As Boolean = False
+    '    Dim url As String = "http://www.thetvdb.com/api/6E82FED600783400/series/" & tvdbid & "/all/" & language
+    '    Dim xmlfile2 As String = Utilities.SeriesXmlPath & tvdbid & ".xml"
+    '    Dim SeriesInfo As New Tvdb.ShowData
+    '    If Not File.Exists(Utilities.SeriesXmlPath & tvdbid & ".xml") Then
+    '        gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
+    '    Else
+    '        'Check series xml isn't older than Five days.  If so, re-download it.
+    '        Dim dtCreationDate As DateTime = File.GetLastWriteTime(xmlfile2)
+    '        Dim datenow As DateTime = Date.Now()
+    '        Dim dif As Long = DateDiff(DateInterval.Day, dtCreationDate, datenow)
+    '        If dif > If(aired <> Nothing, 1, 5) Then
+    '            gotseriesxml = DownloadCache.Savexmltopath(url, Utilities.SeriesXmlPath, tvdbid & ".xml", True)
+    '        Else
+    '            gotseriesxml = True
+    '        End If
+    '    End If
 
-        If Not GotEpImdbId Then url = String.Format("{0}?i={1}&Season={2}&r=xml", Pref.Omdbapiurl, ep.Showimdbid.Value, ep.Season.Value)
+    '    If Not gotseriesxml then
+    '        xmlfile = Utilities.DownloadTextFiles(episodeurl)
+    '        If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
+    '    Else
+    '        SeriesInfo.Load(xmlfile2)
+    '        Dim gotEpxml As Boolean = False
+    '        'check episode is present in seriesxml file, else, re-download it (update to latest)
+    '        If aired <> Nothing Then
+    '            For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+    '                If NewEpisode.FirstAired.Value = aired Then
+    '                    xmlfile = NewEpisode.Node.ToString
+    '                    xmlfile = "<Data>" & xmlfile & "</Data>"
+    '                    gotEpxml = True
+    '                    Exit For
+    '                End If
+    '            Next
+    '        End If
+    '        If Not gotEpxml AndAlso (seasonno <> "-1" And episodeno <> "-1") Then
+    '            If sortorder = "default" Then
+    '                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+    '                    If NewEpisode.EpisodeNumber.Value = episodeno AndAlso NewEpisode.SeasonNumber.Value = seasonno Then
+    '                        xmlfile = NewEpisode.Node.ToString
+    '                        xmlfile = "<Data>" & xmlfile & "</Data>"
+    '                        gotEpxml = True
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            ElseIf sortorder = "dvd" Then
+    '                For Each NewEpisode As Tvdb.Episode In SeriesInfo.Episodes
+    '                    If NewEpisode.DvdEpisodeNumber.value = (episodeno & ".0") AndAlso NewEpisode.DvdSeason.Value = seasonno Then
+    '                        xmlfile = NewEpisode.Node.ToString
+    '                        xmlfile = "<Data>" & xmlfile & "</Data>"
+    '                        gotEpxml = True
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '        End If
+    '        ' Finally, if not in seriesxml file, go old-school
+    '        If Not gotEpxml Then
+    '            xmlfile = Utilities.DownloadTextFiles(episodeurl)
+    '            If xmlfile.Contains("No Results from SP") AndAlso (seasonno <> "-1" And episodeno <> "-1") Then xmlfile = Utilities.DownloadTextFiles(episodeurl2)
+    '        End If
+    '    End If
 
-        Dim imdb As New Classimdb
-        If Not GotEpImdbId Then
-            Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
-            If result.Contains("error") Then Return False
-            Dim adoc As New XmlDocument
-            adoc.LoadXml(result)
-            If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return False
-            If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return False
-            For each thisresult As XmlNode In adoc("root")
-                If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
-                    Dim TmpValue As String = thisresult.Attributes("Episode").Value
-                    If TmpValue <> "" AndAlso TmpValue = ep.Episode.Value Then
-                        Dim epimdbid As String = thisresult.Attributes("imdbID").Value
-                        ep.ImdbId.Value = epimdbid
-                        Exit For
-                    End If
-                End If
-            Next
-            If Not ep.ImdbId.Value.StartsWith("tt") Then Return False
-        End If
+    '    If xmlfile.Contains("Could not connect") OrElse xmlfile.Contains("No Results from SP") Then Return xmlfile               ' Added check if TVDB is unavailable.
+    '    Dim xmlOK As Boolean = Utilities.CheckForXMLIllegalChars(xmlfile)
+    '    If xmlOK Then
+    '        episodestring = "<episodedetails>"
+    '        episodestring = episodestring & "<url>" & If(IsNothing(aired), episodeurl, episodeurl2) & "</url>"
+    '        Dim mirrorslist As New XmlDocument
+    '        mirrorslist.LoadXml(xmlfile)
+    '        For Each thisresult As XmlNode In mirrorslist("Data")
+    '            Select Case thisresult.Name
+    '                Case "Episode"
+    '                    Dim mirrorselection As XmlNode = Nothing
+    '                    For Each mirrorselection In thisresult.ChildNodes
+    '                        Select Case mirrorselection.Name
+    '                            Case "EpisodeName"
+    '                                episodestring = episodestring & "<title>" & mirrorselection.InnerXml & "</title>"
+    '                            Case "FirstAired"
+    '                                episodestring = episodestring & "<premiered>" & mirrorselection.InnerXml & "</premiered>"
+    '                            Case "GuestStars"
+    '                                Dim gueststars() As String = mirrorselection.InnerXml.Split("|")
+    '                                For Each guest In gueststars
+    '                                    If Not String.IsNullOrEmpty(guest) Then episodestring = episodestring & "<actor><name>" & guest & "</name></actor>"
+    '                                Next
+    '                            Case "Director"
+    '                                Dim tempstring As String = mirrorselection.InnerXml
+    '                                tempstring = tempstring.Trim("|")
+    '                                episodestring = episodestring & "<director>" & tempstring & "</director>"
+    '                            Case "Writer"
+    '                                Dim tempstring As String = mirrorselection.InnerXml
+    '                                tempstring = tempstring.Trim("|")
+    '                                episodestring = episodestring & "<credits>" & tempstring & "</credits>"
+    '                            Case "Overview"
+    '                                episodestring = episodestring & "<plot>" & mirrorselection.InnerXml & "</plot>"
+    '                            Case "Rating"
+    '                                episodestring = episodestring & "<rating>" & mirrorselection.InnerXml & "</rating>"
+    '                            Case "RatingCount"
+    '                                episodestring = episodestring & "<ratingcount>" & mirrorselection.InnerXml & "</ratingcount>"
+    '                            Case "IMDB_ID"
+    '                                episodestring = episodestring & "<imdbid>" & mirrorselection.InnerXml & "</imdbid>"
+    '                            Case "id"
+    '                                episodestring = episodestring & "<uniqueid>" & mirrorselection.InnerXml & "</uniqueid>"
+    '                            Case "seriesid"
+    '                                episodestring = episodestring & "<showid>" & mirrorselection.InnerXml & "</showid>"
+    '                            Case "filename"
+    '                                episodestring = episodestring & "<thumb>http://www.thetvdb.com/banners/" & mirrorselection.InnerXml & "</thumb>"
+    '                            Case "airsbefore_episode"
+    '                                episodestring = episodestring & "<displayepisode>" & mirrorselection.InnerXml & "</displayepisode>"
+    '                            Case "airsbefore_season"
+    '                                episodestring = episodestring & "<displayseason>" & mirrorselection.InnerXml & "</displayseason>"
+    '                            Case "SeasonNumber"
+    '                                If sortorder = "default" Then seasonno = mirrorselection.InnerText
+    '                            Case "EpisodeNumber"
+    '                                If sortorder = "default" Then episodeno = mirrorselection.InnerText
+    '                            Case "DVD_season"
+    '                                If sortorder = "dvd" Then seasonno = mirrorselection.InnerText
+    '                            Case "DVD_episodenumber"
+    '                                If sortorder = "dvd" Then episodeno = mirrorselection.InnerText.Substring(0, mirrorselection.InnerText.IndexOf("."))
+    '                                episodestring = episodestring & "<dvd_episodenumber>" & mirrorselection.InnerXml & "</dvd_episodenumber>"
+    '                        End Select
+    '                    Next
+    '            End Select
+    '        Next
+    '        episodestring = episodestring & "</episodedetails>"
+    '    Else
+    '        If CheckBoxDebugShowTVDBReturnedXML.Checked = True Then MsgBox(xmlfile, MsgBoxStyle.OkOnly, "FORM1 getepisode - TVDB returned.....")
+    '        episodestring = "Error"
+    '    End If
+    '    Return episodestring
+    'End Function
 
-        url = String.Format("{0}?i={1}&r=xml", Pref.Omdbapiurl, ep.ImdbId.Value)
-        Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
-        If result2 = "error" Then Return False
-        Dim bdoc As New XmlDocument
-        bdoc.LoadXml(result2)
-        If bdoc("root").HasAttribute("response") AndAlso bdoc("root").Attributes("response").Value = "False" Then Return False
-        If bdoc("root").HasAttribute("Response") AndAlso bdoc("root").Attributes("Response").Value = "False" Then Return False
+    'Private Function ep_add(ByVal alleps As List(Of TvEpisode), ByVal path As String, ByVal show As String, ByVal scrapedok As Boolean)
+    '    tvScraperLog = tvScraperLog & "!!! Saving episode" & vbCrLf
+    '    WorkingWithNfoFiles.ep_NfoSave(alleps, path)
+    '    If Pref.TvDlEpisodeThumb OrElse Pref.autoepisodescreenshot Then
+    '        tvScraperLog &= tv_EpisodeFanartGet(alleps(0), Pref.TvDlEpisodeThumb, Pref.autoepisodescreenshot) & vbcrlf
+    '    Else
+    '        tvScraperLog &= "!!! Skipped download of episode thumb" & vbCrLf
+    '    End If
 
-        For each thisresult As XmlNode In bdoc("root")
-            If Not IsNothing(thisresult.Attributes.ItemOf("imdbRating")) Then
-                Dim ratingVal As String = thisresult.Attributes("imdbRating").Value
-                If ratingVal.ToLower = "n/a" Then Return False
-                ep.Rating.Value = ratingVal
-            End If
-            If Not IsNothing(thisresult.Attributes.ItemOf("imdbVotes")) Then
-                Dim voteval As String = thisresult.Attributes("imdbVotes").Value
-                If Not voteval.ToLower = "n/a" Then ep.Votes.Value = voteval
-            End If
-        Next
+    '    If Not scrapedok AndAlso Pref.TvEpSaveNfoEmpty Then Return path
 
-        Return True
-    End Function
+    '    If Pref.autorenameepisodes = True Then
+    '        Dim eps As New List(Of String)
+    '        For Each ep In alleps
+    '            eps.Add(ep.Episode.Value)
+    '        Next
+    '        Dim tempspath As String = TVShows.episodeRename(path, alleps(0).Season.Value, eps, show, alleps(0).Title.Value, Pref.TvRenameReplaceSpace, Pref.TvRenameReplaceSpaceDot)
 
-    Private Function gettmdbepid(ByRef ep As TvEpisode) As Boolean
-        Dim url As String = String.Format("https://api.themoviedb.org/3/find/{0}?api_key={1}&language=en-US&external_source=tvdb_id", ep.ShowId.Value, Utilities.TMDBAPI)
-        Dim imdb As New Classimdb
-        Try
-            Dim reply As String = imdb.loadwebpage(Pref.proxysettings, url, True)
-            If reply <> "error" Then
-                Dim m As Match = Regex.Match(reply, """id"":(.*?),""")
-                If Not m.Success Then Return False
-                Dim pie As String = m.Groups(1).Value.Trim
-                url = String.Format("https://api.themoviedb.org/3/tv/{0}/season/{1}/episode/{2}/external_ids?api_key={3}&language=en-US", pie, ep.Season.Value, ep.Episode.Value, Utilities.TMDBAPI)
-                Dim reply2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
-                If reply2 = "" Then Return False
-                Dim n As Match = Regex.Match(reply2, """imdb_id"":""(.*?)"",""")
-                If n.Success Then
-                    Dim epimdbid As String = n.Groups(1).Value.Trim
-                    If epimdbid.StartsWith("tt") AndAlso epimdbid.Length = 9 Then
-                        ep.ImdbId.Value = epimdbid
-                        Return True
-                    End If
-                End If
-            End If
-        Catch
-        End Try
-        Return False
-    End Function
+    '        If tempspath <> "false" Then path = tempspath
+    '    End If
+    '    Return path
+    'End Function
+
+    'Private Function GetEpRating(ByRef tvep As TvEpisode, ByVal Rating As String, ByVal Votes As String) As Boolean
+    '    Dim ratingdone As Boolean = False
+    '    If Pref.tvdbIMDbRating Then
+    '        Dim aok As Boolean = False
+
+    '        '''If no Ep IMDB Id, try getting from TMDb first.
+    '        If String.IsNullOrEmpty(tvep.ImdbId.Value) Then aok = gettmdbepid(tvep)
+
+    '        '''Check if not still empty and if is IMDB Id
+    '        If Not String.IsNullOrEmpty(tvep.ImdbId.Value) AndAlso tvep.ImdbId.Value.StartsWith("tt") Then aok = True
+
+    '        '''Try IMDb Direct if we have the IMDB Id
+    '        If aok Then ratingdone = ep_getIMDbRating(tvep.ImdbId.Value, tvep.Rating.Value, tvep.Votes.Value)
+
+    '        '' Disable Omdbapi to get episode ratings till we get a API key, or site becomes free again.
+    '        ''If no success, try Omdbapi (Omdbapi is much slower)
+    '        'If Not ratingdone Then ratingdone = epGetImdbRatingOmdbapi(tvep)
+    '    End If
+
+    '    ''' Fallback to TVDb if nothing from IMDb
+    '    If Not ratingdone Then
+    '        tvep.Rating.Value = Rating
+    '        tvep.Votes.Value = Votes
+    '        ratingdone = True
+    '    End If
+    '    Return ratingdone
+    'End Function
+
+    'Private Function epGetImdbRatingOmdbapi(ByRef ep As TvEpisode) As Boolean
+    '    Dim GotEpImdbId As Boolean = False
+    '    If (String.IsNullOrEmpty(ep.Showimdbid.Value) OrElse ep.Showimdbid.Value = "0") AndAlso String.IsNullOrEmpty(ep.ImdbId.Value) Then Return False
+    '    If Not ep.Showimdbid.Value.StartsWith("tt") AndAlso (String.IsNullOrEmpty(ep.Season.Value) AndAlso String.IsNullOrEmpty(ep.Episode.Value)) Then Return False
+    '    Dim url As String = Nothing
+
+    '    If Not String.IsNullOrEmpty(ep.ImdbId.Value) AndAlso ep.ImdbId.Value.StartsWith("tt") Then GotEpImdbId = True
+
+    '    If Not GotEpImdbId Then url = String.Format("{0}?i={1}&Season={2}&r=xml", Pref.Omdbapiurl, ep.Showimdbid.Value, ep.Season.Value)
+
+    '    Dim imdb As New Classimdb
+    '    If Not GotEpImdbId Then
+    '        Dim result As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
+    '        If result.Contains("error") Then Return False
+    '        Dim adoc As New XmlDocument
+    '        adoc.LoadXml(result)
+    '        If adoc("root").HasAttribute("response") AndAlso adoc("root").Attributes("response").Value = "False" Then Return False
+    '        If adoc("root").HasAttribute("Response") AndAlso adoc("root").Attributes("Response").Value = "False" Then Return False
+    '        For each thisresult As XmlNode In adoc("root")
+    '            If Not IsNothing(thisresult.Attributes.ItemOf("Episode")) Then
+    '                Dim TmpValue As String = thisresult.Attributes("Episode").Value
+    '                If TmpValue <> "" AndAlso TmpValue = ep.Episode.Value Then
+    '                    Dim epimdbid As String = thisresult.Attributes("imdbID").Value
+    '                    ep.ImdbId.Value = epimdbid
+    '                    Exit For
+    '                End If
+    '            End If
+    '        Next
+    '        If Not ep.ImdbId.Value.StartsWith("tt") Then Return False
+    '    End If
+
+    '    url = String.Format("{0}?i={1}&r=xml", Pref.Omdbapiurl, ep.ImdbId.Value)
+    '    Dim result2 As String = imdb.loadwebpage(Pref.proxysettings, url, True, 5)
+    '    If result2 = "error" Then Return False
+    '    Dim bdoc As New XmlDocument
+    '    bdoc.LoadXml(result2)
+    '    If bdoc("root").HasAttribute("response") AndAlso bdoc("root").Attributes("response").Value = "False" Then Return False
+    '    If bdoc("root").HasAttribute("Response") AndAlso bdoc("root").Attributes("Response").Value = "False" Then Return False
+
+    '    For each thisresult As XmlNode In bdoc("root")
+    '        If Not IsNothing(thisresult.Attributes.ItemOf("imdbRating")) Then
+    '            Dim ratingVal As String = thisresult.Attributes("imdbRating").Value
+    '            If ratingVal.ToLower = "n/a" Then Return False
+    '            ep.Rating.Value = ratingVal
+    '        End If
+    '        If Not IsNothing(thisresult.Attributes.ItemOf("imdbVotes")) Then
+    '            Dim voteval As String = thisresult.Attributes("imdbVotes").Value
+    '            If Not voteval.ToLower = "n/a" Then ep.Votes.Value = voteval
+    '        End If
+    '    Next
+
+    '    Return True
+    'End Function
+
+    'Private Function gettmdbepid(ByRef ep As TvEpisode) As Boolean
+    '    Dim url As String = String.Format("https://api.themoviedb.org/3/find/{0}?api_key={1}&language=en-US&external_source=tvdb_id", ep.ShowId.Value, Utilities.TMDBAPI)
+    '    Dim imdb As New Classimdb
+    '    Try
+    '        Dim reply As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+    '        If reply <> "error" Then
+    '            Dim m As Match = Regex.Match(reply, """id"":(.*?),""")
+    '            If Not m.Success Then Return False
+    '            Dim pie As String = m.Groups(1).Value.Trim
+    '            url = String.Format("https://api.themoviedb.org/3/tv/{0}/season/{1}/episode/{2}/external_ids?api_key={3}&language=en-US", pie, ep.Season.Value, ep.Episode.Value, Utilities.TMDBAPI)
+    '            Dim reply2 As String = imdb.loadwebpage(Pref.proxysettings, url, True)
+    '            If reply2 = "" Then Return False
+    '            Dim n As Match = Regex.Match(reply2, """imdb_id"":""(.*?)"",""")
+    '            If n.Success Then
+    '                Dim epimdbid As String = n.Groups(1).Value.Trim
+    '                If epimdbid.StartsWith("tt") AndAlso epimdbid.Length = 9 Then
+    '                    ep.ImdbId.Value = epimdbid
+    '                    Return True
+    '                End If
+    '            End If
+    '        End If
+    '    Catch
+    '    End Try
+    '    Return False
+    'End Function
 
     Public Sub ep_VideoSourcePopulate()
         Try
@@ -1252,12 +1254,8 @@ Partial Public Class Form1
             Dim tempstring As String = ""
             If Show IsNot Nothing Then
                 Dim changed As Integer = 0
-                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then
-                    changed += 1
-                End If
-                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then
-                    changed += 2
-                End If
+                If Utilities.ReplaceNothing(Show.TvdbId.Value) <> tb_ShTvdbId.Text Then changed += 1
+                If Utilities.ReplaceNothing(Show.ImdbId.Value).ToLower <> tb_ShImdbId.Text.ToLower Then changed += 2
                 If changed > 0 Then
                     If changed = 1 Then
                         tempint = MessageBox.Show("It appears that you have changed the TVDB ID" & vbCrLf & "Media Companion depends on this ID for scraping episodes And art" & vbCrLf & vbCrLf & "Are you sure you wish to continue And save this?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -1281,22 +1279,22 @@ Partial Public Class Form1
                 If TmpTitle <> Show.Title.Value Then
                     Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Show's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
                     If TryTitle = MsgBoxResult.No Then
-                        tb_Sh_Ep_Title.Text = Show.Title.Value  'Pref.RemoveIgnoredArticles(Show.Title.Value)
+                        tb_Sh_Ep_Title.Text = Show.Title.Value
                         Exit Sub
                     End If
                     Show.Title.Value = TmpTitle
                 End If
-                Show.Plot.Value = tb_ShPlot.Text
-                Show.Runtime.Value = tb_ShRunTime.Text
-                Show.Premiered.Value = tb_ShPremiered.Text
-                Show.Studio.Value = tb_ShStudio.Text
-                Show.Rating.Value = tb_ShRating.Text
-                Show.ImdbId.Value = tb_ShImdbId.Text
-                Show.TvdbId.Value = tb_ShTvdbId.Text
-                Show.Mpaa.Value = tb_ShCert.Text
-                Show.Genre.Value = tb_ShGenre.Text
-                Show.UserRating.Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
-                Show.SortTitle.Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
+                Show.Plot       .Value = tb_ShPlot.Text
+                Show.Runtime    .Value = tb_ShRunTime.Text
+                Show.Premiered  .Value = tb_ShPremiered.Text
+                Show.Studio     .Value = tb_ShStudio.Text
+                Show.Rating     .Value = tb_ShRating.Text
+                Show.ImdbId     .Value = tb_ShImdbId.Text
+                Show.TvdbId     .Value = tb_ShTvdbId.Text
+                Show.Mpaa       .Value = tb_ShCert.Text
+                Show.Genre      .Value = tb_ShGenre.Text
+                Show.UserRating .Value = If(cmbx_shUserRating.Text = "None", "0", cmbx_shUserRating.Text)
+                Show.SortTitle  .Value = If(TextBox_Sorttitle.Text <> Show.Title.Value, TextBox_Sorttitle.Text, "")
 
                 nfoFunction.tvshow_NfoSave(Show, True)   'Show.Save()
                 Show.UpdateTreenode()
@@ -1314,17 +1312,17 @@ Partial Public Class Form1
                 For Each ep In episodelist
                     If ep.Season.Value = trueseason And ep.Episode.Value = trueepisode Then
                         If tb_Sh_Ep_Title.Text.Replace("'", "").ToLower <> ep.Title.Value.ToLower Then
-                            Dim TryTitle As MsgBoxResult = MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo)
-                            If TryTitle = MsgBoxResult.Yes Then ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
+                            If MsgBox(" You have changed this Episode's Title " & vbCrLf & "Are you sure you want to accept this change", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+                                ep.Title.Value = tb_Sh_Ep_Title.Text.Replace("'", "")
+                            End If
                         End If
-                        ep.Plot.Value = tb_EpPlot.Text
-                        ep.Aired.Value = tb_EpAired.Text
-                        ep.Rating.Value = tb_EpRating.Text
-                        ep.UserRating.Value = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
-                        'ep.Votes.Value              = tb_EpVotes.Text       'No, don't allow users to change votes.
-                        ep.Credits.Value = tb_EpCredits.Text
-                        ep.Director.Value = tb_EpDirector.Text
-                        If ep.Season.Value = "0" Then
+                        ep.Plot         .Value = tb_EpPlot.Text
+                        ep.Aired        .Value = tb_EpAired.Text
+                        ep.Rating       .Value = tb_EpRating.Text
+                        ep.UserRating   .Value = If(cmbx_EpUsrRating.Text = "None", "0", cmbx_EpUsrRating.Text)
+                        ep.Credits      .Value = tb_EpCredits.Text
+                        ep.Director     .Value = tb_EpDirector.Text
+                        If ep.Season    .Value = "0" Then
                             ep.DisplayEpisode.Value = tb_EpAirEpisode.Text
                             ep.DisplaySeason.Value = tb_EpAirSeason.Text
                         End If
@@ -1956,14 +1954,14 @@ Partial Public Class Form1
 
 #End Region
 
-    Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
-        Try
-            If total = 0 Then total = onNumber
-            Return Math.Min((100 / total) * onNumber, 100)
-        Catch
-            Return 1
-        End Try
-    End Function
+    'Function CalcPercentDone(onNumber As Integer, total As Integer) As Integer
+    '    Try
+    '        If total = 0 Then total = onNumber
+    '        Return Math.Min((100 / total) * onNumber, 100)
+    '    Catch
+    '        Return 1
+    '    End Try
+    'End Function
 
 #Region "New TV Series XMl Background workers"
 
