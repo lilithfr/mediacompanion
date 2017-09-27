@@ -151,9 +151,15 @@ Public Class ProtoFile
         Me.CleanDoc()
         If File.Exists(Path) Then
             Try
-                Using tmpstrm As IO.StreamReader = File.OpenText(Path)
-                    Me.Doc = XDocument.Load(tmpstrm)
-                End Using
+                Dim tmpstrm2 As String = IO.File.ReadAllText(path)
+                'Using tmpstrm2 As String = IO.File.ReadAllText(Path)
+                'Using tmpstrm As IO.StreamReader = File.OpenText(Path)
+                    
+                tmpstrm2 = tmpstrm2.Replace("    <genre>", "<genre>")
+                tmpstrm2 = regularexpressions.regex.replace(tmpstrm2, "(<\/genre>.*?\s<genre>)", " / ")
+                Me.Doc = XDocument.Parse(tmpstrm2)
+                    'Me.Doc = XDocument.Load(tmpstrm)
+                'End Using
                 
                 Me.Doc.DescendantNodes.OfType(Of XComment)().Remove()
             Catch ex As Exception

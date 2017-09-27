@@ -679,27 +679,27 @@ Public Class WorkingWithNfoFiles
 
     End Function
 
-    Public Function tv_NfoLoad(ByVal path As String) As TvShow
-        Dim newtvshow As New TvShow
-        If Not File.Exists(path) Then
-            newtvshow.Title.Value = Utilities.GetLastFolder(path)
-            'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
-            newtvshow.NfoFilePath = path
-            newtvshow.Year.Value = "0000"
-            newtvshow.TvdbId.Value = ""
-            newtvshow.Status.Value = "missing"
-            newtvshow.State = Media_Companion.ShowState.Locked
-            Return newtvshow
-            Exit Function
-        Else
-            newtvshow.NfoFilePath = path
-            newtvshow.Load()
-            If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
-                newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
-            End If
-        End If
-        Return newtvshow
-    End Function
+    'Public Function tv_NfoLoad(ByVal path As String) As TvShow
+    '    Dim newtvshow As New TvShow
+    '    If Not File.Exists(path) Then
+    '        newtvshow.Title.Value = Utilities.GetLastFolder(path)
+    '        'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Year.Value = "0000"
+    '        newtvshow.TvdbId.Value = ""
+    '        newtvshow.Status.Value = "missing"
+    '        newtvshow.State = Media_Companion.ShowState.Locked
+    '        Return newtvshow
+    '        Exit Function
+    '    Else
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Load()
+    '        If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
+    '            newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+    '        End If
+    '    End If
+    '    Return newtvshow
+    'End Function
 
     Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
         If File.Exists(Path) And Not overwrite Then Exit Sub
