@@ -24,7 +24,7 @@ Public Class TVDBScraper
     Public Property TvBw                As BackgroundWorker = Nothing
     Public Property PercentDone         As Integer = -1
     Public Property ProgressStart       As String = String.Empty
-    Public Property ListOfShows         As List(Of TvShow)
+    Public Property ListOfShows         As New List(Of TvShow)
     Public Property EpForceSearch       As Boolean = False
     Public Property SingleShow          As Boolean = False
     Public Property SingleShowid        As String = Nothing

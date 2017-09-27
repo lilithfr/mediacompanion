@@ -2297,9 +2297,15 @@ Public Class Pref
         End Try
     End Function
 
-    Public Shared Function GetRootFolderCheck(ByVal fullpath) As Boolean
+    ''' <summary>
+    ''' Checkes whether video file is directly in a Root Movie folder.
+    ''' </summary>
+    ''' <param name="fullpath">Full path and filename (usually nfo path).</param>
+    ''' <param name="force">Override  root check option.</param>
+    ''' <returns>True if in Root folder.</returns>
+    Public Shared Function GetRootFolderCheck(ByVal fullpath As String, Optional ByVal force As Boolean = False) As Boolean
         Dim isroot As Boolean = False
-        If Pref.movrootfoldercheck Then
+        If Pref.movrootfoldercheck OrElse force Then
             Dim lastfolder As String = Utilities.GetLastFolder(fullpath)
             If Not Pref.HomeVidScrape Then
                 Dim rtfolder As String = Nothing

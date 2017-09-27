@@ -212,7 +212,6 @@ Public Class Form1
 	Dim listOfTvFanarts                 As New List(Of str_FanartList)
 	Dim tableSets                       As New List(Of str_TableItems)
 	Dim relativeFolderList              As New List(Of str_RelativeFileList)
-	'Dim templanguage As String
 	Dim WithEvents tvposterpicboxes     As PictureBox
 	Dim WithEvents tvpostercheckboxes   As RadioButton
 	Dim WithEvents tvposterlabels       As Label
@@ -243,8 +242,6 @@ Public Class Form1
 	Private currentTabIndex             As Integer = 0
 	Private homeTabIndex                As Integer = 0
 	Private CustTvIndex                 As Integer = 0
-	Public totalfilesize                As Long = 0
-	Public listoffilestomove            As New List(Of String)
 	Private currenttitle                As String
 	Public singleshow                   As Boolean = False
 	Public DGVMoviesColName             As String = ""
@@ -8560,16 +8557,28 @@ Public Class Form1
 
 	Private Sub tsmiMov_ExportMovies_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiMov_ExportMovies.Click
 		Try
-			listoffilestomove.Clear()
+			'listoffilestomove.Clear()
 			If DataGridViewMovies.SelectedRows.Count > 0 Then
+                Dim listoffilestomove As New List(Of String)
+                Dim totalfilesize As Long = 0
 				For Each sRow As DataGridViewRow In DataGridViewMovies.SelectedRows
+                    Dim isfolder As Boolean = False
 					Dim playlist As New List(Of String)
 
 					Dim fullpathandfilename As String = CType(sRow.DataBoundItem, Data_GridViewMovie).fullpathandfilename.ToString
 
 					playlist = Utilities.GetMediaList(Utilities.GetFileName(fullpathandfilename))
 
-					If playlist.Count > 0 Then
+                    If (Pref.usefoldernames OrElse Pref.allfolders) AndAlso playlist.Count > 0 Then
+                        Dim LastFolder As String = Path.GetDirectoryName(fullpathandfilename) & "\"
+                        isfolder = Not Pref.GetRootFolderCheck(fullpathandfilename, True)
+                        If isfolder Then
+                            listoffilestomove.Add(LastFolder)
+                            totalfilesize += Utilities.GetFolderSize(LastFolder, True)
+                        End If
+                    End If
+                    
+					If playlist.Count > 0 AndAlso Not isfolder Then
 						For Each File In playlist
 							If Not listoffilestomove.Contains(File) Then listoffilestomove.Add(File)
 						Next
@@ -8591,24 +8600,20 @@ Public Class Form1
 						Next
 					End If
 				Next
-
-				totalfilesize = 0
+                
 				For Each item In listoffilestomove
 					totalfilesize = totalfilesize + Utilities.GetFileSize(item)
 				Next
-
-				With FolderBrowserDialog1
-					.ShowNewFolderButton = True
-					.Description = "Select destination for file copy"
-				End With
-				Dim drive As String = ""
-				Dim savepath As String = ""
-				Dim frm As New frmCopyProgress
-				If Pref.MultiMonitoEnabled Then
-					frm.Bounds = screen.AllScreens(CurrentScreen).Bounds
-					frm.StartPosition = FormStartPosition.Manual
-				End If
-				frm.ShowDialog()
+                
+                Using frm1 As New frmCopyProgress
+                    If Pref.MultiMonitoEnabled Then
+					    frm1.Bounds = screen.AllScreens(CurrentScreen).Bounds
+					    frm1.StartPosition = FormStartPosition.Manual
+				    End If
+                    frm1.ListOfFilesToMove = listoffilestomove
+                    frm1.totalfilesize = totalfilesize
+				    frm1.ShowDialog()
+                End Using
 			End If
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
@@ -9035,7 +9040,7 @@ Public Class Form1
 		msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
 		msgstring &= vbCrLf & "Are your sure you wish to continue?"
 		Dim x = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete Show and Episode's nfo's" & If(Not NoDelArt, " and artwork", ""))
-		If x = MsgBoxResult.No OrElse MsgBoxResult.Cancel Then Exit Sub
+		If x = MsgBoxResult.No OrElse X = MsgBoxResult.Cancel Then Exit Sub
 		Dim Sh As TvShow = tv_ShowSelectedCurrently(TvTreeview)
 		Dim seas As TvSeason = tv_SeasonSelectedCurrently(TvTreeview)
 		Dim ep As TvEpisode = ep_SelectedCurrently(TvTreeview)
@@ -9102,8 +9107,8 @@ Public Class Form1
 				msgstring &= vbCrLf & "To Rescrape this show, use ""Check Roots for New TV Shows"" or "
 				msgstring &= vbCrLf & "Add this show's folder again to your ""List Of Separate Folders""." & vbCrLf
 				msgstring &= vbCrLf & "Are your sure you wish to continue?"
-				Dim x = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
-				If x = MsgBoxResult.No OrElse MsgBoxResult.Cancel Then Exit Sub
+				Dim x As MsgBoxResult = MsgBox(msgstring, MsgBoxStyle.YesNoCancel, "Delete Show's nfo's" & If(Not NoDelArt, " and artwork", ""))
+				If x = MsgBoxResult.No OrElse x = MsgBoxResult.Cancel Then Exit Sub
 			End If
 			If Not NoDelArt Then TvDeleteShowArt(show)
 			Dim showpath As String = Show.FolderPath
@@ -11322,7 +11327,7 @@ Public Class Form1
 	End Sub
 
 	Private Sub tb_MovFanartScrnShtTime_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tb_MovFanartScrnShtTime.KeyPress
-		If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then TvEpThumbScreenShot(If(IsNumeric(tb_MovFanartScrnShtTime.Text), tb_MovFanartScrnShtTime.Text.ToInt, Pref.ScrShtDelay))
+		If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then btn_MovFanartScrnSht.PerformClick() 'TvEpThumbScreenShot(If(IsNumeric(tb_MovFanartScrnShtTime.Text), tb_MovFanartScrnShtTime.Text.ToInt, Pref.ScrShtDelay))
 		If Char.IsNumber(e.KeyChar) = False And e.KeyChar <> Chr(8) Then e.Handled = True
 	End Sub
 

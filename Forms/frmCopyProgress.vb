@@ -1,16 +1,10 @@
 ﻿
-'Imports System.IO
-Imports Alphaleonis.Win32.Filesystem
-
-
 Public Class frmCopyProgress
-    Private Function GetFileSize(ByVal MyFilePath As String) As Long
-        Dim MyFile As New FileInfo(MyFilePath)
-        Dim FileSize As Long = MyFile.Length
-        Return FileSize
-    End Function
-
-
+    Dim donesize As Long = 0
+    Dim percentage As Integer = 0
+    Public Property ListOfFilesToMove As New List(Of String)
+    Public Property totalfilesize As Long
+    
     Private Declare Function GetDiskFreeSpaceEx _
     Lib "kernel32" _
     Alias "GetDiskFreeSpaceExA" _
@@ -18,20 +12,7 @@ Public Class frmCopyProgress
     ByRef lpFreeBytesAvailableToCaller As Long, _
     ByRef lpTotalNumberOfBytes As Long, _
     ByRef lpTotalNumberOfFreeBytes As Long) As Long
-    Public Function GetFreeSpace(ByVal Drive As String) As Long
-        Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
-        Dim iAns As Long
-
-        iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
-             lBytesTotal, lFreeBytes)
-
-        If iAns > 0 Then
-            Return lFreeBytes
-        Else
-            Throw New Exception("Invalid or unreadable drive")
-        End If
-
-    End Function
+    
     Private Sub Exportmovies()
         With FolderBrowserDialog1
             .ShowNewFolderButton = True
@@ -45,17 +26,9 @@ Public Class frmCopyProgress
             Me.Visible = True
             Me.Show()
             Me.Refresh()
-
-            Dim listoffilestomove2 As New List(Of String)
-            listoffilestomove2.Clear()
-            For Each fil In Form1.listoffilestomove
-                listoffilestomove2.Add(fil)
-            Next
-
-            Dim totalfilesize As Long
-            totalfilesize = Form1.totalfilesize
+            Dim PossibleFolders As Boolean = Pref.usefoldernames OrElse Pref.allfolders
             Dim drivespace As Long
-            drivespace = GetFreeSpace(drive)
+            drivespace = Utilities.GetFreeSpace(drive)
             Application.DoEvents()
             Me.Refresh()
             Dim percentages As New List(Of Integer)
@@ -71,43 +44,18 @@ Public Class frmCopyProgress
                 ProgressBar1.Value = 0
                 ProgressBar1.Style = ProgressBarStyle.Blocks
                 ProgressBar2.Style = ProgressBarStyle.Blocks
-                Dim donesize As Long = 0
-                Dim percentage As Integer = 0
-                For Each item In listoffilestomove2
+                For Each item In ListOfFilesToMove
                     Label3.Text = item
-                    If donesize <> 0 Then ProgressBar2.Value = donesize * 100 / totalfilesize
                     Try
                         Application.DoEvents()
                         Me.Refresh()
-                        Dim filename As String = Path.GetFileName(item)
-                        Dim dest As String = Path.Combine(savepath, filename)
-                        Dim mediafile As String = filename
-                        Dim fi As New FileInfo(mediafile)
-                        Dim sr As New IO.FileStream(item, IO.FileMode.Open) 'source file
-                        Dim sw As New IO.FileStream(dest, IO.FileMode.Create) 'target file, defaults overwrite
-                        Dim len As Long = sr.Length - 1
-                        donesize += len
-                        For i As Long = 0 To len
-                            Try
-                                sw.WriteByte(sr.ReadByte)
-                                If i Mod 1000000 = 0 Then 'only update UI every 1 Kb copied
-                                    ProgressBar1.Value = i * 100 / len
-                                    ProgressBar1.Refresh()
-                                    If i Mod 10000000 = 0 Then
-                                        Application.DoEvents()
-                                    End If
-                                End If
-                                If closing = True Then
-                                    sw.Close()
-                                    File.Delete(dest)
-                                    Exit For
-                                End If
-                            Catch
-                            End Try
-                        Next
-                        If closing = False Then
-                            sw.Close()
+
+                        If PossibleFolders AndAlso item.EndsWith("\") Then
+                            CopyDirectory(item, savepath & "\" & Utilities.GetLastFolderInPath(item))
+                        Else
+                            Copyfile(item, savepath)
                         End If
+                        
                         If closing = True Then Exit For
                         ProgressBar1.Value = 0
 
@@ -121,6 +69,69 @@ Public Class frmCopyProgress
         Else
             Me.Close()
         End If
+    End Sub
+
+    Public Sub CopyDirectory(ByVal sourcePath As String, ByVal destinationPath As String)
+        Dim sourceDirectoryInfo As New System.IO.DirectoryInfo(sourcePath)
+
+        ' If the destination folder don't exist then create it
+        If Not IO.Directory.Exists(destinationPath) Then IO.Directory.CreateDirectory(destinationPath)
+
+        Dim fileSystemInfo As IO.FileSystemInfo
+        For Each fileSystemInfo In sourceDirectoryInfo.GetFileSystemInfos
+            Dim destinationFileName As String = IO.Path.Combine(destinationPath, fileSystemInfo.Name)
+
+            ' Now check whether its a file or a folder and take action accordingly
+            If TypeOf fileSystemInfo Is IO.FileInfo Then
+                If closing Then Exit Sub
+                Copyfile(fileSystemInfo.FullName, destinationPath)
+            Else
+                ' Recursively call the method to copy all the neste folders
+                CopyDirectory(fileSystemInfo.FullName, destinationFileName)
+            End If
+        Next
+    End Sub
+
+    Private Sub Copyfile(ByVal item As String, ByVal savepath As String)
+        Try
+            If donesize <> 0 Then ProgressBar2.Value = donesize * 100 / totalfilesize
+            Application.DoEvents()
+            Me.Refresh()
+            Dim filename As String = Path.GetFileName(item)
+            Dim dest As String = Path.Combine(savepath, filename)
+            Dim mediafile As String = filename
+            Dim fi As New FileInfo(mediafile)
+            Dim sr As New IO.FileStream(item, IO.FileMode.Open) 'source file
+            Dim sw As New IO.FileStream(dest, IO.FileMode.Create) 'target file, defaults overwrite
+            Dim len As Long = sr.Length - 1
+            donesize += len
+            For i As Long = 0 To len
+                Try
+                    sw.WriteByte(sr.ReadByte)
+                    If i Mod 1000000 = 0 Then 'only update UI every 1 Kb copied
+                        ProgressBar1.Value = i * 100 / len
+                        ProgressBar1.Refresh()
+                        If i Mod 10000000 = 0 Then
+                            Application.DoEvents()
+                        End If
+                    End If
+                    If closing = True Then
+                        sw.Close()
+                        File.Delete(dest)
+                        Exit For
+                    End If
+                Catch
+                End Try
+            Next
+
+            If closing = False Then
+                sw.Close()
+            End If
+
+            Application.DoEvents()
+            Me.Refresh()
+        Catch ex As Exception
+        End Try
     End Sub
 
     Shadows closing As Boolean = False
@@ -150,4 +161,5 @@ Public Class frmCopyProgress
             ExceptionHandler.LogError(ex)
         End Try
     End Sub
+
 End Class

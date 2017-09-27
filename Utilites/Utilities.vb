@@ -538,6 +538,20 @@ ByRef lpTotalNumberOfFreeBytes As Long) As Long
         Return 0
     End Function
 
+    Public Shared Function GetFreeSpace(ByVal Drive As String) As Long
+        Dim lBytesTotal, lFreeBytes, lFreeBytesAvailable As Long
+        Dim iAns As Long
+
+        iAns = GetDiskFreeSpaceEx(Drive, lFreeBytesAvailable, _
+             lBytesTotal, lFreeBytes)
+
+        If iAns > 0 Then
+            Return lFreeBytes
+        Else
+            Throw New Exception("Invalid or unreadable drive")
+        End If
+
+    End Function
 
     Public Shared Function GetFolderSize(ByVal DirPath As String, Optional IncludeSubFolders as Boolean = True) As Long
       Dim size As Long          = 0
