@@ -122,7 +122,7 @@ Public Class Movie
             End If
         End Set
     End Property
-
+    
 #End Region 'Read-write properties
 
 
@@ -2135,8 +2135,8 @@ Public Class Movie
 
         If Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(ActualNfoPathAndFilename.Replace(".nfo", ".jpg")) Then
             Dim oldnameandpath As String = NfoPathAndFilename.Replace(".nfo", ".jpg")
-            Dim newname As String = NfoPathAndFilename.Replace(NfoPath, "").Replace(".nfo", "-poster.jpg")
-            My.Computer.FileSystem.RenameFile(oldnameandpath, newname)
+            imageexistspath = oldnameandpath.Replace(".jpg", "-poster.jpg")
+            File.Move(oldnameandpath, imageexistspath)
         End If
 
 
@@ -3901,7 +3901,11 @@ Public Class Movie
                  Next
 
                 'PART 3.1 - Special check if user has <moviename>.jpg as custom poster and wishes name changed to Kodi Poster format.
-                If Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(subName1 & ".jpg") Then File.Move(subName1 & ".jpg", targetMovieFile & "-poster.jpg")
+                If Rescrape AndAlso Pref.MovCustPosterjpgNoDelete AndAlso File.Exists(subName1 & ".jpg") Then
+                    File.Move(subName1 & ".jpg", targetMovieFile & "-poster.jpg")
+                    log &= "Renamed '" & subName1 & ".jpg' to '" & targetMovieFile & "-poster.jpg'" & vbCrLf
+                End If
+                
 
                 'PART 3.2 - If movie was originally scraped in Basic Save Mode, but user wishes to rename with movie title, check ancillary files and rename if required.
                 If WasBasic AndAlso subName1.Contains("\movie") Then

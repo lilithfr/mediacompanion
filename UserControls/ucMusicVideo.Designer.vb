@@ -1433,8 +1433,8 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 142!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100!))
@@ -1512,7 +1512,7 @@ Partial Class ucMusicVideo
         '
         'btnAddConcertPath
         '
-        Me.btnAddConcertPath.Location = New System.Drawing.Point(428, 403)
+        Me.btnAddConcertPath.Location = New System.Drawing.Point(426, 403)
         Me.btnAddConcertPath.Name = "btnAddConcertPath"
         Me.btnAddConcertPath.Size = New System.Drawing.Size(56, 35)
         Me.btnAddConcertPath.TabIndex = 15
@@ -1525,10 +1525,10 @@ Partial Class ucMusicVideo
         Me.TableLayoutPanel2.SetColumnSpan(Me.clbxMVConcertFolder, 3)
         Me.clbxMVConcertFolder.Dock = System.Windows.Forms.DockStyle.Fill
         Me.clbxMVConcertFolder.FormattingEnabled = true
-        Me.clbxMVConcertFolder.Location = New System.Drawing.Point(428, 174)
+        Me.clbxMVConcertFolder.Location = New System.Drawing.Point(426, 174)
         Me.clbxMVConcertFolder.Name = "clbxMVConcertFolder"
         Me.TableLayoutPanel2.SetRowSpan(Me.clbxMVConcertFolder, 3)
-        Me.clbxMVConcertFolder.Size = New System.Drawing.Size(385, 203)
+        Me.clbxMVConcertFolder.Size = New System.Drawing.Size(387, 203)
         Me.clbxMVConcertFolder.Sorted = true
         Me.clbxMVConcertFolder.TabIndex = 14
         '
@@ -1538,10 +1538,10 @@ Partial Class ucMusicVideo
         Me.Label26.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label26, 3)
         Me.Label26.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label26.Location = New System.Drawing.Point(428, 152)
+        Me.Label26.Location = New System.Drawing.Point(426, 152)
         Me.Label26.Margin = New System.Windows.Forms.Padding(3, 3, 3, 0)
         Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(385, 19)
+        Me.Label26.Size = New System.Drawing.Size(387, 19)
         Me.Label26.TabIndex = 13
         Me.Label26.Text = "Concert Root Video Folder(s)"
         Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1587,13 +1587,12 @@ Partial Class ucMusicVideo
         'Label22
         '
         Me.Label22.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label22.Location = New System.Drawing.Point(129, 16)
+        Me.Label22.Location = New System.Drawing.Point(105, 16)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(258, 78)
+        Me.Label22.Size = New System.Drawing.Size(282, 78)
         Me.Label22.TabIndex = 3
-        Me.Label22.Text = "Choose your Scraper."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Wikipedia - More information, but may be as current."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"IMV"& _ 
-    "DB - Limited Info but larger database"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TheAudioDb - Limited Info and limited dat"& _ 
-    "abase."
+        Me.Label22.Text = "Choose your Scraper."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Wikipedia - More information, but may not be as current."&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"IMVDB - Limited Info but larger database"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TheAudioDb - Limited Info and limited"& _ 
+    " database."
         '
         'rb_MvScr3
         '
@@ -1731,7 +1730,7 @@ Partial Class ucMusicVideo
         Me.Button1.Margin = New System.Windows.Forms.Padding(0)
         Me.Button1.Name = "Button1"
         Me.TableLayoutPanel2.SetRowSpan(Me.Button1, 13)
-        Me.Button1.Size = New System.Drawing.Size(17, 566)
+        Me.Button1.Size = New System.Drawing.Size(15, 566)
         Me.Button1.TabIndex = 19
         Me.Button1.UseVisualStyleBackColor = true
         '
@@ -1739,7 +1738,7 @@ Partial Class ucMusicVideo
         '
         Me.Label27.AutoSize = true
         Me.TableLayoutPanel2.SetColumnSpan(Me.Label27, 3)
-        Me.Label27.Location = New System.Drawing.Point(428, 8)
+        Me.Label27.Location = New System.Drawing.Point(426, 8)
         Me.Label27.Name = "Label27"
         Me.TableLayoutPanel2.SetRowSpan(Me.Label27, 2)
         Me.Label27.Size = New System.Drawing.Size(366, 105)
