@@ -14,20 +14,19 @@ Public Class frmExceptions
         thCopy.Start()
     End Sub
 
-    Private Sub lnkCodeplex_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles lnkCodeplex.LinkClicked
-        'System.Diagnostics.Process.Start(lnkCodeplex.Text)
+    Private Sub lnkTicket_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles lnkTicket.LinkClicked
         Dim aok As Boolean = True
         Try
             If Pref.selectedBrowser <> "" then
                 Try
-                    Process.Start(Pref.selectedBrowser,lnkCodeplex.Text)
+                    Process.Start(Pref.selectedBrowser,lnkTicket.Text)
                 Catch
                     aok = False
                 End Try
             End If
             If Pref.selectedBrowser = "" Or Not aok Then
                 Try
-                    Process.Start(lnkCodeplex.Text)
+                    Process.Start(lnkTicket.Text)
                 Catch ex As Exception
                     MessageBox.Show( "An error occurred while trying to launch the default browser - Using the 'Locate browser' button under 'General Preferences' to select the browser should resolve this error", "", MessageBoxButtons.OK )
                 End Try

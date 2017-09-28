@@ -21,7 +21,7 @@ Imports XBMC.JsonRpc
 
 Public Class Form1
 
-	Const HOME_PAGE = "http://mediacompanion.codeplex.com"
+	'Const HOME_PAGE = "http://mediacompanion.codeplex.com"
     Const SF_Home_Page = "https://sourceforge.net/projects/mediacompanion/"
 	Const TMDB_SITE = "www.themoviedb.org/"
 	Const TMDB_SET_URL = TMDB_SITE & "collection/"
@@ -8736,9 +8736,9 @@ Public Class Form1
 		End Try
 	End Sub
 
-	Private Sub MediaCompanionCodeplexSiteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaCompanionCodeplexSiteToolStripMenuItem.Click
+	Private Sub tsmi_MCSite_ToolStrip_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmi_MCSite_ToolStrip.Click
 		Try
-			OpenUrl(HOME_PAGE)
+			OpenUrl(SF_Home_Page)
 		Catch ex As Exception
 			ExceptionHandler.LogError(ex)
 		End Try

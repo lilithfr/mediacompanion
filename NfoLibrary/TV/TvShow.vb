@@ -374,7 +374,7 @@ Public Class TvShow
             Episode.ShowId.Value = Me.TvdbId.Value
 
             Dim EpisodeNum As Integer                                                                         'code added as suggestion
-            If Not Integer.TryParse(Episode.Episode.Value, EpisodeNum) Then                                   ' by Archaetect on Codeplex 
+            If Not Integer.TryParse(Episode.Episode.Value, EpisodeNum) Then                                   ' by Archaetect 
                 Dim Match As System.Text.RegularExpressions.Match                                             ' to halt error caused if
                 Dim Regex As New System.Text.RegularExpressions.Regex("[sS][0-9][0-9][eE]([0-9][0-9])[^0-9]") ' missing season or episode
                 Match = Regex.Match(Episode.NfoFilePath)                                                      ' number.
