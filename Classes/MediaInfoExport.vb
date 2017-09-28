@@ -791,7 +791,8 @@ Public Class MediaInfoExport
 
     Private Function getTagsTVShow(ByRef text As String, ByVal tvShow As TvShow, ByVal counter As Integer, ByVal numSeasons As Integer, Optional ByVal imagepath As String = "")
         Dim fullTVShowDetails As New TvShow
-        fullTVShowDetails = nfoFunction.tvshow_NfoLoad(tvShow.NfoFilePath) '.Load(tvShow.NfoFilePath)
+        fullTVShowDetails = nfoFunction.tvshow_NfoLoad(tvShow.NfoFilePath)
+        If IsNothing(fullTVShowDetails) Then Return ""
 
         Dim tokenCol As MatchCollection
         Dim tokenRegExp As New Regex("<<[\w_:]+>>")

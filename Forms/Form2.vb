@@ -645,7 +645,7 @@ Public Class Form2
                     If File.Exists(nfopath) Then
                         Dim tvshownfo As New TvShow
                         tvshownfo.NfoFilePath = nfopath
-                        tvshownfo = nfoFunction.tvshow_NfoLoad(nfopath) '.Load
+                        tvshownfo = nfoFunction.tvshow_NfoLoad(nfopath)
                         If tvshownfo.Title.Value <> "" Then
                             tb_SeriesLnk.Text = tvshownfo.Title.Value
                             editsmade = True

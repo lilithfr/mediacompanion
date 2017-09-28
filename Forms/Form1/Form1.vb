@@ -1755,8 +1755,8 @@ Public Class Form1
 					titletxt.Items.Add(title)
 				Next
 				titletxt.Text           = workingMovieDetails.fullmoviebody.title
-				tb_MovFanartMovieTitle.Text           = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
-				tbCurrentMoviePoster.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+				tb_MovFanartMovieTitle.Text = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
+				tbCurrentMoviePoster.Text   = workingMovieDetails.fullmoviebody.title & " (" & workingMovieDetails.fullmoviebody.year & ")"
 				Me.ToolTip1.SetToolTip(Me.titletxt, "Original Title: '" & workingMovieDetails.fullmoviebody.originaltitle & "'")
 				If workingMovieDetails.fullmoviebody.sortorder = "" Then workingMovieDetails.fullmoviebody.sortorder = workingMovieDetails.fullmoviebody.title
 				tb_MovSortOrder .Text = workingMovieDetails.fullmoviebody.sortorder
@@ -1788,8 +1788,8 @@ Public Class Form1
 				'Catch exception thrown when votes is an empty string
 				If workingMovieDetails.fullmoviebody.votes <> "" AndAlso workingMovieDetails.fullmoviebody.votes <> "scraper error" Then
 					Dim votestext As String = workingMovieDetails.fullmoviebody.votes
-					votestext = votestext.RemoveWhitespace
-					votestxt.Text       = Double.Parse(votestext.Replace(".", ",")).ToString("N0")
+					votestext           = votestext.RemoveWhitespace
+					votestxt.Text       = Double.Parse(votestext.Replace(".", "").Replace(",","")).ToString("N0")
 				Else
 					votestxt.Text       = workingMovieDetails.fullmoviebody.votes
 				End If

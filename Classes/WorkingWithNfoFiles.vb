@@ -286,7 +286,8 @@ Public Class WorkingWithNfoFiles
 
     '  All Tv Load/Save Routines
 #Region " Tv Routines "
-    
+  
+#Region "Episode routines"  
     ''' <summary>
     ''' Load Episode nfo as xml document
     ''' </summary>
@@ -425,8 +426,8 @@ Public Class WorkingWithNfoFiles
             xmlEpisode.AppendChild(doc, "aired"         , ep.Aired.Value        )
             xmlEpisode.AppendChild(doc, "plot"          , ep.plot.Value         )
             xmlEpisode.AppendChild(doc, "playcount"     , ep.playcount.Value    )
-            xmlEpisode.AppendChild(doc, "director"      , ep.director.Value     )
-            xmlEpisode.AppendChild(doc, "credits"       , ep.credits.Value      )
+            xmlEpisode.AppendChildList(doc, "director"  , ep.director.Value, ",")
+            xmlEpisode.AppendChildList(doc, "credits"   , ep.credits.Value,  ",")
             xmlEpisode.AppendChild(doc, "rating"        , ep.rating.Value       )
             xmlEpisode.AppendChild(doc, "votes"         , CommaNoComma(ep.votes.Value, Pref.TvThousSeparator))
             If Not String.IsNullOrEmpty(ep.ImdbId.Value) Then
@@ -528,9 +529,17 @@ Public Class WorkingWithNfoFiles
             Case "plot"
                 tvep.Plot.Value = xmlvalue.InnerText
             Case "director"
-                tvep.Director.Value = xmlvalue.InnerText
+                If tvep.Director.Value = "" Then
+                    tvep.Director.Value = xmlvalue.InnerText
+                Else 
+                    tvep.Director.Value += ", " & xmlvalue.InnerText
+                End If
             Case "credits"
-                tvep.Credits.Value = xmlvalue.InnerText 
+                If tvep.Credits.Value = "" Then
+                    tvep.Credits.Value = xmlvalue.InnerText
+                Else
+                    tvep.Credits.Value += ", " & xmlvalue.InnerText
+                End If
             Case "displayseason"
                 tvep.DisplaySeason.Value = xmlvalue.InnerText
             Case "displayepisode"
@@ -633,80 +642,10 @@ Public Class WorkingWithNfoFiles
         If String.IsNullOrEmpty(tvep.PlayCount.Value) Then tvep.PlayCount.Value = "0"
     End Sub
 
-    Public Function tv_NfoLoadFull(ByVal path As String) As TvShow
-        Dim newtvshow As New TvShow
-        If Not File.Exists(path) Then
-            newtvshow.Title.Value = Utilities.GetLastFolder(path)
-            newtvshow.Plot.Value = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
-            newtvshow.Status.Value = "file does not exist"
-            newtvshow.NfoFilePath = path
-            newtvshow.Year.Value = "0000"
-            newtvshow.TvdbId.Value = ""
-            newtvshow.State = Media_Companion.ShowState.Locked
-            Return newtvshow
-            Exit Function
-        Else
-            newtvshow.NfoFilePath = path
-            newtvshow.Load()
-            'Fix episodeguide tag
-            Dim lang As String = newtvshow.EpisodeGuideUrl.Value
-            If String.IsNullOrEmpty(lang) Then
-                lang = "en"
-            Else
-                lang = lang.Substring((lang.LastIndexOf("/") + 1)).Replace(".zip", "")
-            End If
+#End Region
 
-            If Not newtvshow.TvdbId.Value = "" Then
-            newtvshow.EpisodeGuideUrl.Value = ""
-                newtvshow.Url.Value = URLs.EpisodeGuide(newtvshow.TvdbId.Value, lang)
-                newtvshow.Url.Node.SetAttributeValue("cache", newtvshow.TvdbId.Value)
-            End If
-            'end fix
-            If IsNothing(newtvshow.Year.Value) Then
-                If newtvshow.Premiered.Value.Length = 10 Then
-                    newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
-                End If
-            ElseIf newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
-                newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
-            End If
-        End If
-        For Each season As TvSeason In newtvshow.Seasons.Values
-            For Each episode In season.Episodes
-                episode.ShowId = newtvshow.TvdbId
-            Next
-        Next
-        Return newtvshow
-
-    End Function
-
-    'Public Function tv_NfoLoad(ByVal path As String) As TvShow
-    '    Dim newtvshow As New TvShow
-    '    If Not File.Exists(path) Then
-    '        newtvshow.Title.Value = Utilities.GetLastFolder(path)
-    '        'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
-    '        newtvshow.NfoFilePath = path
-    '        newtvshow.Year.Value = "0000"
-    '        newtvshow.TvdbId.Value = ""
-    '        newtvshow.Status.Value = "missing"
-    '        newtvshow.State = Media_Companion.ShowState.Locked
-    '        Return newtvshow
-    '        Exit Function
-    '    Else
-    '        newtvshow.NfoFilePath = path
-    '        newtvshow.Load()
-    '        If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
-    '            newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
-    '        End If
-    '    End If
-    '    Return newtvshow
-    'End Function
-
-    Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
-        If File.Exists(Path) And Not overwrite Then Exit Sub
-
-        Show.Save(Path)
-    End Sub
-
+#Region "Series routines"
+    
     Public Function tv_NfoLoadCheck(ByVal Path As String) As Boolean
         'Check if XBMC nfo and correct some entries before loading into Media Companion.
         Dim aok As Boolean = True
@@ -846,7 +785,7 @@ Public Class WorkingWithNfoFiles
     ''' </summary>
     ''' <param name="path">Nfo path and filename</param>
     ''' <returns></returns>
-    Public Function tvshow_NfoLoad(ByVal path As String)
+    Public Function tvshow_NfoLoad(ByVal path As String) As TvShow
         Try
             Dim newtvshow As New TvShow
             Dim tvshow As New XmlDocument
@@ -924,7 +863,7 @@ Public Class WorkingWithNfoFiles
                             If newtvshow.genre.Value = "" Then
                                 newtvshow.genre.Value = thisresult.InnerText
                             Else
-                                newtvshow.genre.Value = newtvshow.genre.Value & " / " & thisresult.InnerText
+                                newtvshow.genre.Value += " / " & thisresult.InnerText
                             End If
                         Case "language"
                             newtvshow.Language.Value = thisresult.InnerText
@@ -1003,7 +942,7 @@ Public Class WorkingWithNfoFiles
             Return newtvshow
         Catch
         End Try
-        Return "Error"
+        Return Nothing
     End Function
 
     Public Function blanktvshow(ByVal path As String) As TvShow
@@ -1188,8 +1127,84 @@ Public Class WorkingWithNfoFiles
     
 #End Region
 
+#End Region
+
 #Region " Obsolete "
     
+    'Public Function tv_NfoLoadFull(ByVal path As String) As TvShow
+    '    Dim newtvshow As New TvShow
+    '    If Not File.Exists(path) Then
+    '        newtvshow.Title.Value = Utilities.GetLastFolder(path)
+    '        newtvshow.Plot.Value = "problem loading tvshow.nfo, file does not exist." & vbCrLf & "Use the TV Show Selector Tab to create one"
+    '        newtvshow.Status.Value = "file does not exist"
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Year.Value = "0000"
+    '        newtvshow.TvdbId.Value = ""
+    '        newtvshow.State = Media_Companion.ShowState.Locked
+    '        Return newtvshow
+    '        Exit Function
+    '    Else
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Load()
+    '        'Fix episodeguide tag
+    '        Dim lang As String = newtvshow.EpisodeGuideUrl.Value
+    '        If String.IsNullOrEmpty(lang) Then
+    '            lang = "en"
+    '        Else
+    '            lang = lang.Substring((lang.LastIndexOf("/") + 1)).Replace(".zip", "")
+    '        End If
+
+    '        If Not newtvshow.TvdbId.Value = "" Then
+    '        newtvshow.EpisodeGuideUrl.Value = ""
+    '            newtvshow.Url.Value = URLs.EpisodeGuide(newtvshow.TvdbId.Value, lang)
+    '            newtvshow.Url.Node.SetAttributeValue("cache", newtvshow.TvdbId.Value)
+    '        End If
+    '        'end fix
+    '        If IsNothing(newtvshow.Year.Value) Then
+    '            If newtvshow.Premiered.Value.Length = 10 Then
+    '                newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+    '            End If
+    '        ElseIf newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
+    '            newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+    '        End If
+    '    End If
+    '    For Each season As TvSeason In newtvshow.Seasons.Values
+    '        For Each episode In season.Episodes
+    '            episode.ShowId = newtvshow.TvdbId
+    '        Next
+    '    Next
+    '    Return newtvshow
+
+    'End Function
+
+    'Public Function tv_NfoLoad(ByVal path As String) As TvShow
+    '    Dim newtvshow As New TvShow
+    '    If Not File.Exists(path) Then
+    '        newtvshow.Title.Value = Utilities.GetLastFolder(path)
+    '        'newtvshow.Year.Value = newtvshow.Title.Value & " (0000)"
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Year.Value = "0000"
+    '        newtvshow.TvdbId.Value = ""
+    '        newtvshow.Status.Value = "missing"
+    '        newtvshow.State = Media_Companion.ShowState.Locked
+    '        Return newtvshow
+    '        Exit Function
+    '    Else
+    '        newtvshow.NfoFilePath = path
+    '        newtvshow.Load()
+    '        If newtvshow.Year.Value.ToInt = 0 AndAlso newtvshow.Premiered.Value.Length = 10 Then
+    '            newtvshow.Year.Value = newtvshow.Premiered.Value.Substring(0,4)
+    '        End If
+    '    End If
+    '    Return newtvshow
+    'End Function
+
+    'Public Sub tv_NfoSave(ByVal Path As String, ByRef Show As TvShow, Optional ByVal overwrite As Boolean = True, Optional ByVal forceunlocked As String = "")
+    '    If File.Exists(Path) And Not overwrite Then Exit Sub
+
+    '    Show.Save(Path)
+    'End Sub
+
 #End Region
 
     '  All Movie Load/Save Routines
@@ -1278,7 +1293,7 @@ Public Class WorkingWithNfoFiles
                                 If newmovie.director = "" Then
                                     newmovie.director = thisresult.InnerText
                                 Else
-                                    newmovie.director = newmovie.director & " / " & thisresult.InnerText
+                                    newmovie.director += " / " & thisresult.InnerText
                                 End If
                             Case "credits"
                                 If newmovie.credits = "" Then

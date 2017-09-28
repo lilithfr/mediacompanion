@@ -168,7 +168,7 @@ Public Class frmXbmcExport
             If Cancelled Then Exit Sub
             Me.ProgressBar1.Value +=1
             If Not File.Exists(sh.series.Filenameandpath) Then Continue For
-            Dim tvsh As TvShow = nfoFunction.tv_NfoLoadFull(sh.series.Filenameandpath)
+            Dim tvsh As TvShow = nfoFunction.tvshow_NfoLoad(sh.series.Filenameandpath)
             Dim CurrentSh As New XmlDocument
             CurrentSh = TransposetvShows(tvsh, sh.episodes.count, sh.series.Season)
             Application.DoEvents()

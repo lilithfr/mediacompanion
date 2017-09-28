@@ -2126,7 +2126,7 @@ Public Class TVDBScraper
                     PercentDone = If(done = showprocesscount, 100, (100 / showprocesscount) * (done+1))
                     ReportProgress(progresstext)
                     Dim editshow As New TvShow
-                    editshow = nfoFunction.tv_NfoLoadFull(Cache.TvCache.Shows(f).NfoFilePath)
+                    editshow = nfoFunction.tvshow_NfoLoad(Cache.TvCache.Shows(f).NfoFilePath)
                     If tvBatchList.doShowActors Then editshow.ListActors.Clear()
 
                     'Dim tvdbstuff As New TVDBScraper
