@@ -3725,8 +3725,8 @@ Public Class Movie
         Return DownloadCache.SaveImageToCacheAndPaths(url, paths, Pref.overwritethumbs, point.X, point.Y)
     End Function
 
-    Shared Function SaveFanartImageToCacheAndPath(url As String, path As String)
-        If Not Pref.savefanart Then Return False
+    Shared Function SaveFanartImageToCacheAndPath(url As String, path As String, Optional force As Boolean = False)
+        If Not Pref.savefanart AndAlso Not force Then Return False
         Dim point = Movie.GetBackDropResolution(Pref.BackDropResolutionSI)
         Return DownloadCache.SaveImageToCacheAndPath(url, path, Pref.overwritethumbs, point.X, point.Y)
     End Function

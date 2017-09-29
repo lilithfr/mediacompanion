@@ -4082,7 +4082,7 @@ Public Class Form1
 					Else
 						Dim MovSetFanartSavePath As String = workingMovieDetails.fileinfo.movsetfanartpath
 						If MovSetFanartSavePath <> "" Then
-							Movie.SaveFanartImageToCacheAndPath(tempstring2, MovSetFanartSavePath)
+							Movie.SaveFanartImageToCacheAndPath(tempstring2, MovSetFanartSavePath, True)
 							MovPanel6Update()
 							util_ImageLoad(PictureBox2, MovSetFanartSavePath, Utilities.DefaultFanartPath)
 						Else
@@ -9871,14 +9871,24 @@ Public Class Form1
 			Dim SubTab As String = TabControl2.SelectedTab.Name
 			If SubTab = tpMovMain.Name Then mov_RebuildMovieCaches()
 			If SubTab = tpMovFanart.name Then
+                ImgBw.CancelAsync()
+                Do Until Not ImgBw.IsBusy
+                    Application.DoEvents()
+                Loop
 				Panel2.Controls.Clear()
-				MovFanartDisplay()
+                MovFanartDisplay(If(btnMovFanartToggle.Text = "Show Movie Fanart", workingMovieDetails.fullmoviebody.TmdbSetId, ""))
 			End If
 		End If
 		If CurrentTab = TabPage2.Name Then  'TV Shows
 			Dim SubTab As String = TabControl3.SelectedTab.Name
 			If SubTab = tpTvMainBrowser.Name Then tv_CacheRefresh()
-			If SubTab = tpTvFanart.Name Then tv_Fanart_Load()
+			If SubTab = tpTvFanart.Name Then
+                ImgBw.CancelAsync()
+                Do Until Not ImgBw.IsBusy
+                    Application.DoEvents()
+                Loop
+			    tv_Fanart_Load()
+			End If
 		End If
         If CurrentTab = TabPage3.Name AndAlso TabControl1.SelectedTab.Name = tp_HmMainBrowser.Name Then btn_HMRefresh.PerformClick
 		If CurrentTab = TabMV.Name Then ucMusicVideo1.btnRefresh.PerformClick()
@@ -11470,12 +11480,20 @@ Public Class Form1
 			btnMovFanartToggle.BackColor = System.Drawing.Color.Lime
 			Panel2.Controls.Clear()
 			util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.fanartpath, Utilities.DefaultFanartPath)
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
 			MovFanartDisplay()
 		Else
 			btnMovFanartToggle.Text = "Show Movie Fanart"
 			btnMovFanartToggle.BackColor = System.Drawing.Color.Aqua
 			Panel2.Controls.Clear()
 			util_ImageLoad(Picturebox2, workingMovieDetails.fileinfo.movsetfanartpath, Utilities.DefaultFanartPath)
+            ImgBw.CancelAsync()
+            Do Until Not ImgBw.IsBusy
+                Application.DoEvents()
+            Loop
 			MovFanartDisplay(workingMovieDetails.fullmoviebody.TmdbSetId)
 		End If
 		MovFanartToggle = Not MovFanartToggle
@@ -16265,12 +16283,19 @@ Public Class Form1
 			If NumActiveThreads > 2 Then
 				Do Until NumActiveThreads < 1
 					If ImgBwCancelled Then
+                        bw.CancelAsync()
+                        Do Until Not bw.IsBusy
+                            Application.DoEvents()
+                        Loop
 						Exit Do
 					End If
 				Loop
 			End If
             ImgBw.ReportProgress(0, "Press ""Esc"" to Cancel:   Downloading image: " & totalcount & " of " & Total)
 			If ImgBwCancelled Then
+                Do Until Not bw.IsBusy
+                    Application.DoEvents()
+                Loop
 				Exit For
 			End If
 		Next
